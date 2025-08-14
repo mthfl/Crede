@@ -1,12 +1,3 @@
-<?php
-require_once('../model/functionsViews.php');
-$select = new select();
-?>
-<?php
-// Capturar o barcode ou nome da URL
-$identificador = isset($_GET['barcode']) ? $_GET['barcode'] : (isset($_GET['nome']) ? $_GET['nome'] : '');
-?>
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -18,6 +9,9 @@ $identificador = isset($_GET['barcode']) ? $_GET['barcode'] : (isset($_GET['nome
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -231,95 +225,54 @@ $identificador = isset($_GET['barcode']) ? $_GET['barcode'] : (isset($_GET['nome
             border-radius: 4px;
         }
 
-        /* Estilos para o header melhorado */
-        .header-nav-link {
-            position: relative;
-            transition: all 0.3s ease;
-            font-weight: 500;
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-        }
-
-        .header-nav-link:hover {
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-
-        .header-nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 50%;
-            width: 0;
-            height: 2px;
-            background-color: #FFA500;
-            transition: all 0.3s ease;
-            transform: translateX(-50%);
-        }
-
-        .header-nav-link:hover::after {
-            width: 80%;
-        }
-
-        .header-nav-link.active {
-            background-color: rgba(255, 255, 255, 0.15);
-        }
-
-        .header-nav-link.active::after {
-            width: 80%;
-        }
-
-        .mobile-menu-button {
-            display: none;
-        }
-
         /* Estilos para a sidebar */
         .sidebar-link {
             transition: all 0.3s ease;
             border-radius: 0.5rem;
         }
-
+        
         .sidebar-link:hover {
             background-color: rgba(255, 255, 255, 0.1);
             transform: translateX(0.5rem);
         }
-
+        
         .sidebar-link.active {
             background-color: rgba(255, 165, 0, 0.2);
             color: #FFA500;
         }
-
+        
         /* Responsividade da sidebar */
         @media (max-width: 768px) {
             #sidebar {
                 transform: translateX(-100%);
             }
-
+            
             #sidebar.show {
                 transform: translateX(0);
             }
-
+            
             main {
                 margin-left: 0 !important;
             }
-
+            
             /* Botão do menu mobile */
             #menuButton {
                 transition: all 0.3s ease;
             }
-
+            
             #menuButton.hidden {
                 opacity: 0;
                 visibility: hidden;
                 transform: scale(0.8);
             }
-
+            
             /* Footer responsivo para mobile */
             footer {
                 margin-left: 0 !important;
                 padding-left: 1rem !important;
                 padding-right: 1rem !important;
             }
-
+            
             footer .ml-64 {
                 margin-left: 0 !important;
             }
@@ -334,36 +287,36 @@ $identificador = isset($_GET['barcode']) ? $_GET['barcode'] : (isset($_GET['nome
             <!-- Logo e título -->
             <div class="p-6 border-b border-white/20">
                 <div class="flex items-center">
-                    <img src="../assets/imagens/logostgm.png" alt="Logo STGM" class="h-12 mr-3 transition-transform hover:scale-105">
+                    <img src="../../assets/imagens/logostgm.png" alt="Logo STGM" class="h-12 mr-3 transition-transform hover:scale-105">
                     <span class="text-white font-heading text-lg font-semibold">STGM Estoque</span>
                 </div>
             </div>
-
-            <!-- Menu de navegação -->
-            <nav class="flex-1 p-4 space-y-2">
-                <a href="paginainicial.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+            
+                       <!-- Menu de navegação -->
+                       <nav class="flex-1 p-4 space-y-2">
+                <a href="index.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2 active">
                     <i class="fas fa-home mr-3 text-lg"></i>
                     <span>Início</span>
                 </a>
-                <a href="estoque.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                <a href="../estoque.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
                     <i class="fas fa-boxes mr-3 text-lg"></i>
                     <span>Estoque</span>
                 </a>
-                <a href="adicionarproduto.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2 active">
+                <a href="adc_produto.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
                     <i class="fas fa-plus-circle mr-3 text-lg"></i>
                     <span>Adicionar</span>
                 </a>
-            
-                <a href="solicitar.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+
+                <a href="../solicitar.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
                     <i class="fas fa-clipboard-list mr-3 text-lg"></i>
                     <span>Solicitar</span>
                 </a>
-                <a href="relatorios.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                <a href="../relatorios.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
                     <i class="fas fa-chart-bar mr-3 text-lg"></i>
                     <span>Relatórios</span>
                 </a>
             </nav>
-
+ 
             <!-- Botão de fechar sidebar no mobile -->
             <div class="p-4 border-t border-white/20 md:hidden">
                 <button class="w-full bg-white/10 hover:bg-white/20 text-white py-2 px-4 rounded-lg transition-all duration-200" id="closeSidebar">
@@ -373,76 +326,57 @@ $identificador = isset($_GET['barcode']) ? $_GET['barcode'] : (isset($_GET['nome
             </div>
         </div>
     </div>
-
+    
     <button class="fixed top-4 left-4 z-50 md:hidden  text-primary p-3 rounded-lg  hover:bg-primary/90 transition-all duration-200" id="menuButton">
         <i class="fas fa-bars text-lg"></i>
     </button>
-
+    
     <!-- Overlay para mobile -->
     <div class="fixed inset-0 bg-black/50 z-40 md:hidden hidden" id="overlay"></div>
 
-    <!-- Botão Voltar ao Topo -->
-    <button class="back-to-top hidden fixed bottom-6 right-6 z-50 bg-secondary hover:bg-secondary/90 text-white w-12 h-12 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center group">
-        <i class="fas fa-chevron-up text-lg group-hover:scale-110 transition-transform duration-300"></i>
-    </button>
-
     <!-- Main content -->
     <main class="ml-64 px-4 py-8 md:py-12 flex-1 transition-all duration-300">
-        <div class="text-center mb-10">
-            <h1 class="text-primary text-3xl md:text-4xl font-bold mb-8 md:mb-6 text-center page-title tracking-tight font-heading inline-block mx-auto">ADICIONAR NOVO PRODUTO</h1>
-        </div>
+            <div class="text-center mb-10">
+                <h1 class="text-primary text-3xl md:text-4xl font-bold mb-8 md:mb-6 text-center page-title tracking-tight font-heading inline-block mx-auto">ADICIONAR</h1>
+            </div>
 
-        <div class="bg-white rounded-xl shadow-lg p-8 max-w-2xl w-full border-2 border-primary mx-auto">
-            <form action="../control/controllerAdicionarProduto.php?barcode=" method="POST" class="space-y-6">
-                <div class="space-y-4">
-                    <div>
-                        <input type="text" placeholder="NOME DO PRODUTO" id="nome" name="nome" style="text-transform: uppercase;" oninput="this.value = this.value.toUpperCase();" required
-                            class="w-full px-4 py-3 border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent text-center font-semibold"
-                            aria-label="Nome do produto">
-                    </div>
+            <div class="bg-white rounded-xl shadow-lg p-8 max-w-2xl w-full border-2 border-primary mx-auto">
+                <form action="../control/controllerConsultarProduto.php" method="POST" class="space-y-6">
+                    <div class="space-y-4">
+                        <!-- Checkboxes para tipo de produto -->
+                        <div class="space-y-3">
+                            <label class="text-primary font-semibold text-sm">Tipo de Produto:</label>
+                            <div class="space-y-2">
+                                <label class="custom-radio flex items-center">
+                                    <input type="radio" name="tipo_produto" value="com_codigo" id="com_codigo" checked>
+                                    <span class="ml-2 text-gray-700">Produto com código</span>
+                                </label>
+                                <label class="custom-radio flex items-center">
+                                    <input type="radio" name="tipo_produto" value="sem_codigo" id="sem_codigo">
+                                    <span class="ml-2 text-gray-700">Produto sem código</span>
+                                </label>
+                            </div>
+                        </div>
 
-                    <div>
-                        <input type="number" placeholder="QUANTIDADE" min="1" id="quantidade" name="quantidade" required
-                            class="w-full px-4 py-3 border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent text-center font-semibold"
-                            aria-label="Quantidade do produto">
-                    </div>
-                    <div>
-                        <input type="date" placeholder="VALIDADE" min="1" id="validade" name="validade"
-                            class="w-full px-4 py-3 border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent text-center font-semibold"
-                            aria-label="Quantidade do produto">
-                    </div>
+                        <!-- Campo de entrada dinâmico -->
+                        <div>
+                            <input type="text" placeholder="BARCODE" id="barcode" name="barcode" required
+                                class="w-full px-4 py-3 border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent text-center font-semibold"
+                                aria-label="Código de barras do produto">
+                        </div>
 
-                    <div class="p-4 border-2 border-primary rounded-lg">
-                        <p class="font-semibold text-primary mb-3 text-center">Selecione a Categoria</p>
+                        <button type="submit" name="btn" value="Adicionar" class="w-full bg-secondary text-white font-bold py-3 px-4 rounded-lg hover:bg-opacity-90 transition-colors"
+                            aria-label="Adicionar produto">
+                            CADASTRAR
+                        </button>
+                </form>
+            </div>
+        </main>
 
-                        <select class="js-example-basic-single" name="state">
-
-                            <?php
-                            $dados = $select->select_categoria();
-                            foreach ($dados as $dado) {
-                            ?>
-                                <option value="<?= $dado['id'] ?>"><?= $dado['nome_categoria'] ?></option>
-                            <?php } ?>
-                        </select>
-                    </div>
-                    <input type="hidden" name="barcode" value="<?php echo htmlspecialchars($identificador); ?>">
-                </div>
-                <button type="submit" name="btn" value="Adicionar" class="w-full bg-secondary text-white font-bold py-3 px-4 rounded-lg hover:bg-opacity-90 transition-colors"
-                    aria-label="Adicionar produto">
-                    ADICIONAR
-                </button>
-        </div>
-
-
-        </form>
-        </div>
-    </main>
-
-    <!-- Footer -->
     <footer class="bg-gradient-to-r from-primary to-dark text-white py-8 md:py-10 mt-auto relative transition-all duration-300">
         <!-- Efeito de brilho sutil no topo -->
         <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-secondary to-transparent opacity-30"></div>
-
+        
         <div class="ml-64 px-4 md:px-8 transition-all duration-300" id="footerContent">
             <div class="max-w-7xl mx-auto">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
@@ -484,13 +418,13 @@ $identificador = isset($_GET['barcode']) ? $_GET['barcode'] : (isset($_GET['nome
                             Dev Team
                         </h3>
                         <div class="grid grid-cols-1 gap-3">
-                            <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
+                        <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
                                 <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
                                 Matheus Felix
                             </a>
                             <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
                                 <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
-                                Pedro Uchoa
+                                Pedro Uchoa 
                             </a>
                         </div>
                     </div>
@@ -504,15 +438,17 @@ $identificador = isset($_GET['barcode']) ? $_GET['barcode'] : (isset($_GET['nome
                 </div>
             </div>
         </div>
-
+        
         <!-- Efeito de brilho sutil na base -->
         <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-secondary to-transparent opacity-30"></div>
     </footer>
 
+    <!-- Botão Voltar ao Topo -->
+    <button class="back-to-top hidden fixed bottom-6 right-6 z-50 bg-secondary hover:bg-secondary/90 text-white w-12 h-12 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center group">
+        <i class="fas fa-chevron-up text-lg group-hover:scale-110 transition-transform duration-300"></i>
+    </button>
+
     <script>
-        $(document).ready(function() {
-            $('.js-example-basic-single').select2();
-        });
         document.addEventListener('DOMContentLoaded', function() {
             // Sidebar mobile toggle
             const menuButton = document.getElementById('menuButton');
@@ -525,14 +461,14 @@ $identificador = isset($_GET['barcode']) ? $_GET['barcode'] : (isset($_GET['nome
                     e.stopPropagation();
                     sidebar.classList.toggle('show');
                     overlay.classList.toggle('hidden');
-
+                    
                     // Mostrar/ocultar o botão do menu
                     if (sidebar.classList.contains('show')) {
                         menuButton.classList.add('hidden');
                     } else {
                         menuButton.classList.remove('hidden');
                     }
-
+                    
                     document.body.style.overflow = sidebar.classList.contains('show') ? 'hidden' : '';
                 });
 
@@ -578,29 +514,31 @@ $identificador = isset($_GET['barcode']) ? $_GET['barcode'] : (isset($_GET['nome
                         document.body.style.overflow = '';
                     }
                 });
-            }
-
-            // Adicionar suporte para dropdown no mobile
-            const dropdownToggle = document.querySelector('.group > a');
-            const dropdownMenu = document.querySelector('.group > div');
-
-            if (window.innerWidth <= 768) {
-                dropdownToggle.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    dropdownMenu.classList.toggle('scale-0');
-                    dropdownMenu.classList.toggle('scale-100');
-                });
-            }
-
-            // Hamburger menu toggle
-            const hamburger = document.querySelector('.hamburger');
-            const navLinks = document.querySelector('.nav-links');
-
-            if (hamburger && navLinks) {
-                hamburger.addEventListener('click', () => {
-                    navLinks.classList.toggle('active');
-                    hamburger.classList.toggle('open');
-                });
+                
+                // Ajustar footer quando sidebar é aberta/fechada no mobile
+                const footerContent = document.getElementById('footerContent');
+                if (footerContent) {
+                    const adjustFooter = () => {
+                        if (window.innerWidth <= 768) {
+                            if (sidebar.classList.contains('show')) {
+                                footerContent.style.marginLeft = '0';
+                            } else {
+                                footerContent.style.marginLeft = '0';
+                            }
+                        } else {
+                            footerContent.style.marginLeft = '16rem'; // 64 * 0.25rem = 16rem
+                        }
+                    };
+                    
+                    // Ajustar na inicialização
+                    adjustFooter();
+                    
+                    // Ajustar quando a sidebar é aberta/fechada
+                    menuButton.addEventListener('click', adjustFooter);
+                    
+                    // Ajustar quando a janela é redimensionada
+                    window.addEventListener('resize', adjustFooter);
+                }
             }
 
             // Back to top button visibility and functionality
@@ -615,7 +553,7 @@ $identificador = isset($_GET['barcode']) ? $_GET['barcode'] : (isset($_GET['nome
                         backToTop.classList.add('hidden');
                     }
                 });
-
+                
                 // Funcionalidade do botão voltar ao topo
                 backToTop.addEventListener('click', () => {
                     window.scrollTo({
@@ -625,13 +563,36 @@ $identificador = isset($_GET['barcode']) ? $_GET['barcode'] : (isset($_GET['nome
                 });
             }
 
-            // Lazy loading for images
-            if ('loading' in HTMLImageElement.prototype) {
-                const images = document.querySelectorAll('img[loading="lazy"]');
-                images.forEach(img => {
-                    img.loading = 'lazy';
-                });
+            // Controle das checkboxes de tipo de produto
+            const comCodigoRadio = document.getElementById('com_codigo');
+            const semCodigoRadio = document.getElementById('sem_codigo');
+            const inputField = document.getElementById('barcode');
+
+            function updateInputField() {
+                if (comCodigoRadio.checked) {
+                    // Produto com código
+                    inputField.placeholder = "BARCODE";
+                    inputField.name = "barcode";
+                    inputField.setAttribute('aria-label', 'CÓDIGO DE BARRAS DO PRODUTO');
+
+                    // Forçar texto em maiúsculas durante a digitação
+                    inputField.addEventListener('input', function() {
+                        this.value = this.value.toUpperCase();
+                    });
+                } else {
+                    // Produto sem código
+                    inputField.placeholder = "NOME DO PRODUTO";
+                    inputField.name = "nome_produto";
+                    inputField.setAttribute('aria-label', 'Nome do produto');
+                }
             }
+
+            // Adicionar event listeners para as checkboxes
+            comCodigoRadio.addEventListener('change', updateInputField);
+            semCodigoRadio.addEventListener('change', updateInputField);
+
+            // Inicializar o campo
+            updateInputField();
         });
     </script>
 </body>

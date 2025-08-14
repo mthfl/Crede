@@ -4,14 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Adicionar Produto</title>
+    <title>Gerenciamento de Estoque</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -71,44 +68,281 @@
             background: linear-gradient(135deg, #005A24 0%, #1A3C34 100%);
         }
 
-        .custom-radio {
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .custom-radio:hover {
-            background-color: rgba(0, 90, 36, 0.05);
-        }
-
-        .custom-radio input[type="radio"] {
+        .card-item {
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             position: relative;
-            cursor: pointer;
-            appearance: none;
-            width: 20px;
-            height: 20px;
-            border: 2px solid #005A24;
-            border-radius: 50%;
-            margin-right: 10px;
-            outline: none;
+            overflow: hidden;
+            will-change: transform;
         }
 
-        .custom-radio input[type="radio"]:checked {
-            background-color: #FFA500;
+        .card-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 165, 0, 0.1) 0%, rgba(0, 90, 36, 0.05) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+
+        .card-item:hover::before {
+            opacity: 1;
+        }
+
+        .card-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 90, 36, 0.2), 0 10px 10px -5px rgba(0, 90, 36, 0.1);
             border-color: #FFA500;
         }
 
-        .custom-radio input[type="radio"]:checked::after {
+        .card-icon {
+            transition: all 0.3s ease;
+            z-index: 2;
+            position: relative;
+        }
+
+        .card-item:hover .card-icon {
+            transform: scale(1.1);
+            color: #FFA500;
+        }
+
+        .card-item p {
+            z-index: 2;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .card-item:hover p {
+            color: #005A24;
+        }
+
+        .logo-pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: translateY(-50%) translateX(-50%) scale(1);
+            }
+
+            50% {
+                transform: translateY(-50%) translateX(-50%) scale(1.05);
+            }
+
+            100% {
+                transform: translateY(-50%) translateX(-50%) scale(1);
+            }
+        }
+
+        .social-icon {
+            transition: all 0.3s ease;
+        }
+
+        .social-icon:hover {
+            transform: translateY(-3px);
+            filter: drop-shadow(0 4px 3px rgba(255, 165, 0, 0.3));
+        }
+
+        .page-title {
+            position: relative;
+            display: inline-block;
+        }
+
+        .page-title::after {
             content: '';
             position: absolute;
-            top: 50%;
+            bottom: -8px;
             left: 50%;
-            transform: translate(-50%, -50%);
-            width: 10px;
-            height: 10px;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: #FFA500;
+            border-radius: 3px;
+        }
+
+        .card-shine {
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0) 100%);
+            transform: skewX(-25deg);
+            transition: all 0.75s ease;
+            z-index: 2;
+        }
+
+        .card-item:hover .card-shine {
+            left: 150%;
+        }
+
+        .card-badge {
+            transition: all 0.3s ease;
+        }
+
+        .card-item:hover .card-badge {
+            background-color: #FFA500;
+            color: white;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 20px;
+            height: 20px;
+            background-color: #FF5252;
+            color: white;
             border-radius: 50%;
-            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        .header-nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+        }
+
+        .header-nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .header-nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background-color: #FFA500;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .header-nav-link:hover::after {
+            width: 80%;
+        }
+
+        .header-nav-link.active {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .header-nav-link.active::after {
+            width: 80%;
+        }
+
+        .mobile-menu-button {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .header-nav {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: linear-gradient(135deg, #005A24 0%, #1A3C34 100%);
+                padding: 2rem 1rem;
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+                z-index: 50;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                backdrop-filter: blur(10px);
+            }
+
+            .header-nav.show {
+                display: flex;
+                animation: slideIn 0.3s ease-out;
+            }
+
+            @keyframes slideIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(-20px);
+                }
+
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            .header-nav-link {
+                padding: 1rem 1.5rem;
+                text-align: center;
+                margin: 0.5rem 0;
+                font-size: 1.1rem;
+                border-radius: 0.75rem;
+                transition: all 0.3s ease;
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .header-nav-link:hover {
+                background-color: rgba(255, 255, 255, 0.15);
+                transform: translateX(5px);
+            }
+
+            .mobile-menu-button {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                width: 30px;
+                height: 21px;
+                background: transparent;
+                border: none;
+                cursor: pointer;
+                padding: 0;
+                z-index: 60;
+                position: relative;
+            }
+
+            .mobile-menu-button span {
+                width: 100%;
+                height: 3px;
+                background-color: white;
+                border-radius: 10px;
+                transition: all 0.3s ease;
+                position: relative;
+                transform-origin: center;
+            }
+
+            .mobile-menu-button span:first-child.active {
+                transform: rotate(45deg) translate(6px, 6px);
+            }
+
+            .mobile-menu-button span:nth-child(2).active {
+                opacity: 0;
+                transform: scale(0);
+            }
+
+            .mobile-menu-button span:nth-child(3).active {
+                transform: rotate(-45deg) translate(6px, -6px);
+            }
+
+            /* Overlay para fechar menu ao clicar fora */
+            .header-nav::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.3);
+                z-index: -1;
+            }
         }
 
         .nav-link {
@@ -126,46 +360,6 @@
             height: 2px;
             background-color: #FFA500;
             transition: width 0.3s ease;
-        }
-
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            cursor: pointer;
-        }
-
-        .hamburger span {
-            width: 25px;
-            height: 3px;
-            background-color: white;
-            margin: 2px 0;
-            transition: all 0.3s ease;
-        }
-
-        .mobile-menu {
-            transition: max-height 0.3s ease-in-out;
-        }
-
-        @media (max-width: 768px) {
-            .hamburger {
-                display: flex;
-            }
-
-            .nav-links {
-                display: none;
-            }
-
-            .nav-links.active {
-                display: flex;
-                flex-direction: column;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                right: 0;
-                background: linear-gradient(135deg, #005A24 0%, #1A3C34 100%);
-                padding: 1rem;
-                max-height: 400px;
-            }
         }
 
         .back-to-top {
@@ -195,84 +389,54 @@
             transform: scale(1.1);
         }
 
-        .social-icon {
-            transition: all 0.3s ease;
-        }
-
-        .social-icon:hover {
-            transform: translateY(-3px);
-            filter: drop-shadow(0 4px 3px rgba(255, 165, 0, 0.3));
-        }
-
-        .page-title {
-            position: relative;
-            display: inline-block;
-            background: linear-gradient(135deg, #005A24 0%, #1A3C34 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 2px 4px rgba(0, 90, 36, 0.3);
-        }
-
-        .page-title::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 120px;
-            height: 4px;
-            background-color: #FFA500;
-            border-radius: 4px;
-        }
-
         /* Estilos para a sidebar */
         .sidebar-link {
             transition: all 0.3s ease;
             border-radius: 0.5rem;
         }
-        
+
         .sidebar-link:hover {
             background-color: rgba(255, 255, 255, 0.1);
             transform: translateX(0.5rem);
         }
-        
+
         .sidebar-link.active {
             background-color: rgba(255, 165, 0, 0.2);
             color: #FFA500;
         }
-        
+
         /* Responsividade da sidebar */
         @media (max-width: 768px) {
             #sidebar {
                 transform: translateX(-100%);
             }
-            
+
             #sidebar.show {
                 transform: translateX(0);
             }
-            
+
             main {
                 margin-left: 0 !important;
             }
-            
+
             /* Botão do menu mobile */
             #menuButton {
                 transition: all 0.3s ease;
             }
-            
+
             #menuButton.hidden {
                 opacity: 0;
                 visibility: hidden;
                 transform: scale(0.8);
             }
-            
+
             /* Footer responsivo para mobile */
             footer {
                 margin-left: 0 !important;
                 padding-left: 1rem !important;
                 padding-right: 1rem !important;
             }
-            
+
             footer .ml-64 {
                 margin-left: 0 !important;
             }
@@ -291,10 +455,10 @@
                     <span class="text-white font-heading text-lg font-semibold">STGM Estoque</span>
                 </div>
             </div>
-            
+
             <!-- Menu de navegação -->
             <nav class="flex-1 p-4 space-y-2">
-                <a href="paginainicial.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                <a href="index.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2 active">
                     <i class="fas fa-home mr-3 text-lg"></i>
                     <span>Início</span>
                 </a>
@@ -302,11 +466,11 @@
                     <i class="fas fa-boxes mr-3 text-lg"></i>
                     <span>Estoque</span>
                 </a>
-                <a href="adicionarproduto.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2 active">
+                <a href="./products/adc_produto.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
                     <i class="fas fa-plus-circle mr-3 text-lg"></i>
                     <span>Adicionar</span>
                 </a>
-              
+
                 <a href="solicitar.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
                     <i class="fas fa-clipboard-list mr-3 text-lg"></i>
                     <span>Solicitar</span>
@@ -316,7 +480,7 @@
                     <span>Relatórios</span>
                 </a>
             </nav>
-            
+
             <!-- Botão de fechar sidebar no mobile -->
             <div class="p-4 border-t border-white/20 md:hidden">
                 <button class="w-full bg-white/10 hover:bg-white/20 text-white py-2 px-4 rounded-lg transition-all duration-200" id="closeSidebar">
@@ -326,57 +490,97 @@
             </div>
         </div>
     </div>
-    
+
+    <!-- Botão de menu mobile -->
     <button class="fixed top-4 left-4 z-50 md:hidden  text-primary p-3 rounded-lg  hover:bg-primary/90 transition-all duration-200" id="menuButton">
         <i class="fas fa-bars text-lg"></i>
     </button>
-    
+
     <!-- Overlay para mobile -->
     <div class="fixed inset-0 bg-black/50 z-40 md:hidden hidden" id="overlay"></div>
 
+    <!-- Botão Voltar ao Topo -->
+    <button class="back-to-top hidden fixed bottom-6 right-6 z-50 bg-secondary hover:bg-secondary/90 text-white w-12 h-12 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center group">
+        <i class="fas fa-chevron-up text-lg group-hover:scale-110 transition-transform duration-300"></i>
+    </button>
+
     <!-- Main content -->
     <main class="ml-64 px-4 py-8 md:py-12 flex-1 transition-all duration-300">
-            <div class="text-center mb-10">
-                <h1 class="text-primary text-3xl md:text-4xl font-bold mb-8 md:mb-6 text-center page-title tracking-tight font-heading inline-block mx-auto">ADICIONAR</h1>
+        <div class="flex flex-col items-center justify-start pt-16 md:pt-20">
+            <h1 class="text-primary text-3xl md:text-4xl font-bold mb-6 md:mb-8 text-center page-title tracking-tight font-heading">GERENCIAMENTO DE ESTOQUE</h1>
+
+            <!-- Layout: Leitor de código de barras (somente visual) -->
+            <div class="w-full max-w-5xl mx-auto px-4 mb-8 md:mb-10">
+
+                <div class="relative">
+                    <span class="pointer-events-none absolute inset-y-0 left-4 flex items-center text-primary">
+                        <i class="fas fa-barcode text-xl"></i>
+                    </span>
+                    <input
+                        id="barcodeHome"
+                        type="text"
+                        placeholder="Escaneie o código de barras aqui"
+                        class="w-full pl-12 pr-4 py-4 bg-white border-2 border-primary/50 focus:border-secondary focus:ring-2 focus:ring-secondary/40 rounded-2xl outline-none placeholder:text-gray-400 text-gray-700 shadow-card text-lg"
+                        autocomplete="off" />
+                </div>
             </div>
 
-            <div class="bg-white rounded-xl shadow-lg p-8 max-w-2xl w-full border-2 border-primary mx-auto">
-                <form action="../control/controllerConsultarProduto.php" method="POST" class="space-y-6">
-                    <div class="space-y-4">
-                        <!-- Checkboxes para tipo de produto -->
-                        <div class="space-y-3">
-                            <label class="text-primary font-semibold text-sm">Tipo de Produto:</label>
-                            <div class="space-y-2">
-                                <label class="custom-radio flex items-center">
-                                    <input type="radio" name="tipo_produto" value="com_codigo" id="com_codigo" checked>
-                                    <span class="ml-2 text-gray-700">Produto com código</span>
-                                </label>
-                                <label class="custom-radio flex items-center">
-                                    <input type="radio" name="tipo_produto" value="sem_codigo" id="sem_codigo">
-                                    <span class="ml-2 text-gray-700">Produto sem código</span>
-                                </label>
-                            </div>
-                        </div>
 
-                        <!-- Campo de entrada dinâmico -->
-                        <div>
-                            <input type="text" placeholder="BARCODE" id="barcode" name="barcode" required
-                                class="w-full px-4 py-3 border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent text-center font-semibold"
-                                aria-label="Código de barras do produto">
-                        </div>
+            <div id="cardsGrid" class="w-full max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 px-4 justify-center">
 
-                        <button type="submit" name="btn" value="Adicionar" class="w-full bg-secondary text-white font-bold py-3 px-4 rounded-lg hover:bg-opacity-90 transition-colors"
-                            aria-label="Adicionar produto">
-                            CADASTRAR
-                        </button>
-                </form>
+                <a href="../view/adicionarproduto.php" class="group animate-fade-in" style="animation-delay: 0.1s">
+                    <div class="card-item bg-white border-2 border-primary rounded-xl md:rounded-2xl shadow-card w-full h-48 md:h-56 flex flex-col items-center justify-center p-4 md:p-6 relative">
+                        <div class="card-shine"></div>
+                        <div class="card-badge absolute top-0 right-0 bg-accent w-10 h-10 md:w-12 md:h-12 rounded-bl-xl md:rounded-bl-2xl rounded-tr-xl md:rounded-tr-2xl flex items-center justify-center">
+                            <span class="text-primary text-xs font-bold">2</span>
+                        </div>
+                        <i class="fas fa-plus-circle card-icon text-4xl md:text-5xl text-primary mb-4 md:mb-5"></i>
+                        <p class="text-secondary font-bold text-center text-base md:text-lg leading-tight">ADICIONAR</p>
+                    </div>
+                </a>
+
+                <a href="../view/estoque.php" class="group animate-fade-in">
+                    <div class="card-item bg-white border-2 border-primary rounded-xl md:rounded-2xl shadow-card w-full h-48 md:h-56 flex flex-col items-center justify-center p-4 md:p-6 relative">
+                        <div class="card-shine"></div>
+                        <div class="card-badge absolute top-0 right-0 bg-accent w-10 h-10 md:w-12 md:h-12 rounded-bl-xl md:rounded-bl-2xl rounded-tr-xl md:rounded-tr-2xl flex items-center justify-center">
+                            <span class="text-primary text-xs font-bold">1</span>
+                        </div>
+                        <i class="fas fa-boxes card-icon text-4xl md:text-5xl text-primary mb-4 md:mb-5"></i>
+                        <p class="text-secondary font-bold text-center text-base md:text-lg leading-tight">ESTOQUE</p>
+                    </div>
+                </a>
+
+                <a href="../view/solicitar.php" class="group animate-fade-in" style="animation-delay: 0.2s">
+                    <div class="card-item bg-white border-2 border-primary rounded-xl md:rounded-2xl shadow-card w-full h-48 md:h-56 flex flex-col items-center justify-center p-4 md:p-6 relative">
+                        <div class="card-shine"></div>
+                        <div class="card-badge absolute top-0 right-0 bg-accent w-10 h-10 md:w-12 md:h-12 rounded-bl-xl md:rounded-bl-2xl rounded-tr-xl md:rounded-tr-2xl flex items-center justify-center">
+                            <span class="text-primary text-xs font-bold">3</span>
+                        </div>
+                        <i class="fas fa-clipboard-list card-icon text-4xl md:text-5xl text-primary mb-4 md:mb-5"></i>
+                        <p class="text-secondary font-bold text-center text-base md:text-lg leading-tight">RETIRAR</p>
+                    </div>
+                </a>
+
+
+
+                <a href="../view/relatorios.php" class="group animate-fade-in" style="animation-delay: 0.4s">
+                    <div class="card-item bg-white border-2 border-primary rounded-xl md:rounded-2xl shadow-card w-full h-48 md:h-56 flex flex-col items-center justify-center p-4 md:p-6 relative">
+                        <div class="card-shine"></div>
+                        <div class="card-badge absolute top-0 right-0 bg-accent w-10 h-10 md:w-12 md:h-12 rounded-bl-xl md:rounded-bl-2xl rounded-tr-xl md:rounded-tr-2xl flex items-center justify-center">
+                            <span class="text-primary text-xs font-bold">5</span>
+                        </div>
+                        <i class="fas fa-chart-bar card-icon text-4xl md:text-5xl text-primary mb-4 md:mb-5"></i>
+                        <p class="text-secondary font-bold text-center text-base md:text-lg leading-tight">RELATÓRIOS</p>
+                    </div>
+                </a>
             </div>
-        </main>
+        </div>
+    </main>
 
     <footer class="bg-gradient-to-r from-primary to-dark text-white py-8 md:py-10 mt-auto relative transition-all duration-300">
         <!-- Efeito de brilho sutil no topo -->
         <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-secondary to-transparent opacity-30"></div>
-        
+
         <div class="ml-64 px-4 md:px-8 transition-all duration-300" id="footerContent">
             <div class="max-w-7xl mx-auto">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
@@ -418,14 +622,15 @@
                             Dev Team
                         </h3>
                         <div class="grid grid-cols-1 gap-3">
-                        <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
+                            <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
                                 <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
                                 Matheus Felix
                             </a>
                             <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
                                 <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
-                                Pedro Uchoa 
+                                Pedro Uchoa
                             </a>
+
                         </div>
                     </div>
                 </div>
@@ -438,15 +643,10 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Efeito de brilho sutil na base -->
         <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-secondary to-transparent opacity-30"></div>
     </footer>
-
-    <!-- Botão Voltar ao Topo -->
-    <button class="back-to-top hidden fixed bottom-6 right-6 z-50 bg-secondary hover:bg-secondary/90 text-white w-12 h-12 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center group">
-        <i class="fas fa-chevron-up text-lg group-hover:scale-110 transition-transform duration-300"></i>
-    </button>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -461,14 +661,14 @@
                     e.stopPropagation();
                     sidebar.classList.toggle('show');
                     overlay.classList.toggle('hidden');
-                    
+
                     // Mostrar/ocultar o botão do menu
                     if (sidebar.classList.contains('show')) {
                         menuButton.classList.add('hidden');
                     } else {
                         menuButton.classList.remove('hidden');
                     }
-                    
+
                     document.body.style.overflow = sidebar.classList.contains('show') ? 'hidden' : '';
                 });
 
@@ -514,7 +714,7 @@
                         document.body.style.overflow = '';
                     }
                 });
-                
+
                 // Ajustar footer quando sidebar é aberta/fechada no mobile
                 const footerContent = document.getElementById('footerContent');
                 if (footerContent) {
@@ -529,17 +729,19 @@
                             footerContent.style.marginLeft = '16rem'; // 64 * 0.25rem = 16rem
                         }
                     };
-                    
+
                     // Ajustar na inicialização
                     adjustFooter();
-                    
+
                     // Ajustar quando a sidebar é aberta/fechada
                     menuButton.addEventListener('click', adjustFooter);
-                    
+
                     // Ajustar quando a janela é redimensionada
                     window.addEventListener('resize', adjustFooter);
                 }
             }
+
+
 
             // Back to top button visibility and functionality
             const backToTop = document.querySelector('.back-to-top');
@@ -553,7 +755,7 @@
                         backToTop.classList.add('hidden');
                     }
                 });
-                
+
                 // Funcionalidade do botão voltar ao topo
                 backToTop.addEventListener('click', () => {
                     window.scrollTo({
@@ -563,36 +765,106 @@
                 });
             }
 
-            // Controle das checkboxes de tipo de produto
-            const comCodigoRadio = document.getElementById('com_codigo');
-            const semCodigoRadio = document.getElementById('sem_codigo');
-            const inputField = document.getElementById('barcode');
+            // Card entrance animation
+            const cards = document.querySelectorAll('.card-item');
+            cards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.classList.add('translate-y-0', 'opacity-100');
+                    card.classList.remove('translate-y-4', 'opacity-0');
+                }, index * 100);
+            });
 
-            function updateInputField() {
-                if (comCodigoRadio.checked) {
-                    // Produto com código
-                    inputField.placeholder = "BARCODE";
-                    inputField.name = "barcode";
-                    inputField.setAttribute('aria-label', 'CÓDIGO DE BARRAS DO PRODUTO');
-
-                    // Forçar texto em maiúsculas durante a digitação
-                    inputField.addEventListener('input', function() {
-                        this.value = this.value.toUpperCase();
-                    });
-                } else {
-                    // Produto sem código
-                    inputField.placeholder = "NOME DO PRODUTO";
-                    inputField.name = "nome_produto";
-                    inputField.setAttribute('aria-label', 'Nome do produto');
-                }
+            // Lazy loading for images
+            if ('loading' in HTMLImageElement.prototype) {
+                const images = document.querySelectorAll('img[loading="lazy"]');
+                images.forEach(img => {
+                    img.loading = 'lazy';
+                });
             }
 
-            // Adicionar event listeners para as checkboxes
-            comCodigoRadio.addEventListener('change', updateInputField);
-            semCodigoRadio.addEventListener('change', updateInputField);
+            // Preload linked pages
+            const links = document.querySelectorAll('a[target="_blank"]');
+            links.forEach(link => {
+                link.addEventListener('mouseover', () => {
+                    const href = link.getAttribute('href');
+                    if (href) {
+                        fetch(href, {
+                                mode: 'no-cors'
+                            })
+                            .catch(() => {});
+                    }
+                });
+            });
 
-            // Inicializar o campo
-            updateInputField();
+            // Funcionalidade do campo de código de barras
+            const barcodeInput = document.getElementById('barcodeHome');
+
+            if (barcodeInput) {
+                // Função para redirecionar com o código de barras
+                function redirecionarComBarcode() {
+                    const barcode = barcodeInput.value.trim();
+                    if (barcode) {
+                        // Redirecionar para o controller com o código de barras como parâmetro
+                        window.location.href = `../control/controller_main.php?barcode=${encodeURIComponent(barcode)}`;
+                    }
+                }
+
+                // Redirecionar quando pressionar Enter
+                barcodeInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        redirecionarComBarcode();
+                    }
+                });
+
+                // Redirecionar quando o input perder o foco (opcional)
+                barcodeInput.addEventListener('blur', function() {
+                    if (this.value.trim()) {
+                        redirecionarComBarcode();
+                    }
+                });
+
+                // Focar no input quando a página carregar
+                barcodeInput.focus();
+            }
+
+            // Funcionalidade da barra de pesquisa
+            const searchInput = document.getElementById('searchInput');
+            const searchButton = document.getElementById('searchButton');
+
+            if (searchInput && searchButton) {
+                // Função para realizar a pesquisa
+                function realizarPesquisa() {
+                    const termo = searchInput.value.trim();
+                    if (termo) {
+                        // Redirecionar para a página de estoque com o termo de pesquisa
+                        window.location.href = `../view/estoque.php?search=${encodeURIComponent(termo)}`;
+                    }
+                }
+
+                // Pesquisar quando pressionar Enter
+                searchInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        realizarPesquisa();
+                    }
+                });
+
+                // Pesquisar quando clicar no botão
+                searchButton.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    realizarPesquisa();
+                });
+
+                // Efeito de hover no botão
+                searchButton.addEventListener('mouseenter', function() {
+                    this.style.transform = 'scale(1.1)';
+                });
+
+                searchButton.addEventListener('mouseleave', function() {
+                    this.style.transform = 'scale(1)';
+                });
+            }
         });
     </script>
 </body>

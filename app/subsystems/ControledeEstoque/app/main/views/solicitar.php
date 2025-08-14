@@ -1,5 +1,5 @@
 <?php
-require_once('../model/functionsViews.php');
+require_once('../models/model.select.php');
 $select = new select();
 
 ?>
@@ -325,8 +325,9 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
             </div>
             
             <!-- Menu de navegação -->
-            <nav class="flex-1 p-4 space-y-2">
-                <a href="paginainicial.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                        <!-- Menu de navegação -->
+                        <nav class="flex-1 p-4 space-y-2">
+                <a href="index.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2 active">
                     <i class="fas fa-home mr-3 text-lg"></i>
                     <span>Início</span>
                 </a>
@@ -334,12 +335,12 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                     <i class="fas fa-boxes mr-3 text-lg"></i>
                     <span>Estoque</span>
                 </a>
-                <a href="adicionarproduto.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                <a href="./products/adc_produto.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
                     <i class="fas fa-plus-circle mr-3 text-lg"></i>
                     <span>Adicionar</span>
                 </a>
-             
-                <a href="solicitar.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2 active">
+
+                <a href="solicitar.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
                     <i class="fas fa-clipboard-list mr-3 text-lg"></i>
                     <span>Solicitar</span>
                 </a>
@@ -348,7 +349,7 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                     <span>Relatórios</span>
                 </a>
             </nav>
-            
+
             <!-- Botão de fechar sidebar no mobile -->
             <div class="p-4 border-t border-white/20 md:hidden">
                 <button class="w-full bg-white/10 hover:bg-white/20 text-white py-2 px-4 rounded-lg transition-all duration-200" id="closeSidebar">

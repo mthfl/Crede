@@ -1,7 +1,7 @@
 <?php
 require_once("../config/connection.php");
 
-class select extends connection
+class select extends connect
 {
     public function __construct()
     {
