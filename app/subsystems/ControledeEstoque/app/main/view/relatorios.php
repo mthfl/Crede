@@ -1,9 +1,4 @@
-<?php
-        require_once('../model/sessions.php');
-        $session = new sessions();
-        $session->autenticar_session();
-        
-    ?>
+
 <?php
 // Definir variável $barcode para evitar warnings
 $barcode = '';

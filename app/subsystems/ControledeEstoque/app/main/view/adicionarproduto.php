@@ -1,11 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<?php
-        require_once('../model/sessions.php');
-        $session = new sessions();
-        $session->autenticar_session();
-        
-    ?>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">

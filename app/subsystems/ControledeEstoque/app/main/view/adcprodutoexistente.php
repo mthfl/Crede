@@ -1,9 +1,4 @@
-<?php
-        require_once('../model/sessions.php');
-        $session = new sessions();
-        $session->autenticar_session();
-        
-    ?>
+
 <?php
 // Capturar o barcode ou nome da URL
 $identificador = isset($_GET['barcode']) ? $_GET['barcode'] : (isset($_GET['nome']) ? $_GET['nome'] : '');

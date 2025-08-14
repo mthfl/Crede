@@ -1,10 +1,6 @@
 <?php
 require_once('../model/functionsViews.php');
 $select = new select();
-require_once('../model/sessions.php');
-$session = new sessions();
-$session->autenticar_session();
-
 ?>
 <?php
 // Capturar o barcode ou nome da URL
