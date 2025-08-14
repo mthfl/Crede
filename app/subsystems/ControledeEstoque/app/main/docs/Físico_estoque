@@ -1,0 +1,35 @@
+/* Lógico_estoque: */
+CREATE DATABASE u750204740_gerenciamentodeestoque;
+
+CREATE TABLE produtos (
+    id int PRIMARY KEY NOT null AUTO_INCREMENT,
+    barcode char (100),
+    nome_produto varchar (100),
+    quantidade decimal(10,0),
+    natureza enum('limpeza', 'expedientes', 'manutencao', 'eletrico', 'hidraulico', 'educacao_fisica', 'epi', 'copa_e_cozinha', 'informatica', 'ferramentas')
+);
+
+CREATE TABLE responsaveis (
+    id int PRIMARY KEY NOT null AUTO_INCREMENT,
+    nome varchar (100),
+    cargo varchar (100),
+);
+
+CREATE TABLE movimentacao (
+    id int PRIMARY KEY NOT null AUTO_INCREMENT
+    fk_produtos_id int,
+    fk_responsaveis_id int,
+    datareg date,
+    quantidade_retirada	varchar(100),
+    barcode_produto char (100 )
+);
+ 
+ALTER TABLE movimentacao ADD CONSTRAINT FK_movimentacao_2
+    FOREIGN KEY (fk_produtos_id)
+    REFERENCES produtos (id)
+    ON DELETE RESTRICT;
+ 
+ALTER TABLE movimentacao ADD CONSTRAINT FK_movimentacao_3
+    FOREIGN KEY (fk_responsaveis_id)
+    REFERENCES responsaveis (id)
+    ON DELETE RESTRICT;
