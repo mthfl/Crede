@@ -1,6 +1,8 @@
 <?php
 require_once('../model/model.main.php');
 print_r($_POST);
+
+//verificação de codigo de barra
 if (isset($_GET['barcode']) && !empty(trim($_GET['barcode']))) {
 
     $barcode = $_GET['barcode'];
@@ -15,7 +17,10 @@ if (isset($_GET['barcode']) && !empty(trim($_GET['barcode']))) {
         header('Location: ../view/adcnovoproduto.php?barcode=' . $barcode);
         exit();
     }
-} else if (
+}
+
+//registrar perda
+else if (
     isset($_POST['id_produto']) && !empty(trim($_POST['id_produto'])) &&
     isset($_POST['quantidade_perdida']) && !empty(trim($_POST['quantidade_perdida'])) &&
     isset($_POST['tipo_perda']) && !empty(trim($_POST['tipo_perda'])) &&

@@ -400,8 +400,8 @@ echo "<!-- Debug: Resultado count = " . count($resultado) . " -->";
     <header class="sticky top-0 bg-gradient-to-r from-primary to-dark text-white py-4 shadow-lg z-50">
         <div class="container mx-auto px-4 flex justify-between items-center">
             <div class="flex items-center">
-                <img src="https://i.postimg.cc/0N0dsxrM/Bras-o-do-Cear-svg-removebg-preview.png" alt="Logo STGM" class="h-12 mr-3 transition-transform hover:scale-105">
-                <span class="text-white font-heading text-xl font-semibold hidden md:inline">CREDE Estoque</span>
+                <img src="../../assets/imagens/logostgm.png" alt="Logo STGM" class="h-12 mr-3 transition-transform hover:scale-105">
+                <span class="text-white font-heading text-xl font-semibold hidden md:inline">STGM Estoque</span>
             </div>
 
             <button class="mobile-menu-button focus:outline-none" aria-label="Menu" id="menuButton">
@@ -410,31 +410,31 @@ echo "<!-- Debug: Resultado count = " . count($resultado) . " -->";
                 <span></span>
             </button>
 
-            <nav class="header-nav md:flex items-center space-x-1" id="headerNav">
-                <a href="paginainicial.php" class="header-nav-link flex items-center">
-                    <i class="fas fa-home mr-2"></i>
+                        <!-- Menu de navegação -->
+                        <nav class="flex-1 p-4 space-y-2">
+                <a href="../index.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2 active">
+                    <i class="fas fa-home mr-3 text-lg"></i>
                     <span>Início</span>
                 </a>
-                <a href="estoque.php" class="header-nav-link flex items-center">
-                    <i class="fas fa-boxes mr-2"></i>
+                <a href="../estoque.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                    <i class="fas fa-boxes mr-3 text-lg"></i>
                     <span>Estoque</span>
                 </a>
-                <a href="adicionarproduto.php" class="header-nav-link active flex items-center">
-                    <i class="fas fa-plus-circle mr-2"></i>
+                <a href="adc_produto.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                    <i class="fas fa-plus-circle mr-3 text-lg"></i>
                     <span>Adicionar</span>
                 </a>
-         
-            
-                    <a href="solicitar.php" class="header-nav-link flex items-center cursor-pointer">
-                        <i class="fas fa-clipboard-list mr-2"></i>
-                        <span>Solicitar</span>
-                      
-                    </a>
-                <a href="relatorios.php" class="header-nav-link flex items-center">
-                    <i class="fas fa-chart-bar mr-2"></i>
+
+                <a href="../solicitar.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                    <i class="fas fa-clipboard-list mr-3 text-lg"></i>
+                    <span>Solicitar</span>
+                </a>
+                <a href="../relatorios.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                    <i class="fas fa-chart-bar mr-3 text-lg"></i>
                     <span>Relatórios</span>
                 </a>
             </nav>
+
         </div>
     </header>
 
@@ -493,7 +493,7 @@ echo "<!-- Debug: Resultado count = " . count($resultado) . " -->";
                 <div>
                     <h3 class="font-heading text-lg font-semibold mb-3 flex items-center">
                         <i class="fas fa-school mr-2 text-sm"></i>
-                        CREDE 1
+                        EEEP STGM
                     </h3>
                     <p class="text-xs leading-relaxed">
                         <i class="fas fa-map-marker-alt mr-1 text-xs"></i>
@@ -511,7 +511,11 @@ echo "<!-- Debug: Resultado count = " . count($resultado) . " -->";
                     <div class="text-xs leading-relaxed space-y-1">
                         <p class="flex items-start">
                             <i class="fas fa-phone-alt mr-1 mt-0.5 text-xs"></i>
-                            (85) 3101-2783
+                            (85) 3341-3990
+                        </p>
+                        <p class="flex items-start">
+                            <i class="fas fa-envelope mr-1 mt-0.5 text-xs"></i>
+                            eeepsantariamata@gmail.com
                         </p>
                     </div>
                 </div>
@@ -538,7 +542,7 @@ echo "<!-- Debug: Resultado count = " . count($resultado) . " -->";
             <!-- Rodapé inferior compacto -->
             <div class="border-t border-white/20 pt-4 mt-4 text-center">
                 <p class="text-xs">
-                    © 2025 Crede v1.2.0 | Desenvolvido por alunos EEEP STGM
+                    © 2024 STGM v1.2.0 | Desenvolvido por alunos EEEP STGM
                 </p>
             </div>
         </div>

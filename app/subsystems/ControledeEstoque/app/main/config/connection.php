@@ -1,43 +1,35 @@
 <?php
-class Connection
+class connect
 {
-    protected $pdo;
-
-    public function __construct()
+    protected $connect;
+    function __construct()
     {
         $this->connect_database();
     }
-
-    public function connect_database()
+    function connect_database()
     {
-
+        require("../models/private/config.php");
         try {
-            $local_dsn = "mysql:host=localhost;dbname=u750204740_estoque;charset=utf8mb4";
-            $local_user = "root";
-            $local_pass = "";
-            $this->pdo = new PDO($local_dsn, $local_user, $local_pass);
-            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            // echo "Conexão local estabelecida com sucesso!";
-            return true;
-        } catch (PDOException $e) {
-            // echo "Erro na conexão local: " . $e->getMessage();
+            //banco no localhost
+            $host = $config['local']['sist_pagamento']['host'];
+            $database = $config['local']['sist_pagamento']['banco'];
+            $user = $config['local']['sist_pagamento']['user'];
+            $password = $config['local']['sist_pagamento']['senha'];
 
-            // Configurações de conexão da hospedagem
-            $host_dsn = "mysql:host=u750204740_estoque;dbname=u750204740_estoque;charset=utf8mb4";
-            $host_user = "u750204740_estoque";
-            $host_pass = "paoComOvo123!@##";
-            $this->pdo = new PDO($host_dsn, $host_user, $host_pass);
-            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            // echo "Conexão com hospedagem estabelecida com sucesso!";
-            return true;
+            $this->connect = new PDO('mysql:host=' . $host . ';dbname=' . $database, $user, $password);
+
+            if (!$this->connect) {
+                //banco no hostinger
+                $host = $config['hospedagem']['sist_pagamento']['host'];
+                $database = $config['hospedagem']['sist_pagamento']['banco'];
+                $user = $config['hospedagem']['sist_pagamento']['user'];
+                $password = $config['hospedagem']['sist_pagamento']['senha'];
+                $this->connect = new PDO('mysql:host=' . $host . ';dbname=' . $database, $user, $password);
+            }
         } catch (PDOException $e) {
-            echo "Erro na conexão com hospedagem: " . $e->getMessage();
-            return false;
+
+            header('location: ../views/windows/desconnect.php');
+            exit();
         }
-    }
-
-    public function getPdo()
-    {
-        return $this->pdo;
     }
 }

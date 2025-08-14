@@ -260,42 +260,31 @@
                 <span></span>
             </button>
 
-            <nav class="header-nav md:flex items-center space-x-1" id="headerNav">
-
-                <a href="paginainicial.php" class="header-nav-link flex items-center">
-
-                    <i class="fas fa-home mr-2"></i>
+                        <!-- Menu de navegação -->
+                        <nav class="flex-1 p-4 space-y-2">
+                <a href="index.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2 active">
+                    <i class="fas fa-home mr-3 text-lg"></i>
                     <span>Início</span>
                 </a>
-                <a href="estoque.php" class="header-nav-link flex items-center">
-                    <i class="fas fa-boxes mr-2"></i>
+                <a href="estoque.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                    <i class="fas fa-boxes mr-3 text-lg"></i>
                     <span>Estoque</span>
                 </a>
-                <a href="adicionarproduto.php" class="header-nav-link flex items-center">
-                    <i class="fas fa-plus-circle mr-2"></i>
+                <a href="./products/adc_produto.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                    <i class="fas fa-plus-circle mr-3 text-lg"></i>
                     <span>Adicionar</span>
                 </a>
-             
-                <div class="relative group">
-                    <a class="header-nav-link active flex items-center cursor-pointer">
-                        <i class="fas fa-clipboard-list mr-2"></i>
-                        <span>Solicitar</span>
-                        <i class="fas fa-chevron-down ml-1 text-xs"></i>
-                    </a>
-                    <div class="absolute left-0 mt-1 w-48 bg-white rounded-lg shadow-lg overflow-hidden transform scale-0 group-hover:scale-100 transition-transform origin-top z-50">
-                        <a href="solicitar.php" class="block px-4 py-2 text-primary hover:bg-primary hover:text-white transition-colors">
-                            <i class="fas fa-clipboard-check mr-2"></i>Solicitar Produto
-                        </a>
-                        <a href="solicitarnovproduto.php" class="block px-4 py-2 text-primary hover:bg-primary hover:text-white transition-colors bg-primary bg-opacity-10">
-                            <i class="fas fa-plus-square mr-2"></i>Solicitar Novo Produto
-                        </a>
-                    </div>
-                </div>
-                <a href="relatorios.php" class="header-nav-link flex items-center">
-                    <i class="fas fa-chart-bar mr-2"></i>
+
+                <a href="solicitar.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                    <i class="fas fa-clipboard-list mr-3 text-lg"></i>
+                    <span>Solicitar</span>
+                </a>
+                <a href="relatorios.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                    <i class="fas fa-chart-bar mr-3 text-lg"></i>
                     <span>Relatórios</span>
                 </a>
             </nav>
+
         </div>
     </header>
 
