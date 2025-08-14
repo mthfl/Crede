@@ -400,8 +400,8 @@ echo "<!-- Debug: Resultado count = " . count($resultado) . " -->";
     <header class="sticky top-0 bg-gradient-to-r from-primary to-dark text-white py-4 shadow-lg z-50">
         <div class="container mx-auto px-4 flex justify-between items-center">
             <div class="flex items-center">
-                <img src="../assets/imagens/logostgm.png" alt="Logo STGM" class="h-12 mr-3 transition-transform hover:scale-105">
-                <span class="text-white font-heading text-xl font-semibold hidden md:inline">STGM Estoque</span>
+                <img src="https://i.postimg.cc/0N0dsxrM/Bras-o-do-Cear-svg-removebg-preview.png" alt="Logo STGM" class="h-12 mr-3 transition-transform hover:scale-105">
+                <span class="text-white font-heading text-xl font-semibold hidden md:inline">CREDE Estoque</span>
             </div>
 
             <button class="mobile-menu-button focus:outline-none" aria-label="Menu" id="menuButton">
@@ -493,7 +493,7 @@ echo "<!-- Debug: Resultado count = " . count($resultado) . " -->";
                 <div>
                     <h3 class="font-heading text-lg font-semibold mb-3 flex items-center">
                         <i class="fas fa-school mr-2 text-sm"></i>
-                        EEEP STGM
+                        CREDE 1
                     </h3>
                     <p class="text-xs leading-relaxed">
                         <i class="fas fa-map-marker-alt mr-1 text-xs"></i>
@@ -511,11 +511,7 @@ echo "<!-- Debug: Resultado count = " . count($resultado) . " -->";
                     <div class="text-xs leading-relaxed space-y-1">
                         <p class="flex items-start">
                             <i class="fas fa-phone-alt mr-1 mt-0.5 text-xs"></i>
-                            (85) 3341-3990
-                        </p>
-                        <p class="flex items-start">
-                            <i class="fas fa-envelope mr-1 mt-0.5 text-xs"></i>
-                            eeepsantariamata@gmail.com
+                            (85) 3101-2783
                         </p>
                     </div>
                 </div>
@@ -542,7 +538,7 @@ echo "<!-- Debug: Resultado count = " . count($resultado) . " -->";
             <!-- Rodapé inferior compacto -->
             <div class="border-t border-white/20 pt-4 mt-4 text-center">
                 <p class="text-xs">
-                    © 2024 STGM v1.2.0 | Desenvolvido por alunos EEEP STGM
+                    © 2025 Crede v1.2.0 | Desenvolvido por alunos EEEP STGM
                 </p>
             </div>
         </div>
