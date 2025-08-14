@@ -4,15 +4,15 @@ return $config = [
         "crede_estoque" => [
             "host" => "localhost",
             "user" => "root",
-            "banco" => "crede_estoque",
+            "banco" => "crede_users",
             "senha" => ""
         ]
     ],
     "hospedagem" => [
         "crede_estoque" => [
             "host" => "localhost",
-            "user" => "u750204740_crede_estoque",
-            "banco" => "u750204740_crede_estoque",
+            "user" => "u750204740_crede_users",
+            "banco" => "u750204740_crede_users",
             "senha" => "***"           
         ]
     ]
