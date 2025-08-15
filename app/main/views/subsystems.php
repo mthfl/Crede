@@ -109,8 +109,35 @@ $session->tempo_session();
         /* Header melhorado */
         .header-gradient {
             background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(0, 90, 36, 0.1);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(0, 90, 36, 0.08);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            position: relative;
+        }
+
+        .header-gradient::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #005A24 0%, #10B981 50%, #005A24 100%);
+            box-shadow: 0 2px 8px rgba(0, 90, 36, 0.3);
+        }
+
+        .header-gradient::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(0, 90, 36, 0.02), transparent);
+            pointer-events: none;
         }
 
         .logo-container {
@@ -121,7 +148,7 @@ $session->tempo_session();
         /* Search bar aprimorada */
         .search-container {
             position: relative;
-            max-width: 600px;
+            max-width: 800px;
             margin: 0 auto;
         }
 
@@ -268,6 +295,11 @@ $session->tempo_session();
                 max-width: 100%;
             }
             
+            .search-container {
+                padding: 0 16px;
+                max-width: 100%;
+            }
+            
             .system-card {
                 padding: 24px 20px;
             }
@@ -295,6 +327,22 @@ $session->tempo_session();
             
             body {
                 padding-bottom: 0;
+            }
+
+            /* Animação de entrada do header */
+            .header-gradient {
+                animation: slideDown 0.6s ease-out;
+            }
+
+            @keyframes slideDown {
+                from {
+                    transform: translateY(-100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateY(0);
+                    opacity: 1;
+                }
             }
         }
         
@@ -646,32 +694,76 @@ $session->tempo_session();
             color: #6b7280;
             font-size: 12px;
             font-weight: 500;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
-            padding: 8px 12px;
-            border-radius: 12px;
-            min-width: 60px;
+            padding: 12px 16px;
+            border-radius: 16px;
+            min-width: 70px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-btn-with-text::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 90, 36, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .header-btn-with-text:hover::before {
+            left: 100%;
         }
 
         .header-btn-with-text i {
-            font-size: 18px;
-            margin-bottom: 4px;
+            font-size: 20px;
+            margin-bottom: 6px;
             transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
         }
 
         .header-btn-with-text span {
             font-size: 11px;
-            font-weight: 500;
+            font-weight: 600;
             line-height: 1.2;
+            position: relative;
+            z-index: 1;
+            letter-spacing: 0.3px;
         }
 
         .header-btn-with-text:hover {
             color: #005A24;
-            background: rgba(0, 90, 36, 0.05);
+            background: rgba(0, 90, 36, 0.08);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 90, 36, 0.15);
         }
 
         .header-btn-with-text:hover i {
-            transform: scale(1.1);
+            transform: scale(1.15) translateY(-2px);
+        }
+
+        .header-btn-with-text:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 8px rgba(0, 90, 36, 0.1);
+        }
+
+        /* Botão Sair especial */
+        .header-btn-with-text.text-red-600 {
+            color: #dc2626;
+        }
+
+        .header-btn-with-text.text-red-600:hover {
+            color: #b91c1c;
+            background: rgba(220, 38, 38, 0.08);
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.15);
+        }
+
+        .header-btn-with-text.text-red-600::before {
+            background: linear-gradient(90deg, transparent, rgba(220, 38, 38, 0.1), transparent);
         }
 
         /* Classes de Acessibilidade */
@@ -755,38 +847,39 @@ $session->tempo_session();
 <body>
     <!-- Header -->
     <header class="header-gradient shadow-sm">
-        <div class="container mx-auto px-4 sm:px-6 py-3 sm:py-4">
+        <div class="container mx-auto px-4 sm:px-6 py-4 sm:py-6">
             <div class="flex items-center justify-between header-content">
-                <div class="flex items-center space-x-3 sm:space-x-4">
-                    <div class="logo-container w-12 h-12 rounded-xl flex items-center justify-center">
+                <div class="flex items-center space-x-4 sm:space-x-6">
+                    <div class="w-14 h-14 flex items-center justify-center bg-white rounded-2xl shadow-lg">
                         <img src="https://i.postimg.cc/0N0dsxrM/Bras-o-do-Cear-svg-removebg-preview.png" 
                              alt="Logo Ceará" 
-                             class="w-8 h-8 object-contain">
+                             class="w-10 h-10 object-contain">
                     </div>
                     <div>
-                        <h1 class="text-2xl font-bold text-gray-800 font-heading">
+                        <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 font-heading">
                             Subsistemas <span class="text-primary">CREDE</span>
                         </h1>
                     </div>
                 </div>
                 
                 <!-- Botões de Navegação (Desktop) -->
-                <div class="hidden md:flex items-center space-x-6">
-                    <button class="header-btn-with-text" title="Início">
+                <div class="hidden md:flex items-center space-x-8">
+                    <button class="header-btn-with-text" title="Início" onclick="window.location.href='#'">
                         <i class="fas fa-home"></i>
                         <span>Início</span>
-                    </button>
-                    <button class="header-btn-with-text" title="Sair" onclick="window.location.href='../models/sessions.php?sair'">
-                        <i class="fas fa-sign-out-alt"></i>
-                        <span>Sair</span>
                     </button>
                     <button class="header-btn-with-text" title="Acessibilidade" onclick="toggleAccessibility()">
                         <i class="fas fa-universal-access"></i>
                         <span>Acessibilidade</span>
                     </button>
                     <button class="header-btn-with-text" title="Perfil do usuário" onclick="toggleProfile()">
-                        <i class="fas fa-user"></i>
+                        <i class="fas fa-user-circle"></i>
                         <span>Perfil</span>
+                    </button>
+                    <div class="w-px h-8 bg-gray-300 mx-2"></div>
+                    <button class="header-btn-with-text text-red-600 hover:text-red-700" title="Sair" onclick="window.location.href='login.php'">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Sair</span>
                     </button>
                 </div>
                 
