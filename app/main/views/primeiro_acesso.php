@@ -1,4 +1,8 @@
-
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -92,18 +96,24 @@
 
         /* Animações */
         @keyframes float {
-            0%, 100% {
+
+            0%,
+            100% {
                 transform: translateY(0px) rotate(0deg);
             }
+
             50% {
                 transform: translateY(-20px) rotate(5deg);
             }
         }
 
         @keyframes sway {
-            0%, 100% {
+
+            0%,
+            100% {
                 transform: translateX(0px) rotate(0deg);
             }
+
             50% {
                 transform: translateX(10px) rotate(2deg);
             }
@@ -113,16 +123,20 @@
             0% {
                 transform: translateY(-100px) translateX(0px) rotate(0deg);
             }
+
             100% {
                 transform: translateY(calc(100vh + 100px)) translateX(50px) rotate(360deg);
             }
         }
 
         @keyframes sparkle {
-            0%, 100% {
+
+            0%,
+            100% {
                 opacity: 0.3;
                 transform: scale(1);
             }
+
             50% {
                 opacity: 1;
                 transform: scale(1.2);
@@ -134,6 +148,7 @@
                 opacity: 0;
                 transform: translateY(30px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -145,6 +160,7 @@
                 opacity: 0;
                 transform: translateX(-50px);
             }
+
             to {
                 opacity: 1;
                 transform: translateX(0);
@@ -156,6 +172,7 @@
                 opacity: 0;
                 transform: translateX(50px);
             }
+
             to {
                 opacity: 1;
                 transform: translateX(0);
@@ -163,9 +180,12 @@
         }
 
         @keyframes pulse-glow {
-            0%, 100% {
+
+            0%,
+            100% {
                 box-shadow: 0 0 20px rgba(0, 90, 36, 0.4);
             }
+
             50% {
                 box-shadow: 0 0 30px rgba(0, 90, 36, 0.6);
             }
@@ -196,6 +216,7 @@
             0% {
                 transform: translateX(-200px);
             }
+
             100% {
                 transform: translateX(calc(100vw + 200px));
             }
@@ -272,10 +293,10 @@
             font-family: 'Inter', sans-serif;
         }
 
-        .input-group input:focus + label,
-        .input-group input:not(:placeholder-shown) + label,
-        .input-group select:focus + label,
-        .input-group select:not([value=""]) + label {
+        .input-group input:focus+label,
+        .input-group input:not(:placeholder-shown)+label,
+        .input-group select:focus+label,
+        .input-group select:not([value=""])+label {
             top: -12px;
             left: 10px;
             font-size: 0.85rem;
@@ -364,8 +385,13 @@
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         .animate-fade-in-up {
@@ -409,23 +435,23 @@
         ::-webkit-scrollbar-thumb:hover {
             background: linear-gradient(135deg, #1A3C34 0%, #E76F51 100%);
         }
-        
+
         /* Enhanced responsive styles */
         @media (max-width: 640px) {
             .main-container {
                 width: 95%;
                 margin: 1rem auto;
             }
-            
+
             .input-group label {
                 font-size: 0.9rem;
             }
-            
+
             .btn-enhanced {
                 padding: 0.75rem 1rem;
             }
         }
-        
+
         @media (max-width: 475px) {
             .main-container {
                 width: 100%;
@@ -433,7 +459,7 @@
                 border-radius: 0;
                 min-height: 100vh;
             }
-            
+
             .form-container {
                 padding: 1.5rem;
             }
@@ -442,7 +468,7 @@
 </head>
 
 <body class="font-sans bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200 min-h-screen flex items-center justify-center p-0 sm:p-4">
-    
+
     <!-- Elementos flutuantes -->
     <div class="floating-elements">
         <!-- Nuvens flutuantes -->
@@ -453,30 +479,30 @@
 
     <div class="main-container w-full max-w-6xl bg-white rounded-none sm:rounded-3xl shadow-strong overflow-hidden animate-fade-in-up relative z-10">
         <div class="flex flex-col lg:flex-row min-h-[100vh] sm:min-h-[600px]">
-            
+
             <!-- Enhanced Image Container -->
             <div class="hidden md:block lg:flex-1 bg-gradient-primary relative overflow-hidden animate-slide-in-left">
                 <div class="absolute inset-0 bg-black/40"></div>
                 <div class="absolute inset-0 bg-gradient-to-br from-primary/80 via-transparent to-secondary/80"></div>
-                
+
                 <!-- Elementos decorativos -->
                 <div class="absolute top-10 left-10 w-20 h-20 border-2 border-white/30 rounded-full animate-float"></div>
                 <div class="absolute bottom-20 right-10 w-16 h-16 border-2 border-white/30 rounded-full animate-sway"></div>
                 <div class="absolute top-1/3 right-20 w-12 h-12 bg-white/20 rounded-full animate-bounce-gentle"></div>
-                
+
                 <div class="relative z-10 h-full flex flex-col justify-center items-center p-8 lg:p-12 text-center text-white">
                     <div class="mb-8">
                         <i class="fas fa-key text-6xl lg:text-8xl mb-6 text-secondary"></i>
                     </div>
-                    
+
                     <h1 class="text-3xl lg:text-5xl font-bold mb-6 leading-tight font-heading">
                         Primeiro <span class="text-secondary">Acesso</span>
                     </h1>
-                    
+
                     <p class="text-lg lg:text-xl mb-8 max-w-md leading-relaxed opacity-90 font-sans">
                         Defina sua senha para acessar o Sistema CREDE
                     </p>
-                    
+
                     <div class="flex space-x-4 text-sm opacity-80">
                         <div class="flex items-center animate-bounce-gentle" style="animation-delay: 0.5s;">
                             <i class="fas fa-shield-alt mr-2 text-yellow-300"></i>
@@ -493,16 +519,16 @@
                     </div>
                 </div>
             </div>
-            
+
             <!-- Enhanced Form Container -->
             <div class="w-full lg:flex-1 p-4 xs:p-6 sm:p-8 lg:p-12 flex flex-col justify-center animate-slide-in-right relative">
-                
+
                 <!-- Logo Container -->
                 <div class="text-center mb-6 sm:mb-8">
                     <div class="inline-block p-3 sm:p-4 rounded-2xl">
-                        <img src="https://i.postimg.cc/0N0dsxrM/Bras-o-do-Cear-svg-removebg-preview.png" 
-                             alt="Logo Sistema" 
-                             class="w-16 h-16 sm:w-20 sm:h-20 object-contain">
+                        <img src="https://i.postimg.cc/0N0dsxrM/Bras-o-do-Cear-svg-removebg-preview.png"
+                            alt="Logo Sistema"
+                            class="w-16 h-16 sm:w-20 sm:h-20 object-contain">
                     </div>
                     <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 mb-2 font-heading">
                         Definir Senha
@@ -513,19 +539,23 @@
                 </div>
 
                 <!-- Enhanced Form -->
-                <form id="primeiroAcessoForm" 
-                      class="space-y-4 sm:space-y-6">
-                    
+                <form
+                    action="../controllers/controller_auth.php"
+                    method="post"
+                    id="primeiroAcessoForm"
+                    class="space-y-4 sm:space-y-6">
+
                     <!-- Email Input (Disabled) -->
                     <div class="input-group">
                         <div class="relative">
-                            <input type="email" 
-                                   id="email_display" 
-                                   value="usuario@crede.ce.gov.br" 
-                                   disabled
-                                   class="w-full px-4 py-3 sm:py-4 pl-10 sm:pl-12 rounded-xl text-gray-600 bg-gray-100 cursor-not-allowed transition-all duration-300 text-sm sm:text-base">
-                            <label for="email_display" 
-                                   class="absolute left-10 mx-10 sm:left-12 top-3 sm:top-4 text-gray-500 text-xs sm:text-sm font-semibold">
+                            <input type="hidden" name="email" value="<?= $_SESSION['email'] ?>">
+                            <input type="email"
+                                id="email_display"
+                                value="<?= $_SESSION['email'] ?>"
+                                disabled
+                                class="w-full px-4 py-3 sm:py-4 pl-10 sm:pl-12 rounded-xl text-gray-600 bg-gray-100 cursor-not-allowed transition-all duration-300 text-sm sm:text-base">
+                            <label for="email_display"
+                                class="absolute left-10 mx-10 sm:left-12 top-3 sm:top-4 text-gray-500 text-xs sm:text-sm font-semibold">
                                 E-mail
                             </label>
                             <i class="fas fa-envelope absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-base sm:text-lg"></i>
@@ -535,13 +565,14 @@
                     <!-- CPF Input (Disabled) -->
                     <div class="input-group">
                         <div class="relative">
-                            <input type="text" 
-                                   id="cpf_display" 
-                                   value="123.456.789-00" 
-                                   disabled
-                                   class="w-full px-4 py-3 sm:py-4 pl-10 sm:pl-12 rounded-xl text-gray-600 bg-gray-100 cursor-not-allowed transition-all duration-300 text-sm sm:text-base">
-                            <label for="cpf_display" 
-                                   class="absolute left-10 mx-10 sm:left-12 top-3 sm:top-4 text-gray-500 text-xs sm:text-sm font-semibold">
+                            <input type="hidden" name="cpf" value="<?= $_SESSION['cpf'] ?>">
+                            <input type="text"
+                                id="cpf_display"
+                                value="<?= $_SESSION['cpf'] ?>"
+                                disabled
+                                class="w-full px-4 py-3 sm:py-4 pl-10 sm:pl-12 rounded-xl text-gray-600 bg-gray-100 cursor-not-allowed transition-all duration-300 text-sm sm:text-base">
+                            <label for="cpf_display"
+                                class="absolute left-10 mx-10 sm:left-12 top-3 sm:top-4 text-gray-500 text-xs sm:text-sm font-semibold">
                                 CPF
                             </label>
                             <i class="fas fa-id-card absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-base sm:text-lg"></i>
@@ -551,15 +582,15 @@
                     <!-- Nova Senha Input -->
                     <div class="input-group">
                         <div class="relative">
-                            <input type="password" 
-                                   name="nova_senha" 
-                                   id="nova_senha" 
-                                   placeholder=" " 
-                                   required
-                                   minlength="6"
-                                   class="w-full px-4 py-3 sm:py-4 pl-10 sm:pl-12 pr-10 sm:pr-12 rounded-xl text-gray-800 focus:shadow-primary transition-all duration-300 peer text-sm sm:text-base">
-                            <label for="nova_senha" 
-                                   class="absolute left-10 mx-10 sm:left-12 top-3 sm:top-4 transition-all duration-300 peer-focus:text-secondary peer-focus:text-xs sm:peer-focus:text-sm peer-focus:-translate-y--1 peer-focus:font-semibold peer-[:not(:placeholder-shown)]:text-xs sm:peer-[:not(:placeholder-shown)]:text-sm peer-[:not(:placeholder-shown)]:-translate-y-7 peer-[:not(:placeholder-shown)]:text-secondary peer-[:not(:placeholder-shown)]:font-semibold text-sm sm:text-base">
+                            <input type="password"
+                                name="senha"
+                                id="nova_senha"
+                                placeholder=" "
+                                required
+                                minlength="6"
+                                class="w-full px-4 py-3 sm:py-4 pl-10 sm:pl-12 pr-10 sm:pr-12 rounded-xl text-gray-800 focus:shadow-primary transition-all duration-300 peer text-sm sm:text-base">
+                            <label for="nova_senha"
+                                class="absolute left-10 mx-10 sm:left-12 top-3 sm:top-4 transition-all duration-300 peer-focus:text-secondary peer-focus:text-xs sm:peer-focus:text-sm peer-focus:-translate-y--1 peer-focus:font-semibold peer-[:not(:placeholder-shown)]:text-xs sm:peer-[:not(:placeholder-shown)]:text-sm peer-[:not(:placeholder-shown)]:-translate-y-7 peer-[:not(:placeholder-shown)]:text-secondary peer-[:not(:placeholder-shown)]:font-semibold text-sm sm:text-base">
                                 Nova Senha
                             </label>
                             <i class="fas fa-lock absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-primary text-base sm:text-lg"></i>
@@ -570,15 +601,15 @@
                     <!-- Confirmar Senha Input -->
                     <div class="input-group">
                         <div class="relative">
-                            <input type="password" 
-                                   name="confirmar_senha" 
-                                   id="confirmar_senha" 
-                                   placeholder=" " 
-                                   required
-                                   minlength="6"
-                                   class="w-full px-4 py-3 sm:py-4 pl-10 sm:pl-12 pr-10 sm:pr-12 rounded-xl text-gray-800 focus:shadow-primary transition-all duration-300 peer text-sm sm:text-base">
-                            <label for="confirmar_senha" 
-                                   class="absolute left-10 mx-10 sm:left-12 top-3 sm:top-4 transition-all duration-300 peer-focus:text-secondary peer-focus:text-xs sm:peer-focus:text-sm peer-focus:-translate-y--1 peer-focus:font-semibold peer-[:not(:placeholder-shown)]:text-xs sm:peer-[:not(:placeholder-shown)]:text-sm peer-[:not(:placeholder-shown)]:-translate-y-7 peer-[:not(:placeholder-shown)]:text-secondary peer-[:not(:placeholder-shown)]:font-semibold text-sm sm:text-base">
+                            <input type="password"
+                                name="confirmar_senha"
+                                id="confirmar_senha"
+                                placeholder=" "
+                                required
+                                minlength="6"
+                                class="w-full px-4 py-3 sm:py-4 pl-10 sm:pl-12 pr-10 sm:pr-12 rounded-xl text-gray-800 focus:shadow-primary transition-all duration-300 peer text-sm sm:text-base">
+                            <label for="confirmar_senha"
+                                class="absolute left-10 mx-10 sm:left-12 top-3 sm:top-4 transition-all duration-300 peer-focus:text-secondary peer-focus:text-xs sm:peer-focus:text-sm peer-focus:-translate-y--1 peer-focus:font-semibold peer-[:not(:placeholder-shown)]:text-xs sm:peer-[:not(:placeholder-shown)]:text-sm peer-[:not(:placeholder-shown)]:-translate-y-7 peer-[:not(:placeholder-shown)]:text-secondary peer-[:not(:placeholder-shown)]:font-semibold text-sm sm:text-base">
                                 Confirmar Senha
                             </label>
                             <i class="fas fa-lock absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-primary text-base sm:text-lg"></i>
@@ -604,8 +635,8 @@
 
                     <!-- Enhanced Submit Button -->
                     <div class="mt-4 sm:mt-6">
-                        <button type="submit" 
-                                class="btn-enhanced w-full px-6 py-3 sm:py-4 text-white rounded-xl transition-all duration-300 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50 text-sm sm:text-base font-semibold bg-gradient-to-r from-primary to-dark hover:from-dark hover:to-primary">
+                        <button type="submit"
+                            class="btn-enhanced w-full px-6 py-3 sm:py-4 text-white rounded-xl transition-all duration-300 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50 text-sm sm:text-base font-semibold bg-gradient-to-r from-primary to-dark hover:from-dark hover:to-primary">
                             <i class="fas fa-key mr-2"></i>
                             <span>Definir Senha</span>
                         </button>
@@ -620,8 +651,8 @@
                                 <i class="fas fa-arrow-left mr-1"></i>Voltar ao login
                             </a>
                             <span class="mx-2">•</span>
-                            <a href="mailto:suporte@sistema.com" 
-                               class="text-secondary hover:text-primary transition-colors duration-300">
+                            <a href="mailto:suporte@sistema.com"
+                                class="text-secondary hover:text-primary transition-colors duration-300">
                                 Contate o suporte
                             </a>
                         </p>
@@ -646,7 +677,7 @@
                     const input = this.previousElementSibling.previousElementSibling;
                     const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
                     input.setAttribute('type', type);
-                    
+
                     // Enhanced icon animation
                     this.classList.toggle('fa-eye');
                     this.classList.toggle('fa-eye-slash');
@@ -659,8 +690,7 @@
 
             // Enhanced form submission with validation
             form.addEventListener('submit', function(e) {
-                e.preventDefault(); // Previne o envio real do formulário
-                
+
                 const novaSenha = novaSenhaInput.value;
                 const confirmarSenha = confirmarSenhaInput.value;
 
@@ -671,26 +701,20 @@
                     return;
                 }
 
-                if (novaSenha !== confirmarSenha) {
-                    alert('As senhas não coincidem.');
-                    confirmarSenhaInput.focus();
-                    return;
-                }
-
                 // Loading state
                 submitButton.classList.add('loading');
                 submitButton.disabled = true;
-                
+
                 // Add loading text
                 const originalText = submitButton.innerHTML;
                 submitButton.innerHTML = '<span><i class="fas fa-spinner fa-spin mr-2"></i>Definindo senha...</span>';
-                
+
                 // Simula o processamento
                 setTimeout(() => {
                     submitButton.classList.remove('loading');
                     submitButton.disabled = false;
                     submitButton.innerHTML = originalText;
-                    
+
                     // Simula sucesso
                     alert('Senha definida com sucesso! Redirecionando para o login...');
                     // Aqui você pode redirecionar para a página de login
@@ -705,7 +729,7 @@
                     this.parentElement.style.transform = 'translateY(-2px)';
                     this.style.boxShadow = '0 0 20px rgba(0, 90, 36, 0.3)';
                 });
-                
+
                 input.addEventListener('blur', function() {
                     this.parentElement.style.transform = 'translateY(0)';
                     this.style.boxShadow = '';
@@ -719,7 +743,7 @@
                 const size = Math.max(rect.width, rect.height);
                 const x = e.clientX - rect.left - size / 2;
                 const y = e.clientY - rect.top - size / 2;
-                
+
                 ripple.style.cssText = `
                     position: absolute;
                     width: ${size}px;
@@ -732,9 +756,9 @@
                     animation: ripple 0.6s ease-out;
                     pointer-events: none;
                 `;
-                
+
                 this.appendChild(ripple);
-                
+
                 setTimeout(() => {
                     ripple.remove();
                 }, 600);
@@ -763,7 +787,7 @@
         document.addEventListener('mousedown', function() {
             document.body.classList.remove('keyboard-navigation');
         });
-        
+
         // Handle orientation changes on mobile
         window.addEventListener('orientationchange', function() {
             // Small delay to allow the browser to update dimensions
@@ -772,7 +796,7 @@
                 document.documentElement.style.setProperty('--vh', `${vh}px`);
             }, 100);
         });
-        
+
         // Set initial viewport height variable
         (function() {
             const vh = window.innerHeight * 0.01;

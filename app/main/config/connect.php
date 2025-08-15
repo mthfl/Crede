@@ -8,8 +8,10 @@ class connect
     }
     function connect_database()
     {
-        require("../models/private/config.php");
+        
         try {
+            require("../models/private/config.php");
+
             //banco no localhost
             $host = $config['local']['crede_users']['host'];
             $database = $config['local']['crede_users']['banco'];
@@ -28,8 +30,8 @@ class connect
             }
         } catch (PDOException $e) {
 
-            header('location: ../views/windows/desconnect.php');
-            exit();
+            //header('location: ../views/windows/desconnect.php');
+            //exit();
         }
     }
 }

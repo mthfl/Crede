@@ -4,5 +4,7 @@ return $table = [
         1 => 'usuarios',
         2=> 'setores',
         3=> 'tipo_usuarios',
+        4=> 'permissoes',
+        5=> 'sistemas',
     ]
 ];

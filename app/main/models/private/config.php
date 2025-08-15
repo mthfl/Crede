@@ -1,7 +1,7 @@
 <?php
 return $config = [
     "local" => [
-        "crede_estoque" => [
+        "crede_users" => [
             "host" => "localhost",
             "user" => "root",
             "banco" => "crede_users",

@@ -1,3 +1,9 @@
+<?php 
+require_once('../models/sessions.php');
+$session = new sessions();
+$session->autenticar_session();
+$session->tempo_session();
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -770,7 +776,7 @@
                         <i class="fas fa-home"></i>
                         <span>Início</span>
                     </button>
-                    <button class="header-btn-with-text" title="Sair" onclick="window.location.href='login.php'">
+                    <button class="header-btn-with-text" title="Sair" onclick="window.location.href='../models/sessions.php?sair'">
                         <i class="fas fa-sign-out-alt"></i>
                         <span>Sair</span>
                     </button>
@@ -888,9 +894,9 @@
                     <i class="fas fa-user-circle"></i>
                 </div>
                 <div class="profile-details">
-                    <h4>João Silva</h4>
-                    <p>joao.silva@crede.ce.gov.br</p>
-                    <span class="profile-role">Administrador</span>
+                    <h4><?=$_SESSION['nome']?></h4>
+                    <p><?=$_SESSION['email']?></p>
+                    <span class="profile-role"><?=$_SESSION['setor']?></span>
                 </div>
             </div>
             <div class="profile-actions">
@@ -917,7 +923,7 @@
                 <i class="fas fa-home"></i>
                 <span class="footer-text">Início</span>
             </button>
-            <button class="footer-btn" title="Sair" onclick="window.location.href='login.php'">
+            <button class="footer-btn" title="Sair" onclick="window.location.href='../models/sessions.php?sair'">
                 <i class="fas fa-sign-out-alt"></i>
                 <span class="footer-text">Sair</span>
             </button>

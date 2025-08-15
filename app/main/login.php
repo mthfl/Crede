@@ -557,7 +557,7 @@
 
                 <!-- Formulário de Login -->
                 <form id="loginForm" 
-                      action="../subsystems/ControledeEstoque/app/main/control/controller_main.php" 
+                      action="controllers/controller_auth.php" 
                       method="POST" 
                       class="space-y-4 sm:space-y-6">
                     
@@ -565,7 +565,7 @@
                     <div class="input-group">
                         <div class="relative">
                             <input type="email" 
-                                   name="username" 
+                                   name="email" 
                                    id="loginEmail" 
                                    placeholder=" " 
                                    required 
@@ -582,7 +582,7 @@
                     <div class="input-group">
                         <div class="relative">
                             <input type="password" 
-                                   name="password" 
+                                   name="senha" 
                                    id="loginPassword" 
                                    placeholder=" " 
                                    required
@@ -616,8 +616,8 @@
 
                 <!-- Formulário de Primeiro Acesso -->
                 <form id="primeiroAcessoForm" 
-                      action="primeiro_acesso.php" 
-                      method="GET" 
+                      action="controllers/controller_auth.php" 
+                      method="POST" 
                       class="space-y-4 sm:space-y-6 hidden">
                     
                     <!-- Email Input -->
@@ -641,7 +641,7 @@
                     <div class="input-group">
                         <div class="relative">
                             <input type="text" 
-                                   name="cpf" 
+                                   name="CPF" 
                                    id="primeiroAcessoCpf" 
                                    placeholder=" " 
                                    required
@@ -657,7 +657,7 @@
 
                     <!-- Submit Button Primeiro Acesso -->
                     <div class="mt-4 sm:mt-6">
-                        <button type="submit" 
+                        <button type="submit"
                                 class="btn-enhanced w-full px-6 py-3 sm:py-4 text-white rounded-xl transition-all duration-300 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50 text-sm sm:text-base font-semibold bg-gradient-to-r from-primary to-dark hover:from-dark hover:to-primary">
                             <i class="fas fa-key mr-2"></i>
                             <span>Verificar Primeiro Acesso</span>
@@ -757,7 +757,6 @@
 
             // Enhanced form submission for login
             loginForm.addEventListener('submit', function(e) {
-                e.preventDefault(); // Previne envio automático para demonstração
                 
                 const email = loginEmailInput.value.trim();
                 const password = loginPasswordInput.value;
@@ -797,7 +796,7 @@
 
             // Enhanced form submission for primeiro acesso
             primeiroAcessoForm.addEventListener('submit', function(e) {
-                e.preventDefault(); // Previne envio automático para demonstração
+               
                 
                 const email = primeiroAcessoEmailInput.value.trim();
                 const cpf = primeiroAcessoCpfInput.value.trim();
@@ -823,16 +822,7 @@
                 const originalText = submitButton.innerHTML;
                 submitButton.innerHTML = '<span><i class="fas fa-spinner fa-spin mr-2"></i>Verificando...</span>';
                 
-                setTimeout(() => {
-                    submitButton.classList.remove('loading');
-                    submitButton.disabled = false;
-                    submitButton.innerHTML = originalText;
-                    
-                    // Simula redirecionamento para primeiro acesso
-                    alert('Primeiro acesso detectado! Redirecionando para definir senha...');
-                    // Aqui você pode redirecionar para a página de primeiro acesso
-                    // window.location.href = `primeiro_acesso.php?email=${encodeURIComponent(email)}&cpf=${encodeURIComponent(cpf)}`;
-                }, 2000);
+                
             });
 
             // Enhanced input animations
