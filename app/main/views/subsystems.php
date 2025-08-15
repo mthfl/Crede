@@ -818,12 +818,12 @@ $session->tempo_session();
      
 
             <!-- Card 2: Controle de Estoque -->
+             <a href="../../subsystems/controle_de_estoque/default.php">
             <div class="system-card animate-on-scroll" 
                  tabindex="0"
                  role="button"
                  aria-label="Acessar Controle de Estoque - Sistema de gestão de materiais e recursos"
-                 data-system="estoque"
-                 onclick="navigateToSystem('../subsystems/ControledeEstoque/default.php')">
+                 data-system="estoque">
                 <div class="card-icon icon-purple">
                     <i class="fas fa-boxes"></i>
                 </div>
@@ -831,6 +831,7 @@ $session->tempo_session();
                 <p class="text-gray-600 mb-4 text-sm">Gestão completa de materiais e recursos</p>
                 <span class="card-badge">Sistema Ativo</span>
             </div>
+            </a>
 
      
 
