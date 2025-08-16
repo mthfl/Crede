@@ -1,5 +1,9 @@
+<?php 
+require_once('../models/sessions.php');
+$session = new sessions();
+$session->autenticar_session();
+$session->tempo_session();
 
-<?php
 require_once('../model/functionsViews.php');
 $select = new select();
 

@@ -1,5 +1,5 @@
 <?php
-require_once("../config/connect.php");
+require_once(__DIR__.'\..\config\connect.php');
 class model_usuario extends connect
 {
     private string $table1;
@@ -23,7 +23,7 @@ class model_usuario extends connect
     {
         try {
 
-            $stmt_check = $this->connect->prepare("SELECT * FROM $this->table1 WHERE email = :email AND cpf = :cpf");
+            $stmt_check = $this->connect->prepare("SELECT * FROM $this->table1 WHERE email = :email AND cpf = :cpf AND senha = NULL");
             $stmt_check->bindValue(":cpf", $cpf);
             $stmt_check->bindValue(":email", $email);
             $stmt_check->execute();

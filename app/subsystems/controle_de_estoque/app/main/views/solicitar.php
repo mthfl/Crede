@@ -1,9 +1,12 @@
-<?php
+<?php 
+require_once('../models/sessions.php');
+$session = new sessions();
+$session->autenticar_session();
+$session->tempo_session();
+
 require_once('../models/model.select.php');
 $select = new select();
 
-?>
-<?php
 // Processar mensagens de URL
 $mensagem = '';
 $tipoMensagem = '';

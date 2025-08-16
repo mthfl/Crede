@@ -1,5 +1,5 @@
 <?php
-require_once(dirname(__FILE__) . "../config/connect.php");
+require_once(__DIR__.'\..\config\connect.php');
 class model_select extends connect
 {
     private string $table1;

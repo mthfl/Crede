@@ -1,6 +1,6 @@
 <?php
 
-require_once('../config/connect.php');
+require_once(__DIR__.'\..\config\connect.php');
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();

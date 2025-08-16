@@ -8,7 +8,7 @@ class connect
     }
     function connect_database()
     {
-        require("../models/private/config.php");
+        require(__DIR__."\..\models\private\config.php");
         try {
             //banco no localhost
             $host = $config['local']['crede_estoque']['host'];

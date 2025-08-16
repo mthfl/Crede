@@ -1,3 +1,9 @@
+<?php 
+require_once('../../models/sessions.php');
+$session = new sessions();
+$session->autenticar_session();
+$session->tempo_session();
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -341,7 +347,7 @@
             </div>
 
             <div class="bg-white rounded-xl shadow-lg p-8 max-w-2xl w-full border-2 border-primary mx-auto">
-                <form action="../control/controllerConsultarProduto.php" method="POST" class="space-y-6">
+                <form action="../../controllers/controller_crud_produto.php" method="POST" class="space-y-6">
                     <div class="space-y-4">
                         <!-- Checkboxes para tipo de produto -->
                         <div class="space-y-3">

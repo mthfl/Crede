@@ -1,27 +1,11 @@
+<?php 
+require_once('../models/sessions.php');
+$session = new sessions();
+$session->autenticar_session();
+$session->tempo_session();
 
-<?php
-// Processar mensagens de URL
-$mensagem = '';
-$tipoMensagem = '';
-$mostrarAlerta = false;
-
-if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message'])) {
-    $mensagem = $_GET['message'];
-    $tipoMensagem = 'success';
-    $mostrarAlerta = true;
-} elseif (isset($_GET['error']) && $_GET['error'] == '1' && isset($_GET['message'])) {
-    $mensagem = $_GET['message'];
-    $tipoMensagem = 'error';
-    $mostrarAlerta = true;
-} elseif (isset($_GET['mensagem'])) {
-    $mensagem = $_GET['mensagem'];
-    $tipoMensagem = 'success';
-    $mostrarAlerta = true;
-} elseif (isset($_GET['erro'])) {
-    $mensagem = $_GET['erro'];
-    $tipoMensagem = 'error';
-    $mostrarAlerta = true;
-}
+require_once('../models/model.select.php');
+$select = new select();
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -240,33 +224,32 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                             <th class="py-3 px-4 text-left">Categoria</th>
                             <th class="py-3 px-4 text-left">Validade</th>
                             <th class="py-3 px-4 text-left">Data Cadastro</th>
-                            <!-- <th class="py-3 px-4 text-left">Ações</th> -->
                         </tr>
                     </thead>
                     <tbody id="tabelaEstoque">
                         <?php
-                        // Aqui você deve buscar os produtos do banco e gerar as linhas da tabela
-                        require_once '../model/model.functions.php';
-                        $env = isset($_GET['env']) ? $_GET['env'] : 'local';
-                        $gerenciamento = new gerenciamento($env);
-                        $produtos = $gerenciamento->getPdo()->query('SELECT * FROM produtos')->fetchAll(PDO::FETCH_ASSOC);
-                        if ($produtos && count($produtos) > 0) {
+                        $dados = $select->select_total_produtos();
+                        if (count($dados) > 0) {
                             foreach ($produtos as $produto) {
+
                                 $quantidadeClass = $produto['quantidade'] <= 5 ? 'text-red-600 font-bold' : 'text-gray-700';
                                 $rowClass = $produto['quantidade'] <= 5 ? 'border-b border-gray-200 hover:bg-red-50 bg-red-50' : 'border-b border-gray-200 hover:bg-gray-50';
-                                echo '<tr class="' . $rowClass . '">';
-                                echo '<td class="py-3 px/-4">' . htmlspecialchars($produto['barcode']) . '</td>';
-                                echo '<td class="py-3 px-4">' . htmlspecialchars($produto['nome_produto']) . '</td>';
-                                echo '<td class="py-3 px-4 ' . $quantidadeClass . '">' . htmlspecialchars($produto['quantidade']) . '</td>';
-                                echo '<td class="py-3 px-4">' . htmlspecialchars($produto['natureza']) . '</td>';
-                                echo '<td class="py-3 px-4">' . htmlspecialchars($produto['vencimento'] = $produto['vencimento'] == '' ? 'Sem vencimento' : $produto['vencimento']) . '</td>';
-                                echo '<td class="py-3 px-4">' . date('d/m/Y H:i', strtotime($produto['data'])) . '</td>';
-                                echo '</tr>';
+                                ?>
+                                <tr class="' . $rowClass . '">
+                                <td class="py-3 px/-4"><?=htmlspecialchars($produto['barcode'])?></td>
+                                <td class="py-3 px-4"><?=htmlspecialchars($produto['nome_produto'])?></td>
+                                <td class="py-3 px-4 ><?=$quantidadeClass . '">' . htmlspecialchars($produto['quantidade'])?></td>
+                                <td class="py-3 px-4"><?=htmlspecialchars($produto['natureza'])?></td>
+                                <td class="py-3 px-4"><?= htmlspecialchars($produto['vencimento'] = $produto['vencimento'] == '' ? 'Sem vencimento' : $produto['vencimento'])?></td>
+                                <td class="py-3 px-4"><?= date('d/m/Y H:i', strtotime($produto['data']))?></td>
+                                </tr>
+         <?php 
                             }
                         } else {
-                            echo '<tr><td colspan="5" class="py-4 px-4 text-center text-gray-500">Nenhum produto encontrado</td></tr>';
-                        }
-                        ?>
+                            ?>
+                            <tr><td colspan="5" class="py-4 px-4 text-center text-gray-500">Nenhum produto encontrado</td></tr>
+                        <?php } ?>
+                        
                     </tbody>
                 </table>
             </div>

@@ -1,10 +1,17 @@
-<?php
-require_once('../model/functionsViews.php');
+<?php 
+require_once('../../models/sessions.php');
+$session = new sessions();
+$session->autenticar_session();
+$session->tempo_session();
+
+require_once('../../models/model.select.php');
 $select = new select();
-?>
-<?php
-// Capturar o barcode ou nome da URL
-$identificador = isset($_GET['barcode']) ? $_GET['barcode'] : (isset($_GET['nome']) ? $_GET['nome'] : '');
+
+if(!isset($_GET['barcode']) || empty($_GET['barcode'])){
+
+    header('location: adc_produto.php');
+    exit();
+}
 ?>
 
 <!DOCTYPE html>

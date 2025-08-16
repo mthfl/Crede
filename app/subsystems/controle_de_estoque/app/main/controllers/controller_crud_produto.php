@@ -1,9 +1,55 @@
 <?php
 
-require_once(dirname(__FILE__) . "../models/model.main.php");
-//print_r($_POST);
-//registrar perda
+require_once(__DIR__.'\..\models\model.usuario.php');
+print_r($_POST);
+
 if (
+    isset($_POST['btn']) && !empty($_POST['btn']) && is_string($_POST['btn']) &&
+    isset($_POST['tipo_produto']) && !empty($_POST['tipo_produto']) && is_string($_POST['tipo_produto']) &&
+    isset($_POST['barcode']) && !empty($_POST['barcode']) && (is_string($_POST['barcode']) || is_numeric($POST['barcode']))
+) {
+
+    $tipo_produto = $_POST['tipo_produto'];
+    $barcode = $_POST['barcode'];
+
+    if($tipo_produto = 'com_codigo'){
+
+        $obj = new usuario();
+        $result = $obj->verificar_produto_barcode($barcode);
+    
+        if($result) {
+
+            header('Location: ../views/products/adc_produto_existente.php');
+            exit();
+        }else{
+
+            header('Location: ../views/products/adc_novo_produto.php?barcode='.$barcode);
+            exit();
+        }
+    }else{
+
+        $obj = new usuario();
+        $result = $obj->verificar_produto_nome($barcode);
+    
+        switch ($result) {
+            case 1:
+                header('Location: ../view/perdas.php?registrado');
+                exit();
+            case 2:
+                header('Location: ../view/perdas.php?erro');
+                exit();
+            case 3:
+                header('Location: ../view/perdas.php?nao_existe');
+                exit();
+            default:
+                header('Location: ../view/perdas.php?falha');
+                exit();
+        }
+    }
+} 
+
+//registrar perda
+else if (
     isset($_POST['id_produto']) && !empty(trim($_POST['id_produto'])) &&
     isset($_POST['quantidade_perdida']) && !empty(trim($_POST['quantidade_perdida'])) &&
     isset($_POST['tipo_perda']) && !empty(trim($_POST['tipo_perda'])) &&
@@ -15,7 +61,7 @@ if (
     $tipo_perda = trim($_POST['tipo_perda']);
     $data_perda = trim($_POST['data_perda']);
 
-    $obj = new MainModel();
+    $obj = new usuario();
     $result = $obj->registrar_perda(
         $id_produto,
         $quantidade,
@@ -37,7 +83,10 @@ if (
             header('Location: ../view/perdas.php?falha');
             exit();
     }
-} else if (isset($_POST['btn'])) {
+} 
+
+//adcionar produtos novos ao estoque 
+else if (isset($_POST['btn'])) {
     $identificador = $_POST['barcode'];
     $quantidade = $_POST['quantidade'];
 
@@ -154,8 +203,8 @@ if (
             exit;
         }
     }
-} else {
+} /*else {
 
     header('location:../views/index.php');
     exit();
-}
+}*/

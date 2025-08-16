@@ -10,7 +10,7 @@ class connect
     {
         
         try {
-            require("../models/private/config.php");
+            require(__DIR__."\..\models\private\config.php");
 
             //banco no localhost
             $host = $config['local']['crede_users']['host'];

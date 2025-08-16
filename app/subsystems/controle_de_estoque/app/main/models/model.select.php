@@ -1,23 +1,35 @@
 <?php
-require_once("../config/connection.php");
+require_once(__DIR__.'\..\config\connect.php');
 
 class select extends connect
 {
-    public function __construct()
+    private string $table1;
+    private string $table2;
+    private string $table3;
+    private string $table4;
+    private string $table5;
+
+    function __construct()
     {
         parent::__construct();
+        require('private/tables.php');
+        $this->table1 = $table['crede_estoque'][1];
+        $this->table2 = $table['crede_estoque'][2];
+        $this->table3 = $table['crede_estoque'][3];
+        $this->table4 = $table['crede_estoque'][4];
+        $this->table5 = $table['crede_estoque'][5];
     }
 
     public function select_categoria()
     {
-        $query = $this->pdo->query('SELECT * FROM categorias');
+        $query = $this->connect->query("SELECT * FROM $this->table1");
         $resultado = $query->fetchAll(PDO::FETCH_ASSOC);
 
         return $resultado;
     }
-    public function selectProdutosTotal()
+    public function select_total_produtos()
     {
-        $query = $this->pdo->query('SELECT * FROM produtos');
+        $query = $this->connect->query("SELECT * FROM $this->table4");
         $resultado = $query->fetchAll(PDO::FETCH_ASSOC);
 
         return $resultado;

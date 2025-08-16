@@ -1,3 +1,9 @@
+<?php 
+require_once('../models/sessions.php');
+$session = new sessions();
+$session->autenticar_session();
+$session->tempo_session();
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -528,47 +534,33 @@
 
             <div id="cardsGrid" class="w-full max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 px-4 justify-center">
 
-                <a href="../view/adicionarproduto.php" class="group animate-fade-in" style="animation-delay: 0.1s">
+                <a href="./products/adc_produto.php" class="group animate-fade-in" style="animation-delay: 0.1s">
                     <div class="card-item bg-white border-2 border-primary rounded-xl md:rounded-2xl shadow-card w-full h-48 md:h-56 flex flex-col items-center justify-center p-4 md:p-6 relative">
                         <div class="card-shine"></div>
-                        <div class="card-badge absolute top-0 right-0 bg-accent w-10 h-10 md:w-12 md:h-12 rounded-bl-xl md:rounded-bl-2xl rounded-tr-xl md:rounded-tr-2xl flex items-center justify-center">
-                            <span class="text-primary text-xs font-bold">2</span>
-                        </div>
                         <i class="fas fa-plus-circle card-icon text-4xl md:text-5xl text-primary mb-4 md:mb-5"></i>
                         <p class="text-secondary font-bold text-center text-base md:text-lg leading-tight">ADICIONAR</p>
                     </div>
                 </a>
 
-                <a href="../view/estoque.php" class="group animate-fade-in">
+                <a href="estoque.php" class="group animate-fade-in">
                     <div class="card-item bg-white border-2 border-primary rounded-xl md:rounded-2xl shadow-card w-full h-48 md:h-56 flex flex-col items-center justify-center p-4 md:p-6 relative">
                         <div class="card-shine"></div>
-                        <div class="card-badge absolute top-0 right-0 bg-accent w-10 h-10 md:w-12 md:h-12 rounded-bl-xl md:rounded-bl-2xl rounded-tr-xl md:rounded-tr-2xl flex items-center justify-center">
-                            <span class="text-primary text-xs font-bold">1</span>
-                        </div>
                         <i class="fas fa-boxes card-icon text-4xl md:text-5xl text-primary mb-4 md:mb-5"></i>
                         <p class="text-secondary font-bold text-center text-base md:text-lg leading-tight">ESTOQUE</p>
                     </div>
                 </a>
 
-                <a href="../view/solicitar.php" class="group animate-fade-in" style="animation-delay: 0.2s">
+                <a href="solicitar.php" class="group animate-fade-in" style="animation-delay: 0.2s">
                     <div class="card-item bg-white border-2 border-primary rounded-xl md:rounded-2xl shadow-card w-full h-48 md:h-56 flex flex-col items-center justify-center p-4 md:p-6 relative">
                         <div class="card-shine"></div>
-                        <div class="card-badge absolute top-0 right-0 bg-accent w-10 h-10 md:w-12 md:h-12 rounded-bl-xl md:rounded-bl-2xl rounded-tr-xl md:rounded-tr-2xl flex items-center justify-center">
-                            <span class="text-primary text-xs font-bold">3</span>
-                        </div>
                         <i class="fas fa-clipboard-list card-icon text-4xl md:text-5xl text-primary mb-4 md:mb-5"></i>
                         <p class="text-secondary font-bold text-center text-base md:text-lg leading-tight">RETIRAR</p>
                     </div>
                 </a>
 
-
-
-                <a href="../view/relatorios.php" class="group animate-fade-in" style="animation-delay: 0.4s">
+                <a href="relatorios.php" class="group animate-fade-in" style="animation-delay: 0.4s">
                     <div class="card-item bg-white border-2 border-primary rounded-xl md:rounded-2xl shadow-card w-full h-48 md:h-56 flex flex-col items-center justify-center p-4 md:p-6 relative">
                         <div class="card-shine"></div>
-                        <div class="card-badge absolute top-0 right-0 bg-accent w-10 h-10 md:w-12 md:h-12 rounded-bl-xl md:rounded-bl-2xl rounded-tr-xl md:rounded-tr-2xl flex items-center justify-center">
-                            <span class="text-primary text-xs font-bold">5</span>
-                        </div>
                         <i class="fas fa-chart-bar card-icon text-4xl md:text-5xl text-primary mb-4 md:mb-5"></i>
                         <p class="text-secondary font-bold text-center text-base md:text-lg leading-tight">RELATÓRIOS</p>
                     </div>

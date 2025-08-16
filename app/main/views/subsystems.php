@@ -877,7 +877,7 @@ $session->tempo_session();
                         <span>Perfil</span>
                     </button>
                     <div class="w-px h-8 bg-gray-300 mx-2"></div>
-                    <button class="header-btn-with-text text-red-600 hover:text-red-700" title="Sair" onclick="window.location.href='login.php'">
+                    <button class="header-btn-with-text text-red-600 hover:text-red-700" title="Sair" onclick="window.location.href='../models/sessions.php?sair'">
                         <i class="fas fa-sign-out-alt"></i>
                         <span>Sair</span>
                     </button>

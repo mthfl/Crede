@@ -1,17 +1,60 @@
 <?php
-require_once("../config/connection.php");
+require_once(__DIR__.'\..\config\connect.php');
 
-class gerenciamento extends connect
+class usuario extends connect
 {
+    private string $table1;
+    private string $table2;
+    private string $table3;
+    private string $table4;
+    private string $table5;
+
     function __construct()
     {
         parent::__construct();
+        require('private/tables.php');
+        $this->table1 = $table['crede_estoque'][1];
+        $this->table2 = $table['crede_estoque'][2];
+        $this->table3 = $table['crede_estoque'][3];
+        $this->table4 = $table['crede_estoque'][4];
+        $this->table5 = $table['crede_estoque'][5];
     }
 
-    public function verificar_produto($barcode){
+    public function adcionar_produto(int $barcode, string $nome, int $quantidade, int $id_categoria, string $validade): int
+    {
+        date_default_timezone_set('America/Fortaleza');
+        $data = date('Y-m-d H:i:s');
+        
+        $consulta = "INSERT INTO $this->table4 VALUES (null, :barcode, :nome, :quantidade, :id_categoria,:validade, :data)";
+        $query = $this->connect->prepare($consulta);
+        $query->bindValue(":nome", $nome);
+        $query->bindValue(":barcode", $barcode);
+        $query->bindValue(":quantidade", $quantidade);
+        $query->bindValue(":id_categoria", $id_categoria);
+        $query->bindValue(":validade", $validade);
+        $query->bindValue(":data", $data);
+        $query->execute();
 
-        $stmt_check = $this->connect->prepare("SELECT * FROM produtos WHERE barcode = :barcode");
+        return 1;
+    }
+    public function verificar_produto_barcode(int $barcode): bool{
+
+        $stmt_check = $this->connect->prepare("SELECT * FROM $this->table4 WHERE barcode = :barcode");
         $stmt_check->bindParam(':barcode', $barcode);
+        $stmt_check->execute();
+
+        if ($stmt_check->rowCount() > 0) {
+
+            return true;
+        }else{
+
+            return false;
+        }
+    }
+    public function verificar_produto_nome(int $nome): bool{
+
+        $stmt_check = $this->connect->prepare("SELECT * FROM $this->table4 WHERE nome = :nome");
+        $stmt_check->bindParam(':nome',$nome);
         $stmt_check->execute();
 
         if ($stmt_check->rowCount() > 0) {
@@ -155,25 +198,6 @@ class gerenciamento extends connect
         $query->bindValue(":quantidade", $quantidade);
         $query->bindValue(":barcode_com_prefixo", $barcode_com_prefixo);
         $query->execute();
-
-        header("location:../view/estoque.php");
-    }
-
-    public function adcproduto($barcode, $nome,  $quantidade, $natureza, $validade)
-    {
-        date_default_timezone_set('America/Fortaleza');
-        $data = date('Y-m-d H:i:s');
-        
-        $consulta = "INSERT INTO produtos VALUES (null, :barcode, :nome, :quantidade, :natureza,:validade, :data)";
-        $query = $this->pdo->prepare($consulta);
-        $query->bindValue(":nome", $nome);
-        $query->bindValue(":barcode", $barcode);
-        $query->bindValue(":quantidade", $quantidade);
-        $query->bindValue(":natureza", $natureza);
-        $query->bindValue(":validade", $validade);
-        $query->bindValue(":data", $data);
-        $query->execute();
-
 
         header("location:../view/estoque.php");
     }
@@ -411,11 +435,11 @@ class gerenciamento extends connect
     }
 }
 
-class relatorios extends connection
+class relatorios extends connect
 {
-    function __construct($env = 'local')
+    function __construct()
     {
-        parent::__construct($env);
+        parent::__construct();
     }
 
     public function buscarProdutosPorData($data_inicio, $data_fim)
