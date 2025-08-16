@@ -1,9 +1,45 @@
 <?php
+require_once('../models/sessions.php');
+$session = new sessions();
+$session->autenticar_session();
+$session->tempo_session();
 
 require_once(__DIR__.'\..\models\model.usuario.php');
 print_r($_POST);
 
-if (
+if(
+    isset($_POST['barcode']) && !empty($_POST['barcode']) && 
+    isset($_POST['nome_produto']) && !empty($_POST['nome_produto']) &&  
+    isset($_POST['quantidade']) && !empty($_POST['quantidade']) &&
+    isset($_POST['validade']) &&
+    isset($_POST['id_categoria']) && !empty($_POST['id_categoria'])
+){
+
+    $barcode = $_POST['barcode'];
+    $nome = $_POST['nome_produto']; 
+    $quantidade = $_POST['quantidade'];
+    $validade = $_POST['validade'] ?? null;
+    $id_categoria = $_POST['id_categoria'];
+
+    $obj = new usuario();
+    $result = $obj->cadastrar_produto($barcode, $nome,$quantidade, $id_categoria, $validade);
+
+    switch ($result) {
+        case 1:
+            header('Location: ../views/estoque.php?cadastrado');
+            exit();
+        case 2:
+            header('Location: ../views/estoque.php?erro');
+            exit();
+        case 3:
+            header('Location: ../views/estoque.php?ja_cadastrado');
+            exit();
+        default:
+            header('Location: ../views/estoque.php?falha');
+            exit();
+    }
+}
+else if (
     isset($_POST['btn']) && !empty($_POST['btn']) && is_string($_POST['btn']) &&
     isset($_POST['tipo_produto']) && !empty($_POST['tipo_produto']) && is_string($_POST['tipo_produto']) &&
     isset($_POST['barcode']) && !empty($_POST['barcode']) && (is_string($_POST['barcode']) || is_numeric($POST['barcode']))
@@ -19,7 +55,7 @@ if (
     
         if($result) {
 
-            header('Location: ../views/products/adc_produto_existente.php');
+            header('Location: ../views/products/adc_produto_existente.php?barcode='.$barcode);
             exit();
         }else{
 
@@ -71,27 +107,65 @@ else if (
 
     switch ($result) {
         case 1:
-            header('Location: ../view/perdas.php?registrado');
+            header('Location: ../views/estoque.php?registrado');
             exit();
         case 2:
-            header('Location: ../view/perdas.php?erro');
+            header('Location: ../views/perdas.php?erro');
             exit();
         case 3:
-            header('Location: ../view/perdas.php?nao_existe');
+            header('Location: ../views/perdas.php?nao_existe');
             exit();
         default:
-            header('Location: ../view/perdas.php?falha');
+            header('Location: ../views/perdas.php?falha');
             exit();
     }
 } 
+//adicionar categoria
+if(isset($_POST['categoria']) && !empty($_POST['categoria']) && is_numeric($_POST['categoria'])){
 
-//adcionar produtos novos ao estoque 
-else if (isset($_POST['btn'])) {
-    $identificador = $_POST['barcode'];
-    $quantidade = $_POST['quantidade'];
+    $categoria = $_POST['categoria'];
 
-    $x = new gerenciamento();
-    $x->adcaoestoque($identificador, $quantidade);
+    $obj = new usuario();
+    $result = $obj->cadastrar_categoria($categoria);
+
+    switch ($result) {
+        case 1:
+            header('Location: ../views/estoque.php?cadastrado');
+            exit();
+        case 2:
+            header('Location: ../views/estoque.php?erro');
+            exit();
+        case 3:
+            header('Location: ../views/estoque.php?ja_cadastrado');
+            exit();
+        default:
+            header('Location: ../views/estoque.php?falha');
+            exit();
+    }
+} 
+//adicionar produto existente ao estoque
+else if (
+    isset($_POST['barcode']) && !empty($_POST['barcode']) &&
+    isset($_POST['quantidade_adicionar']) && !empty($_POST['quantidade_adicionar']) && is_numeric($_POST['quantidade_adicionar'])
+) {
+    $barcode = $_POST['barcode'];
+    $quantidade = $_POST['quantidade_adicionar'];
+
+    $obj = new usuario();
+    
+    $result = $obj->adicionar_produto($barcode, $quantidade);
+
+    switch ($result) {
+        case 1:
+            header('Location: ../views/estoque.php?adicionado');
+            exit();
+        case 2:
+            header('Location: ../views/estoque.php?erro');
+            exit();
+        default:
+            header('Location: ../views/estoque.php?falha');
+            exit();
+    }
 } else 
     if (isset($_POST['btn'])) {
     $barcode = isset($_POST['barcode']) ? $_POST['barcode'] : '';

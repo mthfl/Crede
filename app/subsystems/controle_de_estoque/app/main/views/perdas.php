@@ -4,31 +4,9 @@ $session = new sessions();
 $session->autenticar_session();
 $session->tempo_session();
 
-require_once('../model/functionsViews.php');
+require_once('../models/model.select.php');
 $select = new select();
 
-// Processar mensagens de URL
-$mensagem = '';
-$tipoMensagem = '';
-$mostrarAlerta = false;
-
-if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message'])) {
-    $mensagem = $_GET['message'];
-    $tipoMensagem = 'success';
-    $mostrarAlerta = true;
-} elseif (isset($_GET['error']) && $_GET['error'] == '1' && isset($_GET['message'])) {
-    $mensagem = $_GET['message'];
-    $tipoMensagem = 'error';
-    $mostrarAlerta = true;
-} elseif (isset($_GET['mensagem'])) {
-    $mensagem = $_GET['mensagem'];
-    $tipoMensagem = 'success';
-    $mostrarAlerta = true;
-} elseif (isset($_GET['erro'])) {
-    $mensagem = $_GET['erro'];
-    $tipoMensagem = 'error';
-    $mostrarAlerta = true;
-}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -307,7 +285,7 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                 <p class="text-gray-600">Preencha os dados abaixo para registrar uma perda no estoque</p>
             </div>
             
-            <form action="../control/controller_main.php" method="POST" class="space-y-6">
+            <form action="../controllers/controller_crud_produto.php" method="POST" class="space-y-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="space-y-2">
                         <label for="produto_id" class="block text-sm font-semibold text-gray-700 mb-2 flex items-center">
@@ -318,7 +296,7 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                             <select class="js-example-basic-single w-full" name="id_produto" id="produto_id" required>
                                 <option value="">Selecione o produto</option>
                                 <?php
-                                $dados = $select->selectProdutosTotal();
+                                $dados = $select->select_produtos();
                                 foreach($dados as $dado){
                                 ?>
                                 <option value="<?= htmlspecialchars($dado['id']) ?>" 

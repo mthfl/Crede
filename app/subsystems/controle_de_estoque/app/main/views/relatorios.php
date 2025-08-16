@@ -4,8 +4,9 @@ $session = new sessions();
 $session->autenticar_session();
 $session->tempo_session();
 
-// Definir variável $barcode para evitar warnings
-$barcode = '';
+require_once('../models/model.select.php');
+$select = new select();
+
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -653,21 +654,42 @@ $barcode = '';
         <div class="quick-stats mb-8">
             <div class="stat-item">
                 <div class="stat-icon">
-                    <i class="fas fa-boxes"></i>
+                    <i class="fas fa-boxes">
+                        <?php 
+                        $dados = $select->select_produtos_total();
+                        foreach ($dados as $dado) {
+                            echo $dado['total'];
+                        }
+                        ?>
+                    </i>
                 </div>
                 <div class="stat-number" id="totalProdutos">-</div>
                 <div class="stat-label">Total de Produtos</div>
             </div>
             <div class="stat-item">
                 <div class="stat-icon">
-                    <i class="fas fa-exclamation-triangle text-warning"></i>
+                    <i class="fas fa-exclamation-triangle text-warning">
+                    <?php 
+                        $dados = $select->select_produtos_critico();
+                        foreach ($dados as $dado) {
+                            echo $dado['total'];
+                        }
+                        ?>
+                    </i>
                 </div>
                 <div class="stat-number" id="produtosCriticos">-</div>
                 <div class="stat-label">Estoque Crítico</div>
             </div>
             <div class="stat-item">
                 <div class="stat-icon">
-                    <i class="fas fa-tags"></i>
+                    <i class="fas fa-tags">
+                        <?php 
+                        $dados = $select->select_total_categorias();
+                        foreach ($dados as $dado) {
+                            echo $dado['total'];
+                        }
+                        ?>
+                        </i>
                 </div>
                 <div class="stat-number" id="totalCategorias">-</div>
                 <div class="stat-label">Categorias</div>
@@ -695,7 +717,7 @@ $barcode = '';
                 </div>
                 <h3 class="text-lg font-bold text-primary mb-2 text-center">Relatório Completo</h3>
                 <p class="text-gray-600 text-center mb-4 text-sm">Relatório detalhado de todo o estoque atual</p>
-                <a href="../control/controllerEstoqueAtual.php" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105" target="_blank">
+                <a href="reports/relatorio_produtos_cadastrados.php" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105" target="_blank">
                     <i class="fas fa-download mr-2"></i>
                     Gerar PDF
                 </a>
@@ -723,7 +745,7 @@ $barcode = '';
                 </div>
                 <h3 class="text-lg font-bold text-primary mb-2 text-center">Estoque Crítico</h3>
                 <p class="text-gray-600 text-center mb-4 text-sm">Produtos com estoque baixo (≤ 5 unidades)</p>
-                <a href="../control/controllerrelatoriocritico.php" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105" target="_blank">
+                <a href="reports/relatorio_critico.php" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105" target="_blank">
                     <i class="fas fa-file-pdf mr-2"></i>
                     Gerar PDF
                 </a>
@@ -765,7 +787,7 @@ $barcode = '';
                 </div>
                 <h3 class="text-lg font-bold text-primary mb-2 text-center">Sem Código de Barras</h3>
                 <p class="text-gray-600 text-center mb-4 text-sm">Relatório detalhado de produtos sem código de barras</p>
-                <a href="../control/controllerrelatorioscb.php" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105" target="_blank">
+                <a href="reports/relatorioscb.php" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105" target="_blank">
                     <i class="fas fa-file-pdf mr-2"></i>
                     Gerar Relatório
                 </a>
@@ -779,7 +801,7 @@ $barcode = '';
                 </div>
                 <h3 class="text-lg font-bold text-primary mb-2 text-center">Relatório de Perdas</h3>
                 <p class="text-gray-600 text-center mb-4 text-sm">Relatório detalhado de todas as perdas registradas no sistema</p>
-                <a href="../control/controllerRelatorioPerdas.php?pdf=1" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105" target="_blank">
+                <a href="reports/relatorio_perdas.php" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105" target="_blank">
                     <i class="fas fa-file-pdf mr-2"></i>
                     Gerar PDF
                 </a>
@@ -810,7 +832,7 @@ $barcode = '';
                 <i class="fas fa-calendar-alt mr-2 text-secondary"></i>
                 Selecionar Período
             </h2>
-            <form id="dateForm" action="../control/controllerRelatorioData.php" method="GET" target="_blank" class="space-y-4">
+            <form id="dateForm" action="reports/relatorio_movimentacoes.php" method="GET" target="_blank" class="space-y-4">
                 <div class="form-group">
                     <label for="data_inicio" class="font-semibold">
                         <i class="fas fa-play mr-1"></i>
@@ -841,7 +863,7 @@ $barcode = '';
                 <i class="fas fa-search mr-2 text-secondary"></i>
                 Selecionar Produto
             </h2>
-            <form id="productForm" action="../control/controllerRelatorioProduto.php" method="GET" target="_blank" class="space-y-4">
+            <form id="productForm" action="reports/relatorio_produto.php" method="GET" target="_blank" class="space-y-4">
                 <div class="form-group">
                     <label for="data_inicio" class="font-semibold">
                         <i class="fas fa-play mr-1"></i>
@@ -864,9 +886,7 @@ $barcode = '';
                     <select id="produto" name="produto" required>
                         <option value="" disabled selected>SELECIONAR PRODUTO</option>
                         <?php
-                        require_once('../model/functionsViews.php');
-                        $select = new select();
-                        $resultado = $select->modalRelatorio($barcode);
+                        $select->modalRelatorio();
                         ?>
                     </select>
                 </div>
@@ -886,7 +906,7 @@ $barcode = '';
                 <i class="fas fa-plus-circle mr-2 text-secondary"></i>
                 Selecionar Período
             </h2>
-            <form id="produtosCadastradosForm" action="../control/controllerRelatorioProdutosCadastrados.php" method="GET" target="_blank" class="space-y-4">
+            <form id="produtosCadastradosForm" action="reports/relatorio_produtos_cadastrados.php" method="GET" target="_blank" class="space-y-4">
                 <div class="form-group">
                     <label for="data_inicio_cadastrados" class="font-semibold">
                         <i class="fas fa-play mr-1"></i>
@@ -917,7 +937,7 @@ $barcode = '';
                 <i class="fas fa-tags mr-2 text-secondary"></i>
                 Selecionar Categoria
             </h2>
-            <form id="categoryForm" action="../control/controllerRelatorioCategoria.php" method="POST" target="_blank" class="space-y-4">
+            <form id="categoryForm" action="reports/relatorio_categoria.php" method="POST" target="_blank" class="space-y-4">
                 <div class="form-group">
                     <label for="categoria" class="font-semibold">
                         <i class="fas fa-tag mr-1"></i>
@@ -1349,7 +1369,7 @@ $barcode = '';
             // Função para carregar estatísticas e gráfico reais
             function loadStatistics() {
                 console.log('Carregando estatísticas...');
-                fetch('../control/controllerEstatisticas.php')
+                fetch('control/controllerEstatisticas.php')
                     .then(response => {
                         console.log('Response status:', response.status);
                         return response.json();

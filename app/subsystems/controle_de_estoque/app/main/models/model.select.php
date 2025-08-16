@@ -27,68 +27,50 @@ class select extends connect
 
         return $resultado;
     }
-    public function select_total_produtos()
+    public function select_produtos()
     {
-        $query = $this->connect->query("SELECT * FROM $this->table4");
+        $query = $this->connect->query("SELECT p.*, c.nome_categoria AS categoria FROM $this->table4 p INNER JOIN $this->table1 c ON p.id_categoria = c.id");
         $resultado = $query->fetchAll(PDO::FETCH_ASSOC);
 
         return $resultado;
     }
-    public function selectProdutos($barcode)
+    public function select_produtos_total()
     {
-        $consulta = "SELECT * FROM produtos WHERE barcode = :barcode";
+        $query = $this->connect->query("SELECT count(*) as total FROM $this->table4");
+        $resultado = $query->fetchAll(PDO::FETCH_ASSOC);
 
-        $query = $this->pdo->prepare($consulta);
+        return $resultado;
+    }
+    public function select_produtos_critico()
+    {
+        $query = $this->connect->query("SELECT count(*) as total FROM $this->table4 WHERE quantidade <= 5");
+        $resultado = $query->fetchAll(PDO::FETCH_ASSOC);
+
+        return $resultado;
+    }
+    public function select_total_categorias()
+    {
+        $query = $this->connect->query("SELECT count(*) as total FROM $this->table1");
+        $resultado = $query->fetchAll(PDO::FETCH_ASSOC);
+
+        return $resultado;
+    }
+    public function select_produto_nome($barcode)
+    {
+        $consulta = "SELECT * FROM $this->table4 WHERE barcode = :barcode";
+
+        $query = $this->connect->prepare($consulta);
         $query->bindValue(":barcode", $barcode);
         $query->execute();
 
         return $resultado = $query->fetchAll(PDO::FETCH_ASSOC);
     }
+    public function select_responsavel(){
+        
+        $consulta = "SELECT * FROM $this->table5";
+        $query = $this->connect->query($consulta);
 
-    public function selectProdutosFlexivel($identificador)
-    {
-        try {
-            // Verificar se é um barcode (numérico) ou nome do produto
-            if (is_numeric($identificador)) {
-                // Buscar por barcode
-                $consulta = "SELECT * FROM produtos WHERE barcode = :identificador";
-                $parametro = $identificador;
-                $nome_parametro = ":identificador";
-            } else {
-                // Verificar se já tem prefixo SCB_
-                if (strpos($identificador, 'SCB_') === 0) {
-                    // Já tem prefixo SCB_, usar como está
-                    $consulta = "SELECT * FROM produtos WHERE UPPER(barcode) = UPPER(:barcode_com_prefixo)";
-                    $parametro = $identificador;
-                    $nome_parametro = ":barcode_com_prefixo";
-                } else {
-                    // Adicionar prefixo SCB_ para produtos sem código
-                    $barcode_com_prefixo = 'SCB_' . $identificador;
-                    $consulta = "SELECT * FROM produtos WHERE UPPER(barcode) = UPPER(:barcode_com_prefixo)";
-                    $parametro = $barcode_com_prefixo;
-                    $nome_parametro = ":barcode_com_prefixo";
-                }
-            }
-
-            error_log("Consulta SQL: " . $consulta);
-            error_log("Parâmetro final: " . $parametro);
-
-            $query = $this->pdo->prepare($consulta);
-            $query->bindValue($nome_parametro, $parametro);
-            $query->execute();
-
-            $resultado = $query->fetchAll(PDO::FETCH_ASSOC);
-            error_log("Resultado encontrado: " . count($resultado) . " registros");
-            
-            // Debug: verificar todos os produtos no banco
-            $todos_produtos = $this->pdo->query("SELECT barcode, nome_produto FROM produtos")->fetchAll(PDO::FETCH_ASSOC);
-            error_log("Todos os produtos no banco: " . print_r($todos_produtos, true));
-            
-            return $resultado;
-        } catch (Exception $e) {
-            error_log("Erro no selectProdutosFlexivel: " . $e->getMessage());
-            return array();
-        }
+        return $resultado = $query->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function selectSolicitarProdutos($barcode)

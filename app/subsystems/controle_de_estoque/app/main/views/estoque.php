@@ -228,38 +228,38 @@ $select = new select();
                     </thead>
                     <tbody id="tabelaEstoque">
                         <?php
-                        $dados = $select->select_total_produtos();
+                        $dados = $select->select_produtos();
                         if (count($dados) > 0) {
-                            foreach ($produtos as $produto) {
-
+                            foreach ($dados as $produto) {
                                 $quantidadeClass = $produto['quantidade'] <= 5 ? 'text-red-600 font-bold' : 'text-gray-700';
                                 $rowClass = $produto['quantidade'] <= 5 ? 'border-b border-gray-200 hover:bg-red-50 bg-red-50' : 'border-b border-gray-200 hover:bg-gray-50';
                                 ?>
-                                <tr class="' . $rowClass . '">
-                                <td class="py-3 px/-4"><?=htmlspecialchars($produto['barcode'])?></td>
-                                <td class="py-3 px-4"><?=htmlspecialchars($produto['nome_produto'])?></td>
-                                <td class="py-3 px-4 ><?=$quantidadeClass . '">' . htmlspecialchars($produto['quantidade'])?></td>
-                                <td class="py-3 px-4"><?=htmlspecialchars($produto['natureza'])?></td>
-                                <td class="py-3 px-4"><?= htmlspecialchars($produto['vencimento'] = $produto['vencimento'] == '' ? 'Sem vencimento' : $produto['vencimento'])?></td>
-                                <td class="py-3 px-4"><?= date('d/m/Y H:i', strtotime($produto['data']))?></td>
+                                <tr class="<?=$rowClass?>">
+                                    <td class="py-3 px-4"><?=htmlspecialchars($produto['barcode'])?></td>
+                                    <td class="py-3 px-4"><?=htmlspecialchars($produto['nome_produto'])?></td>
+                                    <td class="py-3 px-4 <?=$quantidadeClass?>"><?=htmlspecialchars($produto['quantidade'])?></td>
+                                    <td class="py-3 px-4"><?=htmlspecialchars($produto['categoria'])?></td>
+                                    <td class="py-3 px-4"><?= htmlspecialchars($produto['vencimento'] == '' ? 'Sem vencimento' : $produto['vencimento'])?></td>
+                                    <td class="py-3 px-4"><?= date('d/m/Y H:i', strtotime($produto['data']))?></td>
                                 </tr>
-         <?php 
+                            <?php 
                             }
                         } else {
                             ?>
-                            <tr><td colspan="5" class="py-4 px-4 text-center text-gray-500">Nenhum produto encontrado</td></tr>
+                            <tr><td colspan="6" class="py-4 px-4 text-center text-gray-500">Nenhum produto encontrado</td></tr>
                         <?php } ?>
                         
                     </tbody>
                 </table>
             </div>
         </div>
+        
         <!-- Cards para mobile -->
         <div class="mobile-cards mt-6 max-w-5xl mx-auto">
             <?php
-            if ($produtos && count($produtos) > 0) {
+            if ($dados && count($dados) > 0) {
                 $categoriaAtual = '';
-                foreach ($produtos as $produto) {
+                foreach ($dados as $produto) {
                     if ($categoriaAtual != $produto['natureza']) {
                         $categoriaAtual = $produto['natureza'];
                         echo '<div class="bg-primary text-white font-bold py-2 px-4 rounded-lg mt-6 mb-3 categoria-header"><h3 class="text-sm uppercase tracking-wider">' . htmlspecialchars(ucfirst($produto['natureza'])) . '</h3></div>';
@@ -273,15 +273,10 @@ $select = new select();
                     echo '<p class="text-sm text-gray-500 flex items-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" /></svg><span>' . htmlspecialchars($produto['barcode']) . '</span></p>';
                     echo '<p class="text-sm flex items-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3v8a3 3 0 003 3z" /></svg><span class="' . $quantidadeClass . '">Quantidade: ' . htmlspecialchars($produto['quantidade']) . '</span></p>';
                     echo '<p class="text-sm text-gray-500 flex items-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg><span>Cadastrado: ' . date('d/m/Y H:i', strtotime($produto['data'])) . '</span></p>';
+                    if ($produto['vencimento'] != '') {
+                        echo '<p class="text-sm text-gray-500 flex items-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg><span>Vencimento: ' . htmlspecialchars($produto['vencimento']) . '</span></p>';
+                    }
                     echo '</div></div>';
-                    // echo '<div class="flex space-x-1">';
-                    // echo '<button onclick="abrirModalEditar(' . $produto['id'] . ')" class="text-primary hover:text-secondary p-1 rounded-full bg-gray-50" title="Editar">';
-                    // echo '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" /></svg>';
-                    // echo '</button>';
-                    // echo '<button onclick="abrirModalExcluir(' . $produto['id'] . ', \'' . htmlspecialchars(addslashes($produto['nome_produto'])) . '\')" class="text-red-500 hover:text-red-700 p-1 rounded-full bg-gray-50" title="Excluir">';
-                    // echo '<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>';
-                    // echo '</button>';
-                    // echo '</div></div></div>';
                     echo '</div></div>';
                 }
             } else {
@@ -289,8 +284,6 @@ $select = new select();
             }
             ?>
         </div>
-        
-
        
         <!-- Modal de Edição -->
         <div id="modalEditar" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
@@ -317,16 +310,15 @@ $select = new select();
                         <label for="editar_natureza" class="block text-sm font-medium text-gray-700 mb-1">Categoria</label>
                         <select id="editar_natureza" name="editar_natureza" required class="w-full px-4 py-2 border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent">
                             <option value="">Selecione a categoria</option>
-                            <option value="limpeza">Limpeza</option>
-                            <option value="expedientes">Expedientes</option>
-                            <option value="manutencao">Manutenção</option>
-                            <option value="eletrico">Elétrico</option>
-                            <option value="hidraulico">Hidráulico</option>
-                            <option value="educacao_fisica">Educação Física</option>
-                            <option value="epi">EPI</option>
-                            <option value="copa_e_cozinha">Copa e Cozinha</option>
-                            <option value="informatica">Informática</option>
-                            <option value="ferramentas">Ferramentas</option>
+                            <?php 
+                            $dados = $select->select_categoria();
+
+                            foreach ($dados as $dado) {
+                                ?>
+                                <option value="<?=$dado['id']?>"><?=$dado['nome_categoria']?></option>
+                                <?php
+                            }
+                            ?>
                         </select>
                     </div>
                     <div class="flex justify-end space-x-3 mt-6">
@@ -354,7 +346,7 @@ $select = new select();
             </div>
         </div>
         <!-- Modal de Categoria -->
-        <div id="modalCategoria" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
+        <div id="modalCategoria" class="fixed inset-0 bg-black bg-opacity-50 z-[9999] flex items-center justify-center" style="display: none;">
             <div class="bg-white rounded-xl shadow-lg w-full max-w-md p-6 relative">
                 <button onclick="fecharModalCategoria()" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
@@ -575,12 +567,17 @@ $select = new select();
     const pesquisarInput = document.getElementById('pesquisar');
     const filtroCategoria = document.getElementById('filtroCategoria');
     const tabelaEstoque = document.getElementById('tabelaEstoque');
+    const mobileCards = document.querySelector('.mobile-cards');
+    
     if (pesquisarInput && filtroCategoria && tabelaEstoque) {
         pesquisarInput.addEventListener('input', filtrarProdutos);
         filtroCategoria.addEventListener('change', filtrarProdutos);
+        
         function filtrarProdutos() {
             const termo = pesquisarInput.value.toLowerCase();
             const categoria = filtroCategoria.value.toLowerCase();
+            
+            // Filtrar tabela desktop
             const linhas = tabelaEstoque.querySelectorAll('tr');
             linhas.forEach(linha => {
                 const colunas = linha.querySelectorAll('td');
@@ -592,6 +589,35 @@ $select = new select();
                     linha.style.display = matchTermo && matchCategoria ? '' : 'none';
                 }
             });
+            
+            // Filtrar cards mobile
+            if (mobileCards) {
+                const cards = mobileCards.querySelectorAll('.card-item');
+                const categoriaHeaders = mobileCards.querySelectorAll('.categoria-header');
+                
+                cards.forEach(card => {
+                    const nome = card.querySelector('h3').textContent.toLowerCase();
+                    const cat = card.closest('.card-item').previousElementSibling?.classList.contains('categoria-header') ? 
+                               card.closest('.card-item').previousElementSibling.textContent.toLowerCase() : 
+                               card.closest('.card-item').previousElementSibling?.previousElementSibling?.textContent.toLowerCase() || '';
+                    
+                    const matchTermo = nome.includes(termo);
+                    const matchCategoria = categoria === '' || cat.includes(categoria);
+                    card.style.display = matchTermo && matchCategoria ? '' : 'none';
+                });
+                
+                // Mostrar/ocultar headers de categoria baseado nos cards visíveis
+                categoriaHeaders.forEach(header => {
+                    const nextCard = header.nextElementSibling;
+                    if (nextCard && nextCard.classList.contains('card-item')) {
+                        const hasVisibleCards = Array.from(cards).some(card => 
+                            card.style.display !== 'none' && 
+                            card.previousElementSibling === header
+                        );
+                        header.style.display = hasVisibleCards ? '' : 'none';
+                    }
+                });
+            }
         }
     }
 
@@ -783,17 +809,41 @@ $select = new select();
     };
 
     // Funções para o modal de categoria
-    window.abrirModalCategoria = function() {
+    function abrirModalCategoria() {
+        console.log('=== FUNÇÃO ABRIR MODAL CHAMADA ===');
         console.log('Abrindo modal de categoria');
-        document.getElementById('modalCategoria').classList.remove('hidden');
-        document.getElementById('categoria').focus();
-    };
+        
+        const modal = document.getElementById('modalCategoria');
+        console.log('Modal encontrado:', modal);
+        
+        if (modal) {
+            console.log('Alterando display para flex');
+            modal.style.display = 'flex';
+            console.log('Display atual:', modal.style.display);
+            
+            const input = document.getElementById('categoria');
+            if (input) {
+                input.focus();
+                console.log('Input focado');
+            } else {
+                console.error('Input categoria não encontrado');
+            }
+        } else {
+            console.error('Modal de categoria não encontrado');
+        }
+    }
 
-    window.fecharModalCategoria = function() {
+    function fecharModalCategoria() {
         console.log('Fechando modal de categoria');
-        document.getElementById('formCategoria').reset();
-        document.getElementById('modalCategoria').classList.add('hidden');
-    };
+        const modal = document.getElementById('modalCategoria');
+        const form = document.getElementById('formCategoria');
+        if (modal) modal.style.display = 'none';
+        if (form) form.reset();
+    }
+
+    // Tornar as funções globais
+    window.abrirModalCategoria = abrirModalCategoria;
+    window.fecharModalCategoria = fecharModalCategoria;
 
     // Função para enviar formulário de categoria
     window.enviarFormularioCategoria = function(event) {
@@ -841,6 +891,7 @@ $select = new select();
     document.addEventListener('click', function(e) {
         const modalCategoria = document.getElementById('modalCategoria');
         if (e.target === modalCategoria) {
+            console.log('Fechando modal ao clicar fora');
             fecharModalCategoria();
         }
     });
@@ -854,6 +905,8 @@ $select = new select();
             }
         }
     });
+
+    // Modal de categoria será aberto apenas quando o usuário clicar no botão
 });
 </script>
 </body>

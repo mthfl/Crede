@@ -797,7 +797,7 @@ $session->tempo_session();
                     const barcode = barcodeInput.value.trim();
                     if (barcode) {
                         // Redirecionar para o controller com o código de barras como parâmetro
-                        window.location.href = `../control/controller_main.php?barcode=${encodeURIComponent(barcode)}`;
+                        window.location.href = `../controllers/controller_input.php?barcode=${encodeURIComponent(barcode)}`;
                     }
                 }
 

@@ -6,24 +6,6 @@ $session->tempo_session();
 
 require_once('../models/model.select.php');
 $select = new select();
-
-// Processar mensagens de URL
-$mensagem = '';
-$tipoMensagem = '';
-$mostrarNotificacao = false;
-
-// Definir variável $barcode para evitar warnings
-$barcode = '';
-
-if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message'])) {
-    $mensagem = $_GET['message'];
-    $tipoMensagem = 'success';
-    $mostrarNotificacao = true;
-} elseif (isset($_GET['error']) && $_GET['error'] == '1' && isset($_GET['message'])) {
-    $mensagem = $_GET['message'];
-    $tipoMensagem = 'error';
-    $mostrarNotificacao = true;
-}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -392,7 +374,7 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
         </div>
 
         <div class="bg-white rounded-xl shadow-lg p-4 md:p-6 lg:p-8 max-w-2xl w-full border-2 border-primary mx-auto">
-            <form action="../control/controllersolicitar.php" method="POST" class="space-y-4 md:space-y-6" id="solicitarForm">
+            <form action="../controllers/controller_solicitar.php" method="POST" class="space-y-4 md:space-y-6" id="solicitarForm">
                 <div class="space-y-3 md:space-y-4">
                     <!-- Opções de seleção de produto -->
                     <div class="mb-3 md:mb-4">
@@ -411,10 +393,11 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                         <select id="produto" name="produto" required class="custom-select text-sm md:text-base" aria-label="Selecionar produto" onchange="validarSelecao()">
                             <option value="" disabled selected>SELECIONAR PRODUTO</option>
                             <?php
-                            require_once('../model/functionsViews.php');
-                            $select = new select();
-                            $select->selectSolicitarProdutos(null);
+                            $dados = $select->select_produtos();
+                            foreach ($dados as $dado) {
                             ?>
+                                <option value="<?=$dado['id']?>"><?=$dado['nome_produto']?> | <?=$dado['quantidade']?></option>
+                            <?php }?>
                         </select>
                     </div>
 
@@ -450,10 +433,11 @@ if (isset($_GET['success']) && $_GET['success'] == '1' && isset($_GET['message']
                         <select id="retirante" name="retirante" required class="custom-select text-sm md:text-base" aria-label="Selecionar retirante">
                             <option value="" disabled selected>SELECIONAR SOLICITANTE</option>
                             <?php
-                            require_once('../model/functionsViews.php');
-                            $select = new select();
-                            $select->selectSolicitarResponsaveis(null);
+                            $dados = $select->select_responsavel();
+                            foreach ($dados as $dado) {
                             ?>
+                                <option value="<?=$dado['id']?>"><?=$dado['nome']?> | <?=$dado['cargo']?></option>
+                            <?php }?>
                         </select>
                     </div>
                 </div>

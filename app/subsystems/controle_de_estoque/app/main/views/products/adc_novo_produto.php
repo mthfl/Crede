@@ -401,10 +401,11 @@ if(!isset($_GET['barcode']) || empty($_GET['barcode'])){
         </div>
 
         <div class="bg-white rounded-xl shadow-lg p-8 max-w-2xl w-full border-2 border-primary mx-auto">
-            <form action="../control/controllerAdicionarProduto.php?barcode=" method="POST" class="space-y-6">
+            <form action="../../controllers/controller_crud_produto.php" method="POST" class="space-y-6">
                 <div class="space-y-4">
+                    <input type="hidden" name="barcode" value="<?=$_GET['barcode']?>">
                     <div>
-                        <input type="text" placeholder="NOME DO PRODUTO" id="nome" name="nome" style="text-transform: uppercase;" oninput="this.value = this.value.toUpperCase();" required
+                        <input type="text" placeholder="NOME DO PRODUTO" id="nome" name="nome_produto" style="text-transform: uppercase;" oninput="this.value = this.value.toUpperCase();" required
                             class="w-full px-4 py-3 border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent text-center font-semibold"
                             aria-label="Nome do produto">
                     </div>
@@ -423,7 +424,7 @@ if(!isset($_GET['barcode']) || empty($_GET['barcode'])){
                     <div class="p-4 border-2 border-primary rounded-lg">
                         <p class="font-semibold text-primary mb-3 text-center">Selecione a Categoria</p>
 
-                        <select class="js-example-basic-single" name="state">
+                        <select class="js-example-basic-single" name="id_categoria">
 
                             <?php
                             $dados = $select->select_categoria();
@@ -433,7 +434,6 @@ if(!isset($_GET['barcode']) || empty($_GET['barcode'])){
                             <?php } ?>
                         </select>
                     </div>
-                    <input type="hidden" name="barcode" value="<?php echo htmlspecialchars($identificador); ?>">
                 </div>
                 <button type="submit" name="btn" value="Adicionar" class="w-full bg-secondary text-white font-bold py-3 px-4 rounded-lg hover:bg-opacity-90 transition-colors"
                     aria-label="Adicionar produto">
