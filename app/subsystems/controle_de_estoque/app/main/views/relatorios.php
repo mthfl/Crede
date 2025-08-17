@@ -184,7 +184,7 @@ $select = new select();
             transform: scale(1.1);
             color: #FFA500;
         }
-
+        
         .stats-card p,
         .report-card p {
             z-index: 2;
@@ -207,7 +207,7 @@ $select = new select();
 
         .header-nav-link {
             position: relative;
-            transition: all 0.3s ease;
+                transition: all 0.3s ease;
             font-weight: 500;
             padding: 0.5rem 1rem;
             border-radius: 0.5rem;
@@ -466,8 +466,8 @@ $select = new select();
                 width: 30px;
                 height: 21px;
                 background: transparent;
-                border: none;
-                cursor: pointer;
+            border: none;
+            cursor: pointer;
                 padding: 0;
                 z-index: 60;
                 position: relative;
@@ -478,7 +478,7 @@ $select = new select();
                 height: 3px;
                 background-color: white;
                 border-radius: 10px;
-                transition: all 0.3s ease;
+            transition: all 0.3s ease;
                 position: relative;
                 transform-origin: center;
             }
@@ -590,9 +590,9 @@ $select = new select();
                 </div>
             </div>
             
-                        <!-- Menu de navegação -->
-                        <nav class="flex-1 p-4 space-y-2">
-                <a href="index.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2 active">
+            <!-- Menu de navegação -->
+            <nav class="flex-1 p-4 space-y-2">
+                <a href="index.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
                     <i class="fas fa-home mr-3 text-lg"></i>
                     <span>Início</span>
                 </a>
@@ -604,12 +604,12 @@ $select = new select();
                     <i class="fas fa-plus-circle mr-3 text-lg"></i>
                     <span>Adicionar</span>
                 </a>
-
+              
                 <a href="solicitar.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
                     <i class="fas fa-clipboard-list mr-3 text-lg"></i>
                     <span>Solicitar</span>
                 </a>
-                <a href="relatorios.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                <a href="relatorios.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2 active">
                     <i class="fas fa-chart-bar mr-3 text-lg"></i>
                     <span>Relatórios</span>
                 </a>
@@ -624,7 +624,7 @@ $select = new select();
             </div>
         </div>
     </div>
-    
+
     <button class="fixed top-4 left-4 z-50 md:hidden  text-primary p-3 rounded-lg  hover:bg-primary/90 transition-all duration-200" id="menuButton">
         <i class="fas fa-bars text-lg"></i>
     </button>
@@ -664,8 +664,8 @@ $select = new select();
                     </i>
                 </div>
                 <div class="stat-number" id="totalProdutos">-</div>
-                <div class="stat-label">Total de Produtos</div>
-            </div>
+                    <div class="stat-label">Total de Produtos</div>
+                </div>
             <div class="stat-item">
                 <div class="stat-icon">
                     <i class="fas fa-exclamation-triangle text-warning">
@@ -679,7 +679,7 @@ $select = new select();
                 </div>
                 <div class="stat-number" id="produtosCriticos">-</div>
                 <div class="stat-label">Estoque Crítico</div>
-            </div>
+                </div>
             <div class="stat-item">
                 <div class="stat-icon">
                     <i class="fas fa-tags">
@@ -693,8 +693,8 @@ $select = new select();
                 </div>
                 <div class="stat-number" id="totalCategorias">-</div>
                 <div class="stat-label">Categorias</div>
+                </div>
             </div>
-        </div>
 
         <!-- Gráfico de Estoque -->
         <div class="bg-white rounded-xl shadow-card p-6 mb-8">
@@ -702,10 +702,10 @@ $select = new select();
                 <i class="fas fa-chart-pie mr-2 text-secondary"></i>
                 Visão Geral do Estoque
             </h2>
-            <div class="chart-container">
+                <div class="chart-container">
                 <canvas id="estoqueChart"></canvas>
-            </div>
-        </div>
+                    </div>
+                </div>
 
         <!-- Relatórios Disponíveis -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -714,42 +714,42 @@ $select = new select();
                 <div class="card-shine"></div>
                 <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
                     <i class="fas fa-clipboard-list text-4xl"></i>
-                </div>
+                    </div>
                 <h3 class="text-lg font-bold text-primary mb-2 text-center">Relatório Completo</h3>
                 <p class="text-gray-600 text-center mb-4 text-sm">Relatório detalhado de todo o estoque atual</p>
                 <a href="reports/relatorio_produtos_cadastrados.php" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105" target="_blank">
                     <i class="fas fa-download mr-2"></i>
                     Gerar PDF
                 </a>
-            </div>
+                </div>
 
             <!-- Relatório por Período -->
             <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in" style="animation-delay: 0.1s">
                 <div class="card-shine"></div>
                 <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
                     <i class="fas fa-calendar-alt text-4xl"></i>
-                </div>
+                    </div>
                 <h3 class="text-lg font-bold text-primary mb-2 text-center">Relatório de Movimentações</h3>
                 <p class="text-gray-600 text-center mb-4 text-sm">Relatório de movimentação de estoque por período específico</p>
                 <button id="openDateModal" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105">
                     <i class="fas fa-calendar-check mr-2"></i>
                     Selecionar Data
                 </button>
-            </div>
+                </div>
 
             <!-- Relatório de Estoque Crítico -->
             <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in" style="animation-delay: 0.2s">
                 <div class="card-shine"></div>
                 <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
                     <i class="fas fa-exclamation-triangle text-4xl"></i>
-                </div>
+                    </div>
                 <h3 class="text-lg font-bold text-primary mb-2 text-center">Estoque Crítico</h3>
                 <p class="text-gray-600 text-center mb-4 text-sm">Produtos com estoque baixo (≤ 5 unidades)</p>
                 <a href="reports/relatorio_critico.php" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105" target="_blank">
                     <i class="fas fa-file-pdf mr-2"></i>
                     Gerar PDF
                 </a>
-            </div>
+                </div>
 
             <!-- Relatório por Produto -->
             <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in" style="animation-delay: 0.3s">
@@ -965,23 +965,23 @@ $select = new select();
         </div>
     </div>
 
+  
     <footer class="bg-gradient-to-r from-primary to-dark text-white py-8 md:py-10 mt-auto relative transition-all duration-300">
         <!-- Efeito de brilho sutil no topo -->
         <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-secondary to-transparent opacity-30"></div>
-        
-        <div class="ml-64 px-4 md:px-8 transition-all duration-300" id="footerContent">
+
+        <div class="px-4 md:px-8 transition-all duration-300 ml-0 md:ml-64" id="footerContent">
             <div class="max-w-7xl mx-auto">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
                     <!-- Sobre a Escola -->
                     <div class="group">
                         <h3 class="font-heading text-lg md:text-xl font-semibold mb-4 flex items-center text-white group-hover:text-secondary transition-colors duration-300">
                             <i class="fas fa-school mr-3 text-secondary group-hover:scale-110 transition-transform duration-300"></i>
-                            CREDE 1
+                           CREDE 1
                         </h3>
                         <p class="text-sm md:text-base leading-relaxed text-gray-200 group-hover:text-white transition-colors duration-300">
                             <i class="fas fa-map-marker-alt mr-2 text-secondary"></i>
-                            AV. Marta Maria Carvalho Nojoza, SN<br>
-                            Maranguape - CE
+                            Av. Sen. Virgílio Távora, 1103 - Distrito Industrial I, 
                         </p>
                     </div>
 
@@ -992,10 +992,11 @@ $select = new select();
                             Contato
                         </h3>
                         <div class="space-y-3">
-                            <a href="tel:+558531012783" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-colors duration-300 group/item">
+                            <a href="tel:+558533413990" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-colors duration-300 group/item">
                                 <i class="fas fa-phone-alt mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
-                                (85) 3101-2783
+                                (85) 3341-3990
                             </a>
+                        
                         </div>
                     </div>
 
@@ -1006,14 +1007,15 @@ $select = new select();
                             Dev Team
                         </h3>
                         <div class="grid grid-cols-1 gap-3">
-                        <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
+                            <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
                                 <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
                                 Matheus Felix
                             </a>
                             <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
                                 <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
-                                Pedro Uchoa 
+                                Pedro Uchoa
                             </a>
+
                         </div>
                     </div>
                 </div>
@@ -1021,12 +1023,12 @@ $select = new select();
                 <!-- Rodapé inferior -->
                 <div class="border-t border-white/20 pt-6 mt-8 text-center">
                     <p class="text-sm md:text-base text-gray-300 hover:text-white transition-colors duration-300">
-                        © 2025 Crede v1.2.0 | Desenvolvido por alunos EEEP STGM
+                        © 2024 STGM v1.2.0 | Desenvolvido por alunos EEEP STGM
                     </p>
                 </div>
             </div>
         </div>
-        
+
         <!-- Efeito de brilho sutil na base -->
         <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-secondary to-transparent opacity-30"></div>
     </footer>
@@ -1382,7 +1384,7 @@ $select = new select();
                             document.getElementById('totalCategorias').textContent = data.estatisticas.total_categorias;
                             setupChart(data.grafico);
                             console.log('Estatísticas carregadas com sucesso');
-                        } else {
+                    } else {
                             console.error('Erro nos dados:', data.error);
                             document.getElementById('totalProdutos').textContent = '-';
                             document.getElementById('produtosCriticos').textContent = '-';
@@ -1543,6 +1545,31 @@ $select = new select();
                     }
                 }, 5000);
             });
+
+            // Ajustar footer quando sidebar é aberta/fechada no mobile
+            const footerContent = document.getElementById('footerContent');
+            if (footerContent) {
+                const adjustFooter = () => {
+                    if (window.innerWidth <= 768) {
+                        if (sidebar.classList.contains('show')) {
+                            footerContent.style.marginLeft = '0';
+                        } else {
+                            footerContent.style.marginLeft = '0';
+                        }
+                    } else {
+                        footerContent.style.marginLeft = '16rem'; // 64 * 0.25rem = 16rem
+                    }
+                };
+                
+                // Ajustar na inicialização
+                adjustFooter();
+                
+                // Ajustar quando a sidebar é aberta/fechada
+                menuButton.addEventListener('click', adjustFooter);
+                
+                // Ajustar quando a janela é redimensionada
+                window.addEventListener('resize', adjustFooter);
+            }
         });
     </script>
 </body>

@@ -1,10 +1,10 @@
-<?php 
-require_once('../models/sessions.php');
+<?php
+require_once ('../models/sessions.php');
 $session = new sessions();
 $session->autenticar_session();
 $session->tempo_session();
 
-require_once('../models/model.select.php');
+require_once ('../models/model.select.php');
 $select = new select();
 
 ?>
@@ -224,7 +224,7 @@ $select = new select();
             
                         <!-- Menu de navegação -->
                         <nav class="flex-1 p-4 space-y-2">
-                <a href="index.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2 active">
+                <a href="index.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
                     <i class="fas fa-home mr-3 text-lg"></i>
                     <span>Início</span>
                 </a>
@@ -270,7 +270,7 @@ $select = new select();
     </button>
 
     <!-- Main content -->
-    <main class="ml-64 px-4 py-8 md:py-12 flex-1 transition-all duration-300">
+    <main class="ml-0 md:ml-64 px-4 py-8 md:py-12 flex-1 transition-all duration-300">
         <div class="text-center mb-10">
             <h1 class="text-primary text-3xl md:text-4xl font-bold mb-8 md:mb-6 text-center page-title tracking-tight font-heading inline-block mx-auto">GERENCIAR PERDAS</h1>
         </div>
@@ -293,12 +293,13 @@ $select = new select();
                             Produto
                         </label>
                         <div class="relative">
-                            <select class="js-example-basic-single w-full" name="id_produto" id="produto_id" required>
+                            <select name="id_produto" id="produto_id" required 
+                                    class="w-full px-4 py-3 border-2 border-primary/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary transition-all duration-200 hover:border-primary/50 bg-white shadow-sm appearance-none">
                                 <option value="">Selecione o produto</option>
                                 <?php
                                 $dados = $select->select_produtos();
-                                foreach($dados as $dado){
-                                ?>
+                                foreach ($dados as $dado) {
+                                    ?>
                                 <option value="<?= htmlspecialchars($dado['id']) ?>" 
                                         data-nome="<?= htmlspecialchars($dado['nome_produto']) ?>"
                                         data-quantidade="<?= htmlspecialchars($dado['quantidade'] ?? '0') ?>"
@@ -307,10 +308,10 @@ $select = new select();
                                     <?= htmlspecialchars($dado['nome_produto']) ?> 
                                     (Estoque: <?= htmlspecialchars($dado['quantidade'] ?? '0') ?>)
                                 </option>
-                                <?php }?>
+                                <?php } ?>
                             </select>
                             <div class="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
-                                <i class="fas fa-chevron-down text-primary"></i>
+                                <i class="fas fa-chevron-down text-primary text-sm"></i>
                             </div>
                         </div>
                         
@@ -409,23 +410,23 @@ $select = new select();
             </div>
         </div>
     </main>
+
     <footer class="bg-gradient-to-r from-primary to-dark text-white py-8 md:py-10 mt-auto relative transition-all duration-300">
         <!-- Efeito de brilho sutil no topo -->
         <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-secondary to-transparent opacity-30"></div>
-        
-        <div class="px-4 md:px-8 transition-all duration-300" id="footerContent">
+
+        <div class="px-4 md:px-8 transition-all duration-300 ml-0 md:ml-64" id="footerContent">
             <div class="max-w-7xl mx-auto">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
                     <!-- Sobre a Escola -->
                     <div class="group">
                         <h3 class="font-heading text-lg md:text-xl font-semibold mb-4 flex items-center text-white group-hover:text-secondary transition-colors duration-300">
                             <i class="fas fa-school mr-3 text-secondary group-hover:scale-110 transition-transform duration-300"></i>
-                            CREDE 1
+                           CREDE 1
                         </h3>
                         <p class="text-sm md:text-base leading-relaxed text-gray-200 group-hover:text-white transition-colors duration-300">
                             <i class="fas fa-map-marker-alt mr-2 text-secondary"></i>
-                            AV. Marta Maria Carvalho Nojoza, SN<br>
-                            Maranguape - CE
+                            Av. Sen. Virgílio Távora, 1103 - Distrito Industrial I, 
                         </p>
                     </div>
 
@@ -436,10 +437,11 @@ $select = new select();
                             Contato
                         </h3>
                         <div class="space-y-3">
-                            <a href="tel:+558531012783" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-colors duration-300 group/item">
+                            <a href="tel:+558533413990" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-colors duration-300 group/item">
                                 <i class="fas fa-phone-alt mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
-                                (85) 3101-2783
+                                (85) 3341-3990
                             </a>
+                        
                         </div>
                     </div>
 
@@ -450,14 +452,15 @@ $select = new select();
                             Dev Team
                         </h3>
                         <div class="grid grid-cols-1 gap-3">
-                        <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
+                            <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
                                 <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
                                 Matheus Felix
                             </a>
                             <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
                                 <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
-                                Pedro Uchoa 
+                                Pedro Uchoa
                             </a>
+
                         </div>
                     </div>
                 </div>
@@ -465,262 +468,265 @@ $select = new select();
                 <!-- Rodapé inferior -->
                 <div class="border-t border-white/20 pt-6 mt-8 text-center">
                     <p class="text-sm md:text-base text-gray-300 hover:text-white transition-colors duration-300">
-                        © 2025 Crede v1.2.0 | Desenvolvido por alunos EEEP STGM
+                        © 2024 STGM v1.2.0 | Desenvolvido por alunos EEEP STGM
                     </p>
                 </div>
             </div>
         </div>
-        
+
         <!-- Efeito de brilho sutil na base -->
         <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-secondary to-transparent opacity-30"></div>
     </footer>
     <script>
-        $(document).ready(function() {
-            // Configuração melhorada do Select2
-            $('.js-example-basic-single').select2({
-                placeholder: 'Selecione o produto',
-                allowClear: true,
-                width: '100%',
-                minimumResultsForSearch: Infinity, // Desabilita o campo de busca
-                language: {
-                    noResults: function() {
-                        return "Nenhum produto encontrado";
-                    }
-                },
-                templateResult: function(data) {
-                    if (!data.id) return data.text;
-                    return $(`<span class="flex items-center justify-between w-full">
-                        <span class="truncate">${data.text}</span>
-                        <span class="text-xs text-gray-500 ml-2">${$(data.element).data('quantidade') || '0'}</span>
-                    </span>`);
-                },
-                templateSelection: function(data) {
-                    if (!data.id) return data.text;
-                    return $(`<span class="font-medium">${$(data.element).data('nome') || data.text}</span>`);
-                },
-                escapeMarkup: function(markup) {
-                    return markup;
-                }
-            });
-
+        document.addEventListener('DOMContentLoaded', function() {
             // Evento para mostrar informações do produto selecionado
-            $('#produto_id').on('change', function() {
-                const selectedOption = $(this).find('option:selected');
-                const produtoInfo = $('#produto-info');
-                const estoqueAlerta = $('#estoque-alerta');
-                
-                if (selectedOption.val()) {
-                    // Mostrar informações do produto
-                    $('#info-nome').text(selectedOption.data('nome'));
-                    $('#info-quantidade').text(selectedOption.data('quantidade'));
+            const produtoSelect = document.getElementById('produto_id');
+            const produtoInfo = document.getElementById('produto-info');
+            const estoqueAlerta = document.getElementById('estoque-alerta');
+            
+            if (produtoSelect) {
+                produtoSelect.addEventListener('change', function() {
+                    const selectedOption = this.options[this.selectedIndex];
                     
-                    produtoInfo.removeClass('hidden').addClass('animate-fade-in');
-                    
-                    // Verificar se há quantidade suficiente
-                    const estoqueAtual = parseInt(selectedOption.data('quantidade')) || 0;
-                    const quantidadePerdida = parseInt($('#quantidade_perdida').val()) || 0;
-                    
-                    if (quantidadePerdida > estoqueAtual) {
-                        estoqueAlerta.removeClass('hidden').addClass('animate-fade-in');
+                    if (this.value) {
+                        // Mostrar informações do produto
+                        document.getElementById('info-nome').textContent = selectedOption.dataset.nome;
+                        document.getElementById('info-quantidade').textContent = selectedOption.dataset.quantidade;
+                        
+                        produtoInfo.classList.remove('hidden');
+                        produtoInfo.classList.add('animate-fade-in');
+                        
+                        // Verificar se há quantidade suficiente
+                        const estoqueAtual = parseInt(selectedOption.dataset.quantidade) || 0;
+                        const quantidadePerdida = parseInt(document.getElementById('quantidade_perdida').value) || 0;
+                        
+                        if (quantidadePerdida > estoqueAtual) {
+                            estoqueAlerta.classList.remove('hidden');
+                            estoqueAlerta.classList.add('animate-fade-in');
+                        } else {
+                            estoqueAlerta.classList.add('hidden');
+                        }
                     } else {
-                        estoqueAlerta.addClass('hidden');
+                        produtoInfo.classList.add('hidden');
+                        estoqueAlerta.classList.add('hidden');
                     }
-                } else {
-                    produtoInfo.addClass('hidden');
-                    estoqueAlerta.addClass('hidden');
-                }
-            });
+                });
+            }
 
             // Evento para validar quantidade em tempo real
-            $('#quantidade_perdida').on('input', function() {
-                const quantidadePerdida = parseInt($(this).val()) || 0;
-                const selectedOption = $('#produto_id').find('option:selected');
-                const estoqueAlerta = $('#estoque-alerta');
-                
-                if (selectedOption.val() && quantidadePerdida > 0) {
-                    const estoqueAtual = parseInt(selectedOption.data('quantidade')) || 0;
+            const quantidadeInput = document.getElementById('quantidade_perdida');
+            if (quantidadeInput) {
+                quantidadeInput.addEventListener('input', function() {
+                    const quantidadePerdida = parseInt(this.value) || 0;
+                    const selectedOption = produtoSelect.options[produtoSelect.selectedIndex];
                     
-                    if (quantidadePerdida > estoqueAtual) {
-                        estoqueAlerta.removeClass('hidden').addClass('animate-fade-in');
-                        $(this).addClass('border-red-500').removeClass('border-primary/30');
+                    if (produtoSelect.value && quantidadePerdida > 0) {
+                        const estoqueAtual = parseInt(selectedOption.dataset.quantidade) || 0;
+                        
+                        if (quantidadePerdida > estoqueAtual) {
+                            estoqueAlerta.classList.remove('hidden');
+                            estoqueAlerta.classList.add('animate-fade-in');
+                            this.classList.add('border-red-500');
+                            this.classList.remove('border-primary/30');
+                        } else {
+                            estoqueAlerta.classList.add('hidden');
+                            this.classList.remove('border-red-500');
+                            this.classList.add('border-primary/30');
+                        }
                     } else {
-                        estoqueAlerta.addClass('hidden');
-                        $(this).removeClass('border-red-500').addClass('border-primary/30');
+                        estoqueAlerta.classList.add('hidden');
+                        this.classList.remove('border-red-500');
+                        this.classList.add('border-primary/30');
                     }
-                } else {
-                    estoqueAlerta.addClass('hidden');
-                    $(this).removeClass('border-red-500').addClass('border-primary/30');
-                }
-            });
+                });
+            }
 
             // Validação do formulário antes do envio
-            $('form').on('submit', function(e) {
-                const produtoId = $('#produto_id').val();
-                const quantidadePerdida = parseInt($('#quantidade_perdida').val()) || 0;
-                const selectedOption = $('#produto_id').find('option:selected');
-                
-                if (!produtoId) {
-                    e.preventDefault();
-                    mostrarAlerta('Selecione um produto', 'error');
-                    $('#produto_id').focus();
-                    return false;
-                }
-                
-                if (quantidadePerdida <= 0) {
-                    e.preventDefault();
-                    mostrarAlerta('A quantidade deve ser maior que zero', 'error');
-                    $('#quantidade_perdida').focus();
-                    return false;
-                }
-                
-                const estoqueAtual = parseInt(selectedOption.data('quantidade')) || 0;
-                if (quantidadePerdida > estoqueAtual) {
-                    e.preventDefault();
-                    mostrarAlerta(`Quantidade solicitada (${quantidadePerdida}) é maior que o estoque disponível (${estoqueAtual})`, 'error');
-                    $('#quantidade_perdida').focus();
-                    return false;
-                }
-                
-                // Confirmação antes de registrar a perda
-                if (!confirm('Tem certeza que deseja registrar esta perda? Esta ação não pode ser desfeita.')) {
-                    e.preventDefault();
-                    return false;
-                }
-            });
-        });
-    document.addEventListener('DOMContentLoaded', function() {
-        // Sidebar mobile toggle
-        const menuButton = document.getElementById('menuButton');
-        const sidebar = document.getElementById('sidebar');
-        const overlay = document.getElementById('overlay');
-        const closeSidebar = document.getElementById('closeSidebar');
-
-        if (menuButton && sidebar) {
-            menuButton.addEventListener('click', function(e) {
-                e.stopPropagation();
-                sidebar.classList.toggle('show');
-                overlay.classList.toggle('hidden');
-                
-                // Mostrar/ocultar o botão do menu
-                if (sidebar.classList.contains('show')) {
-                    menuButton.classList.add('hidden');
-                } else {
-                    menuButton.classList.remove('hidden');
-                }
-                
-                document.body.style.overflow = sidebar.classList.contains('show') ? 'hidden' : '';
-            });
-
-            // Fechar sidebar ao clicar no overlay
-            if (overlay) {
-                overlay.addEventListener('click', function() {
-                    sidebar.classList.remove('show');
-                    overlay.classList.add('hidden');
-                    menuButton.classList.remove('hidden');
-                    document.body.style.overflow = '';
+            const form = document.querySelector('form');
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    const produtoId = produtoSelect.value;
+                    const quantidadePerdida = parseInt(quantidadeInput.value) || 0;
+                    const selectedOption = produtoSelect.options[produtoSelect.selectedIndex];
+                    
+                    if (!produtoId) {
+                        e.preventDefault();
+                        mostrarAlerta('Selecione um produto', 'error');
+                        produtoSelect.focus();
+                        return false;
+                    }
+                    
+                    if (quantidadePerdida <= 0) {
+                        e.preventDefault();
+                        mostrarAlerta('A quantidade deve ser maior que zero', 'error');
+                        quantidadeInput.focus();
+                        return false;
+                    }
+                    
+                    const estoqueAtual = parseInt(selectedOption.dataset.quantidade) || 0;
+                    if (quantidadePerdida > estoqueAtual) {
+                        e.preventDefault();
+                        mostrarAlerta(`Quantidade solicitada (${quantidadePerdida}) é maior que o estoque disponível (${estoqueAtual})`, 'error');
+                        quantidadeInput.focus();
+                        return false;
+                    }
+                    
+                    // Confirmação antes de registrar a perda
+                    if (!confirm('Tem certeza que deseja registrar esta perda? Esta ação não pode ser desfeita.')) {
+                        e.preventDefault();
+                        return false;
+                    }
                 });
             }
 
-            // Fechar sidebar ao clicar no botão fechar
-            if (closeSidebar) {
-                closeSidebar.addEventListener('click', function() {
-                    sidebar.classList.remove('show');
-                    overlay.classList.add('hidden');
-                    menuButton.classList.remove('hidden');
-                    document.body.style.overflow = '';
-                });
-            }
+            // Sidebar mobile toggle
+            const menuButton = document.getElementById('menuButton');
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+            const closeSidebar = document.getElementById('closeSidebar');
 
-            // Fechar sidebar ao clicar em um link
-            const navLinks = sidebar.querySelectorAll('a');
-            navLinks.forEach(link => {
-                link.addEventListener('click', function() {
-                    if (window.innerWidth <= 768) {
+            if (menuButton && sidebar) {
+                menuButton.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    sidebar.classList.toggle('show');
+                    overlay.classList.toggle('hidden');
+                    
+                    // Mostrar/ocultar o botão do menu
+                    if (sidebar.classList.contains('show')) {
+                        menuButton.classList.add('hidden');
+                    } else {
+                        menuButton.classList.remove('hidden');
+                    }
+                    
+                    document.body.style.overflow = sidebar.classList.contains('show') ? 'hidden' : '';
+                });
+
+                // Fechar sidebar ao clicar no overlay
+                if (overlay) {
+                    overlay.addEventListener('click', function() {
+                        sidebar.classList.remove('show');
+                        overlay.classList.add('hidden');
+                        menuButton.classList.remove('hidden');
+                        document.body.style.overflow = '';
+                    });
+                }
+
+                // Fechar sidebar ao clicar no botão fechar
+                if (closeSidebar) {
+                    closeSidebar.addEventListener('click', function() {
+                        sidebar.classList.remove('show');
+                        overlay.classList.add('hidden');
+                        menuButton.classList.remove('hidden');
+                        document.body.style.overflow = '';
+                    });
+                }
+
+                // Fechar sidebar ao clicar em um link
+                const navLinks = sidebar.querySelectorAll('a');
+                navLinks.forEach(link => {
+                    link.addEventListener('click', function() {
+                        if (window.innerWidth <= 768) {
+                            sidebar.classList.remove('show');
+                            overlay.classList.add('hidden');
+                            menuButton.classList.remove('hidden');
+                            document.body.style.overflow = '';
+                        }
+                    });
+                });
+
+                // Fechar sidebar ao pressionar ESC
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape' && sidebar.classList.contains('show')) {
                         sidebar.classList.remove('show');
                         overlay.classList.add('hidden');
                         menuButton.classList.remove('hidden');
                         document.body.style.overflow = '';
                     }
                 });
-            });
-
-            // Fechar sidebar ao pressionar ESC
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape' && sidebar.classList.contains('show')) {
-                    sidebar.classList.remove('show');
-                    overlay.classList.add('hidden');
-                    menuButton.classList.remove('hidden');
-                    document.body.style.overflow = '';
+                
+                // Ajustar footer quando sidebar é aberta/fechada no mobile
+                const footerContent = document.getElementById('footerContent');
+                if (footerContent) {
+                    const adjustFooter = () => {
+                        if (window.innerWidth <= 768) {
+                            if (sidebar.classList.contains('show')) {
+                                footerContent.style.marginLeft = '0';
+                            } else {
+                                footerContent.style.marginLeft = '0';
+                            }
+                        } else {
+                            footerContent.style.marginLeft = '16rem'; // 64 * 0.25rem = 16rem
+                        }
+                    };
+                    
+                    // Ajustar na inicialização
+                    adjustFooter();
+                    
+                    // Ajustar quando a sidebar é aberta/fechada
+                    menuButton.addEventListener('click', adjustFooter);
+                    
+                    // Ajustar quando a janela é redimensionada
+                    window.addEventListener('resize', adjustFooter);
                 }
-            });
-        }
+            }
 
-        // Back to top button visibility and functionality
-        const backToTop = document.querySelector('.back-to-top');
-        if (backToTop) {
-            window.addEventListener('scroll', () => {
-                if (window.scrollY > 300) {
-                    backToTop.classList.add('visible');
-                    backToTop.classList.remove('hidden');
-                } else {
-                    backToTop.classList.remove('visible');
-                    backToTop.classList.add('hidden');
-                }
-            });
-            
-            // Funcionalidade do botão voltar ao topo
-            backToTop.addEventListener('click', () => {
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth'
+            // Back to top button visibility and functionality
+            const backToTop = document.querySelector('.back-to-top');
+            if (backToTop) {
+                window.addEventListener('scroll', () => {
+                    if (window.scrollY > 300) {
+                        backToTop.classList.add('visible');
+                        backToTop.classList.remove('hidden');
+                    } else {
+                        backToTop.classList.remove('visible');
+                        backToTop.classList.add('hidden');
+                    }
                 });
-            });
-        }
+                
+                // Funcionalidade do botão voltar ao topo
+                backToTop.addEventListener('click', () => {
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                });
+            }
 
-        // Definir data atual no campo de data
-        const dataPerdaInput = document.getElementById('data_perda');
-        if (dataPerdaInput) {
-            const hoje = new Date().toISOString().split('T')[0];
-            dataPerdaInput.value = hoje;
-        }
+            // Definir data atual no campo de data
+            const dataPerdaInput = document.getElementById('data_perda');
+            if (dataPerdaInput) {
+                const hoje = new Date().toISOString().split('T')[0];
+                dataPerdaInput.value = hoje;
+            }
+        });
 
-        // Mostrar alerta se houver mensagem
-        <?php if ($mostrarAlerta): ?>
-        try {
-            mostrarAlerta('<?php echo addslashes($mensagem); ?>', '<?php echo $tipoMensagem; ?>');
-        } catch (error) {
-            console.error('Erro ao inicializar alerta:', error);
-        }
-        <?php endif; ?>
-    });
-
-    // Função para mostrar alertas
-    window.mostrarAlerta = function(mensagem, tipo) {
-        const alerta = document.getElementById('alertaMensagem');
-        const mensagemTexto = document.getElementById('mensagemTexto');
-        const alertaIcon = document.getElementById('alertaIcon');
-        
-        if (!alerta || !mensagemTexto || !alertaIcon) {
-            return;
-        }
-        
-        mensagemTexto.textContent = mensagem;
-        
-        if (tipo === 'success') {
-            alerta.className = 'fixed bottom-4 right-4 p-4 rounded-lg shadow-lg max-w-md z-50 bg-green-500 text-white';
-            alertaIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />';
-        } else if (tipo === 'error') {
-            alerta.className = 'fixed bottom-4 right-4 p-4 rounded-lg shadow-lg max-w-md z-50 bg-red-500 text-white';
-            alertaIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />';
-        }
-        
-        alerta.classList.remove('hidden');
-        
-        // Auto-hide após 5 segundos
-        setTimeout(() => {
-            alerta.classList.add('hidden');
-        }, 5000);
-    };
+        // Função para mostrar alertas
+        window.mostrarAlerta = function(mensagem, tipo) {
+            const alerta = document.getElementById('alertaMensagem');
+            const mensagemTexto = document.getElementById('mensagemTexto');
+            const alertaIcon = document.getElementById('alertaIcon');
+            
+            if (!alerta || !mensagemTexto || !alertaIcon) {
+                return;
+            }
+            
+            mensagemTexto.textContent = mensagem;
+            
+            if (tipo === 'success') {
+                alerta.className = 'fixed bottom-4 right-4 p-4 rounded-lg shadow-lg max-w-md z-50 bg-green-500 text-white';
+                alertaIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />';
+            } else if (tipo === 'error') {
+                alerta.className = 'fixed bottom-4 right-4 p-4 rounded-lg shadow-lg max-w-md z-50 bg-red-500 text-white';
+                alertaIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />';
+            }
+            
+            alerta.classList.remove('hidden');
+            
+            // Auto-hide após 5 segundos
+            setTimeout(() => {
+                alerta.classList.add('hidden');
+            }, 5000);
+        };
     </script>
 </body>
 </html>

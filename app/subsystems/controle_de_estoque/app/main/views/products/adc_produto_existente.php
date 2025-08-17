@@ -335,19 +335,18 @@ $select = new select();
 </head>
 
 <body class="min-h-screen flex flex-col font-sans bg-light">
-    <!-- Sidebar -->
-    <div class="fixed left-0 top-0 h-full w-64 bg-gradient-to-b from-primary to-dark text-white shadow-xl z-50 transform transition-transform duration-300 ease-in-out" id="sidebar">
+<div class="fixed left-0 top-0 h-full w-64 bg-gradient-to-b from-primary to-dark text-white shadow-xl z-50 transform transition-transform duration-300 ease-in-out" id="sidebar">
         <div class="flex flex-col h-full">
             <!-- Logo e título -->
             <div class="p-6 border-b border-white/20">
                 <div class="flex items-center">
-                    <img src="../../assets/imagens/logostgm.png" alt="Logo STGM" class="h-12 mr-3 transition-transform hover:scale-105">
+                    <img src="https://i.postimg.cc/0N0dsxrM/Bras-o-do-Cear-svg-removebg-preview.png" alt="Logo STGM" class="h-12 mr-3 transition-transform hover:scale-105">
                     <span class="text-white font-heading text-lg font-semibold">CREDE Estoque</span>
                 </div>
             </div>
             
-            <!-- Menu de navegação -->
-            <nav class="flex-1 p-4 space-y-2">
+                        <!-- Menu de navegação -->
+                        <nav class="flex-1 p-4 space-y-2">
                 <a href="../index.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
                     <i class="fas fa-home mr-3 text-lg"></i>
                     <span>Início</span>
@@ -356,10 +355,11 @@ $select = new select();
                     <i class="fas fa-boxes mr-3 text-lg"></i>
                     <span>Estoque</span>
                 </a>
-                <a href="adc_produto.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2 active">
+                <a href="./adc_produto.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2 active">
                     <i class="fas fa-plus-circle mr-3 text-lg"></i>
                     <span>Adicionar</span>
                 </a>
+              
                 <a href="../solicitar.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
                     <i class="fas fa-clipboard-list mr-3 text-lg"></i>
                     <span>Solicitar</span>
@@ -370,6 +370,7 @@ $select = new select();
                 </a>
             </nav>
 
+            
             <!-- Botão de fechar sidebar no mobile -->
             <div class="p-4 border-t border-white/20 md:hidden">
                 <button class="w-full bg-white/10 hover:bg-white/20 text-white py-2 px-4 rounded-lg transition-all duration-200" id="closeSidebar">
@@ -434,73 +435,69 @@ $select = new select();
         </div>
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-gradient-to-r from-primary to-dark text-white py-6 mt-8 transition-all duration-300 relative">
+    <footer class="bg-gradient-to-r from-primary to-dark text-white py-8 md:py-10 mt-auto relative transition-all duration-300">
         <!-- Efeito de brilho sutil no topo -->
         <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-secondary to-transparent opacity-30"></div>
-        
+
         <div class="px-4 md:px-8 transition-all duration-300 ml-0 md:ml-64" id="footerContent">
             <div class="max-w-7xl mx-auto">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
                     <!-- Sobre a Escola -->
-                    <div>
-                        <h3 class="font-heading text-lg font-semibold mb-3 flex items-center">
-                            <i class="fas fa-school mr-2 text-sm"></i>
-                            EEEP STGM
+                    <div class="group">
+                        <h3 class="font-heading text-lg md:text-xl font-semibold mb-4 flex items-center text-white group-hover:text-secondary transition-colors duration-300">
+                            <i class="fas fa-school mr-3 text-secondary group-hover:scale-110 transition-transform duration-300"></i>
+                           CREDE 1
                         </h3>
-                        <p class="text-xs leading-relaxed">
-                            <i class="fas fa-map-marker-alt mr-1 text-xs"></i>
-                            AV. Marta Maria Carvalho Nojoza, SN<br>
-                            Maranguape - CE
+                        <p class="text-sm md:text-base leading-relaxed text-gray-200 group-hover:text-white transition-colors duration-300">
+                            <i class="fas fa-map-marker-alt mr-2 text-secondary"></i>
+                            Av. Sen. Virgílio Távora, 1103 - Distrito Industrial I, 
                         </p>
                     </div>
 
                     <!-- Contato -->
-                    <div>
-                        <h3 class="font-heading text-lg font-semibold mb-3 flex items-center">
-                            <i class="fas fa-address-book mr-2 text-sm"></i>
+                    <div class="group">
+                        <h3 class="font-heading text-lg md:text-xl font-semibold mb-4 flex items-center text-white group-hover:text-secondary transition-colors duration-300">
+                            <i class="fas fa-address-book mr-3 text-secondary group-hover:scale-110 transition-transform duration-300"></i>
                             Contato
                         </h3>
-                        <div class="text-xs leading-relaxed space-y-1">
-                            <p class="flex items-start">
-                                <i class="fas fa-phone-alt mr-1 mt-0.5 text-xs"></i>
+                        <div class="space-y-3">
+                            <a href="tel:+558533413990" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-colors duration-300 group/item">
+                                <i class="fas fa-phone-alt mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
                                 (85) 3341-3990
-                            </p>
-                            <p class="flex items-start">
-                                <i class="fas fa-envelope mr-1 mt-0.5 text-xs"></i>
-                                eeepsantariamata@gmail.com
-                            </p>
+                            </a>
+                        
                         </div>
                     </div>
 
-                    <div>
-                        <h3 class="font-heading text-lg font-semibold mb-3 flex items-center">
-                            <i class="fas fa-code mr-2 text-sm"></i>
+                    <!-- Desenvolvedores -->
+                    <div class="group">
+                        <h3 class="font-heading text-lg md:text-xl font-semibold mb-4 flex items-center text-white group-hover:text-secondary transition-colors duration-300">
+                            <i class="fas fa-code mr-3 text-secondary group-hover:scale-110 transition-transform duration-300"></i>
                             Dev Team
                         </h3>
-                        <div class="grid grid-cols-2 gap-2">
-                        <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
-                                    <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
-                                    Matheus Felix
-                                </a>
-                                <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
-                                    <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
-                                    Pedro Uchoa 
-                                </a>
-                         
+                        <div class="grid grid-cols-1 gap-3">
+                            <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
+                                <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
+                                Matheus Felix
+                            </a>
+                            <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
+                                <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
+                                Pedro Uchoa
+                            </a>
+
                         </div>
                     </div>
                 </div>
 
-                <!-- Rodapé inferior compacto -->
-                <div class="border-t border-white/20 pt-4 mt-4 text-center">
-                    <p class="text-xs">
+                <!-- Rodapé inferior -->
+                <div class="border-t border-white/20 pt-6 mt-8 text-center">
+                    <p class="text-sm md:text-base text-gray-300 hover:text-white transition-colors duration-300">
                         © 2024 STGM v1.2.0 | Desenvolvido por alunos EEEP STGM
                     </p>
                 </div>
             </div>
         </div>
-        
+
         <!-- Efeito de brilho sutil na base -->
         <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-secondary to-transparent opacity-30"></div>
     </footer>
@@ -601,6 +598,31 @@ $select = new select();
                 images.forEach(img => {
                     img.loading = 'lazy';
                 });
+            }
+
+            // Ajustar footer quando sidebar é aberta/fechada no mobile
+            const footerContent = document.getElementById('footerContent');
+            if (footerContent) {
+                const adjustFooter = () => {
+                    if (window.innerWidth <= 768) {
+                        if (sidebar.classList.contains('show')) {
+                            footerContent.style.marginLeft = '0';
+                        } else {
+                            footerContent.style.marginLeft = '0';
+                        }
+                    } else {
+                        footerContent.style.marginLeft = '16rem'; // 64 * 0.25rem = 16rem
+                    }
+                };
+                
+                // Ajustar na inicialização
+                adjustFooter();
+                
+                // Ajustar quando a sidebar é aberta/fechada
+                menuButton.addEventListener('click', adjustFooter);
+                
+                // Ajustar quando a janela é redimensionada
+                window.addEventListener('resize', adjustFooter);
             }
         });
     </script>

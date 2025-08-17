@@ -293,14 +293,14 @@ $session->tempo_session();
             <!-- Logo e título -->
             <div class="p-6 border-b border-white/20">
                 <div class="flex items-center">
-                    <img src="../../assets/imagens/logostgm.png" alt="Logo STGM" class="h-12 mr-3 transition-transform hover:scale-105">
-                    <span class="text-white font-heading text-lg font-semibold">STGM Estoque</span>
+                    <img src="https://i.postimg.cc/0N0dsxrM/Bras-o-do-Cear-svg-removebg-preview.png" alt="Logo STGM" class="h-12 mr-3 transition-transform hover:scale-105">
+                    <span class="text-white font-heading text-lg font-semibold">CREDE Estoque</span>
                 </div>
             </div>
             
-                       <!-- Menu de navegação -->
-                       <nav class="flex-1 p-4 space-y-2">
-                <a href="index.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2 active">
+            <!-- Menu de navegação -->
+            <nav class="flex-1 p-4 space-y-2">
+                <a href="../index.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
                     <i class="fas fa-home mr-3 text-lg"></i>
                     <span>Início</span>
                 </a>
@@ -308,11 +308,11 @@ $session->tempo_session();
                     <i class="fas fa-boxes mr-3 text-lg"></i>
                     <span>Estoque</span>
                 </a>
-                <a href="adc_produto.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                <a href="./adc_produto.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2 active">
                     <i class="fas fa-plus-circle mr-3 text-lg"></i>
                     <span>Adicionar</span>
                 </a>
-
+              
                 <a href="../solicitar.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
                     <i class="fas fa-clipboard-list mr-3 text-lg"></i>
                     <span>Solicitar</span>
@@ -322,7 +322,7 @@ $session->tempo_session();
                     <span>Relatórios</span>
                 </a>
             </nav>
- 
+
             <!-- Botão de fechar sidebar no mobile -->
             <div class="p-4 border-t border-white/20 md:hidden">
                 <button class="w-full bg-white/10 hover:bg-white/20 text-white py-2 px-4 rounded-lg transition-all duration-200" id="closeSidebar">
@@ -333,7 +333,7 @@ $session->tempo_session();
         </div>
     </div>
     
-    <button class="fixed top-4 left-4 z-50 md:hidden  text-primary p-3 rounded-lg  hover:bg-primary/90 transition-all duration-200" id="menuButton">
+    <button class="fixed top-4 left-4 z-50 md:hidden text-primary p-3 rounded-lg hover:bg-primary/90 transition-all duration-200" id="menuButton">
         <i class="fas fa-bars text-lg"></i>
     </button>
     
@@ -341,61 +341,62 @@ $session->tempo_session();
     <div class="fixed inset-0 bg-black/50 z-40 md:hidden hidden" id="overlay"></div>
 
     <!-- Main content -->
-    <main class="ml-64 px-4 py-8 md:py-12 flex-1 transition-all duration-300">
-            <div class="text-center mb-10">
-                <h1 class="text-primary text-3xl md:text-4xl font-bold mb-8 md:mb-6 text-center page-title tracking-tight font-heading inline-block mx-auto">ADICIONAR</h1>
-            </div>
+    <main class="ml-0 md:ml-64 px-4 py-8 md:py-12 flex-1 transition-all duration-300">
+        <div class="text-center mb-10">
+            <h1 class="text-primary text-3xl md:text-4xl font-bold mb-8 md:mb-6 text-center page-title tracking-tight font-heading inline-block mx-auto">ADICIONAR</h1>
+        </div>
 
-            <div class="bg-white rounded-xl shadow-lg p-8 max-w-2xl w-full border-2 border-primary mx-auto">
-                <form action="../../controllers/controller_crud_produto.php" method="POST" class="space-y-6">
-                    <div class="space-y-4">
-                        <!-- Checkboxes para tipo de produto -->
-                        <div class="space-y-3">
-                            <label class="text-primary font-semibold text-sm">Tipo de Produto:</label>
-                            <div class="space-y-2">
-                                <label class="custom-radio flex items-center">
-                                    <input type="radio" name="tipo_produto" value="com_codigo" id="com_codigo" checked>
-                                    <span class="ml-2 text-gray-700">Produto com código</span>
-                                </label>
-                                <label class="custom-radio flex items-center">
-                                    <input type="radio" name="tipo_produto" value="sem_codigo" id="sem_codigo">
-                                    <span class="ml-2 text-gray-700">Produto sem código</span>
-                                </label>
-                            </div>
+        <div class="bg-white rounded-xl shadow-lg p-8 max-w-2xl w-full border-2 border-primary mx-auto">
+            <form action="../../controllers/controller_crud_produto.php" method="POST" class="space-y-6">
+                <div class="space-y-4">
+                    <!-- Checkboxes para tipo de produto -->
+                    <div class="space-y-3">
+                        <label class="text-primary font-semibold text-sm">Tipo de Produto:</label>
+                        <div class="space-y-2">
+                            <label class="custom-radio flex items-center">
+                                <input type="radio" name="tipo_produto" value="com_codigo" id="com_codigo" checked>
+                                <span class="ml-2 text-gray-700">Produto com código</span>
+                            </label>
+                            <label class="custom-radio flex items-center">
+                                <input type="radio" name="tipo_produto" value="sem_codigo" id="sem_codigo">
+                                <span class="ml-2 text-gray-700">Produto sem código</span>
+                            </label>
                         </div>
+                    </div>
 
-                        <!-- Campo de entrada dinâmico -->
-                        <div>
-                            <input type="text" placeholder="BARCODE" id="barcode" name="barcode" required
-                                class="w-full px-4 py-3 border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent text-center font-semibold"
-                                aria-label="Código de barras do produto">
-                        </div>
+                    <!-- Campo de entrada dinâmico -->
+                    <div>
+                        <input type="text" placeholder="BARCODE" id="barcode" name="barcode" required
+                            class="w-full px-4 py-3 border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent text-center font-semibold"
+                            aria-label="Código de barras do produto">
+                    </div>
 
-                        <button type="submit" name="btn" value="Adicionar" class="w-full bg-secondary text-white font-bold py-3 px-4 rounded-lg hover:bg-opacity-90 transition-colors"
-                            aria-label="Adicionar produto">
-                            CADASTRAR
-                        </button>
-                </form>
-            </div>
-        </main>
+                    <button type="submit" name="btn" value="Adicionar" class="w-full bg-secondary text-white font-bold py-3 px-4 rounded-lg hover:bg-opacity-90 transition-colors"
+                        aria-label="Adicionar produto">
+                        CADASTRAR
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
 
+    
     <footer class="bg-gradient-to-r from-primary to-dark text-white py-8 md:py-10 mt-auto relative transition-all duration-300">
         <!-- Efeito de brilho sutil no topo -->
         <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-secondary to-transparent opacity-30"></div>
-        
-        <div class="ml-64 px-4 md:px-8 transition-all duration-300" id="footerContent">
+
+        <div class="px-4 md:px-8 transition-all duration-300 ml-0 md:ml-64" id="footerContent">
             <div class="max-w-7xl mx-auto">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
                     <!-- Sobre a Escola -->
                     <div class="group">
                         <h3 class="font-heading text-lg md:text-xl font-semibold mb-4 flex items-center text-white group-hover:text-secondary transition-colors duration-300">
                             <i class="fas fa-school mr-3 text-secondary group-hover:scale-110 transition-transform duration-300"></i>
-                            EEEP STGM
+                           CREDE 1
                         </h3>
                         <p class="text-sm md:text-base leading-relaxed text-gray-200 group-hover:text-white transition-colors duration-300">
                             <i class="fas fa-map-marker-alt mr-2 text-secondary"></i>
-                            AV. Marta Maria Carvalho Nojoza, SN<br>
-                            Maranguape - CE
+                            Av. Sen. Virgílio Távora, 1103 - Distrito Industrial I, 
                         </p>
                     </div>
 
@@ -410,10 +411,7 @@ $session->tempo_session();
                                 <i class="fas fa-phone-alt mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
                                 (85) 3341-3990
                             </a>
-                            <a href="mailto:eeepsantariamata@gmail.com" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-colors duration-300 group/item">
-                                <i class="fas fa-envelope mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
-                                eeepsantariamata@gmail.com
-                            </a>
+                        
                         </div>
                     </div>
 
@@ -424,14 +422,15 @@ $session->tempo_session();
                             Dev Team
                         </h3>
                         <div class="grid grid-cols-1 gap-3">
-                        <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
+                            <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
                                 <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
                                 Matheus Felix
                             </a>
                             <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
                                 <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
-                                Pedro Uchoa 
+                                Pedro Uchoa
                             </a>
+
                         </div>
                     </div>
                 </div>
@@ -444,7 +443,7 @@ $session->tempo_session();
                 </div>
             </div>
         </div>
-        
+
         <!-- Efeito de brilho sutil na base -->
         <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-secondary to-transparent opacity-30"></div>
     </footer>

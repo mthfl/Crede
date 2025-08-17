@@ -75,7 +75,7 @@ $session->tempo_session();
 
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            background: linear-gradient(135deg, #F8FAF9 0%, #E6F4EA 100%);
             min-height: 100vh;
             line-height: 1.6;
         }
@@ -108,7 +108,7 @@ $session->tempo_session();
 
         /* Header melhorado */
         .header-gradient {
-            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            background: linear-gradient(135deg, #ffffff 0%, #F8FAF9 100%);
             backdrop-filter: blur(20px);
             border-bottom: 1px solid rgba(0, 90, 36, 0.08);
             position: sticky;
@@ -125,7 +125,7 @@ $session->tempo_session();
             left: 0;
             right: 0;
             height: 4px;
-            background: linear-gradient(90deg, #005A24 0%, #10B981 50%, #005A24 100%);
+            background: linear-gradient(90deg, #005A24 0%, #FFA500 50%, #005A24 100%);
             box-shadow: 0 2px 8px rgba(0, 90, 36, 0.3);
         }
 
@@ -155,10 +155,10 @@ $session->tempo_session();
         .search-input {
             width: 100%;
             padding: 16px 24px 16px 56px;
-            border: 2px solid #e2e8f0;
+            border: 2px solid rgba(0, 90, 36, 0.2);
             border-radius: 16px;
             font-size: 16px;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
@@ -166,8 +166,8 @@ $session->tempo_session();
 
         .search-input:focus {
             outline: none;
-            border-color: #005A24;
-            box-shadow: 0 0 0 4px rgba(0, 90, 36, 0.1), 0 8px 30px rgba(0, 0, 0, 0.1);
+            border-color: #FFA500;
+            box-shadow: 0 0 0 4px rgba(255, 165, 0, 0.1), 0 8px 30px rgba(0, 0, 0, 0.1);
             transform: translateY(-2px);
         }
 
@@ -182,7 +182,7 @@ $session->tempo_session();
         }
 
         .search-input:focus + .search-icon {
-            color: #005A24;
+            color: #FFA500;
         }
 
         /* Cards melhorados */
@@ -269,14 +269,14 @@ $session->tempo_session();
         .card-badge {
             display: inline-block;
             padding: 6px 16px;
-            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+            background: linear-gradient(135deg, #005A24 0%, #10B981 100%);
             color: white;
             border-radius: 20px;
             font-size: 12px;
             font-weight: 500;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+            box-shadow: 0 2px 8px rgba(0, 90, 36, 0.3);
         }
 
         /* Gradientes para ícones */
@@ -856,14 +856,14 @@ $session->tempo_session();
                              class="w-10 h-10 object-contain">
                     </div>
                     <div>
-                        <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 font-heading">
-                            Subsistemas <span class="text-primary">CREDE</span>
+                        <h1 class="text-xl sm:text-2xl font-semibold font-heading">
+                            <span class="text-primary">Subsistemas</span> <span class="text-secondary">CREDE</span>
                         </h1>
                     </div>
                 </div>
                 
                 <!-- Botões de Navegação (Desktop) -->
-                <div class="hidden md:flex items-center space-x-8">
+                <div class="hidden md:flex items-center space-x-4">
                     <button class="header-btn-with-text" title="Início" onclick="window.location.href='#'">
                         <i class="fas fa-home"></i>
                         <span>Início</span>
@@ -872,14 +872,9 @@ $session->tempo_session();
                         <i class="fas fa-universal-access"></i>
                         <span>Acessibilidade</span>
                     </button>
-                    <button class="header-btn-with-text" title="Perfil do usuário" onclick="toggleProfile()">
-                        <i class="fas fa-user-circle"></i>
-                        <span>Perfil</span>
-                    </button>
-                    <div class="w-px h-8 bg-gray-300 mx-2"></div>
-                    <button class="header-btn-with-text text-red-600 hover:text-red-700" title="Sair" onclick="window.location.href='../models/sessions.php?sair'">
+                    <div class="w-px h-8 bg-gray-300 mx-3"></div>
+                    <button class="w-10 h-10 rounded-xl bg-gray-100 hover:bg-red-50 text-red-600 hover:text-red-700 transition-all duration-300 flex items-center justify-center" title="Sair" onclick="window.location.href='../models/sessions.php?sair'">
                         <i class="fas fa-sign-out-alt"></i>
-                        <span>Sair</span>
                     </button>
                 </div>
                 
@@ -917,7 +912,7 @@ $session->tempo_session();
                  role="button"
                  aria-label="Acessar Controle de Estoque - Sistema de gestão de materiais e recursos"
                  data-system="estoque">
-                <div class="card-icon icon-purple">
+                <div class="card-icon icon-primary">
                     <i class="fas fa-boxes"></i>
                 </div>
                 <h3 class="card-title">Controle de Estoque</h3>

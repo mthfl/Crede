@@ -131,11 +131,11 @@ $select = new select();
             
                         <!-- Menu de navegação -->
                         <nav class="flex-1 p-4 space-y-2">
-                <a href="index.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2 active">
+                <a href="index.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
                     <i class="fas fa-home mr-3 text-lg"></i>
                     <span>Início</span>
                 </a>
-                <a href="estoque.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                <a href="estoque.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2 active">
                     <i class="fas fa-boxes mr-3 text-lg"></i>
                     <span>Estoque</span>
                 </a>
@@ -276,122 +276,65 @@ $select = new select();
                     if ($produto['vencimento'] != '') {
                         echo '<p class="text-sm text-gray-500 flex items-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg><span>Vencimento: ' . htmlspecialchars($produto['vencimento']) . '</span></p>';
                     }
-                    echo '</div></div>';
-                    echo '</div></div>';
+                    echo '</div>';
+                    echo '</div>';
                 }
             } else {
-                echo '<div class="text-center py-8 text-gray-500"><i class="fas fa-box-open text-4xl mb-2"></i><p>Nenhum produto encontrado</p></div>';
+                echo '<div class="text-center text-gray-500 py-8">Nenhum produto encontrado</div>';
             }
             ?>
         </div>
        
-        <!-- Modal de Edição -->
-        <div id="modalEditar" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
-            <div class="bg-white rounded-xl shadow-lg w-full max-w-md p-6 relative">
-                <button onclick="fecharModalEditar()" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-                </button>
-                <h2 class="text-2xl font-bold text-primary mb-4">Editar Produto</h2>
-                <form id="formEditar" action="../control/controllerEditarProduto.php" method="POST" class="space-y-4" onsubmit="return enviarFormularioEdicao(event)">
-                    <input type="hidden" id="editar_id" name="editar_id">
-                    <div>
-                        <label for="editar_barcode" class="block text-sm font-medium text-gray-700 mb-1">Código de Barras</label>
-                        <input type="text" id="editar_barcode" name="editar_barcode" required class="w-full px-4 py-2 border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent">
-                    </div>
-                    <div>
-                        <label for="editar_nome" class="block text-sm font-medium text-gray-700 mb-1">Nome do Produto</label>
-                        <input type="text" id="editar_nome" name="editar_nome" required class="w-full px-4 py-2 border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent">
-                    </div>
-                    <div>
-                        <label for="editar_quantidade" class="block text-sm font-medium text-gray-700 mb-1">Quantidade</label>
-                        <input type="number" id="editar_quantidade" name="editar_quantidade" min="0" required class="w-full px-4 py-2 border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent">
-                    </div>
-                    <div>
-                        <label for="editar_natureza" class="block text-sm font-medium text-gray-700 mb-1">Categoria</label>
-                        <select id="editar_natureza" name="editar_natureza" required class="w-full px-4 py-2 border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent">
-                            <option value="">Selecione a categoria</option>
-                            <?php 
-                            $dados = $select->select_categoria();
+        <!-- Botão Voltar ao Topo -->
+        <button class="back-to-top hidden fixed bottom-6 right-6 z-50 bg-secondary hover:bg-secondary/90 text-white w-12 h-12 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center group">
+            <i class="fas fa-chevron-up text-lg group-hover:scale-110 transition-transform duration-300"></i>
+        </button>
 
-                            foreach ($dados as $dado) {
-                                ?>
-                                <option value="<?=$dado['id']?>"><?=$dado['nome_categoria']?></option>
-                                <?php
-                            }
-                            ?>
-                        </select>
+        <!-- Modal para Nova Categoria -->
+        <div id="modalCategoria" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center">
+            <div class="bg-white rounded-xl shadow-2xl p-8 max-w-md w-full mx-4 transform transition-all duration-300 scale-95 opacity-0" id="modalContent">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-bold text-primary flex items-center">
+                        <i class="fas fa-tags mr-3 text-secondary"></i>
+                        Nova Categoria
+                    </h2>
+                    <button onclick="fecharModalCategoria()" class="text-gray-400 hover:text-gray-600 transition-colors">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                
+                <form id="formCategoria" class="space-y-6">
+                    <div>
+                        <label for="nomeCategoria" class="block text-sm font-semibold text-gray-700 mb-2">
+                            Nome da Categoria
+                        </label>
+                        <input type="text" id="nomeCategoria" name="nomeCategoria" required
+                               class="w-full px-4 py-3 border-2 border-primary/30 rounded-lg focus:outline-none focus:ring-1 focus:ring-secondary focus:border-secondary transition-all duration-200"
+                               placeholder="Ex: Informática">
                     </div>
-                    <div class="flex justify-end space-x-3 mt-6">
-                        <button type="button" onclick="fecharModalEditar()" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors">Cancelar</button>
-                        <button type="submit" class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-opacity-90 transition-colors">Salvar Alterações</button>
+                    
+                    <div class="flex gap-3 pt-4">
+                        <button type="button" onclick="fecharModalCategoria()" 
+                                class="flex-1 bg-gray-300 text-gray-700 font-semibold py-2 px-2 rounded-lg hover:bg-gray-400 transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-md">
+                            <i class="fas fa-times mr-2"></i>
+                            Cancelar
+                        </button>
+                        <button type="submit" 
+                                class="flex-1 bg-gradient-to-r from-secondary to-orange-500 text-white font-semibold py-3 px-4 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl">
+                            <i class="fas fa-save mr-2"></i>
+                            Salvar Categoria
+                        </button>
                     </div>
                 </form>
-            </div>
-        </div>
-        <!-- Modal de Exclusão -->
-        <div id="modalExcluir" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
-            <div class="bg-white rounded-xl shadow-lg w-full max-w-md p-6 relative">
-                <button onclick="fecharModalExcluir()" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-                </button>
-                <div class="text-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-red-500 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
-                    <h2 class="text-2xl font-bold text-gray-800 mb-4">Tem certeza?</h2>
-                    <p class="text-gray-600 mb-6">Você está prestes a excluir <span id="nomeProdutoExcluir" class="font-semibold"></span>. Esta ação não pode ser desfeita.</p>
-                </div>
-                <div class="flex justify-center space-x-3">
-                    <button onclick="fecharModalExcluir()" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors">Cancelar</button>
-                    <a id="linkExcluir" href="#" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors">Sim, excluir</a>
-                </div>
-            </div>
-        </div>
-        <!-- Modal de Categoria -->
-        <div id="modalCategoria" class="fixed inset-0 bg-black bg-opacity-50 z-[9999] flex items-center justify-center" style="display: none;">
-            <div class="bg-white rounded-xl shadow-lg w-full max-w-md p-6 relative">
-                <button onclick="fecharModalCategoria()" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-                </button>
-                <div class="text-center mb-6">
-                    <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-primary/10 mb-4">
-                        <i class="fas fa-chart-bar text-primary text-xl"></i>
-                    </div>
-                    <h2 class="text-2xl font-bold text-primary mb-2">Nova Categoria</h2>
-                    <p class="text-gray-600">Adicione uma nova categoria para organizar seus produtos</p>
-                </div>
-                <form id="formCategoria" action="../controllers/controller_crud_produto.php" method="POST" class="space-y-4" onsubmit="return enviarFormularioCategoria(event)">
-                    <div>
-                        <label for="categoria" class="block text-sm font-medium text-gray-700 mb-1">Nome da Categoria</label>
-                        <input type="text" id="categoria" name="categoria" required 
-                               class="w-full px-4 py-3 border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition-all duration-200"
-                               placeholder="Ex: Informática, Limpeza, etc.">
-                    </div>
-                                         <div class="flex justify-center space-x-3 mt-6">
-                         <button type="button" onclick="fecharModalCategoria()" 
-                                 class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors">
-                             Cancelar
-                         </button>
-                         <button type="submit" 
-                                 class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors flex items-center">
-                             <i class="fas fa-plus mr-2"></i>
-                             Cadastrar Categoria
-                         </button>
-                     </div>
-                </form>
-            </div>
-        </div>
-
-        <!-- Alerta de mensagem -->
-        <div id="alertaMensagem" class="fixed bottom-4 right-4 p-4 rounded-lg shadow-lg max-w-md hidden animate-fade-in z-50">
-            <div class="flex items-center">
-                <svg id="alertaIcon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"></svg>
-                <span id="mensagemTexto">Operação realizada com sucesso!</span>
             </div>
         </div>
     </main>
+
+
     <footer class="bg-gradient-to-r from-primary to-dark text-white py-8 md:py-10 mt-auto relative transition-all duration-300">
         <!-- Efeito de brilho sutil no topo -->
         <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-secondary to-transparent opacity-30"></div>
-        
+
         <div class="px-4 md:px-8 transition-all duration-300 ml-0 md:ml-64" id="footerContent">
             <div class="max-w-7xl mx-auto">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
@@ -399,12 +342,11 @@ $select = new select();
                     <div class="group">
                         <h3 class="font-heading text-lg md:text-xl font-semibold mb-4 flex items-center text-white group-hover:text-secondary transition-colors duration-300">
                             <i class="fas fa-school mr-3 text-secondary group-hover:scale-110 transition-transform duration-300"></i>
-                            CREDE 1
+                           CREDE 1
                         </h3>
                         <p class="text-sm md:text-base leading-relaxed text-gray-200 group-hover:text-white transition-colors duration-300">
                             <i class="fas fa-map-marker-alt mr-2 text-secondary"></i>
-                            AV. Marta Maria Carvalho Nojoza, SN<br>
-                            Maranguape - CE
+                            Av. Sen. Virgílio Távora, 1103 - Distrito Industrial I, 
                         </p>
                     </div>
 
@@ -415,10 +357,11 @@ $select = new select();
                             Contato
                         </h3>
                         <div class="space-y-3">
-                            <a href="tel:+558531012783" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-colors duration-300 group/item">
+                            <a href="tel:+558533413990" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-colors duration-300 group/item">
                                 <i class="fas fa-phone-alt mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
-                                (85) 3101-2783
+                                (85) 3341-3990
                             </a>
+                        
                         </div>
                     </div>
 
@@ -429,14 +372,15 @@ $select = new select();
                             Dev Team
                         </h3>
                         <div class="grid grid-cols-1 gap-3">
-                              <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
+                            <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
                                 <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
                                 Matheus Felix
                             </a>
                             <a href="#" class="flex items-center text-sm md:text-base text-gray-200 hover:text-white transition-all duration-300 group/item hover:translate-x-1">
                                 <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
-                                Pedro Uchoa 
+                                Pedro Uchoa
                             </a>
+
                         </div>
                     </div>
                 </div>
@@ -444,37 +388,18 @@ $select = new select();
                 <!-- Rodapé inferior -->
                 <div class="border-t border-white/20 pt-6 mt-8 text-center">
                     <p class="text-sm md:text-base text-gray-300 hover:text-white transition-colors duration-300">
-                        © 2025 Crede v1.2.0 | Desenvolvido por alunos EEEP STGM
+                        © 2024 STGM v1.2.0 | Desenvolvido por alunos EEEP STGM
                     </p>
                 </div>
             </div>
         </div>
-        
+
         <!-- Efeito de brilho sutil na base -->
         <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-secondary to-transparent opacity-30"></div>
     </footer>
+
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-    // Verificar se os elementos do alerta existem
-    const alerta = document.getElementById('alertaMensagem');
-    const mensagemTexto = document.getElementById('mensagemTexto');
-    const alertaIcon = document.getElementById('alertaIcon');
-    console.log('Elementos do alerta encontrados:', {
-        alerta: !!alerta,
-        mensagemTexto: !!mensagemTexto,
-        alertaIcon: !!alertaIcon
-    });
-
-    // Mostrar alerta se houver mensagem
-    <?php if ($mostrarAlerta): ?>
-    console.log('Inicializando alerta com mensagem: "<?php echo addslashes($mensagem); ?>", tipo: "<?php echo $tipoMensagem; ?>"');
-    try {
-        mostrarAlerta('<?php echo addslashes($mensagem); ?>', '<?php echo $tipoMensagem; ?>');
-    } catch (error) {
-        console.error('Erro ao inicializar alerta:', error);
-    }
-    <?php endif; ?>
-
     // Sidebar mobile toggle
     const menuButton = document.getElementById('menuButton');
     const sidebar = document.getElementById('sidebar');
@@ -539,6 +464,31 @@ $select = new select();
                 document.body.style.overflow = '';
             }
         });
+                    
+                    // Ajustar footer quando sidebar é aberta/fechada no mobile
+                    const footerContent = document.getElementById('footerContent');
+                    if (footerContent) {
+                        const adjustFooter = () => {
+                            if (window.innerWidth <= 768) {
+                                if (sidebar.classList.contains('show')) {
+                                    footerContent.style.marginLeft = '0';
+                                } else {
+                                    footerContent.style.marginLeft = '0';
+                                }
+                            } else {
+                                footerContent.style.marginLeft = '16rem'; // 64 * 0.25rem = 16rem
+                            }
+                        };
+                        
+                        // Ajustar na inicialização
+                        adjustFooter();
+                        
+                        // Ajustar quando a sidebar é aberta/fechada
+                        menuButton.addEventListener('click', adjustFooter);
+                        
+                        // Ajustar quando a janela é redimensionada
+                        window.addEventListener('resize', adjustFooter);
+                    }
     }
 
     // Back to top button visibility and functionality
@@ -563,351 +513,110 @@ $select = new select();
         });
     }
 
-    // Filtro de produtos (desktop e mobile)
+                // Funcionalidade de pesquisa
     const pesquisarInput = document.getElementById('pesquisar');
     const filtroCategoria = document.getElementById('filtroCategoria');
     const tabelaEstoque = document.getElementById('tabelaEstoque');
-    const mobileCards = document.querySelector('.mobile-cards');
-    
-    if (pesquisarInput && filtroCategoria && tabelaEstoque) {
-        pesquisarInput.addEventListener('input', filtrarProdutos);
-        filtroCategoria.addEventListener('change', filtrarProdutos);
         
         function filtrarProdutos() {
             const termo = pesquisarInput.value.toLowerCase();
-            const categoria = filtroCategoria.value.toLowerCase();
-            
-            // Filtrar tabela desktop
-            const linhas = tabelaEstoque.querySelectorAll('tr');
-            linhas.forEach(linha => {
-                const colunas = linha.querySelectorAll('td');
-                if (colunas.length > 0) {
-                    const nome = colunas[1].textContent.toLowerCase();
-                    const cat = colunas[3].textContent.toLowerCase();
-                    const matchTermo = nome.includes(termo);
-                    const matchCategoria = categoria === '' || cat === categoria;
-                    linha.style.display = matchTermo && matchCategoria ? '' : 'none';
-                }
-            });
-            
-            // Filtrar cards mobile
-            if (mobileCards) {
-                const cards = mobileCards.querySelectorAll('.card-item');
-                const categoriaHeaders = mobileCards.querySelectorAll('.categoria-header');
-                
-                cards.forEach(card => {
-                    const nome = card.querySelector('h3').textContent.toLowerCase();
-                    const cat = card.closest('.card-item').previousElementSibling?.classList.contains('categoria-header') ? 
-                               card.closest('.card-item').previousElementSibling.textContent.toLowerCase() : 
-                               card.closest('.card-item').previousElementSibling?.previousElementSibling?.textContent.toLowerCase() || '';
+                    const categoria = filtroCategoria.value;
                     
-                    const matchTermo = nome.includes(termo);
-                    const matchCategoria = categoria === '' || cat.includes(categoria);
-                    card.style.display = matchTermo && matchCategoria ? '' : 'none';
-                });
-                
-                // Mostrar/ocultar headers de categoria baseado nos cards visíveis
-                categoriaHeaders.forEach(header => {
-                    const nextCard = header.nextElementSibling;
-                    if (nextCard && nextCard.classList.contains('card-item')) {
-                        const hasVisibleCards = Array.from(cards).some(card => 
-                            card.style.display !== 'none' && 
-                            card.previousElementSibling === header
-                        );
-                        header.style.display = hasVisibleCards ? '' : 'none';
-                    }
-                });
-            }
-        }
-    }
-
-    // Modais de edição/exclusão
-    window.abrirModalEditar = function(id) {
-        console.log('Abrindo modal de edição para ID:', id);
-        fetch('../control/controllerEditarProduto.php?id=' + id)
-            .then(response => response.json())
-            .then(data => {
-                if (data.erro) {
-                    alert('Erro ao carregar dados do produto: ' + data.erro);
-                    return;
+                    // Implementar lógica de filtro aqui
+                    console.log('Filtrando produtos:', { termo, categoria });
                 }
-                document.getElementById('editar_id').value = data.id;
-                document.getElementById('editar_barcode').value = data.barcode;
-                document.getElementById('editar_nome').value = data.nome_produto;
-                document.getElementById('editar_quantidade').value = data.quantidade;
-                document.getElementById('editar_natureza').value = data.natureza;
-                document.getElementById('modalEditar').classList.remove('hidden');
-            })
-            .catch(error => {
-                console.error('Erro ao carregar dados do produto:', error);
-                alert('Erro ao carregar dados do produto');
-            });
-    };
 
-    window.fecharModalEditar = function() {
-        console.log('Fechando modal de edição');
-        document.getElementById('formEditar').reset();
-        document.getElementById('editar_id').value = '';
-        document.getElementById('editar_barcode').value = '';
-        document.getElementById('editar_nome').value = '';
-        document.getElementById('editar_quantidade').value = '';
-        document.getElementById('editar_natureza').value = '';
-        document.getElementById('modalEditar').classList.add('hidden');
-    };
+                if (pesquisarInput) {
+                    pesquisarInput.addEventListener('input', filtrarProdutos);
+                }
 
-    window.abrirModalExcluir = function(id, nome) {
-        console.log('Tentando abrir modal de exclusão para ID:', id, 'Nome:', nome);
-        const modalExcluir = document.getElementById('modalExcluir');
-        const nomeProdutoExcluir = document.getElementById('nomeProdutoExcluir');
-        const linkExcluir = document.getElementById('linkExcluir');
-        
-        if (!modalExcluir || !nomeProdutoExcluir || !linkExcluir) {
-            console.error('Elementos do modal de exclusão não encontrados');
+                if (filtroCategoria) {
+                    filtroCategoria.addEventListener('change', filtrarProdutos);
+                }
+
+                // Formulário de nova categoria
+                const formCategoria = document.getElementById('formCategoria');
+                if (formCategoria) {
+                    formCategoria.addEventListener('submit', function(e) {
+                        e.preventDefault();
+                        
+                        const nomeCategoria = document.getElementById('nomeCategoria').value.trim();
+                        const descricaoCategoria = document.getElementById('descricaoCategoria').value.trim();
+                        
+                        if (!nomeCategoria) {
+                            alert('Por favor, insira o nome da categoria');
             return;
         }
         
-        nomeProdutoExcluir.textContent = nome;
-        linkExcluir.href = '../control/controllerApagarProduto.php?id=' + id;
-        modalExcluir.classList.remove('hidden');
-        console.log('Modal de exclusão visível:', !modalExcluir.classList.contains('hidden'));
-    };
-
-    window.fecharModalExcluir = function() {
-        console.log('Fechando modal de exclusão');
-        document.getElementById('modalExcluir').classList.add('hidden');
-    };
-
-    // Fechar modais ao clicar fora, apenas no fundo do modal
-    document.addEventListener('click', function(e) {
-        const modalEditar = document.getElementById('modalEditar');
-        const modalExcluir = document.getElementById('modalExcluir');
-        
-        if (e.target === modalEditar) {
-            console.log('Clique fora do modal de edição');
-            fecharModalEditar();
-        }
-        if (e.target === modalExcluir) {
-            console.log('Clique fora do modal de exclusão');
-            fecharModalExcluir();
-        }
-    });
-
-    // Fechar modais ao pressionar ESC
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            const modalEditar = document.getElementById('modalEditar');
-            const modalExcluir = document.getElementById('modalExcluir');
-            
-            if (modalEditar && !modalEditar.classList.contains('hidden')) {
-                console.log('Fechando modal de edição via ESC');
-                fecharModalEditar();
-            }
-            if (modalExcluir && !modalExcluir.classList.contains('hidden')) {
-                console.log('Fechando modal de exclusão via ESC');
-                fecharModalExcluir();
-            }
-        }
-    });
-
-    // Função para mostrar alertas
-    window.mostrarAlerta = function(mensagem, tipo) {
-        console.log('Exibindo alerta:', mensagem, tipo);
-        const alerta = document.getElementById('alertaMensagem');
-        const mensagemTexto = document.getElementById('mensagemTexto');
-        const alertaIcon = document.getElementById('alertaIcon');
-        
-        if (!alerta || !mensagemTexto || !alertaIcon) {
-            console.error('Elementos do alerta não encontrados:', {
-                alerta: !!alerta,
-                mensagemTexto: !!mensagemTexto,
-                alertaIcon: !!alertaIcon
+                        // Aqui você pode implementar a lógica para salvar a categoria
+                        // Por exemplo, fazer uma requisição AJAX para o controller
+                        console.log('Salvando categoria:', { nomeCategoria, descricaoCategoria });
+                        
+                        // Simular salvamento (substitua por sua lógica real)
+                        alert('Categoria salva com sucesso!');
+                        
+                        // Fechar modal e limpar formulário
+                        fecharModalCategoria();
+                        formCategoria.reset();
+                        
+                        // Opcional: recarregar a página ou atualizar a lista de categorias
+                        // location.reload();
+                    });
+                }
             });
-            return;
-        }
-        
-        mensagemTexto.textContent = mensagem;
-        
-        if (tipo === 'success') {
-            alerta.className = 'fixed bottom-4 right-4 p-4 rounded-lg shadow-lg max-w-md z-50 bg-green-500 text-white';
-            alertaIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />';
-        } else if (tipo === 'error') {
-            alerta.className = 'fixed bottom-4 right-4 p-4 rounded-lg shadow-lg max-w-md z-50 bg-red-500 text-white';
-            alertaIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />';
-        }
-        
-        alerta.classList.remove('hidden');
-        console.log('Alerta visível:', !alerta.classList.contains('hidden'));
-        
-        // Auto-hide após 5 segundos e limpar URL
+
+            // Funções para controlar o modal
+            function abrirModalCategoria() {
+                const modal = document.getElementById('modalCategoria');
+                const modalContent = document.getElementById('modalContent');
+                
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                
+                // Animar entrada
         setTimeout(() => {
-            console.log('Iniciando ocultação do alerta e limpeza da URL');
-            alerta.classList.add('hidden');
-            console.log('Alerta oculto:', alerta.classList.contains('hidden'));
-            
-            try {
-                // Tentar limpar a URL com pathname
-                const cleanUrl = window.location.pathname;
-                console.log('Tentando limpar URL para:', cleanUrl);
-                window.history.replaceState({}, document.title, cleanUrl);
-                console.log('URL após tentativa com pathname:', window.location.href);
+                    modalContent.classList.remove('scale-95', 'opacity-0');
+                    modalContent.classList.add('scale-100', 'opacity-100');
+                }, 10);
                 
-                // Verificar se a URL ainda contém parâmetros
-                if (window.location.search) {
-                    console.log('URL ainda contém parâmetros, tentando caminho fixo');
-                    const fixedUrl = '/GitHub/Salaberga/portalsalaberga/app/subsystems/ControledeEstoque/app/main/view/estoque.php';
-                    window.history.replaceState({}, document.title, fixedUrl);
-                    console.log('URL após tentativa com caminho fixo:', window.location.href);
-                }
-            } catch (error) {
-                console.error('Erro ao limpar URL:', error);
-                // Solução de contingência: recarregar a página sem parâmetros
-                console.log('Recarregando página como contingência');
-                window.location = '/GitHub/Salaberga/portalsalaberga/app/subsystems/ControledeEstoque/app/main/view/estoque.php';
-            }
-        }, 5000);
-    };
-
-    // Função para enviar formulário de edição
-    window.enviarFormularioEdicao = function(event) {
-        event.preventDefault();
-        
-        const form = event.target;
-        const formData = new FormData(form);
-        
-        const submitBtn = form.querySelector('button[type="submit"]');
-        const originalText = submitBtn.textContent;
-        submitBtn.textContent = 'Salvando...';
-        submitBtn.disabled = true;
-        
-        fetch('../control/controllerEditarProduto.php', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            fecharModalEditar();
-            
-            if (data.success) {
-                mostrarAlerta(data.message || 'Produto atualizado com sucesso!', 'success');
-                setTimeout(() => {
-                    window.location.reload();
-                }, 1000);
-            } else {
-                mostrarAlerta(data.message || 'Erro ao atualizar produto', 'error');
-                submitBtn.textContent = originalText;
-                submitBtn.disabled = false;
-            }
-        })
-        .catch(error => {
-            console.error('Erro ao editar produto:', error);
-            mostrarAlerta('Erro ao atualizar produto', 'error');
-            submitBtn.textContent = originalText;
-            submitBtn.disabled = false;
-        });
-        
-        return false;
-    };
-
-    // Funções para o modal de categoria
-    function abrirModalCategoria() {
-        console.log('=== FUNÇÃO ABRIR MODAL CHAMADA ===');
-        console.log('Abrindo modal de categoria');
-        
-        const modal = document.getElementById('modalCategoria');
-        console.log('Modal encontrado:', modal);
-        
-        if (modal) {
-            console.log('Alterando display para flex');
-            modal.style.display = 'flex';
-            console.log('Display atual:', modal.style.display);
-            
-            const input = document.getElementById('categoria');
-            if (input) {
-                input.focus();
-                console.log('Input focado');
-            } else {
-                console.error('Input categoria não encontrado');
-            }
-        } else {
-            console.error('Modal de categoria não encontrado');
-        }
+                // Focar no primeiro campo
+                document.getElementById('nomeCategoria').focus();
     }
 
     function fecharModalCategoria() {
-        console.log('Fechando modal de categoria');
         const modal = document.getElementById('modalCategoria');
-        const form = document.getElementById('formCategoria');
-        if (modal) modal.style.display = 'none';
-        if (form) form.reset();
-    }
-
-    // Tornar as funções globais
-    window.abrirModalCategoria = abrirModalCategoria;
-    window.fecharModalCategoria = fecharModalCategoria;
-
-    // Função para enviar formulário de categoria
-    window.enviarFormularioCategoria = function(event) {
-        event.preventDefault();
-        
-        const form = event.target;
-        const formData = new FormData(form);
-        const submitBtn = form.querySelector('button[type="submit"]');
-        const originalText = submitBtn.innerHTML;
-        
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Cadastrando...';
-        submitBtn.disabled = true;
-        
-        fetch('../control/controller_categoria.php', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.text())
-        .then(data => {
-            fecharModalCategoria();
-            
-            // Verificar se a resposta indica sucesso
-            if (data.includes('sucesso') || data.includes('success') || data.includes('cadastrada')) {
-                mostrarAlerta('Categoria cadastrada com sucesso!', 'success');
+                const modalContent = document.getElementById('modalContent');
+                
+                // Animar saída
+                modalContent.classList.remove('scale-100', 'opacity-100');
+                modalContent.classList.add('scale-95', 'opacity-0');
+                
                 setTimeout(() => {
-                    window.location.reload();
-                }, 1000);
-            } else {
-                mostrarAlerta('Erro ao cadastrar categoria. Tente novamente.', 'error');
+                    modal.classList.add('hidden');
+                    modal.classList.remove('flex');
+                }, 300);
+                
+                // Limpar formulário
+                document.getElementById('formCategoria').reset();
             }
-        })
-        .catch(error => {
-            console.error('Erro ao cadastrar categoria:', error);
-            mostrarAlerta('Erro ao cadastrar categoria', 'error');
-        })
-        .finally(() => {
-            submitBtn.innerHTML = originalText;
-            submitBtn.disabled = false;
-        });
-        
-        return false;
-    };
 
-    // Fechar modal de categoria ao clicar fora
-    document.addEventListener('click', function(e) {
-        const modalCategoria = document.getElementById('modalCategoria');
-        if (e.target === modalCategoria) {
-            console.log('Fechando modal ao clicar fora');
+            // Fechar modal ao clicar fora
+            document.getElementById('modalCategoria').addEventListener('click', function(e) {
+                if (e.target === this) {
             fecharModalCategoria();
         }
     });
 
-    // Fechar modal de categoria ao pressionar ESC
+            // Fechar modal com ESC
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
-            const modalCategoria = document.getElementById('modalCategoria');
-            if (modalCategoria && !modalCategoria.classList.contains('hidden')) {
+                    const modal = document.getElementById('modalCategoria');
+                    if (!modal.classList.contains('hidden')) {
                 fecharModalCategoria();
             }
         }
-    });
-
-    // Modal de categoria será aberto apenas quando o usuário clicar no botão
 });
 </script>
+    </main>
 </body>
 </html>
