@@ -269,7 +269,7 @@ $session->tempo_session();
         .card-badge {
             display: inline-block;
             padding: 6px 16px;
-            background: linear-gradient(135deg, #005A24 0%, #10B981 100%);
+            background: #005A24;
             color: white;
             border-radius: 20px;
             font-size: 12px;

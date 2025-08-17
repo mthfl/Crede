@@ -323,6 +323,14 @@ $session->tempo_session();
                 </a>
             </nav>
 
+            <!-- Botão de Sair -->
+            <div class="p-4 border-t border-white/20">
+                <a href="../../models/sessions.php?sair" class="w-full bg-transparent border border-white/40 hover:bg-white/10 text-white py-2 px-4 rounded-lg transition-all duration-200 flex items-center justify-center">
+                    <i class="fas fa-sign-out-alt mr-2"></i>
+                    Sair
+                </a>
+            </div>
+
             <!-- Botão de fechar sidebar no mobile -->
             <div class="p-4 border-t border-white/20 md:hidden">
                 <button class="w-full bg-white/10 hover:bg-white/20 text-white py-2 px-4 rounded-lg transition-all duration-200" id="closeSidebar">
