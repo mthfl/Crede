@@ -200,7 +200,7 @@ $session->tempo_session();
             backdrop-filter: blur(10px);
             border: 1px solid rgba(0, 90, 36, 0.1);
             border-radius: 20px;
-            padding: 32px 24px;
+            padding: 36px 28px;
             text-align: center;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
@@ -238,45 +238,63 @@ $session->tempo_session();
             width: 80px;
             height: 80px;
             margin: 0 auto 20px;
-            border-radius: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 32px;
-            color: white;
             transition: all 0.3s ease;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card-icon img {
+        
+            border-radius: 20px;
+            transition: transform 0.3s ease;
+        }
+        
+        .system-card:hover .card-icon img {
+            transform: rotate(5deg);
         }
 
-        .system-card:hover .card-icon {
-            transform: scale(1.1) rotate(5deg);
-            animation: float 3s ease-in-out infinite;
-        }
+
 
         .card-title {
             font-family: 'Poppins', sans-serif;
-            font-size: 20px;
-            font-weight: 600;
+            font-size: 22px;
+            font-weight: 700;
             color: #1e293b;
-            margin-bottom: 12px;
+            margin-bottom: 8px;
             transition: color 0.3s ease;
+            line-height: 1.2;
         }
 
         .system-card:hover .card-title {
             color: #005A24;
         }
 
+        .card-description {
+            color: #64748b;
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+            font-weight: 400;
+        }
+
         .card-badge {
             display: inline-block;
-            padding: 6px 16px;
-            background: #005A24;
+            padding: 8px 20px;
+            background: linear-gradient(135deg, #005A24 0%, #1A3C34 100%);
             color: white;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 500;
+            border-radius: 25px;
+            font-size: 11px;
+            font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
-            box-shadow: 0 2px 8px rgba(0, 90, 36, 0.3);
+            letter-spacing: 1px;
+            box-shadow: 0 4px 12px rgba(0, 90, 36, 0.25);
+            transition: all 0.3s ease;
+        }
+
+        .system-card:hover .card-badge {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(0, 90, 36, 0.35);
         }
 
         /* Gradientes para ícones */
@@ -307,7 +325,11 @@ $session->tempo_session();
             .card-icon {
                 width: 64px;
                 height: 64px;
-                font-size: 24px;
+            }
+            
+            .card-icon img {
+                width: 64px;
+                height: 64px;
             }
             
             .search-input {
@@ -847,10 +869,10 @@ $session->tempo_session();
 <body>
     <!-- Header -->
     <header class="header-gradient shadow-sm">
-        <div class="container mx-auto px-4 sm:px-6 py-4 sm:py-6">
+        <div class="container mx-auto px-6 py-4">
             <div class="flex items-center justify-between header-content">
                 <div class="flex items-center space-x-4 sm:space-x-6">
-                    <div class="w-14 h-14 flex items-center justify-center bg-white rounded-2xl shadow-lg">
+                    <div class="w-14 h-14 flex items-center justify-center bg-white rounded-2xl ">
                         <img src="https://i.postimg.cc/0N0dsxrM/Bras-o-do-Cear-svg-removebg-preview.png" 
                              alt="Logo Ceará" 
                              class="w-10 h-10 object-contain">
@@ -912,11 +934,11 @@ $session->tempo_session();
                  role="button"
                  aria-label="Acessar Controle de Estoque - Sistema de gestão de materiais e recursos"
                  data-system="estoque">
-                <div class="card-icon icon-primary">
-                    <i class="fas fa-boxes"></i>
+                <div class="card-icon">
+                    <img src="https://i.postimg.cc/wT8bLxNS/Design-sem-nome-7.png" alt="Ícone Controle de Estoque" class="w-24 h-24 object-contain">
                 </div>
                 <h3 class="card-title">Controle de Estoque</h3>
-                <p class="text-gray-600 mb-4 text-sm">Gestão completa de materiais e recursos</p>
+                <p class="card-description">Gestão completa de materiais e recursos</p>
                 <span class="card-badge">Sistema Ativo</span>
             </div>
             </a>
