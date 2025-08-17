@@ -358,7 +358,7 @@ $select = new select();
                     <h2 class="text-2xl font-bold text-primary mb-2">Nova Categoria</h2>
                     <p class="text-gray-600">Adicione uma nova categoria para organizar seus produtos</p>
                 </div>
-                <form id="formCategoria" action="../control/controller_categoria.php" method="POST" class="space-y-4" onsubmit="return enviarFormularioCategoria(event)">
+                <form id="formCategoria" action="../controllers/controller_crud_produto.php" method="POST" class="space-y-4" onsubmit="return enviarFormularioCategoria(event)">
                     <div>
                         <label for="categoria" class="block text-sm font-medium text-gray-700 mb-1">Nome da Categoria</label>
                         <input type="text" id="categoria" name="categoria" required 
