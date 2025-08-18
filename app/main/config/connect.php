@@ -2,13 +2,13 @@
 class connect
 {
     protected $connect;
+    
     function __construct()
     {
         $this->connect_database();
     }
     function connect_database()
     {
-        
         try {
             require(__DIR__."\..\models\private\config.php");
 
@@ -30,8 +30,8 @@ class connect
             }
         } catch (PDOException $e) {
 
-            //header('location: ../views/windows/desconnect.php');
-            //exit();
+            header('location: ../views/windows/desconnect.php');
+            exit();
         }
     }
 }

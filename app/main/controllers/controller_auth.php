@@ -1,6 +1,6 @@
 <?php
-require_once("../models/model.usuario.php");
-print_r($_POST);
+require_once(__DIR__."\..\models\model.usuario.php");
+//print_r($_POST);
 
 //pre-cadastro
 if (
@@ -96,10 +96,10 @@ else if (
             header('Location: ../login.php?falha');
             exit();
     }
-}/*else{
+}else{
 
     session_unset();
     session_destroy();
     header('location:../login.php');
     exit();
-}*/
+}

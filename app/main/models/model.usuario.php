@@ -28,11 +28,7 @@ class model_usuario extends connect
             $stmt_check->bindValue(":email", $email);
             $stmt_check->execute();
 
-<<<<<<< Updated upstream
             if ($stmt_check->rowCount() == 1) {
-=======
-            if ($stmt_check->rowCount() <= 0) {
->>>>>>> Stashed changes
 
                 session_start();
                 $_SESSION['email'] = $email;
