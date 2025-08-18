@@ -1539,6 +1539,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 border: 2px solid var(--gray-800);
             }
         }
+
+        /* Título de seção (Informações Pessoais) */
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            color: var(--gray-800);
+            font-weight: 800;
+            letter-spacing: 0.2px;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .section-title .title-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 0.75rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 100%);
+            color: #fff;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 18px rgba(0, 90, 36, 0.25);
+            flex-shrink: 0;
+        }
+
+        .section-title .title-icon i {
+            font-size: 1.125rem;
+        }
+
+        .section-title .title-text {
+            line-height: 1.1;
+        }
     }
     </style>
 </head>
@@ -1612,11 +1646,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
             <!-- Card Principal de Informações -->
             <div class="profile-main-card">
-                <h3 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
-                    <i class="fas fa-user-circle mr-3 text-green-600"></i>
-                    Informações Pessoais
-                </h3>
-                
+            
                 <div class="info-grid">
                     <!-- Email -->
                     <div class="info-card animate-on-scroll">
