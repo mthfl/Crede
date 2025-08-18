@@ -1,8 +1,11 @@
-<?php 
+<?php
 require_once('../../models/sessions.php');
 $session = new sessions();
 $session->autenticar_session();
 $session->tempo_session();
+
+require_once('../../models/model.select.php');
+$select = new select();
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -44,22 +47,12 @@ $session->tempo_session();
                     },
                     keyframes: {
                         fadeIn: {
-                            '0%': {
-                                opacity: '0'
-                            },
-                            '100%': {
-                                opacity: '1'
-                            }
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' }
                         },
                         slideUp: {
-                            '0%': {
-                                transform: 'translateY(20px)',
-                                opacity: '0'
-                            },
-                            '100%': {
-                                transform: 'translateY(0)',
-                                opacity: '1'
-                            }
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' }
                         }
                     }
                 }
@@ -231,54 +224,50 @@ $session->tempo_session();
             border-radius: 4px;
         }
 
-        /* Estilos para a sidebar */
         .sidebar-link {
             transition: all 0.3s ease;
             border-radius: 0.5rem;
         }
-        
+
         .sidebar-link:hover {
             background-color: rgba(255, 255, 255, 0.1);
             transform: translateX(0.5rem);
         }
-        
+
         .sidebar-link.active {
             background-color: rgba(255, 165, 0, 0.2);
             color: #FFA500;
         }
-        
-        /* Responsividade da sidebar */
+
         @media (max-width: 768px) {
             #sidebar {
                 transform: translateX(-100%);
             }
-            
+
             #sidebar.show {
                 transform: translateX(0);
             }
-            
+
             main {
                 margin-left: 0 !important;
             }
-            
-            /* Botão do menu mobile */
+
             #menuButton {
                 transition: all 0.3s ease;
             }
-            
+
             #menuButton.hidden {
                 opacity: 0;
                 visibility: hidden;
                 transform: scale(0.8);
             }
-            
-            /* Footer responsivo para mobile */
+
             footer {
                 margin-left: 0 !important;
                 padding-left: 1rem !important;
                 padding-right: 1rem !important;
             }
-            
+
             footer .ml-64 {
                 margin-left: 0 !important;
             }
@@ -287,18 +276,14 @@ $session->tempo_session();
 </head>
 
 <body class="min-h-screen flex flex-col font-sans bg-light">
-    <!-- Sidebar -->
     <div class="fixed left-0 top-0 h-full w-64 bg-gradient-to-b from-primary to-dark text-white shadow-xl z-50 transform transition-transform duration-300 ease-in-out" id="sidebar">
         <div class="flex flex-col h-full">
-            <!-- Logo e título -->
             <div class="p-6 border-b border-white/20">
                 <div class="flex items-center">
                     <img src="https://i.postimg.cc/0N0dsxrM/Bras-o-do-Cear-svg-removebg-preview.png" alt="Logo STGM" class="h-12 mr-3 transition-transform hover:scale-105">
                     <span class="text-white font-heading text-lg font-semibold">CREDE Estoque</span>
                 </div>
             </div>
-            
-            <!-- Menu de navegação -->
             <nav class="flex-1 p-4 space-y-2">
                 <a href="../index.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
                     <i class="fas fa-home mr-3 text-lg"></i>
@@ -312,7 +297,6 @@ $session->tempo_session();
                     <i class="fas fa-plus-circle mr-3 text-lg"></i>
                     <span>Adicionar</span>
                 </a>
-              
                 <a href="../solicitar.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
                     <i class="fas fa-clipboard-list mr-3 text-lg"></i>
                     <span>Solicitar</span>
@@ -322,16 +306,12 @@ $session->tempo_session();
                     <span>Relatórios</span>
                 </a>
             </nav>
-
-            <!-- Botão de Sair -->
             <div class="p-4 border-t border-white/20">
-                <a href="../../models/sessions.php?sair" class="w-full bg-transparent border border-white/40 hover:bg-white/10 text-white py-2 px-4 rounded-lg transition-all duration-200 flex items-center justify-center">
+                <a href="../../../../../../main/views/subsystems.php" class="w-full bg-transparent border border-white/40 hover:bg-white/10 text-white py-2 px-4 rounded-lg transition-all duration-200 flex items-center justify-center">
                     <i class="fas fa-sign-out-alt mr-2"></i>
                     Sair
                 </a>
             </div>
-
-            <!-- Botão de fechar sidebar no mobile -->
             <div class="p-4 border-t border-white/20 md:hidden">
                 <button class="w-full bg-white/10 hover:bg-white/20 text-white py-2 px-4 rounded-lg transition-all duration-200" id="closeSidebar">
                     <i class="fas fa-times mr-2"></i>
@@ -340,15 +320,13 @@ $session->tempo_session();
             </div>
         </div>
     </div>
-    
+
     <button class="fixed top-4 left-4 z-50 md:hidden text-primary p-3 rounded-lg hover:bg-primary/90 transition-all duration-200" id="menuButton">
         <i class="fas fa-bars text-lg"></i>
     </button>
-    
-    <!-- Overlay para mobile -->
+
     <div class="fixed inset-0 bg-black/50 z-40 md:hidden hidden" id="overlay"></div>
 
-    <!-- Main content -->
     <main class="ml-0 md:ml-64 px-4 py-8 md:py-12 flex-1 transition-all duration-300">
         <div class="text-center mb-10">
             <h1 class="text-primary text-3xl md:text-4xl font-bold mb-8 md:mb-6 text-center page-title tracking-tight font-heading inline-block mx-auto">ADICIONAR</h1>
@@ -357,7 +335,6 @@ $session->tempo_session();
         <div class="bg-white rounded-xl shadow-lg p-8 max-w-2xl w-full border-2 border-primary mx-auto">
             <form action="../../controllers/controller_crud_produto.php" method="POST" class="space-y-6">
                 <div class="space-y-4">
-                    <!-- Checkboxes para tipo de produto -->
                     <div class="space-y-3">
                         <label class="text-primary font-semibold text-sm">Tipo de Produto:</label>
                         <div class="space-y-2">
@@ -372,14 +349,18 @@ $session->tempo_session();
                         </div>
                     </div>
 
-                    <!-- Campo de entrada dinâmico -->
-                    <div>
+                    <div id="com_codigo_fields">
                         <input type="text" placeholder="BARCODE" id="barcode" name="barcode" required
                             class="w-full px-4 py-3 border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent text-center font-semibold"
                             aria-label="Código de barras do produto">
                     </div>
 
-                    <button type="submit" name="btn" value="Adicionar" class="w-full bg-secondary text-white font-bold py-3 px-4 rounded-lg hover:bg-opacity-90 transition-colors"
+                    <div id="sem_codigo_fields" class="hidden space-y-4">
+                        
+                    </div>
+
+                    <button type="submit" name="btn" value="Adicionar" 
+                        class="w-full bg-secondary text-white font-bold py-3 px-4 rounded-lg hover:bg-opacity-90 transition-colors"
                         aria-label="Adicionar produto">
                         CADASTRAR
                     </button>
@@ -388,27 +369,21 @@ $session->tempo_session();
         </div>
     </main>
 
-    
     <footer class="bg-gradient-to-r from-primary to-dark text-white py-8 md:py-10 mt-auto relative transition-all duration-300">
-        <!-- Efeito de brilho sutil no topo -->
         <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-secondary to-transparent opacity-30"></div>
-
         <div class="px-4 md:px-8 transition-all duration-300 ml-0 md:ml-64" id="footerContent">
             <div class="max-w-7xl mx-auto">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
-                    <!-- Sobre a Escola -->
                     <div class="group">
                         <h3 class="font-heading text-lg md:text-xl font-semibold mb-4 flex items-center text-white group-hover:text-secondary transition-colors duration-300">
                             <i class="fas fa-school mr-3 text-secondary group-hover:scale-110 transition-transform duration-300"></i>
-                           CREDE 1
+                            CREDE 1
                         </h3>
                         <p class="text-sm md:text-base leading-relaxed text-gray-200 group-hover:text-white transition-colors duration-300">
                             <i class="fas fa-map-marker-alt mr-2 text-secondary"></i>
-                            Av. Sen. Virgílio Távora, 1103 - Distrito Industrial I, 
+                            Av. Sen. Virgílio Távora, 1103 - Distrito Industrial I,
                         </p>
                     </div>
-
-                    <!-- Contato -->
                     <div class="group">
                         <h3 class="font-heading text-lg md:text-xl font-semibold mb-4 flex items-center text-white group-hover:text-secondary transition-colors duration-300">
                             <i class="fas fa-address-book mr-3 text-secondary group-hover:scale-110 transition-transform duration-300"></i>
@@ -419,11 +394,8 @@ $session->tempo_session();
                                 <i class="fas fa-phone-alt mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
                                 (85) 3341-3990
                             </a>
-                        
                         </div>
                     </div>
-
-                    <!-- Desenvolvedores -->
                     <div class="group">
                         <h3 class="font-heading text-lg md:text-xl font-semibold mb-4 flex items-center text-white group-hover:text-secondary transition-colors duration-300">
                             <i class="fas fa-code mr-3 text-secondary group-hover:scale-110 transition-transform duration-300"></i>
@@ -438,12 +410,9 @@ $session->tempo_session();
                                 <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
                                 Pedro Uchoa
                             </a>
-
                         </div>
                     </div>
                 </div>
-
-                <!-- Rodapé inferior -->
                 <div class="border-t border-white/20 pt-6 mt-8 text-center">
                     <p class="text-sm md:text-base text-gray-300 hover:text-white transition-colors duration-300">
                         © 2024 STGM v1.2.0 | Desenvolvido por alunos EEEP STGM
@@ -451,12 +420,9 @@ $session->tempo_session();
                 </div>
             </div>
         </div>
-
-        <!-- Efeito de brilho sutil na base -->
         <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-secondary to-transparent opacity-30"></div>
     </footer>
 
-    <!-- Botão Voltar ao Topo -->
     <button class="back-to-top hidden fixed bottom-6 right-6 z-50 bg-secondary hover:bg-secondary/90 text-white w-12 h-12 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center group">
         <i class="fas fa-chevron-up text-lg group-hover:scale-110 transition-transform duration-300"></i>
     </button>
@@ -474,18 +440,14 @@ $session->tempo_session();
                     e.stopPropagation();
                     sidebar.classList.toggle('show');
                     overlay.classList.toggle('hidden');
-                    
-                    // Mostrar/ocultar o botão do menu
                     if (sidebar.classList.contains('show')) {
                         menuButton.classList.add('hidden');
                     } else {
                         menuButton.classList.remove('hidden');
                     }
-                    
                     document.body.style.overflow = sidebar.classList.contains('show') ? 'hidden' : '';
                 });
 
-                // Fechar sidebar ao clicar no overlay
                 if (overlay) {
                     overlay.addEventListener('click', function() {
                         sidebar.classList.remove('show');
@@ -495,7 +457,6 @@ $session->tempo_session();
                     });
                 }
 
-                // Fechar sidebar ao clicar no botão fechar
                 if (closeSidebar) {
                     closeSidebar.addEventListener('click', function() {
                         sidebar.classList.remove('show');
@@ -505,7 +466,6 @@ $session->tempo_session();
                     });
                 }
 
-                // Fechar sidebar ao clicar em um link
                 const navLinks = sidebar.querySelectorAll('a');
                 navLinks.forEach(link => {
                     link.addEventListener('click', function() {
@@ -518,7 +478,6 @@ $session->tempo_session();
                     });
                 });
 
-                // Fechar sidebar ao pressionar ESC
                 document.addEventListener('keydown', function(e) {
                     if (e.key === 'Escape' && sidebar.classList.contains('show')) {
                         sidebar.classList.remove('show');
@@ -527,34 +486,23 @@ $session->tempo_session();
                         document.body.style.overflow = '';
                     }
                 });
-                
-                // Ajustar footer quando sidebar é aberta/fechada no mobile
+
                 const footerContent = document.getElementById('footerContent');
                 if (footerContent) {
                     const adjustFooter = () => {
                         if (window.innerWidth <= 768) {
-                            if (sidebar.classList.contains('show')) {
-                                footerContent.style.marginLeft = '0';
-                            } else {
-                                footerContent.style.marginLeft = '0';
-                            }
+                            footerContent.style.marginLeft = sidebar.classList.contains('show') ? '0' : '0';
                         } else {
-                            footerContent.style.marginLeft = '16rem'; // 64 * 0.25rem = 16rem
+                            footerContent.style.marginLeft = '16rem';
                         }
                     };
-                    
-                    // Ajustar na inicialização
                     adjustFooter();
-                    
-                    // Ajustar quando a sidebar é aberta/fechada
                     menuButton.addEventListener('click', adjustFooter);
-                    
-                    // Ajustar quando a janela é redimensionada
                     window.addEventListener('resize', adjustFooter);
                 }
             }
 
-            // Back to top button visibility and functionality
+            // Back to top button
             const backToTop = document.querySelector('.back-to-top');
             if (backToTop) {
                 window.addEventListener('scroll', () => {
@@ -566,8 +514,7 @@ $session->tempo_session();
                         backToTop.classList.add('hidden');
                     }
                 });
-                
-                // Funcionalidade do botão voltar ao topo
+
                 backToTop.addEventListener('click', () => {
                     window.scrollTo({
                         top: 0,
@@ -576,38 +523,57 @@ $session->tempo_session();
                 });
             }
 
-            // Controle das checkboxes de tipo de produto
+            // Initialize Select2
+            $('.js-example-basic-single').select2({
+                placeholder: "Selecione uma categoria",
+                allowClear: true,
+                width: '100%'
+            });
+
+            // Control form fields visibility
             const comCodigoRadio = document.getElementById('com_codigo');
             const semCodigoRadio = document.getElementById('sem_codigo');
-            const inputField = document.getElementById('barcode');
+            const comCodigoFields = document.getElementById('com_codigo_fields');
+            const semCodigoFields = document.getElementById('sem_codigo_fields');
+            const submitButton = document.querySelector('button[type="submit"]');
 
-            function updateInputField() {
+            function toggleFields() {
                 if (comCodigoRadio.checked) {
-                    // Produto com código
-                    inputField.placeholder = "BARCODE";
-                    inputField.name = "barcode";
-                    inputField.setAttribute('aria-label', 'CÓDIGO DE BARRAS DO PRODUTO');
-
-                    // Forçar texto em maiúsculas durante a digitação
-                    inputField.addEventListener('input', function() {
-                        this.value = this.value.toUpperCase();
-                    });
+                    comCodigoFields.classList.remove('hidden');
+                    semCodigoFields.classList.add('hidden');
+                    submitButton.classList.remove('hidden');
+                    // Set required only for barcode
+                    comCodigoFields.querySelector('input').required = true;
+                    semCodigoFields.querySelectorAll('input, select').forEach(field => field.required = false);
                 } else {
-                    // Produto sem código
-                    inputField.placeholder = "NOME DO PRODUTO";
-                    inputField.name = "nome_produto";
-                    inputField.setAttribute('aria-label', 'Nome do produto');
+                    comCodigoFields.classList.add('hidden');
+                    semCodigoFields.classList.remove('hidden');
+                    submitButton.classList.remove('hidden');
+                    // Set required for all fields in sem_codigo
+                    comCodigoFields.querySelector('input').required = false;
+                    semCodigoFields.querySelectorAll('input, select').forEach(field => field.required = true);
                 }
             }
 
-            // Adicionar event listeners para as checkboxes
-            comCodigoRadio.addEventListener('change', updateInputField);
-            semCodigoRadio.addEventListener('change', updateInputField);
+            // Initialize form state
+            toggleFields();
 
-            // Inicializar o campo
-            updateInputField();
+            // Add event listeners
+            comCodigoRadio.addEventListener('change', toggleFields);
+            semCodigoRadio.addEventListener('change', toggleFields);
+
+            // Force uppercase for barcode
+            const barcodeInput = document.getElementById('barcode');
+            barcodeInput.addEventListener('input', function() {
+                this.value = this.value.toUpperCase();
+            });
+
+            // Force uppercase for product name
+            const nomeInput = document.getElementById('nome');
+            nomeInput.addEventListener('input', function() {
+                this.value = this.value.toUpperCase();
+            });
         });
     </script>
 </body>
-
 </html>

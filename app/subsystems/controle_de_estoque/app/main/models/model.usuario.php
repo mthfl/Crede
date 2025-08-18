@@ -24,26 +24,38 @@ class usuario extends connect
         $this->table5 = $table['crede_estoque'][5];
     }
 
-    public function cadastrar_produto(int $barcode, string $nome, int $quantidade, int $id_categoria, string $validade): int
+    public function cadastrar_produto($barcode, string $nome, int $quantidade, int $id_categoria, string $validade): int
     {
-        date_default_timezone_set('America/Fortaleza');
-        $data = date('Y-m-d H:i:s');
-
-        $consulta = "INSERT INTO $this->table4 VALUES (null, :barcode, :nome, :quantidade, :id_categoria,:validade, :data)";
+        $consulta = "SELECT * FROM $this->table4 WHERE nome_produto = :nome";
         $query = $this->connect->prepare($consulta);
         $query->bindValue(":nome", $nome);
-        $query->bindValue(":barcode", $barcode);
-        $query->bindValue(":quantidade", $quantidade);
-        $query->bindValue(":id_categoria", $id_categoria);
-        $query->bindValue(":validade", $validade);
-        $query->bindValue(":data", $data);
         $query->execute();
 
-        return 1;
+        if ($query->rowCount() <= 0) {
+            date_default_timezone_set('America/Fortaleza');
+            $data = date('Y-m-d H:i:s');
+
+            $consulta = "INSERT INTO $this->table4 VALUES (null, :barcode, :nome, :quantidade, :id_categoria,:validade, :data)";
+            $query = $this->connect->prepare($consulta);
+            $query->bindValue(":nome", $nome);
+            $query->bindValue(":barcode", $barcode);
+            $query->bindValue(":quantidade", $quantidade);
+            $query->bindValue(":id_categoria", $id_categoria);
+            $query->bindValue(":validade", $validade);
+            $query->bindValue(":data", $data);
+
+            if ($query->execute()) {
+                return 1;
+            } else {
+                return 2;
+            }
+
+        } else {
+            return 3;
+        }
     }
     public function verificar_produto_barcode(int $barcode): bool
     {
-
         $stmt_check = $this->connect->prepare("SELECT * FROM $this->table4 WHERE barcode = :barcode");
         $stmt_check->bindParam(':barcode', $barcode);
         $stmt_check->execute();
@@ -56,10 +68,9 @@ class usuario extends connect
             return false;
         }
     }
-    public function verificar_produto_nome(int $nome): bool
+    public function verificar_produto_nome(string $nome): bool
     {
-
-        $stmt_check = $this->connect->prepare("SELECT * FROM $this->table4 WHERE nome = :nome");
+        $stmt_check = $this->connect->prepare("SELECT * FROM $this->table4 WHERE nome_produto = :nome");
         $stmt_check->bindParam(':nome', $nome);
         $stmt_check->execute();
 
@@ -113,13 +124,12 @@ class usuario extends connect
 
     public function cadastrar_categoria(string $categoria): int
     {
-
         try {
-            $stmt_check = $this->connect->prepare("SELECT * FROM $this->table1 WHERE nome = :nome");
+            $stmt_check = $this->connect->prepare("SELECT * FROM $this->table1 WHERE nome_categoria = :nome");
             $stmt_check->bindValue(":nome", $categoria);
             $stmt_check->execute();
 
-            if ($stmt_check->rowCount() < 0) {
+            if ($stmt_check->rowCount() <= 0) {
 
                 $stmt_check = $this->connect->prepare("INSERT INTO $this->table1 VALUES(NULL, :nome)");
                 $stmt_check->bindValue(":nome", $categoria);
@@ -1106,9 +1116,4 @@ class relatorios extends connect
         // Saída do PDF (mesmo padrão dos outros relatórios)
         $pdf->Output("relatorio_estoque_critico.pdf", "I");
     }
-
-    
-    
-
-   
 }

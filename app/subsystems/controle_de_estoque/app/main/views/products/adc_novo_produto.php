@@ -7,11 +7,6 @@ $session->tempo_session();
 require_once('../../models/model.select.php');
 $select = new select();
 
-if(!isset($_GET['barcode']) || empty($_GET['barcode'])){
-
-    header('location: adc_produto.php');
-    exit();
-}
 ?>
 
 <!DOCTYPE html>
@@ -374,7 +369,7 @@ if(!isset($_GET['barcode']) || empty($_GET['barcode'])){
 
             <!-- Botão de Sair -->
             <div class="p-4 border-t border-white/20">
-                <a href="../../models/sessions.php?sair" class="w-full bg-transparent border border-white/40 hover:bg-white/10 text-white py-2 px-4 rounded-lg transition-all duration-200 flex items-center justify-center">
+                <a href="../../../../../../main/views/subsystems.php" class="w-full bg-transparent border border-white/40 hover:bg-white/10 text-white py-2 px-4 rounded-lg transition-all duration-200 flex items-center justify-center">
                     <i class="fas fa-sign-out-alt mr-2"></i>
                     Sair
                 </a>
@@ -411,7 +406,7 @@ if(!isset($_GET['barcode']) || empty($_GET['barcode'])){
         <div class="bg-white rounded-xl shadow-lg p-8 max-w-2xl w-full border-2 border-primary mx-auto">
             <form action="../../controllers/controller_crud_produto.php" method="POST" class="space-y-6">
                 <div class="space-y-4">
-                    <input type="hidden" name="barcode" value="<?=$_GET['barcode']?>">
+                    <input type="hidden" name="barcode" value="<?=$_GET['barcode'] ?? ''?>">
                     <div>
                         <input type="text" placeholder="NOME DO PRODUTO" id="nome" name="nome_produto" style="text-transform: uppercase;" oninput="this.value = this.value.toUpperCase();" required
                             class="w-full px-4 py-3 border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent text-center font-semibold"

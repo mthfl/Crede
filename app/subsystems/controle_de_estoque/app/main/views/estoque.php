@@ -1,4 +1,4 @@
-<?php 
+<?php
 require_once('../models/sessions.php');
 $session = new sessions();
 $session->autenticar_session();
@@ -43,80 +43,186 @@ $select = new select();
         }
     </script>
     <style>
-        body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; background-color: #F8FAF9; }
-        .gradient-bg { background: linear-gradient(135deg, #005A24 0%, #1A3C34 100%); }
-        .page-title { position: relative; display: inline-block; }
-        .page-title::after { content: ''; position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%); width: 80px; height: 3px; background-color: #FFA500; border-radius: 3px; }
-        .header-nav-link { position: relative; transition: all 0.3s ease; font-weight: 500; padding: 0.5rem 1rem; border-radius: 0.5rem; }
-        .header-nav-link:hover { background-color: rgba(255,255,255,0.1); }
-        .header-nav-link::after { content: ''; position: absolute; bottom: -2px; left: 50%; width: 0; height: 2px; background-color: #FFA500; transition: all 0.3s ease; transform: translateX(-50%); }
-        .header-nav-link:hover::after, .header-nav-link.active::after { width: 80%; }
-        .header-nav-link.active { background-color: rgba(255,255,255,0.15); }
-        .mobile-menu-button { display: none; }
-        
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+            background-color: #F8FAF9;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #005A24 0%, #1A3C34 100%);
+        }
+
+        .page-title {
+            position: relative;
+            display: inline-block;
+        }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: #FFA500;
+            border-radius: 3px;
+        }
+
+        .header-nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+        }
+
+        .header-nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .header-nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background-color: #FFA500;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .header-nav-link:hover::after,
+        .header-nav-link.active::after {
+            width: 80%;
+        }
+
+        .header-nav-link.active {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .mobile-menu-button {
+            display: none;
+        }
+
         /* Estilos para a sidebar */
         .sidebar-link {
             transition: all 0.3s ease;
             border-radius: 0.5rem;
         }
-        
+
         .sidebar-link:hover {
             background-color: rgba(255, 255, 255, 0.1);
             transform: translateX(0.5rem);
         }
-        
+
         .sidebar-link.active {
             background-color: rgba(255, 165, 0, 0.2);
             color: #FFA500;
         }
-        
+
         /* Responsividade da sidebar */
         @media (max-width: 768px) {
             #sidebar {
                 transform: translateX(-100%);
             }
-            
+
             #sidebar.show {
                 transform: translateX(0);
             }
-            
+
             main {
                 margin-left: 0 !important;
             }
-            
+
             /* Botão do menu mobile */
             #menuButton {
                 transition: all 0.3s ease;
             }
-            
+
             #menuButton.hidden {
                 opacity: 0;
                 visibility: hidden;
                 transform: scale(0.8);
             }
-            
+
             /* Footer responsivo para mobile */
             footer {
                 margin-left: 0 !important;
                 padding-left: 1rem !important;
                 padding-right: 1rem !important;
             }
-            
+
             footer .ml-64 {
                 margin-left: 0 !important;
             }
         }
-        .desktop-table { display: block; width: 100%; }
-        .mobile-cards { display: none; }
-        @media screen and (max-width: 768px) { .desktop-table { display: none; } .mobile-cards { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1rem; padding: 0 0.5rem; width: 100%; } .card-item { margin-bottom: 0.75rem; } .categoria-header { margin-top: 1.5rem; margin-bottom: 0.75rem; } }
-        .card-item { transition: all 0.3s ease; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-        .card-item:hover { transform: translateY(-2px); box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .quantidade-critica { color: #FF0000; font-weight: bold; }
-        .max-w-5xl { max-width: 64rem; width: 100%; }
-        .flex-1.w-full { max-width: 100%; }
-        #exportarBtn { margin-top: 1.5rem; }
+
+        .desktop-table {
+            display: block;
+            width: 100%;
+        }
+
+        .mobile-cards {
+            display: none;
+        }
+
+        @media screen and (max-width: 768px) {
+            .desktop-table {
+                display: none;
+            }
+
+            .mobile-cards {
+                display: flex;
+                flex-direction: column;
+                gap: 0.75rem;
+                margin-top: 1rem;
+                padding: 0 0.5rem;
+                width: 100%;
+            }
+
+            .card-item {
+                margin-bottom: 0.75rem;
+            }
+
+            .categoria-header {
+                margin-top: 1.5rem;
+                margin-bottom: 0.75rem;
+            }
+        }
+
+        .card-item {
+            transition: all 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .quantidade-critica {
+            color: #FF0000;
+            font-weight: bold;
+        }
+
+        .max-w-5xl {
+            max-width: 64rem;
+            width: 100%;
+        }
+
+        .flex-1.w-full {
+            max-width: 100%;
+        }
+
+        #exportarBtn {
+            margin-top: 1.5rem;
+        }
     </style>
 </head>
+
 <body class="min-h-screen flex flex-col font-sans bg-light">
     <!-- Sidebar -->
     <div class="fixed left-0 top-0 h-full w-64 bg-gradient-to-b from-primary to-dark text-white shadow-xl z-50 transform transition-transform duration-300 ease-in-out" id="sidebar">
@@ -128,9 +234,9 @@ $select = new select();
                     <span class="text-white font-heading text-lg font-semibold">CREDE Estoque</span>
                 </div>
             </div>
-            
-                        <!-- Menu de navegação -->
-                        <nav class="flex-1 p-4 space-y-2">
+
+            <!-- Menu de navegação -->
+            <nav class="flex-1 p-4 space-y-2">
                 <a href="index.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
                     <i class="fas fa-home mr-3 text-lg"></i>
                     <span>Início</span>
@@ -143,7 +249,7 @@ $select = new select();
                     <i class="fas fa-plus-circle mr-3 text-lg"></i>
                     <span>Adicionar</span>
                 </a>
-              
+
                 <a href="solicitar.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
                     <i class="fas fa-clipboard-list mr-3 text-lg"></i>
                     <span>Solicitar</span>
@@ -156,12 +262,12 @@ $select = new select();
 
             <!-- Botão de Sair -->
             <div class="p-4 border-t border-white/20">
-                <a href="../models/sessions.php?sair" class="w-full bg-transparent border border-white/40 hover:bg-white/10 text-white py-2 px-4 rounded-lg transition-all duration-200 flex items-center justify-center">
+                <a href="../../../../../main/views/subsystems.php" class="w-full bg-transparent border border-white/40 hover:bg-white/10 text-white py-2 px-4 rounded-lg transition-all duration-200 flex items-center justify-center">
                     <i class="fas fa-sign-out-alt mr-2"></i>
                     Sair
                 </a>
             </div>
-            
+
             <!-- Botão de fechar sidebar no mobile -->
             <div class="p-4 border-t border-white/20 md:hidden">
                 <button class="w-full bg-white/10 hover:bg-white/20 text-white py-2 px-4 rounded-lg transition-all duration-200" id="closeSidebar">
@@ -175,10 +281,10 @@ $select = new select();
     <button class="fixed top-4 left-4 z-50 md:hidden  text-primary p-3 rounded-lg  hover:bg-primary/90 transition-all duration-200" id="menuButton">
         <i class="fas fa-bars text-lg"></i>
     </button>
-    
+
     <!-- Overlay para mobile -->
     <div class="fixed inset-0 bg-black/50 z-40 md:hidden hidden" id="overlay"></div>
-    
+
     <!-- Botão Voltar ao Topo -->
     <button class="back-to-top hidden fixed bottom-6 right-6 z-50 bg-secondary hover:bg-secondary/90 text-white w-12 h-12 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center group">
         <i class="fas fa-chevron-up text-lg group-hover:scale-110 transition-transform duration-300"></i>
@@ -196,16 +302,13 @@ $select = new select();
             <div class="flex gap-2 flex-wrap justify-center items-center">
                 <select id="filtroCategoria" class="px-4 py-3 border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent">
                     <option value="">Todas as categorias</option>
-                    <option value="limpeza">Limpeza</option>
-                    <option value="expedientes">Expedientes</option>
-                    <option value="manutencao">Manutenção</option>
-                    <option value="eletrico">Elétrico</option>
-                    <option value="hidraulico">Hidráulico</option>
-                    <option value="educacao_fisica">Educação Física</option>
-                    <option value="epi">EPI</option>
-                    <option value="copa_e_cozinha">Copa e Cozinha</option>
-                    <option value="informatica">Informática</option>
-                    <option value="ferramentas">Ferramentas</option>
+                    <?php 
+                    $dados = $select->select_categoria();
+                    foreach ($dados as $dado) {
+                    ?>
+
+                        <option value="<?=$dado['id']?>"><?=$dado['nome_categoria']?></option>
+                    <?php } ?>
                 </select>
                 <a href="perdas.php">
                     <button class="bg-red-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-red-700 transition-colors flex items-center shadow-md">
@@ -240,27 +343,29 @@ $select = new select();
                             foreach ($dados as $produto) {
                                 $quantidadeClass = $produto['quantidade'] <= 5 ? 'text-red-600 font-bold' : 'text-gray-700';
                                 $rowClass = $produto['quantidade'] <= 5 ? 'border-b border-gray-200 hover:bg-red-50 bg-red-50' : 'border-b border-gray-200 hover:bg-gray-50';
-                                ?>
-                                <tr class="<?=$rowClass?>">
-                                    <td class="py-3 px-4"><?=htmlspecialchars($produto['barcode'])?></td>
-                                    <td class="py-3 px-4"><?=htmlspecialchars($produto['nome_produto'])?></td>
-                                    <td class="py-3 px-4 <?=$quantidadeClass?>"><?=htmlspecialchars($produto['quantidade'])?></td>
-                                    <td class="py-3 px-4"><?=htmlspecialchars($produto['categoria'])?></td>
-                                    <td class="py-3 px-4"><?= htmlspecialchars($produto['vencimento'] == '' ? 'Sem vencimento' : $produto['vencimento'])?></td>
-                                    <td class="py-3 px-4"><?= date('d/m/Y H:i', strtotime($produto['data']))?></td>
+                        ?>
+                                <tr class="<?= $rowClass ?>">
+                                    <td class="py-3 px-4"><?= htmlspecialchars($produto['barcode'] = $produto['barcode'] == '' ? 'Sem código': $produto['barcode'] )?></td>
+                                    <td class="py-3 px-4"><?= htmlspecialchars($produto['nome_produto']) ?></td>
+                                    <td class="py-3 px-4 <?= $quantidadeClass ?>"><?= htmlspecialchars($produto['quantidade']) ?></td>
+                                    <td class="py-3 px-4"><?= htmlspecialchars($produto['categoria']) ?></td>
+                                    <td class="py-3 px-4"><?= htmlspecialchars($produto['vencimento'] == '' ? 'Sem vencimento' : $produto['vencimento']) ?></td>
+                                    <td class="py-3 px-4"><?= date('d/m/Y H:i', strtotime($produto['data'])) ?></td>
                                 </tr>
-                            <?php 
+                            <?php
                             }
                         } else {
                             ?>
-                            <tr><td colspan="6" class="py-4 px-4 text-center text-gray-500">Nenhum produto encontrado</td></tr>
+                            <tr>
+                                <td colspan="6" class="py-4 px-4 text-center text-gray-500">Nenhum produto encontrado</td>
+                            </tr>
                         <?php } ?>
-                        
+
                     </tbody>
                 </table>
             </div>
         </div>
-        
+
         <!-- Cards para mobile -->
         <div class="mobile-cards mt-6 max-w-5xl mx-auto">
             <?php
@@ -291,7 +396,7 @@ $select = new select();
             }
             ?>
         </div>
-       
+
         <!-- Botão Voltar ao Topo -->
         <button class="back-to-top hidden fixed bottom-6 right-6 z-50 bg-secondary hover:bg-secondary/90 text-white w-12 h-12 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center group">
             <i class="fas fa-chevron-up text-lg group-hover:scale-110 transition-transform duration-300"></i>
@@ -309,25 +414,25 @@ $select = new select();
                         <i class="fas fa-times text-xl"></i>
                     </button>
                 </div>
-                
-                <form id="formCategoria" class="space-y-6">
+
+                <form action="../controllers/controller_crud_produto.php" method="post" id="formCategoria" class="space-y-6">
                     <div>
                         <label for="nomeCategoria" class="block text-sm font-semibold text-gray-700 mb-2">
                             Nome da Categoria
                         </label>
-                        <input type="text" id="nomeCategoria" name="nomeCategoria" required
-                               class="w-full px-4 py-3 border-2 border-primary/30 rounded-lg focus:outline-none focus:ring-1 focus:ring-secondary focus:border-secondary transition-all duration-200"
-                               placeholder="Ex: Informática">
+                        <input type="text" id="nomeCategoria" name="categoria" required
+                            class="w-full px-4 py-3 border-2 border-primary/30 rounded-lg focus:outline-none focus:ring-1 focus:ring-secondary focus:border-secondary transition-all duration-200"
+                            placeholder="Ex: Informática">
                     </div>
-                    
+
                     <div class="flex gap-3 pt-4">
-                        <button type="button" onclick="fecharModalCategoria()" 
-                                class="flex-1 bg-gray-300 text-gray-700 font-semibold py-2 px-2 rounded-lg hover:bg-gray-400 transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-md">
+                        <button type="button" onclick="fecharModalCategoria()"
+                            class="flex-1 bg-gray-300 text-gray-700 font-semibold py-2 px-2 rounded-lg hover:bg-gray-400 transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-md">
                             <i class="fas fa-times mr-2"></i>
                             Cancelar
                         </button>
-                        <button type="submit" 
-                                class="flex-1 bg-gradient-to-r from-secondary to-orange-500 text-white font-semibold py-3 px-4 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl">
+                        <button type="submit"
+                            class="flex-1 bg-gradient-to-r from-secondary to-orange-500 text-white font-semibold py-3 px-4 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl">
                             <i class="fas fa-save mr-2"></i>
                             Salvar Categoria
                         </button>
@@ -349,11 +454,11 @@ $select = new select();
                     <div class="group">
                         <h3 class="font-heading text-lg md:text-xl font-semibold mb-4 flex items-center text-white group-hover:text-secondary transition-colors duration-300">
                             <i class="fas fa-school mr-3 text-secondary group-hover:scale-110 transition-transform duration-300"></i>
-                           CREDE 1
+                            CREDE 1
                         </h3>
                         <p class="text-sm md:text-base leading-relaxed text-gray-200 group-hover:text-white transition-colors duration-300">
                             <i class="fas fa-map-marker-alt mr-2 text-secondary"></i>
-                            Av. Sen. Virgílio Távora, 1103 - Distrito Industrial I, 
+                            Av. Sen. Virgílio Távora, 1103 - Distrito Industrial I,
                         </p>
                     </div>
 
@@ -368,7 +473,7 @@ $select = new select();
                                 <i class="fas fa-phone-alt mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
                                 (85) 3341-3990
                             </a>
-                        
+
                         </div>
                     </div>
 
@@ -406,224 +511,200 @@ $select = new select();
     </footer>
 
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-    // Sidebar mobile toggle
-    const menuButton = document.getElementById('menuButton');
-    const sidebar = document.getElementById('sidebar');
-    const overlay = document.getElementById('overlay');
-    const closeSidebar = document.getElementById('closeSidebar');
+        document.addEventListener('DOMContentLoaded', function() {
+            // Sidebar mobile toggle
+            const menuButton = document.getElementById('menuButton');
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+            const closeSidebar = document.getElementById('closeSidebar');
 
-    if (menuButton && sidebar) {
-        menuButton.addEventListener('click', function(e) {
-            e.stopPropagation();
-            sidebar.classList.toggle('show');
-            overlay.classList.toggle('hidden');
-            
-            // Mostrar/ocultar o botão do menu
-            if (sidebar.classList.contains('show')) {
-                menuButton.classList.add('hidden');
-            } else {
-                menuButton.classList.remove('hidden');
-            }
-            
-            document.body.style.overflow = sidebar.classList.contains('show') ? 'hidden' : '';
-        });
+            if (menuButton && sidebar) {
+                menuButton.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    sidebar.classList.toggle('show');
+                    overlay.classList.toggle('hidden');
 
-        // Fechar sidebar ao clicar no overlay
-        if (overlay) {
-            overlay.addEventListener('click', function() {
-                sidebar.classList.remove('show');
-                overlay.classList.add('hidden');
-                menuButton.classList.remove('hidden');
-                document.body.style.overflow = '';
-            });
-        }
-
-        // Fechar sidebar ao clicar no botão fechar
-        if (closeSidebar) {
-            closeSidebar.addEventListener('click', function() {
-                sidebar.classList.remove('show');
-                overlay.classList.add('hidden');
-                menuButton.classList.remove('hidden');
-                document.body.style.overflow = '';
-            });
-        }
-
-        // Fechar sidebar ao clicar em um link
-        const navLinks = sidebar.querySelectorAll('a');
-        navLinks.forEach(link => {
-            link.addEventListener('click', function() {
-                if (window.innerWidth <= 768) {
-                    sidebar.classList.remove('show');
-                    overlay.classList.add('hidden');
-                    menuButton.classList.remove('hidden');
-                    document.body.style.overflow = '';
-                }
-            });
-        });
-
-        // Fechar sidebar ao pressionar ESC
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && sidebar.classList.contains('show')) {
-                sidebar.classList.remove('show');
-                overlay.classList.add('hidden');
-                menuButton.classList.remove('hidden');
-                document.body.style.overflow = '';
-            }
-        });
-                    
-                    // Ajustar footer quando sidebar é aberta/fechada no mobile
-                    const footerContent = document.getElementById('footerContent');
-                    if (footerContent) {
-                        const adjustFooter = () => {
-                            if (window.innerWidth <= 768) {
-                                if (sidebar.classList.contains('show')) {
-                                    footerContent.style.marginLeft = '0';
-                                } else {
-                                    footerContent.style.marginLeft = '0';
-                                }
-                            } else {
-                                footerContent.style.marginLeft = '16rem'; // 64 * 0.25rem = 16rem
-                            }
-                        };
-                        
-                        // Ajustar na inicialização
-                        adjustFooter();
-                        
-                        // Ajustar quando a sidebar é aberta/fechada
-                        menuButton.addEventListener('click', adjustFooter);
-                        
-                        // Ajustar quando a janela é redimensionada
-                        window.addEventListener('resize', adjustFooter);
+                    // Mostrar/ocultar o botão do menu
+                    if (sidebar.classList.contains('show')) {
+                        menuButton.classList.add('hidden');
+                    } else {
+                        menuButton.classList.remove('hidden');
                     }
-    }
 
-    // Back to top button visibility and functionality
-    const backToTop = document.querySelector('.back-to-top');
-    if (backToTop) {
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 300) {
-                backToTop.classList.add('visible');
-                backToTop.classList.remove('hidden');
-            } else {
-                backToTop.classList.remove('visible');
-                backToTop.classList.add('hidden');
-            }
-        });
-        
-        // Funcionalidade do botão voltar ao topo
-        backToTop.addEventListener('click', () => {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        });
-    }
+                    document.body.style.overflow = sidebar.classList.contains('show') ? 'hidden' : '';
+                });
 
-                // Funcionalidade de pesquisa
-    const pesquisarInput = document.getElementById('pesquisar');
-    const filtroCategoria = document.getElementById('filtroCategoria');
-    const tabelaEstoque = document.getElementById('tabelaEstoque');
-        
-        function filtrarProdutos() {
-            const termo = pesquisarInput.value.toLowerCase();
-                    const categoria = filtroCategoria.value;
-                    
-                    // Implementar lógica de filtro aqui
-                    console.log('Filtrando produtos:', { termo, categoria });
-                }
-
-                if (pesquisarInput) {
-                    pesquisarInput.addEventListener('input', filtrarProdutos);
-                }
-
-                if (filtroCategoria) {
-                    filtroCategoria.addEventListener('change', filtrarProdutos);
-                }
-
-                // Formulário de nova categoria
-                const formCategoria = document.getElementById('formCategoria');
-                if (formCategoria) {
-                    formCategoria.addEventListener('submit', function(e) {
-                        e.preventDefault();
-                        
-                        const nomeCategoria = document.getElementById('nomeCategoria').value.trim();
-                        const descricaoCategoria = document.getElementById('descricaoCategoria').value.trim();
-                        
-                        if (!nomeCategoria) {
-                            alert('Por favor, insira o nome da categoria');
-            return;
-        }
-        
-                        // Aqui você pode implementar a lógica para salvar a categoria
-                        // Por exemplo, fazer uma requisição AJAX para o controller
-                        console.log('Salvando categoria:', { nomeCategoria, descricaoCategoria });
-                        
-                        // Simular salvamento (substitua por sua lógica real)
-                        alert('Categoria salva com sucesso!');
-                        
-                        // Fechar modal e limpar formulário
-                        fecharModalCategoria();
-                        formCategoria.reset();
-                        
-                        // Opcional: recarregar a página ou atualizar a lista de categorias
-                        // location.reload();
+                // Fechar sidebar ao clicar no overlay
+                if (overlay) {
+                    overlay.addEventListener('click', function() {
+                        sidebar.classList.remove('show');
+                        overlay.classList.add('hidden');
+                        menuButton.classList.remove('hidden');
+                        document.body.style.overflow = '';
                     });
                 }
-            });
 
-            // Funções para controlar o modal
-            function abrirModalCategoria() {
-                const modal = document.getElementById('modalCategoria');
-                const modalContent = document.getElementById('modalContent');
-                
-                modal.classList.remove('hidden');
-                modal.classList.add('flex');
-                
-                // Animar entrada
-        setTimeout(() => {
-                    modalContent.classList.remove('scale-95', 'opacity-0');
-                    modalContent.classList.add('scale-100', 'opacity-100');
-                }, 10);
-                
-                // Focar no primeiro campo
-                document.getElementById('nomeCategoria').focus();
-    }
+                // Fechar sidebar ao clicar no botão fechar
+                if (closeSidebar) {
+                    closeSidebar.addEventListener('click', function() {
+                        sidebar.classList.remove('show');
+                        overlay.classList.add('hidden');
+                        menuButton.classList.remove('hidden');
+                        document.body.style.overflow = '';
+                    });
+                }
 
-    function fecharModalCategoria() {
-        const modal = document.getElementById('modalCategoria');
-                const modalContent = document.getElementById('modalContent');
-                
-                // Animar saída
-                modalContent.classList.remove('scale-100', 'opacity-100');
-                modalContent.classList.add('scale-95', 'opacity-0');
-                
-                setTimeout(() => {
-                    modal.classList.add('hidden');
-                    modal.classList.remove('flex');
-                }, 300);
-                
-                // Limpar formulário
-                document.getElementById('formCategoria').reset();
+                // Fechar sidebar ao clicar em um link
+                const navLinks = sidebar.querySelectorAll('a');
+                navLinks.forEach(link => {
+                    link.addEventListener('click', function() {
+                        if (window.innerWidth <= 768) {
+                            sidebar.classList.remove('show');
+                            overlay.classList.add('hidden');
+                            menuButton.classList.remove('hidden');
+                            document.body.style.overflow = '';
+                        }
+                    });
+                });
+
+                // Fechar sidebar ao pressionar ESC
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape' && sidebar.classList.contains('show')) {
+                        sidebar.classList.remove('show');
+                        overlay.classList.add('hidden');
+                        menuButton.classList.remove('hidden');
+                        document.body.style.overflow = '';
+                    }
+                });
+
+                // Ajustar footer quando sidebar é aberta/fechada no mobile
+                const footerContent = document.getElementById('footerContent');
+                if (footerContent) {
+                    const adjustFooter = () => {
+                        if (window.innerWidth <= 768) {
+                            if (sidebar.classList.contains('show')) {
+                                footerContent.style.marginLeft = '0';
+                            } else {
+                                footerContent.style.marginLeft = '0';
+                            }
+                        } else {
+                            footerContent.style.marginLeft = '16rem'; // 64 * 0.25rem = 16rem
+                        }
+                    };
+
+                    // Ajustar na inicialização
+                    adjustFooter();
+
+                    // Ajustar quando a sidebar é aberta/fechada
+                    menuButton.addEventListener('click', adjustFooter);
+
+                    // Ajustar quando a janela é redimensionada
+                    window.addEventListener('resize', adjustFooter);
+                }
             }
 
-            // Fechar modal ao clicar fora
-            document.getElementById('modalCategoria').addEventListener('click', function(e) {
-                if (e.target === this) {
-            fecharModalCategoria();
-        }
-    });
+            // Back to top button visibility and functionality
+            const backToTop = document.querySelector('.back-to-top');
+            if (backToTop) {
+                window.addEventListener('scroll', () => {
+                    if (window.scrollY > 300) {
+                        backToTop.classList.add('visible');
+                        backToTop.classList.remove('hidden');
+                    } else {
+                        backToTop.classList.remove('visible');
+                        backToTop.classList.add('hidden');
+                    }
+                });
 
-            // Fechar modal com ESC
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-                    const modal = document.getElementById('modalCategoria');
-                    if (!modal.classList.contains('hidden')) {
+                // Funcionalidade do botão voltar ao topo
+                backToTop.addEventListener('click', () => {
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                });
+            }
+
+            // Funcionalidade de pesquisa
+            const pesquisarInput = document.getElementById('pesquisar');
+            const filtroCategoria = document.getElementById('filtroCategoria');
+            const tabelaEstoque = document.getElementById('tabelaEstoque');
+
+            function filtrarProdutos() {
+                const termo = pesquisarInput.value.toLowerCase();
+                const categoria = filtroCategoria.value;
+
+                // Implementar lógica de filtro aqui
+                console.log('Filtrando produtos:', {
+                    termo,
+                    categoria
+                });
+            }
+
+            if (pesquisarInput) {
+                pesquisarInput.addEventListener('input', filtrarProdutos);
+            }
+
+            if (filtroCategoria) {
+                filtroCategoria.addEventListener('change', filtrarProdutos);
+            }
+
+
+        });
+
+        // Funções para controlar o modal
+        function abrirModalCategoria() {
+            const modal = document.getElementById('modalCategoria');
+            const modalContent = document.getElementById('modalContent');
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+
+            // Animar entrada
+            setTimeout(() => {
+                modalContent.classList.remove('scale-95', 'opacity-0');
+                modalContent.classList.add('scale-100', 'opacity-100');
+            }, 10);
+
+            // Focar no primeiro campo
+            document.getElementById('nomeCategoria').focus();
+        }
+
+        function fecharModalCategoria() {
+            const modal = document.getElementById('modalCategoria');
+            const modalContent = document.getElementById('modalContent');
+
+            // Animar saída
+            modalContent.classList.remove('scale-100', 'opacity-100');
+            modalContent.classList.add('scale-95', 'opacity-0');
+
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 300);
+
+            // Limpar formulário
+            document.getElementById('formCategoria').reset();
+        }
+
+        // Fechar modal ao clicar fora
+        document.getElementById('modalCategoria').addEventListener('click', function(e) {
+            if (e.target === this) {
                 fecharModalCategoria();
             }
-        }
-});
-</script>
+        });
+
+        // Fechar modal com ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const modal = document.getElementById('modalCategoria');
+                if (!modal.classList.contains('hidden')) {
+                    fecharModalCategoria();
+                }
+            }
+        });
+    </script>
     </main>
 </body>
+
 </html>

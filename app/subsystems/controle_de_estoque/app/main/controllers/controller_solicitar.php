@@ -8,7 +8,7 @@ require_once('../models/model.usuario.php');
 print_r($_POST);
 
 if (
-    isset( $_POST['opcao_atual']) && $_POST['opcao_atual'] == 'select' &&
+    isset($_POST['opcao_atual']) && $_POST['opcao_atual'] == 'select' &&
     isset($_POST['produto']) && !empty($_POST['produto']) && is_numeric($_POST['produto']) &&
     isset($_POST['retirante']) && !empty($_POST['retirante']) && is_numeric($_POST['retirante']) &&
     isset($_POST['quantidade']) && !empty($_POST['quantidade']) && is_numeric($_POST['quantidade'])
@@ -41,9 +41,7 @@ if (
             header("Location: ../views/solicitar.php?fatal");
             break;
     }
-} 
-
-else if (
+} else if (
     isset($_POST['barcode']) && !empty($_POST['barcode']) && is_numeric($_POST['barcode']) &&
     isset($_POST['retirante']) && !empty($_POST['retirante']) && is_numeric($_POST['retirante']) &&
     isset($_POST['quantidade']) && !empty($_POST['quantidade']) && is_numeric($_POST['quantidade'])
@@ -57,7 +55,7 @@ else if (
 
     date_default_timezone_set('America/Fortaleza');
     $datatime = date('Y-m-d H:i:s');
-    $result = $model->solicitar_produto_barcode($valor_retirada, $id_produto, $retirante, $datetime, $usuario);
+    $result = $model->solicitar_produto_barcode($valor_retirada, $id_produto, $retirante, $datatime, $usuario);
 
     switch ($result) {
         case 1:

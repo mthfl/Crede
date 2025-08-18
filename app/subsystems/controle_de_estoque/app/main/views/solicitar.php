@@ -1,4 +1,4 @@
-<?php 
+<?php
 require_once('../models/sessions.php');
 $session = new sessions();
 $session->autenticar_session();
@@ -122,6 +122,7 @@ $select = new select();
         }
 
         @media (min-width: 768px) {
+
             .custom-input,
             .custom-select {
                 padding: 0.75rem;
@@ -200,28 +201,26 @@ $select = new select();
             transform: scale(1.1);
         }
 
-        /* Estilos para a sidebar */
         .sidebar-link {
             transition: all 0.3s ease;
             border-radius: 0.5rem;
         }
-        
+
         .sidebar-link:hover {
             background-color: rgba(255, 255, 255, 0.1);
             transform: translateX(0.5rem);
         }
-        
+
         .sidebar-link.active {
             background-color: rgba(255, 165, 0, 0.2);
             color: #FFA500;
         }
-        
-        /* Responsividade da sidebar */
+
         @media (max-width: 768px) {
             #sidebar {
                 transform: translateX(-100%);
             }
-            
+
             #sidebar.show {
                 transform: translateX(0);
             }
@@ -237,44 +236,41 @@ $select = new select();
                     transform: translateY(0);
                 }
             }
-            
-            /* Botão do menu mobile */
+
             #menuButton {
                 transition: all 0.3s ease;
             }
-            
+
             #menuButton.hidden {
                 opacity: 0;
                 visibility: hidden;
                 transform: scale(0.8);
             }
-            
-            /* Footer responsivo para mobile */
+
             footer {
                 margin-left: 0 !important;
                 padding-left: 1rem !important;
                 padding-right: 1rem !important;
             }
-            
+
             footer .ml-64 {
                 margin-left: 0 !important;
             }
         }
 
-        /* Responsividade para elementos específicos */
         @media (max-width: 640px) {
             .page-title::after {
                 width: 60px;
                 height: 2px;
                 bottom: -6px;
             }
-            
+
             .custom-input,
             .custom-select {
                 font-size: 0.875rem;
                 padding: 0.5rem;
             }
-            
+
             .custom-input::placeholder,
             .custom-select option {
                 font-size: 0.875rem;
@@ -287,7 +283,7 @@ $select = new select();
                 height: 2px;
                 bottom: -4px;
             }
-            
+
             .custom-input,
             .custom-select {
                 font-size: 0.8rem;
@@ -298,20 +294,16 @@ $select = new select();
 </head>
 
 <body class="min-h-screen flex flex-col font-sans bg-light">
-    <!-- Sidebar -->
     <div class="fixed left-0 top-0 h-full w-64 bg-gradient-to-b from-primary to-dark text-white shadow-xl z-50 transform transition-transform duration-300 ease-in-out" id="sidebar">
         <div class="flex flex-col h-full">
-            <!-- Logo e título -->
             <div class="p-6 border-b border-white/20">
                 <div class="flex items-center">
                     <img src="https://i.postimg.cc/0N0dsxrM/Bras-o-do-Cear-svg-removebg-preview.png" alt="Logo STGM" class="h-12 mr-3 transition-transform hover:scale-105">
                     <span class="text-white font-heading text-lg font-semibold">CREDE Estoque</span>
                 </div>
             </div>
-            
-            <!-- Menu de navegação -->
-                        <!-- Menu de navegação -->
-                        <nav class="flex-1 p-4 space-y-2">
+
+            <nav class="flex-1 p-4 space-y-2">
                 <a href="index.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
                     <i class="fas fa-home mr-3 text-lg"></i>
                     <span>Início</span>
@@ -324,7 +316,6 @@ $select = new select();
                     <i class="fas fa-plus-circle mr-3 text-lg"></i>
                     <span>Adicionar</span>
                 </a>
-
                 <a href="solicitar.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2 active">
                     <i class="fas fa-clipboard-list mr-3 text-lg"></i>
                     <span>Solicitar</span>
@@ -335,15 +326,13 @@ $select = new select();
                 </a>
             </nav>
 
-            <!-- Botão de Sair -->
             <div class="p-4 border-t border-white/20">
-                <a href="../models/sessions.php?sair" class="w-full bg-transparent border border-white/40 hover:bg-white/10 text-white py-2 px-4 rounded-lg transition-all duration-200 flex items-center justify-center">
+                <a href="../../../../../main/views/subsystems.php" class="w-full bg-transparent border border-white/40 hover:bg-white/10 text-white py-2 px-4 rounded-lg transition-all duration-200 flex items-center justify-center">
                     <i class="fas fa-sign-out-alt mr-2"></i>
                     Sair
                 </a>
             </div>
 
-            <!-- Botão de fechar sidebar no mobile -->
             <div class="p-4 border-t border-white/20 md:hidden">
                 <button class="w-full bg-white/10 hover:bg-white/20 text-white py-2 px-4 rounded-lg transition-all duration-200" id="closeSidebar">
                     <i class="fas fa-times mr-2"></i>
@@ -352,39 +341,25 @@ $select = new select();
             </div>
         </div>
     </div>
-    
-    <button class="fixed top-4 left-4 z-50 md:hidden  text-primary p-3 rounded-lg  hover:bg-primary/90 transition-all duration-200" id="menuButton">
+
+    <button class="fixed top-4 left-4 z-50 md:hidden text-primary p-3 rounded-lg hover:bg-primary/90 transition-all duration-200" id="menuButton">
         <i class="fas fa-bars text-lg"></i>
     </button>
-    
-    <!-- Overlay para mobile -->
+
     <div class="fixed inset-0 bg-black/50 z-40 md:hidden hidden" id="overlay"></div>
-    
-    <!-- Botão Voltar ao Topo -->
+
     <button class="back-to-top hidden fixed bottom-6 right-6 z-50 bg-secondary hover:bg-secondary/90 text-white w-12 h-12 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center group">
         <i class="fas fa-chevron-up text-lg group-hover:scale-110 transition-transform duration-300"></i>
     </button>
 
-    <!-- Main content -->
     <main class="ml-0 md:ml-64 px-4 py-8 md:py-12 flex-1 transition-all duration-300">
         <div class="text-center mb-6 md:mb-10">
             <h1 class="text-primary text-2xl md:text-3xl lg:text-4xl font-bold mb-4 md:mb-6 lg:mb-8 text-center page-title tracking-tight font-heading inline-block mx-auto">SOLICITAR PRODUTO</h1>
         </div>
 
-        <!-- Notificação -->
-        <div id="notificacao" class="max-w-2xl mx-auto mb-4 px-4 md:px-0 <?php echo isset($_SESSION['erro_solicitacao']) ? '' : 'hidden'; ?>">
-            <div id="notificacaoConteudo" class="p-3 md:p-4 rounded-lg shadow-lg bg-red-500 text-white text-sm md:text-base">
-                <div class="flex items-center">
-                    <i id="notificacaoIcon" class="fas fa-exclamation-circle mr-2"></i>
-                    <span id="notificacaoTexto"><?php echo $_SESSION['erro_solicitacao'] ?? 'Erro desconhecido'; ?></span>
-                </div>
-            </div>
-        </div>
-
         <div class="bg-white rounded-xl shadow-lg p-4 md:p-6 lg:p-8 max-w-2xl w-full border-2 border-primary mx-auto">
             <form action="../controllers/controller_solicitar.php" method="POST" class="space-y-4 md:space-y-6" id="solicitarForm">
                 <div class="space-y-3 md:space-y-4">
-                    <!-- Opções de seleção de produto -->
                     <div class="mb-3 md:mb-4">
                         <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
                             <button type="button" id="btnSelect" class="w-full sm:flex-1 bg-primary text-white py-2 px-3 md:px-4 rounded-lg font-semibold transition-colors text-sm md:text-base" onclick="mostrarOpcao('select')">
@@ -396,7 +371,6 @@ $select = new select();
                         </div>
                     </div>
 
-                    <!-- Opção 1: Select de produtos -->
                     <div id="opcaoSelect" class="select-wrapper">
                         <select id="produto" name="produto" required class="custom-select text-sm md:text-base" aria-label="Selecionar produto" onchange="validarSelecao()">
                             <option value="" disabled selected>SELECIONAR PRODUTO</option>
@@ -404,17 +378,16 @@ $select = new select();
                             $dados = $select->select_produtos();
                             foreach ($dados as $dado) {
                             ?>
-                                <option value="<?=$dado['id']?>"><?=$dado['nome_produto']?> | <?=$dado['quantidade']?></option>
-                            <?php }?>
+                                <option value="<?= $dado['id'] ?>"><?= $dado['nome_produto'] ?> | <?= $dado['quantidade'] ?></option>
+                            <?php } ?>
                         </select>
                     </div>
 
-                    <!-- Opção 2: Input para código de barras -->
                     <div id="opcaoBarcode" class="hidden">
                         <div class="relative">
-                            <input type="text" id="barcodeInput" name="barcode" value="<?php echo $_GET['barcode'] ?? ''; ?>" placeholder="ESCANEIE O CÓDIGO DE BARRAS" 
-                                   class="custom-input text-center text-base md:text-lg font-mono tracking-wider" 
-                                   aria-label="Código de barras">
+                            <input type="text" id="barcodeInput" name="barcode" value="<?php echo $_GET['barcode'] ?? ''; ?>" placeholder="ESCANEIE O CÓDIGO DE BARRAS"
+                                class="custom-input text-center text-base md:text-lg font-mono tracking-wider"
+                                aria-label="Código de barras">
                             <div class="absolute right-3 top-1/2 transform -translate-y-1/2">
                                 <i class="fas fa-barcode text-gray-400"></i>
                             </div>
@@ -428,7 +401,7 @@ $select = new select();
                                 <i class="fas fa-check-circle text-green-500 text-lg md:text-xl ml-2 flex-shrink-0"></i>
                             </div>
                         </div>
-                        <input type="hidden" id="produtoIdHidden" name="barcode" value="">
+                        <input type="hidden" id="produtoIdHidden" name="produto_id" value="">
                         <input type="hidden" id="opcaoAtualHidden" name="opcao_atual" value="barcode">
                     </div>
 
@@ -444,13 +417,13 @@ $select = new select();
                             $dados = $select->select_responsavel();
                             foreach ($dados as $dado) {
                             ?>
-                                <option value="<?=$dado['id']?>"><?=$dado['nome']?> | <?=$dado['cargo']?></option>
-                            <?php }?>
+                                <option value="<?= $dado['id'] ?>"><?= $dado['nome'] ?> | <?= $dado['cargo'] ?></option>
+                            <?php } ?>
                         </select>
                     </div>
                 </div>
 
-                <button type="submit" name="btn" class="w-full bg-secondary text-white font-bold py-2 md:py-3 px-4 rounded-lg hover:bg-opacity-90 transition-colors text-sm md:text-base"
+                <button type="submit" name="btn" value="Confirmar" class="w-full bg-secondary text-white font-bold py-2 md:py-3 px-4 rounded-lg hover:bg-opacity-90 transition-colors text-sm md:text-base"
                     aria-label="Confirmar solicitação">
                     CONFIRMAR
                 </button>
@@ -458,27 +431,21 @@ $select = new select();
         </div>
     </main>
 
-    
     <footer class="bg-gradient-to-r from-primary to-dark text-white py-8 md:py-10 mt-auto relative transition-all duration-300">
-        <!-- Efeito de brilho sutil no topo -->
         <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-secondary to-transparent opacity-30"></div>
-
         <div class="px-4 md:px-8 transition-all duration-300 ml-0 md:ml-64" id="footerContent">
             <div class="max-w-7xl mx-auto">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
-                    <!-- Sobre a Escola -->
                     <div class="group">
                         <h3 class="font-heading text-lg md:text-xl font-semibold mb-4 flex items-center text-white group-hover:text-secondary transition-colors duration-300">
                             <i class="fas fa-school mr-3 text-secondary group-hover:scale-110 transition-transform duration-300"></i>
-                           CREDE 1
+                            CREDE 1
                         </h3>
                         <p class="text-sm md:text-base leading-relaxed text-gray-200 group-hover:text-white transition-colors duration-300">
                             <i class="fas fa-map-marker-alt mr-2 text-secondary"></i>
-                            Av. Sen. Virgílio Távora, 1103 - Distrito Industrial I, 
+                            Av. Sen. Virgílio Távora, 1103 - Distrito Industrial I,
                         </p>
                     </div>
-
-                    <!-- Contato -->
                     <div class="group">
                         <h3 class="font-heading text-lg md:text-xl font-semibold mb-4 flex items-center text-white group-hover:text-secondary transition-colors duration-300">
                             <i class="fas fa-address-book mr-3 text-secondary group-hover:scale-110 transition-transform duration-300"></i>
@@ -489,11 +456,8 @@ $select = new select();
                                 <i class="fas fa-phone-alt mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
                                 (85) 3341-3990
                             </a>
-                        
                         </div>
                     </div>
-
-                    <!-- Desenvolvedores -->
                     <div class="group">
                         <h3 class="font-heading text-lg md:text-xl font-semibold mb-4 flex items-center text-white group-hover:text-secondary transition-colors duration-300">
                             <i class="fas fa-code mr-3 text-secondary group-hover:scale-110 transition-transform duration-300"></i>
@@ -508,12 +472,9 @@ $select = new select();
                                 <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
                                 Pedro Uchoa
                             </a>
-
                         </div>
                     </div>
                 </div>
-
-                <!-- Rodapé inferior -->
                 <div class="border-t border-white/20 pt-6 mt-8 text-center">
                     <p class="text-sm md:text-base text-gray-300 hover:text-white transition-colors duration-300">
                         © 2024 STGM v1.2.0 | Desenvolvido por alunos EEEP STGM
@@ -521,41 +482,35 @@ $select = new select();
                 </div>
             </div>
         </div>
-
-        <!-- Efeito de brilho sutil na base -->
         <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-secondary to-transparent opacity-30"></div>
     </footer>
 
     <script>
         $(document).ready(function() {
-    $('.js-example-basic-single').select2();
-});
+            $('.custom-select').select2({
+                placeholder: "SELECIONAR",
+                allowClear: true,
+                width: '100%'
+            });
+        });
+
         let opcaoAtual = 'select';
         let produtoSelecionado = null;
-        
-        // Função para configurar campos baseado na opção atual
+
         function configurarCampos(opcao) {
             const produtoIdHidden = document.getElementById('produtoIdHidden');
             if (produtoIdHidden) {
-                produtoIdHidden.name = opcao;
+                produtoIdHidden.name = opcao === 'select' ? 'produto' : 'barcode';
                 produtoIdHidden.value = '';
             }
         }
-        
-        // Inicializar a opção atual no hidden
+
         document.addEventListener('DOMContentLoaded', function() {
             const opcaoAtualHidden = document.getElementById('opcaoAtualHidden');
             if (opcaoAtualHidden) {
                 opcaoAtualHidden.value = opcaoAtual;
             }
-            
-            // Configurar campo hidden inicial
-            const produtoIdHidden = document.getElementById('produtoIdHidden');
-            if (produtoIdHidden) {
-                produtoIdHidden.name = opcaoAtual;
-            }
-            
-            // Validar seleção inicial
+            configurarCampos(opcaoAtual);
             validarSelecao();
         });
 
@@ -567,12 +522,13 @@ $select = new select();
             const produtoSelect = document.getElementById('produto');
             const barcodeInput = document.getElementById('barcodeInput');
             const opcaoAtualHidden = document.getElementById('opcaoAtualHidden');
+            const produtoIdHidden = document.getElementById('produtoIdHidden');
 
             produtoSelect.value = '';
             barcodeInput.value = '';
             document.getElementById('produtoInfo').classList.add('hidden');
-            document.getElementById('produtoIdHidden').value = '';
             produtoSelecionado = null;
+            produtoIdHidden.value = '';
 
             if (opcao === 'select') {
                 btnSelect.className = 'w-full sm:flex-1 bg-primary text-white py-2 px-3 md:px-4 rounded-lg font-semibold transition-colors text-sm md:text-base';
@@ -583,13 +539,11 @@ $select = new select();
                 produtoSelect.removeAttribute('disabled');
                 barcodeInput.required = false;
                 barcodeInput.setAttribute('disabled', 'disabled');
-                barcodeInput.name = ''; // Remove o name para não enviar
-                produtoSelect.name = 'produto'; // Garante que o name está correto
+                barcodeInput.name = '';
+                produtoSelect.name = 'produto';
                 opcaoAtual = 'select';
                 opcaoAtualHidden.value = 'select';
-                
-                // Configurar o campo hidden para produto
-                configurarCampos('produto');
+                configurarCampos('select');
             } else {
                 btnSelect.className = 'w-full sm:flex-1 bg-gray-300 text-gray-700 py-2 px-3 md:px-4 rounded-lg font-semibold transition-colors text-sm md:text-base';
                 btnBarcode.className = 'w-full sm:flex-1 bg-primary text-white py-2 px-3 md:px-4 rounded-lg font-semibold transition-colors text-sm md:text-base';
@@ -597,40 +551,16 @@ $select = new select();
                 opcaoBarcode.classList.remove('hidden');
                 produtoSelect.required = false;
                 produtoSelect.setAttribute('disabled', 'disabled');
-                produtoSelect.name = ''; // Remove o name para não enviar
+                produtoSelect.name = '';
                 barcodeInput.required = true;
                 barcodeInput.removeAttribute('disabled');
-                barcodeInput.name = 'barcode'; // Garante que o name está correto
+                barcodeInput.name = 'barcode';
                 opcaoAtual = 'barcode';
                 opcaoAtualHidden.value = 'barcode';
-                
-                // Configurar o campo hidden para barcode
-                const produtoIdHidden = document.getElementById('produtoIdHidden');
-                if (produtoIdHidden) {
-                    produtoIdHidden.name = 'barcode';
-                    produtoIdHidden.value = '';
-                }
-                
+                configurarCampos('barcode');
                 setTimeout(() => barcodeInput.focus(), 100);
             }
-            
-            console.log('Opção alterada para:', opcao);
-            console.log('Opção atual:', opcaoAtual);
-        }
-
-        async function buscarProdutoPorBarcode(barcode) {
-            try {
-                const response = await fetch(`../control/controllerBuscarProduto.php?barcode=${encodeURIComponent(barcode)}`);
-                const data = await response.json();
-                if (data.success && data.produto) {
-                    return data.produto;
-                } else {
-                    throw new Error(data.error || 'Produto não encontrado');
-                }
-            } catch (error) {
-                console.error('Erro ao buscar produto:', error);
-                return null;
-            }
+            validarSelecao();
         }
 
         function exibirProdutoInfo(produto) {
@@ -639,123 +569,70 @@ $select = new select();
             const produtoEstoque = document.getElementById('produtoEstoque');
             const produtoIdHidden = document.getElementById('produtoIdHidden');
 
-            console.log('Exibindo informações do produto:', produto);
-
             produtoNome.textContent = produto.nome_produto;
             produtoEstoque.textContent = `Estoque: ${produto.quantidade} unidades`;
             produtoInfo.classList.remove('hidden');
             produtoSelecionado = produto;
-            
-            // Configurar o campo hidden para barcode quando produto é encontrado
-            produtoIdHidden.value = produto.barcode; // Usar o barcode do produto
-            produtoIdHidden.name = 'barcode'; // Garantir que o name está correto para barcode
-            
-            // Também garantir que o input de barcode tenha o valor correto
-            const barcodeInput = document.getElementById('barcodeInput');
-            if (barcodeInput) {
-                barcodeInput.value = produto.barcode;
-            }
-            
-            console.log('Produto selecionado:', produtoSelecionado);
-            console.log('Valor do hidden (barcode):', produtoIdHidden.value);
-            console.log('Name do hidden:', produtoIdHidden.name);
-            
-            // Atualizar a opção atual para barcode se não estiver já definida
-            if (opcaoAtual !== 'barcode') {
-                opcaoAtual = 'barcode';
-                const opcaoAtualHidden = document.getElementById('opcaoAtualHidden');
-                if (opcaoAtualHidden) {
-                    opcaoAtualHidden.value = 'barcode';
-                }
-            }
+            produtoIdHidden.value = produto.id; // Use product ID for submission
+            produtoIdHidden.name = 'produto_id';
+            document.getElementById('barcodeInput').value = produto.barcode;
         }
 
         function validarSelecao() {
             const produtoSelect = document.getElementById('produto');
             const produtoIdHidden = document.getElementById('produtoIdHidden');
-            
-            console.log('Validando seleção...');
-            console.log('Valor do select:', produtoSelect.value);
-            console.log('Opção atual:', opcaoAtual);
-            
+
             if (opcaoAtual === 'select') {
                 if (produtoSelect.value !== '' && produtoSelect.value !== null) {
-                    produtoSelecionado = { id: produtoSelect.value };
-                    produtoIdHidden.value = produtoSelect.value; // Garantir que o hidden também tenha o valor
-                    produtoIdHidden.name = 'produto'; // Garantir que o name está correto
-                    console.log('Produto selecionado via select:', produtoSelecionado);
-                    console.log('Valor do hidden atualizado:', produtoIdHidden.value);
+                    produtoSelecionado = {
+                        id: produtoSelect.value
+                    };
+                    produtoIdHidden.value = produtoSelect.value;
+                    produtoIdHidden.name = 'produto';
                 } else {
                     produtoSelecionado = null;
                     produtoIdHidden.value = '';
-                    console.log('Produto desmarcado via select');
                 }
             } else if (opcaoAtual === 'barcode') {
-                // Se estiver na opção barcode, verificar se há produto selecionado
                 if (produtoSelecionado) {
-                    produtoIdHidden.value = produtoSelecionado.barcode;
-                    produtoIdHidden.name = 'barcode';
-                    console.log('Produto barcode ativo, produtoSelecionado:', produtoSelecionado);
+                    produtoIdHidden.value = produtoSelecionado.id;
+                    produtoIdHidden.name = 'produto_id';
                 } else {
                     produtoIdHidden.value = '';
-                    produtoIdHidden.name = 'barcode';
-                    console.log('Opção barcode ativa, mas sem produto selecionado');
+                    produtoIdHidden.name = 'produto_id';
                 }
             }
         }
 
         function validarFormulario() {
-            console.log('Validando formulário...');
-            console.log('Opção atual:', opcaoAtual);
-            
+            const produtoSelect = document.getElementById('produto');
+            const barcodeInput = document.getElementById('barcodeInput');
+            const quantidade = document.getElementById('quantidade').value;
+            const retirante = document.getElementById('retirante').value;
+
             if (opcaoAtual === 'select') {
-                const produtoSelect = document.getElementById('produto');
-                const valor = produtoSelect.value;
-                console.log('Valor do select:', valor);
-                console.log('Produto selecionado:', produtoSelecionado);
-                const valido = produtoSelecionado !== null && valor !== '';
-                console.log('Validação select:', valido);
-                return valido;
+                return produtoSelect.value !== '' && quantidade > 0 && retirante !== '';
             } else if (opcaoAtual === 'barcode') {
-                const barcodeInput = document.getElementById('barcodeInput');
-                const valor = barcodeInput.value.trim();
-                console.log('Valor do barcode:', valor);
-                console.log('Produto selecionado:', produtoSelecionado);
-                const valido = produtoSelecionado !== null && valor !== '';
-                console.log('Validação barcode:', valido);
-                
-                // Verificação adicional para barcode
-                if (valido) {
-                    const produtoIdHidden = document.getElementById('produtoIdHidden');
-                    console.log('Campo hidden barcode:', produtoIdHidden.value);
-                    console.log('Campo hidden name:', produtoIdHidden.name);
-                }
-                
-                return valido;
+                return produtoSelecionado !== null && barcodeInput.value.trim() !== '' && quantidade > 0 && retirante !== '';
             }
-            
             return false;
         }
 
         function mostrarNotificacao(mensagem, tipo) {
-            const notificacao = document.getElementById('notificacao');
-            const notificacaoConteudo = document.getElementById('notificacaoConteudo');
-            const notificacaoIcon = document.getElementById('notificacaoIcon');
-            const notificacaoTexto = document.getElementById('notificacaoTexto');
-
-            notificacaoTexto.textContent = mensagem;
-            if (tipo === 'success') {
-                notificacaoConteudo.className = 'p-3 md:p-4 rounded-lg shadow-lg bg-green-500 text-white text-sm md:text-base';
-                notificacaoIcon.className = 'fas fa-check-circle mr-2';
-            } else if (tipo === 'error') {
-                notificacaoConteudo.className = 'p-3 md:p-4 rounded-lg shadow-lg bg-red-500 text-white text-sm md:text-base';
-            }
-            notificacao.classList.remove('hidden');
-            setTimeout(() => notificacao.classList.add('hidden'), 5000);
+            const notificacao = document.createElement('div');
+            notificacao.className = 'fixed top-4 right-4 z-50 p-3 md:p-4 rounded-lg shadow-lg text-sm md:text-base';
+            notificacao.className += tipo === 'success' ? ' bg-green-500 text-white' : ' bg-red-500 text-white';
+            notificacao.innerHTML = `
+                <div class="flex items-center">
+                    <i class="${tipo === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle'} mr-2"></i>
+                    <span>${mensagem}</span>
+                </div>
+            `;
+            document.body.appendChild(notificacao);
+            setTimeout(() => notificacao.remove(), 5000);
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-            // Sidebar mobile toggle
             const menuButton = document.getElementById('menuButton');
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('overlay');
@@ -766,18 +643,14 @@ $select = new select();
                     e.stopPropagation();
                     sidebar.classList.toggle('show');
                     overlay.classList.toggle('hidden');
-                    
-                    // Mostrar/ocultar o botão do menu
                     if (sidebar.classList.contains('show')) {
                         menuButton.classList.add('hidden');
                     } else {
                         menuButton.classList.remove('hidden');
                     }
-                    
                     document.body.style.overflow = sidebar.classList.contains('show') ? 'hidden' : '';
                 });
 
-                // Fechar sidebar ao clicar no overlay
                 if (overlay) {
                     overlay.addEventListener('click', function() {
                         sidebar.classList.remove('show');
@@ -787,7 +660,6 @@ $select = new select();
                     });
                 }
 
-                // Fechar sidebar ao clicar no botão fechar
                 if (closeSidebar) {
                     closeSidebar.addEventListener('click', function() {
                         sidebar.classList.remove('show');
@@ -797,7 +669,6 @@ $select = new select();
                     });
                 }
 
-                // Fechar sidebar ao clicar em um link
                 const navLinks = sidebar.querySelectorAll('a');
                 navLinks.forEach(link => {
                     link.addEventListener('click', function() {
@@ -810,7 +681,6 @@ $select = new select();
                     });
                 });
 
-                // Fechar sidebar ao pressionar ESC
                 document.addEventListener('keydown', function(e) {
                     if (e.key === 'Escape' && sidebar.classList.contains('show')) {
                         sidebar.classList.remove('show');
@@ -819,47 +689,25 @@ $select = new select();
                         document.body.style.overflow = '';
                     }
                 });
-                
-                // Ajustar footer quando sidebar é aberta/fechada no mobile
+
                 const footerContent = document.getElementById('footerContent');
                 if (footerContent) {
                     const adjustFooter = () => {
-                        if (window.innerWidth <= 768) {
-                            if (sidebar.classList.contains('show')) {
-                                footerContent.style.marginLeft = '0';
-                            } else {
-                                footerContent.style.marginLeft = '0';
-                            }
-                        } else {
-                            footerContent.style.marginLeft = '16rem'; // 64 * 0.25rem = 16rem
-                        }
+                        footerContent.style.marginLeft = window.innerWidth <= 768 ? '0' : '16rem';
                     };
-                    
-                    // Ajustar na inicialização
                     adjustFooter();
-                    
-                    // Ajustar quando a sidebar é aberta/fechada
                     menuButton.addEventListener('click', adjustFooter);
-                    
-                    // Ajustar quando a janela é redimensionada
                     window.addEventListener('resize', adjustFooter);
                 }
             }
 
-            // Back to top button visibility and functionality
             const backToTop = document.querySelector('.back-to-top');
             if (backToTop) {
                 window.addEventListener('scroll', () => {
-                    if (window.scrollY > 300) {
-                        backToTop.classList.add('visible');
-                        backToTop.classList.remove('hidden');
-                    } else {
-                        backToTop.classList.remove('visible');
-                        backToTop.classList.add('hidden');
-                    }
+                    backToTop.classList.toggle('visible', window.scrollY > 300);
+                    backToTop.classList.toggle('hidden', window.scrollY <= 300);
                 });
-                
-                // Funcionalidade do botão voltar ao topo
+
                 backToTop.addEventListener('click', () => {
                     window.scrollTo({
                         top: 0,
@@ -868,32 +716,18 @@ $select = new select();
                 });
             }
 
-            <?php if (isset($_SESSION['erro_solicitacao'])): ?>
-                mostrarNotificacao('<?php echo addslashes($_SESSION['erro_solicitacao']); ?>', 'error');
-                <?php unset($_SESSION['erro_solicitacao']); ?>
-            <?php endif; ?>
-
-            // Verificar se há barcode na URL e buscar produto automaticamente
             <?php if (isset($_GET['barcode']) && !empty($_GET['barcode'])): ?>
                 const barcodeFromURL = '<?php echo htmlspecialchars($_GET['barcode']); ?>';
                 if (barcodeFromURL) {
-                    // Mudar para opção de barcode
                     mostrarOpcao('barcode');
-
-                    // Definir o valor no input
                     const barcodeInput = document.getElementById('barcodeInput');
                     if (barcodeInput) {
                         barcodeInput.value = barcodeFromURL;
-
-                        // Buscar produto automaticamente
                         setTimeout(() => {
                             buscarProdutoPorBarcode(barcodeFromURL).then(produto => {
                                 if (produto) {
                                     exibirProdutoInfo(produto);
-                                    // Mostrar notificação de sucesso
                                     mostrarNotificacao(`Produto encontrado: ${produto.nome_produto}`, 'success');
-                                    
-                                    // Garantir que a validação seja executada
                                     validarSelecao();
                                 } else {
                                     mostrarNotificacao('Produto não encontrado para este código de barras', 'error');
@@ -915,19 +749,17 @@ $select = new select();
                             const produto = await buscarProdutoPorBarcode(barcode);
                             if (produto) {
                                 exibirProdutoInfo(produto);
-                                // Executar validação após exibir produto
-                                validarSelecao();
+                                mostrarNotificacao(`Produto encontrado: ${produto.nome_produto}`, 'success');
                             } else {
                                 document.getElementById('produtoInfo').classList.add('hidden');
                                 produtoSelecionado = null;
-                                // Executar validação quando produto não é encontrado
-                                validarSelecao();
+                                mostrarNotificacao('Produto não encontrado para este código de barras', 'error');
                             }
+                            validarSelecao();
                         }, 500);
                     } else {
                         document.getElementById('produtoInfo').classList.add('hidden');
                         produtoSelecionado = null;
-                        // Executar validação quando barcode é limpo
                         validarSelecao();
                     }
                 });
@@ -940,68 +772,15 @@ $select = new select();
                             buscarProdutoPorBarcode(barcode).then(produto => {
                                 if (produto) {
                                     exibirProdutoInfo(produto);
-                                    // Executar validação após exibir produto
-                                    validarSelecao();
+                                    mostrarNotificacao(`Produto encontrado: ${produto.nome_produto}`, 'success');
                                 } else {
-                                    // Executar validação quando produto não é encontrado
-                                    validarSelecao();
+                                    document.getElementById('produtoInfo').classList.add('hidden');
+                                    produtoSelecionado = null;
+                                    mostrarNotificacao('Produto não encontrado para este código de barras', 'error');
                                 }
+                                validarSelecao();
                             });
                         }
-                    }
-                });
-            }
-
-            const form = document.getElementById('solicitarForm');
-            if (form) {
-                form.addEventListener('submit', function(e) {
-                    const valido = validarFormulario();
-                    const formData = new FormData(form);
-                    const formDataObj = {};
-                    formData.forEach((value, key) => {
-                        formDataObj[key] = value;
-                    });
-                    
-                    console.log('=== SUBMISSÃO DO FORMULÁRIO ===');
-                    console.log('Validação:', valido);
-                    console.log('Opção atual:', opcaoAtual);
-                    console.log('Produto selecionado:', produtoSelecionado);
-                    console.log('Valor do select:', document.getElementById('produto').value);
-                    console.log('Valor do hidden:', document.getElementById('produtoIdHidden').value);
-                    console.log('Valor do barcode:', document.getElementById('barcodeInput').value);
-                    console.log('Name do hidden:', document.getElementById('produtoIdHidden').name);
-                    console.log('Dados do formulário:', formDataObj);
-                    
-                    // Verificar se o campo hidden está configurado corretamente
-                    const produtoIdHidden = document.getElementById('produtoIdHidden');
-                    if (opcaoAtual === 'barcode' && produtoSelecionado) {
-                        // Garantir que o campo hidden tenha o barcode correto
-                        produtoIdHidden.value = produtoSelecionado.barcode;
-                        produtoIdHidden.name = 'barcode';
-                        console.log('Campo hidden configurado para barcode:', produtoIdHidden.value);
-                        
-                        // Também definir o valor no input de barcode para garantir
-                        const barcodeInput = document.getElementById('barcodeInput');
-                        if (barcodeInput) {
-                            barcodeInput.value = produtoSelecionado.barcode;
-                        }
-                    } else if (opcaoAtual === 'select' && document.getElementById('produto').value) {
-                        // Garantir que o campo hidden tenha o ID correto
-                        produtoIdHidden.value = document.getElementById('produto').value;
-                        produtoIdHidden.name = 'produto';
-                        console.log('Campo hidden configurado para produto:', produtoIdHidden.value);
-                    }
-                    
-                    if (!valido) {
-                        e.preventDefault();
-                        let mensagem = 'Por favor, selecione um produto antes de continuar.';
-                        if (opcaoAtual === 'barcode' && !produtoSelecionado) {
-                            mensagem = 'Por favor, escaneie um código de barras válido antes de continuar.';
-                        } else if (opcaoAtual === 'select' && document.getElementById('produto').value === '') {
-                            mensagem = 'Por favor, selecione um produto da lista antes de continuar.';
-                        }
-                        mostrarNotificacao(mensagem, 'error');
-                        return false;
                     }
                 });
             }
