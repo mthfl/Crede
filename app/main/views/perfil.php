@@ -699,13 +699,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         @media (min-width: 768px) {
             .profile-content {
-                grid-template-columns: 2fr 1fr;
+                grid-template-columns: 1fr;
             }
         }
 
         @media (min-width: 1200px) {
             .profile-content {
-                grid-template-columns: 1fr 1fr 1fr;
+                grid-template-columns: 1fr;
             }
         }
 
@@ -756,6 +756,73 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             box-shadow: 0 8px 24px rgba(255, 165, 0, 0.1);
         }
 
+        /* Itens de estatística aprimorados */
+        .stats-card .stat-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.875rem 1rem;
+            background: #ffffff;
+            border: 1px solid var(--gray-200);
+            border-radius: 0.875rem;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+
+        .stats-card .stat-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.06);
+            border-color: rgba(0, 90, 36, 0.2);
+        }
+
+        .stats-card .stat-left {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .stats-card .stat-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 100%);
+            box-shadow: 0 6px 14px rgba(0,90,36,0.25);
+        }
+
+        .stats-card .stat-title {
+            font-size: 0.8125rem;
+            color: var(--gray-600);
+            margin-bottom: 0.125rem;
+            font-weight: 600;
+        }
+
+        .stats-card .stat-value {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--gray-800);
+        }
+
+        .stats-card .progress {
+            width: 140px;
+            height: 10px;
+            background: var(--gray-100);
+            border-radius: 999px;
+            overflow: hidden;
+            border: 1px solid var(--gray-200);
+        }
+
+        .stats-card .progress > span {
+            display: block;
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg, var(--secondary) 0%, #FFB84D 100%);
+            border-radius: 999px;
+            transition: width 0.6s ease;
+        }
+
         /* Avatar redimensionado para hero */
         .profile-avatar {
             width: clamp(8rem, 25vw, 12rem);
@@ -785,6 +852,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
             transform: rotate(45deg);
             transition: all 0.6s ease;
+            z-index: 0;
         }
 
         .profile-avatar:hover::before {
@@ -794,6 +862,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .profile-avatar:hover {
             box-shadow: 0 20px 60px rgba(0, 90, 36, 0.4);
             transform: scale(1.05);
+        }
+
+        .default-avatar-icon {
+            font-size: clamp(3rem, 10vw, 5rem);
+            line-height: 1;
+            color: var(--white);
+            position: relative;
+            z-index: 1;
         }
 
         .avatar-overlay {
@@ -921,6 +997,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             font-size: clamp(0.75rem, 2.5vw, 0.875rem);
             width: 100%;
             text-align: center;
+        }
+
+        .edit-button.inline {
+            width: auto;
         }
 
         .edit-button:hover {
@@ -1214,7 +1294,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         /* Estilos para o cropper */
         .cropper-container {
             max-width: 100%;
-            max-height: min(60vh, 400px);
+            max-height: min(38vh, 260px);
             margin: 0 auto;
             overflow: hidden;
             position: relative;
@@ -1237,8 +1317,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         .crop-preview {
-            width: clamp(5rem, 15vw, 7.5rem);
-            height: clamp(5rem, 15vw, 7.5rem);
+            width: clamp(4rem, 12vw, 5.5rem);
+            height: clamp(4rem, 12vw, 5.5rem);
             border-radius: 50%;
             overflow: hidden;
             border: 3px solid var(--primary);
@@ -1500,17 +1580,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <!-- Hero Section com Avatar e Nome -->
         <section class="profile-hero">
             <div class="profile-avatar" onclick="openPhotoModal()">
-                <img id="profileImage" src="<?php echo !empty($dados_usuario['foto_perfil']) ? $dados_usuario['foto_perfil'] : '/placeholder.svg'; ?>" alt="Foto de Perfil" class="<?php echo !empty($dados_usuario['foto_perfil']) ? 'w-full h-full object-cover rounded-full' : 'w-full h-full object-cover rounded-full hidden'; ?>">
-                <i id="profileIcon" class="<?php echo !empty($dados_usuario['foto_perfil']) ? 'fas fa-user hidden' : 'fas fa-user'; ?>"></i>
+                <img id="profileImage" src="<?php echo !empty($dados_usuario['foto_perfil']) ? $dados_usuario['foto_perfil'] : ''; ?>" alt="" class="<?php echo !empty($dados_usuario['foto_perfil']) ? 'w-full h-full object-cover rounded-full' : 'w-full h-full object-cover rounded-full hidden'; ?>">
+                <i id="profileIcon" class="<?php echo !empty($dados_usuario['foto_perfil']) ? 'fa-solid fa-user hidden' : 'fa-solid fa-user default-avatar-icon'; ?>" aria-hidden="true"></i>
                 <div class="avatar-overlay">
                     <i class="fas fa-camera"></i>
                 </div>
             </div>
             
             <h1 class="text-4xl font-bold text-gray-800 mb-2">
-                <?php echo $dados_usuario['nome']; ?>
+                <?php echo isset($dados_usuario['nome']) ? $dados_usuario['nome'] : 'Usuário'; ?>
             </h1>
+            <button onclick="openPhotoModal()" class="edit-button inline mb-4">
+                <i class="fas fa-camera"></i>
+                Alterar Foto de Perfil
+            </button>
+            <?php if (!empty($dados_usuario['nome_funcao'])): ?>
             <p class="text-xl text-gray-600 mb-4"><?php echo $dados_usuario['nome_funcao']; ?></p>
+            <?php endif; ?>
             <div class="flex justify-center gap-4 flex-wrap">
                 <span class="px-4 py-2 bg-green-100 text-green-800 rounded-full text-sm font-medium">
                     <i class="fas fa-check-circle mr-2"></i>Perfil Ativo
@@ -1539,7 +1625,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
                         <div class="info-label">E-mail</div>
                         <div class="info-value">
-                            <?php echo $dados_usuario['email']; ?>
+                            <?php echo $dados_usuario['email'] ?? 'Sem e-mail'; ?>
                         </div>
                     </div>
 
@@ -1550,7 +1636,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
                         <div class="info-label">CPF</div>
                         <div class="info-value">
-                            <?php echo $dados_usuario['cpf']; ?>
+                            <?php echo $dados_usuario['cpf'] ?? 'Sem CPF'; ?>
+                        </div>
+                    </div>
+
+                    <!-- Setor -->
+                    <div class="info-card animate-on-scroll">
+                        <div class="info-icon">
+                            <i class="fas fa-sitemap"></i>
+                        </div>
+                        <div class="info-label">Setor</div>
+                        <div class="info-value">
+                            <?php echo $dados_usuario['setor'] ?? 'Não informado'; ?>
                         </div>
                     </div>
 
@@ -1563,7 +1660,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div class="info-value <?php echo empty($dados_usuario['telefone']) ? 'empty' : ''; ?>" id="phoneValue">
                             <?php echo !empty($dados_usuario['telefone']) ? $dados_usuario['telefone'] : 'Não informado'; ?>
                         </div>
-                        <button onclick="openEditModal('<?php echo $dados_usuario['telefone']; ?>')" class="edit-button mt-4">
+                        <button onclick="openEditModal('<?php echo $dados_usuario['telefone'] ?? ''; ?>')" class="edit-button mt-4">
                             <i class="fas fa-edit"></i>
                             <span id="phoneButtonText"><?php echo !empty($dados_usuario['telefone']) ? 'Editar Telefone' : 'Adicionar Telefone'; ?></span>
                         </button>
@@ -1571,81 +1668,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
             </div>
 
-            <!-- Card de Ações Rápidas -->
-            <div class="quick-actions-card">
-                <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
-                    <i class="fas fa-bolt mr-3 text-orange-500"></i>
-                    Ações Rápidas
-                </h3>
-                
-                <div class="space-y-3">
-                    <button onclick="openPhotoModal()" class="w-full p-3 bg-green-50 hover:bg-green-100 border border-green-200 rounded-lg transition-all duration-300 flex items-center justify-between group">
-                        <div class="flex items-center">
-                            <i class="fas fa-camera text-green-600 mr-3"></i>
-                            <span class="text-green-800 font-medium">Alterar Foto</span>
-                        </div>
-                        <i class="fas fa-chevron-right text-green-600 group-hover:translate-x-1 transition-transform"></i>
-                    </button>
-                    
-                    <button class="w-full p-3 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-lg transition-all duration-300 flex items-center justify-between group">
-                        <div class="flex items-center">
-                            <i class="fas fa-key text-blue-600 mr-3"></i>
-                            <span class="text-blue-800 font-medium">Alterar Senha</span>
-                        </div>
-                        <i class="fas fa-chevron-right text-blue-600 group-hover:translate-x-1 transition-transform"></i>
-                    </button>
-                    
-                    <button class="w-full p-3 bg-purple-50 hover:bg-purple-100 border border-purple-200 rounded-lg transition-all duration-300 flex items-center justify-between group">
-                        <div class="flex items-center">
-                            <i class="fas fa-download text-purple-600 mr-3"></i>
-                            <span class="text-purple-800 font-medium">Baixar Dados</span>
-                        </div>
-                        <i class="fas fa-chevron-right text-purple-600 group-hover:translate-x-1 transition-transform"></i>
-                    </button>
-                </div>
-            </div>
+            
 
-            <!-- Card de Estatísticas -->
-            <div class="stats-card">
-                <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
-                    <i class="fas fa-chart-line mr-3 text-orange-500"></i>
-                    Atividade
-                </h3>
-                
-                <div class="space-y-4">
-                    <div class="flex justify-between items-center p-3 bg-white rounded-lg border">
-                        <div>
-                            <p class="text-sm text-gray-600">Último Acesso</p>
-                            <p class="font-semibold text-gray-800">Hoje, 14:30</p>
-                        </div>
-                        <i class="fas fa-clock text-2xl text-green-500"></i>
-                    </div>
-                    
-                    <div class="flex justify-between items-center p-3 bg-white rounded-lg border">
-                        <div>
-                            <p class="text-sm text-gray-600">Perfil Completo</p>
-                            <p class="font-semibold text-gray-800">85%</p>
-                        </div>
-                        <div class="w-12 h-12 relative">
-                            <svg class="w-12 h-12 transform -rotate-90" viewBox="0 0 36 36">
-                                <path class="text-gray-200" stroke="currentColor" stroke-width="3" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
-                                <path class="text-orange-500" stroke="currentColor" stroke-width="3" fill="none" stroke-dasharray="85, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
-                            </svg>
-                            <div class="absolute inset-0 flex items-center justify-center">
-                                <span class="text-xs font-bold text-orange-600">85%</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="flex justify-between items-center p-3 bg-white rounded-lg border">
-                        <div>
-                            <p class="text-sm text-gray-600">Sessões Este Mês</p>
-                            <p class="font-semibold text-gray-800">24</p>
-                        </div>
-                        <i class="fas fa-calendar-alt text-2xl text-blue-500"></i>
-                    </div>
-                </div>
-            </div>
+            
 
         </div>
 
@@ -1704,21 +1729,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </button>
             </div>
             
-            <div style="display: flex; flex-direction: column; gap: 1.5rem;">
-                <!-- Foto Atual -->
-                <div class="text-center">
-                    <h4 class="text-lg font-semibold text-gray-800 mb-4">Foto Atual</h4>
-                    <div class="inline-block">
-                        <div id="currentPhotoContainer" class="w-32 h-32 bg-gray-200 rounded-full flex items-center justify-center mx-auto">
-                            <?php if (!empty($dados_usuario['foto_perfil'])): ?>
-                                <img src="<?php echo $dados_usuario['foto_perfil']; ?>" alt="Foto Atual" class="w-full h-full object-cover rounded-full">
-                            <?php else: ?>
-                                <i class="fas fa-user text-4xl text-gray-400"></i>
-                            <?php endif; ?>
-                        </div>
-                    </div>
-                </div>
-
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
                 <!-- Área de Upload e Recorte -->
                 <div id="uploadArea" class="text-center">
                     <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>" enctype="multipart/form-data">
@@ -1737,7 +1748,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <!-- Área de Recorte (inicialmente oculta) -->
                 <div id="cropArea" class="hidden">
-                    <div class="text-center mb-4">
+                    <div class="text-center mb-3">
                         <h4 class="text-lg font-semibold text-gray-800">Recortar Foto</h4>
                         <p class="text-gray-600">Arraste e redimensione para selecionar a área desejada</p>
                     </div>
@@ -1747,7 +1758,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
 
                     <!-- Preview do recorte -->
-                    <div class="text-center mb-4">
+                    <div class="text-center mb-3">
                         <h5 class="text-base font-semibold text-gray-800 mb-2">Preview</h5>
                         <div class="crop-preview">
                             <img id="cropPreview" src="/placeholder.svg" alt="Preview do recorte">
@@ -1788,7 +1799,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <!-- JavaScript -->
     <script>
         // Estado da aplicação
-        let currentPhone = '<?php echo $dados_usuario['telefone']; ?>';
+        let currentPhone = '<?php echo $dados_usuario['telefone'] ?? ''; ?>';
         let hasProfilePhoto = <?php echo !empty($dados_usuario['foto_perfil']) ? 'true' : 'false'; ?>;
         let cropper = null;
         let selectedFile = null;
@@ -1852,13 +1863,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (hasProfilePhoto) {
                 profileImage.classList.remove('hidden');
                 profileIcon.classList.add('hidden');
-                currentPhotoContainer.innerHTML = '<img src="' + profileImage.src + '" alt="Foto Atual" class="w-full h-full object-cover rounded-full">';
-                removePhotoSection.classList.remove('hidden');
+                if (currentPhotoContainer) {
+                    currentPhotoContainer.innerHTML = '<img src="' + profileImage.src + '" alt="Foto Atual" class="w-full h-full object-cover rounded-full">';
+                }
+                if (removePhotoSection) {
+                    removePhotoSection.classList.remove('hidden');
+                }
             } else {
                 profileImage.classList.add('hidden');
                 profileIcon.classList.remove('hidden');
-                currentPhotoContainer.innerHTML = '<i class="fas fa-user text-4xl text-gray-400"></i>';
-                removePhotoSection.classList.add('hidden');
+                if (currentPhotoContainer) {
+                    currentPhotoContainer.innerHTML = '<i class="fas fa-user text-4xl text-gray-400"></i>';
+                }
+                if (removePhotoSection) {
+                    removePhotoSection.classList.add('hidden');
+                }
             }
         }
 
@@ -1999,6 +2018,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Reset file input
             const fileInput = document.getElementById('foto_perfil');
             if (fileInput) fileInput.value = '';
+            const currentPhotoSection = document.getElementById('currentPhotoSection');
+            if (currentPhotoSection) currentPhotoSection.classList.remove('hidden');
         }
 
         function openEditModal(telefone = '', isEdit = false) {
@@ -2103,7 +2124,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             reader.onload = function(e) {
                 // Restaurar conteúdo da área de recorte
                 cropArea.innerHTML = `
-                    <div class="text-center mb-4">
+                    <div class="text-center mb-3">
                         <h4 class="text-lg font-semibold text-gray-800">Recortar Foto</h4>
                         <p class="text-gray-600">Arraste e redimensione para selecionar a área desejada</p>
                     </div>
@@ -2112,7 +2133,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <img id="cropImage" src="/placeholder.svg" alt="Imagem para recorte" style="max-width: 100%;">
                     </div>
 
-                    <div class="text-center mb-4">
+                    <div class="text-center mb-3">
                         <h5 class="text-base font-semibold text-gray-800 mb-2">Preview</h5>
                         <div class="crop-preview">
                             <img id="cropPreview" src="/placeholder.svg" alt="Preview do recorte">
@@ -2156,7 +2177,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if (!cropperContainer) return;
 
             const windowHeight = window.innerHeight;
-            const maxHeight = Math.min(windowHeight * 0.5, 400);
+            const maxHeight = Math.min(windowHeight * 0.35, 260);
             
             cropperContainer.style.maxHeight = `${maxHeight}px`;
             
