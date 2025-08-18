@@ -859,11 +859,34 @@ $session->tempo_session();
             transition: all 0.6s ease;
         }
 
-        .animate-on-scroll.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    </style>
+                 .animate-on-scroll.visible {
+             opacity: 1;
+             transform: translateY(0);
+         }
+
+         /* Botão de Acessibilidade Desktop */
+         .accessibility-fab {
+             animation: float 3s ease-in-out infinite;
+         }
+
+         .accessibility-fab:hover {
+             animation: none;
+             transform: scale(1.1);
+         }
+
+         @keyframes pulse-glow {
+             0%, 100% {
+                 box-shadow: 0 0 0 0 rgba(0, 90, 36, 0.7);
+             }
+             50% {
+                 box-shadow: 0 0 0 10px rgba(0, 90, 36, 0);
+             }
+         }
+
+         .accessibility-fab {
+             animation: pulse-glow 2s infinite;
+         }
+     </style>
 </head>
 
 <body>
@@ -884,21 +907,21 @@ $session->tempo_session();
                     </div>
                 </div>
                 
-                <!-- Botões de Navegação (Desktop) -->
-                <div class="hidden md:flex items-center space-x-4">
-                    <button class="header-btn-with-text" title="Início" onclick="window.location.href='#'">
-                        <i class="fas fa-home"></i>
-                        <span>Início</span>
-                    </button>
-                    <button class="header-btn-with-text" title="Acessibilidade" onclick="toggleAccessibility()">
-                        <i class="fas fa-universal-access"></i>
-                        <span>Acessibilidade</span>
-                    </button>
-                    <div class="w-px h-8 bg-gray-300 mx-3"></div>
-                    <button class="w-10 h-10 rounded-xl bg-gray-100 hover:bg-red-50 text-red-600 hover:text-red-700 transition-all duration-300 flex items-center justify-center" title="Sair" onclick="window.location.href='../models/sessions.php?sair'">
-                        <i class="fas fa-sign-out-alt"></i>
-                    </button>
-                </div>
+                                 <!-- Botões de Navegação (Desktop) -->
+                 <div class="hidden md:flex items-center space-x-4">
+                     <button class="header-btn-with-text" title="Início" onclick="window.location.href='#'">
+                         <i class="fas fa-home"></i>
+                         <span>Início</span>
+                     </button>
+                     <button class="header-btn-with-text" title="Perfil do usuário" onclick="window.location.href='perfil.php'">
+                         <i class="fas fa-user"></i>
+                         <span>Perfil</span>
+                     </button>
+                     <div class="w-px h-8 bg-gray-300 mx-3"></div>
+                     <button class="w-10 h-10 rounded-xl bg-gray-100 hover:bg-red-50 text-red-600 hover:text-red-700 transition-all duration-300 flex items-center justify-center" title="Sair" onclick="window.location.href='../models/sessions.php?sair'">
+                         <i class="fas fa-sign-out-alt"></i>
+                     </button>
+                 </div>
                 
 
             </div>
@@ -951,9 +974,18 @@ $session->tempo_session();
 
        
 
-    </main>
+         </main>
 
-    <!-- Painel de Acessibilidade -->
+     <!-- Botão de Acessibilidade (Desktop) -->
+     <div class="hidden md:block fixed bottom-6 right-6 z-50">
+         <button onclick="toggleAccessibility()" 
+                 class="w-14 h-14 rounded-full bg-primary hover:bg-dark text-white shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center group accessibility-fab"
+                 title="Acessibilidade">
+             <i class="fas fa-universal-access text-xl group-hover:scale-110 transition-transform duration-300"></i>
+         </button>
+     </div>
+
+     <!-- Painel de Acessibilidade -->
     <div id="accessibilityPanel" class="accessibility-panel">
         <div class="accessibility-content">
             <div class="accessibility-header">
@@ -1042,7 +1074,7 @@ $session->tempo_session();
                 <i class="fas fa-universal-access"></i>
                 <span class="footer-text">Acessibilidade</span>
             </button>
-            <button class="footer-btn" title="Perfil do usuário" onclick="toggleProfile()">
+            <button class="footer-btn" title="Perfil do usuário" onclick="window.location.href='perfil.php'">
                 <i class="fas fa-user"></i>
                 <span class="footer-text">Perfil</span>
             </button>
@@ -1243,7 +1275,7 @@ $session->tempo_session();
                                 } else if (command.includes('estoque') || command.includes('controle')) {
                                     document.querySelector('[data-system="estoque"]').click();
                                 } else if (command.includes('perfil')) {
-                                    document.querySelector('.footer-btn[title="Perfil do usuário"]').click();
+                                    window.location.href = 'perfil.php';
                                 } else if (command.includes('acessibilidade')) {
                                     document.querySelector('.footer-btn[title="Acessibilidade"]').click();
                                 }
