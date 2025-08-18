@@ -23,12 +23,16 @@ class model_usuario extends connect
     {
         try {
 
-            $stmt_check = $this->connect->prepare("SELECT * FROM $this->table1 WHERE email = :email AND cpf = :cpf AND senha = NULL");
+            $stmt_check = $this->connect->prepare("SELECT * FROM $this->table1 WHERE senha = NULL AND email = :email AND cpf = :cpf");
             $stmt_check->bindValue(":cpf", $cpf);
             $stmt_check->bindValue(":email", $email);
             $stmt_check->execute();
 
-            if ($stmt_check->rowCount() > 0) {
+<<<<<<< Updated upstream
+            if ($stmt_check->rowCount() == 1) {
+=======
+            if ($stmt_check->rowCount() <= 0) {
+>>>>>>> Stashed changes
 
                 session_start();
                 $_SESSION['email'] = $email;
