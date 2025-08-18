@@ -1640,7 +1640,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </span>
             </div>
         </section>
-
+  
         <!-- Grid de Conteúdo -->
         <div class="profile-content">
             
