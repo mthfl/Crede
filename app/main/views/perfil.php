@@ -1733,7 +1733,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                            name="telefone" 
                            class="form-input" 
                            placeholder="(85) 99999-9999"
-                           pattern="^$$\d{2}$$\s\d{4,5}-\d{4}$"
+                           pattern="^\(\d{2}\)\s\d{4,5}-\d{4}$"
                            maxlength="15"
                            required>
                 </div>
@@ -1921,20 +1921,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             const telefoneInput = document.getElementById('telefone');
             
             telefoneInput.addEventListener('input', function(e) {
-                let value = e.target.value.replace(/\D/g, '');
-                
-                if (value.length <= 11) {
-                    if (value.length >= 2) {
-                        value = value.replace(/^(\d{2})/, '($1) ');
-                    }
-                    if (value.length >= 7) {
-                        value = value.replace(/^(\d{2})\s(\d{5})/, '($1) $2-');
-                    } else if (value.length >= 6) {
-                        value = value.replace(/^(\d{2})\s(\d{4})/, '($1) $2-');
+                let digits = e.target.value.replace(/\D/g, '');
+
+                // Limitar a 11 dígitos (DD + 9)
+                if (digits.length > 11) digits = digits.slice(0, 11);
+
+                let formatted = '';
+                const d1 = digits.slice(0, 2);
+                const rest = digits.slice(2);
+
+                if (digits.length < 3) {
+                    formatted = digits.length > 0 ? `(${d1}` : '';
+                } else {
+                    // Com DDD completo
+                    if (rest.length <= 4) {
+                        // Até 4 dígitos após DDD
+                        formatted = `(${d1}) ${rest}`;
+                    } else if (rest.length <= 8) {
+                        // Formato fixo: XXXX-XXXX
+                        formatted = `(${d1}) ${rest.slice(0, 4)}-${rest.slice(4)}`;
+                    } else {
+                        // Formato móvel: XXXXX-XXXX
+                        formatted = `(${d1}) ${rest.slice(0, 5)}-${rest.slice(5, 9)}`;
                     }
                 }
-                
-                e.target.value = value;
+
+                e.target.value = formatted;
             });
         }
 
@@ -2115,7 +2127,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             event.preventDefault();
             
             const telefone = document.getElementById('telefone').value;
-            const telefoneRegex = /^(\d{2})\s\d{4,5}-\d{4}$/;
+            const telefoneRegex = /^\(\d{2}\)\s\d{4,5}-\d{4}$/;
             
             if (!telefoneRegex.test(telefone)) {
                 showMessage('Por favor, insira um número de telefone válido no formato (85) 99999-9999', 'error');
