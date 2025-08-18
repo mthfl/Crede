@@ -725,7 +725,7 @@ $select = new select();
                     </div>
                 <h3 class="text-lg font-bold text-primary mb-2 text-center">Relatório Completo</h3>
                 <p class="text-gray-600 text-center mb-4 text-sm">Relatório detalhado de todo o estoque atual</p>
-                <a href="reports/relatorio_produtos_cadastrados.php" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105" target="_blank">
+                <a href="reports/relatorio_produto_geral.php" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105" target="_blank">
                     <i class="fas fa-download mr-2"></i>
                     Gerar PDF
                 </a>
