@@ -1,5 +1,6 @@
 <?php
 require_once(__DIR__.'\..\config\connect.php');
+
 class model_usuario extends connect
 {
     private string $table1;
@@ -11,7 +12,7 @@ class model_usuario extends connect
     function __construct()
     {
         parent::__construct();
-        require('private/tables.php');
+        require(__DIR__.'\private\tables.php');
         $this->table1 = $table['crede_users'][1];
         $this->table2 = $table['crede_users'][2];
         $this->table3 = $table['crede_users'][3];
@@ -30,7 +31,9 @@ class model_usuario extends connect
 
             if ($stmt_check->rowCount() == 1) {
 
-                session_start();
+                if (session_status() === PHP_SESSION_NONE) {
+                    session_start();
+                }
                 $_SESSION['email'] = $email;
                 $_SESSION['cpf'] = $cpf;
 
@@ -44,7 +47,7 @@ class model_usuario extends connect
             return 0;
         }
     }
-    public function primeiro_acesso($cpf, $email, $senha)
+    public function primeiro_acesso(string $cpf, string $email, string $senha):int
     {
         try {
 
@@ -72,6 +75,7 @@ class model_usuario extends connect
                 return 3;
             }
         } catch (Exception $e) {
+
 
             return 0;
         }

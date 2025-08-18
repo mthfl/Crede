@@ -1,2 +1,91 @@
-/app/main/models/privete/
-/app/subsystems/app/main/models/privete/
+# Pastas Private - Segurança
+**/private/
+**/private/*
+**/models/private/
+**/models/private/*
+**/config/private/
+**/config/private/*
+**/app/main/models/private/
+**/app/main/models/private/*
+**/app/subsystems/*/app/main/models/private/
+**/app/subsystems/*/app/main/models/private/*
+
+# Arquivos de configuração sensíveis
+**/config.php
+**/database.php
+**/db_config.php
+**/connection.php
+**/.env
+**/.env.local
+**/.env.production
+**/.env.staging
+
+# Arquivos de credenciais
+**/credentials.php
+**/secrets.php
+**/auth.php
+**/keys.php
+**/passwords.php
+
+# Logs e arquivos temporários
+**/logs/
+**/logs/*
+**/tmp/
+**/temp/
+**/cache/
+**/cache/*
+**/uploads/
+**/uploads/*
+**/backup/
+**/backup/*
+
+# Arquivos de sessão
+**/sessions/
+**/sessions/*
+**/session/
+**/session/*
+
+# Arquivos de banco de dados
+**/*.sql
+**/*.sqlite
+**/*.db
+**/*.sqlite3
+
+# Arquivos de sistema
+**/.DS_Store
+**/Thumbs.db
+**/desktop.ini
+
+# IDEs e editores
+**/.vscode/
+**/.idea/
+**/.vs/
+**/*.swp
+**/*.swo
+**/*~
+
+# Arquivos de build e dependências
+**/node_modules/
+**/vendor/
+**/composer.lock
+**/package-lock.json
+**/yarn.lock
+
+# Arquivos de backup e temporários
+**/*.bak
+**/*.backup
+**/*.tmp
+**/*.temp
+**/*.old
+
+# Arquivos de certificados e chaves
+**/*.pem
+**/*.key
+**/*.crt
+**/*.p12
+**/*.pfx
+
+# Arquivos de configuração específicos do CREDE
+**/crede_config.php
+**/crede_secrets.php
+**/crede_database.php

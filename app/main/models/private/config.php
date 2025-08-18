@@ -13,7 +13,7 @@ return $config = [
             "host" => "localhost",
             "user" => "u750204740_crede_users",
             "banco" => "u750204740_crede_users",
-            "senha" => "***"           
+            "senha" => "Crede1@#$"           
         ]
     ]
 ];
