@@ -1638,12 +1638,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <p class="text-xl text-gray-600 mb-4"><?php echo $dados_usuario['nome_funcao']; ?></p>
             <?php endif; ?>
             <div class="flex justify-center gap-4 flex-wrap">
-                <span class="px-4 py-2 bg-green-100 text-green-800 rounded-full text-sm font-medium">
-                    <i class="fas fa-check-circle mr-2"></i>Perfil Ativo
-                </span>
-                <span class="px-4 py-2 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
-                    <i class="fas fa-shield-alt mr-2"></i>Verificado
-                </span>
+
             </div>
         </section>
   
