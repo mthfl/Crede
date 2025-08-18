@@ -28,7 +28,7 @@ class model_usuario extends connect
             $stmt_check->bindValue(":email", $email);
             $stmt_check->execute();
 
-            if ($stmt_check->rowCount() > 0) {
+            if ($stmt_check->rowCount() == 1) {
 
                 session_start();
                 $_SESSION['email'] = $email;
