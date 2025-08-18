@@ -10,6 +10,18 @@ $session->tempo_session();
 $model_usuario = new model_usuario();
 $dados_usuario = $model_usuario->getDadosUsuario($_SESSION['id']);
 
+// Caminho seguro para a foto de perfil vinda do banco
+$hasPhoto = !empty($dados_usuario['foto_perfil']) && $dados_usuario['foto_perfil'] !== 'default.png';
+$foto_perfil_url = '';
+if ($hasPhoto) {
+	$fp = $dados_usuario['foto_perfil'];
+	if (preg_match('/^https?:\/\//', $fp) || (isset($fp[0]) && $fp[0] === '/')) {
+		$foto_perfil_url = $fp;
+	} else {
+		$foto_perfil_url = '../assets/fotos_perfil/' . $fp;
+	}
+}
+
 // Processar atualização do telefone e upload de foto
 $mensagem = '';
 $tipo_mensagem = '';
@@ -839,7 +851,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
-            cursor: pointer;
+            cursor: default;
         }
 
         .profile-avatar::before {
@@ -870,27 +882,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             color: var(--white);
             position: relative;
             z-index: 1;
-        }
-
-        .avatar-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-size: clamp(1.5rem, 5vw, 2rem);
-            opacity: 0;
-            transition: all 0.3s ease;
-            border-radius: 50%;
         }
 
-        .profile-avatar:hover .avatar-overlay {
-            opacity: 1;
+        .default-avatar-icon svg {
+            width: 50%;
+            height: 50%;
+            fill: #ffffff;
+            display: block;
+        }
+
+        .avatar-overlay {
+            display: none;
         }
 
         /* Grid de informações otimizado */
@@ -1613,12 +1618,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <!-- Hero Section com Avatar e Nome -->
         <section class="profile-hero">
-            <div class="profile-avatar" onclick="openPhotoModal()">
-                <img id="profileImage" src="<?php echo !empty($dados_usuario['foto_perfil']) ? $dados_usuario['foto_perfil'] : ''; ?>" alt="" class="<?php echo !empty($dados_usuario['foto_perfil']) ? 'w-full h-full object-cover rounded-full' : 'w-full h-full object-cover rounded-full hidden'; ?>">
-                <i id="profileIcon" class="<?php echo !empty($dados_usuario['foto_perfil']) ? 'fa-solid fa-user hidden' : 'fa-solid fa-user default-avatar-icon'; ?>" aria-hidden="true"></i>
-                <div class="avatar-overlay">
-                    <i class="fas fa-camera"></i>
-                </div>
+            <div class="profile-avatar">
+                <img id="profileImage" src="<?php echo $hasPhoto ? htmlspecialchars($foto_perfil_url, ENT_QUOTES) : ''; ?>" alt="" class="<?php echo $hasPhoto ? 'w-full h-full object-cover rounded-full' : 'w-full h-full object-cover rounded-full hidden'; ?>">
+                <i id="profileIcon" class="<?php echo $hasPhoto ? 'hidden' : 'default-avatar-icon'; ?>" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+                        <path d="M12 12c2.761 0 5-2.239 5-5s-2.239-5-5-5-5 2.239-5 5 2.239 5 5 5zm0 2c-4.418 0-8 2.239-8 5v1c0 .552.448 1 1 1h14c.552 0 1-.448 1-1v-1c0-2.761-3.582-5-8-5z"/>
+                    </svg>
+                </i>
             </div>
             
             <h1 class="text-4xl font-bold text-gray-800 mb-2">
@@ -1813,7 +1819,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
 
                 <!-- Remover Foto -->
-                <div id="removePhotoSection" class="border-t pt-4 text-center <?php echo empty($dados_usuario['foto_perfil']) ? 'hidden' : ''; ?>">
+                <div id="removePhotoSection" class="border-t pt-4 text-center <?php echo $hasPhoto ? '' : 'hidden'; ?>">
                     <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
                         <input type="hidden" name="remover_foto" value="1">
                         <button type="submit" class="btn-remove">
@@ -1830,7 +1836,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script>
         // Estado da aplicação
         let currentPhone = '<?php echo $dados_usuario['telefone'] ?? ''; ?>';
-        let hasProfilePhoto = <?php echo !empty($dados_usuario['foto_perfil']) ? 'true' : 'false'; ?>;
+        let hasProfilePhoto = <?php echo $hasPhoto ? 'true' : 'false'; ?>;
         let cropper = null;
         let selectedFile = null;
 
@@ -2283,12 +2289,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 showMessage('Nenhuma imagem selecionada para recorte.', 'error');
                 return;
             }
-
+ 
             const btn = event.target;
             const originalText = btn.innerHTML;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span class="hidden sm:inline">Processando...</span>';
             btn.disabled = true;
-
+ 
             try {
                 const canvas = cropper.getCroppedCanvas({
                     width: 300,
@@ -2296,28 +2302,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     imageSmoothingEnabled: true,
                     imageSmoothingQuality: 'high'
                 });
-
+ 
                 if (canvas) {
-                    canvas.toBlob(function(blob) {
-                        // Simular upload da imagem
-                        const reader = new FileReader();
-                        reader.onload = function(e) {
-                            // Atualizar foto de perfil
-                            const profileImage = document.getElementById('profileImage');
-                            profileImage.src = e.target.result;
-                            hasProfilePhoto = true;
-                            updatePhotoDisplay();
-                            
-                            closePhotoModal();
-                            showMessage('Foto de perfil atualizada com sucesso!', 'success');
-                        };
-                        reader.onerror = function() {
-                            showMessage('Erro ao processar imagem. Tente novamente.', 'error');
-                            btn.innerHTML = originalText;
-                            btn.disabled = false;
-                        };
-                        reader.readAsDataURL(blob);
-                    }, 'image/jpeg', 0.85);
+                    // Obter DataURL e enviar para o backend
+                    const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+
+                    // Criar formulário oculto para POST tradicional (permite o PHP redirecionar)
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = window.location.href;
+
+                    const inputFlag = document.createElement('input');
+                    inputFlag.type = 'hidden';
+                    inputFlag.name = 'upload_foto';
+                    inputFlag.value = '1';
+                    form.appendChild(inputFlag);
+
+                    const inputData = document.createElement('input');
+                    inputData.type = 'hidden';
+                    inputData.name = 'cropped_image_data';
+                    inputData.value = dataUrl;
+                    form.appendChild(inputData);
+
+                    document.body.appendChild(form);
+                    form.submit();
                 } else {
                     throw new Error('Erro ao gerar canvas');
                 }
