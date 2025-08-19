@@ -4,8 +4,8 @@ $session = new sessions();
 $session->autenticar_session();
 $session->tempo_session();
 
-require_once(__DIR__.'/../config/connect.php');
-
+require_once(__DIR__ . '/../config/connect.php');
+//print_r($_POST);
 class select extends connect
 {
     private string $table1;
@@ -17,7 +17,7 @@ class select extends connect
     function __construct()
     {
         parent::__construct();
-        require('private/tables.php');
+        require(__DIR__.'/private/tables.php');
         $this->table1 = $table['crede_estoque'][1];
         $this->table2 = $table['crede_estoque'][2];
         $this->table3 = $table['crede_estoque'][3];
@@ -70,49 +70,12 @@ class select extends connect
 
         return $resultado = $query->fetchAll(PDO::FETCH_ASSOC);
     }
-    public function select_responsavel(){
-        
+    public function select_responsavel()
+    {
+
         $consulta = "SELECT * FROM $this->table5";
         $query = $this->connect->query($consulta);
 
         return $resultado = $query->fetchAll(PDO::FETCH_ASSOC);
     }
-
-    public function selectSolicitarProdutos($barcode)
-    {
-        try {
-            $query = $this->pdo->query('SELECT id, barcode, nome_produto, quantidade FROM produtos ORDER BY nome_produto');
-            while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
-                echo "<option value='" . htmlspecialchars($row['id']) . "'>" . htmlspecialchars($row['nome_produto']) . " (Estoque: " . htmlspecialchars($row['quantidade']) . ")</option>";      
-            }
-        } catch (PDOException $e) {
-            echo "<option value='' disabled>Erro ao conectar ao banco: " . htmlspecialchars($e->getMessage()) . "</option>";
-        }
-    }
-
-    public function selectSolicitarResponsaveis($barcode)
-    {
-        try {
-            $query = $this->pdo->query('SELECT nome FROM responsaveis ORDER BY nome');
-            while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
-                echo "<option value='" . htmlspecialchars($row['nome']) . "'>" . htmlspecialchars($row['nome']) . "</option>";
-            }
-        } catch (PDOException $e) {
-            echo "<option value='' disabled>Erro ao conectar ao banco: " . htmlspecialchars($e->getMessage()) . "</option>";
-        }
-    }
-
-
-    public function modalRelatorio()
-    {
-        try {
-            $query = $this->pdo->query('SELECT id, nome_produto FROM produtos ORDER BY nome_produto');
-            while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
-                echo "<option value='" . htmlspecialchars($row['id']) . "'>" . strtoupper(htmlspecialchars($row['nome_produto'])) . "</option>";
-            }
-        } catch (PDOException $e) {
-            echo "<option value='' disabled>Erro ao carregar produtos: " . htmlspecialchars($e->getMessage()) . "</option>";
-        }
-    }
 }
-?>

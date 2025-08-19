@@ -1,12 +1,11 @@
 <?php 
-require_once('../models/sessions.php');
+require_once(__DIR__ . '/../models/sessions.php');
 $session = new sessions();
 $session->autenticar_session();
 $session->tempo_session();
 
-require_once('../models/model.select.php');
+require_once(__DIR__ . '/../models/model.select.php');
 $select = new select();
-
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -893,9 +892,7 @@ $select = new select();
                     </label>
                     <select id="produto" name="produto" required>
                         <option value="" disabled selected>SELECIONAR PRODUTO</option>
-                        <?php
-                        $select->modalRelatorio();
-                        ?>
+                        
                     </select>
                 </div>
                 <button type="submit" class="confirm-btn">

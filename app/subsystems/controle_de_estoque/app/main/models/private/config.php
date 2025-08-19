@@ -1,5 +1,5 @@
 <?php
-require_once(__DIR__.'\..\..\models\sessions.php');
+require_once(__DIR__.'/../../models/sessions.php');
 $session = new sessions();
 $session->autenticar_session();
 $session->tempo_session();
@@ -18,7 +18,7 @@ return $config = [
             "host" => "localhost",
             "user" => "u750204740_crede_estoque",
             "banco" => "u750204740_crede_estoque",
-            "senha" => "***"           
+            "senha" => "Crede1@#$"           
         ]
     ]
 ];

@@ -1,5 +1,8 @@
 <?php
-require_once('../model/sessions.php');
+require_once(__DIR__ . '\..\..\models\sessions.php');
+$session = new sessions();
+$session->autenticar_session();
+$session->tempo_session();
 require_once('../model/model.functions.php');
 
 $session = new sessions();

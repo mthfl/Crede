@@ -1,5 +1,5 @@
 <?php
-require_once("../models/model.usuario.php");
+require_once(__DIR__."/../models/model.usuario.php");
 
 //pre-cadastro
 if (
@@ -97,8 +97,6 @@ else if (
     }
 }else{
 
-    session_unset();
-    session_destroy();
     header('location:../login.php');
     exit();
 }

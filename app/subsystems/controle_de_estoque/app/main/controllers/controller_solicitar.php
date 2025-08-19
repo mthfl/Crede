@@ -1,11 +1,12 @@
 <?php
-require_once('../models/sessions.php');
+require_once(__DIR__ . '/../models/sessions.php');
 $session = new sessions();
 $session->autenticar_session();
 $session->tempo_session();
 
-require_once('../models/model.usuario.php');
-print_r($_POST);
+require_once(__DIR__ . '/../models/model.usuario.php');
+$select = new usuario();
+//print_r($_POST);
 
 if (
     isset($_POST['opcao_atual']) && $_POST['opcao_atual'] == 'select' &&

@@ -1,5 +1,5 @@
 <?php
-require_once(__DIR__.'/../config/connect.php');
+require_once(__DIR__ . '/../config/connect.php');
 class model_usuario extends connect
 {
     private string $table1;
@@ -11,7 +11,7 @@ class model_usuario extends connect
     function __construct()
     {
         parent::__construct();
-        $table = require(__DIR__.'/private/tables.php');
+        $table = require(__DIR__ . '/private/tables.php');
         $this->table1 = $table['crede_users'][1];
         $this->table2 = $table['crede_users'][2];
         $this->table3 = $table['crede_users'][3];
@@ -22,7 +22,6 @@ class model_usuario extends connect
     public function pre_cadastro(string $cpf, string $email): int
     {
         try {
-
             $stmt_check = $this->connect->prepare("SELECT * FROM $this->table1 WHERE senha IS NULL AND email = :email AND cpf = :cpf");
             $stmt_check->bindValue(":cpf", $cpf);
             $stmt_check->bindValue(":email", $email);
@@ -30,7 +29,9 @@ class model_usuario extends connect
 
             if ($stmt_check->rowCount() == 1) {
 
-                session_start();
+                if (session_status() === PHP_SESSION_NONE) {
+                    session_start();
+                }
                 $_SESSION['email'] = $email;
                 $_SESSION['cpf'] = $cpf;
 
@@ -41,6 +42,7 @@ class model_usuario extends connect
             }
         } catch (Exception $e) {
 
+            error_log("Erro no login: " . $e->getMessage());
             return 0;
         }
     }
@@ -73,18 +75,13 @@ class model_usuario extends connect
             }
         } catch (Exception $e) {
 
+            error_log("Erro no login: " . $e->getMessage());
             return 0;
         }
     }
     public function login(string $email, string $senha): int
     {
         try {
-            // Verificar se a conexão está ativa
-            if (!$this->connect) {
-                error_log("Erro: Conexão com banco não estabelecida");
-                return 0;
-            }
-            
             $stmt_check = $this->connect->prepare("SELECT u.*, s.nome AS setor FROM $this->table1 u INNER JOIN $this->table2 s ON u.id_setor = s.id WHERE email = :email");
             $stmt_check->bindValue(':email', $email);
             $stmt_check->execute();
@@ -96,6 +93,23 @@ class model_usuario extends connect
                     if (session_status() === PHP_SESSION_NONE) {
                         session_start();
                     }
+                    $stmt_check = $this->connect->prepare(
+                 "SELECT t.tipo, s.nome FROM permissoes p 
+                        INNER JOIN  tipos_usuarios t ON t.id = p.id_tipos_usuarios 
+                        INNER JOIN  sistemas s ON s.id = p.id_sistemas 
+                        INNER JOIN  usuarios u ON u.id = p.id_usuarios 
+                        WHERE p.id_usuarios = 1");
+
+                    //$stmt_check->bindValue(':id', $user['id']);
+                    $stmt_check->execute();
+
+                    $dados = $stmt_check->fetchAll(PDO::FETCH_ASSOC);
+                    foreach ($dados as $dado) {
+                        
+                        $_SESSION[$dado['tipo']] = $dado['tipo'];
+                        $_SESSION[$dado['nome']] = $dado['nome'];
+                    }
+
                     $_SESSION['id'] = $user['id'];
                     $_SESSION['nome'] = $user['nome'];
                     $_SESSION['email'] = $user['email'];
@@ -109,32 +123,33 @@ class model_usuario extends connect
                 return 3;
             }
         } catch (Exception $e) {
+
             error_log("Erro no login: " . $e->getMessage());
             return 0;
         }
     }
-    
+
     public function getDadosUsuario(int $id): array
     {
         try {
             $stmt = $this->connect->prepare("SELECT u.*, s.nome AS setor FROM $this->table1 u INNER JOIN $this->table2 s ON u.id_setor = s.id WHERE u.id = :id");
             $stmt->bindValue(':id', $id);
             $stmt->execute();
-            
+
             $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
             return $usuario ? $usuario : [];
         } catch (Exception $e) {
             return [];
         }
     }
-    
+
     public function atualizarTelefone(int $id, string $telefone): int
     {
         try {
             $stmt = $this->connect->prepare("UPDATE $this->table1 SET telefone = :telefone WHERE id = :id");
             $stmt->bindValue(':telefone', $telefone);
             $stmt->bindValue(':id', $id);
-            
+
             if ($stmt->execute()) {
                 return 1; // Sucesso
             } else {
@@ -144,7 +159,7 @@ class model_usuario extends connect
             return 0; // Erro de exceção
         }
     }
-    
+
     public function uploadFotoPerfil(int $id, array $arquivo): array
     {
         try {
@@ -152,41 +167,41 @@ class model_usuario extends connect
             if (!isset($arquivo['tmp_name']) || empty($arquivo['tmp_name'])) {
                 return ['success' => false, 'message' => 'Nenhum arquivo foi enviado'];
             }
-            
+
             // Verificar se houve erro no upload
             if ($arquivo['error'] !== UPLOAD_ERR_OK) {
                 return ['success' => false, 'message' => 'Erro no upload do arquivo'];
             }
-            
+
             // Verificar tipo de arquivo
             $tiposPermitidos = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
             if (!in_array($arquivo['type'], $tiposPermitidos)) {
                 return ['success' => false, 'message' => 'Tipo de arquivo não permitido. Use apenas JPG, PNG ou GIF'];
             }
-            
+
             // Verificar tamanho (máximo 5MB)
             if ($arquivo['size'] > 5 * 1024 * 1024) {
                 return ['success' => false, 'message' => 'Arquivo muito grande. Máximo 5MB permitido'];
             }
-            
+
             // Criar pasta se não existir
             $pastaDestino = __DIR__ . '/../assets/fotos_perfil/';
             if (!is_dir($pastaDestino)) {
                 mkdir($pastaDestino, 0755, true);
             }
-            
+
             // Gerar nome único para o arquivo
             $extensao = pathinfo($arquivo['name'], PATHINFO_EXTENSION);
             $nomeArquivo = 'perfil_' . $id . '_' . time() . '.' . $extensao;
             $caminhoCompleto = $pastaDestino . $nomeArquivo;
-            
+
             // Mover arquivo
             if (move_uploaded_file($arquivo['tmp_name'], $caminhoCompleto)) {
                 // Atualizar banco de dados
                 $stmt = $this->connect->prepare("UPDATE $this->table1 SET foto_perfil = :foto_perfil WHERE id = :id");
                 $stmt->bindValue(':foto_perfil', $nomeArquivo);
                 $stmt->bindValue(':id', $id);
-                
+
                 if ($stmt->execute()) {
                     return ['success' => true, 'message' => 'Foto atualizada com sucesso', 'filename' => $nomeArquivo];
                 } else {
@@ -197,12 +212,11 @@ class model_usuario extends connect
             } else {
                 return ['success' => false, 'message' => 'Erro ao mover arquivo'];
             }
-            
         } catch (Exception $e) {
             return ['success' => false, 'message' => 'Erro interno: ' . $e->getMessage()];
         }
     }
-    
+
     public function uploadFotoPerfilRecortada(int $id, string $imageData): array
     {
         try {
@@ -210,7 +224,7 @@ class model_usuario extends connect
             if (empty($imageData)) {
                 return ['success' => false, 'message' => 'Nenhuma imagem foi fornecida'];
             }
-            
+
             // Extrair dados da imagem base64
             if (preg_match('/^data:image\/(\w+);base64,/', $imageData, $matches)) {
                 $imageType = $matches[1];
@@ -218,35 +232,35 @@ class model_usuario extends connect
             } else {
                 return ['success' => false, 'message' => 'Formato de imagem inválido'];
             }
-            
+
             // Decodificar base64
             $imageData = base64_decode($imageData);
             if ($imageData === false) {
                 return ['success' => false, 'message' => 'Erro ao decodificar imagem'];
             }
-            
+
             // Verificar se é uma imagem válida
             if (!getimagesizefromstring($imageData)) {
                 return ['success' => false, 'message' => 'Arquivo não é uma imagem válida'];
             }
-            
+
             // Criar pasta se não existir
             $pastaDestino = __DIR__ . '/../assets/fotos_perfil/';
             if (!is_dir($pastaDestino)) {
                 mkdir($pastaDestino, 0755, true);
             }
-            
+
             // Gerar nome único para o arquivo
             $nomeArquivo = 'perfil_' . $id . '_' . time() . '.jpg';
             $caminhoCompleto = $pastaDestino . $nomeArquivo;
-            
+
             // Salvar arquivo
             if (file_put_contents($caminhoCompleto, $imageData)) {
                 // Atualizar banco de dados
                 $stmt = $this->connect->prepare("UPDATE $this->table1 SET foto_perfil = :foto_perfil WHERE id = :id");
                 $stmt->bindValue(':foto_perfil', $nomeArquivo);
                 $stmt->bindValue(':id', $id);
-                
+
                 if ($stmt->execute()) {
                     return ['success' => true, 'message' => 'Foto atualizada com sucesso', 'filename' => $nomeArquivo];
                 } else {
@@ -257,12 +271,11 @@ class model_usuario extends connect
             } else {
                 return ['success' => false, 'message' => 'Erro ao salvar arquivo'];
             }
-            
         } catch (Exception $e) {
             return ['success' => false, 'message' => 'Erro interno: ' . $e->getMessage()];
         }
     }
-    
+
     public function removerFotoPerfil(int $id): array
     {
         try {
@@ -270,7 +283,7 @@ class model_usuario extends connect
             $stmt = $this->connect->prepare("SELECT foto_perfil FROM $this->table1 WHERE id = :id");
             $stmt->bindValue(':id', $id);
             $stmt->execute();
-            
+
             $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
             if ($usuario && $usuario['foto_perfil'] && $usuario['foto_perfil'] !== 'default.png') {
                 // Remover arquivo físico
@@ -279,17 +292,16 @@ class model_usuario extends connect
                     unlink($caminhoArquivo);
                 }
             }
-            
+
             // Atualizar banco para foto padrão
             $stmt = $this->connect->prepare("UPDATE $this->table1 SET foto_perfil = 'default.png' WHERE id = :id");
             $stmt->bindValue(':id', $id);
-            
+
             if ($stmt->execute()) {
                 return ['success' => true, 'message' => 'Foto removida com sucesso'];
             } else {
                 return ['success' => false, 'message' => 'Erro ao remover foto'];
             }
-            
         } catch (Exception $e) {
             return ['success' => false, 'message' => 'Erro interno: ' . $e->getMessage()];
         }

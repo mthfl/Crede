@@ -1,11 +1,12 @@
 <?php
-require_once('../models/sessions.php');
+require_once(__DIR__ . '/../models/sessions.php');
 $session = new sessions();
 $session->autenticar_session();
 $session->tempo_session();
 
 require_once(__DIR__ . '/../models/model.usuario.php');
-print_r($_POST);
+$select = new usuario();
+//print_r($_POST);
 
 //cadastrar produto com codigo de barra
 if (
@@ -152,9 +153,8 @@ else if (
             header('Location: ../views/estoque.php?falha');
             exit();
     }
-} 
-/*else {
+} else {
 
     header('location:../views/index.php');
     exit();
-}*/
+}

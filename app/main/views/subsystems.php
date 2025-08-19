@@ -1,8 +1,9 @@
-<?php 
-require_once('../models/sessions.php');
+<?php
+require_once(__DIR__ . '/../models/sessions.php');
 $session = new sessions();
 $session->autenticar_session();
 $session->tempo_session();
+
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -82,28 +83,63 @@ $session->tempo_session();
 
         /* Animações */
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         @keyframes slideUp {
-            from { opacity: 0; transform: translateY(40px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         @keyframes scaleIn {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
         @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
         }
 
         @keyframes pulseSoft {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
         }
 
         /* Header melhorado */
@@ -181,7 +217,7 @@ $session->tempo_session();
             transition: color 0.3s ease;
         }
 
-        .search-input:focus + .search-icon {
+        .search-input:focus+.search-icon {
             color: #FFA500;
         }
 
@@ -243,13 +279,13 @@ $session->tempo_session();
             justify-content: center;
             transition: all 0.3s ease;
         }
-        
+
         .card-icon img {
-        
+
             border-radius: 20px;
             transition: transform 0.3s ease;
         }
-        
+
         .system-card:hover .card-icon img {
             transform: rotate(5deg);
         }
@@ -298,11 +334,25 @@ $session->tempo_session();
         }
 
         /* Gradientes para ícones */
-        .icon-primary { background: linear-gradient(135deg, #005A24 0%, #1A3C34 100%); }
-        .icon-purple { background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%); }
-        .icon-orange { background: linear-gradient(135deg, #F97316 0%, #EA580C 100%); }
-        .icon-green { background: linear-gradient(135deg, #10B981 0%, #059669 100%); }
-        .icon-blue { background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%); }
+        .icon-primary {
+            background: linear-gradient(135deg, #005A24 0%, #1A3C34 100%);
+        }
+
+        .icon-purple {
+            background: linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%);
+        }
+
+        .icon-orange {
+            background: linear-gradient(135deg, #F97316 0%, #EA580C 100%);
+        }
+
+        .icon-green {
+            background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+        }
+
+        .icon-blue {
+            background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+        }
 
         /* Responsividade melhorada */
         @media (max-width: 768px) {
@@ -312,26 +362,26 @@ $session->tempo_session();
                 padding: 0 16px;
                 max-width: 100%;
             }
-            
+
             .search-container {
                 padding: 0 16px;
                 max-width: 100%;
             }
-            
+
             .system-card {
                 padding: 24px 20px;
             }
-            
+
             .card-icon {
                 width: 64px;
                 height: 64px;
             }
-            
+
             .card-icon img {
                 width: 64px;
                 height: 64px;
             }
-            
+
             .search-input {
                 padding: 14px 20px 14px 48px;
                 font-size: 16px;
@@ -342,11 +392,11 @@ $session->tempo_session();
             .mobile-footer {
                 display: none !important;
             }
-            
+
             .header-content {
                 justify-content: space-between;
             }
-            
+
             body {
                 padding-bottom: 0;
             }
@@ -361,13 +411,14 @@ $session->tempo_session();
                     transform: translateY(-100%);
                     opacity: 0;
                 }
+
                 to {
                     transform: translateY(0);
                     opacity: 1;
                 }
             }
         }
-        
+
         @media (max-width: 768px) {
             .header-content {
                 flex-direction: row;
@@ -375,30 +426,30 @@ $session->tempo_session();
                 text-align: center;
                 justify-content: center;
             }
-            
+
             .mobile-footer {
                 display: block !important;
             }
-            
+
             body {
                 padding-bottom: 100px;
             }
         }
-        
+
         @media (max-width: 480px) {
             .header-content {
                 gap: 12px;
             }
-            
+
             .header-nav {
                 gap: 8px;
             }
-            
+
             .header-nav a {
                 padding: 10px;
                 font-size: 14px;
             }
-            
+
             .header-nav button {
                 width: 40px;
                 height: 40px;
@@ -523,6 +574,7 @@ $session->tempo_session();
             from {
                 transform: translateY(100%);
             }
+
             to {
                 transform: translateY(0);
             }
@@ -859,34 +911,37 @@ $session->tempo_session();
             transition: all 0.6s ease;
         }
 
-                 .animate-on-scroll.visible {
-             opacity: 1;
-             transform: translateY(0);
-         }
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
 
-         /* Botão de Acessibilidade Desktop */
-         .accessibility-fab {
-             animation: float 3s ease-in-out infinite;
-         }
+        /* Botão de Acessibilidade Desktop */
+        .accessibility-fab {
+            animation: float 3s ease-in-out infinite;
+        }
 
-         .accessibility-fab:hover {
-             animation: none;
-             transform: scale(1.1);
-         }
+        .accessibility-fab:hover {
+            animation: none;
+            transform: scale(1.1);
+        }
 
-         @keyframes pulse-glow {
-             0%, 100% {
-                 box-shadow: 0 0 0 0 rgba(0, 90, 36, 0.7);
-             }
-             50% {
-                 box-shadow: 0 0 0 10px rgba(0, 90, 36, 0);
-             }
-         }
+        @keyframes pulse-glow {
 
-         .accessibility-fab {
-             animation: pulse-glow 2s infinite;
-         }
-     </style>
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(0, 90, 36, 0.7);
+            }
+
+            50% {
+                box-shadow: 0 0 0 10px rgba(0, 90, 36, 0);
+            }
+        }
+
+        .accessibility-fab {
+            animation: pulse-glow 2s infinite;
+        }
+    </style>
 </head>
 
 <body>
@@ -896,9 +951,9 @@ $session->tempo_session();
             <div class="flex items-center justify-between header-content">
                 <div class="flex items-center space-x-4 sm:space-x-6">
                     <div class="w-14 h-14 flex items-center justify-center bg-white rounded-2xl ">
-                        <img src="https://i.postimg.cc/0N0dsxrM/Bras-o-do-Cear-svg-removebg-preview.png" 
-                             alt="Logo Ceará" 
-                             class="w-10 h-10 object-contain">
+                        <img src="https://i.postimg.cc/0N0dsxrM/Bras-o-do-Cear-svg-removebg-preview.png"
+                            alt="Logo Ceará"
+                            class="w-10 h-10 object-contain">
                     </div>
                     <div>
                         <h1 class="text-xl sm:text-2xl font-semibold font-heading">
@@ -906,23 +961,23 @@ $session->tempo_session();
                         </h1>
                     </div>
                 </div>
-                
-                                 <!-- Botões de Navegação (Desktop) -->
-                 <div class="hidden md:flex items-center space-x-4">
-                     <button class="header-btn-with-text" title="Início" onclick="window.location.href='#'">
-                         <i class="fas fa-home"></i>
-                         <span>Início</span>
-                     </button>
-                     <button class="header-btn-with-text" title="Perfil do usuário" onclick="window.location.href='perfil.php'">
-                         <i class="fas fa-user"></i>
-                         <span>Perfil</span>
-                     </button>
-                     <div class="w-px h-8 bg-gray-300 mx-3"></div>
-                     <button class="w-10 h-10 rounded-xl bg-gray-100 hover:bg-red-50 text-red-600 hover:text-red-700 transition-all duration-300 flex items-center justify-center" title="Sair" onclick="window.location.href='../models/sessions.php?sair'">
-                         <i class="fas fa-sign-out-alt"></i>
-                     </button>
-                 </div>
-                
+
+                <!-- Botões de Navegação (Desktop) -->
+                <div class="hidden md:flex items-center space-x-4">
+                    <button class="header-btn-with-text" title="Início" onclick="window.location.href='#'">
+                        <i class="fas fa-home"></i>
+                        <span>Início</span>
+                    </button>
+                    <button class="header-btn-with-text" title="Perfil do usuário" onclick="window.location.href='perfil.php'">
+                        <i class="fas fa-user"></i>
+                        <span>Perfil</span>
+                    </button>
+                    <div class="w-px h-8 bg-gray-300 mx-3"></div>
+                    <button class="w-10 h-10 rounded-xl bg-gray-100 hover:bg-red-50 text-red-600 hover:text-red-700 transition-all duration-300 flex items-center justify-center" title="Sair" onclick="window.location.href='../models/sessions.php?sair'">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
+                </div>
+
 
             </div>
         </div>
@@ -930,62 +985,62 @@ $session->tempo_session();
 
     <!-- Main Content -->
     <main class="container mx-auto px-6 py-12">
-        
-        
+
+
 
         <!-- Search Bar -->
         <div class="mb-12 animate-on-scroll">
             <div class="search-container">
-                <input type="text" 
-                       id="searchSubsystems" 
-                       placeholder="Buscar aplicativos e sistemas..." 
-                       class="search-input"
-                       autocomplete="off">
+                <input type="text"
+                    id="searchSubsystems"
+                    placeholder="Buscar aplicativos e sistemas..."
+                    class="search-input"
+                    autocomplete="off">
                 <i class="fas fa-search search-icon"></i>
             </div>
         </div>
 
         <!-- Application Cards Grid -->
         <div class="card-grid">
-            
-     
+
 
             <!-- Card 2: Controle de Estoque -->
-             <a href="../../subsystems/controle_de_estoque/default.php">
-            <div class="system-card animate-on-scroll" 
-                 tabindex="0"
-                 role="button"
-                 aria-label="Acessar Controle de Estoque - Sistema de gestão de materiais e recursos"
-                 data-system="estoque">
-                <div class="card-icon">
-                    <img src="https://i.postimg.cc/wT8bLxNS/Design-sem-nome-7.png" alt="Ícone Controle de Estoque" class="w-24 h-24 object-contain">
-                </div>
-                <h3 class="card-title">Controle de Estoque</h3>
-                <p class="card-description">Gestão completa de materiais e recursos</p>
-                <span class="card-badge">Sistema Ativo</span>
-            </div>
-            </a>
 
-     
+            <?php if (isset($_SESSION['Estoque'])) { ?>
+                <a href="../../subsystems/controle_de_estoque/default.php">
+                    <div class="system-card animate-on-scroll"
+                        tabindex="0"
+                        role="button"
+                        aria-label="Acessar Controle de Estoque - Sistema de gestão de materiais e recursos"
+                        data-system="estoque">
+                        <div class="card-icon">
+                            <img src="https://i.postimg.cc/wT8bLxNS/Design-sem-nome-7.png" alt="Ícone Controle de Estoque" class="w-24 h-24 object-contain">
+                        </div>
+                        <h3 class="card-title">Controle de Estoque</h3>
+                        <p class="card-description">Gestão completa de materiais e recursos</p>
+                        <span class="card-badge">Sistema Ativo</span>
+                    </div>
+                </a>
+            <?php } ?>
 
-       
+
 
         </div>
 
-       
 
-         </main>
 
-     <!-- Botão de Acessibilidade (Desktop) -->
-     <div class="hidden md:block fixed bottom-6 right-6 z-50">
-         <button onclick="toggleAccessibility()" 
-                 class="w-14 h-14 rounded-full bg-primary hover:bg-dark text-white shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center group accessibility-fab"
-                 title="Acessibilidade">
-             <i class="fas fa-universal-access text-xl group-hover:scale-110 transition-transform duration-300"></i>
-         </button>
-     </div>
+    </main>
 
-     <!-- Painel de Acessibilidade -->
+    <!-- Botão de Acessibilidade (Desktop) -->
+    <div class="hidden md:block fixed bottom-6 right-6 z-50">
+        <button onclick="toggleAccessibility()"
+            class="w-14 h-14 rounded-full bg-primary hover:bg-dark text-white shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center group accessibility-fab"
+            title="Acessibilidade">
+            <i class="fas fa-universal-access text-xl group-hover:scale-110 transition-transform duration-300"></i>
+        </button>
+    </div>
+
+    <!-- Painel de Acessibilidade -->
     <div id="accessibilityPanel" class="accessibility-panel">
         <div class="accessibility-content">
             <div class="accessibility-header">
@@ -1037,9 +1092,9 @@ $session->tempo_session();
                     <i class="fas fa-user-circle"></i>
                 </div>
                 <div class="profile-details">
-                    <h4><?=$_SESSION['nome']?></h4>
-                    <p><?=$_SESSION['email']?></p>
-                    <span class="profile-role"><?=$_SESSION['setor']?></span>
+                    <h4><?= $_SESSION['nome'] ?></h4>
+                    <p><?= $_SESSION['email'] ?></p>
+                    <span class="profile-role"><?= $_SESSION['setor'] ?></span>
                 </div>
             </div>
             <div class="profile-actions">
@@ -1098,7 +1153,7 @@ $session->tempo_session();
                     const title = card.querySelector('.card-title').textContent.toLowerCase();
                     const description = card.querySelector('p').textContent.toLowerCase();
                     const isVisible = title.includes(searchTerm) || description.includes(searchTerm);
-                    
+
                     if (isVisible) {
                         card.style.display = 'block';
                         card.style.animationDelay = `${visibleCount * 0.1}s`;
@@ -1140,7 +1195,7 @@ $session->tempo_session();
             cards.forEach(card => {
                 card.setAttribute('tabindex', '0');
                 card.setAttribute('role', 'button');
-                
+
                 card.addEventListener('keydown', function(e) {
                     if (e.key === 'Enter' || e.key === ' ') {
                         e.preventDefault();
@@ -1159,11 +1214,11 @@ $session->tempo_session();
             window.navigateToSystem = function(url) {
                 const card = event.currentTarget;
                 card.classList.add('loading');
-                
+
                 // Feedback visual
                 const icon = card.querySelector('.card-icon');
                 icon.style.transform = 'scale(0.9)';
-                
+
                 setTimeout(() => {
                     window.location.href = url;
                 }, 300);
@@ -1174,7 +1229,7 @@ $session->tempo_session();
                 const panel = document.getElementById('accessibilityPanel');
                 const isVisible = panel.style.display === 'block';
                 panel.style.display = isVisible ? 'none' : 'block';
-                
+
                 // Fechar painel de perfil se estiver aberto
                 if (!isVisible) {
                     document.getElementById('profilePanel').style.display = 'none';
@@ -1185,7 +1240,7 @@ $session->tempo_session();
                 const panel = document.getElementById('profilePanel');
                 const isVisible = panel.style.display === 'block';
                 panel.style.display = isVisible ? 'none' : 'block';
-                
+
                 // Fechar painel de acessibilidade se estiver aberto
                 if (!isVisible) {
                     document.getElementById('accessibilityPanel').style.display = 'none';
@@ -1196,15 +1251,15 @@ $session->tempo_session();
             window.setContrast = function(contrast) {
                 const body = document.body;
                 const buttons = document.querySelectorAll('.option-group:nth-child(1) .option-btn');
-                
+
                 // Remove classes ativas do grupo de contraste
                 buttons.forEach(btn => btn.classList.remove('active'));
                 event.target.classList.add('active');
-                
+
                 // Remove classes de contraste anteriores
                 body.classList.remove('contrast-high', 'contrast-inverted');
-                
-                switch(contrast) {
+
+                switch (contrast) {
                     case 'high':
                         body.classList.add('contrast-high');
                         break;
@@ -1217,15 +1272,15 @@ $session->tempo_session();
             window.setFontSize = function(size) {
                 const body = document.body;
                 const buttons = document.querySelectorAll('.option-group:nth-child(2) .option-btn');
-                
+
                 // Remove classes ativas do grupo de tamanho
                 buttons.forEach(btn => btn.classList.remove('active'));
                 event.target.classList.add('active');
-                
+
                 // Remove classes de tamanho anteriores
                 body.classList.remove('font-large', 'font-extra-large');
-                
-                switch(size) {
+
+                switch (size) {
                     case 'large':
                         body.classList.add('font-large');
                         break;
@@ -1244,17 +1299,17 @@ $session->tempo_session();
                     btn.textContent = 'Desativar';
                     btn.style.background = '#dc2626';
                     btn.style.color = '#ffffff';
-                    
+
                     try {
                         // Verificar se o navegador suporta reconhecimento de voz
                         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-                        
+
                         if (SpeechRecognition) {
                             window.voiceRecognition = new SpeechRecognition();
                             window.voiceRecognition.continuous = true;
                             window.voiceRecognition.interimResults = false;
                             window.voiceRecognition.lang = 'pt-BR';
-                            
+
                             window.voiceRecognition.onstart = function() {
                                 console.log('Reconhecimento de voz iniciado');
                                 const announcer = document.getElementById('screen-reader-announcer');
@@ -1262,11 +1317,11 @@ $session->tempo_session();
                                     announcer.textContent = 'Navegação por voz ativada. Diga "início", "sair", "estoque", "perfil" ou "acessibilidade".';
                                 }
                             };
-                            
+
                             window.voiceRecognition.onresult = function(event) {
                                 const command = event.results[event.results.length - 1][0].transcript.toLowerCase();
                                 console.log('Comando reconhecido:', command);
-                                
+
                                 // Comandos de voz
                                 if (command.includes('início') || command.includes('home')) {
                                     document.querySelector('.footer-btn[title="Início"]').click();
@@ -1279,14 +1334,14 @@ $session->tempo_session();
                                 } else if (command.includes('acessibilidade')) {
                                     document.querySelector('.footer-btn[title="Acessibilidade"]').click();
                                 }
-                                
+
                                 // Anunciar comando reconhecido
                                 const announcer = document.getElementById('screen-reader-announcer');
                                 if (announcer) {
                                     announcer.textContent = `Comando reconhecido: ${command}`;
                                 }
                             };
-                            
+
                             window.voiceRecognition.onerror = function(event) {
                                 console.error('Erro no reconhecimento de voz:', event.error);
                                 alert(`Erro no reconhecimento de voz: ${event.error}. Verifique se o microfone está conectado e permitido.`);
@@ -1294,13 +1349,13 @@ $session->tempo_session();
                                 btn.style.background = '#005A24';
                                 btn.style.color = '#ffffff';
                             };
-                            
+
                             window.voiceRecognition.onend = function() {
                                 console.log('Reconhecimento de voz finalizado');
                             };
-                            
+
                             window.voiceRecognition.start();
-                            
+
                         } else {
                             throw new Error('API de reconhecimento de voz não suportada');
                         }
@@ -1315,7 +1370,7 @@ $session->tempo_session();
                     btn.textContent = 'Ativar';
                     btn.style.background = '#005A24';
                     btn.style.color = '#ffffff';
-                    
+
                     // Parar reconhecimento de voz
                     if (window.voiceRecognition) {
                         try {
@@ -1324,7 +1379,7 @@ $session->tempo_session();
                             console.error('Erro ao parar reconhecimento de voz:', error);
                         }
                     }
-                    
+
                     // Anunciar desativação
                     const announcer = document.getElementById('screen-reader-announcer');
                     if (announcer) {
@@ -1340,47 +1395,47 @@ $session->tempo_session();
                     btn.textContent = 'Parar';
                     btn.style.background = '#dc2626';
                     btn.style.color = '#ffffff';
-                    
+
                     // Verificar se o navegador suporta síntese de voz
                     if ('speechSynthesis' in window) {
                         // Ler informações da página
                         const title = document.querySelector('h1').textContent;
                         const cards = document.querySelectorAll('.system-card');
                         let textToRead = `Página de subsistemas CREDE. ${title}. `;
-                        
+
                         cards.forEach((card, index) => {
                             const cardTitle = card.querySelector('.card-title').textContent;
                             const cardDesc = card.querySelector('p') ? card.querySelector('p').textContent : '';
                             textToRead += `Card ${index + 1}: ${cardTitle}. ${cardDesc}. `;
                         });
-                        
+
                         textToRead += 'Use Tab para navegar pelos elementos. Pressione Enter para ativar.';
-                        
+
                         // Criar utterance
                         const utterance = new SpeechSynthesisUtterance(textToRead);
                         utterance.lang = 'pt-BR';
                         utterance.rate = 0.9;
                         utterance.pitch = 1;
-                        
+
                         utterance.onend = function() {
                             btn.textContent = 'Leitura';
                             btn.style.background = '#005A24';
                             btn.style.color = '#ffffff';
                         };
-                        
+
                         utterance.onerror = function(event) {
                             console.error('Erro na síntese de voz:', event.error);
                             btn.textContent = 'Leitura';
                             btn.style.background = '#005A24';
                             btn.style.color = '#ffffff';
                         };
-                        
+
                         // Parar qualquer síntese anterior
                         window.speechSynthesis.cancel();
-                        
+
                         // Iniciar nova síntese
                         window.speechSynthesis.speak(utterance);
-                        
+
                     } else {
                         alert('Seu navegador não suporta síntese de voz.');
                         btn.textContent = 'Leitura';
@@ -1391,7 +1446,7 @@ $session->tempo_session();
                     btn.textContent = 'Leitura';
                     btn.style.background = '#005A24';
                     btn.style.color = '#ffffff';
-                    
+
                     // Parar síntese de voz
                     if ('speechSynthesis' in window) {
                         window.speechSynthesis.cancel();
@@ -1443,15 +1498,15 @@ $session->tempo_session();
                         animation: ripple 0.6s linear;
                         pointer-events: none;
                     `;
-                    
+
                     const rect = this.getBoundingClientRect();
                     const size = Math.max(rect.width, rect.height);
                     ripple.style.width = ripple.style.height = size + 'px';
                     ripple.style.left = (event.clientX - rect.left - size / 2) + 'px';
                     ripple.style.top = (event.clientY - rect.top - size / 2) + 'px';
-                    
+
                     this.appendChild(ripple);
-                    
+
                     setTimeout(() => {
                         ripple.remove();
                     }, 600);
