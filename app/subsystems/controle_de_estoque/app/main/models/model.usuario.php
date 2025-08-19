@@ -1,5 +1,5 @@
 <?php
-require_once(__DIR__ . '\..\config\connect.php');
+require_once(__DIR__ . '/../config/connect.php');
 require_once('sessions.php');
 $session = new sessions();
 $session->autenticar_session();

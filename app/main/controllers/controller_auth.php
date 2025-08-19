@@ -1,6 +1,5 @@
 <?php
-require_once(__DIR__."\..\models\model.usuario.php");
-//print_r($_POST);
+require_once("../models/model.usuario.php");
 
 //pre-cadastro
 if (
@@ -62,7 +61,7 @@ else if (
             header('Location: ../login.php?nao_existe');
             exit();
         default:
-            header('Location: ..login.php?falha');
+            header('Location: ../login.php?falha');
             exit();
     }
 }

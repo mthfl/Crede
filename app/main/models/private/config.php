@@ -9,7 +9,7 @@ return $config = [
         ]
     ],
     "hospedagem" => [
-        "crede_estoque" => [
+        "crede_users" => [
             "host" => "localhost",
             "user" => "u750204740_crede_users",
             "banco" => "u750204740_crede_users",

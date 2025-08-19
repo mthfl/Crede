@@ -1,6 +1,5 @@
 <?php
-require_once(__DIR__.'\..\config\connect.php');
-
+require_once(__DIR__.'/../config/connect.php');
 class model_usuario extends connect
 {
     private string $table1;
@@ -12,7 +11,7 @@ class model_usuario extends connect
     function __construct()
     {
         parent::__construct();
-        require(__DIR__.'\private\tables.php');
+        $table = require(__DIR__.'/private/tables.php');
         $this->table1 = $table['crede_users'][1];
         $this->table2 = $table['crede_users'][2];
         $this->table3 = $table['crede_users'][3];
@@ -24,16 +23,14 @@ class model_usuario extends connect
     {
         try {
 
-            $stmt_check = $this->connect->prepare("SELECT * FROM $this->table1 WHERE senha = NULL AND email = :email AND cpf = :cpf");
+            $stmt_check = $this->connect->prepare("SELECT * FROM $this->table1 WHERE senha IS NULL AND email = :email AND cpf = :cpf");
             $stmt_check->bindValue(":cpf", $cpf);
             $stmt_check->bindValue(":email", $email);
             $stmt_check->execute();
 
             if ($stmt_check->rowCount() == 1) {
 
-                if (session_status() === PHP_SESSION_NONE) {
-                    session_start();
-                }
+                session_start();
                 $_SESSION['email'] = $email;
                 $_SESSION['cpf'] = $cpf;
 
@@ -47,7 +44,7 @@ class model_usuario extends connect
             return 0;
         }
     }
-    public function primeiro_acesso(string $cpf, string $email, string $senha):int
+    public function primeiro_acesso($cpf, $email, $senha)
     {
         try {
 
@@ -76,13 +73,18 @@ class model_usuario extends connect
             }
         } catch (Exception $e) {
 
-
             return 0;
         }
     }
     public function login(string $email, string $senha): int
     {
         try {
+            // Verificar se a conexão está ativa
+            if (!$this->connect) {
+                error_log("Erro: Conexão com banco não estabelecida");
+                return 0;
+            }
+            
             $stmt_check = $this->connect->prepare("SELECT u.*, s.nome AS setor FROM $this->table1 u INNER JOIN $this->table2 s ON u.id_setor = s.id WHERE email = :email");
             $stmt_check->bindValue(':email', $email);
             $stmt_check->execute();
@@ -107,7 +109,7 @@ class model_usuario extends connect
                 return 3;
             }
         } catch (Exception $e) {
-
+            error_log("Erro no login: " . $e->getMessage());
             return 0;
         }
     }
