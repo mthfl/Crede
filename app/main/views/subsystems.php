@@ -224,11 +224,11 @@ $session->tempo_session();
         /* Cards melhorados */
         .card-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 24px;
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
-            justify-content: start;
+            justify-content: center;
         }
 
         .system-card {
@@ -1003,9 +1003,25 @@ $session->tempo_session();
         <!-- Application Cards Grid -->
         <div class="card-grid">
 
+            <!-- Card 1: Gerenciador de Usuários -->
+            <?php if (isset($_SESSION['Admin']) || isset($_SESSION['Gestor'])) { ?>
+                <a href="../../subsystems/gerenciador_usuario/index.php">
+                    <div class="system-card animate-on-scroll"
+                        tabindex="0"
+                        role="button"
+                        aria-label="Acessar Gerenciador de Usuários - Sistema de gestão de usuários, setores e permissões"
+                        data-system="usuarios">
+                        <div class="card-icon">
+                            <img src="https://i.postimg.cc/0N0dsxrM/Bras-o-do-Cear-svg-removebg-preview.png" alt="Ícone Gerenciador de Usuários" class="w-24 h-24 object-contain">
+                        </div>
+                        <h3 class="card-title">Gerenciador de Usuários</h3>
+                        <p class="card-description">Gestão de usuários, setores e permissões</p>
+                        <span class="card-badge">Sistema Ativo</span>
+                    </div>
+                </a>
+            <?php } ?>
 
             <!-- Card 2: Controle de Estoque -->
-
             <?php if (isset($_SESSION['Estoque'])) { ?>
                 <a href="../../subsystems/controle_de_estoque/default.php">
                     <div class="system-card animate-on-scroll"
@@ -1022,8 +1038,6 @@ $session->tempo_session();
                     </div>
                 </a>
             <?php } ?>
-
-
 
         </div>
 
@@ -1327,6 +1341,8 @@ $session->tempo_session();
                                     document.querySelector('.footer-btn[title="Início"]').click();
                                 } else if (command.includes('sair') || command.includes('logout')) {
                                     document.querySelector('.footer-btn[title="Sair"]').click();
+                                } else if (command.includes('usuários') || command.includes('gerenciador')) {
+                                    document.querySelector('[data-system="usuarios"]').click();
                                 } else if (command.includes('estoque') || command.includes('controle')) {
                                     document.querySelector('[data-system="estoque"]').click();
                                 } else if (command.includes('perfil')) {
@@ -1409,7 +1425,7 @@ $session->tempo_session();
                             textToRead += `Card ${index + 1}: ${cardTitle}. ${cardDesc}. `;
                         });
 
-                        textToRead += 'Use Tab para navegar pelos elementos. Pressione Enter para ativar.';
+                        textToRead += 'Use Tab para navegar pelos elementos. Pressione Enter para ativar. Comandos de voz disponíveis: "usuários", "estoque", "perfil", "acessibilidade".';
 
                         // Criar utterance
                         const utterance = new SpeechSynthesisUtterance(textToRead);
