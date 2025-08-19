@@ -17,12 +17,12 @@ $session->tempo_session();
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-    <title>Subsistemas - CREDE</title>
+    <title>Subsistemas - CREDE 1</title>
 
     <!-- SEO Meta Tags -->
-    <meta name="description" content="Subsistemas do Sistema CREDE - Coordenadoria Regional de Desenvolvimento da Educação">
-    <meta name="author" content="CREDE">
-    <meta name="keywords" content="subsistemas, CREDE, sistema, educação, controle de estoque">
+    <meta name="description" content="Subsistemas do Sistema CREDE 1 - Coordenadoria Regional de Desenvolvimento da Educação">
+    <meta name="author" content="CREDE 1">
+    <meta name="keywords" content="subsistemas, CREDE 1, sistema, educação, controle de estoque">
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="https://i.postimg.cc/0N0dsxrM/Bras-o-do-Cear-svg-removebg-preview.png">
@@ -957,7 +957,7 @@ $session->tempo_session();
                     </div>
                     <div>
                         <h1 class="text-xl sm:text-2xl font-semibold font-heading">
-                            <span class="text-primary">Subsistemas</span> <span class="text-secondary">CREDE</span>
+                            <span class="text-primary">Subsistemas</span> <span class="text-secondary">CREDE 1</span>
                         </h1>
                     </div>
                 </div>

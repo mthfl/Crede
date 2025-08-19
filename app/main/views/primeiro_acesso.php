@@ -15,12 +15,12 @@ if (session_status() === PHP_SESSION_NONE) {
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-    <title>Primeiro Acesso - CREDE</title>
+    <title>Primeiro Acesso - CREDE 1</title>
 
     <!-- SEO Meta Tags -->
-    <meta name="description" content="Primeiro acesso ao Sistema CREDE - Defina sua senha">
-    <meta name="author" content="CREDE">
-    <meta name="keywords" content="primeiro acesso, senha, CREDE, sistema, educação">
+    <meta name="description" content="Primeiro acesso ao Sistema CREDE 1 - Defina sua senha">
+    <meta name="author" content="CREDE 1">
+    <meta name="keywords" content="primeiro acesso, senha, CREDE 1, sistema, educação">
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="https://i.postimg.cc/0N0dsxrM/Bras-o-do-Cear-svg-removebg-preview.png">
@@ -500,7 +500,7 @@ if (session_status() === PHP_SESSION_NONE) {
                     </h1>
 
                     <p class="text-lg lg:text-xl mb-8 max-w-md leading-relaxed opacity-90 font-sans">
-                        Defina sua senha para acessar o Sistema CREDE
+                        Defina sua senha para acessar o Sistema CREDE 1
                     </p>
 
                     <div class="flex space-x-4 text-sm opacity-80">
@@ -534,7 +534,7 @@ if (session_status() === PHP_SESSION_NONE) {
                         Definir Senha
                     </h2>
                     <p class="text-gray-600 text-base sm:text-lg font-sans">
-                        Configure sua senha para acessar o Sistema CREDE
+                        Configure sua senha para acessar o Sistema CREDE 1
                     </p>
                 </div>
 

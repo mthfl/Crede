@@ -11,12 +11,12 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-    <title>Login CREDE</title>
+    <title>Login CREDE 1</title>
 
     <!-- SEO Meta Tags -->
-    <meta name="description" content="Acesso ao Sistema CREDE - Coordenadoria Regional de Desenvolvimento da Educação">
-    <meta name="author" content="CREDE">
-    <meta name="keywords" content="login, acesso, CREDE, sistema, educação">
+    <meta name="description" content="Acesso ao Sistema CREDE1 - Coordenadoria Regional de Desenvolvimento da Educação">
+    <meta name="author" content="CREDE 1">
+    <meta name="keywords" content="login, acesso, CREDE 1, sistema, educação">
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="https://i.postimg.cc/0N0dsxrM/Bras-o-do-Cear-svg-removebg-preview.png">
@@ -493,7 +493,7 @@
         </div>
 
                     <h1 class="text-3xl lg:text-5xl font-bold mb-6 leading-tight font-heading">
-                        Login <span class="text-secondary">CREDE</span>
+                        Login <span class="text-secondary">CREDE 1</span>
                     </h1>
                     
                     <p class="text-lg lg:text-xl mb-8 max-w-md leading-relaxed opacity-90 font-sans">
@@ -533,7 +533,7 @@
                         Bem-vindo
                     </h2>
                     <p class="text-gray-600 text-base sm:text-lg font-sans">
-                        Acesse o Sistema CREDE
+                        Acesse o Sistema CREDE 1
                     </p>
                 </div>
 

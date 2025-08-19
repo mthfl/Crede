@@ -98,9 +98,9 @@ class model_usuario extends connect
                         INNER JOIN  tipos_usuarios t ON t.id = p.id_tipos_usuarios 
                         INNER JOIN  sistemas s ON s.id = p.id_sistemas 
                         INNER JOIN  usuarios u ON u.id = p.id_usuarios 
-                        WHERE p.id_usuarios = 1");
+                        WHERE p.id_usuarios = :id");
 
-                    //$stmt_check->bindValue(':id', $user['id']);
+                    $stmt_check->bindValue(':id', $user['id']);
                     $stmt_check->execute();
 
                     $dados = $stmt_check->fetchAll(PDO::FETCH_ASSOC);
