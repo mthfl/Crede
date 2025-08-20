@@ -144,7 +144,7 @@ else if (
 
     switch ($result) {
         case 1:
-            header('Location: ../views/estoque.php?adicionado');
+            header('Location: ../views/estoque.php?excluido');
             exit();
         case 2:
             header('Location: ../views/estoque.php?erro');
