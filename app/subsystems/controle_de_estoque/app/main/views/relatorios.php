@@ -608,10 +608,7 @@ $select = new select();
                     <i class="fas fa-clipboard-list mr-3 text-lg"></i>
                     <span>Solicitar</span>
                 </a>
-                <a href="relatorios.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2 active">
-                    <i class="fas fa-chart-bar mr-3 text-lg"></i>
-                    <span>Relatórios</span>
-                </a>
+              
             </nav>
 
             <!-- Botão de Sair -->

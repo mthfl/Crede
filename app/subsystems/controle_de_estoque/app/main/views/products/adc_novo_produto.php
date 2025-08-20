@@ -19,6 +19,9 @@ $select = new select();
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -325,6 +328,48 @@ $select = new select();
                 margin-left: 0 !important;
             }
         }
+
+        /* Estilos do Select2 (Selecionar Categoria) */
+        .select2-container {
+            width: 100% !important;
+        }
+        .select2-container .select2-selection--single {
+            height: 48px;
+            border: 2px solid #005A24;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            transition: box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 44px;
+            padding-left: 12px;
+            font-weight: 600;
+            color: #1A3C34;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 46px;
+            right: 10px;
+        }
+        .select2-container--default .select2-selection--single:focus,
+        .select2-container--default .select2-selection--single:hover {
+            border-color: #FFA500;
+            box-shadow: 0 0 0 3px rgba(255, 165, 0, 0.25);
+        }
+        .select2-dropdown {
+            border: 2px solid #005A24;
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+        .select2-results__option--highlighted.select2-results__option--selectable {
+            background-color: #FFA500 !important;
+            color: #FFFFFF !important;
+        }
+        .select2-search--dropdown .select2-search__field {
+            border: 2px solid #005A24 !important;
+            border-radius: 0.5rem;
+            outline: none;
+        }
     </style>
 </head>
 
@@ -335,7 +380,7 @@ $select = new select();
             <!-- Logo e título -->
             <div class="p-6 border-b border-white/20">
                 <div class="flex items-center">
-                    <img src="../../assets/imagens/logostgm.png" alt="Logo STGM" class="h-12 mr-3 transition-transform hover:scale-105">
+                    <img src="https://i.postimg.cc/0N0dsxrM/Bras-o-do-Cear-svg-removebg-preview.png" alt="Logo STGM" class="h-12 mr-3 transition-transform hover:scale-105">
                     <span class="text-white font-heading text-lg font-semibold">STGM Estoque</span>
                 </div>
             </div>
@@ -360,10 +405,7 @@ $select = new select();
                     <i class="fas fa-clipboard-list mr-3 text-lg"></i>
                     <span>Solicitar</span>
                 </a>
-                <a href="../relatorios.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
-                    <i class="fas fa-chart-bar mr-3 text-lg"></i>
-                    <span>Relatórios</span>
-                </a>
+               
             </nav>
 
             <!-- Botão de Sair -->
@@ -426,7 +468,8 @@ $select = new select();
                     <div class="p-4 border-2 border-primary rounded-lg">
                         <p class="font-semibold text-primary mb-3 text-center">Selecione a Categoria</p>
 
-                        <select class="js-example-basic-single" name="id_categoria">
+                        <select class="js-example-basic-single" id="categoria" name="id_categoria" required data-placeholder="Selecione uma categoria">
+                            <option value="" disabled selected hidden>Selecione uma categoria</option>
 
                             <?php
                             $dados = $select->select_categoria();
@@ -518,7 +561,13 @@ $select = new select();
 
     <script>
         $(document).ready(function() {
-            $('.js-example-basic-single').select2();
+            $('.js-example-basic-single').select2({
+                placeholder: 'Selecione uma categoria',
+                width: '100%',
+                language: {
+                    noResults: function () { return 'Nenhum resultado encontrado'; }
+                }
+            });
         });
         document.addEventListener('DOMContentLoaded', function() {
             // Sidebar mobile toggle
