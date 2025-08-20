@@ -307,12 +307,14 @@ $select = new select();
                         <option value="<?=$dado['id']?>"><?=$dado['nome_categoria']?></option>
                     <?php } ?>
                 </select>
+                <?php if(isset($_SESSION['Admin estoque'])){?>
                 <a href="perdas.php">
                     <button class="bg-red-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-red-700 transition-colors flex items-center shadow-md">
                         <i class="fas fa-exclamation-triangle mr-2"></i>
                         Perdas
                     </button>
                 </a>
+                <?php }?>
                 <button onclick="abrirModalCategoria()" class="bg-primary text-white font-bold py-3 px-4 rounded-lg hover:bg-primary/90 transition-colors flex items-center shadow-md">
                     <i class="fas fa-plus mr-2"></i>
                     Nova Categoria

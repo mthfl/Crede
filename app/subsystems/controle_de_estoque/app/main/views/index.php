@@ -1,4 +1,4 @@
-<?php 
+<?php
 require_once(__DIR__ . '/../models/sessions.php');
 $session = new sessions();
 $session->autenticar_session();
@@ -452,7 +452,7 @@ $session->tempo_session();
 </head>
 
 <body class="min-h-screen flex flex-col font-sans bg-light">
-<div class="fixed left-0 top-0 h-full w-64 bg-gradient-to-b from-primary to-dark text-white shadow-xl z-50 transform transition-transform duration-300 ease-in-out" id="sidebar">
+    <div class="fixed left-0 top-0 h-full w-64 bg-gradient-to-b from-primary to-dark text-white shadow-xl z-50 transform transition-transform duration-300 ease-in-out" id="sidebar">
         <div class="flex flex-col h-full">
             <!-- Logo e título -->
             <div class="p-6 border-b border-white/20">
@@ -461,9 +461,9 @@ $session->tempo_session();
                     <span class="text-white font-heading text-lg font-semibold">CREDE Estoque</span>
                 </div>
             </div>
-            
-                        <!-- Menu de navegação -->
-                        <nav class="flex-1 p-4 space-y-2">
+
+            <!-- Menu de navegação -->
+            <nav class="flex-1 p-4 space-y-2">
                 <a href="index.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2 active">
                     <i class="fas fa-home mr-3 text-lg"></i>
                     <span>Início</span>
@@ -476,12 +476,10 @@ $session->tempo_session();
                     <i class="fas fa-plus-circle mr-3 text-lg"></i>
                     <span>Adicionar</span>
                 </a>
-              
                 <a href="solicitar.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
                     <i class="fas fa-clipboard-list mr-3 text-lg"></i>
                     <span>Solicitar</span>
                 </a>
-             
             </nav>
 
             <!-- Botão de Sair -->
@@ -491,7 +489,7 @@ $session->tempo_session();
                     Sair
                 </a>
             </div>
-            
+
             <!-- Botão de fechar sidebar no mobile -->
             <div class="p-4 border-t border-white/20 md:hidden">
                 <button class="w-full bg-white/10 hover:bg-white/20 text-white py-2 px-4 rounded-lg transition-all duration-200" id="closeSidebar">
@@ -563,13 +561,13 @@ $session->tempo_session();
                     </div>
                 </a>
 
-                <a href="relatorios.php" class="group animate-fade-in" style="animation-delay: 0.4s">
+                <!--<a href="#" class="group animate-fade-in" style="animation-delay: 0.4s">
                     <div class="card-item bg-white border-2 border-primary rounded-xl md:rounded-2xl shadow-card w-full h-48 md:h-56 flex flex-col items-center justify-center p-4 md:p-6 relative">
                         <div class="card-shine"></div>
                         <i class="fas fa-chart-bar card-icon text-4xl md:text-5xl text-primary mb-4 md:mb-5"></i>
                         <p class="text-secondary font-bold text-center text-base md:text-lg leading-tight">RELATÓRIOS</p>
                     </div>
-                </a>
+                </a>-->
             </div>
         </div>
     </main>
@@ -585,11 +583,11 @@ $session->tempo_session();
                     <div class="group">
                         <h3 class="font-heading text-lg md:text-xl font-semibold mb-4 flex items-center text-white group-hover:text-secondary transition-colors duration-300">
                             <i class="fas fa-school mr-3 text-secondary group-hover:scale-110 transition-transform duration-300"></i>
-                           CREDE 1
+                            CREDE 1
                         </h3>
                         <p class="text-sm md:text-base leading-relaxed text-gray-200 group-hover:text-white transition-colors duration-300">
                             <i class="fas fa-map-marker-alt mr-2 text-secondary"></i>
-                            Av. Sen. Virgílio Távora, 1103 - Distrito Industrial I, 
+                            Av. Sen. Virgílio Távora, 1103 - Distrito Industrial I,
                         </p>
                     </div>
 
@@ -604,7 +602,7 @@ $session->tempo_session();
                                 <i class="fas fa-phone-alt mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
                                 (85) 3341-3990
                             </a>
-                        
+
                         </div>
                     </div>
 
