@@ -254,7 +254,7 @@ $select = new select();
                     <i class="fas fa-clipboard-list mr-3 text-lg"></i>
                     <span>Solicitar</span>
                 </a>
-           
+
             </nav>
 
             <!-- Botão de Sair -->
@@ -299,20 +299,22 @@ $select = new select();
             <div class="flex gap-2 flex-wrap justify-center items-center">
                 <select id="filtroCategoria" class="px-4 py-3 border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent">
                     <option value="">Todas as categorias</option>
-                    <?php 
+                    <?php
                     $dados = $select->select_categoria();
                     foreach ($dados as $dado) {
                     ?>
 
-                        <option value="<?=$dado['id']?>"><?=$dado['nome_categoria']?></option>
+                        <option value="<?= $dado['id'] ?>"><?= $dado['nome_categoria'] ?></option>
                     <?php } ?>
                 </select>
-                <a href="perdas.php">
-                    <button class="bg-red-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-red-700 transition-colors flex items-center shadow-md">
-                        <i class="fas fa-exclamation-triangle mr-2"></i>
-                        Perdas
-                    </button>
-                </a>
+                <?php if (isset($_SESSION['Admin_estoque'])) { ?>
+                    <a href="perdas.php">
+                        <button class="bg-red-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-red-700 transition-colors flex items-center shadow-md">
+                            <i class="fas fa-exclamation-triangle mr-2"></i>
+                            Perdas
+                        </button>
+                    </a>
+                <?php } ?>
                 <button onclick="abrirModalCategoria()" class="bg-primary text-white font-bold py-3 px-4 rounded-lg hover:bg-primary/90 transition-colors flex items-center shadow-md">
                     <i class="fas fa-plus mr-2"></i>
                     Nova Categoria
@@ -331,6 +333,8 @@ $select = new select();
                             <th class="py-3 px-4 text-left">Categoria</th>
                             <th class="py-3 px-4 text-left">Validade</th>
                             <th class="py-3 px-4 text-left">Data Cadastro</th>
+                            <th class="py-3 px-4 text-left"></th>
+                            <th class="py-3 px-4 text-left"></th>
                         </tr>
                     </thead>
                     <tbody id="tabelaEstoque">
@@ -342,12 +346,18 @@ $select = new select();
                                 $rowClass = $produto['quantidade'] <= 5 ? 'border-b border-gray-200 hover:bg-red-50 bg-red-50' : 'border-b border-gray-200 hover:bg-gray-50';
                         ?>
                                 <tr class="<?= $rowClass ?>">
-                                    <td class="py-3 px-4"><?= htmlspecialchars($produto['barcode'] = $produto['barcode'] == '' ? 'Sem código': $produto['barcode'] )?></td>
+                                    <td class="py-3 px-4"><?= htmlspecialchars($produto['barcode'] = $produto['barcode'] == '' ? 'Sem código' : $produto['barcode']) ?></td>
                                     <td class="py-3 px-4"><?= htmlspecialchars($produto['nome_produto']) ?></td>
                                     <td class="py-3 px-4 <?= $quantidadeClass ?>"><?= htmlspecialchars($produto['quantidade']) ?></td>
                                     <td class="py-3 px-4"><?= htmlspecialchars($produto['categoria']) ?></td>
                                     <td class="py-3 px-4"><?= htmlspecialchars($produto['vencimento'] == '' ? 'Sem vencimento' : $produto['vencimento']) ?></td>
                                     <td class="py-3 px-4"><?= date('d/m/Y H:i', strtotime($produto['data'])) ?></td>
+                                    <?php if (isset($_SESSION['Admin_estoque'])) { ?>
+                                        <td class="py-3 px-4"><a href="./products/editar_produto.php?id_produto=<?=$produto['id']?>">editar</a></td>
+                                    <?php } ?>
+                                    <?php if (isset($_SESSION['Admin_estoque'])) { ?>
+                                        <td class="py-3 px-4"><a href="../controllers/controller_crud_produto.php?id_excluir=<?=$produto['id']?>">excluir</a></td>
+                                    <?php } ?>
                                 </tr>
                             <?php
                             }

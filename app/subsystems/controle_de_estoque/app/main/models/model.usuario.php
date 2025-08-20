@@ -10,13 +10,13 @@ class usuario extends connect
     private string $table1;
     private string $table2;
     private string $table3;
-    private string $table4;
+    protected string $table4;
     private string $table5;
 
     function __construct()
     {
         parent::__construct();
-        require(__DIR__.'/private/tables.php');
+        require(__DIR__ . '/private/tables.php');
         $this->table1 = $table['crede_estoque'][1];
         $this->table2 = $table['crede_estoque'][2];
         $this->table3 = $table['crede_estoque'][3];
@@ -149,18 +149,35 @@ class usuario extends connect
         }
     }
 
-    public function adicionar_produto($barcode, $quantidade)
+    public function adicionar_produto($barcode, $quantidade, $validade): int
     {
-        $consulta = "UPDATE produtos SET quantidade = quantidade + :quantidade WHERE barcode = :barcode";
-        $stmt_adicionar = $this->connect->prepare($consulta);
-        $stmt_adicionar->bindValue(":quantidade", $quantidade);
-        $stmt_adicionar->bindValue(":barcode", $barcode);
 
-        if ($stmt_adicionar->execute()) {
+        if ($validade == NULL) {
+            $consulta = "UPDATE produtos SET quantidade = quantidade + :quantidade WHERE barcode = :barcode";
+            $stmt_adicionar = $this->connect->prepare($consulta);
+            $stmt_adicionar->bindValue(":quantidade", $quantidade);
+            $stmt_adicionar->bindValue(":barcode", $barcode);
 
-            return 1;
+            if ($stmt_adicionar->execute()) {
+
+                return 1;
+            } else {
+                return 2;
+            }
         } else {
-            return 2;
+
+            $consulta = "UPDATE produtos SET quantidade = quantidade + :quantidade,  vencimento = :vencimento WHERE barcode = :barcode";
+            $stmt_adicionar = $this->connect->prepare($consulta);
+            $stmt_adicionar->bindValue(":quantidade", $quantidade);
+            $stmt_adicionar->bindValue(":barcode", $barcode);
+            $stmt_adicionar->bindValue(":vencimento", $validade);
+
+            if ($stmt_adicionar->execute()) {
+
+                return 1;
+            } else {
+                return 2;
+            }
         }
     }
 
@@ -272,69 +289,6 @@ class usuario extends connect
             }
         } catch (PDOException $e) {
 
-            return false;
-        }
-    }
-
-    public function apagarProduto($id)
-    {
-        try {
-            error_log("=== INICIANDO EXCLUSÃO DE PRODUTO ===");
-            error_log("ID do produto: " . $id);
-
-            // Verificar se o produto existe antes de tentar excluir
-            $consultaVerificar = "SELECT id, nome_produto FROM produtos WHERE id = :id";
-            $queryVerificar = $this->connect->prepare($consultaVerificar);
-            $queryVerificar->bindValue(":id", $id);
-            $queryVerificar->execute();
-            $produto = $queryVerificar->fetch(PDO::FETCH_ASSOC);
-
-            if (!$produto) {
-                error_log("Produto não encontrado com ID: " . $id);
-                return false;
-            }
-
-            error_log("Produto encontrado: " . $produto['nome_produto']);
-
-            // Verificar se há movimentações relacionadas
-            $consultaMovimentacoes = "SELECT COUNT(*) as total FROM movimentacao WHERE fk_produtos_id = :id";
-            $queryMovimentacoes = $this->connect->prepare($consultaMovimentacoes);
-            $queryMovimentacoes->bindValue(":id", $id);
-            $queryMovimentacoes->execute();
-            $movimentacoes = $queryMovimentacoes->fetch(PDO::FETCH_ASSOC);
-
-            error_log("Movimentações relacionadas: " . $movimentacoes['total']);
-
-            // Excluir movimentações relacionadas primeiro (se houver)
-            if ($movimentacoes['total'] > 0) {
-                error_log("Excluindo movimentações relacionadas...");
-                $consultaDeleteMovimentacoes = "DELETE FROM movimentacao WHERE fk_produtos_id = :id";
-                $queryDeleteMovimentacoes = $this->connect->prepare($consultaDeleteMovimentacoes);
-                $queryDeleteMovimentacoes->bindValue(":id", $id);
-                $queryDeleteMovimentacoes->execute();
-                error_log("Movimentações excluídas com sucesso");
-            }
-
-            // Excluir o produto
-            $consulta = "DELETE FROM produtos WHERE id = :id";
-            $query = $this->connect->prepare($consulta);
-            $query->bindValue(":id", $id);
-            $resultado = $query->execute();
-            $linhasAfetadas = $query->rowCount();
-
-            error_log("Query de exclusão executada");
-            error_log("Linhas afetadas: " . $linhasAfetadas);
-
-            if ($linhasAfetadas > 0) {
-                error_log("Produto excluído com sucesso");
-                return true;
-            } else {
-                error_log("Nenhuma linha foi afetada na exclusão");
-                return false;
-            }
-        } catch (PDOException $e) {
-            error_log("Erro ao apagar produto: " . $e->getMessage());
-            error_log("Stack trace: " . $e->getTraceAsString());
             return false;
         }
     }

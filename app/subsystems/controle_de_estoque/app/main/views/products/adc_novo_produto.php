@@ -449,7 +449,7 @@ $select = new select();
                 <div class="space-y-4">
                     <input type="hidden" name="barcode" value="<?=$_GET['barcode'] ?? ''?>">
                     <div>
-                        <input type="text" placeholder="NOME DO PRODUTO" id="nome" name="nome_produto" style="text-transform: uppercase;" oninput="this.value = this.value.toUpperCase();" required
+                        <input type="text" placeholder="NOME DO PRODUTO | MARCA | MODELO | PACOTE OU UNIDADE" id="nome" name="nome_produto" style="text-transform: uppercase;" oninput="this.value = this.value.toUpperCase();" required
                             class="w-full px-4 py-3 border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent text-center font-semibold"
                             aria-label="Nome do produto">
                     </div>

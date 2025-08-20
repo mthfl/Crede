@@ -5,8 +5,10 @@ $session->autenticar_session();
 $session->tempo_session();
 
 require_once(__DIR__ . '/../models/model.usuario.php');
+require_once(__DIR__ . '/../models/model.admin.php');
 $select = new usuario();
-//print_r($_POST);
+print_r($_GET);
+print_r($_POST);
 
 //cadastrar produto com codigo de barra
 if (
@@ -15,12 +17,33 @@ if (
     isset($_POST['id_categoria']) && !empty($_POST['id_categoria']) && is_numeric($_POST['id_categoria'])
 ) {
 
+    $id_produto = $_POST['id_produto'] ?? null;
     $barcode = $_POST['barcode'] ?? null;
     $nome = $_POST['nome_produto'];
     $quantidade = $_POST['quantidade'];
     $validade = $_POST['validade'] ?? null;
     $id_categoria = $_POST['id_categoria'];
 
+    if (isset($_POST['editar'])) {
+
+        $obj = new admin();
+        $result = $obj->editar_produto($id_produto, $barcode, $nome, $quantidade, $id_categoria, $validade);
+
+        switch ($result) {
+            case 1:
+                header('Location: ../views/estoque.php?cadastrado');
+                exit();
+            case 2:
+                header('Location: ../views/estoque.php?erro');
+                exit();
+            case 3:
+                header('Location: ../views/products/adc_novo_produto.php?ja_cadastrado');
+                exit();
+            default:
+                header('Location: ../views/estoque.php?falha');
+                exit();
+        }
+    }
     $obj = new usuario();
     $result = $obj->cadastrar_produto($barcode, $nome, $quantidade, $id_categoria, $validade);
 
@@ -66,6 +89,11 @@ else if (
     } else  if ($tipo_produto === 'sem_codigo') {
 
         header('Location: ../views/products/adc_novo_produto.php');
+        exit();
+    } else if ($tipo_produto === 'criar_codigo') {
+
+        // Adicionar SCB_ apenas para o gerador de código de barras
+        header('Location: https://barcode.orcascan.com/?type=code128&data=SCB_' . $barcode);
         exit();
     }
 }
@@ -137,10 +165,28 @@ else if (
 ) {
     $barcode = $_POST['barcode'];
     $quantidade = $_POST['quantidade_adicionar'];
+    $validade = $_POST['validade'] ?? null;
 
     $obj = new usuario();
 
-    $result = $obj->adicionar_produto($barcode, $quantidade);
+    $result = $obj->adicionar_produto($barcode, $quantidade, $validade);
+
+    switch ($result) {
+        case 1:
+            header('Location: ../views/estoque.php?excluido');
+            exit();
+        case 2:
+            header('Location: ../views/estoque.php?erro');
+            exit();
+        default:
+            header('Location: ../views/estoque.php?falha');
+            exit();
+    }
+} else if (isset($_GET['id_excluir']) && !empty($_GET['id_excluir'])) {
+
+    $id_produto = $_GET['id_excluir'];
+    $obj = new admin();
+    $result = $obj->excluir_produto($id_produto);
 
     switch ($result) {
         case 1:
