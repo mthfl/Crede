@@ -1,3 +1,29 @@
+<?php
+require_once(__DIR__ . '/../../../main/models/sessions.php');
+require_once(__DIR__ . '/../../../main/models/model.usuario.php');
+
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+$session = new sessions();
+$session->autenticar_session();
+$session->tempo_session();
+
+$modelUsuario = new model_usuario();
+$dadosUsuario = [];
+try {
+    $dadosUsuario = $modelUsuario->getDadosUsuario((int)($_SESSION['id'] ?? 0));
+} catch (Throwable $e) {
+    $dadosUsuario = [];
+}
+
+$userName = isset($_SESSION['nome']) ? $_SESSION['nome'] : 'Usuário';
+$userSetor = isset($_SESSION['setor']) ? $_SESSION['setor'] : 'Sistema de Gestão';
+$userEmail = isset($_SESSION['email']) ? $_SESSION['email'] : '';
+$userInitial = function_exists('mb_substr') ? mb_strtoupper(mb_substr($userName, 0, 1, 'UTF-8'), 'UTF-8') : strtoupper(substr($userName, 0, 1));
+$fotoPerfil = isset($dadosUsuario['foto_perfil']) ? $dadosUsuario['foto_perfil'] : null;
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -339,8 +365,32 @@
                 
                 <div class="flex items-center gap-2 sm:gap-4">
                     <div class="hidden sm:block text-right">
-                        <p class="text-sm font-semibold text-dark" id="userName">Administrador</p>
-                        <p class="text-xs text-gray-500">Sistema de Gestão</p>
+                        <p class="text-sm font-semibold text-dark"><?php echo htmlspecialchars($userName, ENT_QUOTES, 'UTF-8'); ?></p>
+                        <p class="text-xs text-gray-500"><?php echo htmlspecialchars($userSetor, ENT_QUOTES, 'UTF-8'); ?></p>
+                    </div>
+                    <div class="relative">
+                        <button id="userMenuButton" class="p-1 rounded-full hover:ring-2 hover:ring-primary/30 transition">
+                            <?php if (!empty($fotoPerfil) && $fotoPerfil !== 'default.png') { ?>
+                                <img src="<?php echo '../../../main/assets/fotos_perfil/' . htmlspecialchars($fotoPerfil, ENT_QUOTES, 'UTF-8'); ?>" alt="Foto de perfil" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full object-cover border border-gray-200">
+                            <?php } else { ?>
+                                <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-primary to-dark text-white flex items-center justify-center font-semibold">
+                                    <?php echo htmlspecialchars($userInitial, ENT_QUOTES, 'UTF-8'); ?>
+                                </div>
+                            <?php } ?>
+                        </button>
+                        <div id="userMenu" class="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-xl border border-gray-200 hidden">
+                            <div class="p-4 border-b">
+                                <p class="font-semibold text-dark truncate"><?php echo htmlspecialchars($userName, ENT_QUOTES, 'UTF-8'); ?></p>
+                                <?php if (!empty($userEmail)) { ?><p class="text-sm text-gray-500 truncate"><?php echo htmlspecialchars($userEmail, ENT_QUOTES, 'UTF-8'); ?></p><?php } ?>
+                                <p class="text-xs text-gray-400 mt-1"><?php echo htmlspecialchars($userSetor, ENT_QUOTES, 'UTF-8'); ?></p>
+                            </div>
+                            <a href="<?php echo '../../../main/views/perfil.php'; ?>" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
+                                <i class="fa-solid fa-user mr-2"></i> Meu Perfil
+                            </a>
+                            <button onclick="logout()" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50">
+                                <i class="fa-solid fa-arrow-right-from-bracket mr-2"></i> Sair
+                            </button>
+                        </div>
                     </div>
                     <button onclick="logout()" class="btn-logout p-2 sm:p-3 rounded-xl text-gray-600 hover:text-dark transition-all">
                         <i class="fa-solid fa-arrow-right-from-bracket text-base sm:text-lg"></i>
@@ -570,8 +620,11 @@
         const tiposUsuario = ['Administrador', 'Gestor', 'Usuário', 'Visualizador'];
 
         function logout() {
-            if (confirm('Deseja sair do sistema?')) {
-                window.location.href = '../../main/views/subsystems.php';
+            const confirmDialog = confirm('🚪 Deseja sair do sistema CREDE?');
+            if (confirmDialog) {
+                document.body.style.opacity = '0.7';
+                document.body.style.pointerEvents = 'none';
+                setTimeout(() => { window.location.href = '../../main/views/subsystems.php'; }, 500);
             }
         }
 
@@ -798,6 +851,19 @@
 
         // Enhanced UX features
         document.addEventListener('DOMContentLoaded', function() {
+            const userBtn = document.getElementById('userMenuButton');
+            const userMenu = document.getElementById('userMenu');
+            if (userBtn && userMenu) {
+                userBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    userMenu.classList.toggle('hidden');
+                });
+                document.addEventListener('click', function(e) {
+                    if (!userMenu.contains(e.target)) {
+                        userMenu.classList.add('hidden');
+                    }
+                });
+            }
             // Add smooth scroll behavior
             document.documentElement.style.scrollBehavior = 'smooth';
             
@@ -850,19 +916,7 @@
 
         });
 
-        // Enhanced logout function
-        function logout() {
-            const confirmDialog = confirm('🚪 Deseja sair do sistema CREDE?');
-            if (confirmDialog) {
-                // Add loading state
-                document.body.style.opacity = '0.7';
-                document.body.style.pointerEvents = 'none';
-                
-                setTimeout(() => {
-                    window.location.href = '../../main/views/subsystems.php';
-                }, 500);
-            }
-        }
+        // Enhanced logout function (duplicate safeguarded above)
     </script>
 </body>
 
