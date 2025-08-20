@@ -1,4 +1,4 @@
-<?php 
+<?php
 require_once(__DIR__ . '/../models/sessions.php');
 $session = new sessions();
 $session->autenticar_session();
@@ -52,8 +52,12 @@ $select = new select();
                     },
                     keyframes: {
                         fadeIn: {
-                            '0%': { opacity: '0' },
-                            '100%': { opacity: '1' }
+                            '0%': {
+                                opacity: '0'
+                            },
+                            '100%': {
+                                opacity: '1'
+                            }
                         },
                         slideUp: {
                             '0%': {
@@ -183,7 +187,7 @@ $select = new select();
             transform: scale(1.1);
             color: #FFA500;
         }
-        
+
         .stats-card p,
         .report-card p {
             z-index: 2;
@@ -206,7 +210,7 @@ $select = new select();
 
         .header-nav-link {
             position: relative;
-                transition: all 0.3s ease;
+            transition: all 0.3s ease;
             font-weight: 500;
             padding: 0.5rem 1rem;
             border-radius: 0.5rem;
@@ -358,7 +362,9 @@ $select = new select();
         }
 
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         .chart-container {
@@ -436,6 +442,7 @@ $select = new select();
                     opacity: 0;
                     transform: translateY(-20px);
                 }
+
                 to {
                     opacity: 1;
                     transform: translateY(0);
@@ -465,8 +472,8 @@ $select = new select();
                 width: 30px;
                 height: 21px;
                 background: transparent;
-            border: none;
-            cursor: pointer;
+                border: none;
+                cursor: pointer;
                 padding: 0;
                 z-index: 60;
                 position: relative;
@@ -477,7 +484,7 @@ $select = new select();
                 height: 3px;
                 background-color: white;
                 border-radius: 10px;
-            transition: all 0.3s ease;
+                transition: all 0.3s ease;
                 position: relative;
                 transform-origin: center;
             }
@@ -515,7 +522,7 @@ $select = new select();
             #sidebar {
                 transform: translateX(-100%);
             }
-            
+
             #sidebar.show {
                 transform: translateX(0);
             }
@@ -531,25 +538,25 @@ $select = new select();
                     transform: translateY(0);
                 }
             }
-            
+
             /* Botão do menu mobile */
             #menuButton {
                 transition: all 0.3s ease;
             }
-            
+
             #menuButton.hidden {
                 opacity: 0;
                 visibility: hidden;
                 transform: scale(0.8);
             }
-            
+
             /* Footer responsivo para mobile */
             footer {
                 margin-left: 0 !important;
                 padding-left: 1rem !important;
                 padding-right: 1rem !important;
             }
-            
+
             footer .ml-64 {
                 margin-left: 0 !important;
             }
@@ -564,12 +571,12 @@ $select = new select();
         .sidebar-link {
             transition: all 0.3s ease;
         }
-        
+
         .sidebar-link:hover {
             background-color: rgba(255, 255, 255, 0.1);
             transform: translateX(0.5rem);
         }
-        
+
         .sidebar-link.active {
             background-color: rgba(255, 165, 0, 0.2);
             color: #FFA500;
@@ -588,7 +595,7 @@ $select = new select();
                     <span class="text-white font-heading text-lg font-semibold">CREDE Estoque</span>
                 </div>
             </div>
-            
+
             <!-- Menu de navegação -->
             <nav class="flex-1 p-4 space-y-2">
                 <a href="index.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
@@ -603,12 +610,12 @@ $select = new select();
                     <i class="fas fa-plus-circle mr-3 text-lg"></i>
                     <span>Adicionar</span>
                 </a>
-              
+
                 <a href="solicitar.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
                     <i class="fas fa-clipboard-list mr-3 text-lg"></i>
                     <span>Solicitar</span>
                 </a>
-              
+
             </nav>
 
             <!-- Botão de Sair -->
@@ -632,10 +639,10 @@ $select = new select();
     <button class="fixed top-4 left-4 z-50 md:hidden  text-primary p-3 rounded-lg  hover:bg-primary/90 transition-all duration-200" id="menuButton">
         <i class="fas fa-bars text-lg"></i>
     </button>
-    
+
     <!-- Overlay para mobile -->
     <div class="fixed inset-0 bg-black/50 z-40 md:hidden hidden" id="overlay"></div>
-    
+
     <!-- Botão Voltar ao Topo -->
     <button class="back-to-top hidden fixed bottom-6 right-6 z-50 bg-secondary hover:bg-secondary/90 text-white w-12 h-12 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center group">
         <i class="fas fa-chevron-up text-lg group-hover:scale-110 transition-transform duration-300"></i>
@@ -659,7 +666,7 @@ $select = new select();
             <div class="stat-item">
                 <div class="stat-icon">
                     <i class="fas fa-boxes">
-                        <?php 
+                        <?php
                         $dados = $select->select_produtos_total();
                         foreach ($dados as $dado) {
                             echo $dado['total'];
@@ -668,12 +675,12 @@ $select = new select();
                     </i>
                 </div>
                 <div class="stat-number" id="totalProdutos">-</div>
-                    <div class="stat-label">Total de Produtos</div>
-                </div>
+                <div class="stat-label">Total de Produtos</div>
+            </div>
             <div class="stat-item">
                 <div class="stat-icon">
                     <i class="fas fa-exclamation-triangle text-warning">
-                    <?php 
+                        <?php
                         $dados = $select->select_produtos_critico();
                         foreach ($dados as $dado) {
                             echo $dado['total'];
@@ -683,22 +690,22 @@ $select = new select();
                 </div>
                 <div class="stat-number" id="produtosCriticos">-</div>
                 <div class="stat-label">Estoque Crítico</div>
-                </div>
+            </div>
             <div class="stat-item">
                 <div class="stat-icon">
                     <i class="fas fa-tags">
-                        <?php 
+                        <?php
                         $dados = $select->select_total_categorias();
                         foreach ($dados as $dado) {
                             echo $dado['total'];
                         }
                         ?>
-                        </i>
+                    </i>
                 </div>
                 <div class="stat-number" id="totalCategorias">-</div>
                 <div class="stat-label">Categorias</div>
-                </div>
             </div>
+        </div>
 
         <!-- Gráfico de Estoque -->
         <div class="bg-white rounded-xl shadow-card p-6 mb-8">
@@ -706,56 +713,56 @@ $select = new select();
                 <i class="fas fa-chart-pie mr-2 text-secondary"></i>
                 Visão Geral do Estoque
             </h2>
-                <div class="chart-container">
+            <div class="chart-container">
                 <canvas id="estoqueChart"></canvas>
-                    </div>
-                </div>
+            </div>
+        </div>
 
         <!-- Relatórios Disponíveis -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Relatório de Estoque Completo -->
+            <!--Relatório de Estoque Completo
             <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in">
                 <div class="card-shine"></div>
                 <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
                     <i class="fas fa-clipboard-list text-4xl"></i>
-                    </div>
+                </div>
                 <h3 class="text-lg font-bold text-primary mb-2 text-center">Relatório Completo</h3>
                 <p class="text-gray-600 text-center mb-4 text-sm">Relatório detalhado de todo o estoque atual</p>
                 <a href="reports/relatorio_produto_geral.php" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105" target="_blank">
                     <i class="fas fa-download mr-2"></i>
                     Gerar PDF
                 </a>
-                </div>
+            </div>
 
-            <!-- Relatório por Período -->
+            Relatório por Período
             <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in" style="animation-delay: 0.1s">
                 <div class="card-shine"></div>
                 <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
                     <i class="fas fa-calendar-alt text-4xl"></i>
-                    </div>
+                </div>
                 <h3 class="text-lg font-bold text-primary mb-2 text-center">Relatório de Movimentações</h3>
                 <p class="text-gray-600 text-center mb-4 text-sm">Relatório de movimentação de estoque por período específico</p>
                 <button id="openDateModal" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105">
                     <i class="fas fa-calendar-check mr-2"></i>
                     Selecionar Data
                 </button>
-                </div>
+            </div>
 
-            <!-- Relatório de Estoque Crítico -->
+            Relatório de Estoque Crítico
             <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in" style="animation-delay: 0.2s">
                 <div class="card-shine"></div>
                 <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
                     <i class="fas fa-exclamation-triangle text-4xl"></i>
-                    </div>
+                </div>
                 <h3 class="text-lg font-bold text-primary mb-2 text-center">Estoque Crítico</h3>
                 <p class="text-gray-600 text-center mb-4 text-sm">Produtos com estoque baixo (≤ 5 unidades)</p>
                 <a href="#" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105" target="_blank">
                     <i class="fas fa-file-pdf mr-2"></i>
                     Gerar PDF
                 </a>
-                </div>
+            </div>
 
-            <!-- Relatório por Produto -->
+            Relatório por Produto
             <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in" style="animation-delay: 0.3s">
                 <div class="card-shine"></div>
                 <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
@@ -769,7 +776,7 @@ $select = new select();
                 </button>
             </div>
 
-            <!-- Relatório por Data (Produtos Cadastrados) -->
+            Relatório por Data (Produtos Cadastrados)
             <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in" style="animation-delay: 0.4s">
                 <div class="card-shine"></div>
                 <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
@@ -783,7 +790,7 @@ $select = new select();
                 </button>
             </div>
 
-            <!-- Relatório de Produtos sem Código de Barras -->
+            Relatório de Produtos sem Código de Barras
             <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in" style="animation-delay: 0.5s">
                 <div class="card-shine"></div>
                 <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
@@ -797,7 +804,7 @@ $select = new select();
                 </a>
             </div>
 
-            <!-- Relatório de Perdas -->
+            Relatório de Perdas
             <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in" style="animation-delay: 0.6s">
                 <div class="card-shine"></div>
                 <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
@@ -811,7 +818,7 @@ $select = new select();
                 </a>
             </div>
 
-            <!-- Relatório por categoria -->
+            Relatório por categoria
             <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in" style="animation-delay: 0.6s">
                 <div class="card-shine"></div>
                 <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
@@ -823,7 +830,7 @@ $select = new select();
                     <i class="fas fa-file-pdf mr-2"></i>
                     Gerar PDF
                 </button>
-            </div>
+            </div>-->
         </div>
 
     </main>
@@ -889,7 +896,7 @@ $select = new select();
                     </label>
                     <select id="produto" name="produto" required>
                         <option value="" disabled selected>SELECIONAR PRODUTO</option>
-                        
+
                     </select>
                 </div>
                 <button type="submit" class="confirm-btn">
@@ -967,7 +974,7 @@ $select = new select();
         </div>
     </div>
 
-  
+
     <footer class="bg-gradient-to-r from-primary to-dark text-white py-8 md:py-10 mt-auto relative transition-all duration-300">
         <!-- Efeito de brilho sutil no topo -->
         <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-secondary to-transparent opacity-30"></div>
@@ -979,11 +986,11 @@ $select = new select();
                     <div class="group">
                         <h3 class="font-heading text-lg md:text-xl font-semibold mb-4 flex items-center text-white group-hover:text-secondary transition-colors duration-300">
                             <i class="fas fa-school mr-3 text-secondary group-hover:scale-110 transition-transform duration-300"></i>
-                           CREDE 1
+                            CREDE 1
                         </h3>
                         <p class="text-sm md:text-base leading-relaxed text-gray-200 group-hover:text-white transition-colors duration-300">
                             <i class="fas fa-map-marker-alt mr-2 text-secondary"></i>
-                            Av. Sen. Virgílio Távora, 1103 - Distrito Industrial I, 
+                            Av. Sen. Virgílio Távora, 1103 - Distrito Industrial I,
                         </p>
                     </div>
 
@@ -998,7 +1005,7 @@ $select = new select();
                                 <i class="fas fa-phone-alt mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
                                 (85) 3341-3990
                             </a>
-                        
+
                         </div>
                     </div>
 
@@ -1048,14 +1055,14 @@ $select = new select();
                     e.stopPropagation();
                     sidebar.classList.toggle('show');
                     overlay.classList.toggle('hidden');
-                    
+
                     // Mostrar/ocultar o botão do menu
                     if (sidebar.classList.contains('show')) {
                         menuButton.classList.add('hidden');
                     } else {
                         menuButton.classList.remove('hidden');
                     }
-                    
+
                     document.body.style.overflow = sidebar.classList.contains('show') ? 'hidden' : '';
                 });
 
@@ -1386,12 +1393,16 @@ $select = new select();
                             document.getElementById('totalCategorias').textContent = data.estatisticas.total_categorias;
                             setupChart(data.grafico);
                             console.log('Estatísticas carregadas com sucesso');
-                    } else {
+                        } else {
                             console.error('Erro nos dados:', data.error);
                             document.getElementById('totalProdutos').textContent = '-';
                             document.getElementById('produtosCriticos').textContent = '-';
                             document.getElementById('totalCategorias').textContent = '-';
-                            setupChart({em_estoque: 0, estoque_critico: 0, sem_estoque: 0});
+                            setupChart({
+                                em_estoque: 0,
+                                estoque_critico: 0,
+                                sem_estoque: 0
+                            });
                         }
                     })
                     .catch(error => {
@@ -1399,7 +1410,11 @@ $select = new select();
                         document.getElementById('totalProdutos').textContent = '-';
                         document.getElementById('produtosCriticos').textContent = '-';
                         document.getElementById('totalCategorias').textContent = '-';
-                        setupChart({em_estoque: 0, estoque_critico: 0, sem_estoque: 0});
+                        setupChart({
+                            em_estoque: 0,
+                            estoque_critico: 0,
+                            sem_estoque: 0
+                        });
                     });
             }
 
@@ -1465,24 +1480,24 @@ $select = new select();
             function showNotification(message, type = 'info') {
                 const notification = document.createElement('div');
                 notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg transform transition-all duration-300 translate-x-full`;
-                
+
                 const bgColor = type === 'error' ? 'bg-red-500' : type === 'success' ? 'bg-green-500' : 'bg-blue-500';
                 notification.className += ` ${bgColor} text-white`;
-                
+
                 notification.innerHTML = `
                     <div class="flex items-center">
                         <i class="fas fa-${type === 'error' ? 'exclamation-circle' : type === 'success' ? 'check-circle' : 'info-circle'} mr-2"></i>
                         <span>${message}</span>
                     </div>
                 `;
-                
+
                 document.body.appendChild(notification);
-                
+
                 // Animar entrada
                 setTimeout(() => {
                     notification.classList.remove('translate-x-full');
                 }, 100);
-                
+
                 // Remover após 3 segundos
                 setTimeout(() => {
                     notification.classList.add('translate-x-full');
@@ -1562,13 +1577,13 @@ $select = new select();
                         footerContent.style.marginLeft = '16rem'; // 64 * 0.25rem = 16rem
                     }
                 };
-                
+
                 // Ajustar na inicialização
                 adjustFooter();
-                
+
                 // Ajustar quando a sidebar é aberta/fechada
                 menuButton.addEventListener('click', adjustFooter);
-                
+
                 // Ajustar quando a janela é redimensionada
                 window.addEventListener('resize', adjustFooter);
             }

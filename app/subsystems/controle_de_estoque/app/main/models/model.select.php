@@ -11,7 +11,7 @@ class select extends connect
     private string $table1;
     private string $table2;
     private string $table3;
-    private string $table4;
+    protected string $table4;
     private string $table5;
 
     function __construct()
@@ -25,6 +25,13 @@ class select extends connect
         $this->table5 = $table['crede_estoque'][5];
     }
 
+    public function select_produtos_id($id)
+    {
+        $query = $this->connect->query("SELECT p.*, c.nome_categoria AS categoria, c.id as id_categoria FROM $this->table4 p INNER JOIN $this->table1 c ON p.id_categoria = c.id WHERE p.id = '$id'");
+        $resultado = $query->fetch(PDO::FETCH_ASSOC);
+
+        return $resultado;
+    }
     public function select_categoria()
     {
         $query = $this->connect->query("SELECT * FROM $this->table1");

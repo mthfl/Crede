@@ -343,6 +343,10 @@ $select = new select();
                                 <input type="radio" name="tipo_produto" value="sem_codigo" id="sem_codigo">
                                 <span class="ml-2 text-gray-700">Produto sem código</span>
                             </label>
+                            <label class="custom-radio flex items-center">
+                                <input type="radio" name="tipo_produto" value="criar_codigo" id="sem_codigo">
+                                <span class="ml-2 text-gray-700">Criar código</span>
+                            </label>
                         </div>
                     </div>
 
