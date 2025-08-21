@@ -13,7 +13,7 @@ class sessions
 
                 session_unset();
                 session_destroy();
-                header('location:../../../../../main/login.php');
+                header('location:../../../main/login.php');
                 exit();
             }
         } catch (PDOException $e) {
@@ -31,7 +31,7 @@ class sessions
 
                     session_unset();
                     session_destroy();
-                    header('location:../../../../../main/login.php');
+                    header('location:../../../main/login.php');
                     exit();
                 }
             }
@@ -47,7 +47,7 @@ class sessions
         try {
             session_unset();
             session_destroy();
-            header('location:../../../../../main/login.php');
+            header('location:../../../main/login.php');
             exit();
         } catch (PDOException $e) {
             header('location: ../views/windows/faltal_erro.php');

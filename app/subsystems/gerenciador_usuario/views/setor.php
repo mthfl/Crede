@@ -6,8 +6,7 @@ $dados = $session->tempo_session();
 
 require_once(__DIR__."/../models/model.select.php");
 $select = new select();
-
-
+$setores = $select->listar_setores(); // Assumindo que listar_setores() retorna um array de setores
 
 $userName = isset($_SESSION['nome']) ? $_SESSION['nome'] : 'Usuário';
 $userSetor = isset($_SESSION['setor']) ? $_SESSION['setor'] : 'Sistema de Gestão';
@@ -467,7 +466,6 @@ $userEmail = isset($_SESSION['email']) ? $_SESSION['email'] : '';
                 <!-- Setores Grid -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 sm:gap-6 w-full" id="setoresGrid">
                     <?php 
-                    $setores = $select->listar_setores(); // Assumindo que listar_setores() retorna um array de setores
                     foreach ($setores as $index => $sector): 
                     ?>
                         <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-xl sm:rounded-2xl animate-fade-in hover:scale-105 transition-all duration-300" style="animation-delay: <?php echo ($index * 0.1) . 's'; ?>;">
@@ -480,16 +478,13 @@ $userEmail = isset($_SESSION['email']) ? $_SESSION['email'] : '';
                                     <div class="min-w-0 flex-1">
                                         <h3 class="font-bold text-dark text-base sm:text-lg lg:text-xl mb-1 truncate"><?php echo htmlspecialchars($sector['nome'], ENT_QUOTES, 'UTF-8'); ?></h3>
                                     </div>
-                                    <div class="min-w-0 flex-1">
-                                        <h3 class="font-bold text-dark text-base sm:text-lg lg:text-xl mb-1 truncate"><?php $dado = $select->listar_usuarios_setores($sector['id_setor']); echo htmlspecialchars($dado['total'], ENT_QUOTES, 'UTF-8'); ?></h3>
-                                    </div>
                                 </div>
                             </div>
                             <div class="flex items-center justify-end gap-2 pt-3 border-t border-gray-100">
                                 <button onclick="openEditSector(<?php echo $sector['id']; ?>)" class="p-1.5 sm:p-2 rounded-lg border border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300" title="Editar setor">
                                     <i class="fa-solid fa-pen text-xs sm:text-sm"></i>
                                 </button>
-                                <button onclick="openDeleteModal(<?php echo $sector['id']; ?>)" class="p-1.5 sm:p-2 rounded-lg border border-red-200 hover:bg-red-500 hover:text-white text-red-600 transition-all duration-300" title="Excluir setor">
+                                <button onclick="openDeleteModal(<?php echo $sector['id']; ?>, '<?php echo htmlspecialchars($sector['nome'], ENT_QUOTES, 'UTF-8'); ?>')" class="p-1.5 sm:p-2 rounded-lg border border-red-200 hover:bg-red-500 hover:text-white text-red-600 transition-all duration-300" title="Excluir setor">
                                     <i class="fa-solid fa-trash text-xs sm:text-sm"></i>
                                 </button>
                             </div>
@@ -500,7 +495,7 @@ $userEmail = isset($_SESSION['email']) ? $_SESSION['email'] : '';
         </main>
     </div>
 
-    <!-- Enhanced modal with better mobile responsiveness -->
+    <!-- Enhanced modal for adding/editing sector -->
     <div id="modalSetor" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-3 sm:p-4 z-40">
         <div class="bg-white w-full max-w-md sm:max-w-lg rounded-xl sm:rounded-2xl shadow-2xl max-h-[95vh] sm:max-h-[90vh] overflow-y-auto transform transition-all duration-300 scale-95 opacity-0" id="modalSetorContent">
             <div class="p-4 sm:p-6 md:p-8 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white">
@@ -510,7 +505,7 @@ $userEmail = isset($_SESSION['email']) ? $_SESSION['email'] : '';
                     </div>
                     <div class="flex-1 min-w-0">
                         <h3 id="modalTitle" class="text-lg sm:text-xl md:text-2xl font-bold text-dark font-heading responsive-text-2xl">Cadastrar Setor</h3>
-                        <p class="text-gray-600 text-xs sm:text-sm">Preencha as informações do setor</p>
+                        <p class="text-gray-600 text-xs sm:text-sm">Preencha o nome do setor</p>
                     </div>
                 </div>
                 <button class="absolute top-4 right-4 sm:top-6 sm:right-6 p-2 rounded-xl hover:bg-gray-100 transition-all group" onclick="closeModal('modalSetor')">
@@ -518,35 +513,31 @@ $userEmail = isset($_SESSION['email']) ? $_SESSION['email'] : '';
                 </button>
             </div>
             <div class="p-4 sm:p-6 md:p-8">
-                <div class="space-y-4 sm:space-y-6">
-                    <div>
-                        <label class="block text-sm font-semibold text-dark mb-2 sm:mb-3 flex items-center gap-2">
-                            <i class="fa-solid fa-tag text-secondary"></i>
-                            Nome do Setor *
-                        </label>
-                        <input id="inpNomeSetor" type="text" class="input-enhanced w-full px-3 sm:px-4 py-3 sm:py-4 rounded-lg sm:rounded-xl transition-all text-sm sm:text-base border-2 focus:border-secondary focus:ring-4 focus:ring-secondary/10" placeholder="Digite o nome do setor">
+                <form id="sectorForm" action="../controllers/controller_setor.php" method="POST">
+                    <input type="hidden" id="inpSectorId" name="sector_id" value="">
+                    <div class="space-y-4 sm:space-y-6">
+                        <div>
+                            <label class="block text-sm font-semibold text-dark mb-2 sm:mb-3 flex items-center gap-2">
+                                <i class="fa-solid fa-tag text-secondary"></i>
+                                Nome do Setor *
+                            </label>
+                            <input id="inpNomeSetor" name="nome" type="text" class="input-enhanced w-full px-3 sm:px-4 py-3 sm:py-4 rounded-lg sm:rounded-xl transition-all text-sm sm:text-base border-2 focus:border-secondary focus:ring-4 focus:ring-secondary/10" placeholder="Digite o nome do setor" required>
+                        </div>
                     </div>
-                    <div>
-                        <label class="block text-sm font-semibold text-dark mb-2 sm:mb-3 flex items-center gap-2">
-                            <i class="fa-solid fa-align-left text-secondary"></i>
-                            Descrição
-                        </label>
-                        <textarea id="inpDescricaoSetor" class="input-enhanced w-full px-3 sm:px-4 py-3 sm:py-4 rounded-lg sm:rounded-xl transition-all text-sm sm:text-base border-2 focus:border-secondary focus:ring-4 focus:ring-secondary/10 resize-none" rows="3" placeholder="Digite uma descrição para o setor"></textarea>
+                    <div class="mt-4 sm:mt-6 border-t border-gray-100 bg-gray-50/50 flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-3 pt-4 sm:pt-6">
+                        <button type="button" class="px-4 sm:px-6 py-3 rounded-lg sm:rounded-xl border-2 border-gray-300 font-semibold text-gray-700 hover:bg-gray-100 hover:border-gray-400 transition-all text-sm sm:text-base order-2 sm:order-1" onclick="closeModal('modalSetor')">
+                            <i class="fa-solid fa-times mr-2"></i>Cancelar
+                        </button>
+                        <button type="submit" class="px-4 sm:px-6 py-3 bg-gradient-to-r from-secondary to-orange-500 text-white font-semibold rounded-lg sm:rounded-xl hover:from-secondary/90 hover:to-orange-500/90 transition-all text-sm sm:text-base shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 order-1 sm:order-2">
+                            <i class="fa-solid fa-save mr-2"></i>Salvar Setor
+                        </button>
                     </div>
-                </div>
-            </div>
-            <div class="p-4 sm:p-6 md:p-8 border-t border-gray-100 bg-gray-50/50 flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-3">
-                <button class="px-4 sm:px-6 py-3 rounded-lg sm:rounded-xl border-2 border-gray-300 font-semibold text-gray-700 hover:bg-gray-100 hover:border-gray-400 transition-all text-sm sm:text-base order-2 sm:order-1" onclick="closeModal('modalSetor')">
-                    <i class="fa-solid fa-times mr-2"></i>Cancelar
-                </button>
-                <button class="px-4 sm:px-6 py-3 bg-gradient-to-r from-secondary to-orange-500 text-white font-semibold rounded-lg sm:rounded-xl hover:from-secondary/90 hover:to-orange-500/90 transition-all text-sm sm:text-base shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 order-1 sm:order-2" onclick="saveSector()">
-                    <i class="fa-solid fa-save mr-2"></i>Salvar Setor
-                </button>
+                </form>
             </div>
         </div>
     </div>
 
-    <!-- Enhanced delete modal with better mobile layout -->
+    <!-- Enhanced delete modal -->
     <div id="modalDelete" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-3 sm:p-4 z-50">
         <div class="bg-white w-full max-w-sm sm:max-w-md rounded-xl sm:rounded-2xl shadow-2xl transform transition-all duration-300 scale-95 opacity-0" id="modalDeleteContent">
             <div class="p-4 sm:p-6 md:p-8 text-center">
@@ -561,20 +552,23 @@ $userEmail = isset($_SESSION['email']) ? $_SESSION['email'] : '';
                     <i class="fa-solid fa-info-circle mr-2"></i>
                     Esta ação não pode ser desfeita.
                 </p>
-                <div class="flex flex-col sm:flex-row gap-3 justify-center">
-                    <button class="px-4 sm:px-6 py-3 rounded-lg sm:rounded-xl border-2 border-gray-300 font-semibold text-gray-700 hover:bg-gray-100 hover:border-gray-400 transition-all text-sm sm:text-base order-2 sm:order-1" onclick="closeModal('modalDelete')">
-                        <i class="fa-solid fa-times mr-2"></i>Cancelar
-                    </button>
-                    <button class="px-4 sm:px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold rounded-lg sm:rounded-xl hover:from-red-600 hover:to-red-700 transition-all text-sm sm:text-base shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 order-1 sm:order-2" onclick="confirmDelete()">
-                        <i class="fa-solid fa-trash mr-2"></i>Excluir Setor
-                    </button>
-                </div>
+                <form id="deleteForm" action="../controllers/controller_setor.php" method="POST">
+                    <input type="hidden" id="deleteSectorId" name="sector_id" value="">
+                    <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                        <button type="button" class="px-4 sm:px-6 py-3 rounded-lg sm:rounded-xl border-2 border-gray-300 font-semibold text-gray-700 hover:bg-gray-100 hover:border-gray-400 transition-all text-sm sm:text-base order-2 sm:order-1" onclick="closeModal('modalDelete')">
+                            <i class="fa-solid fa-times mr-2"></i>Cancelar
+                        </button>
+                        <button type="submit" class="px-4 sm:px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold rounded-lg sm:rounded-xl hover:from-red-600 hover:to-red-700 transition-all text-sm sm:text-base shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 order-1 sm:order-2">
+                            <i class="fa-solid fa-trash mr-2"></i>Excluir Setor
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 
     <script>
-        // Dados dos setores obtidos do PHP (não mais necessário para renderizar, mas mantido para as funções de edição/exclusão)
+        // Dados dos setores obtidos do PHP
         const setores = <?php echo json_encode($setores); ?>;
 
         let editingSectorId = null;
@@ -591,8 +585,9 @@ $userEmail = isset($_SESSION['email']) ? $_SESSION['email'] : '';
 
         function openSectorForm() {
             document.getElementById('modalTitle').textContent = 'Cadastrar Setor';
+            document.getElementById('inpSectorId').value = '';
             document.getElementById('inpNomeSetor').value = '';
-            document.getElementById('inpDescricaoSetor').value = '';
+            document.getElementById('sectorForm').action = '../controllers/controller_setor.php';
             editingSectorId = null;
             openModal('modalSetor');
         }
@@ -601,10 +596,26 @@ $userEmail = isset($_SESSION['email']) ? $_SESSION['email'] : '';
             const sector = setores.find(s => s.id === sectorId);
             if (sector) {
                 document.getElementById('modalTitle').textContent = 'Editar Setor';
+                document.getElementById('inpSectorId').value = sector.id;
                 document.getElementById('inpNomeSetor').value = sector.nome;
-                document.getElementById('inpDescricaoSetor').value = sector.descricao || '';
+                document.getElementById('sectorForm').action = '../controllers/controller_setor.php';
                 editingSectorId = sectorId;
                 openModal('modalSetor');
+            }
+        }
+
+        function openDeleteModal(sectorId, sectorName) {
+            const sector = setores.find(s => s.id === sectorId);
+            if (sector) {
+                if (sector.usuarios > 0) {
+                    showNotification(`Não é possível excluir o setor "${sector.nome}" pois possui ${sector.usuarios} usuário(s) vinculado(s).`, 'error');
+                    return;
+                }
+                
+                deletingSectorId = sectorId;
+                document.getElementById('deleteSectorName').textContent = sectorName;
+                document.getElementById('deleteSectorId').value = sectorId;
+                openModal('modalDelete');
             }
         }
 
@@ -613,7 +624,6 @@ $userEmail = isset($_SESSION['email']) ? $_SESSION['email'] : '';
             modal.classList.remove('hidden');
             modal.classList.add('flex');
             
-            // Animar entrada do modal
             setTimeout(() => {
                 const content = modal.querySelector('[id$="Content"]');
                 if (content) {
@@ -638,49 +648,6 @@ $userEmail = isset($_SESSION['email']) ? $_SESSION['email'] : '';
             }, 300);
         }
 
-        function saveSector() {
-            const nome = document.getElementById('inpNomeSetor').value.trim();
-            const descricao = document.getElementById('inpDescricaoSetor').value.trim();
-            
-            if (!nome) {
-                showNotification('Digite o nome do setor.', 'error');
-                return;
-            }
-            
-            // Para salvar/editar, você precisaria fazer uma chamada AJAX para um endpoint PHP
-            // Aqui, apenas mostramos uma notificação, pois o array é atualizado no backend
-            showNotification(editingSectorId ? 'Setor atualizado com sucesso!' : 'Setor cadastrado com sucesso!', 'success');
-            closeModal('modalSetor');
-            // Recarregar a página para atualizar os dados do backend
-            setTimeout(() => { window.location.reload(); }, 1000);
-        }
-
-        function openDeleteModal(sectorId) {
-            const sector = setores.find(s => s.id === sectorId);
-            if (sector) {
-                if (sector.usuarios > 0) {
-                    showNotification(`Não é possível excluir o setor "${sector.nome}" pois possui ${sector.usuarios} usuário(s) vinculado(s).`, 'error');
-                    return;
-                }
-                
-                deletingSectorId = sectorId;
-                document.getElementById('deleteSectorName').textContent = sector.nome;
-                openModal('modalDelete');
-            }
-        }
-
-        function confirmDelete() {
-            if (deletingSectorId) {
-                // Para excluir, você precisaria fazer uma chamada AJAX para um endpoint PHP
-                // Aqui, apenas mostramos uma notificação, pois o array é atualizado no backend
-                showNotification('Setor excluído com sucesso!', 'success');
-                closeModal('modalDelete');
-                deletingSectorId = null;
-                // Recarregar a página para atualizar os dados do backend
-                setTimeout(() => { window.location.reload(); }, 1000);
-            }
-        }
-
         function showNotification(message, type = 'info') {
             const notification = document.createElement('div');
             notification.className = `fixed top-4 right-4 z-50 p-3 sm:p-4 rounded-lg sm:rounded-xl shadow-lg transform transition-all duration-300 translate-x-full max-w-sm ${
@@ -702,17 +669,12 @@ $userEmail = isset($_SESSION['email']) ? $_SESSION['email'] : '';
             }, 10);
             
             setTimeout(() => {
-                notification.style.transform = 'translateX(full)';
+                notification.style.transform = 'translateX(100%)';
                 setTimeout(() => {
                     document.body.removeChild(notification);
                 }, 300);
             }, 3000);
         }
-
-        // Removido o renderSetores(), pois agora é feito via PHP
-
-        // Initialize
-        // renderSetores(); // Não mais necessário
 
         // Enhanced UX features
         document.addEventListener('DOMContentLoaded', function() {
@@ -762,6 +724,25 @@ $userEmail = isset($_SESSION['email']) ? $_SESSION['email'] : '';
                     }
                 });
             }
+
+            // Form submission handling
+            document.getElementById('sectorForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const nome = document.getElementById('inpNomeSetor').value.trim();
+                if (!nome) {
+                    showNotification('Digite o nome do setor.', 'error');
+                    return;
+                }
+                
+                // Submit the form
+                this.submit();
+            });
+
+            document.getElementById('deleteForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                // Submit the delete form
+                this.submit();
+            });
         });
     </script>
 </body>

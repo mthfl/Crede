@@ -1004,7 +1004,7 @@ $session->tempo_session();
         <div class="card-grid">
 
             <!-- Card 1: Gerenciador de Usuários -->
-            <?php if (isset($_SESSION['Admin'])) { ?>
+            <?php if (isset($_SESSION['Admin_geral'])) { ?>
                 <a href="../../subsystems/gerenciador_usuario/index.php">
                     <div class="system-card animate-on-scroll"
                         tabindex="0"

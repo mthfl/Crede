@@ -114,6 +114,7 @@ class model_usuario extends connect
                     $_SESSION['nome'] = $user['nome'];
                     $_SESSION['email'] = $user['email'];
                     $_SESSION['setor'] = $user['setor'];
+                    $_SESSION['foto_perfil'] = $user['foto_perfil'];
                     return 1;
                 } else {
                     return 4;

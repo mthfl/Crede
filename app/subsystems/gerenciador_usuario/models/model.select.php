@@ -53,7 +53,7 @@ class select extends connect
     /**
      * Listar sistemas disponíveis
      */
-    public function listarSistemas(): array
+    public function listar_sistemas()
     {
         try {
             $stmt = $this->connect->prepare("SELECT * FROM {$this->table5} ORDER BY nome");
@@ -61,7 +61,7 @@ class select extends connect
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $e) {
             error_log("Erro ao listar sistemas: " . $e->getMessage());
-            return [];
+            return 0;
         }
     }
         /**
@@ -151,22 +151,21 @@ class select extends connect
     }    /**
     * Listar todos os usuários com informações do setor
     */
-   public function listarUsuarios(): array
+   public function listar_usuarios()
    {
        try {
-           $stmt = $this->connect->prepare("SELECT u.*, s.nome AS nome_setor FROM {$this->table1} u INNER JOIN {$this->table2} s ON u.id_setor = s.id ORDER BY u.nome");
-           $stmt->execute();
+           $stmt = $this->connect->query("SELECT u.*, s.nome AS nome_setor FROM {$this->table1} u INNER JOIN {$this->table2} s ON u.id_setor = s.id ORDER BY u.nome");
            return $stmt->fetchAll(PDO::FETCH_ASSOC);
        } catch (Exception $e) {
            error_log("Erro ao listar usuários: " . $e->getMessage());
-           return [];
+           return 0;
        }
    }
 
         /**
      * Listar todos os tipos de usuários
      */
-    public function listarTiposUsuarios(): array
+    public function listar_tipos_usuarios()
     {
         try {
             $stmt = $this->connect->prepare("SELECT * FROM {$this->table3} ORDER BY tipo");
@@ -174,7 +173,7 @@ class select extends connect
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (Exception $e) {
             error_log("Erro ao listar tipos de usuários: " . $e->getMessage());
-            return [];
+            return 0;
         }
     }
 
