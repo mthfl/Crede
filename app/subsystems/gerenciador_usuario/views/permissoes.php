@@ -23,7 +23,7 @@ $userName = isset($_SESSION['nome']) ? $_SESSION['nome'] : 'Usuário';
 $userSetor = isset($_SESSION['setor']) ? $_SESSION['setor'] : 'Sistema de Gestão';
 $userEmail = isset($_SESSION['email']) ? $_SESSION['email'] : '';
 $userInitial = function_exists('mb_substr') ? mb_strtoupper(mb_substr($userName, 0, 1, 'UTF-8'), 'UTF-8') : strtoupper(substr($userName, 0, 1));
-$fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : null;
+$fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">

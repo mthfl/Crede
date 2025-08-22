@@ -9,7 +9,6 @@ $select = new select();
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -48,16 +47,13 @@ $select = new select();
             scroll-behavior: smooth;
             background-color: #F8FAF9;
         }
-
         .gradient-bg {
             background: linear-gradient(135deg, #005A24 0%, #1A3C34 100%);
         }
-
         .page-title {
             position: relative;
             display: inline-block;
         }
-
         .page-title::after {
             content: '';
             position: absolute;
@@ -69,7 +65,6 @@ $select = new select();
             background-color: #FFA500;
             border-radius: 3px;
         }
-
         .header-nav-link {
             position: relative;
             transition: all 0.3s ease;
@@ -77,11 +72,9 @@ $select = new select();
             padding: 0.5rem 1rem;
             border-radius: 0.5rem;
         }
-
         .header-nav-link:hover {
             background-color: rgba(255, 255, 255, 0.1);
         }
-
         .header-nav-link::after {
             content: '';
             position: absolute;
@@ -93,87 +86,66 @@ $select = new select();
             transition: all 0.3s ease;
             transform: translateX(-50%);
         }
-
         .header-nav-link:hover::after,
         .header-nav-link.active::after {
             width: 80%;
         }
-
         .header-nav-link.active {
             background-color: rgba(255, 255, 255, 0.15);
         }
-
         .mobile-menu-button {
             display: none;
         }
-
-        /* Estilos para a sidebar */
         .sidebar-link {
             transition: all 0.3s ease;
             border-radius: 0.5rem;
         }
-
         .sidebar-link:hover {
             background-color: rgba(255, 255, 255, 0.1);
             transform: translateX(0.5rem);
         }
-
         .sidebar-link.active {
             background-color: rgba(255, 165, 0, 0.2);
             color: #FFA500;
         }
-
-        /* Responsividade da sidebar */
         @media (max-width: 768px) {
             #sidebar {
                 transform: translateX(-100%);
             }
-
             #sidebar.show {
                 transform: translateX(0);
             }
-
             main {
                 margin-left: 0 !important;
             }
-
-            /* Botão do menu mobile */
             #menuButton {
                 transition: all 0.3s ease;
             }
-
             #menuButton.hidden {
                 opacity: 0;
                 visibility: hidden;
                 transform: scale(0.8);
             }
-
-            /* Footer responsivo para mobile */
             footer {
                 margin-left: 0 !important;
                 padding-left: 1rem !important;
                 padding-right: 1rem !important;
             }
-
             footer .ml-64 {
                 margin-left: 0 !important;
             }
         }
-
         .desktop-table {
             display: block;
             width: 100%;
         }
-
         .mobile-cards {
             display: none;
         }
-
         @media screen and (max-width: 768px) {
             .desktop-table {
                 display: none;
             }
-
             .mobile-cards {
                 display: flex;
                 flex-direction: column;
@@ -182,60 +154,51 @@ $select = new select();
                 padding: 0 0.5rem;
                 width: 100%;
             }
-
-            .card-item {
-                margin-bottom: 0.75rem;
-            }
-
             .categoria-header {
                 margin-top: 1.5rem;
                 margin-bottom: 0.75rem;
             }
         }
-
         .card-item {
             transition: all 0.3s ease;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         }
-
         .card-item:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-
         .quantidade-critica {
             color: #FF0000;
             font-weight: bold;
         }
-
         .max-w-5xl {
             max-width: 64rem;
             width: 100%;
         }
-
         .flex-1.w-full {
             max-width: 100%;
         }
-
         #exportarBtn {
             margin-top: 1.5rem;
         }
+        .action-button {
+            transition: all 0.3s ease;
+        }
+        .action-button:hover {
+            transform: scale(1.1);
+        }
     </style>
 </head>
-
 <body class="min-h-screen flex flex-col font-sans bg-light">
     <!-- Sidebar -->
     <div class="fixed left-0 top-0 h-full w-64 bg-gradient-to-b from-primary to-dark text-white shadow-xl z-50 transform transition-transform duration-300 ease-in-out" id="sidebar">
         <div class="flex flex-col h-full">
-            <!-- Logo e título -->
             <div class="p-6 border-b border-white/20">
                 <div class="flex items-center">
                     <img src="https://i.postimg.cc/0N0dsxrM/Bras-o-do-Cear-svg-removebg-preview.png" alt="Logo STGM" class="h-12 mr-3 transition-transform hover:scale-105">
                     <span class="text-white font-heading text-lg font-semibold">CREDE Estoque</span>
                 </div>
             </div>
-
-            <!-- Menu de navegação -->
             <nav class="flex-1 p-4 space-y-2">
                 <a href="index.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
                     <i class="fas fa-home mr-3 text-lg"></i>
@@ -249,23 +212,17 @@ $select = new select();
                     <i class="fas fa-plus-circle mr-3 text-lg"></i>
                     <span>Adicionar</span>
                 </a>
-
                 <a href="solicitar.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
                     <i class="fas fa-clipboard-list mr-3 text-lg"></i>
                     <span>Solicitar</span>
                 </a>
-
             </nav>
-
-            <!-- Botão de Sair -->
             <div class="p-4 border-t border-white/20">
-                <a href="../../../../../main/views/subsystems.php" class="w-full bg-transparent border border-white/40 hover:bg-white/10 text-white py-2 px-4 rounded-lg transition-all duration-200 flex items-center justify-center">
+                <a href="../views/subsystems.php" class="w-full bg-transparent border border-white/40 hover:bg-white/10 text-white py-2 px-4 rounded-lg transition-all duration-200 flex items-center justify-center">
                     <i class="fas fa-sign-out-alt mr-2"></i>
                     Sair
                 </a>
             </div>
-
-            <!-- Botão de fechar sidebar no mobile -->
             <div class="p-4 border-t border-white/20 md:hidden">
                 <button class="w-full bg-white/10 hover:bg-white/20 text-white py-2 px-4 rounded-lg transition-all duration-200" id="closeSidebar">
                     <i class="fas fa-times mr-2"></i>
@@ -274,20 +231,13 @@ $select = new select();
             </div>
         </div>
     </div>
-
-    <button class="fixed top-4 left-4 z-50 md:hidden  text-primary p-3 rounded-lg  hover:bg-primary/90 transition-all duration-200" id="menuButton">
+    <button class="fixed top-4 left-4 z-50 md:hidden text-primary p-3 rounded-lg hover:bg-primary/90 transition-all duration-200" id="menuButton">
         <i class="fas fa-bars text-lg"></i>
     </button>
-
-    <!-- Overlay para mobile -->
     <div class="fixed inset-0 bg-black/50 z-40 md:hidden hidden" id="overlay"></div>
-
-    <!-- Botão Voltar ao Topo -->
     <button class="back-to-top hidden fixed bottom-6 right-6 z-50 bg-secondary hover:bg-secondary/90 text-white w-12 h-12 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center group">
         <i class="fas fa-chevron-up text-lg group-hover:scale-110 transition-transform duration-300"></i>
     </button>
-
-    <!-- Main content -->
     <main class="ml-0 md:ml-64 px-4 py-8 md:py-12 flex-1 transition-all duration-300">
         <div class="text-center mb-10">
             <h1 class="text-primary text-3xl md:text-4xl font-bold mb-8 md:mb-6 text-center page-title tracking-tight font-heading inline-block mx-auto">VISUALIZAR ESTOQUE</h1>
@@ -303,8 +253,7 @@ $select = new select();
                     $dados = $select->select_categoria();
                     foreach ($dados as $dado) {
                     ?>
-
-                        <option value="<?= $dado['id'] ?>"><?= $dado['nome_categoria'] ?></option>
+                        <option value="<?= $dado['id'] ?>"><?= htmlspecialchars($dado['nome_categoria']) ?></option>
                     <?php } ?>
                 </select>
                 <?php if (isset($_SESSION['Admin_estoque'])) { ?>
@@ -321,7 +270,6 @@ $select = new select();
                 </button>
             </div>
         </div>
-        <!-- Tabela para desktop -->
         <div class="desktop-table bg-white rounded-xl shadow-lg overflow-hidden border-2 border-primary max-w-5xl mx-auto">
             <div class="overflow-x-auto">
                 <table class="w-full">
@@ -333,8 +281,10 @@ $select = new select();
                             <th class="py-3 px-4 text-left">Categoria</th>
                             <th class="py-3 px-4 text-left">Validade</th>
                             <th class="py-3 px-4 text-left">Data Cadastro</th>
-                            <th class="py-3 px-4 text-left"></th>
-                            <th class="py-3 px-4 text-left"></th>
+                            <?php if (isset($_SESSION['Admin_estoque'])) { ?>
+                                <th class="py-3 px-4 text-left">Editar</th>
+                                <th class="py-3 px-4 text-left">Excluir</th>
+                            <?php } ?>
                         </tr>
                     </thead>
                     <tbody id="tabelaEstoque">
@@ -353,10 +303,16 @@ $select = new select();
                                     <td class="py-3 px-4"><?= htmlspecialchars($produto['vencimento'] == '' ? 'Sem vencimento' : $produto['vencimento']) ?></td>
                                     <td class="py-3 px-4"><?= date('d/m/Y H:i', strtotime($produto['data'])) ?></td>
                                     <?php if (isset($_SESSION['Admin_estoque'])) { ?>
-                                        <td class="py-3 px-4"><a href="./products/editar_produto.php?id_produto=<?=$produto['id']?>">editar</a></td>
-                                    <?php } ?>
-                                    <?php if (isset($_SESSION['Admin_estoque'])) { ?>
-                                        <td class="py-3 px-4"><a href="../controllers/controller_crud_produto.php?id_excluir=<?=$produto['id']?>">excluir</a></td>
+                                        <td class="py-3 px-4">
+                                            <a href="./products/editar_produto.php?id_produto=<?= $produto['id'] ?>" class="action-button text-primary hover:text-primary/80">
+                                                <i class="fas fa-pen"></i>
+                                            </a>
+                                        </td>
+                                        <td class="py-3 px-4">
+                                            <button onclick="abrirModalExcluir(<?= $produto['id'] ?>, '<?= htmlspecialchars($produto['nome_produto'], ENT_QUOTES, 'UTF-8') ?>')" class="action-button text-red-600 hover:text-red-700">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>
                                     <?php } ?>
                                 </tr>
                             <?php
@@ -364,16 +320,13 @@ $select = new select();
                         } else {
                             ?>
                             <tr>
-                                <td colspan="6" class="py-4 px-4 text-center text-gray-500">Nenhum produto encontrado</td>
+                                <td colspan="<?= isset($_SESSION['Admin_estoque']) ? 8 : 6 ?>" class="py-4 px-4 text-center text-gray-500">Nenhum produto encontrado</td>
                             </tr>
                         <?php } ?>
-
                     </tbody>
                 </table>
             </div>
         </div>
-
-        <!-- Cards para mobile -->
         <div class="mobile-cards mt-6 max-w-5xl mx-auto">
             <?php
             if ($dados && count($dados) > 0) {
@@ -397,18 +350,13 @@ $select = new select();
                     }
                     echo '</div>';
                     echo '</div>';
+                    echo '</div>';
                 }
             } else {
                 echo '<div class="text-center text-gray-500 py-8">Nenhum produto encontrado</div>';
             }
             ?>
         </div>
-
-        <!-- Botão Voltar ao Topo -->
-        <button class="back-to-top hidden fixed bottom-6 right-6 z-50 bg-secondary hover:bg-secondary/90 text-white w-12 h-12 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center group">
-            <i class="fas fa-chevron-up text-lg group-hover:scale-110 transition-transform duration-300"></i>
-        </button>
-
         <!-- Modal para Nova Categoria -->
         <div id="modalCategoria" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center">
             <div class="bg-white rounded-xl shadow-2xl p-8 max-w-md w-full mx-4 transform transition-all duration-300 scale-95 opacity-0" id="modalContent">
@@ -421,7 +369,6 @@ $select = new select();
                         <i class="fas fa-times text-xl"></i>
                     </button>
                 </div>
-
                 <form action="../controllers/controller_crud_produto.php" method="post" id="formCategoria" class="space-y-6">
                     <div>
                         <label for="nomeCategoria" class="block text-sm font-semibold text-gray-700 mb-2">
@@ -431,7 +378,6 @@ $select = new select();
                             class="w-full px-4 py-3 border-2 border-primary/30 rounded-lg focus:outline-none focus:ring-1 focus:ring-secondary focus:border-secondary transition-all duration-200"
                             placeholder="Ex: Informática">
                     </div>
-
                     <div class="flex gap-3 pt-4">
                         <button type="button" onclick="fecharModalCategoria()"
                             class="flex-1 bg-gray-300 text-gray-700 font-semibold py-2 px-2 rounded-lg hover:bg-gray-400 transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-md">
@@ -447,17 +393,46 @@ $select = new select();
                 </form>
             </div>
         </div>
+        <!-- Modal para Confirmação de Exclusão -->
+        <div id="modalExcluir" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center">
+            <div class="bg-white rounded-xl shadow-2xl p-8 max-w-md w-full mx-4 transform transition-all duration-300 scale-95 opacity-0" id="modalExcluirContent">
+                <div class="flex items-center justify-between mb-6">
+                    <h2 class="text-2xl font-bold text-primary flex items-center">
+                        <i class="fas fa-exclamation-triangle mr-3 text-red-600"></i>
+                        Confirmar Exclusão
+                    </h2>
+                    <button onclick="fecharModalExcluir()" class="text-gray-400 hover:text-gray-600 transition-colors">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                <p class="text-gray-700 text-base mb-6">
+                    Tem certeza que deseja excluir o produto <span id="nomeProdutoExcluir" class="font-semibold"></span>?
+                    <br>
+                    <span class="text-sm text-red-600">Esta ação não pode ser desfeita.</span>
+                </p>
+                <form action="../controllers/controller_crud_produto.php" method="post" id="formExcluir">
+                    <input type="hidden" id="idExcluir" name="id_excluir" value="">
+                    <div class="flex gap-3 pt-4">
+                        <button type="button" onclick="fecharModalExcluir()"
+                            class="flex-1 bg-gray-300 text-gray-700 font-semibold py-2 px-2 rounded-lg hover:bg-gray-400 transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-md">
+                            <i class="fas fa-times mr-2"></i>
+                            Cancelar
+                        </button>
+                        <button type="submit"
+                            class="flex-1 bg-gradient-to-r from-red-600 to-red-700 text-white font-semibold py-3 px-4 rounded-lg hover:from-red-700 hover:to-red-800 transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl">
+                            <i class="fas fa-trash mr-2"></i>
+                            Excluir
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </main>
-
-
     <footer class="bg-gradient-to-r from-primary to-dark text-white py-8 md:py-10 mt-auto relative transition-all duration-300">
-        <!-- Efeito de brilho sutil no topo -->
         <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-secondary to-transparent opacity-30"></div>
-
         <div class="px-4 md:px-8 transition-all duration-300 ml-0 md:ml-64" id="footerContent">
             <div class="max-w-7xl mx-auto">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
-                    <!-- Sobre a Escola -->
                     <div class="group">
                         <h3 class="font-heading text-lg md:text-xl font-semibold mb-4 flex items-center text-white group-hover:text-secondary transition-colors duration-300">
                             <i class="fas fa-school mr-3 text-secondary group-hover:scale-110 transition-transform duration-300"></i>
@@ -468,8 +443,6 @@ $select = new select();
                             Av. Sen. Virgílio Távora, 1103 - Distrito Industrial I,
                         </p>
                     </div>
-
-                    <!-- Contato -->
                     <div class="group">
                         <h3 class="font-heading text-lg md:text-xl font-semibold mb-4 flex items-center text-white group-hover:text-secondary transition-colors duration-300">
                             <i class="fas fa-address-book mr-3 text-secondary group-hover:scale-110 transition-transform duration-300"></i>
@@ -480,11 +453,8 @@ $select = new select();
                                 <i class="fas fa-phone-alt mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
                                 (85) 3341-3990
                             </a>
-
                         </div>
                     </div>
-
-                    <!-- Desenvolvedores -->
                     <div class="group">
                         <h3 class="font-heading text-lg md:text-xl font-semibold mb-4 flex items-center text-white group-hover:text-secondary transition-colors duration-300">
                             <i class="fas fa-code mr-3 text-secondary group-hover:scale-110 transition-transform duration-300"></i>
@@ -499,12 +469,9 @@ $select = new select();
                                 <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
                                 Pedro Uchoa
                             </a>
-
                         </div>
                     </div>
                 </div>
-
-                <!-- Rodapé inferior -->
                 <div class="border-t border-white/20 pt-6 mt-8 text-center">
                     <p class="text-sm md:text-base text-gray-300 hover:text-white transition-colors duration-300">
                         © 2024 STGM v1.2.0 | Desenvolvido por alunos EEEP STGM
@@ -512,36 +479,26 @@ $select = new select();
                 </div>
             </div>
         </div>
-
-        <!-- Efeito de brilho sutil na base -->
         <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-secondary to-transparent opacity-30"></div>
     </footer>
-
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Sidebar mobile toggle
             const menuButton = document.getElementById('menuButton');
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('overlay');
             const closeSidebar = document.getElementById('closeSidebar');
-
             if (menuButton && sidebar) {
                 menuButton.addEventListener('click', function(e) {
                     e.stopPropagation();
                     sidebar.classList.toggle('show');
                     overlay.classList.toggle('hidden');
-
-                    // Mostrar/ocultar o botão do menu
                     if (sidebar.classList.contains('show')) {
                         menuButton.classList.add('hidden');
                     } else {
                         menuButton.classList.remove('hidden');
                     }
-
                     document.body.style.overflow = sidebar.classList.contains('show') ? 'hidden' : '';
                 });
-
-                // Fechar sidebar ao clicar no overlay
                 if (overlay) {
                     overlay.addEventListener('click', function() {
                         sidebar.classList.remove('show');
@@ -550,8 +507,6 @@ $select = new select();
                         document.body.style.overflow = '';
                     });
                 }
-
-                // Fechar sidebar ao clicar no botão fechar
                 if (closeSidebar) {
                     closeSidebar.addEventListener('click', function() {
                         sidebar.classList.remove('show');
@@ -560,8 +515,6 @@ $select = new select();
                         document.body.style.overflow = '';
                     });
                 }
-
-                // Fechar sidebar ao clicar em um link
                 const navLinks = sidebar.querySelectorAll('a');
                 navLinks.forEach(link => {
                     link.addEventListener('click', function() {
@@ -573,8 +526,6 @@ $select = new select();
                         }
                     });
                 });
-
-                // Fechar sidebar ao pressionar ESC
                 document.addEventListener('keydown', function(e) {
                     if (e.key === 'Escape' && sidebar.classList.contains('show')) {
                         sidebar.classList.remove('show');
@@ -583,34 +534,20 @@ $select = new select();
                         document.body.style.overflow = '';
                     }
                 });
-
-                // Ajustar footer quando sidebar é aberta/fechada no mobile
                 const footerContent = document.getElementById('footerContent');
                 if (footerContent) {
                     const adjustFooter = () => {
                         if (window.innerWidth <= 768) {
-                            if (sidebar.classList.contains('show')) {
-                                footerContent.style.marginLeft = '0';
-                            } else {
-                                footerContent.style.marginLeft = '0';
-                            }
+                            footerContent.style.marginLeft = '0';
                         } else {
-                            footerContent.style.marginLeft = '16rem'; // 64 * 0.25rem = 16rem
+                            footerContent.style.marginLeft = '16rem';
                         }
                     };
-
-                    // Ajustar na inicialização
                     adjustFooter();
-
-                    // Ajustar quando a sidebar é aberta/fechada
                     menuButton.addEventListener('click', adjustFooter);
-
-                    // Ajustar quando a janela é redimensionada
                     window.addEventListener('resize', adjustFooter);
                 }
             }
-
-            // Back to top button visibility and functionality
             const backToTop = document.querySelector('.back-to-top');
             if (backToTop) {
                 window.addEventListener('scroll', () => {
@@ -622,8 +559,6 @@ $select = new select();
                         backToTop.classList.add('hidden');
                     }
                 });
-
-                // Funcionalidade do botão voltar ao topo
                 backToTop.addEventListener('click', () => {
                     window.scrollTo({
                         top: 0,
@@ -631,87 +566,83 @@ $select = new select();
                     });
                 });
             }
-
-            // Funcionalidade de pesquisa
             const pesquisarInput = document.getElementById('pesquisar');
             const filtroCategoria = document.getElementById('filtroCategoria');
             const tabelaEstoque = document.getElementById('tabelaEstoque');
-
             function filtrarProdutos() {
                 const termo = pesquisarInput.value.toLowerCase();
                 const categoria = filtroCategoria.value;
-
-                // Implementar lógica de filtro aqui
-                console.log('Filtrando produtos:', {
-                    termo,
-                    categoria
-                });
+                console.log('Filtrando produtos:', { termo, categoria });
             }
-
             if (pesquisarInput) {
                 pesquisarInput.addEventListener('input', filtrarProdutos);
             }
-
             if (filtroCategoria) {
                 filtroCategoria.addEventListener('change', filtrarProdutos);
             }
-
-
         });
-
-        // Funções para controlar o modal
         function abrirModalCategoria() {
             const modal = document.getElementById('modalCategoria');
             const modalContent = document.getElementById('modalContent');
-
             modal.classList.remove('hidden');
             modal.classList.add('flex');
-
-            // Animar entrada
             setTimeout(() => {
                 modalContent.classList.remove('scale-95', 'opacity-0');
                 modalContent.classList.add('scale-100', 'opacity-100');
             }, 10);
-
-            // Focar no primeiro campo
             document.getElementById('nomeCategoria').focus();
         }
-
         function fecharModalCategoria() {
             const modal = document.getElementById('modalCategoria');
             const modalContent = document.getElementById('modalContent');
-
-            // Animar saída
             modalContent.classList.remove('scale-100', 'opacity-100');
             modalContent.classList.add('scale-95', 'opacity-0');
-
             setTimeout(() => {
                 modal.classList.add('hidden');
                 modal.classList.remove('flex');
             }, 300);
-
-            // Limpar formulário
             document.getElementById('formCategoria').reset();
         }
-
-        // Fechar modal ao clicar fora
-        document.getElementById('modalCategoria').addEventListener('click', function(e) {
+        function abrirModalExcluir(id, nome) {
+            const modal = document.getElementById('modalExcluir');
+            const modalContent = document.getElementById('modalExcluirContent');
+            document.getElementById('idExcluir').value = id;
+            document.getElementById('nomeProdutoExcluir').textContent = nome;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            setTimeout(() => {
+                modalContent.classList.remove('scale-95', 'opacity-0');
+                modalContent.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+        function fecharModalExcluir() {
+            const modal = document.getElementById('modalExcluir');
+            const modalContent = document.getElementById('modalExcluirContent');
+            modalContent.classList.remove('scale-100', 'opacity-100');
+            modalContent.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 300);
+            document.getElementById('formExcluir').reset();
+        }
+        document.getElementById('modalExcluir').addEventListener('click', function(e) {
             if (e.target === this) {
-                fecharModalCategoria();
+                fecharModalExcluir();
             }
         });
-
-        // Fechar modal com ESC
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
-                const modal = document.getElementById('modalCategoria');
-                if (!modal.classList.contains('hidden')) {
+                const modalCategoria = document.getElementById('modalCategoria');
+                const modalExcluir = document.getElementById('modalExcluir');
+                if (!modalCategoria.classList.contains('hidden')) {
                     fecharModalCategoria();
+                }
+                if (!modalExcluir.classList.contains('hidden')) {
+                    fecharModalExcluir();
                 }
             }
         });
     </script>
-    </main>
 </body>
-
 </html>
