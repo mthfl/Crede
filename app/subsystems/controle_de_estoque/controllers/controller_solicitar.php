@@ -4,8 +4,8 @@ $session = new sessions();
 $session->autenticar_session();
 $session->tempo_session();
 
-require_once(__DIR__ . '/../models/model.usuario.php');
-$select = new usuario();
+require_once(__DIR__ . '/../models/model.liberador.php');
+$select = new liberador();
 //print_r($_POST);
 
 if (
@@ -17,13 +17,13 @@ if (
 
     $id_produto = $_POST['produto'];
     $retirante = $_POST['retirante'];
-    $valor_retirada = $_POST['quantidade'];
-    $usuario = $_SESSION['nome'];
-    $model = new usuario();
+    $valor_retirado = $_POST['quantidade'];
+    $liberador = $_SESSION['nome'] ?? null;
+    $model = new liberador();
 
     date_default_timezone_set('America/Fortaleza');
     $datatime = date('Y-m-d H:i:s');
-    $result = $model->solicitar_produto_id($valor_retirada, $id_produto, $retirante, $datatime, $usuario);
+    $result = $model->solicitar_produto_id($valor_retirado, $id_produto, $retirante, $datatime, $liberador);
 
     switch ($result) {
         case 1:
@@ -48,15 +48,15 @@ if (
     isset($_POST['quantidade']) && !empty($_POST['quantidade']) && is_numeric($_POST['quantidade'])
 ) {
 
-    $id_produto = $_POST['barcode'];
+    $barcode = $_POST['barcode'];
     $retirante = $_POST['retirante'];
     $valor_retirada = $_POST['quantidade'];
-    $usuario = $_SESSION['nome'];
-    $model = new usuario();
+    $liberador = $_SESSION['nome'];
+    $model = new liberador();
 
     date_default_timezone_set('America/Fortaleza');
     $datatime = date('Y-m-d H:i:s');
-    $result = $model->solicitar_produto_barcode($valor_retirada, $id_produto, $retirante, $datatime, $usuario);
+    $result = $model->solicitar_produto_barcode($valor_retirada, $barcode, $retirante, $datatime, $liberador);
 
     switch ($result) {
         case 1:
@@ -75,4 +75,8 @@ if (
             header("Location: ../views/solicitar.php?fatal");
             break;
     }
+} else {
+
+    header('location:../views/index.php');
+    exit();
 }

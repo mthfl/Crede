@@ -12,6 +12,7 @@
 
 # Arquivos de configuração sensíveis
 **/config.php
+**/tables.php
 **/database.php
 **/db_config.php
 **/connection.php

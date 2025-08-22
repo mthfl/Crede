@@ -1,4 +1,4 @@
-<?php 
+<?php
 require_once(__DIR__ . '/../../models/sessions.php');
 $session = new sessions();
 $session->autenticar_session();
@@ -7,10 +7,10 @@ $session->tempo_session();
 require_once(__DIR__ . '/../../models/model.select.php');
 $select = new select();
 
-if(isset($_GET['id_produto']) && !empty($_GET['id_produto'])) {
+if (!isset($_GET['barcode']) || empty($_GET['barcode'])) {
 
-    $id_produto = $_GET['id_produto'];
-    $dados = $select->select_produtos_id($id_produto);
+    header('location:adc_produto.php');
+    exit();
 }
 ?>
 
@@ -25,9 +25,6 @@ if(isset($_GET['id_produto']) && !empty($_GET['id_produto'])) {
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -334,89 +331,56 @@ if(isset($_GET['id_produto']) && !empty($_GET['id_produto'])) {
                 margin-left: 0 !important;
             }
         }
-
-        /* Estilos do Select2 (Selecionar Categoria) */
-        .select2-container {
-            width: 100% !important;
-        }
-        .select2-container .select2-selection--single {
-            height: 48px;
-            border: 2px solid #005A24;
-            border-radius: 0.5rem;
-            display: flex;
-            align-items: center;
-            transition: box-shadow 0.2s ease, border-color 0.2s ease;
-        }
-        .select2-container--default .select2-selection--single .select2-selection__rendered {
-            line-height: 44px;
-            padding-left: 12px;
-            font-weight: 600;
-            color: #1A3C34;
-        }
-        .select2-container--default .select2-selection--single .select2-selection__arrow {
-            height: 46px;
-            right: 10px;
-        }
-        .select2-container--default .select2-selection--single:focus,
-        .select2-container--default .select2-selection--single:hover {
-            border-color: #FFA500;
-            box-shadow: 0 0 0 3px rgba(255, 165, 0, 0.25);
-        }
-        .select2-dropdown {
-            border: 2px solid #005A24;
-            border-radius: 0.5rem;
-            overflow: hidden;
-        }
-        .select2-results__option--highlighted.select2-results__option--selectable {
-            background-color: #FFA500 !important;
-            color: #FFFFFF !important;
-        }
-        .select2-search--dropdown .select2-search__field {
-            border: 2px solid #005A24 !important;
-            border-radius: 0.5rem;
-            outline: none;
-        }
     </style>
 </head>
 
 <body class="min-h-screen flex flex-col font-sans bg-light">
-    <!-- Sidebar -->
     <div class="fixed left-0 top-0 h-full w-64 bg-gradient-to-b from-primary to-dark text-white shadow-xl z-50 transform transition-transform duration-300 ease-in-out" id="sidebar">
         <div class="flex flex-col h-full">
             <!-- Logo e título -->
             <div class="p-6 border-b border-white/20">
                 <div class="flex items-center">
                     <img src="https://i.postimg.cc/0N0dsxrM/Bras-o-do-Cear-svg-removebg-preview.png" alt="Logo STGM" class="h-12 mr-3 transition-transform hover:scale-105">
-                    <span class="text-white font-heading text-lg font-semibold">STGM Estoque</span>
+                    <span class="text-white font-heading text-lg font-semibold">CREDE Estoque</span>
                 </div>
             </div>
 
             <!-- Menu de navegação -->
-                        <!-- Menu de navegação -->
-                        <nav class="flex-1 p-4 space-y-2">
-                <a href="../index.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2 active">
-                    <i class="fas fa-home mr-3 text-lg"></i>
-                    <span>Início</span>
-                </a>
-                <a href="../estoque.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
-                    <i class="fas fa-boxes mr-3 text-lg"></i>
-                    <span>Estoque</span>
-                </a>
-                <a href="adc_produto.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
-                    <i class="fas fa-plus-circle mr-3 text-lg"></i>
-                    <span>Adicionar</span>
-                </a>
+            <nav class="flex-1 p-4 space-y-2">
+            <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
+                    <a href="../index.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2 active">
+                        <i class="fas fa-home mr-3 text-lg"></i>
+                        <span>Início</span>
+                    </a>
+                <?php } ?>
+                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
+                    <a href="../estoque.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                        <i class="fas fa-boxes mr-3 text-lg"></i>
+                        <span>Estoque</span>
+                    </a>
+                <?php } ?>
+                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
+                    <a href="adc_produto.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                        <i class="fas fa-plus-circle mr-3 text-lg"></i>
+                        <span>Adicionar</span>
+                    </a>
+                <?php } ?>
+                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
+                    <a href="../solicitar.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                        <i class="fas fa-clipboard-list mr-3 text-lg"></i>
+                        <span>Solicitar</span>
+                    </a>
+                <?php } ?>
+                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
+                    <a href="../relatorios.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                        <i class="fas fa-clipboard-list mr-3 text-lg"></i>
+                        <span>Relatórios</span>
+                    </a>
+                <?php } ?>
 
-                <a href="../solicitar.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
-                    <i class="fas fa-clipboard-list mr-3 text-lg"></i>
-                    <span>Solicitar</span>
-                </a>
-               
             </nav>
-
-            <!-- Botão de Sair -->
             <div class="p-4 border-t border-white/20">
-                <a href="../../../../../../main/views/subsystems.php" class="w-full bg-transparent border border-white/40 hover:bg-white/10 text-white py-2 px-4 rounded-lg transition-all duration-200 flex items-center justify-center">
+                <a href="../../../../main/views/subsystems.php" class="w-full bg-transparent border border-white/40 hover:bg-white/10 text-white py-2 px-4 rounded-lg transition-all duration-200 flex items-center justify-center">
                     <i class="fas fa-sign-out-alt mr-2"></i>
                     Sair
                 </a>
@@ -432,7 +396,7 @@ if(isset($_GET['id_produto']) && !empty($_GET['id_produto'])) {
         </div>
     </div>
 
-    <button class="fixed top-4 left-4 z-50 md:hidden  text-primary p-3 rounded-lg  hover:bg-primary/90 transition-all duration-200" id="menuButton">
+    <button class="fixed top-4 left-4 z-50 md:hidden bg-white text-primary p-3 rounded-lg hover:bg-primary/90 transition-all duration-200" id="menuButton">
         <i class="fas fa-bars text-lg"></i>
     </button>
 
@@ -445,64 +409,52 @@ if(isset($_GET['id_produto']) && !empty($_GET['id_produto'])) {
     </button>
 
     <!-- Main content -->
-    <main class="ml-64 px-4 py-8 md:py-12 flex-1 transition-all duration-300">
+    <main class="ml-0 md:ml-64 px-4 py-8 md:py-12 flex-1 transition-all duration-300">
         <div class="text-center mb-10">
-            <h1 class="text-primary text-3xl md:text-4xl font-bold mb-8 md:mb-6 text-center page-title tracking-tight font-heading inline-block mx-auto">ADICIONAR NOVO PRODUTO</h1>
+            <h1 class="text-primary text-3xl md:text-4xl font-bold mb-8 md:mb-6 text-center page-title tracking-tight font-heading inline-block mx-auto">ADICIONAR AO ESTOQUE</h1>
         </div>
 
         <div class="bg-white rounded-xl shadow-lg p-8 max-w-2xl w-full border-2 border-primary mx-auto">
             <form action="../../controllers/controller_crud_produto.php" method="POST" class="space-y-6">
                 <div class="space-y-4">
-                    <input type="hidden" name="id_produto" value="<?=$id_produto?>">
                     <div>
-                        <input value="<?=$dados['barcode']?>" type="text" placeholder="BARCODE" id="barcode" name="barcode" style="text-transform: uppercase;" oninput="this.value = this.value.toUpperCase();" required
-                            class="w-full px-4 py-3 border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent text-center font-semibold"
-                            aria-label="Nome do produto">
-                    </div>
-                    <div>
-                        <input value="<?=$dados['nome_produto']?>" type="text" placeholder="NOME DO PRODUTO | MARCA | MODELO | PACOTE OU UNIDADE" id="nome" name="nome_produto" style="text-transform: uppercase;" oninput="this.value = this.value.toUpperCase();" required
-                            class="w-full px-4 py-3 border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent text-center font-semibold"
-                            aria-label="Nome do produto">
+
+                        <?php
+
+                        $dados = $select->select_produto_nome(($_GET['barcode']));
+                        foreach ($dados as $dado) {
+                        ?>
+                            <input type="text" placeholder="NOME DO PRODUTO" id="nome" name="nome" value="<?= $dado['nome_produto'] ?>"
+                                class="w-full px-4 py-3 border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent text-center font-semibold"
+                                aria-label="Nome do produto">
+
+                        <?php
+                        }
+                        ?>
                     </div>
 
+                    <input type="hidden" name="barcode" value="<?= $_GET['barcode'] ?>">
+
                     <div>
-                        <input value="<?=$dados['quantidade']?>" type="number" placeholder="QUANTIDADE" min="1" id="quantidade" name="quantidade" required
+                        <input type="number" placeholder="QUANTIDADE" min="1" id="quantidade" name="quantidade_adicionar" required
                             class="w-full px-4 py-3 border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent text-center font-semibold"
                             aria-label="Quantidade do produto">
                     </div>
                     <div>
-                        <input value="<?=$dados['vencimento']?>" type="date" placeholder="VALIDADE" min="1" id="validade" name="validade"
+                        <input type="date" placeholder="VALIDADE" min="1" id="validade" name="validade"
                             class="w-full px-4 py-3 border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent text-center font-semibold"
                             aria-label="Quantidade do produto">
                     </div>
 
-                    <div class="p-4 border-2 border-primary rounded-lg">
-                        <p class="font-semibold text-primary mb-3 text-center">Selecione a Categoria</p>
-
-                        <select class="js-example-basic-single" id="categoria" name="id_categoria" required data-placeholder="Selecione uma categoria">
-                            <option value="<?=$dados['id_categoria']?>"  selected><?=$dados['categoria']?></option>
-
-                            <?php
-                            $dados = $select->select_categoria();
-                            foreach ($dados as $dado) {
-                            ?>
-                                <option value="<?= $dado['id'] ?>"><?= $dado['nome_categoria'] ?></option>
-                            <?php } ?>
-                        </select>
-                    </div>
+                    <button type="submit" name="btn" value="Adicionar" class="w-full bg-secondary text-white font-bold py-3 px-4 rounded-lg hover:bg-opacity-90 transition-colors"
+                        aria-label="Adicionar produto">
+                        ADICIONAR QUANTIDADE
+                    </button>
                 </div>
-                <button type="submit" name="editar" value="Adicionar" class="w-full bg-secondary text-white font-bold py-3 px-4 rounded-lg hover:bg-opacity-90 transition-colors"
-                    aria-label="Adicionar produto">
-                    ADICIONAR
-                </button>
-        </div>
-
-
-        </form>
+            </form>
         </div>
     </main>
 
-    
     <footer class="bg-gradient-to-r from-primary to-dark text-white py-8 md:py-10 mt-auto relative transition-all duration-300">
         <!-- Efeito de brilho sutil no topo -->
         <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-secondary to-transparent opacity-30"></div>
@@ -514,11 +466,11 @@ if(isset($_GET['id_produto']) && !empty($_GET['id_produto'])) {
                     <div class="group">
                         <h3 class="font-heading text-lg md:text-xl font-semibold mb-4 flex items-center text-white group-hover:text-secondary transition-colors duration-300">
                             <i class="fas fa-school mr-3 text-secondary group-hover:scale-110 transition-transform duration-300"></i>
-                           CREDE 1
+                            CREDE 1
                         </h3>
                         <p class="text-sm md:text-base leading-relaxed text-gray-200 group-hover:text-white transition-colors duration-300">
                             <i class="fas fa-map-marker-alt mr-2 text-secondary"></i>
-                            Av. Sen. Virgílio Távora, 1103 - Distrito Industrial I, 
+                            Av. Sen. Virgílio Távora, 1103 - Distrito Industrial I,
                         </p>
                     </div>
 
@@ -533,7 +485,7 @@ if(isset($_GET['id_produto']) && !empty($_GET['id_produto'])) {
                                 <i class="fas fa-phone-alt mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
                                 (85) 3341-3990
                             </a>
-                        
+
                         </div>
                     </div>
 
@@ -571,15 +523,6 @@ if(isset($_GET['id_produto']) && !empty($_GET['id_produto'])) {
     </footer>
 
     <script>
-        $(document).ready(function() {
-            $('.js-example-basic-single').select2({
-                placeholder: 'Selecione uma categoria',
-                width: '100%',
-                language: {
-                    noResults: function () { return 'Nenhum resultado encontrado'; }
-                }
-            });
-        });
         document.addEventListener('DOMContentLoaded', function() {
             // Sidebar mobile toggle
             const menuButton = document.getElementById('menuButton');
@@ -647,29 +590,6 @@ if(isset($_GET['id_produto']) && !empty($_GET['id_produto'])) {
                 });
             }
 
-            // Adicionar suporte para dropdown no mobile
-            const dropdownToggle = document.querySelector('.group > a');
-            const dropdownMenu = document.querySelector('.group > div');
-
-            if (window.innerWidth <= 768) {
-                dropdownToggle.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    dropdownMenu.classList.toggle('scale-0');
-                    dropdownMenu.classList.toggle('scale-100');
-                });
-            }
-
-            // Hamburger menu toggle
-            const hamburger = document.querySelector('.hamburger');
-            const navLinks = document.querySelector('.nav-links');
-
-            if (hamburger && navLinks) {
-                hamburger.addEventListener('click', () => {
-                    navLinks.classList.toggle('active');
-                    hamburger.classList.toggle('open');
-                });
-            }
-
             // Back to top button visibility and functionality
             const backToTop = document.querySelector('.back-to-top');
             if (backToTop) {
@@ -698,6 +618,31 @@ if(isset($_GET['id_produto']) && !empty($_GET['id_produto'])) {
                 images.forEach(img => {
                     img.loading = 'lazy';
                 });
+            }
+
+            // Ajustar footer quando sidebar é aberta/fechada no mobile
+            const footerContent = document.getElementById('footerContent');
+            if (footerContent) {
+                const adjustFooter = () => {
+                    if (window.innerWidth <= 768) {
+                        if (sidebar.classList.contains('show')) {
+                            footerContent.style.marginLeft = '0';
+                        } else {
+                            footerContent.style.marginLeft = '0';
+                        }
+                    } else {
+                        footerContent.style.marginLeft = '16rem'; // 64 * 0.25rem = 16rem
+                    }
+                };
+
+                // Ajustar na inicialização
+                adjustFooter();
+
+                // Ajustar quando a sidebar é aberta/fechada
+                menuButton.addEventListener('click', adjustFooter);
+
+                // Ajustar quando a janela é redimensionada
+                window.addEventListener('resize', adjustFooter);
             }
         });
     </script>

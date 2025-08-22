@@ -464,27 +464,41 @@ $session->tempo_session();
 
             <!-- Menu de navegação -->
             <nav class="flex-1 p-4 space-y-2">
-                <a href="index.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2 active">
-                    <i class="fas fa-home mr-3 text-lg"></i>
-                    <span>Início</span>
-                </a>
-                <a href="estoque.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
-                    <i class="fas fa-boxes mr-3 text-lg"></i>
-                    <span>Estoque</span>
-                </a>
-                <a href="./products/adc_produto.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
-                    <i class="fas fa-plus-circle mr-3 text-lg"></i>
-                    <span>Adicionar</span>
-                </a>
-                <a href="solicitar.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
-                    <i class="fas fa-clipboard-list mr-3 text-lg"></i>
-                    <span>Solicitar</span>
-                </a>
+                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
+                    <a href="index.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2 active">
+                        <i class="fas fa-home mr-3 text-lg"></i>
+                        <span>Início</span>
+                    </a>
+                <?php } ?>
+                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
+                    <a href="estoque.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                        <i class="fas fa-boxes mr-3 text-lg"></i>
+                        <span>Estoque</span>
+                    </a>
+                <?php } ?>
+                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
+                    <a href="./products/adc_produto.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                        <i class="fas fa-plus-circle mr-3 text-lg"></i>
+                        <span>Adicionar</span>
+                    </a>
+                <?php } ?>
+                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
+                    <a href="solicitar.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                        <i class="fas fa-clipboard-list mr-3 text-lg"></i>
+                        <span>Solicitar</span>
+                    </a>
+                <?php } ?>
+                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
+                    <a href="relatorios.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                        <i class="fas fa-clipboard-list mr-3 text-lg"></i>
+                        <span>Relatórios</span>
+                    </a>
+                <?php } ?>
             </nav>
 
             <!-- Botão de Sair -->
             <div class="p-4 border-t border-white/20">
-                <a href="../../../../../main/views/subsystems.php" class="w-full bg-transparent border border-white/40 hover:bg-white/10 text-white py-2 px-4 rounded-lg transition-all duration-200 flex items-center justify-center">
+                <a href="../../../main/views/subsystems.php" class="w-full bg-transparent border border-white/40 hover:bg-white/10 text-white py-2 px-4 rounded-lg transition-all duration-200 flex items-center justify-center">
                     <i class="fas fa-sign-out-alt mr-2"></i>
                     Sair
                 </a>
@@ -521,53 +535,59 @@ $session->tempo_session();
             <!-- Layout: Leitor de código de barras (somente visual) -->
             <div class="w-full max-w-5xl mx-auto px-4 mb-8 md:mb-10">
 
-                <div class="relative">
-                    <span class="pointer-events-none absolute inset-y-0 left-4 flex items-center text-primary">
-                        <i class="fas fa-barcode text-xl"></i>
-                    </span>
-                    <input
-                        id="barcodeHome"
-                        type="text"
-                        placeholder="Escaneie o código de barras aqui"
-                        class="w-full pl-12 pr-4 py-4 bg-white border-2 border-primary/50 focus:border-secondary focus:ring-2 focus:ring-secondary/40 rounded-2xl outline-none placeholder:text-gray-400 text-gray-700 shadow-card text-lg"
-                        autocomplete="off" />
-                </div>
+                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
+                    <div class="relative">
+                        <span class="pointer-events-none absolute inset-y-0 left-4 flex items-center text-primary">
+                            <i class="fas fa-barcode text-xl"></i>
+                        </span>
+                        <input
+                            id="barcodeHome"
+                            type="text"
+                            placeholder="Escaneie o código de barras aqui"
+                            class="w-full pl-12 pr-4 py-4 bg-white border-2 border-primary/50 focus:border-secondary focus:ring-2 focus:ring-secondary/40 rounded-2xl outline-none placeholder:text-gray-400 text-gray-700 shadow-card text-lg"
+                            autocomplete="off" />
+                    </div>
+                <?php } ?>
             </div>
 
 
             <div id="cardsGrid" class="w-full max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8 px-4 justify-center">
-
-                <a href="./products/adc_produto.php" class="group animate-fade-in" style="animation-delay: 0.1s">
-                    <div class="card-item bg-white border-2 border-primary rounded-xl md:rounded-2xl shadow-card w-full h-48 md:h-56 flex flex-col items-center justify-center p-4 md:p-6 relative">
-                        <div class="card-shine"></div>
-                        <i class="fas fa-plus-circle card-icon text-4xl md:text-5xl text-primary mb-4 md:mb-5"></i>
-                        <p class="text-secondary font-bold text-center text-base md:text-lg leading-tight">ADICIONAR</p>
-                    </div>
-                </a>
-
-                <a href="estoque.php" class="group animate-fade-in">
-                    <div class="card-item bg-white border-2 border-primary rounded-xl md:rounded-2xl shadow-card w-full h-48 md:h-56 flex flex-col items-center justify-center p-4 md:p-6 relative">
-                        <div class="card-shine"></div>
-                        <i class="fas fa-boxes card-icon text-4xl md:text-5xl text-primary mb-4 md:mb-5"></i>
-                        <p class="text-secondary font-bold text-center text-base md:text-lg leading-tight">ESTOQUE</p>
-                    </div>
-                </a>
-
-                <a href="solicitar.php" class="group animate-fade-in" style="animation-delay: 0.2s">
-                    <div class="card-item bg-white border-2 border-primary rounded-xl md:rounded-2xl shadow-card w-full h-48 md:h-56 flex flex-col items-center justify-center p-4 md:p-6 relative">
-                        <div class="card-shine"></div>
-                        <i class="fas fa-clipboard-list card-icon text-4xl md:text-5xl text-primary mb-4 md:mb-5"></i>
-                        <p class="text-secondary font-bold text-center text-base md:text-lg leading-tight">RETIRAR</p>
-                    </div>
-                </a>
-
-                <!--<a href="relatorios.php" class="group animate-fade-in" style="animation-delay: 0.4s">
-                    <div class="card-item bg-white border-2 border-primary rounded-xl md:rounded-2xl shadow-card w-full h-48 md:h-56 flex flex-col items-center justify-center p-4 md:p-6 relative">
-                        <div class="card-shine"></div>
-                        <i class="fas fa-chart-bar card-icon text-4xl md:text-5xl text-primary mb-4 md:mb-5"></i>
-                        <p class="text-secondary font-bold text-center text-base md:text-lg leading-tight">RELATÓRIOS</p>
-                    </div>
-                </a>-->
+                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
+                    <a href="./products/adc_produto.php" class="group animate-fade-in" style="animation-delay: 0.1s">
+                        <div class="card-item bg-white border-2 border-primary rounded-xl md:rounded-2xl shadow-card w-full h-48 md:h-56 flex flex-col items-center justify-center p-4 md:p-6 relative">
+                            <div class="card-shine"></div>
+                            <i class="fas fa-plus-circle card-icon text-4xl md:text-5xl text-primary mb-4 md:mb-5"></i>
+                            <p class="text-secondary font-bold text-center text-base md:text-lg leading-tight">ADICIONAR</p>
+                        </div>
+                    </a>
+                <?php } ?>
+                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
+                    <a href="estoque.php" class="group animate-fade-in">
+                        <div class="card-item bg-white border-2 border-primary rounded-xl md:rounded-2xl shadow-card w-full h-48 md:h-56 flex flex-col items-center justify-center p-4 md:p-6 relative">
+                            <div class="card-shine"></div>
+                            <i class="fas fa-boxes card-icon text-4xl md:text-5xl text-primary mb-4 md:mb-5"></i>
+                            <p class="text-secondary font-bold text-center text-base md:text-lg leading-tight">ESTOQUE</p>
+                        </div>
+                    </a>
+                <?php } ?>
+                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
+                    <a href="solicitar.php" class="group animate-fade-in" style="animation-delay: 0.2s">
+                        <div class="card-item bg-white border-2 border-primary rounded-xl md:rounded-2xl shadow-card w-full h-48 md:h-56 flex flex-col items-center justify-center p-4 md:p-6 relative">
+                            <div class="card-shine"></div>
+                            <i class="fas fa-clipboard-list card-icon text-4xl md:text-5xl text-primary mb-4 md:mb-5"></i>
+                            <p class="text-secondary font-bold text-center text-base md:text-lg leading-tight">RETIRAR</p>
+                        </div>
+                    </a>
+                <?php } ?>
+                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
+                    <a href="relatorios.php" class="group animate-fade-in" style="animation-delay: 0.4s">
+                        <div class="card-item bg-white border-2 border-primary rounded-xl md:rounded-2xl shadow-card w-full h-48 md:h-56 flex flex-col items-center justify-center p-4 md:p-6 relative">
+                            <div class="card-shine"></div>
+                            <i class="fas fa-chart-bar card-icon text-4xl md:text-5xl text-primary mb-4 md:mb-5"></i>
+                            <p class="text-secondary font-bold text-center text-base md:text-lg leading-tight">RELATÓRIOS</p>
+                        </div>
+                    </a>
+                <?php } ?>
             </div>
         </div>
     </main>

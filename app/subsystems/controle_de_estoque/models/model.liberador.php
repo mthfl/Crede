@@ -5,13 +5,12 @@ $session->autenticar_session();
 $session->tempo_session();
 
 require_once(__DIR__ . '/../config/connect.php');
-class usuario extends connect
+class liberador extends connect
 {
-    private string $table1;
-    private string $table2;
-    private string $table3;
+    protected string $table1;
+    protected string $table2;
+    protected string $table3;
     protected string $table4;
-    private string $table5;
 
     function __construct()
     {
@@ -21,7 +20,6 @@ class usuario extends connect
         $this->table2 = $table['crede_estoque'][2];
         $this->table3 = $table['crede_estoque'][3];
         $this->table4 = $table['crede_estoque'][4];
-        $this->table5 = $table['crede_estoque'][5];
     }
 
     public function cadastrar_produto($barcode, string $nome, int $quantidade, int $id_categoria, string $validade): int
@@ -79,45 +77,6 @@ class usuario extends connect
         } else {
 
             return false;
-        }
-    }
-    public function registrar_perda(
-        $id_produto,
-        $quantidade,
-        $tipo_perda,
-        $data_perda
-    ) {
-
-        $stmt_check = $this->connect->prepare("SELECT * FROM produtos WHERE id = :id");
-        $stmt_check->bindParam(':id', $id_produto);
-        $stmt_check->execute();
-
-        if ($stmt_check->rowCount() > 0) {
-
-            $dados = $stmt_check->fetch(PDO::FETCH_ASSOC);
-            $nova_quantidade = $dados['quantidade'] - $quantidade;
-            $stmt_registrar = $this->connect->prepare("UPDATE `produtos` SET quantidade = :quantidade WHERE id = :id");
-            $stmt_registrar->bindParam(':id', $id_produto);
-            $stmt_registrar->bindParam(':quantidade', $nova_quantidade);
-            $stmt_registrar->execute();
-
-            $stmt_registrar = $this->connect->prepare("INSERT INTO perdas_produtos VALUES(null, :id_produto, :quantidade, :tipo, :data_perda)");
-            $stmt_registrar->bindParam(':id_produto', $id_produto);
-            $stmt_registrar->bindParam(':quantidade', $quantidade);
-            $stmt_registrar->bindParam(':tipo', $tipo_perda);
-            $stmt_registrar->bindParam(':data_perda', $data_perda);
-            $stmt_registrar->execute();
-
-            if ($stmt_registrar) {
-
-                return 1;
-            } else {
-
-                return 2;
-            }
-        } else {
-
-            return 3;
         }
     }
 
@@ -181,7 +140,7 @@ class usuario extends connect
         }
     }
 
-    public function solicitar_produto_id($valor_retirada, $id_produto, $id_retirante, $datetime, $usuario)
+    public function solicitar_produto_id($valor_retirado, $id_produto, $solicitador, $datetime, $liberador)
     {
         try {
 
@@ -192,24 +151,24 @@ class usuario extends connect
             $produto = $queryProduto->fetch(PDO::FETCH_ASSOC);
             $barcode_produto = $produto['barcode'];
 
-            if ($produto['quantidade'] < $valor_retirada) {
+            if ($produto['quantidade'] < $valor_retirado) {
                 return 3;
             }
 
             $consultaUpdate = "UPDATE produtos SET quantidade = quantidade - :valor_retirada WHERE id = :id";
             $queryUpdate = $this->connect->prepare($consultaUpdate);
-            $queryUpdate->bindValue(":valor_retirada", $valor_retirada, PDO::PARAM_INT);
+            $queryUpdate->bindValue(":valor_retirada", $valor_retirado, PDO::PARAM_INT);
             $queryUpdate->bindValue(":id", $id_produto);
             $queryUpdate->execute();
 
-            $consultaInsert = "INSERT INTO movimentacao VALUES (NULL, :id_produto, :usuario, :id_responsaveis, :datareg, :barcode_produto, :quantidade_retirada)";
+            $consultaInsert = "INSERT INTO movimentacao VALUES (NULL, :id_produtos, :liber, :datareg, :barcode_produto, :quantidade_retirada)";
             $queryInsert = $this->connect->prepare($consultaInsert);
-            $queryInsert->bindValue(":id_produto", $id_produto);
-            $queryInsert->bindValue(":usuario", $usuario);
-            $queryInsert->bindValue(":id_responsaveis", $id_retirante);
+            $queryInsert->bindValue(":id_produtos", $id_produto);
+            $queryInsert->bindValue(":liberador", $liberador);
+            $queryInsert->bindValue(":solicitador", $solicitador);
             $queryInsert->bindValue(":datareg", $datetime);
             $queryInsert->bindValue(":barcode_produto", $barcode_produto);
-            $queryInsert->bindValue(":quantidade_retirada", $valor_retirada);
+            $queryInsert->bindValue(":quantidade_retirada", $valor_retirado);
 
             if ($queryInsert->execute()) {
                 return 1;
@@ -222,7 +181,7 @@ class usuario extends connect
         }
     }
 
-    public function solicitar_produto_barcode($valor_retirada, $barcode, $id_retirante, $datetime,  $usuario)
+    public function solicitar_produto_barcode($valor_retirado, $barcode, $solicitador, $datetime, $liberador)
     {
         try {
 
@@ -233,24 +192,24 @@ class usuario extends connect
             $produto = $queryProduto->fetch(PDO::FETCH_ASSOC);
             $id_produto = $produto['id'];
 
-            if ($produto['quantidade'] < $valor_retirada) {
+            if ($produto['quantidade'] < $valor_retirado) {
                 return 3;
             }
 
             $consultaUpdate = "UPDATE produtos SET quantidade = quantidade - :valor_retirada WHERE id = :id";
             $queryUpdate = $this->connect->prepare($consultaUpdate);
-            $queryUpdate->bindValue(":valor_retirada", $valor_retirada, PDO::PARAM_INT);
+            $queryUpdate->bindValue(":valor_retirada", $valor_retirado, PDO::PARAM_INT);
             $queryUpdate->bindValue(":id", $id_produto);
             $queryUpdate->execute();
 
-            $consultaInsert = "INSERT INTO movimentacao VALUES (NULL, :id_produto, :usuario, :id_responsaveis, :datareg, :barcode_produto, :quantidade_retirada)";
+            $consultaInsert = "INSERT INTO movimentacao VALUES (NULL, :id_produtos, :liber, :datareg, :barcode_produto, :quantidade_retirada)";
             $queryInsert = $this->connect->prepare($consultaInsert);
-            $queryInsert->bindValue(":id_produto", $id_produto);
-            $queryInsert->bindValue(":usuario", $usuario);
-            $queryInsert->bindValue(":id_responsaveis", $id_retirante);
+            $queryInsert->bindValue(":id_produtos", $id_produto);
+            $queryInsert->bindValue(":liberador", $liberador);
+            $queryInsert->bindValue(":solicitador", $solicitador);
             $queryInsert->bindValue(":datareg", $datetime);
             $queryInsert->bindValue(":barcode_produto", $barcode);
-            $queryInsert->bindValue(":quantidade_retirada", $valor_retirada);
+            $queryInsert->bindValue(":quantidade_retirada", $valor_retirado);
 
             if ($queryInsert->execute()) {
                 return 1;
@@ -262,34 +221,25 @@ class usuario extends connect
             return 0;
         }
     }
-    public function editarProduto($id, $nome, $barcode, $quantidade, $natureza)
+    public function editar_produto_nome($id, $nome): int
     {
         try {
-
-            $consulta = "UPDATE produtos SET barcode = :barcode, nome_produto = :nome, quantidade = :quantidade, natureza = :natureza WHERE id = :id";
+            $consulta = "UPDATE produtos SET nome_produto = :nome WHERE id = :id";
             $query = $this->connect->prepare($consulta);
             $query->bindValue(":id", $id);
-            $query->bindValue(":barcode", $barcode);
             $query->bindValue(":nome", $nome);
-            $query->bindValue(":quantidade", $quantidade);
-            $query->bindValue(":natureza", $natureza);
+            $query->execute();
 
-            $resultado = $query->execute();
-            $linhasAfetadas = $query->rowCount();
+            if ($query->execute()) {
 
-            error_log("Query executada com sucesso");
-            error_log("Linhas afetadas: " . $linhasAfetadas);
-
-            if ($linhasAfetadas > 0) {
-                error_log("Produto editado com sucesso");
-                return true;
+                return 1;
             } else {
-                error_log("Nenhuma linha foi afetada - produto pode não existir");
-                return false;
+
+                return 2;
             }
         } catch (PDOException $e) {
 
-            return false;
+            return 0;
         }
     }
 }

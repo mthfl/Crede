@@ -9,6 +9,7 @@ $select = new select();
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -47,13 +48,16 @@ $select = new select();
             scroll-behavior: smooth;
             background-color: #F8FAF9;
         }
+
         .gradient-bg {
             background: linear-gradient(135deg, #005A24 0%, #1A3C34 100%);
         }
+
         .page-title {
             position: relative;
             display: inline-block;
         }
+
         .page-title::after {
             content: '';
             position: absolute;
@@ -65,6 +69,7 @@ $select = new select();
             background-color: #FFA500;
             border-radius: 3px;
         }
+
         .header-nav-link {
             position: relative;
             transition: all 0.3s ease;
@@ -72,9 +77,11 @@ $select = new select();
             padding: 0.5rem 1rem;
             border-radius: 0.5rem;
         }
+
         .header-nav-link:hover {
             background-color: rgba(255, 255, 255, 0.1);
         }
+
         .header-nav-link::after {
             content: '';
             position: absolute;
@@ -86,66 +93,83 @@ $select = new select();
             transition: all 0.3s ease;
             transform: translateX(-50%);
         }
+
         .header-nav-link:hover::after,
         .header-nav-link.active::after {
             width: 80%;
         }
+
         .header-nav-link.active {
             background-color: rgba(255, 255, 255, 0.15);
         }
+
         .mobile-menu-button {
             display: none;
         }
+
         .sidebar-link {
             transition: all 0.3s ease;
             border-radius: 0.5rem;
         }
+
         .sidebar-link:hover {
             background-color: rgba(255, 255, 255, 0.1);
             transform: translateX(0.5rem);
         }
+
         .sidebar-link.active {
             background-color: rgba(255, 165, 0, 0.2);
             color: #FFA500;
         }
+
         @media (max-width: 768px) {
             #sidebar {
                 transform: translateX(-100%);
             }
+
             #sidebar.show {
                 transform: translateX(0);
             }
+
             main {
                 margin-left: 0 !important;
             }
+
             #menuButton {
                 transition: all 0.3s ease;
             }
+
             #menuButton.hidden {
                 opacity: 0;
                 visibility: hidden;
                 transform: scale(0.8);
             }
+
             footer {
                 margin-left: 0 !important;
                 padding-left: 1rem !important;
                 padding-right: 1rem !important;
             }
+
             footer .ml-64 {
                 margin-left: 0 !important;
             }
         }
+
         .desktop-table {
             display: block;
             width: 100%;
         }
+
         .mobile-cards {
             display: none;
         }
+
         @media screen and (max-width: 768px) {
             .desktop-table {
                 display: none;
             }
+
             .mobile-cards {
                 display: flex;
                 flex-direction: column;
@@ -154,41 +178,51 @@ $select = new select();
                 padding: 0 0.5rem;
                 width: 100%;
             }
+
             .categoria-header {
                 margin-top: 1.5rem;
                 margin-bottom: 0.75rem;
             }
         }
+
         .card-item {
             transition: all 0.3s ease;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         }
+
         .card-item:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
+
         .quantidade-critica {
             color: #FF0000;
             font-weight: bold;
         }
+
         .max-w-5xl {
             max-width: 64rem;
             width: 100%;
         }
+
         .flex-1.w-full {
             max-width: 100%;
         }
+
         #exportarBtn {
             margin-top: 1.5rem;
         }
+
         .action-button {
             transition: all 0.3s ease;
         }
+
         .action-button:hover {
             transform: scale(1.1);
         }
     </style>
 </head>
+
 <body class="min-h-screen flex flex-col font-sans bg-light">
     <!-- Sidebar -->
     <div class="fixed left-0 top-0 h-full w-64 bg-gradient-to-b from-primary to-dark text-white shadow-xl z-50 transform transition-transform duration-300 ease-in-out" id="sidebar">
@@ -200,25 +234,39 @@ $select = new select();
                 </div>
             </div>
             <nav class="flex-1 p-4 space-y-2">
-                <a href="index.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
-                    <i class="fas fa-home mr-3 text-lg"></i>
-                    <span>Início</span>
-                </a>
-                <a href="estoque.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2 active">
-                    <i class="fas fa-boxes mr-3 text-lg"></i>
-                    <span>Estoque</span>
-                </a>
-                <a href="./products/adc_produto.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
-                    <i class="fas fa-plus-circle mr-3 text-lg"></i>
-                    <span>Adicionar</span>
-                </a>
-                <a href="solicitar.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
-                    <i class="fas fa-clipboard-list mr-3 text-lg"></i>
-                    <span>Solicitar</span>
-                </a>
+                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
+                    <a href="index.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2 active">
+                        <i class="fas fa-home mr-3 text-lg"></i>
+                        <span>Início</span>
+                    </a>
+                <?php } ?>
+                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
+                    <a href="estoque.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                        <i class="fas fa-boxes mr-3 text-lg"></i>
+                        <span>Estoque</span>
+                    </a>
+                <?php } ?>
+                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
+                    <a href="./products/adc_produto.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                        <i class="fas fa-plus-circle mr-3 text-lg"></i>
+                        <span>Adicionar</span>
+                    </a>
+                <?php } ?>
+                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
+                    <a href="solicitar.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                        <i class="fas fa-clipboard-list mr-3 text-lg"></i>
+                        <span>Solicitar</span>
+                    </a>
+                <?php } ?>
+                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
+                    <a href="relatorios.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                        <i class="fas fa-clipboard-list mr-3 text-lg"></i>
+                        <span>Relatórios</span>
+                    </a>
+                <?php } ?>
             </nav>
             <div class="p-4 border-t border-white/20">
-                <a href="../views/subsystems.php" class="w-full bg-transparent border border-white/40 hover:bg-white/10 text-white py-2 px-4 rounded-lg transition-all duration-200 flex items-center justify-center">
+                <a href="../../../main/views/subsystems.php" class="w-full bg-transparent border border-white/40 hover:bg-white/10 text-white py-2 px-4 rounded-lg transition-all duration-200 flex items-center justify-center">
                     <i class="fas fa-sign-out-alt mr-2"></i>
                     Sair
                 </a>
@@ -256,7 +304,7 @@ $select = new select();
                         <option value="<?= $dado['id'] ?>"><?= htmlspecialchars($dado['nome_categoria']) ?></option>
                     <?php } ?>
                 </select>
-                <?php if (isset($_SESSION['Admin_estoque'])) { ?>
+                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
                     <a href="perdas.php">
                         <button class="bg-red-600 text-white font-bold py-3 px-4 rounded-lg hover:bg-red-700 transition-colors flex items-center shadow-md">
                             <i class="fas fa-exclamation-triangle mr-2"></i>
@@ -281,8 +329,10 @@ $select = new select();
                             <th class="py-3 px-4 text-left">Categoria</th>
                             <th class="py-3 px-4 text-left">Validade</th>
                             <th class="py-3 px-4 text-left">Data Cadastro</th>
-                            <?php if (isset($_SESSION['Admin_estoque'])) { ?>
+                            <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
                                 <th class="py-3 px-4 text-left">Editar</th>
+                            <?php } ?>
+                            <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
                                 <th class="py-3 px-4 text-left">Excluir</th>
                             <?php } ?>
                         </tr>
@@ -302,16 +352,19 @@ $select = new select();
                                     <td class="py-3 px-4"><?= htmlspecialchars($produto['categoria']) ?></td>
                                     <td class="py-3 px-4"><?= htmlspecialchars($produto['vencimento'] == '' ? 'Sem vencimento' : $produto['vencimento']) ?></td>
                                     <td class="py-3 px-4"><?= date('d/m/Y H:i', strtotime($produto['data'])) ?></td>
-                                    <?php if (isset($_SESSION['Admin_estoque'])) { ?>
+                                    <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
                                         <td class="py-3 px-4">
                                             <a href="./products/editar_produto.php?id_produto=<?= $produto['id'] ?>" class="action-button text-primary hover:text-primary/80">
                                                 <i class="fas fa-pen"></i>
                                             </a>
                                         </td>
+                                    <?php } ?>
+                                    <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
                                         <td class="py-3 px-4">
-                                            <button onclick="abrirModalExcluir(<?= $produto['id'] ?>, '<?= htmlspecialchars($produto['nome_produto'], ENT_QUOTES, 'UTF-8') ?>')" class="action-button text-red-600 hover:text-red-700">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
+                                            <a href="../controllers/controller_crud_produto.php?id_excluir=<?= $produto['id'] ?>" class="action-button text-primary hover:text-primary/80">
+                                                <i class="fas fa-pen"></i>
+                                            </a>
+
                                         </td>
                                     <?php } ?>
                                 </tr>
@@ -569,10 +622,14 @@ $select = new select();
             const pesquisarInput = document.getElementById('pesquisar');
             const filtroCategoria = document.getElementById('filtroCategoria');
             const tabelaEstoque = document.getElementById('tabelaEstoque');
+
             function filtrarProdutos() {
                 const termo = pesquisarInput.value.toLowerCase();
                 const categoria = filtroCategoria.value;
-                console.log('Filtrando produtos:', { termo, categoria });
+                console.log('Filtrando produtos:', {
+                    termo,
+                    categoria
+                });
             }
             if (pesquisarInput) {
                 pesquisarInput.addEventListener('input', filtrarProdutos);
@@ -581,6 +638,7 @@ $select = new select();
                 filtroCategoria.addEventListener('change', filtrarProdutos);
             }
         });
+
         function abrirModalCategoria() {
             const modal = document.getElementById('modalCategoria');
             const modalContent = document.getElementById('modalContent');
@@ -592,6 +650,7 @@ $select = new select();
             }, 10);
             document.getElementById('nomeCategoria').focus();
         }
+
         function fecharModalCategoria() {
             const modal = document.getElementById('modalCategoria');
             const modalContent = document.getElementById('modalContent');
@@ -603,6 +662,7 @@ $select = new select();
             }, 300);
             document.getElementById('formCategoria').reset();
         }
+
         function abrirModalExcluir(id, nome) {
             const modal = document.getElementById('modalExcluir');
             const modalContent = document.getElementById('modalExcluirContent');
@@ -615,6 +675,7 @@ $select = new select();
                 modalContent.classList.add('scale-100', 'opacity-100');
             }, 10);
         }
+
         function fecharModalExcluir() {
             const modal = document.getElementById('modalExcluir');
             const modalContent = document.getElementById('modalExcluirContent');
@@ -645,4 +706,5 @@ $select = new select();
         });
     </script>
 </body>
+
 </html>

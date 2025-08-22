@@ -8,11 +8,15 @@ require_once(__DIR__ . '/../config/connect.php');
 //print_r($_POST);
 class select extends connect
 {
-    private string $table1;
-    private string $table2;
-    private string $table3;
+    protected string $table1;
+    protected string $table2;
+    protected string $table3;
     protected string $table4;
-    private string $table5;
+    protected string $table5;
+    protected string $table6;
+    protected string $table7;
+    protected string $table8;
+    protected string $table9;
 
     function __construct()
     {
@@ -22,7 +26,11 @@ class select extends connect
         $this->table2 = $table['crede_estoque'][2];
         $this->table3 = $table['crede_estoque'][3];
         $this->table4 = $table['crede_estoque'][4];
-        $this->table5 = $table['crede_estoque'][5];
+        $this->table5 = $table['crede_users'][1];
+        $this->table6 = $table['crede_users'][2];
+        $this->table7 = $table['crede_users'][3];
+        $this->table8 = $table['crede_users'][4];
+        $this->table9 = $table['crede_users'][5];
     }
 
     public function select_produtos_id($id)
@@ -79,9 +87,8 @@ class select extends connect
     }
     public function select_responsavel()
     {
-
-        $consulta = "SELECT * FROM $this->table5";
-        $query = $this->connect->query($consulta);
+        $consulta = "SELECT u.nome, s.nome AS nome_setor FROM {$this->table6} u INNER JOIN {$this->table7} s ON u.id_setor = s.id";
+        $query = $this->connect_users->query($consulta);
 
         return $resultado = $query->fetchAll(PDO::FETCH_ASSOC);
     }

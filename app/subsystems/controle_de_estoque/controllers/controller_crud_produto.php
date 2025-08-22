@@ -4,30 +4,68 @@ $session = new sessions();
 $session->autenticar_session();
 $session->tempo_session();
 
-require_once(__DIR__ . '/../models/model.usuario.php');
+require_once(__DIR__ . '/../models/model.liberador.php');
 require_once(__DIR__ . '/../models/model.admin.php');
-$select = new usuario();
-print_r($_GET);
+$select = new liberador();
+//print_r($_GET);
 print_r($_POST);
 
 //cadastrar produto com codigo de barra
 if (
-    isset($_POST['nome_produto']) && !empty($_POST['nome_produto']) && is_string($_POST['nome_produto']) &&
-    isset($_POST['quantidade']) && !empty($_POST['quantidade']) && is_numeric($_POST['quantidade']) &&
-    isset($_POST['id_categoria']) && !empty($_POST['id_categoria']) && is_numeric($_POST['id_categoria'])
+    isset($_POST['nome_produto']) && !empty($_POST['nome_produto']) && is_string($_POST['nome_produto'])
 ) {
 
     $id_produto = $_POST['id_produto'] ?? null;
     $barcode = $_POST['barcode'] ?? null;
     $nome = $_POST['nome_produto'];
-    $quantidade = $_POST['quantidade'];
+    $quantidade = $_POST['quantidade'] ?? null;
     $validade = $_POST['validade'] ?? null;
-    $id_categoria = $_POST['id_categoria'];
+    $id_categoria = $_POST['id_categoria'] ?? null;
 
     if (isset($_POST['editar'])) {
 
-        $obj = new admin();
-        $result = $obj->editar_produto($id_produto, $barcode, $nome, $quantidade, $id_categoria, $validade);
+        if (isset($_SESSION['liberador_estoque'])) {
+
+            $obj = new liberador();
+            $result = $obj->editar_produto_nome($id_produto, $nome);
+
+            switch ($result) {
+                case 1:
+                    header('Location: ../views/estoque.php?cadastrado');
+                    exit();
+                case 2:
+                    header('Location: ../views/estoque.php?erro');
+                    exit();
+                case 3:
+                    header('Location: ../views/products/adc_novo_produto.php?ja_cadastrado');
+                    exit();
+                default:
+                    header('Location: ../views/estoque.php?falha');
+                    exit();
+            }
+        } else {
+            $obj = new admin();
+            $result = $obj->editar_produto_geral($id_produto, $barcode, $nome, $quantidade, $id_categoria, $validade);
+
+            switch ($result) {
+                case 1:
+                    header('Location: ../views/estoque.php?cadastrado');
+                    exit();
+                case 2:
+                    header('Location: ../views/estoque.php?erro');
+                    exit();
+                case 3:
+                    header('Location: ../views/products/adc_novo_produto.php?ja_cadastrado');
+                    exit();
+                default:
+                    header('Location: ../views/estoque.php?falha');
+                    exit();
+            }
+        }
+    } else {
+
+        $obj = new liberador();
+        $result = $obj->cadastrar_produto($barcode, $nome, $quantidade, $id_categoria, $validade);
 
         switch ($result) {
             case 1:
@@ -44,23 +82,6 @@ if (
                 exit();
         }
     }
-    $obj = new usuario();
-    $result = $obj->cadastrar_produto($barcode, $nome, $quantidade, $id_categoria, $validade);
-
-    switch ($result) {
-        case 1:
-            header('Location: ../views/estoque.php?cadastrado');
-            exit();
-        case 2:
-            header('Location: ../views/estoque.php?erro');
-            exit();
-        case 3:
-            header('Location: ../views/products/adc_novo_produto.php?ja_cadastrado');
-            exit();
-        default:
-            header('Location: ../views/estoque.php?falha');
-            exit();
-    }
 }
 
 //verificar o tipo de cadastro de produto
@@ -74,7 +95,7 @@ else if (
 
     if ($tipo_produto === 'com_codigo') {
 
-        $obj = new usuario();
+        $obj = new liberador();
         $result = $obj->verificar_produto_barcode($barcode);
 
         if ($result) {
@@ -111,7 +132,7 @@ else if (
     $tipo_perda = trim($_POST['tipo_perda']);
     $data_perda = trim($_POST['data_perda']);
 
-    $obj = new usuario();
+    $obj = new admin();
     $result = $obj->registrar_perda(
         $id_produto,
         $quantidade,
@@ -140,7 +161,7 @@ else if (isset($_POST['categoria']) && !empty($_POST['categoria'])) {
 
     $categoria = $_POST['categoria'];
 
-    $obj = new usuario();
+    $obj = new liberador();
     $result = $obj->cadastrar_categoria($categoria);
 
     switch ($result) {
@@ -167,7 +188,7 @@ else if (
     $quantidade = $_POST['quantidade_adicionar'];
     $validade = $_POST['validade'] ?? null;
 
-    $obj = new usuario();
+    $obj = new liberador();
 
     $result = $obj->adicionar_produto($barcode, $quantidade, $validade);
 

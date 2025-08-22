@@ -458,12 +458,14 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
                         </div>
                         <span class="text-sm sm:text-base">Cadastrar Usuário</span>
                     </button>
+                    <?php if(isset($_SESSION['Dev_usuario'])){?>
                     <button onclick="openUserTypeForm()" class="bg-gradient-to-r from-secondary to-orange-500 hover:from-secondary/90 hover:to-orange-500/90 text-white px-6 py-3 rounded-xl font-semibold flex items-center justify-center sm:justify-start gap-2 sm:gap-3 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
                         <div class="w-6 h-6 rounded-lg bg-white/20 flex items-center justify-center">
                             <i class="fa-solid fa-user-tag text-white text-sm"></i>
                         </div>
                         <span class="text-sm sm:text-base">Cadastrar Tipo de Usuário</span>
                     </button>
+                    <?php }?>
                 </div>
 
                 <!-- Users Table -->

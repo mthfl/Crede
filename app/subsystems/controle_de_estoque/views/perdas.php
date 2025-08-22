@@ -47,77 +47,175 @@ $select = new select();
         }
     </script>
     <style>
-        body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; background-color: #F8FAF9; }
-        .gradient-bg { background: linear-gradient(135deg, #005A24 0%, #1A3C34 100%); }
-        .page-title { position: relative; display: inline-block; }
-        .page-title::after { content: ''; position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%); width: 80px; height: 3px; background-color: #FFA500; border-radius: 3px; }
-        .header-nav-link { position: relative; transition: all 0.3s ease; font-weight: 500; padding: 0.5rem 1rem; border-radius: 0.5rem; }
-        .header-nav-link:hover { background-color: rgba(255,255,255,0.1); }
-        .header-nav-link::after { content: ''; position: absolute; bottom: -2px; left: 50%; width: 0; height: 2px; background-color: #FFA500; transition: all 0.3s ease; transform: translateX(-50%); }
-        .header-nav-link:hover::after, .header-nav-link.active::after { width: 80%; }
-        .header-nav-link.active { background-color: rgba(255,255,255,0.15); }
-        .mobile-menu-button { display: none; }
-        
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+            background-color: #F8FAF9;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(135deg, #005A24 0%, #1A3C34 100%);
+        }
+
+        .page-title {
+            position: relative;
+            display: inline-block;
+        }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background-color: #FFA500;
+            border-radius: 3px;
+        }
+
+        .header-nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+        }
+
+        .header-nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .header-nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background-color: #FFA500;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .header-nav-link:hover::after,
+        .header-nav-link.active::after {
+            width: 80%;
+        }
+
+        .header-nav-link.active {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .mobile-menu-button {
+            display: none;
+        }
+
         /* Estilos para a sidebar */
         .sidebar-link {
             transition: all 0.3s ease;
             border-radius: 0.5rem;
         }
-        
+
         .sidebar-link:hover {
             background-color: rgba(255, 255, 255, 0.1);
             transform: translateX(0.5rem);
         }
-        
+
         .sidebar-link.active {
             background-color: rgba(255, 165, 0, 0.2);
             color: #FFA500;
         }
-        
+
         /* Responsividade da sidebar */
         @media (max-width: 768px) {
             #sidebar {
                 transform: translateX(-100%);
             }
-            
+
             #sidebar.show {
                 transform: translateX(0);
             }
-            
+
             main {
                 margin-left: 0 !important;
             }
-            
+
             /* Botão do menu mobile */
             #menuButton {
                 transition: all 0.3s ease;
             }
-            
+
             #menuButton.hidden {
                 opacity: 0;
                 visibility: hidden;
                 transform: scale(0.8);
             }
-            
+
             /* Footer responsivo para mobile */
             footer {
                 margin-left: 0 !important;
                 padding-left: 1rem !important;
                 padding-right: 1rem !important;
             }
-            
+
             footer .ml-64 {
                 margin-left: 0 !important;
             }
         }
-        .desktop-table { display: block; width: 100%; }
-        .mobile-cards { display: none; }
-        @media screen and (max-width: 768px) { .desktop-table { display: none; } .mobile-cards { display: flex; flex-direction: column; gap: 0.75rem; margin-top: 1rem; padding: 0 0.5rem; width: 100%; } .card-item { margin-bottom: 0.75rem; } .categoria-header { margin-top: 1.5rem; margin-bottom: 0.75rem; } }
-        .card-item { transition: all 0.3s ease; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-        .card-item:hover { transform: translateY(-2px); box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .max-w-5xl { max-width: 64rem; width: 100%; }
-        .flex-1.w-full { max-width: 100%; }
-        
+
+        .desktop-table {
+            display: block;
+            width: 100%;
+        }
+
+        .mobile-cards {
+            display: none;
+        }
+
+        @media screen and (max-width: 768px) {
+            .desktop-table {
+                display: none;
+            }
+
+            .mobile-cards {
+                display: flex;
+                flex-direction: column;
+                gap: 0.75rem;
+                margin-top: 1rem;
+                padding: 0 0.5rem;
+                width: 100%;
+            }
+
+            .card-item {
+                margin-bottom: 0.75rem;
+            }
+
+            .categoria-header {
+                margin-top: 1.5rem;
+                margin-bottom: 0.75rem;
+            }
+        }
+
+        .card-item {
+            transition: all 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .max-w-5xl {
+            max-width: 64rem;
+            width: 100%;
+        }
+
+        .flex-1.w-full {
+            max-width: 100%;
+        }
+
         /* Estilos para o Select2 personalizado */
         .select2-container--default .select2-selection--single {
             height: 48px;
@@ -126,90 +224,98 @@ $select = new select();
             background-color: white;
             transition: all 0.2s ease;
         }
-        
+
         .select2-container--default .select2-selection--single:hover {
             border-color: rgba(0, 90, 36, 0.5);
         }
-        
+
         .select2-container--default.select2-container--focus .select2-selection--single {
             border-color: #FFA500;
             box-shadow: 0 0 0 3px rgba(255, 165, 0, 0.1);
         }
-        
+
         .select2-container--default .select2-selection--single .select2-selection__rendered {
             line-height: 46px;
             padding-left: 16px;
             color: #374151;
             font-weight: 500;
         }
-        
+
         .select2-container--default .select2-selection--single .select2-selection__arrow {
             height: 46px;
             width: 30px;
         }
-        
+
         .select2-dropdown {
             border: 2px solid #005A24;
             border-radius: 8px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
         }
-        
+
         .select2-container--default .select2-results__option--highlighted[aria-selected] {
             background-color: #005A24;
             color: white;
         }
-        
+
         .select2-container--default .select2-results__option[aria-selected=true] {
             background-color: #E6F4EA;
             color: #005A24;
         }
-        
+
         /* Remover ícones padrão do Select2 */
         .select2-container--default .select2-selection--single .select2-selection__clear {
             display: none !important;
         }
-        
+
         .select2-container--default .select2-results__option .select2-results__option__icon {
             display: none !important;
         }
-        
+
         /* Estilizar o ícone de seta */
         .select2-container--default .select2-selection--single .select2-selection__arrow b {
             display: none !important;
         }
-        
+
         /* Animações */
         .animate-fade-in {
             animation: fadeIn 0.3s ease-in-out;
         }
-        
+
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
-        
+
         /* Estilos para campos com erro */
         .border-red-500 {
             border-color: #EF4444 !important;
             box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
         }
-        
+
         /* Melhorias para o campo de quantidade */
         #quantidade_perdida:focus {
             border-color: #FFA500;
             box-shadow: 0 0 0 3px rgba(255, 165, 0, 0.1);
         }
-        
+
         /* Estilos para as informações do produto */
         #produto-info {
             transition: all 0.3s ease;
         }
-        
+
         #estoque-alerta {
             transition: all 0.3s ease;
         }
     </style>
 </head>
+
 <body class="min-h-screen flex flex-col font-sans bg-light">
     <!-- Sidebar -->
     <div class="fixed left-0 top-0 h-full w-64 bg-gradient-to-b from-primary to-dark text-white shadow-xl z-50 transform transition-transform duration-300 ease-in-out" id="sidebar">
@@ -221,32 +327,45 @@ $select = new select();
                     <span class="text-white font-heading text-lg font-semibold">CREDE Estoque</span>
                 </div>
             </div>
-            
-                        <!-- Menu de navegação -->
-                        <nav class="flex-1 p-4 space-y-2">
-                <a href="index.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
-                    <i class="fas fa-home mr-3 text-lg"></i>
-                    <span>Início</span>
-                </a>
-                <a href="estoque.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
-                    <i class="fas fa-boxes mr-3 text-lg"></i>
-                    <span>Estoque</span>
-                </a>
-                <a href="./products/adc_produto.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
-                    <i class="fas fa-plus-circle mr-3 text-lg"></i>
-                    <span>Adicionar</span>
-                </a>
 
-                <a href="solicitar.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
-                    <i class="fas fa-clipboard-list mr-3 text-lg"></i>
-                    <span>Solicitar</span>
-                </a>
-             
+            <!-- Menu de navegação -->
+            <nav class="flex-1 p-4 space-y-2">
+                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
+                    <a href="index.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2 active">
+                        <i class="fas fa-home mr-3 text-lg"></i>
+                        <span>Início</span>
+                    </a>
+                <?php } ?>
+                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
+                    <a href="estoque.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                        <i class="fas fa-boxes mr-3 text-lg"></i>
+                        <span>Estoque</span>
+                    </a>
+                <?php } ?>
+                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
+                    <a href="./products/adc_produto.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                        <i class="fas fa-plus-circle mr-3 text-lg"></i>
+                        <span>Adicionar</span>
+                    </a>
+                <?php } ?>
+                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
+                    <a href="solicitar.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                        <i class="fas fa-clipboard-list mr-3 text-lg"></i>
+                        <span>Solicitar</span>
+                    </a>
+                <?php } ?>
+                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
+                    <a href="relatorios.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                        <i class="fas fa-clipboard-list mr-3 text-lg"></i>
+                        <span>Relatórios</span>
+                    </a>
+                <?php } ?>
+
             </nav>
 
             <!-- Botão de Sair -->
             <div class="p-4 border-t border-white/20">
-                <a href="../../../../../main/views/subsystems.php" class="w-full bg-transparent border border-white/40 hover:bg-white/10 text-white py-2 px-4 rounded-lg transition-all duration-200 flex items-center justify-center">
+                <a href="../../../main/views/subsystems.php" class="w-full bg-transparent border border-white/40 hover:bg-white/10 text-white py-2 px-4 rounded-lg transition-all duration-200 flex items-center justify-center">
                     <i class="fas fa-sign-out-alt mr-2"></i>
                     Sair
                 </a>
@@ -261,14 +380,14 @@ $select = new select();
             </div>
         </div>
     </div>
-    
+
     <button class="fixed top-4 left-4 z-50 md:hidden  text-primary p-3 rounded-lg  hover:bg-primary/90 transition-all duration-200" id="menuButton">
         <i class="fas fa-bars text-lg"></i>
     </button>
-    
+
     <!-- Overlay para mobile -->
     <div class="fixed inset-0 bg-black/50 z-40 md:hidden hidden" id="overlay"></div>
-    
+
     <!-- Botão Voltar ao Topo -->
     <button class="back-to-top hidden fixed bottom-6 right-6 z-50 bg-secondary hover:bg-secondary/90 text-white w-12 h-12 rounded-full shadow-lg transition-all duration-300 flex items-center justify-center group">
         <i class="fas fa-chevron-up text-lg group-hover:scale-110 transition-transform duration-300"></i>
@@ -279,7 +398,7 @@ $select = new select();
         <div class="text-center mb-10">
             <h1 class="text-primary text-3xl md:text-4xl font-bold mb-8 md:mb-6 text-center page-title tracking-tight font-heading inline-block mx-auto">GERENCIAR PERDAS</h1>
         </div>
-        
+
         <!-- Formulário para registrar perda -->
         <div class="bg-white rounded-xl shadow-lg p-8 max-w-4xl w-full border-2 border-primary mx-auto mb-8">
             <div class="text-center mb-8">
@@ -289,7 +408,7 @@ $select = new select();
                 <h2 class="text-3xl font-bold text-primary mb-2">Registrar Nova Perda</h2>
                 <p class="text-gray-600">Preencha os dados abaixo para registrar uma perda no estoque</p>
             </div>
-            
+
             <form action="../controllers/controller_crud_produto.php" method="POST" class="space-y-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="space-y-2">
@@ -298,28 +417,28 @@ $select = new select();
                             Produto
                         </label>
                         <div class="relative">
-                            <select name="id_produto" id="produto_id" required 
-                                    class="w-full px-4 py-3 border-2 border-primary/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary transition-all duration-200 hover:border-primary/50 bg-white shadow-sm appearance-none">
+                            <select name="id_produto" id="produto_id" required
+                                class="w-full px-4 py-3 border-2 border-primary/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary transition-all duration-200 hover:border-primary/50 bg-white shadow-sm appearance-none">
                                 <option value="">Selecione o produto</option>
                                 <?php
                                 $dados = $select->select_produtos();
                                 foreach ($dados as $dado) {
-                                    ?>
-                                <option value="<?= htmlspecialchars($dado['id']) ?>" 
+                                ?>
+                                    <option value="<?= htmlspecialchars($dado['id']) ?>"
                                         data-nome="<?= htmlspecialchars($dado['nome_produto']) ?>"
                                         data-quantidade="<?= htmlspecialchars($dado['quantidade'] ?? '0') ?>"
                                         data-categoria="<?= htmlspecialchars($dado['categoria'] ?? 'N/A') ?>"
                                         data-codigo="<?= htmlspecialchars($dado['codigo'] ?? 'N/A') ?>">
-                                    <?= htmlspecialchars($dado['nome_produto']) ?> 
-                                    (Estoque: <?= htmlspecialchars($dado['quantidade'] ?? '0') ?>)
-                                </option>
+                                        <?= htmlspecialchars($dado['nome_produto']) ?>
+                                        (Estoque: <?= htmlspecialchars($dado['quantidade'] ?? '0') ?>)
+                                    </option>
                                 <?php } ?>
                             </select>
                             <div class="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
                                 <i class="fas fa-chevron-down text-primary text-sm"></i>
                             </div>
                         </div>
-                        
+
                         <!-- Informações do produto selecionado -->
                         <div id="produto-info" class="hidden mt-3 p-3 bg-accent rounded-lg border border-primary/20">
                             <div class="flex items-center justify-between mb-2">
@@ -337,7 +456,7 @@ $select = new select();
                                 </div>
                             </div>
                         </div>
-                        
+
                         <!-- Alerta de estoque baixo -->
                         <div id="estoque-alerta" class="hidden mt-2 p-2 bg-yellow-100 border border-yellow-300 rounded-lg">
                             <div class="flex items-center text-yellow-800 text-xs">
@@ -350,12 +469,12 @@ $select = new select();
                             <i class="fas fa-sort-numeric-down text-primary mr-2"></i>
                             Quantidade Perdida
                         </label>
-                        <input type="number" id="quantidade_perdida" name="quantidade_perdida" min="1" required 
-                               class="w-full px-4 py-3 border-2 border-primary/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary transition-all duration-200 hover:border-primary/50 bg-white shadow-sm"
-                               placeholder="Ex: 5">
+                        <input type="number" id="quantidade_perdida" name="quantidade_perdida" min="1" required
+                            class="w-full px-4 py-3 border-2 border-primary/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary transition-all duration-200 hover:border-primary/50 bg-white shadow-sm"
+                            placeholder="Ex: 5">
                     </div>
                 </div>
-                
+
                 <!-- Segunda linha: Tipo de Perda e Data -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="space-y-2">
@@ -363,8 +482,8 @@ $select = new select();
                             <i class="fas fa-tag text-primary mr-2"></i>
                             Tipo de Perda
                         </label>
-                        <select id="tipo_perda" name="tipo_perda" required 
-                                class="w-full px-4 py-3 border-2 border-primary/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary transition-all duration-200 hover:border-primary/50 bg-white shadow-sm">
+                        <select id="tipo_perda" name="tipo_perda" required
+                            class="w-full px-4 py-3 border-2 border-primary/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary transition-all duration-200 hover:border-primary/50 bg-white shadow-sm">
                             <option value="">Selecione o tipo de perda</option>
                             <option value="Dano Físico" class="py-2">🚨 Dano Físico</option>
                             <option value="Vencimento" class="py-2">⏰ Vencimento</option>
@@ -377,13 +496,13 @@ $select = new select();
                             <i class="fas fa-calendar-alt text-primary mr-2"></i>
                             Data da Perda
                         </label>
-                        <input type="date" id="data_perda" name="data_perda" required 
-                               class="w-full px-4 py-3 border-2 border-primary/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary transition-all duration-200 hover:border-primary/50 bg-white shadow-sm">
+                        <input type="date" id="data_perda" name="data_perda" required
+                            class="w-full px-4 py-3 border-2 border-primary/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary transition-all duration-200 hover:border-primary/50 bg-white shadow-sm">
                     </div>
                 </div>
-                
-               
-                
+
+
+
                 <!-- Botão de envio -->
                 <div class="pt-4 flex justify-center">
                     <button type="submit" class="bg-gradient-to-r from-red-600 to-red-700 text-white font-bold py-3 px-8 rounded-xl hover:from-red-700 hover:to-red-800 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
@@ -393,9 +512,9 @@ $select = new select();
                 </div>
             </form>
         </div>
-        
 
-        
+
+
         <!-- Botões de ação -->
         <div class="mt-12 flex justify-center w-full gap-6">
             <a href="estoque.php" class="group">
@@ -404,9 +523,9 @@ $select = new select();
                     Voltar ao Estoque
                 </button>
             </a>
-           
+
         </div>
-        
+
         <!-- Alerta de mensagem -->
         <div id="alertaMensagem" class="fixed bottom-4 right-4 p-4 rounded-lg shadow-lg max-w-md hidden animate-fade-in z-50">
             <div class="flex items-center">
@@ -427,11 +546,11 @@ $select = new select();
                     <div class="group">
                         <h3 class="font-heading text-lg md:text-xl font-semibold mb-4 flex items-center text-white group-hover:text-secondary transition-colors duration-300">
                             <i class="fas fa-school mr-3 text-secondary group-hover:scale-110 transition-transform duration-300"></i>
-                           CREDE 1
+                            CREDE 1
                         </h3>
                         <p class="text-sm md:text-base leading-relaxed text-gray-200 group-hover:text-white transition-colors duration-300">
                             <i class="fas fa-map-marker-alt mr-2 text-secondary"></i>
-                            Av. Sen. Virgílio Távora, 1103 - Distrito Industrial I, 
+                            Av. Sen. Virgílio Távora, 1103 - Distrito Industrial I,
                         </p>
                     </div>
 
@@ -446,7 +565,7 @@ $select = new select();
                                 <i class="fas fa-phone-alt mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
                                 (85) 3341-3990
                             </a>
-                        
+
                         </div>
                     </div>
 
@@ -488,23 +607,23 @@ $select = new select();
             const produtoSelect = document.getElementById('produto_id');
             const produtoInfo = document.getElementById('produto-info');
             const estoqueAlerta = document.getElementById('estoque-alerta');
-            
+
             if (produtoSelect) {
                 produtoSelect.addEventListener('change', function() {
                     const selectedOption = this.options[this.selectedIndex];
-                    
+
                     if (this.value) {
                         // Mostrar informações do produto
                         document.getElementById('info-nome').textContent = selectedOption.dataset.nome;
                         document.getElementById('info-quantidade').textContent = selectedOption.dataset.quantidade;
-                        
+
                         produtoInfo.classList.remove('hidden');
                         produtoInfo.classList.add('animate-fade-in');
-                        
+
                         // Verificar se há quantidade suficiente
                         const estoqueAtual = parseInt(selectedOption.dataset.quantidade) || 0;
                         const quantidadePerdida = parseInt(document.getElementById('quantidade_perdida').value) || 0;
-                        
+
                         if (quantidadePerdida > estoqueAtual) {
                             estoqueAlerta.classList.remove('hidden');
                             estoqueAlerta.classList.add('animate-fade-in');
@@ -524,10 +643,10 @@ $select = new select();
                 quantidadeInput.addEventListener('input', function() {
                     const quantidadePerdida = parseInt(this.value) || 0;
                     const selectedOption = produtoSelect.options[produtoSelect.selectedIndex];
-                    
+
                     if (produtoSelect.value && quantidadePerdida > 0) {
                         const estoqueAtual = parseInt(selectedOption.dataset.quantidade) || 0;
-                        
+
                         if (quantidadePerdida > estoqueAtual) {
                             estoqueAlerta.classList.remove('hidden');
                             estoqueAlerta.classList.add('animate-fade-in');
@@ -553,21 +672,21 @@ $select = new select();
                     const produtoId = produtoSelect.value;
                     const quantidadePerdida = parseInt(quantidadeInput.value) || 0;
                     const selectedOption = produtoSelect.options[produtoSelect.selectedIndex];
-                    
+
                     if (!produtoId) {
                         e.preventDefault();
                         mostrarAlerta('Selecione um produto', 'error');
                         produtoSelect.focus();
                         return false;
                     }
-                    
+
                     if (quantidadePerdida <= 0) {
                         e.preventDefault();
                         mostrarAlerta('A quantidade deve ser maior que zero', 'error');
                         quantidadeInput.focus();
                         return false;
                     }
-                    
+
                     const estoqueAtual = parseInt(selectedOption.dataset.quantidade) || 0;
                     if (quantidadePerdida > estoqueAtual) {
                         e.preventDefault();
@@ -575,7 +694,7 @@ $select = new select();
                         quantidadeInput.focus();
                         return false;
                     }
-                    
+
                     // Confirmação antes de registrar a perda
                     if (!confirm('Tem certeza que deseja registrar esta perda? Esta ação não pode ser desfeita.')) {
                         e.preventDefault();
@@ -595,14 +714,14 @@ $select = new select();
                     e.stopPropagation();
                     sidebar.classList.toggle('show');
                     overlay.classList.toggle('hidden');
-                    
+
                     // Mostrar/ocultar o botão do menu
                     if (sidebar.classList.contains('show')) {
                         menuButton.classList.add('hidden');
                     } else {
                         menuButton.classList.remove('hidden');
                     }
-                    
+
                     document.body.style.overflow = sidebar.classList.contains('show') ? 'hidden' : '';
                 });
 
@@ -648,7 +767,7 @@ $select = new select();
                         document.body.style.overflow = '';
                     }
                 });
-                
+
                 // Ajustar footer quando sidebar é aberta/fechada no mobile
                 const footerContent = document.getElementById('footerContent');
                 if (footerContent) {
@@ -663,13 +782,13 @@ $select = new select();
                             footerContent.style.marginLeft = '16rem'; // 64 * 0.25rem = 16rem
                         }
                     };
-                    
+
                     // Ajustar na inicialização
                     adjustFooter();
-                    
+
                     // Ajustar quando a sidebar é aberta/fechada
                     menuButton.addEventListener('click', adjustFooter);
-                    
+
                     // Ajustar quando a janela é redimensionada
                     window.addEventListener('resize', adjustFooter);
                 }
@@ -687,7 +806,7 @@ $select = new select();
                         backToTop.classList.add('hidden');
                     }
                 });
-                
+
                 // Funcionalidade do botão voltar ao topo
                 backToTop.addEventListener('click', () => {
                     window.scrollTo({
@@ -710,13 +829,13 @@ $select = new select();
             const alerta = document.getElementById('alertaMensagem');
             const mensagemTexto = document.getElementById('mensagemTexto');
             const alertaIcon = document.getElementById('alertaIcon');
-            
+
             if (!alerta || !mensagemTexto || !alertaIcon) {
                 return;
             }
-            
+
             mensagemTexto.textContent = mensagem;
-            
+
             if (tipo === 'success') {
                 alerta.className = 'fixed bottom-4 right-4 p-4 rounded-lg shadow-lg max-w-md z-50 bg-green-500 text-white';
                 alertaIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />';
@@ -724,9 +843,9 @@ $select = new select();
                 alerta.className = 'fixed bottom-4 right-4 p-4 rounded-lg shadow-lg max-w-md z-50 bg-red-500 text-white';
                 alertaIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />';
             }
-            
+
             alerta.classList.remove('hidden');
-            
+
             // Auto-hide após 5 segundos
             setTimeout(() => {
                 alerta.classList.add('hidden');
@@ -734,4 +853,5 @@ $select = new select();
         };
     </script>
 </body>
+
 </html>

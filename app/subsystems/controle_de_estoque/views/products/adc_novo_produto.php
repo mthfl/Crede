@@ -1,4 +1,4 @@
-<?php 
+<?php
 require_once(__DIR__ . '/../../models/sessions.php');
 $session = new sessions();
 $session->autenticar_session();
@@ -333,6 +333,7 @@ $select = new select();
         .select2-container {
             width: 100% !important;
         }
+
         .select2-container .select2-selection--single {
             height: 48px;
             border: 2px solid #005A24;
@@ -341,30 +342,36 @@ $select = new select();
             align-items: center;
             transition: box-shadow 0.2s ease, border-color 0.2s ease;
         }
+
         .select2-container--default .select2-selection--single .select2-selection__rendered {
             line-height: 44px;
             padding-left: 12px;
             font-weight: 600;
             color: #1A3C34;
         }
+
         .select2-container--default .select2-selection--single .select2-selection__arrow {
             height: 46px;
             right: 10px;
         }
+
         .select2-container--default .select2-selection--single:focus,
         .select2-container--default .select2-selection--single:hover {
             border-color: #FFA500;
             box-shadow: 0 0 0 3px rgba(255, 165, 0, 0.25);
         }
+
         .select2-dropdown {
             border: 2px solid #005A24;
             border-radius: 0.5rem;
             overflow: hidden;
         }
+
         .select2-results__option--highlighted.select2-results__option--selectable {
             background-color: #FFA500 !important;
             color: #FFFFFF !important;
         }
+
         .select2-search--dropdown .select2-search__field {
             border: 2px solid #005A24 !important;
             border-radius: 0.5rem;
@@ -386,31 +393,44 @@ $select = new select();
             </div>
 
             <!-- Menu de navegação -->
-                        <!-- Menu de navegação -->
-                        <nav class="flex-1 p-4 space-y-2">
-                <a href="../index.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2 active">
-                    <i class="fas fa-home mr-3 text-lg"></i>
-                    <span>Início</span>
-                </a>
-                <a href="../estoque.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
-                    <i class="fas fa-boxes mr-3 text-lg"></i>
-                    <span>Estoque</span>
-                </a>
-                <a href="adc_produto.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
-                    <i class="fas fa-plus-circle mr-3 text-lg"></i>
-                    <span>Adicionar</span>
-                </a>
+            <!-- Menu de navegação -->
+            <nav class="flex-1 p-4 space-y-2">
+                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
+                    <a href="../index.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2 active">
+                        <i class="fas fa-home mr-3 text-lg"></i>
+                        <span>Início</span>
+                    </a>
+                <?php } ?>
+                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
+                    <a href="../estoque.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                        <i class="fas fa-boxes mr-3 text-lg"></i>
+                        <span>Estoque</span>
+                    </a>
+                <?php } ?>
+                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
+                    <a href="adc_produto.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                        <i class="fas fa-plus-circle mr-3 text-lg"></i>
+                        <span>Adicionar</span>
+                    </a>
+                <?php } ?>
+                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
+                    <a href="../solicitar.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                        <i class="fas fa-clipboard-list mr-3 text-lg"></i>
+                        <span>Solicitar</span>
+                    </a>
+                <?php } ?>
+                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
+                    <a href="../relatorios.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                        <i class="fas fa-clipboard-list mr-3 text-lg"></i>
+                        <span>Relatórios</span>
+                    </a>
+                <?php } ?>
 
-                <a href="../solicitar.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
-                    <i class="fas fa-clipboard-list mr-3 text-lg"></i>
-                    <span>Solicitar</span>
-                </a>
-               
             </nav>
 
             <!-- Botão de Sair -->
             <div class="p-4 border-t border-white/20">
-                <a href="../../../../../../main/views/subsystems.php" class="w-full bg-transparent border border-white/40 hover:bg-white/10 text-white py-2 px-4 rounded-lg transition-all duration-200 flex items-center justify-center">
+                <a href="../../../../main/views/subsystems.php" class="w-full bg-transparent border border-white/40 hover:bg-white/10 text-white py-2 px-4 rounded-lg transition-all duration-200 flex items-center justify-center">
                     <i class="fas fa-sign-out-alt mr-2"></i>
                     Sair
                 </a>
@@ -447,7 +467,7 @@ $select = new select();
         <div class="bg-white rounded-xl shadow-lg p-8 max-w-2xl w-full border-2 border-primary mx-auto">
             <form action="../../controllers/controller_crud_produto.php" method="POST" class="space-y-6">
                 <div class="space-y-4">
-                    <input type="hidden" name="barcode" value="<?=$_GET['barcode'] ?? ''?>">
+                    <input type="hidden" name="barcode" value="<?= $_GET['barcode'] ?? '' ?>">
                     <div>
                         <input type="text" placeholder="NOME DO PRODUTO | MARCA | MODELO | PACOTE OU UNIDADE" id="nome" name="nome_produto" style="text-transform: uppercase;" oninput="this.value = this.value.toUpperCase();" required
                             class="w-full px-4 py-3 border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent text-center font-semibold"
@@ -491,7 +511,7 @@ $select = new select();
         </div>
     </main>
 
-    
+
     <footer class="bg-gradient-to-r from-primary to-dark text-white py-8 md:py-10 mt-auto relative transition-all duration-300">
         <!-- Efeito de brilho sutil no topo -->
         <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-secondary to-transparent opacity-30"></div>
@@ -503,11 +523,11 @@ $select = new select();
                     <div class="group">
                         <h3 class="font-heading text-lg md:text-xl font-semibold mb-4 flex items-center text-white group-hover:text-secondary transition-colors duration-300">
                             <i class="fas fa-school mr-3 text-secondary group-hover:scale-110 transition-transform duration-300"></i>
-                           CREDE 1
+                            CREDE 1
                         </h3>
                         <p class="text-sm md:text-base leading-relaxed text-gray-200 group-hover:text-white transition-colors duration-300">
                             <i class="fas fa-map-marker-alt mr-2 text-secondary"></i>
-                            Av. Sen. Virgílio Távora, 1103 - Distrito Industrial I, 
+                            Av. Sen. Virgílio Távora, 1103 - Distrito Industrial I,
                         </p>
                     </div>
 
@@ -522,7 +542,7 @@ $select = new select();
                                 <i class="fas fa-phone-alt mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
                                 (85) 3341-3990
                             </a>
-                        
+
                         </div>
                     </div>
 
@@ -565,7 +585,9 @@ $select = new select();
                 placeholder: 'Selecione uma categoria',
                 width: '100%',
                 language: {
-                    noResults: function () { return 'Nenhum resultado encontrado'; }
+                    noResults: function() {
+                        return 'Nenhum resultado encontrado';
+                    }
                 }
             });
         });
