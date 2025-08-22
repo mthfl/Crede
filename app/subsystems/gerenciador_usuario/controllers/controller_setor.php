@@ -70,7 +70,6 @@ if (
             exit();
     }
 } else {
-
-    header('Location: ../views/setor.php?falha');
+    header('Location: ../index.php');
     exit();
 }

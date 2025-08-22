@@ -312,10 +312,12 @@ $select = new select();
                         </button>
                     </a>
                 <?php } ?>
+                <?php if (isset($_SESSION['Admin_estoque'])|| isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
                 <button onclick="abrirModalCategoria()" class="bg-primary text-white font-bold py-3 px-4 rounded-lg hover:bg-primary/90 transition-colors flex items-center shadow-md">
                     <i class="fas fa-plus mr-2"></i>
                     Nova Categoria
                 </button>
+                <?php } ?>
             </div>
         </div>
         <div class="desktop-table bg-white rounded-xl shadow-lg overflow-hidden border-2 border-primary max-w-5xl mx-auto">

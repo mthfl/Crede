@@ -1,6 +1,6 @@
-<?php 
+<?php
 require_once(__DIR__ . "/../models/model.admin.php");
-print_r($_POST);
+//print_r($_POST);
 
 if (
     !isset($_POST["perm_id"]) && empty($_POST["perm_id"]) &&
@@ -13,24 +13,23 @@ if (
     $id_usuairo = $_POST["user_id"];
 
     $admin_model = new admin();
-    $result = $admin_model->adicionar_permissao($id_usuairo, $id_tipo_usuario,$id_sistema);
+    $result = $admin_model->adicionar_permissao($id_usuairo, $id_tipo_usuario, $id_sistema);
 
     switch ($result) {
         case 1:
-            header('Location: ../views/permissoes.php?criado');
+            header('Location: ../views/permissoes.php?user_id=' . $id_usuairo . '&criado');
             exit();
         case 2:
-            header('Location: ../views/permissoes.php?erro');
+            header('Location: ../views/permissoes.php?user_id=' . $id_usuairo . '&erro');
             exit();
         case 3:
-            header('Location: ../views/permissoes.php?ja_existe');
+            header('Location: ../views/permissoes.php?user_id=' . $id_usuairo . '&ja_existe');
             exit();
         default:
-            header('Location: ../views/permissoes.php?falha');
+            header('Location: ../views/permissoes.php?user_id=' . $id_usuairo . '&falha');
             exit();
     }
-}
-else if (
+} else if (
     isset($_POST["perm_id"]) && !empty($_POST["perm_id"]) &&
     !isset($_POST["sistema"]) && empty($_POST["sistema"])
 ) {
@@ -41,13 +40,13 @@ else if (
 
     switch ($result) {
         case 1:
-            header('Location: ../views/permissoes.php?excluido');
+            header('Location: ../views/permissoes.php?user_id=' . $id_usuairo . '&excluido');
             exit();
         case 2:
-            header('Location: ../views/permissoes.php?erro');
+            header('Location: ../views/permissoes.php?user_id=' . $id_usuairo . '&erro');
             exit();
         default:
-            header('Location: ../views/permissoes.php?falha');
+            header('Location: ../views/permissoes.php?user_id=' . $id_usuairo . '&falha');
             exit();
     }
 } else if (
@@ -62,21 +61,23 @@ else if (
     $id_usuairo = $_POST["user_id"];
 
     $admin_model = new admin();
-    $result = $admin_model->editar_permissao($perm_id, $id_usuairo, $id_tipo_usuario,$id_sistema);
+    $result = $admin_model->editar_permissao($perm_id, $id_usuairo, $id_tipo_usuario, $id_sistema);
 
     switch ($result) {
         case 1:
-            header('Location: ../views/permissoes.php?editado');
+            header('Location: ../views/permissoes.php?user_id=' . $id_usuairo . '&editado');
             exit();
         case 2:
-            header('Location: ../views/permissoes.php?erro');
+            header('Location: ../views/permissoes.php?user_id=' . $id_usuairo . '&erro');
             exit();
         case 3:
-            header('Location: ../views/permissoes.php?ja_existe');
+            header('Location: ../views/permissoes.php?user_id=' . $id_usuairo . '&ja_existe');
             exit();
         default:
-            header('Location: ../views/permissoes.php?falha');
+            header('Location: ../views/permissoes.php?user_id=' . $id_usuairo . '&falha');
             exit();
     }
+} else {
+    header('Location: ../index.php');
+    exit();
 }
-?>
