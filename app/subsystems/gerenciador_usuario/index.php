@@ -299,19 +299,7 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
     <div class="bg-decoration bg-circle-1"></div>
     <div class="bg-decoration bg-circle-2"></div>
     
-    <!-- Loading Overlay -->
-    <div id="loadingOverlay" class="fixed inset-0 bg-gradient-to-br from-white/90 to-light/90 z-50 flex items-center justify-center backdrop-blur-sm">
-        <div class="text-center animate-scale-in">
-            <div class="loading-spinner mx-auto mb-6"></div>
-            <div class="space-y-2">
-                <h3 class="text-xl font-bold text-dark font-heading">CREDE 1</h3>
-                <p class="text-gray-600 font-medium">Carregando sistema...</p>
-                <div class="w-32 h-1 bg-gray-200 rounded-full mx-auto overflow-hidden">
-                    <div class="h-full bg-gradient-to-r from-primary to-secondary rounded-full animate-shimmer"></div>
-                </div>
-            </div>
-        </div>
-    </div>
+   
 
     <div class="min-h-screen">
         <!-- Header -->
