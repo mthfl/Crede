@@ -780,6 +780,56 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
             applyFilters();
             document.getElementById('searchUser').addEventListener('input', applyFilters);
             
+            // Check for URL parameters to show notifications
+            const urlParams = new URLSearchParams(window.location.search);
+            const message = urlParams.get('criado') || urlParams.get('editado') || urlParams.get('excluido') || urlParams.get('erro') || urlParams.get('ja_existe') || urlParams.get('falha');
+            
+            if (message) {
+                let notificationMessage = '';
+                let notificationType = 'info';
+                
+                switch (message) {
+                    case 'criado':
+                        notificationMessage = 'Permissão adicionada com sucesso!';
+                        notificationType = 'success';
+                        break;
+                    case 'editado':
+                        notificationMessage = 'Permissão editada com sucesso!';
+                        notificationType = 'success';
+                        break;
+                    case 'excluido':
+                        notificationMessage = 'Permissão removida com sucesso!';
+                        notificationType = 'success';
+                        break;
+                    case 'erro':
+                        notificationMessage = 'Erro ao processar a operação. Tente novamente.';
+                        notificationType = 'error';
+                        break;
+                    case 'ja_existe':
+                        notificationMessage = 'Esta permissão já existe para este usuário.';
+                        notificationType = 'error';
+                        break;
+                    case 'falha':
+                        notificationMessage = 'Falha na operação. Verifique os dados e tente novamente.';
+                        notificationType = 'error';
+                        break;
+                }
+                
+                if (notificationMessage) {
+                    showNotification(notificationMessage, notificationType);
+                }
+                
+                // Clean URL parameters to avoid showing the same message on refresh
+                const cleanUrl = new URL(window.location);
+                cleanUrl.searchParams.delete('criado');
+                cleanUrl.searchParams.delete('editado');
+                cleanUrl.searchParams.delete('excluido');
+                cleanUrl.searchParams.delete('erro');
+                cleanUrl.searchParams.delete('ja_existe');
+                cleanUrl.searchParams.delete('falha');
+                window.history.replaceState({}, '', cleanUrl);
+            }
+            
             // If there's a selected user on page load, update the visual state
             if (selectedUserId !== null) {
                 const userCards = document.querySelectorAll('.user-card');

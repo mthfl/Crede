@@ -271,6 +271,81 @@ $select = new select();
             transform: scale(1);
             opacity: 1;
         }
+
+        /* Garantir que os modais funcionem em todos os dispositivos */
+        #modalCategoria,
+        #modalExcluir {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            z-index: 999999 !important;
+            display: none !important;
+            align-items: center !important;
+            justify-content: center !important;
+            background-color: rgba(0, 0, 0, 0.5) !important;
+        }
+
+        #modalCategoria.flex,
+        #modalExcluir.flex {
+            display: flex !important;
+        }
+
+        #modalCategoriaContent,
+        #modalExcluirContent {
+            position: relative !important;
+            z-index: 9999999 !important;
+            pointer-events: auto !important;
+        }
+
+        /* Responsividade dos filtros */
+        @media screen and (max-width: 768px) {
+            .mb-6.flex.flex-col.md\\:flex-row {
+                gap: 1rem;
+            }
+            
+            .mb-6.flex.flex-col.md\\:flex-row .flex-1 {
+                order: 1;
+            }
+            
+            .mb-6.flex.flex-col.md\\:flex-row .flex.gap-2 {
+                order: 2;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 0.5rem;
+            }
+            
+            .mb-6.flex.flex-col.md\\:flex-row .flex.gap-2 select {
+                font-size: 0.875rem;
+                padding: 0.5rem 0.75rem;
+                min-width: auto;
+            }
+            
+            #pesquisar {
+                font-size: 1rem;
+                padding: 0.75rem 1rem;
+            }
+        }
+
+        /* Melhorar a aparência dos filtros ativos */
+        #pesquisar:not(:placeholder-shown),
+        #filtroCategoria:not([value=""]) {
+            border-color: #FFA500;
+            box-shadow: 0 0 0 3px rgba(255, 165, 0, 0.1);
+        }
+
+        /* Animação suave para os filtros */
+        .desktop-table tr,
+        .mobile-cards .card-item {
+            transition: all 0.3s ease;
+        }
+
+        .desktop-table tr.hidden,
+        .mobile-cards .card-item.hidden {
+            opacity: 0;
+            transform: scale(0.95);
+        }
     </style>
 </head>
 
@@ -398,7 +473,7 @@ $select = new select();
                                 $quantidadeClass = $produto['quantidade'] <= 5 ? 'text-red-600 font-bold' : 'text-gray-700';
                                 $rowClass = $produto['quantidade'] <= 5 ? 'border-b border-gray-200 hover:bg-red-50 bg-red-50' : 'border-b border-gray-200 hover:bg-gray-50';
                         ?>
-                                <tr class="<?= $rowClass ?>">
+                                <tr class="<?= $rowClass ?>" data-categoria-id="<?= $produto['id_categoria'] ?>" data-categoria="<?= htmlspecialchars($produto['categoria']) ?>">
                                     <td class="py-3 px-4"><?= htmlspecialchars($produto['barcode'] = $produto['barcode'] == '' ? 'Sem código' : $produto['barcode']) ?></td>
                                     <td class="py-3 px-4"><?= htmlspecialchars($produto['nome_produto']) ?></td>
                                     <td class="py-3 px-4 <?= $quantidadeClass ?>"><?= htmlspecialchars($produto['quantidade']) ?></td>
@@ -442,12 +517,12 @@ $select = new select();
                         echo '<div class="bg-primary text-white font-bold py-2 px-4 rounded-lg mt-6 mb-3 categoria-header"><h3 class="text-sm uppercase tracking-wider">' . htmlspecialchars(ucfirst($produto['categoria'])) . '</h3></div>';
                     }
                     $quantidadeClass = $produto['quantidade'] <= 5 ? 'quantidade-critica' : '';
-                    echo '<div class="card-item bg-white shadow rounded-lg border-l-4 border-primary p-4 mb-3">';
+                    echo '<div class="card-item bg-white shadow rounded-lg border-l-4 border-primary p-4 mb-3" data-categoria-id="' . $produto['id_categoria'] . '" data-categoria="' . htmlspecialchars($produto['categoria']) . '">';
                     echo '<div class="flex justify-between items-start w-full">';
                     echo '<div class="flex-1">';
                     echo '<h3 class="font-bold text-lg text-primary mb-1">' . htmlspecialchars($produto['nome_produto']) . '</h3>';
                     echo '<div class="flex flex-col space-y-1">';
-                    echo '<p class="text-sm text-gray-500 flex items-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" /></svg><span>' . htmlspecialchars($produto['barcode']) . '</span></p>';
+                    echo '<p class="text-sm text-gray-500 flex items-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" /></svg><span data-barcode="' . htmlspecialchars($produto['barcode']) . '">' . htmlspecialchars($produto['barcode']) . '</span></p>';
                     echo '<p class="text-sm flex items-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3v8a3 3 0 003 3z" /></svg><span class="' . $quantidadeClass . '">Quantidade: ' . htmlspecialchars($produto['quantidade']) . '</span></p>';
                     echo '<p class="text-sm text-gray-500 flex items-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg><span>Cadastrado: ' . date('d/m/Y H:i', strtotime($produto['data'])) . '</span></p>';
                     if ($produto['vencimento'] != '') {
@@ -470,79 +545,79 @@ $select = new select();
             }
             ?>
         </div>
-        
-        <!-- Modal para Nova Categoria -->
-        <div id="modalCategoria" class="fixed inset-0 bg-black bg-opacity-50 z-[999999] hidden items-center justify-center">
-            <div class="bg-white rounded-xl shadow-2xl p-8 max-w-md w-full mx-4 transform scale-95 opacity-0 transition-all duration-300" id="modalCategoriaContent">
-                <div class="flex items-center justify-between mb-6">
-                    <h2 class="text-2xl font-bold text-primary flex items-center">
-                        <i class="fas fa-tags mr-3 text-secondary"></i>
-                        Nova Categoria
-                    </h2>
-                    <button onclick="fecharModalCategoria()" class="text-gray-400 hover:text-gray-600 transition-colors">
-                        <i class="fas fa-times text-xl"></i>
-                    </button>
-                </div>
-                <form action="../controllers/controller_crud_produto.php" method="post" id="formCategoria" class="space-y-6">
-                    <div>
-                        <label for="nomeCategoria" class="block text-sm font-semibold text-gray-700 mb-2">
-                            Nome da Categoria
-                        </label>
-                        <input type="text" id="nomeCategoria" name="categoria" required
-                            class="w-full px-4 py-3 border-2 border-primary/30 rounded-lg focus:outline-none focus:ring-1 focus:ring-secondary focus:border-secondary transition-all duration-200"
-                            placeholder="Ex: Informática">
-                    </div>
-                    <div class="flex gap-3 pt-4">
-                        <button type="button" onclick="fecharModalCategoria()"
-                            class="flex-1 bg-gray-300 text-gray-700 font-semibold py-2 px-2 rounded-lg hover:bg-gray-400 transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-md">
-                            <i class="fas fa-times mr-2"></i>
-                            Cancelar
-                        </button>
-                        <button type="submit"
-                            class="flex-1 bg-gradient-to-r from-secondary to-orange-500 text-white font-semibold py-3 px-4 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl">
-                            <i class="fas fa-save mr-2"></i>
-                            Salvar Categoria
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-        
-        <!-- Modal para Confirmação de Exclusão -->
-        <div id="modalExcluir" class="fixed inset-0 bg-black bg-opacity-50 z-[999999] hidden items-center justify-center">
-            <div class="bg-white rounded-xl shadow-2xl p-8 max-w-md w-full mx-4 transform scale-95 opacity-0 transition-all duration-300" id="modalExcluirContent">
-                <div class="flex items-center justify-between mb-6">
-                    <h2 class="text-2xl font-bold text-primary flex items-center">
-                        <i class="fas fa-exclamation-triangle mr-3 text-red-600"></i>
-                        Confirmar Exclusão
-                    </h2>
-                    <button onclick="fecharModalExcluir()" class="text-gray-400 hover:text-gray-600 transition-colors">
-                        <i class="fas fa-times text-xl"></i>
-                    </button>
-                </div>
-                <p class="text-gray-700 text-base mb-6">
-                    Tem certeza que deseja excluir o produto <span id="nomeProdutoExcluir" class="font-semibold"></span>?
-                    <br>
-                    <span class="text-sm text-red-600">Esta ação não pode ser desfeita.</span>
-                </p>
-                <form action="../controllers/controller_crud_produto.php" method="post" id="formExcluir">
-                    <input type="hidden" id="idExcluir" name="id_excluir" value="">
-                    <div class="flex gap-3 pt-4">
-                        <button type="button" onclick="fecharModalExcluir()"
-                            class="flex-1 bg-gray-300 text-gray-700 font-semibold py-2 px-2 rounded-lg hover:bg-gray-400 transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-md">
-                            <i class="fas fa-times mr-2"></i>
-                            Cancelar
-                        </button>
-                        <button type="submit"
-                            class="flex-1 bg-gradient-to-r from-red-600 to-red-700 text-white font-semibold py-3 px-4 rounded-lg hover:from-red-700 hover:to-red-800 transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl">
-                            <i class="fas fa-trash-alt mr-2"></i>
-                            Excluir
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
     </main>
+    
+    <!-- Modal para Nova Categoria -->
+    <div id="modalCategoria" class="fixed inset-0 bg-black bg-opacity-50 z-[999999] hidden items-center justify-center">
+        <div class="bg-white rounded-xl shadow-2xl p-8 max-w-md w-full mx-4 transform scale-95 opacity-0 transition-all duration-300" id="modalCategoriaContent">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold text-primary flex items-center">
+                    <i class="fas fa-tags mr-3 text-secondary"></i>
+                    Nova Categoria
+                </h2>
+                <button onclick="fecharModalCategoria()" class="text-gray-400 hover:text-gray-600 transition-colors">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <form action="../controllers/controller_crud_produto.php" method="post" id="formCategoria" class="space-y-6">
+                <div>
+                    <label for="nomeCategoria" class="block text-sm font-semibold text-gray-700 mb-2">
+                        Nome da Categoria
+                    </label>
+                    <input type="text" id="nomeCategoria" name="categoria" required
+                        class="w-full px-4 py-3 border-2 border-primary/30 rounded-lg focus:outline-none focus:ring-1 focus:ring-secondary focus:border-secondary transition-all duration-200"
+                        placeholder="Ex: Informática">
+                </div>
+                <div class="flex gap-3 pt-4">
+                    <button type="button" onclick="fecharModalCategoria()"
+                        class="flex-1 bg-gray-300 text-gray-700 font-semibold py-2 px-2 rounded-lg hover:bg-gray-400 transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-md">
+                        <i class="fas fa-times mr-2"></i>
+                        Cancelar
+                    </button>
+                    <button type="submit"
+                        class="flex-1 bg-gradient-to-r from-secondary to-orange-500 text-white font-semibold py-3 px-4 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl">
+                        <i class="fas fa-save mr-2"></i>
+                        Salvar Categoria
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Modal para Confirmação de Exclusão -->
+    <div id="modalExcluir" class="fixed inset-0 bg-black bg-opacity-50 z-[999999] hidden items-center justify-center">
+        <div class="bg-white rounded-xl shadow-2xl p-8 max-w-md w-full mx-4 transform scale-95 opacity-0 transition-all duration-300" id="modalExcluirContent">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold text-primary flex items-center">
+                    <i class="fas fa-exclamation-triangle mr-3 text-red-600"></i>
+                    Confirmar Exclusão
+                </h2>
+                <button onclick="fecharModalExcluir()" class="text-gray-400 hover:text-gray-600 transition-colors">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <p class="text-gray-700 text-base mb-6">
+                Tem certeza que deseja excluir o produto <span id="nomeProdutoExcluir" class="font-semibold"></span>?
+                <br>
+                <span class="text-sm text-red-600">Esta ação não pode ser desfeita.</span>
+            </p>
+            <form action="../controllers/controller_crud_produto.php" method="post" id="formExcluir">
+                <input type="hidden" id="idExcluir" name="id_excluir" value="">
+                <div class="flex gap-3 pt-4">
+                    <button type="button" onclick="fecharModalExcluir()"
+                        class="flex-1 bg-gray-300 text-gray-700 font-semibold py-2 px-2 rounded-lg hover:bg-gray-400 transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-md">
+                        <i class="fas fa-times mr-2"></i>
+                        Cancelar
+                    </button>
+                    <button type="submit"
+                        class="flex-1 bg-gradient-to-r from-red-600 to-red-700 text-white font-semibold py-3 px-4 rounded-lg hover:from-red-700 hover:to-red-800 transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl">
+                        <i class="fas fa-trash-alt mr-2"></i>
+                        Excluir
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
     <footer class="bg-gradient-to-r from-primary to-dark text-white py-8 md:py-10 mt-auto relative transition-all duration-300">
         <div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-secondary to-transparent opacity-30"></div>
         <div class="px-4 md:px-8 transition-all duration-300 ml-0 md:ml-64" id="footerContent">
@@ -697,10 +772,76 @@ $select = new select();
             function filtrarProdutos() {
                 const termo = pesquisarInput.value.toLowerCase();
                 const categoria = filtroCategoria.value;
-                console.log('Filtrando produtos:', {
-                    termo,
-                    categoria
+                
+                // Filtrar tabela desktop
+                const linhasTabela = tabelaEstoque.querySelectorAll('tr');
+                let linhasVisiveis = 0;
+                
+                linhasTabela.forEach(linha => {
+                    const barcode = linha.cells[0]?.textContent?.toLowerCase() || '';
+                    const nome = linha.cells[1]?.textContent?.toLowerCase() || '';
+                    const categoriaId = linha.getAttribute('data-categoria-id') || '';
+                    
+                    const matchTermo = barcode.includes(termo) || nome.includes(termo);
+                    const matchCategoria = categoria === '' || categoriaId === categoria;
+                    
+                    if (matchTermo && matchCategoria) {
+                        linha.style.display = '';
+                        linha.classList.remove('hidden');
+                        linhasVisiveis++;
+                    } else {
+                        linha.style.display = 'none';
+                        linha.classList.add('hidden');
+                    }
                 });
+                
+                // Filtrar cards mobile
+                const cardsMobile = document.querySelectorAll('.mobile-cards .card-item');
+                let cardsVisiveis = 0;
+                
+                cardsMobile.forEach(card => {
+                    const barcode = card.querySelector('[data-barcode]')?.textContent?.toLowerCase() || '';
+                    const nome = card.querySelector('h3')?.textContent?.toLowerCase() || '';
+                    const categoriaId = card.getAttribute('data-categoria-id') || '';
+                    
+                    const matchTermo = barcode.includes(termo) || nome.includes(termo);
+                    const matchCategoria = categoria === '' || categoriaId === categoria;
+                    
+                    if (matchTermo && matchCategoria) {
+                        card.style.display = '';
+                        card.classList.remove('hidden');
+                        cardsVisiveis++;
+                    } else {
+                        card.style.display = 'none';
+                        card.classList.add('hidden');
+                    }
+                });
+                
+                // Mostrar mensagem quando não há resultados
+                const mensagemTabela = tabelaEstoque.querySelector('.no-results-message');
+                if (mensagemTabela) {
+                    mensagemTabela.remove();
+                }
+                
+                if (linhasVisiveis === 0) {
+                    const mensagem = document.createElement('tr');
+                    mensagem.className = 'no-results-message';
+                    mensagem.innerHTML = '<td colspan="8" class="py-4 px-4 text-center text-gray-500">Nenhum produto encontrado com os filtros aplicados</td>';
+                    tabelaEstoque.appendChild(mensagem);
+                }
+                
+                // Mostrar mensagem para mobile quando não há resultados
+                const mensagemMobile = document.querySelector('.mobile-cards .no-results-message');
+                if (mensagemMobile) {
+                    mensagemMobile.remove();
+                }
+                
+                if (cardsVisiveis === 0) {
+                    const mensagem = document.createElement('div');
+                    mensagem.className = 'no-results-message text-center text-gray-500 py-8';
+                    mensagem.textContent = 'Nenhum produto encontrado com os filtros aplicados';
+                    document.querySelector('.mobile-cards').appendChild(mensagem);
+                }
             }
             
             if (pesquisarInput) {
@@ -725,9 +866,6 @@ $select = new select();
         });
 
         function abrirModalCategoria() {
-            console.log('=== INICIANDO abrirModalCategoria ===');
-            console.log('Dispositivo:', window.innerWidth > 768 ? 'DESKTOP' : 'MOBILE');
-            
             const modal = document.getElementById('modalCategoria');
             const modalContent = document.getElementById('modalCategoriaContent');
             
@@ -736,39 +874,30 @@ $select = new select();
                 return;
             }
             
-            console.log('📍 ANTES das modificações:');
-            console.log('Modal classList:', Array.from(modal.classList));
-            console.log('Modal computedStyle display:', window.getComputedStyle(modal).display);
-            
-            // Usar classes Tailwind para mostrar o modal
+            // Mostrar o modal
+            modal.style.display = 'flex';
             modal.classList.remove('hidden');
             modal.classList.add('flex');
             
+            // Animar o conteúdo
             setTimeout(() => {
                 modalContent.classList.remove('scale-95', 'opacity-0');
                 modalContent.classList.add('scale-100', 'opacity-100');
             }, 10);
             
-            console.log('📍 DEPOIS das modificações:');
-            console.log('Modal classList:', Array.from(modal.classList));
-            console.log('Modal computedStyle display:', window.getComputedStyle(modal).display);
-            console.log('Modal getBoundingClientRect:', modal.getBoundingClientRect());
-            console.log('Modal é visível?', modal.offsetWidth > 0 && modal.offsetHeight > 0);
-            
-            // Focus input
+            // Focus no input
             const inputCategoria = document.getElementById('nomeCategoria');
             if (inputCategoria) {
                 setTimeout(() => {
                     inputCategoria.focus();
-                    console.log('🎯 Input focado');
                 }, 100);
             }
             
-            console.log('=== FIM abrirModalCategoria ===');
+            // Prevenir scroll do body
+            document.body.style.overflow = 'hidden';
         }
 
         function fecharModalCategoria() {
-            console.log('=== INICIANDO fecharModalCategoria ===');
             const modal = document.getElementById('modalCategoria');
             const modalContent = document.getElementById('modalCategoriaContent');
             
@@ -777,24 +906,22 @@ $select = new select();
                 return;
             }
             
+            // Animar o fechamento
             modalContent.classList.remove('scale-100', 'opacity-100');
             modalContent.classList.add('scale-95', 'opacity-0');
             
             setTimeout(() => {
+                modal.style.display = 'none';
                 modal.classList.add('hidden');
                 modal.classList.remove('flex');
                 document.getElementById('formCategoria').reset();
-                console.log('✅ Modal fechado');
             }, 300);
             
-            console.log('=== FIM fecharModalCategoria ===');
+            // Restaurar scroll do body
+            document.body.style.overflow = '';
         }
 
         function abrirModalExcluir(id, nome) {
-            console.log('=== INICIANDO abrirModalExcluir ===');
-            console.log('Parâmetros:', { id, nome });
-            console.log('Dispositivo:', window.innerWidth > 768 ? 'DESKTOP' : 'MOBILE');
-            
             const modal = document.getElementById('modalExcluir');
             const modalContent = document.getElementById('modalExcluirContent');
             const nomeProdutoExcluir = document.getElementById('nomeProdutoExcluir');
@@ -805,30 +932,23 @@ $select = new select();
                 return;
             }
 
-            console.log('📍 ANTES das modificações:');
-            console.log('Modal classList:', Array.from(modal.classList));
-            console.log('Modal computedStyle display:', window.getComputedStyle(modal).display);
-
+            // Preencher dados do modal
             idExcluir.value = id;
             nomeProdutoExcluir.textContent = nome;
-            console.log('✏️ Dados preenchidos no modal');
             
-            // Usar classes Tailwind para mostrar o modal
+            // Mostrar o modal
+            modal.style.display = 'flex';
             modal.classList.remove('hidden');
             modal.classList.add('flex');
             
+            // Animar o conteúdo
             setTimeout(() => {
                 modalContent.classList.remove('scale-95', 'opacity-0');
                 modalContent.classList.add('scale-100', 'opacity-100');
             }, 10);
             
-            console.log('📍 DEPOIS das modificações:');
-            console.log('Modal classList:', Array.from(modal.classList));
-            console.log('Modal computedStyle display:', window.getComputedStyle(modal).display);
-            console.log('Modal getBoundingClientRect:', modal.getBoundingClientRect());
-            console.log('Modal é visível?', modal.offsetWidth > 0 && modal.offsetHeight > 0);
-            
-            console.log('=== FIM abrirModalExcluir ===');
+            // Prevenir scroll do body
+            document.body.style.overflow = 'hidden';
         }
 
         function fecharModalExcluir() {

@@ -25,7 +25,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'get_permissions' && isset($_G
 //print_r($_POST);
 
 if (
-    !isset($_POST["perm_id"]) && empty($_POST["perm_id"]) &&
+    (!isset($_POST["perm_id"]) || empty($_POST["perm_id"])) &&
     isset($_POST["sistema"]) && !empty($_POST["sistema"]) &&
     isset($_POST["user_id"]) && !empty($_POST["user_id"]) &&
     isset($_POST["tipo_permissao"]) && !empty($_POST["tipo_permissao"])
@@ -53,9 +53,12 @@ if (
     }
 } else if (
     isset($_POST["perm_id"]) && !empty($_POST["perm_id"]) &&
-    !isset($_POST["sistema"]) && empty($_POST["sistema"])
+    isset($_POST["user_id"]) && !empty($_POST["user_id"]) &&
+    (!isset($_POST["sistema"]) || empty($_POST["sistema"])) &&
+    (!isset($_POST["tipo_permissao"]) || empty($_POST["tipo_permissao"]))
 ) {
     $perm_id = $_POST["perm_id"];
+    $id_usuairo = $_POST["user_id"];
 
     $admin_model = new admin();
     $result = $admin_model->excluir_permissao($perm_id);

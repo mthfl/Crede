@@ -368,7 +368,7 @@ $select = new select();
                                 <span class="ml-2 text-gray-700">Produto sem código</span>
                             </label>
                             <label class="custom-radio flex items-center">
-                                <input type="radio" name="tipo_produto" value="criar_codigo" id="sem_codigo">
+                                <input type="radio" name="tipo_produto" value="criar_codigo" id="criar_codigo">
                                 <span class="ml-2 text-gray-700">Criar código</span>
                             </label>
                         </div>
@@ -558,6 +558,7 @@ $select = new select();
             // Control form fields visibility
             const comCodigoRadio = document.getElementById('com_codigo');
             const semCodigoRadio = document.getElementById('sem_codigo');
+            const criarCodigoRadio = document.getElementById('criar_codigo');
             const comCodigoFields = document.getElementById('com_codigo_fields');
             const semCodigoFields = document.getElementById('sem_codigo_fields');
             const submitButton = document.querySelector('button[type="submit"]');
@@ -570,13 +571,20 @@ $select = new select();
                     // Set required only for barcode
                     comCodigoFields.querySelector('input').required = true;
                     semCodigoFields.querySelectorAll('input, select').forEach(field => field.required = false);
-                } else {
+                } else if (semCodigoRadio.checked) {
                     comCodigoFields.classList.add('hidden');
                     semCodigoFields.classList.remove('hidden');
                     submitButton.classList.remove('hidden');
                     // Set required for all fields in sem_codigo
                     comCodigoFields.querySelector('input').required = false;
                     semCodigoFields.querySelectorAll('input, select').forEach(field => field.required = true);
+                } else if (criarCodigoRadio.checked) {
+                    comCodigoFields.classList.remove('hidden');
+                    semCodigoFields.classList.add('hidden');
+                    submitButton.classList.remove('hidden');
+                    // Set required for barcode in criar_codigo
+                    comCodigoFields.querySelector('input').required = true;
+                    semCodigoFields.querySelectorAll('input, select').forEach(field => field.required = false);
                 }
             }
 
@@ -586,6 +594,7 @@ $select = new select();
             // Add event listeners
             comCodigoRadio.addEventListener('change', toggleFields);
             semCodigoRadio.addEventListener('change', toggleFields);
+            criarCodigoRadio.addEventListener('change', toggleFields);
 
             // Force uppercase for barcode
             const barcodeInput = document.getElementById('barcode');

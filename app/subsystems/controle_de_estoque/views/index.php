@@ -575,7 +575,7 @@ $session->tempo_session();
                         <div class="card-item bg-white border-2 border-primary rounded-xl md:rounded-2xl shadow-card w-full h-48 md:h-56 flex flex-col items-center justify-center p-4 md:p-6 relative">
                             <div class="card-shine"></div>
                             <i class="fas fa-clipboard-list card-icon text-4xl md:text-5xl text-primary mb-4 md:mb-5"></i>
-                            <p class="text-secondary font-bold text-center text-base md:text-lg leading-tight">RETIRAR</p>
+                            <p class="text-secondary font-bold text-center text-base md:text-lg leading-tight">SOLICITAR</p>
                         </div>
                     </a>
                 <?php } ?>

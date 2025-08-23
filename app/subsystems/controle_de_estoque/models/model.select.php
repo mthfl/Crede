@@ -49,7 +49,7 @@ class select extends connect
     }
     public function select_produtos()
     {
-        $query = $this->connect->query("SELECT p.*, c.nome_categoria AS categoria FROM $this->table4 p INNER JOIN $this->table1 c ON p.id_categoria = c.id ORDER BY p.id DESC");
+        $query = $this->connect->query("SELECT p.*, c.nome_categoria AS categoria, c.id as id_categoria FROM $this->table4 p INNER JOIN $this->table1 c ON p.id_categoria = c.id ORDER BY p.id DESC");
         $resultado = $query->fetchAll(PDO::FETCH_ASSOC);
 
         return $resultado;
