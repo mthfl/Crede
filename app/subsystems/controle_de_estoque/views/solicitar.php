@@ -353,6 +353,21 @@ $select = new select();
             color: #1A3C34;
         }
 
+        /* Estilos para produtos com estoque crítico */
+        .produto-critico {
+            color: #dc2626 !important;
+            font-weight: 600;
+        }
+
+        .produto-baixo {
+            color: #d97706 !important;
+            font-weight: 500;
+        }
+
+        .produto-normal {
+            color: #059669 !important;
+        }
+
         @media (min-width: 768px) {
             .select2-container--default .select2-selection--single {
                 padding: 0.75rem;
@@ -479,7 +494,19 @@ $select = new select();
                     <div id="opcaoSelect" class="select-wrapper">
                         <select id="produto" name="produto" required class="custom-select text-sm md:text-base" aria-label="Selecionar produto" onchange="validarSelecao()">
                             <option value="" disabled selected>SELECIONAR PRODUTO</option>
-                       
+                            <?php
+                            $produtos = $select->select_produtos();
+                            if ($produtos && count($produtos) > 0) {
+                                foreach ($produtos as $produto) {
+                                    $quantidade = $produto['quantidade'];
+                                    $status_class = $quantidade <= 5 ? 'text-red-600' : ($quantidade <= 10 ? 'text-yellow-600' : 'text-green-600');
+                                    $status_text = $quantidade <= 5 ? ' (CRÍTICO)' : ($quantidade <= 10 ? ' (BAIXO)' : '');
+                                    echo '<option value="' . $produto['id'] . '" data-barcode="' . $produto['barcode'] . '" data-quantidade="' . $quantidade . '">';
+                                    echo htmlspecialchars($produto['nome_produto']) . ' - ' . htmlspecialchars($produto['categoria']) . $status_text;
+                                    echo '</option>';
+                                }
+                            }
+                            ?>
                         </select>
                     </div>
 
@@ -510,12 +537,7 @@ $select = new select();
                             class="custom-input text-sm md:text-base" aria-label="Quantidade do produto">
                     </div>
 
-                    <div class="select-wrapper">
-                        <select id="retirante" name="retirante" required class="custom-select text-sm md:text-base" aria-label="Selecionar retirante">
-                            <option value="" disabled selected>SELECIONAR SOLICITANTE</option>
-                          
-                        </select>
-                    </div>
+
                 </div>
 
                 <button type="submit" name="btn" value="Confirmar" class="w-full bg-secondary text-white font-bold py-2 md:py-3 px-4 rounded-lg hover:bg-opacity-90 transition-colors text-sm md:text-base"
@@ -703,12 +725,11 @@ $select = new select();
             const produtoSelect = document.getElementById('produto');
             const barcodeInput = document.getElementById('barcodeInput');
             const quantidade = document.getElementById('quantidade').value;
-            const retirante = document.getElementById('retirante').value;
 
             if (opcaoAtual === 'select') {
-                return produtoSelect.value !== '' && quantidade > 0 && retirante !== '';
+                return produtoSelect.value !== '' && quantidade > 0;
             } else if (opcaoAtual === 'barcode') {
-                return produtoSelecionado !== null && barcodeInput.value.trim() !== '' && quantidade > 0 && retirante !== '';
+                return produtoSelecionado !== null && barcodeInput.value.trim() !== '' && quantidade > 0;
             }
             return false;
         }
@@ -879,6 +900,84 @@ $select = new select();
                     }
                 });
             }
+
+            // Função para buscar produto por código de barras
+            async function buscarProdutoPorBarcode(barcode) {
+                try {
+                    const response = await fetch('../controllers/controller_solicitar.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: 'barcode=' + encodeURIComponent(barcode) + '&action=buscar'
+                    });
+                    
+                    // Verificar se a resposta é JSON
+                    const contentType = response.headers.get('content-type');
+                    if (!contentType || !contentType.includes('application/json')) {
+                        console.error('Resposta não é JSON:', contentType);
+                        const text = await response.text();
+                        console.error('Resposta recebida:', text);
+                        return null;
+                    }
+                    
+                    if (response.ok) {
+                        const data = await response.json();
+                        console.log('Resposta do servidor:', data);
+                        if (data.success && data.produto) {
+                            return data.produto;
+                        } else if (data.debug) {
+                            console.log('Debug info:', data.debug);
+                        }
+                    }
+                    return null;
+                } catch (error) {
+                    console.error('Erro ao buscar produto:', error);
+                    return null;
+                }
+            }
+
+            // Função para atualizar informações do produto quando selecionado no select
+            function atualizarInfoProduto() {
+                const produtoSelect = document.getElementById('produto');
+                const selectedOption = produtoSelect.options[produtoSelect.selectedIndex];
+                
+                if (selectedOption && selectedOption.value) {
+                    const barcode = selectedOption.getAttribute('data-barcode');
+                    const quantidade = selectedOption.getAttribute('data-quantidade');
+                    const nomeProduto = selectedOption.textContent.split(' - ')[0];
+                    
+                    // Atualizar o campo de código de barras se estiver na opção barcode
+                    const barcodeInput = document.getElementById('barcodeInput');
+                    if (barcodeInput) {
+                        barcodeInput.value = barcode;
+                    }
+                    
+                    // Mostrar informações do produto
+                    const produtoInfo = document.getElementById('produtoInfo');
+                    const produtoNome = document.getElementById('produtoNome');
+                    const produtoEstoque = document.getElementById('produtoEstoque');
+                    
+                    if (produtoInfo && produtoNome && produtoEstoque) {
+                        produtoNome.textContent = nomeProduto;
+                        produtoEstoque.textContent = `Estoque: ${quantidade} unidades`;
+                        produtoInfo.classList.remove('hidden');
+                    }
+                    
+                    // Atualizar produto selecionado
+                    produtoSelecionado = {
+                        id: selectedOption.value,
+                        nome_produto: nomeProduto,
+                        quantidade: quantidade,
+                        barcode: barcode
+                    };
+                    
+                    validarSelecao();
+                }
+            }
+
+            // Adicionar evento para atualizar informações quando produto for selecionado
+            document.getElementById('produto').addEventListener('change', atualizarInfoProduto);
         });
     </script>
 </body>

@@ -22,7 +22,7 @@ $select = new select();
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.8/jquery.inputmask.min.js"></script>
+
     <script>
         tailwind.config = {
             theme: {
@@ -346,14 +346,24 @@ $select = new select();
 
         .select2-container--default .select2-selection--single .select2-selection__rendered {
             line-height: 44px;
-            padding-left: 12px;
+            padding-left: 40px;
+            padding-right: 40px;
             font-weight: 600;
             color: #1A3C34;
+            text-align: center;
+        }
+
+        /* Responsividade para o Select2 */
+        @media (min-width: 768px) {
+            .select2-container--default .select2-selection--single .select2-selection__rendered {
+                padding-left: 180px;
+                padding-right: 40px;
+            }
         }
 
         .select2-container--default .select2-selection--single .select2-selection__arrow {
             height: 46px;
-            right: 10px;
+            right: 15px;
         }
 
         .select2-container--default .select2-selection--single:focus,
@@ -377,6 +387,22 @@ $select = new select();
             border: 2px solid #005A24 !important;
             border-radius: 0.5rem;
             outline: none;
+        }
+
+        /* Estilo para o campo de data */
+        #validade[readonly] {
+            cursor: pointer;
+            background-color: #f8f9fa;
+        }
+
+        #validade[readonly]:hover {
+            background-color: #e9ecef;
+            border-color: #FFA500;
+        }
+
+        #validade[type="date"] {
+            cursor: text;
+            background-color: white;
         }
     </style>
 </head>
@@ -478,10 +504,13 @@ $select = new select();
                             class="w-full px-4 py-3 border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent text-center font-semibold"
                             aria-label="Quantidade do produto">
                     </div>
-                    <div>
-                        <input type="text" placeholder="DATA DE VALIDADE " id="validade" name="validade"
-                            class="w-full px-4 py-3 border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent text-center font-semibold"
-                            aria-label="Data de validade">
+                    <div class="relative">
+                        <input type="text" placeholder="DATA DE VALIDADE (DD/MM/AAAA)" id="validade" name="validade"
+                            class="w-full px-4 py-3 pr-12 border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent text-center font-semibold"
+                            aria-label="Data de validade" readonly>
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                            <i class="fas fa-calendar-alt text-primary text-lg"></i>
+                        </div>
                     </div>
 
                     <div class="p-4 border-2 border-primary rounded-lg">
@@ -583,11 +612,34 @@ $select = new select();
                 }
             });
 
-            // Aplicar máscara para o campo de validade
-            $('#validade').inputmask('99/99/9999', {
-              
-                clearMaskOnLostFocus: true
+            // Campo de data de validade
+            $('#validade').on('click focus', function() {
+                // Mudar para tipo date quando clicado ou focado
+                $(this).attr('type', 'date');
+                $(this).removeAttr('readonly');
+                $(this).attr('min', '<?= date('Y-m-d') ?>');
             });
+
+            // Quando o campo perder o foco, voltar para texto se estiver vazio
+            $('#validade').on('blur', function() {
+                if (!$(this).val()) {
+                    $(this).attr('type', 'text');
+                    $(this).attr('readonly', 'readonly');
+                    $(this).removeAttr('min');
+                }
+            });
+
+            // Também permitir interação via teclado
+            $('#validade').on('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    $(this).attr('type', 'date');
+                    $(this).removeAttr('readonly');
+                    $(this).attr('min', '<?= date('Y-m-d') ?>');
+                    $(this).focus();
+                }
+            });
+
         });
 
         document.addEventListener('DOMContentLoaded', function() {

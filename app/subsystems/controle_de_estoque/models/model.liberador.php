@@ -221,6 +221,20 @@ class liberador extends connect
             return 0;
         }
     }
+    public function select_produto_nome($barcode)
+    {
+        try {
+            $consulta = "SELECT p.*, c.nome_categoria AS categoria, c.id as id_categoria FROM $this->table4 p INNER JOIN $this->table1 c ON p.id_categoria = c.id WHERE p.barcode = :barcode";
+            $query = $this->connect->prepare($consulta);
+            $query->bindValue(":barcode", $barcode);
+            $query->execute();
+
+            return $resultado = $query->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+
     public function editar_produto_nome($id, $nome): int
     {
         try {

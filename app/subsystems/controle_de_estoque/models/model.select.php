@@ -77,7 +77,7 @@ class select extends connect
     }
     public function select_produto_nome($barcode)
     {
-        $consulta = "SELECT * FROM $this->table4 WHERE barcode = :barcode";
+        $consulta = "SELECT p.*, c.nome_categoria AS categoria, c.id as id_categoria FROM $this->table4 p INNER JOIN $this->table1 c ON p.id_categoria = c.id WHERE p.barcode = :barcode";
 
         $query = $this->connect->prepare($consulta);
         $query->bindValue(":barcode", $barcode);
