@@ -252,77 +252,49 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
                         <p class="text-xs text-gray-500 font-medium hidden sm:block">Gerenciamento de Permissões</p>
                     </div>
                 </div>
-                <div class="flex items-center gap-2 sm:gap-4">
-                    <div class="hidden sm:block text-right">
-                        <p class="text-sm font-semibold text-dark"><?php echo htmlspecialchars($userName, ENT_QUOTES, 'UTF-8'); ?></p>
-                        <p class="text-xs text-gray-500"><?php echo htmlspecialchars($userSetor, ENT_QUOTES, 'UTF-8'); ?></p>
-                    </div>
-                    <div class="relative">
-                        <button id="userMenuButton" class="p-1 rounded-full hover:ring-2 hover:ring-primary/30 transition">
-                            <?php if (!empty($fotoPerfil) && $fotoPerfil !== 'default.png') { ?>
-                                <img src="<?php echo '../assets/fotos_perfil/' . htmlspecialchars($fotoPerfil, ENT_QUOTES, 'UTF-8'); ?>" alt="Foto de perfil" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full object-cover border border-gray-200">
-                            <?php } else { ?>
-                                <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-primary to-dark text-white flex items-center justify-center font-semibold">
-                                    <?php echo htmlspecialchars($userInitial, ENT_QUOTES, 'UTF-8'); ?>
-                                </div>
-                            <?php } ?>
-                        </button>
-                        <div id="userMenu" class="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-xl border border-gray-200 hidden">
-                            <div class="p-4 border-b">
-                                <p class="font-semibold text-dark truncate"><?php echo htmlspecialchars($userName, ENT_QUOTES, 'UTF-8'); ?></p>
-                                <?php if (!empty($userEmail)) { ?><p class="text-sm text-gray-500 truncate"><?php echo htmlspecialchars($userEmail, ENT_QUOTES, 'UTF-8'); ?></p><?php } ?>
-                                <p class="text-xs text-gray-400 mt-1"><?php echo htmlspecialchars($userSetor, ENT_QUOTES, 'UTF-8'); ?></p>
-                            </div>
-                            <a href="<?php echo '../views/perfil.php'; ?>" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
-                                <i class="fa-solid fa-user mr-2"></i> Meu Perfil
-                            </a>
-                            <button onclick="logout()" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50">
-                                <i class="fa-solid fa-arrow-right-from-bracket mr-2"></i> Sair
-                            </button>
-                        </div>
-                    </div>
-                    <button onclick="logout()" class="p-2 sm:p-3 rounded-xl text-red-600 hover:bg-red-50 transition-all">
-                        <i class="fa-solid fa-arrow-right-from-bracket text-base sm:text-lg"></i>
-                    </button>
-                </div>
+               
             </div>
         </header>
         <!-- Main Content -->
-        <main class="px-2 sm:px-6 py-4 sm:py-8 flex-1">
-            <div class="min-h-full">
+        <main class="px-4 sm:px-8 lg:px-12 py-6 sm:py-10 flex-1">
+            <div class="min-h-full w-full max-w-none">
                 <!-- Permissions Management Panel -->
                 <div class="card-enhanced rounded-2xl overflow-hidden animate-slide-up">
-                    <div class="p-4 sm:p-6">
-                        <div class="grid grid-cols-1 xl:grid-cols-3 gap-4 sm:gap-6">
+                    <div class="p-8 sm:p-10">
+                        <div class="grid grid-cols-1 xl:grid-cols-5 gap-8 sm:gap-10">
                             <!-- Lista de Usuários -->
-                            <div class="xl:col-span-1 flex flex-col">
-                                <h4 class="text-lg sm:text-xl font-semibold text-dark mb-4 flex items-center gap-2">
-                                    <i class="fa-solid fa-users text-primary"></i>
+                            <div class="xl:col-span-2 flex flex-col">
+                                <h4 class="text-xl sm:text-2xl font-semibold text-dark mb-8 flex items-center gap-4">
+                                    <i class="fa-solid fa-users text-primary text-2xl"></i>
                                     Selecionar Usuário
                                 </h4>
-                                <div class="mb-4">
+                                <div class="mb-8">
                                     <div class="relative">
-                                        <input type="text" id="searchUser" placeholder="Pesquisar por nome..." class="input-enhanced w-full px-4 py-3 pl-10 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-sm bg-white">
-                                        <i class="fa-solid fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                                        <input type="text" id="searchUser" placeholder="Pesquisar por nome..." class="input-enhanced w-full px-5 py-4 pl-14 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-base bg-white">
+                                        <i class="fa-solid fa-search absolute left-5 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
                                     </div>
                                 </div>
-                                <div class="space-y-3 max-h-64 sm:max-h-96 overflow-y-auto border border-gray-200 rounded-xl p-4 bg-gray-50/30" id="usersList">
+                                <div class="space-y-4 max-h-96 sm:max-h-[500px] overflow-y-auto border border-gray-200 rounded-xl p-5 bg-gray-50/30" id="usersList">
                                     <?php foreach ($usuarios as $index => $user): ?>
-                                        <div class="card-enhanced p-4 rounded-xl border-2 user-card cursor-pointer transition-all duration-300 hover:bg-gray-50 hover:border-gray-300 <?php echo $selected_user_id == $user['id'] ? 'bg-gradient-to-r from-primary/10 to-secondary/10 border-primary shadow-lg shadow-primary/20 ring-2 ring-primary/20' : ''; ?>" data-user-id="<?php echo htmlspecialchars($user['id']); ?>" data-nome="<?php echo strtolower(htmlspecialchars($user['nome'])); ?>" data-email="<?php echo strtolower(htmlspecialchars($user['email'])); ?>" data-setor="<?php echo strtolower(htmlspecialchars($user['nome_setor'])); ?>" onclick="selectUser(<?php echo $index; ?>, <?php echo htmlspecialchars($user['id']); ?>)">
+                                        <div class="card-enhanced p-4 rounded-xl border-2 user-card cursor-pointer transition-all duration-300 hover:bg-gray-50 hover:border-gray-300 hover:shadow-lg <?php echo $selected_user_id == $user['id'] ? 'bg-gradient-to-r from-primary/10 to-secondary/10 border-primary shadow-lg shadow-primary/20 ring-2 ring-primary/20' : ''; ?>" data-user-id="<?php echo htmlspecialchars($user['id']); ?>" data-nome="<?php echo strtolower(htmlspecialchars($user['nome'])); ?>" data-email="<?php echo strtolower(htmlspecialchars($user['email'])); ?>" data-setor="<?php echo strtolower(htmlspecialchars($user['nome_setor'])); ?>" onclick="selectUser(<?php echo $index; ?>, <?php echo htmlspecialchars($user['id']); ?>)">
                                             <div class="flex items-center gap-3">
-                                                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-secondary text-white flex items-center justify-center font-semibold text-sm shadow-md transition-all duration-300 <?php echo $selected_user_id == $user['id'] ? 'ring-2 ring-primary/30 scale-110' : ''; ?>">
-                                                    <?php echo htmlspecialchars($user['nome'][0]); ?>
-                                                </div>
-                                                <div class="flex-1">
-                                                    <div class="font-semibold text-dark text-sm <?php echo $selected_user_id == $user['id'] ? 'text-primary' : ''; ?>"><?php echo htmlspecialchars($user['nome']); ?></div>
-                                                    <div class="text-xs text-gray-600"><?php echo htmlspecialchars($user['email']); ?></div>
-                                                    <div class="flex items-center gap-2 mt-1">
-                                                        <span class="text-xs text-gray-500"><?php echo htmlspecialchars($user['nome_setor']); ?></span>
+                                                <?php if (!empty($user['foto_perfil']) && $user['foto_perfil'] !== 'default.png') { ?>
+                                                    <img src="<?php echo '../../../main/assets/fotos_perfil/' . htmlspecialchars($user['foto_perfil'], ENT_QUOTES, 'UTF-8'); ?>" alt="Foto de perfil de <?php echo htmlspecialchars($user['nome']); ?>" class="w-12 h-12 rounded-full object-cover border-2 border-white shadow-md transition-all duration-300 <?php echo $selected_user_id == $user['id'] ? 'ring-2 ring-primary/30 scale-110' : ''; ?>">
+                                                <?php } else { ?>
+                                                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-secondary text-white flex items-center justify-center font-semibold text-base shadow-md transition-all duration-300 <?php echo $selected_user_id == $user['id'] ? 'ring-2 ring-primary/30 scale-110' : ''; ?>">
+                                                        <?php echo htmlspecialchars($user['nome'][0]); ?>
+                                                    </div>
+                                                <?php } ?>
+                                                <div class="flex-1 min-w-0">
+                                                    <div class="font-bold text-dark text-sm <?php echo $selected_user_id == $user['id'] ? 'text-primary' : ''; ?> truncate"><?php echo htmlspecialchars($user['nome']); ?></div>
+                                                    <div class="text-xs text-gray-600 truncate"><?php echo htmlspecialchars($user['email']); ?></div>
+                                                    <div class="flex items-center gap-2 mt-1.5">
+                                                        <span class="text-xs text-primary font-medium bg-primary/10 px-2.5 py-1 rounded-full"><?php echo htmlspecialchars($user['nome_setor']); ?></span>
                                                     </div>
                                                 </div>
                                                 <?php if ($selected_user_id == $user['id']) { ?>
-                                                    <div class="flex items-center justify-center w-6 h-6 rounded-full bg-primary text-white">
-                                                        <i class="fa-solid fa-check text-xs"></i>
+                                                    <div class="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white shadow-lg">
+                                                        <i class="fa-solid fa-check text-sm"></i>
                                                     </div>
                                                 <?php } ?>
                                             </div>
@@ -331,51 +303,70 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
                                 </div>
                             </div>
                             <!-- Permissões -->
-                            <div class="xl:col-span-2 flex flex-col">
-                                <h4 class="text-lg sm:text-xl font-semibold text-dark mb-4 flex items-center gap-2">
-                                    <i class="fa-solid fa-key text-secondary"></i>
-                                    Atribuir Permissões
+                                                       <!-- Permissões -->
+                                                       <div class="xl:col-span-3 flex flex-col">
+                                <h4 class="text-lg sm:text-xl font-semibold text-dark mb-6 flex items-center gap-3">
+                                    <i class="fa-solid fa-key text-secondary text-xl"></i>
+                                    Gerenciar Permissões
                                 </h4>
-                                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+                                
+                                <!-- Área de Ações -->
+                                <div class="mb-8">
+                                    <button onclick="openAddPermissionModal()" class="px-8 py-4 bg-gradient-to-r from-primary to-dark text-white font-semibold rounded-xl hover:from-primary/90 hover:to-dark/90 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 btn-primary">
+                                        <i class="fa-solid fa-plus mr-3"></i>Adicionar Nova Permissão
+                                    </button>
+                                </div>
+
+                                <!-- Grid de Permissões -->
+                                <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
                                     <!-- Formulário de Permissões -->
-                                    <div class="space-y-4">
-                                        <button onclick="openAddPermissionModal()" class="w-full px-6 py-3 bg-gradient-to-r from-primary to-dark text-white font-semibold rounded-xl hover:from-primary/90 hover:to-dark/90 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 btn-primary">
-                                            <i class="fa-solid fa-plus mr-2"></i>Adicionar Permissão
-                                        </button>
+                                    <div class="bg-gradient-to-r from-gray-50 to-white p-6 rounded-xl border border-gray-200">
+                                        <h5 class="text-lg font-semibold text-dark mb-4 flex items-center gap-2">
+                                            <i class="fa-solid fa-plus-circle text-primary"></i>
+                                            Nova Permissão
+                                        </h5>
+                                        <p class="text-gray-600 text-sm mb-4">Adicione permissões para o usuário selecionado</p>
+                                        <div class="text-center py-6">
+                                            <div class="w-14 h-14 mx-auto mb-3 rounded-full bg-gradient-to-r from-secondary/20 to-orange-500/20 flex items-center justify-center">
+                                                <i class="fa-solid fa-plus text-xl text-secondary"></i>
+                                            </div>
+                                            <p class="text-gray-500 text-xs">Clique no botão "Adicionar Nova Permissão" acima para começar</p>
+                                        </div>
                                     </div>
+                                    
                                     <!-- Permissões Atuais -->
-                                    <div class="flex flex-col">
-                                        <h5 class="text-sm font-semibold text-dark mb-3 flex items-center gap-2">
+                                    <div class="bg-gradient-to-r from-accent/20 to-white p-6 rounded-xl border border-accent/30">
+                                        <h5 class="text-lg font-semibold text-dark mb-4 flex items-center gap-2">
                                             <i class="fa-solid fa-list-check text-primary"></i>
                                             Permissões Atuais
                                         </h5>
-                                        <div id="currentPermissions" class="space-y-2 max-h-48 sm:max-h-64 overflow-y-auto">
+                                        <div id="currentPermissions" class="space-y-3 max-h-64 overflow-y-auto">
                                             <?php if (empty($permissions)): ?>
-                                                <div class="text-center py-8">
-                                                    <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
-                                                        <i class="fa-solid fa-shield-halved text-2xl text-gray-400"></i>
+                                                <div class="text-center py-12">
+                                                    <div class="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-r from-gray-100 to-gray-200 flex items-center justify-center shadow-lg">
+                                                        <i class="fa-solid fa-shield-halved text-3xl text-gray-400"></i>
                                                     </div>
-                                                    <p class="text-gray-500 text-sm font-medium">Nenhuma permissão atribuída</p>
-                                                    <p class="text-gray-400 text-xs mt-1">Adicione permissões para o usuário</p>
+                                                    <h6 class="text-gray-600 text-lg font-semibold mb-2">Nenhuma permissão atribuída</h6>
+                                                    <p class="text-gray-500 text-sm">Adicione permissões para o usuário selecionado</p>
                                                 </div>
                                             <?php else: ?>
                                                 <?php foreach ($permissions as $perm): ?>
-                                                    <div class="flex items-center justify-between p-4 bg-gradient-to-r from-accent/30 to-white rounded-xl border border-accent/50 shadow-sm hover:shadow-md transition-all duration-300">
-                                                        <div class="flex items-center gap-3">
-                                                            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white shadow-md">
-                                                                <i class="fa-solid fa-key text-sm"></i>
+                                                    <div class="flex items-center justify-between p-4 bg-gradient-to-r from-white to-accent/20 rounded-xl border border-accent/50 shadow-sm hover:shadow-md transition-all duration-300 group">
+                                                        <div class="flex items-center gap-4">
+                                                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white shadow-md group-hover:scale-110 transition-transform">
+                                                                <i class="fa-solid fa-key text-base"></i>
                                                             </div>
                                                             <div>
-                                                                <div class="font-semibold text-dark text-sm"><?php echo htmlspecialchars($perm['nome_sistema']); ?></div>
-                                                                <div class="text-xs text-gray-600"><?php echo htmlspecialchars($perm['tipo_usuario']); ?></div>
+                                                                <div class="font-bold text-dark text-base"><?php echo htmlspecialchars($perm['nome_sistema']); ?></div>
+                                                                <div class="text-sm text-gray-600 font-medium"><?php echo htmlspecialchars($perm['tipo_usuario']); ?></div>
                                                             </div>
                                                         </div>
-                                                        <div class="flex items-center gap-2">
-                                                            <button data-perm-id="<?php echo htmlspecialchars($perm['id']); ?>" data-sistema-id="<?php echo htmlspecialchars($perm['id_sistemas']); ?>" data-tipo-permissao-id="<?php echo htmlspecialchars($perm['id_tipos_usuarios']); ?>" onclick="openEditPermissionModal(this)" class="p-2 rounded-lg text-gray-600 hover:bg-primary hover:text-white hover:border-primary border border-gray-200 transition-all duration-200 group">
-                                                                <i class="fa-solid fa-pen text-sm group-hover:scale-110 transition-transform"></i>
+                                                        <div class="flex items-center gap-3">
+                                                            <button data-perm-id="<?php echo htmlspecialchars($perm['id']); ?>" data-sistema-id="<?php echo htmlspecialchars($perm['id_sistemas']); ?>" data-tipo-permissao-id="<?php echo htmlspecialchars($perm['id_tipos_usuarios']); ?>" onclick="openEditPermissionModal(this)" class="p-2.5 rounded-lg text-gray-600 hover:bg-primary hover:text-white hover:border-primary border-2 border-gray-200 transition-all duration-200 group-hover:scale-110">
+                                                                <i class="fa-solid fa-pen text-sm"></i>
                                                             </button>
-                                                            <button onclick="openDeletePermissionModal(<?php echo $perm['id']; ?>, '<?php echo htmlspecialchars($perm['nome_sistema'] . ' - ' . $perm['tipo_usuario'], ENT_QUOTES, 'UTF-8'); ?>')" class="p-2 rounded-lg text-red-600 hover:bg-red-50 hover:text-red-700 transition-all duration-200 group">
-                                                                <i class="fa-solid fa-trash text-sm group-hover:scale-110 transition-transform"></i>
+                                                            <button onclick="openDeletePermissionModal(<?php echo $perm['id']; ?>, '<?php echo htmlspecialchars($perm['nome_sistema'] . ' - ' . $perm['tipo_usuario'], ENT_QUOTES, 'UTF-8'); ?>')" class="p-2.5 rounded-lg text-red-600 hover:bg-red-500 hover:text-white border-2 border-red-200 transition-all duration-200 group-hover:scale-110">
+                                                                <i class="fa-solid fa-trash text-sm"></i>
                                                             </button>
                                                         </div>
                                                     </div>
@@ -554,16 +545,7 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
         const usuarios = <?php echo json_encode($usuarios); ?>;
         let selectedUserId = <?php echo json_encode($selected_user_id); ?>;
 
-        function logout() {
-            const confirmDialog = confirm('🚪 Deseja sair do sistema CREDE?');
-            if (confirmDialog) {
-                document.body.style.opacity = '0.7';
-                document.body.style.pointerEvents = 'none';
-                setTimeout(() => {
-                    window.location.href = '../views/subsystems.php';
-                }, 500);
-            }
-        }
+
 
         function showNotification(message, type = 'info') {
             const existingNotification = document.querySelector('.notification');
@@ -602,8 +584,118 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
 
         function selectUser(index, userId) {
             selectedUserId = userId;
-            // Redirect to the same page with user_id query parameter
-            window.location.href = `permissoes.php?user_id=${encodeURIComponent(userId)}`;
+            
+            // Update URL without page reload
+            const url = new URL(window.location);
+            url.searchParams.set('user_id', userId);
+            window.history.pushState({}, '', url);
+            
+                         // Update selected user visual state
+             document.querySelectorAll('.user-card').forEach(card => {
+                 card.classList.remove('bg-gradient-to-r', 'from-primary/10', 'to-secondary/10', 'border-primary', 'shadow-lg', 'shadow-primary/20', 'ring-2', 'ring-primary/20');
+                 card.querySelector('.font-bold')?.classList.remove('text-primary');
+                 card.querySelector('.w-12.h-12')?.classList.remove('ring-2', 'ring-primary/30', 'scale-110');
+                 card.querySelector('.w-12.h-12.rounded-full')?.classList.remove('ring-2', 'ring-primary/30', 'scale-110');
+                
+                                 // Remove check icon if exists
+                 const checkIcon = card.querySelector('.w-8.h-8.rounded-full.bg-primary');
+                 if (checkIcon) checkIcon.remove();
+            });
+            
+                         // Add selected state to current card
+             const currentCard = document.querySelectorAll('.user-card')[index];
+             if (currentCard) {
+                 currentCard.classList.add('bg-gradient-to-r', 'from-primary/10', 'to-secondary/10', 'border-primary', 'shadow-lg', 'shadow-primary/20', 'ring-2', 'ring-primary/20');
+                 currentCard.querySelector('.font-bold')?.classList.add('text-primary');
+                 currentCard.querySelector('.w-12.h-12')?.classList.add('ring-2', 'ring-primary/30', 'scale-110');
+                 currentCard.querySelector('.w-12.h-12.rounded-full')?.classList.add('ring-2', 'ring-primary/30', 'scale-110');
+                
+                                 // Add check icon
+                 const userInfo = currentCard.querySelector('.flex-1');
+                 if (userInfo) {
+                     const checkIcon = document.createElement('div');
+                     checkIcon.className = 'flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white shadow-lg';
+                     checkIcon.innerHTML = '<i class="fa-solid fa-check text-sm"></i>';
+                     
+                     // Insert the check icon after the userInfo div, not at the end of the card
+                     userInfo.parentNode.insertBefore(checkIcon, userInfo.nextSibling);
+                 }
+            }
+            
+            // Load permissions for selected user via AJAX
+            loadUserPermissions(userId);
+        }
+        
+        function loadUserPermissions(userId) {
+            // Show loading state
+            const permissionsContainer = document.getElementById('currentPermissions');
+            permissionsContainer.innerHTML = `
+                <div class="text-center py-8">
+                    <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r from-primary/20 to-secondary/20 flex items-center justify-center animate-spin">
+                        <i class="fa-solid fa-spinner text-2xl text-primary"></i>
+                    </div>
+                    <p class="text-gray-500 text-sm">Carregando permissões...</p>
+                </div>
+            `;
+            
+            // Make AJAX request
+            fetch(`../controllers/controller_permissoes.php?action=get_permissions&user_id=${userId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        updatePermissionsDisplay(data.permissions);
+                    } else {
+                        showNotification('Erro ao carregar permissões: ' + (data.message || 'Erro desconhecido'), 'error');
+                        updatePermissionsDisplay([]);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showNotification('Erro ao carregar permissões', 'error');
+                    updatePermissionsDisplay([]);
+                });
+        }
+        
+        function updatePermissionsDisplay(permissions) {
+            const permissionsContainer = document.getElementById('currentPermissions');
+            
+            if (permissions.length === 0) {
+                permissionsContainer.innerHTML = `
+                    <div class="text-center py-12">
+                        <div class="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-r from-gray-100 to-gray-200 flex items-center justify-center shadow-lg">
+                            <i class="fa-solid fa-shield-halved text-3xl text-gray-400"></i>
+                        </div>
+                        <h6 class="text-gray-600 text-lg font-semibold mb-2">Nenhuma permissão atribuída</h6>
+                        <p class="text-gray-500 text-sm">Adicione permissões para o usuário selecionado</p>
+                    </div>
+                `;
+            } else {
+                let permissionsHTML = '';
+                permissions.forEach(perm => {
+                    permissionsHTML += `
+                        <div class="flex items-center justify-between p-4 bg-gradient-to-r from-white to-accent/20 rounded-xl border border-accent/50 shadow-sm hover:shadow-md transition-all duration-300 group">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center text-white shadow-md group-hover:scale-110 transition-transform">
+                                    <i class="fa-solid fa-key text-base"></i>
+                                </div>
+                                <div>
+                                    <div class="font-bold text-dark text-base">${perm.nome_sistema}</div>
+                                    <div class="text-sm text-gray-600 font-medium">${perm.tipo_usuario}</div>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <button data-perm-id="${perm.id}" data-sistema-id="${perm.id_sistemas}" data-tipo-permissao-id="${perm.id_tipos_usuarios}" onclick="openEditPermissionModal(this)" class="p-2.5 rounded-lg text-gray-600 hover:bg-primary hover:text-white hover:border-primary border-2 border-gray-200 transition-all duration-200 group-hover:scale-110">
+                                    <i class="fa-solid fa-pen text-sm"></i>
+                                </button>
+                                <button onclick="openDeletePermissionModal(${perm.id}, '${perm.nome_sistema} - ${perm.tipo_usuario}')" class="p-2.5 rounded-lg text-red-600 hover:bg-red-500 hover:text-white border-2 border-red-200 transition-all duration-200 group-hover:scale-110">
+                                    <i class="fa-solid fa-trash text-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                });
+                permissionsContainer.innerHTML = permissionsHTML;
+            }
         }
 
         function openAddPermissionModal() {
@@ -687,6 +779,34 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
         document.addEventListener('DOMContentLoaded', function() {
             applyFilters();
             document.getElementById('searchUser').addEventListener('input', applyFilters);
+            
+            // If there's a selected user on page load, update the visual state
+            if (selectedUserId !== null) {
+                const userCards = document.querySelectorAll('.user-card');
+                userCards.forEach((card, index) => {
+                    const cardUserId = parseInt(card.dataset.userId);
+                    if (cardUserId === selectedUserId) {
+                                                 // Update visual state for selected user
+                         card.classList.add('bg-gradient-to-r', 'from-primary/10', 'to-secondary/10', 'border-primary', 'shadow-lg', 'shadow-primary/20', 'ring-2', 'ring-primary/20');
+                         card.querySelector('.font-bold')?.classList.add('text-primary');
+                         card.querySelector('.w-12.h-12')?.classList.add('ring-2', 'ring-primary/30', 'scale-110');
+                         card.querySelector('.w-12.h-12.rounded-full')?.classList.add('ring-2', 'ring-primary/30', 'scale-110');
+                        
+                                                 // Add check icon if not exists
+                         if (!card.querySelector('.w-8.h-8.rounded-full.bg-primary')) {
+                             const checkIcon = document.createElement('div');
+                             checkIcon.className = 'flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white shadow-lg';
+                             checkIcon.innerHTML = '<i class="fa-solid fa-check text-sm"></i>';
+                             
+                             // Insert the check icon after the userInfo div, not at the end of the card
+                             const userInfo = card.querySelector('.flex-1');
+                             if (userInfo) {
+                                 userInfo.parentNode.insertBefore(checkIcon, userInfo.nextSibling);
+                             }
+                         }
+                    }
+                });
+            }
             document.getElementById('addPermissionForm').addEventListener('submit', function(e) {
                 if (!this.addSistema.value || !this.addTipoPermissao.value) {
                     e.preventDefault();

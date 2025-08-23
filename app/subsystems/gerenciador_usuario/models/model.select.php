@@ -40,7 +40,14 @@ class select extends connect
     public function listar_setores()
     {
         try {
-            $stmt = $this->connect->query("SELECT * FROM {$this->table2} ORDER BY nome");
+            $stmt = $this->connect->query("
+                SELECT s.*, 
+                       COALESCE(COUNT(u.id), 0) AS total_usuarios 
+                FROM {$this->table2} s 
+                LEFT JOIN {$this->table1} u ON s.id = u.id_setor 
+                GROUP BY s.id, s.nome 
+                ORDER BY s.nome
+            ");
 
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -140,7 +147,7 @@ class select extends connect
     public function buscarUsuario(int $id): array
     {
         try {
-            $stmt = $this->connect->prepare("SELECT u.*, s.nome AS nome_setor FROM {$this->table1} u INNER JOIN {$this->table2} s ON u.id_setor = s.id WHERE u.id = :id");
+            $stmt = $this->connect->prepare("SELECT u.*, s.nome AS nome_setor, u.foto_perfil FROM {$this->table1} u INNER JOIN {$this->table2} s ON u.id_setor = s.id WHERE u.id = :id");
             $stmt->bindValue(":id", $id);
             $stmt->execute();
             return $stmt->fetch(PDO::FETCH_ASSOC);
@@ -154,7 +161,7 @@ class select extends connect
    public function listar_usuarios()
    {
        try {
-           $stmt = $this->connect->query("SELECT u.*, s.nome AS nome_setor FROM {$this->table1} u INNER JOIN {$this->table2} s ON u.id_setor = s.id ORDER BY u.nome");
+           $stmt = $this->connect->query("SELECT u.*, s.nome AS nome_setor, u.foto_perfil FROM {$this->table1} u INNER JOIN {$this->table2} s ON u.id_setor = s.id ORDER BY u.nome");
            return $stmt->fetchAll(PDO::FETCH_ASSOC);
        } catch (Exception $e) {
            error_log("Erro ao listar usuários: " . $e->getMessage());

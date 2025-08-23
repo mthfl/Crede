@@ -1,5 +1,27 @@
 <?php
 require_once(__DIR__ . "/../models/model.admin.php");
+require_once(__DIR__ . "/../models/model.select.php");
+
+// Handle AJAX request for getting permissions
+if (isset($_GET['action']) && $_GET['action'] === 'get_permissions' && isset($_GET['user_id'])) {
+    $user_id = (int)$_GET['user_id'];
+    
+    $select = new select();
+    $permissions = $select->listarPermissoesUsuario($user_id);
+    
+    if ($permissions === false) {
+        $permissions = [];
+    }
+    
+    // Return JSON response
+    header('Content-Type: application/json');
+    echo json_encode([
+        'success' => true,
+        'permissions' => $permissions
+    ]);
+    exit();
+}
+
 //print_r($_POST);
 
 if (

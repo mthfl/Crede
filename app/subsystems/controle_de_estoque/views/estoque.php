@@ -215,10 +215,61 @@ $select = new select();
 
         .action-button {
             transition: all 0.3s ease;
+            padding: 0.5rem;
+            border-radius: 0.25rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .action-button:hover {
             transform: scale(1.1);
+            background-color: rgba(0, 90, 36, 0.1);
+        }
+
+        .action-button.edit {
+            color: #FFA500;
+        }
+
+        .action-button.delete {
+            color: #FF0000;
+        }
+
+        /* CORREÇÃO DOS MODAIS - Z-index muito alto para sobrepor tudo */
+        .modal-overlay {
+            display: none;
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            background-color: rgba(0, 0, 0, 0.5) !important;
+            z-index: 999999 !important;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.show {
+            display: flex !important;
+        }
+
+        .modal-content {
+            max-width: 24rem;
+            width: 90%;
+            background: white !important;
+            border-radius: 0.75rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            transform: scale(0.95);
+            opacity: 0;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 9999999 !important;
+            pointer-events: auto !important;
+        }
+
+        .modal-content.scale-100 {
+            transform: scale(1);
+            opacity: 1;
         }
     </style>
 </head>
@@ -235,13 +286,13 @@ $select = new select();
             </div>
             <nav class="flex-1 p-4 space-y-2">
                 <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
-                    <a href="index.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2 active">
+                    <a href="index.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
                         <i class="fas fa-home mr-3 text-lg"></i>
                         <span>Início</span>
                     </a>
                 <?php } ?>
                 <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
-                    <a href="estoque.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                    <a href="estoque.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2 active">
                         <i class="fas fa-boxes mr-3 text-lg"></i>
                         <span>Estoque</span>
                     </a>
@@ -312,11 +363,11 @@ $select = new select();
                         </button>
                     </a>
                 <?php } ?>
-                <?php if (isset($_SESSION['Admin_estoque'])|| isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
-                <button onclick="abrirModalCategoria()" class="bg-primary text-white font-bold py-3 px-4 rounded-lg hover:bg-primary/90 transition-colors flex items-center shadow-md">
-                    <i class="fas fa-plus mr-2"></i>
-                    Nova Categoria
-                </button>
+                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
+                    <button onclick="abrirModalCategoria()" class="bg-primary text-white font-bold py-3 px-4 rounded-lg hover:bg-primary/90 transition-colors flex items-center shadow-md">
+                        <i class="fas fa-plus mr-2"></i>
+                        Nova Categoria
+                    </button>
                 <?php } ?>
             </div>
         </div>
@@ -356,17 +407,16 @@ $select = new select();
                                     <td class="py-3 px-4"><?= date('d/m/Y H:i', strtotime($produto['data'])) ?></td>
                                     <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
                                         <td class="py-3 px-4">
-                                            <a href="./products/editar_produto.php?id_produto=<?= $produto['id'] ?>" class="action-button text-primary hover:text-primary/80">
-                                                <i class="fas fa-pen"></i>
+                                            <a href="./products/editar_produto.php?id_produto=<?= $produto['id'] ?>" class="action-button edit" title="Editar">
+                                                <i class="fas fa-edit"></i>
                                             </a>
                                         </td>
                                     <?php } ?>
                                     <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
                                         <td class="py-3 px-4">
-                                            <a href="../controllers/controller_crud_produto.php?id_excluir=<?= $produto['id'] ?>" class="action-button text-primary hover:text-primary/80">
-                                                <i class="fas fa-pen"></i>
-                                            </a>
-
+                                            <button class="action-button delete" data-id="<?= $produto['id'] ?>" data-nome="<?= htmlspecialchars(addslashes($produto['nome_produto'])) ?>" title="Excluir">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
                                         </td>
                                     <?php } ?>
                                 </tr>
@@ -387,9 +437,9 @@ $select = new select();
             if ($dados && count($dados) > 0) {
                 $categoriaAtual = '';
                 foreach ($dados as $produto) {
-                    if ($categoriaAtual != $produto['natureza']) {
-                        $categoriaAtual = $produto['natureza'];
-                        echo '<div class="bg-primary text-white font-bold py-2 px-4 rounded-lg mt-6 mb-3 categoria-header"><h3 class="text-sm uppercase tracking-wider">' . htmlspecialchars(ucfirst($produto['natureza'])) . '</h3></div>';
+                    if ($categoriaAtual != $produto['categoria']) {
+                        $categoriaAtual = $produto['categoria'];
+                        echo '<div class="bg-primary text-white font-bold py-2 px-4 rounded-lg mt-6 mb-3 categoria-header"><h3 class="text-sm uppercase tracking-wider">' . htmlspecialchars(ucfirst($produto['categoria'])) . '</h3></div>';
                     }
                     $quantidadeClass = $produto['quantidade'] <= 5 ? 'quantidade-critica' : '';
                     echo '<div class="card-item bg-white shadow rounded-lg border-l-4 border-primary p-4 mb-3">';
@@ -405,6 +455,14 @@ $select = new select();
                     }
                     echo '</div>';
                     echo '</div>';
+                    echo '<div class="flex flex-col gap-2">';
+                    if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) {
+                        echo '<a href="./products/editar_produto.php?id_produto=' . $produto['id'] . '" class="action-button edit" title="Editar"><i class="fas fa-edit"></i></a>';
+                    }
+                    if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['Dev_estoque'])) {
+                        echo '<button class="action-button delete" data-id="' . $produto['id'] . '" data-nome="' . htmlspecialchars(addslashes($produto['nome_produto'])) . '" title="Excluir"><i class="fas fa-trash-alt"></i></button>';
+                    }
+                    echo '</div>';
                     echo '</div>';
                 }
             } else {
@@ -412,9 +470,10 @@ $select = new select();
             }
             ?>
         </div>
+        
         <!-- Modal para Nova Categoria -->
-        <div id="modalCategoria" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center">
-            <div class="bg-white rounded-xl shadow-2xl p-8 max-w-md w-full mx-4 transform transition-all duration-300 scale-95 opacity-0" id="modalContent">
+        <div id="modalCategoria" class="fixed inset-0 bg-black bg-opacity-50 z-[999999] hidden items-center justify-center">
+            <div class="bg-white rounded-xl shadow-2xl p-8 max-w-md w-full mx-4 transform scale-95 opacity-0 transition-all duration-300" id="modalCategoriaContent">
                 <div class="flex items-center justify-between mb-6">
                     <h2 class="text-2xl font-bold text-primary flex items-center">
                         <i class="fas fa-tags mr-3 text-secondary"></i>
@@ -448,9 +507,10 @@ $select = new select();
                 </form>
             </div>
         </div>
+        
         <!-- Modal para Confirmação de Exclusão -->
-        <div id="modalExcluir" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center">
-            <div class="bg-white rounded-xl shadow-2xl p-8 max-w-md w-full mx-4 transform transition-all duration-300 scale-95 opacity-0" id="modalExcluirContent">
+        <div id="modalExcluir" class="fixed inset-0 bg-black bg-opacity-50 z-[999999] hidden items-center justify-center">
+            <div class="bg-white rounded-xl shadow-2xl p-8 max-w-md w-full mx-4 transform scale-95 opacity-0 transition-all duration-300" id="modalExcluirContent">
                 <div class="flex items-center justify-between mb-6">
                     <h2 class="text-2xl font-bold text-primary flex items-center">
                         <i class="fas fa-exclamation-triangle mr-3 text-red-600"></i>
@@ -475,7 +535,7 @@ $select = new select();
                         </button>
                         <button type="submit"
                             class="flex-1 bg-gradient-to-r from-red-600 to-red-700 text-white font-semibold py-3 px-4 rounded-lg hover:from-red-700 hover:to-red-800 transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl">
-                            <i class="fas fa-trash mr-2"></i>
+                            <i class="fas fa-trash-alt mr-2"></i>
                             Excluir
                         </button>
                     </div>
@@ -542,6 +602,7 @@ $select = new select();
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('overlay');
             const closeSidebar = document.getElementById('closeSidebar');
+            
             if (menuButton && sidebar) {
                 menuButton.addEventListener('click', function(e) {
                     e.stopPropagation();
@@ -554,6 +615,7 @@ $select = new select();
                     }
                     document.body.style.overflow = sidebar.classList.contains('show') ? 'hidden' : '';
                 });
+                
                 if (overlay) {
                     overlay.addEventListener('click', function() {
                         sidebar.classList.remove('show');
@@ -562,6 +624,7 @@ $select = new select();
                         document.body.style.overflow = '';
                     });
                 }
+                
                 if (closeSidebar) {
                     closeSidebar.addEventListener('click', function() {
                         sidebar.classList.remove('show');
@@ -570,6 +633,7 @@ $select = new select();
                         document.body.style.overflow = '';
                     });
                 }
+                
                 const navLinks = sidebar.querySelectorAll('a');
                 navLinks.forEach(link => {
                     link.addEventListener('click', function() {
@@ -581,6 +645,7 @@ $select = new select();
                         }
                     });
                 });
+                
                 document.addEventListener('keydown', function(e) {
                     if (e.key === 'Escape' && sidebar.classList.contains('show')) {
                         sidebar.classList.remove('show');
@@ -589,6 +654,7 @@ $select = new select();
                         document.body.style.overflow = '';
                     }
                 });
+                
                 const footerContent = document.getElementById('footerContent');
                 if (footerContent) {
                     const adjustFooter = () => {
@@ -603,6 +669,7 @@ $select = new select();
                     window.addEventListener('resize', adjustFooter);
                 }
             }
+            
             const backToTop = document.querySelector('.back-to-top');
             if (backToTop) {
                 window.addEventListener('scroll', () => {
@@ -614,6 +681,7 @@ $select = new select();
                         backToTop.classList.add('hidden');
                     }
                 });
+                
                 backToTop.addEventListener('click', () => {
                     window.scrollTo({
                         top: 0,
@@ -621,6 +689,7 @@ $select = new select();
                     });
                 });
             }
+            
             const pesquisarInput = document.getElementById('pesquisar');
             const filtroCategoria = document.getElementById('filtroCategoria');
             const tabelaEstoque = document.getElementById('tabelaEstoque');
@@ -633,75 +702,185 @@ $select = new select();
                     categoria
                 });
             }
+            
             if (pesquisarInput) {
                 pesquisarInput.addEventListener('input', filtrarProdutos);
             }
+            
             if (filtroCategoria) {
                 filtroCategoria.addEventListener('change', filtrarProdutos);
             }
+
+            // Event listener for delete buttons
+            const deleteButtons = document.querySelectorAll('.action-button.delete');
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const id = this.getAttribute('data-id');
+                    const nome = this.getAttribute('data-nome');
+                    console.log('Botão de exclusão clicado:', { id, nome });
+                    abrirModalExcluir(id, nome);
+                });
+            });
         });
 
         function abrirModalCategoria() {
+            console.log('=== INICIANDO abrirModalCategoria ===');
+            console.log('Dispositivo:', window.innerWidth > 768 ? 'DESKTOP' : 'MOBILE');
+            
             const modal = document.getElementById('modalCategoria');
-            const modalContent = document.getElementById('modalContent');
+            const modalContent = document.getElementById('modalCategoriaContent');
+            
+            if (!modal || !modalContent) {
+                console.error('❌ ERRO: Elementos do modal não encontrados');
+                return;
+            }
+            
+            console.log('📍 ANTES das modificações:');
+            console.log('Modal classList:', Array.from(modal.classList));
+            console.log('Modal computedStyle display:', window.getComputedStyle(modal).display);
+            
+            // Usar classes Tailwind para mostrar o modal
             modal.classList.remove('hidden');
             modal.classList.add('flex');
+            
             setTimeout(() => {
                 modalContent.classList.remove('scale-95', 'opacity-0');
                 modalContent.classList.add('scale-100', 'opacity-100');
             }, 10);
-            document.getElementById('nomeCategoria').focus();
+            
+            console.log('📍 DEPOIS das modificações:');
+            console.log('Modal classList:', Array.from(modal.classList));
+            console.log('Modal computedStyle display:', window.getComputedStyle(modal).display);
+            console.log('Modal getBoundingClientRect:', modal.getBoundingClientRect());
+            console.log('Modal é visível?', modal.offsetWidth > 0 && modal.offsetHeight > 0);
+            
+            // Focus input
+            const inputCategoria = document.getElementById('nomeCategoria');
+            if (inputCategoria) {
+                setTimeout(() => {
+                    inputCategoria.focus();
+                    console.log('🎯 Input focado');
+                }, 100);
+            }
+            
+            console.log('=== FIM abrirModalCategoria ===');
         }
 
         function fecharModalCategoria() {
+            console.log('=== INICIANDO fecharModalCategoria ===');
             const modal = document.getElementById('modalCategoria');
-            const modalContent = document.getElementById('modalContent');
+            const modalContent = document.getElementById('modalCategoriaContent');
+            
+            if (!modal || !modalContent) {
+                console.error('❌ ERRO: Elementos do modal não encontrados ao fechar');
+                return;
+            }
+            
             modalContent.classList.remove('scale-100', 'opacity-100');
             modalContent.classList.add('scale-95', 'opacity-0');
+            
             setTimeout(() => {
                 modal.classList.add('hidden');
                 modal.classList.remove('flex');
+                document.getElementById('formCategoria').reset();
+                console.log('✅ Modal fechado');
             }, 300);
-            document.getElementById('formCategoria').reset();
+            
+            console.log('=== FIM fecharModalCategoria ===');
         }
 
         function abrirModalExcluir(id, nome) {
+            console.log('=== INICIANDO abrirModalExcluir ===');
+            console.log('Parâmetros:', { id, nome });
+            console.log('Dispositivo:', window.innerWidth > 768 ? 'DESKTOP' : 'MOBILE');
+            
             const modal = document.getElementById('modalExcluir');
             const modalContent = document.getElementById('modalExcluirContent');
-            document.getElementById('idExcluir').value = id;
-            document.getElementById('nomeProdutoExcluir').textContent = nome;
+            const nomeProdutoExcluir = document.getElementById('nomeProdutoExcluir');
+            const idExcluir = document.getElementById('idExcluir');
+
+            if (!modal || !modalContent || !nomeProdutoExcluir || !idExcluir) {
+                console.error('❌ ERRO: Elementos do modal de exclusão não encontrados');
+                return;
+            }
+
+            console.log('📍 ANTES das modificações:');
+            console.log('Modal classList:', Array.from(modal.classList));
+            console.log('Modal computedStyle display:', window.getComputedStyle(modal).display);
+
+            idExcluir.value = id;
+            nomeProdutoExcluir.textContent = nome;
+            console.log('✏️ Dados preenchidos no modal');
+            
+            // Usar classes Tailwind para mostrar o modal
             modal.classList.remove('hidden');
             modal.classList.add('flex');
+            
             setTimeout(() => {
                 modalContent.classList.remove('scale-95', 'opacity-0');
                 modalContent.classList.add('scale-100', 'opacity-100');
             }, 10);
+            
+            console.log('📍 DEPOIS das modificações:');
+            console.log('Modal classList:', Array.from(modal.classList));
+            console.log('Modal computedStyle display:', window.getComputedStyle(modal).display);
+            console.log('Modal getBoundingClientRect:', modal.getBoundingClientRect());
+            console.log('Modal é visível?', modal.offsetWidth > 0 && modal.offsetHeight > 0);
+            
+            console.log('=== FIM abrirModalExcluir ===');
         }
 
         function fecharModalExcluir() {
+            console.log('=== INICIANDO fecharModalExcluir ===');
             const modal = document.getElementById('modalExcluir');
             const modalContent = document.getElementById('modalExcluirContent');
+            
+            if (!modal || !modalContent) {
+                console.error('❌ ERRO: Elementos do modal não encontrados ao fechar');
+                return;
+            }
+            
             modalContent.classList.remove('scale-100', 'opacity-100');
             modalContent.classList.add('scale-95', 'opacity-0');
+            
             setTimeout(() => {
                 modal.classList.add('hidden');
                 modal.classList.remove('flex');
+                document.getElementById('formExcluir').reset();
+                console.log('✅ Modal fechado');
             }, 300);
-            document.getElementById('formExcluir').reset();
+            
+            console.log('=== FIM fecharModalExcluir ===');
         }
+
+        // Close modals when clicking outside
+        document.getElementById('modalCategoria').addEventListener('click', function(e) {
+            if (e.target === this) {
+                console.log('Clicou fora do modal de categoria, fechando');
+                fecharModalCategoria();
+            }
+        });
+
         document.getElementById('modalExcluir').addEventListener('click', function(e) {
             if (e.target === this) {
+                console.log('Clicou fora do modal de exclusão, fechando');
                 fecharModalExcluir();
             }
         });
+
+        // Close modals on Escape key
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 const modalCategoria = document.getElementById('modalCategoria');
                 const modalExcluir = document.getElementById('modalExcluir');
-                if (!modalCategoria.classList.contains('hidden')) {
+                
+                if (modalCategoria && (modalCategoria.style.display === 'flex' || modalCategoria.classList.contains('show'))) {
+                    console.log('Fechando modal de categoria via Escape');
                     fecharModalCategoria();
                 }
-                if (!modalExcluir.classList.contains('hidden')) {
+                if (modalExcluir && (modalExcluir.style.display === 'flex' || modalExcluir.classList.contains('show'))) {
+                    console.log('Fechando modal de exclusão via Escape');
                     fecharModalExcluir();
                 }
             }

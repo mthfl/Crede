@@ -175,6 +175,23 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
             border-color: rgba(0, 90, 36, 0.2);
         }
 
+        .card-enhanced:hover h3 {
+            color: #005A24 !important;
+        }
+
+        .card-enhanced:hover p {
+            color: #374151 !important;
+        }
+
+        .card-enhanced:hover .text-primary {
+            color: #005A24 !important;
+        }
+
+        /* Ensure all icons turn white on hover */
+        .card-enhanced:hover .icon-container i {
+            color: white !important;
+        }
+
         /* Icon container with gradient background */
         .icon-container {
             background: linear-gradient(135deg, var(--bg-from), var(--bg-to));
@@ -247,28 +264,27 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
 
         /* Button enhancements */
         .btn-logout {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .btn-logout::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.2), transparent);
-            transform: translateX(-100%);
-            transition: transform 0.6s;
-        }
-
-        .btn-logout:hover::before {
-            transform: translateX(100%);
+            background: rgba(0, 90, 36, 0.1);
+            color: #005A24;
+            border: 2px solid #005A24;
+            padding: clamp(0.5rem, 2vw, 0.75rem) clamp(0.75rem, 3vw, 1.5rem);
+            border-radius: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: clamp(0.75rem, 2.5vw, 0.875rem);
+            white-space: nowrap;
         }
 
         .btn-logout:hover {
-            background: #f3f4f6;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            background: #005A24;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 90, 36, 0.25);
         }
 
         /* Staggered animation for cards */
@@ -312,36 +328,10 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
                 </div>
                 
                 <div class="flex items-center gap-4">
-                    <div class="hidden sm:block text-right">
-                        <p class="text-sm font-semibold text-dark" id="userName"><?php echo htmlspecialchars($userName, ENT_QUOTES, 'UTF-8'); ?></p>
-                        <p class="text-xs text-gray-500"><?php echo htmlspecialchars($userSetor, ENT_QUOTES, 'UTF-8'); ?></p>
-                    </div>
-                    <div class="relative">
-                        <button id="userMenuButton" class="p-1 rounded-full hover:ring-2 hover:ring-primary/30 transition">
-                            <?php if (!empty($fotoPerfil) && $fotoPerfil !== 'default.png') { ?>
-                                <img src="<?php echo '../../main/assets/fotos_perfil/' . htmlspecialchars($fotoPerfil, ENT_QUOTES, 'UTF-8'); ?>" alt="Foto de perfil" class="w-10 h-10 rounded-full object-cover border border-gray-200">
-                            <?php } else { ?>
-                                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-dark text-white flex items-center justify-center font-semibold">
-                                    <?php echo htmlspecialchars($userInitial, ENT_QUOTES, 'UTF-8'); ?>
-                                </div>
-                            <?php } ?>
-                        </button>
-                        <div id="userMenu" class="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-xl border border-gray-200 hidden">
-                            <div class="p-4 border-b">
-                                <p class="font-semibold text-dark truncate"><?php echo htmlspecialchars($userName, ENT_QUOTES, 'UTF-8'); ?></p>
-                                <?php if (!empty($userEmail)) { ?><p class="text-sm text-gray-500 truncate"><?php echo htmlspecialchars($userEmail, ENT_QUOTES, 'UTF-8'); ?></p><?php } ?>
-                                <p class="text-xs text-gray-400 mt-1"><?php echo htmlspecialchars($userSetor, ENT_QUOTES, 'UTF-8'); ?></p>
-                            </div>
-                            <a href="<?php echo '../../main/views/perfil.php'; ?>" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
-                                <i class="fa-solid fa-user mr-2"></i> Meu Perfil
-                            </a>
-                            <button onclick="logout()" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50">
-                                <i class="fa-solid fa-arrow-right-from-bracket mr-2"></i> Sair
-                            </button>
-                        </div>
-                    </div>
-                    <button onclick="logout()" class="btn-logout p-3 rounded-xl text-gray-600 hover:text-dark transition-all">
-                        <i class="fa-solid fa-arrow-right-from-bracket text-lg"></i>
+                  
+                    <button onclick="logout()" class="btn-logout">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        <span class="hidden sm:inline">Voltar</span>
                     </button>
                     </div>
             </div>
@@ -393,15 +383,15 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
                     <a href="views/setor.php" class="card-enhanced card-2 rounded-3xl p-8 group animate-fade-in">
                         <div class="icon-container w-20 h-20 rounded-3xl flex items-center justify-center mb-6 group-hover:scale-110 transition-all duration-500"
                              style="--bg-from: rgba(255, 165, 0, 0.1); --bg-to: rgba(255, 165, 0, 0.05);">
-                            <i class="fa-solid fa-building text-3xl text-secondary group-hover:text-white transition-colors duration-300"></i>
+                            <i class="fa-solid fa-building text-3xl text-primary group-hover:text-white transition-colors duration-300"></i>
                         </div>
-                        <h3 class="text-2xl font-bold text-dark mb-3 font-heading group-hover:text-secondary transition-colors">
+                        <h3 class="text-2xl font-bold text-dark mb-3 font-heading group-hover:text-primary transition-colors">
                             Setores
                         </h3>
                         <p class="text-gray-600 leading-relaxed mb-4">
                             Organize e gerencie setores organizacionais com estrutura hierárquica completa
                         </p>
-                        <div class="flex items-center text-secondary font-semibold text-sm group-hover:translate-x-2 transition-transform">
+                        <div class="flex items-center text-primary font-semibold text-sm group-hover:translate-x-2 transition-transform">
                             <span>Acessar módulo</span>
                             <i class="fa-solid fa-arrow-right ml-2 group-hover:ml-3 transition-all"></i>
                         </div>
@@ -411,15 +401,15 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
                     <a href="views/permissoes.php" class="card-enhanced card-3 rounded-3xl p-8 group animate-fade-in md:col-span-2 lg:col-span-1">
                         <div class="icon-container w-20 h-20 rounded-3xl flex items-center justify-center mb-6 group-hover:scale-110 transition-all duration-500"
                              style="--bg-from: rgba(59, 130, 246, 0.1); --bg-to: rgba(59, 130, 246, 0.05);">
-                            <i class="fa-solid fa-shield-halved text-3xl text-blue-500 group-hover:text-white transition-colors duration-300"></i>
+                            <i class="fa-solid fa-shield-halved text-3xl text-primary group-hover:text-white transition-colors duration-300"></i>
                         </div>
-                        <h3 class="text-2xl font-bold text-dark mb-3 font-heading group-hover:text-blue-500 transition-colors">
+                        <h3 class="text-2xl font-bold text-dark mb-3 font-heading group-hover:text-primary transition-colors">
                             Permissões
                         </h3>
                         <p class="text-gray-600 leading-relaxed mb-4">
                             Configure permissões detalhadas e controle de acesso para cada usuário do sistema
                         </p>
-                        <div class="flex items-center text-blue-500 font-semibold text-sm group-hover:translate-x-2 transition-transform">
+                        <div class="flex items-center text-primary font-semibold text-sm group-hover:translate-x-2 transition-transform">
                             <span>Acessar módulo</span>
                             <i class="fa-solid fa-arrow-right ml-2 group-hover:ml-3 transition-all"></i>
                         </div>
@@ -444,19 +434,7 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
             }, 1500);
         });
 
-        // Logout function with enhanced UX
-        function logout() {
-            const confirmDialog = confirm('🚪 Deseja sair do sistema CREDE?');
-            if (confirmDialog) {
-                // Add loading state
-                document.body.style.opacity = '0.7';
-                document.body.style.pointerEvents = 'none';
-                
-                setTimeout(() => {
-                window.location.href = '../../main/views/subsystems.php';
-                }, 500);
-            }
-        }
+
 
         // Update user menu toggle and animations
         document.addEventListener('DOMContentLoaded', function() {
@@ -508,19 +486,36 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
             }
         });
 
-        // Add hover sound effects (optional)
+        // Add hover effects for cards
         document.querySelectorAll('.card-enhanced').forEach(card => {
             card.addEventListener('mouseenter', function() {
-                // Could add subtle sound effect here
                 this.style.transform = 'translateY(-8px) scale(1.02)';
+                
+                // Ensure text colors are maintained on hover for all cards
+                const title = this.querySelector('h3');
+                const description = this.querySelector('p');
+                const linkText = this.querySelector('.text-primary');
+                
+                if (title) title.style.color = '#005A24';
+                if (description) description.style.color = '#374151';
+                if (linkText) linkText.style.color = '#005A24';
             });
             
             card.addEventListener('mouseleave', function() {
                 this.style.transform = 'translateY(0) scale(1)';
+                
+                // Reset text colors for all cards
+                const title = this.querySelector('h3');
+                const description = this.querySelector('p');
+                const linkText = this.querySelector('.text-primary');
+                
+                if (title) title.style.color = '';
+                if (description) description.style.color = '';
+                if (linkText) linkText.style.color = '';
             });
         });
 
-        // Performance optimization - preload critical resources
+  
         const preloadLinks = [
             'views/usuario.php',
             'views/setor.php', 
@@ -533,6 +528,11 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
             linkElement.href = link;
             document.head.appendChild(linkElement);
         });
+
+      
+        function logout() {
+            window.location.href = '../../main/views/subsystems.php';
+        }
     </script>
 </body>
 

@@ -399,16 +399,15 @@ if (isset($_GET['id_produto']) && !empty($_GET['id_produto'])) {
             </div>
 
             <!-- Menu de navegação -->
-            <!-- Menu de navegação -->
             <nav class="flex-1 p-4 space-y-2">
                 <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
-                    <a href="../index.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2 active">
+                    <a href="../index.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
                         <i class="fas fa-home mr-3 text-lg"></i>
                         <span>Início</span>
                     </a>
                 <?php } ?>
                 <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
-                    <a href="../estoque.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                    <a href="../estoque.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2 active">
                         <i class="fas fa-boxes mr-3 text-lg"></i>
                         <span>Estoque</span>
                     </a>
@@ -467,7 +466,7 @@ if (isset($_GET['id_produto']) && !empty($_GET['id_produto'])) {
     <!-- Main content -->
     <main class="ml-64 px-4 py-8 md:py-12 flex-1 transition-all duration-300">
         <div class="text-center mb-10">
-            <h1 class="text-primary text-3xl md:text-4xl font-bold mb-8 md:mb-6 text-center page-title tracking-tight font-heading inline-block mx-auto">ADICIONAR NOVO PRODUTO</h1>
+            <h1 class="text-primary text-3xl md:text-4xl font-bold mb-8 md:mb-6 text-center page-title tracking-tight font-heading inline-block mx-auto">EDITAR PRODUTO</h1>
         </div>
 
         <div class="bg-white rounded-xl shadow-lg p-8 max-w-2xl w-full border-2 border-primary mx-auto">

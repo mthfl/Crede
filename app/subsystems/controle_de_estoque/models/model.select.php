@@ -92,4 +92,6 @@ class select extends connect
 
         return $resultado = $query->fetchAll(PDO::FETCH_ASSOC);
     }
+    
 }
+

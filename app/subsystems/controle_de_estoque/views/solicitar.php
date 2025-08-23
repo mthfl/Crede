@@ -398,8 +398,8 @@ $select = new select();
             </div>
 
             <nav class="flex-1 p-4 space-y-2">
-                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
-                    <a href="index.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2 active">
+            <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
+                    <a href="index.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
                         <i class="fas fa-home mr-3 text-lg"></i>
                         <span>Início</span>
                     </a>
@@ -411,13 +411,13 @@ $select = new select();
                     </a>
                 <?php } ?>
                 <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
-                    <a href="./products/adc_produto.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                    <a href="./products/adc_produto.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2 ">
                         <i class="fas fa-plus-circle mr-3 text-lg"></i>
                         <span>Adicionar</span>
                     </a>
                 <?php } ?>
                 <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
-                    <a href="solicitar.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                    <a href="solicitar.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2 active">
                         <i class="fas fa-clipboard-list mr-3 text-lg"></i>
                         <span>Solicitar</span>
                     </a>
@@ -432,7 +432,7 @@ $select = new select();
             </nav>
 
             <div class="p-4 border-t border-white/20">
-                <a href="../../../main/views/subsystems.php" class="w-full bg-transparent border border-white/40 hover:bg-white/10 text-white py-2 px-4 rounded-lg transition-all duration-200 flex items-center justify-center">
+                <a href="../../../../../main/views/subsystems.php" class="w-full bg-transparent border border-white/40 hover:bg-white/10 text-white py-2 px-4 rounded-lg transition-all duration-200 flex items-center justify-center">
                     <i class="fas fa-sign-out-alt mr-2"></i>
                     Sair
                 </a>
@@ -479,12 +479,7 @@ $select = new select();
                     <div id="opcaoSelect" class="select-wrapper">
                         <select id="produto" name="produto" required class="custom-select text-sm md:text-base" aria-label="Selecionar produto" onchange="validarSelecao()">
                             <option value="" disabled selected>SELECIONAR PRODUTO</option>
-                            <?php
-                            $dados = $select->select_produtos();
-                            foreach ($dados as $dado) {
-                            ?>
-                                <option value="<?= $dado['id'] ?>"><?= $dado['nome_produto'] ?> | <?= $dado['quantidade'] ?></option>
-                            <?php } ?>
+                       
                         </select>
                     </div>
 
@@ -518,12 +513,7 @@ $select = new select();
                     <div class="select-wrapper">
                         <select id="retirante" name="retirante" required class="custom-select text-sm md:text-base" aria-label="Selecionar retirante">
                             <option value="" disabled selected>SELECIONAR SOLICITANTE</option>
-                            <?php
-                            $dados = $select->select_responsavel();
-                            foreach ($dados as $dado) {
-                            ?>
-                                <option value="<?= $dado['nome'] ?>"><?= $dado['nome'] ?> | <?= $dado['nome_setor'] ?></option>
-                            <?php } ?>
+                          
                         </select>
                     </div>
                 </div>

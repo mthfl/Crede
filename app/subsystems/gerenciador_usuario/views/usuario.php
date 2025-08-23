@@ -183,16 +183,32 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
             backdrop-filter: blur(10px);
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
-            overflow: visible;
+            overflow: hidden;
             width: 100%;
             height: fit-content;
-            min-height: 200px;
+            min-height: 280px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .card-enhanced::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 90, 36, 0.05), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .card-enhanced:hover::before {
+            left: 100%;
         }
 
         .card-enhanced:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 15px 40px -10px rgba(0, 0, 0, 0.15), 0 8px 20px -5px rgba(0, 0, 0, 0.1);
-            border-color: rgba(0, 90, 36, 0.2);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 25px 60px -15px rgba(0, 90, 36, 0.15), 0 15px 35px -10px rgba(0, 0, 0, 0.1);
+            border-color: rgba(0, 90, 36, 0.3);
         }
 
         /* Responsive grid improvements - FIXED */
@@ -370,6 +386,8 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
+            font-weight: 600;
+            letter-spacing: 0.025em;
         }
 
         .status-badge::before {
@@ -385,6 +403,50 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
 
         .status-badge:hover::before {
             left: 100%;
+        }
+
+        /* Botão de ação melhorado */
+        .action-btn {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .action-btn:hover::before {
+            left: 100%;
+        }
+
+        /* Avatar com indicador online */
+        .avatar-online {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .avatar-online:hover {
+            transform: scale(1.05);
+        }
+
+        .online-indicator {
+            position: absolute;
+            bottom: -2px;
+            right: -2px;
+            width: 16px;
+            height: 16px;
+            background: #10B981;
+            border: 2px solid white;
+            border-radius: 50%;
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
         }
     </style>
 </head>
@@ -411,39 +473,7 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
                     </div>
                 </div>
 
-                <div class="flex items-center gap-2 sm:gap-4">
-                    <div class="hidden sm:block text-right">
-                        <p class="text-sm font-semibold text-dark"><?php echo htmlspecialchars($userName, ENT_QUOTES, 'UTF-8'); ?></p>
-                        <p class="text-xs text-gray-500"><?php echo htmlspecialchars($userSetor, ENT_QUOTES, 'UTF-8'); ?></p>
-                    </div>
-                    <div class="relative">
-                        <button id="userMenuButton" class="p-1 rounded-full hover:ring-2 hover:ring-primary/30 transition">
-                            <?php if (!empty($fotoPerfil) && $fotoPerfil !== 'default.png') { ?>
-                                <img src="<?php echo '../../../main/assets/fotos_perfil/' . htmlspecialchars($fotoPerfil, ENT_QUOTES, 'UTF-8'); ?>" alt="Foto de perfil" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full object-cover border border-gray-200">
-                            <?php } else { ?>
-                                <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-primary to-dark text-white flex items-center justify-center font-semibold">
-                                    <?php echo htmlspecialchars($userInitial, ENT_QUOTES, 'UTF-8'); ?>
-                                </div>
-                            <?php } ?>
-                        </button>
-                        <div id="userMenu" class="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-xl border border-gray-200 hidden">
-                            <div class="p-4 border-b">
-                                <p class="font-semibold text-dark truncate"><?php echo htmlspecialchars($userName, ENT_QUOTES, 'UTF-8'); ?></p>
-                                <?php if (!empty($userEmail)) { ?><p class="text-sm text-gray-500 truncate"><?php echo htmlspecialchars($userEmail, ENT_QUOTES, 'UTF-8'); ?></p><?php } ?>
-                                <p class="text-xs text-gray-400 mt-1"><?php echo htmlspecialchars($userSetor, ENT_QUOTES, 'UTF-8'); ?></p>
-                            </div>
-                            <a href="<?php echo '../../../main/views/perfil.php'; ?>" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
-                                <i class="fa-solid fa-user mr-2"></i> Meu Perfil
-                            </a>
-                            <button onclick="logout()" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50">
-                                <i class="fa-solid fa-arrow-right-from-bracket mr-2"></i> Sair
-                            </button>
-                        </div>
-                    </div>
-                    <button onclick="logout()" class="btn-logout p-2 sm:p-3 rounded-xl text-gray-600 hover:text-dark transition-all">
-                        <i class="fa-solid fa-arrow-right-from-bracket text-base sm:text-lg"></i>
-                    </button>
-                </div>
+                
             </div>
         </header>
 
@@ -488,40 +518,75 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
 
                     <!-- Cards Container -->
                     <div class="p-4 sm:p-6">
-                        <div id="usersCards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 sm:gap-6 w-full">
+                        <div id="usersCards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-5 sm:gap-6 w-full">
                             <?php foreach ($usuarios as $user): ?>
-                                <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-xl sm:rounded-2xl animate-fade-in user-card" data-nome="<?php echo strtolower(htmlspecialchars($user['nome'])); ?>" data-email="<?php echo strtolower(htmlspecialchars($user['email'])); ?>" data-setor="<?php echo strtolower(htmlspecialchars($user['id_setor'])); ?>">
-                                    <div class="flex flex-col gap-3 sm:gap-4 mb-4">
-                                        <div class="flex items-start gap-2 sm:gap-3">
-                                            <div class="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 rounded-xl sm:rounded-2xl bg-gradient-primary text-white flex items-center justify-center font-semibold text-sm sm:text-base lg:text-lg flex-shrink-0">
-                                                <?php echo htmlspecialchars($user['nome'][0]); ?>
+                                <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl animate-fade-in user-card group hover:shadow-2xl transition-all duration-500" data-nome="<?php echo strtolower(htmlspecialchars($user['nome'])); ?>" data-email="<?php echo strtolower(htmlspecialchars($user['email'])); ?>" data-setor="<?php echo strtolower(htmlspecialchars($user['id_setor'])); ?>">
+                                    
+                                    <!-- Header do Card com Avatar e Nome -->
+                                    <div class="flex items-start gap-3 mb-4">
+                                        <?php if (!empty($user['foto_perfil']) && $user['foto_perfil'] !== 'default.png') { ?>
+                                            <div class="relative">
+                                                <img src="<?php echo '../../../main/assets/fotos_perfil/' . htmlspecialchars($user['foto_perfil'], ENT_QUOTES, 'UTF-8'); ?>" alt="Foto de perfil de <?php echo htmlspecialchars($user['nome']); ?>" class="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-2xl object-cover border-2 border-white shadow-lg flex-shrink-0">
+                                                <div class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
                                             </div>
-                                            <div class="min-w-0 flex-1">
-                                                <h3 class="font-semibold text-dark text-sm sm:text-base lg:text-lg truncate"><?php echo htmlspecialchars($user['nome']); ?></h3>
-                                                <p class="text-gray-600 text-xs sm:text-sm lg:text-base truncate"><?php echo htmlspecialchars($user['email']); ?></p>
+                                        <?php } else { ?>
+                                            <div class="relative">
+                                                <div class="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-2xl bg-gradient-to-br from-primary via-primary to-dark text-white flex items-center justify-center font-bold text-base sm:text-lg lg:text-xl flex-shrink-0 shadow-lg">
+                                                    <?php echo htmlspecialchars($user['nome'][0]); ?>
+                                                </div>
+                                                <div class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
                                             </div>
+                                        <?php } ?>
+                                        
+                                        <div class="min-w-0 flex-1 pt-1">
+                                            <h3 class="font-bold text-dark text-base sm:text-lg lg:text-xl truncate mb-1 group-hover:text-primary transition-colors duration-300">
+                                                <?php echo htmlspecialchars($user['nome']); ?>
+                                            </h3>
+                                            <p class="text-gray-500 text-sm sm:text-base truncate flex items-center gap-2">
+                                                <i class="fa-solid fa-envelope text-xs text-gray-400"></i>
+                                                <?php echo htmlspecialchars($user['email']); ?>
+                                            </p>
                                         </div>
-
-                                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 mb-3 sm:mb-4">
-                                            <div>
-                                                <label class="block text-xs font-medium text-gray-500 mb-1">CPF</label>
-                                                <span class="text-xs sm:text-sm font-mono text-gray-700 bg-gray-50/50 px-2 sm:px-3 py-1 rounded-lg break-all"><?php echo htmlspecialchars($user['cpf']); ?></span>
-                                            </div>
-                                            <div>
-                                                <label class="block text-xs font-medium text-gray-500 mb-1">Setor</label>
-                                                <span class="status-badge px-2 sm:px-3 py-1 text-xs sm:text-sm font-semibold rounded-full bg-accent/30 text-primary border border-accent/50"><?php echo htmlspecialchars($user['nome_setor']); ?></span>
-                                            </div>
-                                        </div>
-
                                     </div>
 
-                                    <div class="flex items-center justify-end gap-2 pt-3 border-t border-gray-100">
-                                        <button class="p-1.5 sm:p-2 rounded-lg sm:rounded-xl border border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300" onclick="openEditUser(<?php echo $user['id']; ?>)" title="Editar usuário">
-                                            <i class='fa-solid fa-pen text-xs sm:text-sm'></i>
-                                        </button>
-                                        <button class="p-1.5 sm:p-2 rounded-lg sm:rounded-xl border border-red-200 hover:bg-red-500 hover:text-white text-red-600 transition-all duration-300" onclick="openDeleteUser(<?php echo $user['id']; ?>, '<?php echo htmlspecialchars($user['nome'], ENT_QUOTES, 'UTF-8'); ?>')" title="Remover usuário">
-                                            <i class='fa-solid fa-trash text-xs sm:text-sm'></i>
-                                        </button>
+                                    <!-- Informações do Usuário -->
+                                    <div class="space-y-3 mb-4">
+                                        <!-- CPF -->
+                                        <div class="bg-gradient-to-r from-gray-50 to-gray-100/50 p-2.5 rounded-xl border border-gray-200/50">
+                                            <label class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
+                                                <i class="fa-solid fa-id-card text-primary mr-2"></i>CPF
+                                            </label>
+                                            <span class="text-sm font-mono text-gray-800 bg-white px-2.5 py-1.5 rounded-lg border border-gray-200/50 block">
+                                                <?php echo htmlspecialchars($user['cpf']); ?>
+                                            </span>
+                                        </div>
+                                        
+                                        <!-- Setor -->
+                                        <div class="bg-gradient-to-r from-accent/20 to-accent/10 p-2.5 rounded-xl border border-accent/30">
+                                            <label class="block text-xs font-semibold text-primary mb-1.5 uppercase tracking-wide">
+                                                <i class="fa-solid fa-building text-primary mr-2"></i>Setor
+                                            </label>
+                                            <span class="status-badge px-3 py-1.5 text-sm font-semibold rounded-xl bg-white text-primary border-2 border-accent/50 shadow-sm">
+                                                <?php echo htmlspecialchars($user['nome_setor']); ?>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Barra de Ações -->
+                                    <div class="flex items-center justify-between pt-4 border-t border-gray-200/50">
+                                        <div class="text-xs text-gray-400 font-medium">
+                                            <i class="fa-solid fa-clock mr-1"></i>
+                                            ID: <?php echo $user['id']; ?>
+                                        </div>
+                                        
+                                        <div class="flex items-center gap-2">
+                                            <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(<?php echo $user['id']; ?>)" title="Editar usuário">
+                                                <i class='fa-solid fa-pen text-sm'></i>
+                                            </button>
+                                            <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeleteUser(<?php echo $user['id']; ?>, '<?php echo htmlspecialchars($user['nome'], ENT_QUOTES, 'UTF-8'); ?>')" title="Remover usuário">
+                                                <i class='fa-solid fa-trash text-sm'></i>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             <?php endforeach; ?>
@@ -550,7 +615,7 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
                 </button>
             </div>
             <div class="p-6 sm:p-8">
-                <form id="userForm" action="../controllers/controller_usuario.php" method="POST">
+                <form id="userForm" action="../controllers/controller_usuario.php" method="POST" enctype="multipart/form-data">
                     <input type="hidden" id="inpUserId" name="user_id" value="">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
@@ -586,6 +651,7 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
                                 <?php endforeach; ?>
                             </select>
                         </div>
+
                     </div>
                     <div class="p-6 sm:p-8 border-t border-gray-100 bg-gray-50/50 flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-3">
                         <button type="button" class="px-6 py-3 rounded-xl border-2 border-gray-300 font-semibold text-gray-700 hover:bg-gray-100 hover:border-gray-400 transition-all text-base" onclick="closeModal('modalUser')">
@@ -672,16 +738,7 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
     <script>
         const usuarios = <?php echo json_encode($usuarios); ?>;
 
-        function logout() {
-            const confirmDialog = confirm('🚪 Deseja sair do sistema CREDE?');
-            if (confirmDialog) {
-                document.body.style.opacity = '0.7';
-                document.body.style.pointerEvents = 'none';
-                setTimeout(() => {
-                    window.location.href = '../../main/views/subsystems.php';
-                }, 500);
-            }
-        }
+
 
         function openUserForm() {
             document.getElementById('modalTitle').textContent = 'Cadastrar Usuário';
@@ -706,7 +763,21 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
                 document.getElementById('inpUserId').value = user.id || '';
                 document.getElementById('inpNome').value = user.nome || '';
                 document.getElementById('inpEmail').value = user.email || '';
-                document.getElementById('inpCpf').value = user.cpf || '';
+                
+                // Aplicar máscara ao CPF se existir
+                if (user.cpf) {
+                    const cpf = user.cpf.toString();
+                    if (cpf.length === 11) {
+                        // Formatar CPF com máscara
+                        const cpfFormatado = cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+                        document.getElementById('inpCpf').value = cpfFormatado;
+                    } else {
+                        document.getElementById('inpCpf').value = user.cpf || '';
+                    }
+                } else {
+                    document.getElementById('inpCpf').value = '';
+                }
+                
                 document.getElementById('inpSetor').value = user.id_setor || ''; // Use id_setor instead of setor_id
                 document.getElementById('userForm').action = '../controllers/controller_usuario.php';
                 openModal('modalUser');
@@ -799,10 +870,39 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
             document.getElementById('resultCount').textContent = `${count} resultado${count !== 1 ? 's' : ''}`;
         }
 
+        // Função para aplicar máscara de CPF
+        function aplicarMascaraCPF(input) {
+            let value = input.value.replace(/\D/g, ''); // Remove tudo que não é dígito
+            value = value.replace(/(\d{3})(\d)/, '$1.$2'); // Coloca ponto depois do 3º dígito
+            value = value.replace(/(\d{3})(\d)/, '$1.$2'); // Coloca ponto depois do 6º dígito
+            value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2'); // Coloca hífen antes dos últimos 2 dígitos
+            input.value = value;
+        }
+
+        // Função para remover máscara do CPF (apenas números)
+        function removerMascaraCPF(cpf) {
+            return cpf.replace(/\D/g, '');
+        }
+
         // Event listeners
         document.addEventListener('DOMContentLoaded', function() {
             applyFilters(); // Inicial
             document.getElementById('tableSearch').addEventListener('input', applyFilters);
+
+            // Aplicar máscara de CPF
+            const cpfInput = document.getElementById('inpCpf');
+            if (cpfInput) {
+                cpfInput.addEventListener('input', function() {
+                    aplicarMascaraCPF(this);
+                });
+                
+                // Limitar o campo a 14 caracteres (formato: 000.000.000-00)
+                cpfInput.addEventListener('keypress', function(e) {
+                    if (this.value.length >= 14 && e.key !== 'Backspace' && e.key !== 'Delete') {
+                        e.preventDefault();
+                    }
+                });
+            }
 
             // Form submissions
             document.getElementById('userForm').addEventListener('submit', function(e) {
@@ -810,7 +910,19 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
                 if (!this.inpNome.value.trim() || !this.inpEmail.value.trim() || !this.inpCpf.value.trim() || !this.inpSetor.value) {
                     e.preventDefault();
                     showNotification('Preencha todos os campos obrigatórios.', 'error');
+                    return;
                 }
+                
+                // Validar formato do CPF antes de enviar
+                const cpf = removerMascaraCPF(this.inpCpf.value);
+                if (cpf.length !== 11) {
+                    e.preventDefault();
+                    showNotification('CPF deve conter 11 dígitos.', 'error');
+                    return;
+                }
+                
+                // Atualizar o valor do campo CPF para enviar apenas números
+                this.inpCpf.value = cpf;
             });
 
             document.getElementById('userTypeForm').addEventListener('submit', function(e) {

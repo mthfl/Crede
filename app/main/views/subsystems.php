@@ -184,8 +184,9 @@ $session->tempo_session();
         /* Search bar aprimorada */
         .search-container {
             position: relative;
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
+            padding: 0 24px;
         }
 
         .search-input {
@@ -209,15 +210,16 @@ $session->tempo_session();
 
         .search-icon {
             position: absolute;
-            left: 20px;
+            left: 44px;
             top: 50%;
             transform: translateY(-50%);
             color: #64748b;
             font-size: 18px;
             transition: color 0.3s ease;
+            z-index: 10;
         }
 
-        .search-input:focus+.search-icon {
+        .search-input:focus + .search-icon {
             color: #FFA500;
         }
 
@@ -386,6 +388,11 @@ $session->tempo_session();
                 padding: 14px 20px 14px 48px;
                 font-size: 16px;
             }
+
+            .search-icon {
+                left: 20px;
+                font-size: 16px;
+            }
         }
 
         @media (min-width: 769px) {
@@ -453,6 +460,16 @@ $session->tempo_session();
             .header-nav button {
                 width: 40px;
                 height: 40px;
+            }
+
+            .search-input {
+                padding: 12px 16px 12px 44px;
+                font-size: 14px;
+            }
+
+            .search-icon {
+                left: 16px;
+                font-size: 14px;
             }
         }
 
@@ -985,6 +1002,7 @@ $session->tempo_session();
 
     <!-- Main Content -->
     <main class="container mx-auto px-6 py-12">
+        <div class="max-w-6xl mx-auto">
 
 
 
@@ -1040,9 +1058,6 @@ $session->tempo_session();
             <?php } ?>
 
         </div>
-
-
-
     </main>
 
     <!-- Botão de Acessibilidade (Desktop) -->

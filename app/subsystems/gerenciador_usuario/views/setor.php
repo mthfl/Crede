@@ -417,39 +417,7 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
                     </div>
                 </div>
                 
-                <div class="flex items-center gap-2 sm:gap-3 md:gap-4">
-                    <div class="hidden md:block text-right">
-                        <p class="text-sm font-semibold text-dark"><?php echo htmlspecialchars($userName, ENT_QUOTES, 'UTF-8'); ?></p>
-                        <p class="text-xs text-gray-500"><?php echo htmlspecialchars($userSetor, ENT_QUOTES, 'UTF-8'); ?></p>
-                    </div>
-                    <div class="relative">
-                        <button id="userMenuButton" class="p-1 rounded-full hover:ring-2 hover:ring-primary/30 transition">
-                            <?php if (!empty($fotoPerfil) && $fotoPerfil !== 'default.png') { ?>
-                                <img src="<?php echo '../../../main/assets/fotos_perfil/' . htmlspecialchars($fotoPerfil, ENT_QUOTES, 'UTF-8'); ?>" alt="Foto de perfil" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full object-cover border border-gray-200">
-                            <?php } else { ?>
-                                <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-primary to-dark text-white flex items-center justify-center font-semibold">
-                                    <?php echo htmlspecialchars($userInitial, ENT_QUOTES, 'UTF-8'); ?>
-                                </div>
-                            <?php } ?>
-                        </button>
-                        <div id="userMenu" class="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-xl border border-gray-200 hidden">
-                            <div class="p-4 border-b">
-                                <p class="font-semibold text-dark truncate"><?php echo htmlspecialchars($userName, ENT_QUOTES, 'UTF-8'); ?></p>
-                                <?php if (!empty($userEmail)) { ?><p class="text-sm text-gray-500 truncate"><?php echo htmlspecialchars($userEmail, ENT_QUOTES, 'UTF-8'); ?></p><?php } ?>
-                                <p class="text-xs text-gray-400 mt-1"><?php echo htmlspecialchars($userSetor, ENT_QUOTES, 'UTF-8'); ?></p>
-                            </div>
-                            <a href="<?php echo '../../../main/views/perfil.php'; ?>" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
-                                <i class="fa-solid fa-user mr-2"></i> Meu Perfil
-                            </a>
-                            <button onclick="logout()" class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50">
-                                <i class="fa-solid fa-arrow-right-from-bracket mr-2"></i> Sair
-                            </button>
-                        </div>
-                    </div>
-                    <button onclick="logout()" class="btn-logout p-1.5 sm:p-2 md:p-3 rounded-lg sm:rounded-xl text-gray-600 hover:text-dark transition-all">
-                        <i class="fa-solid fa-arrow-right-from-bracket text-sm sm:text-base md:text-lg"></i>
-                    </button>
-                </div>
+                
             </div>
         </header>
 
@@ -466,30 +434,103 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
                     </button>
                 </div>
 
+                <!-- Estatísticas Resumidas -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-8 animate-fade-in">
+                    <?php 
+                    $totalSetores = count($setores);
+                    $totalUsuarios = array_sum(array_column($setores, 'total_usuarios'));
+                    $setoresAtivos = count(array_filter($setores, function($s) { return ($s['total_usuarios'] ?? 0) > 0; }));
+                    ?>
+                    
+                    <!-- Total de Setores -->
+                    <div class="bg-white rounded-2xl p-4 sm:p-6 border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 text-white flex items-center justify-center">
+                                <i class="fa-solid fa-building text-xl"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600 font-medium">Total de Setores</p>
+                                <p class="text-2xl font-bold text-dark"><?php echo $totalSetores; ?></p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Total de Usuários -->
+                    <div class="bg-white rounded-2xl p-4 sm:p-6 border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-green-500 to-green-600 text-white flex items-center justify-center">
+                                <i class="fa-solid fa-users text-xl"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600 font-medium">Total de Usuários</p>
+                                <p class="text-2xl font-bold text-dark"><?php echo $totalUsuarios; ?></p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Setores Ativos -->
+                    <div class="bg-white rounded-2xl p-4 sm:p-6 border border-gray-200 shadow-sm hover:shadow-md transition-all duration-300">
+                        <div class="flex items-center gap-3">
+                            <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-orange-500 to-orange-600 text-white flex items-center justify-center">
+                                <i class="fa-solid fa-check-circle text-xl"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-600 font-medium">Setores Ativos</p>
+                                <p class="text-2xl font-bold text-dark"><?php echo $setoresAtivos; ?></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Setores Grid -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4 sm:gap-6 w-full" id="setoresGrid">
                     <?php 
                     foreach ($setores as $index => $sector): 
                     ?>
-                        <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-xl sm:rounded-2xl animate-fade-in hover:scale-105 transition-all duration-300" style="animation-delay: <?php echo ($index * 0.1) . 's'; ?>;">
-                            <div class="flex flex-col gap-3 sm:gap-4 mb-4 sm:mb-5">
-                                <div class="flex items-start gap-3 sm:gap-4">
-                                    <div class="w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 rounded-xl sm:rounded-2xl bg-gradient-to-br from-secondary to-orange-500 text-white flex items-center justify-center relative overflow-hidden flex-shrink-0">
-                                        <i class="fa-solid fa-building text-sm sm:text-lg lg:text-xl relative z-10"></i>
-                                        <div class="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent"></div>
-                                    </div>
-                                    <div class="min-w-0 flex-1">
-                                        <h3 class="font-bold text-dark text-base sm:text-lg lg:text-xl mb-1 truncate"><?php echo htmlspecialchars($sector['nome'], ENT_QUOTES, 'UTF-8'); ?></h3>
-                                    </div>
+                        <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-xl sm:rounded-2xl animate-fade-in hover:scale-105 transition-all duration-300 group" style="animation-delay: <?php echo ($index * 0.1) . 's'; ?>;">
+                            <!-- Header do Card -->
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-2xl bg-gradient-to-br from-secondary to-orange-500 text-white flex items-center justify-center relative overflow-hidden flex-shrink-0 group-hover:scale-110 transition-all duration-300">
+                                    <i class="fa-solid fa-building text-lg sm:text-xl lg:text-2xl relative z-10"></i>
+                                    <div class="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent"></div>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="px-2 py-1 bg-accent/50 text-primary text-xs font-semibold rounded-full border border-accent/50">
+                                        <?php echo $sector['total_usuarios'] ?? 0; ?> usuário<?php echo ($sector['total_usuarios'] ?? 0) != 1 ? 's' : ''; ?>
+                                    </span>
                                 </div>
                             </div>
-                            <div class="flex items-center justify-end gap-2 pt-3 border-t border-gray-100">
-                                <button onclick="openEditSector(<?php echo $sector['id']; ?>)" class="p-1.5 sm:p-2 rounded-lg border border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300" title="Editar setor">
-                                    <i class="fa-solid fa-pen text-xs sm:text-sm"></i>
-                                </button>
-                                <button onclick="openDeleteModal(<?php echo $sector['id']; ?>, '<?php echo htmlspecialchars($sector['nome'], ENT_QUOTES, 'UTF-8'); ?>')" class="p-1.5 sm:p-2 rounded-lg border border-red-200 hover:bg-red-500 hover:text-white text-red-600 transition-all duration-300" title="Excluir setor">
-                                    <i class="fa-solid fa-trash text-xs sm:text-sm"></i>
-                                </button>
+                            
+                            <!-- Conteúdo Principal -->
+                            <div class="mb-4">
+                                <h3 class="font-bold text-dark text-lg sm:text-xl lg:text-2xl mb-2 group-hover:text-primary transition-colors duration-300">
+                                    <?php echo htmlspecialchars($sector['nome'], ENT_QUOTES, 'UTF-8'); ?>
+                                </h3>
+                                
+                                                                 <!-- Estatísticas do Setor -->
+                                 <div class="space-y-2">
+                                     <div class="flex items-center gap-2 text-sm text-gray-600">
+                                         <i class="fa-solid fa-users text-secondary"></i>
+                                         <span class="font-medium"><?php echo $sector['total_usuarios'] ?? 0; ?> pessoa<?php echo ($sector['total_usuarios'] ?? 0) != 1 ? 's' : ''; ?> alocada<?php echo ($sector['total_usuarios'] ?? 0) != 1 ? 's' : ''; ?></span>
+                                     </div>
+                                 </div>
+                            </div>
+                            
+                            
+                            
+                            <!-- Ações do Card -->
+                            <div class="flex items-center justify-between pt-3 border-t border-gray-100">
+                                <div class="text-xs text-gray-500">
+                                    ID: <?php echo $sector['id']; ?>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <button onclick="openEditSector(<?php echo $sector['id']; ?>)" class="p-2 rounded-lg border border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 group-hover:scale-105" title="Editar setor">
+                                        <i class="fa-solid fa-pen text-sm"></i>
+                                    </button>
+                                    <button onclick="openDeleteModal(<?php echo $sector['id']; ?>, '<?php echo htmlspecialchars($sector['nome'], ENT_QUOTES, 'UTF-8'); ?>')" class="p-2 rounded-lg border border-red-200 hover:bg-red-500 hover:text-white text-red-600 transition-all duration-300 group-hover:scale-105" title="Excluir setor">
+                                        <i class="fa-solid fa-trash text-sm"></i>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     <?php endforeach; ?>
@@ -577,14 +618,7 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
         let editingSectorId = null;
         let deletingSectorId = null;
 
-        function logout() {
-            const confirmDialog = confirm('🚪 Deseja sair do sistema CREDE?');
-            if (confirmDialog) {
-                document.body.style.opacity = '0.7';
-                document.body.style.pointerEvents = 'none';
-                setTimeout(() => { window.location.href = '../../main/views/subsystems.php'; }, 500);
-            }
-        }
+
 
         function openSectorForm() {
             document.getElementById('modalTitle').textContent = 'Cadastrar Setor';
@@ -610,8 +644,8 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
         function openDeleteModal(sectorId, sectorName) {
             const sector = setores.find(s => s.id === sectorId);
             if (sector) {
-                if (sector.usuarios > 0) {
-                    showNotification(`Não é possível excluir o setor "${sector.nome}" pois possui ${sector.usuarios} usuário(s) vinculado(s).`, 'error');
+                if ((sector.total_usuarios || 0) > 0) {
+                    showNotification(`Não é possível excluir o setor "${sector.nome}" pois possui ${sector.total_usuarios} usuário(s) vinculado(s).`, 'error');
                     return;
                 }
                 

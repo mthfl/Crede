@@ -22,6 +22,7 @@ $select = new select();
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.8/jquery.inputmask.min.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -393,10 +394,9 @@ $select = new select();
             </div>
 
             <!-- Menu de navegação -->
-            <!-- Menu de navegação -->
             <nav class="flex-1 p-4 space-y-2">
                 <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
-                    <a href="../index.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2 active">
+                    <a href="../index.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
                         <i class="fas fa-home mr-3 text-lg"></i>
                         <span>Início</span>
                     </a>
@@ -408,7 +408,7 @@ $select = new select();
                     </a>
                 <?php } ?>
                 <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
-                    <a href="adc_produto.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                    <a href="adc_produto.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2 active">
                         <i class="fas fa-plus-circle mr-3 text-lg"></i>
                         <span>Adicionar</span>
                     </a>
@@ -425,7 +425,6 @@ $select = new select();
                         <span>Relatórios</span>
                     </a>
                 <?php } ?>
-
             </nav>
 
             <!-- Botão de Sair -->
@@ -446,7 +445,7 @@ $select = new select();
         </div>
     </div>
 
-    <button class="fixed top-4 left-4 z-50 md:hidden  text-primary p-3 rounded-lg  hover:bg-primary/90 transition-all duration-200" id="menuButton">
+    <button class="fixed top-4 left-4 z-50 md:hidden text-primary p-3 rounded-lg hover:bg-primary/90 transition-all duration-200" id="menuButton">
         <i class="fas fa-bars text-lg"></i>
     </button>
 
@@ -480,16 +479,15 @@ $select = new select();
                             aria-label="Quantidade do produto">
                     </div>
                     <div>
-                        <input type="date" placeholder="VALIDADE" min="1" id="validade" name="validade"
+                        <input type="text" placeholder="DATA DE VALIDADE " id="validade" name="validade"
                             class="w-full px-4 py-3 border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent text-center font-semibold"
-                            aria-label="Quantidade do produto">
+                            aria-label="Data de validade">
                     </div>
 
                     <div class="p-4 border-2 border-primary rounded-lg">
-                        <p class="font-semibold text-primary mb-3 text-center">Selecione a Categoria</p>
-
-                        <select class="js-example-basic-single" id="categoria" name="id_categoria" required data-placeholder="Selecione uma categoria">
-                            <option value="" disabled selected hidden>Selecione uma categoria</option>
+                        
+                        <select class="js-example-basic-single " id="categoria" name="id_categoria" required data-placeholder="Selecione uma categoria">
+                            <option class="text-center " value="" disabled selected hidden>Selecione uma categoria</option>
 
                             <?php
                             $dados = $select->select_categoria();
@@ -504,13 +502,9 @@ $select = new select();
                     aria-label="Adicionar produto">
                     ADICIONAR
                 </button>
-        </div>
-
-
-        </form>
+            </form>
         </div>
     </main>
-
 
     <footer class="bg-gradient-to-r from-primary to-dark text-white py-8 md:py-10 mt-auto relative transition-all duration-300">
         <!-- Efeito de brilho sutil no topo -->
@@ -542,7 +536,6 @@ $select = new select();
                                 <i class="fas fa-phone-alt mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
                                 (85) 3341-3990
                             </a>
-
                         </div>
                     </div>
 
@@ -561,7 +554,6 @@ $select = new select();
                                 <i class="fab fa-instagram mr-3 text-secondary group-hover/item:scale-110 transition-transform duration-300"></i>
                                 Pedro Uchoa
                             </a>
-
                         </div>
                     </div>
                 </div>
@@ -590,7 +582,14 @@ $select = new select();
                     }
                 }
             });
+
+            // Aplicar máscara para o campo de validade
+            $('#validade').inputmask('99/99/9999', {
+              
+                clearMaskOnLostFocus: true
+            });
         });
+
         document.addEventListener('DOMContentLoaded', function() {
             // Sidebar mobile toggle
             const menuButton = document.getElementById('menuButton');
