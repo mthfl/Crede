@@ -191,21 +191,34 @@ $select = new select();
                 min-width: 0;
                 width: 100%;
                 box-sizing: border-box;
+                margin-left: 0 !important;
             }
 
-            .card-item .flex {
+            .card-item > .flex {
                 flex-wrap: wrap;
                 gap: 0.5rem;
+                flex-direction: column;
+                align-items: flex-start;
             }
 
             .card-item .flex-1 {
                 min-width: 0;
-                flex: 1 1 200px;
+                flex: 1 1 auto;
+                width: 100%;
             }
 
             .card-item .flex.flex-col.gap-2 {
                 flex-shrink: 0;
                 min-width: auto;
+                width: 100%;
+                flex-direction: row;
+                justify-content: flex-end;
+                gap: 0.75rem;
+            }
+
+            .mobile-cards .card-item h3,
+            .mobile-cards .card-item span {
+                word-break: break-word;
             }
         }
 
@@ -563,6 +576,7 @@ $select = new select();
                     }
                     echo '</div>';
                     echo '</div>';
+                    echo '</div>'; // fecha .card-item
                 }
             } else {
                 echo '<div class="text-center text-gray-500 py-8">Nenhum produto encontrado</div>';

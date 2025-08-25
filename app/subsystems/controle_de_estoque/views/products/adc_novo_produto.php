@@ -617,7 +617,6 @@ $select = new select();
                 // Mudar para tipo date quando clicado ou focado
                 $(this).attr('type', 'date');
                 $(this).removeAttr('readonly');
-                $(this).attr('min', '<?= date('Y-m-d') ?>');
             });
 
             // Quando o campo perder o foco, voltar para texto se estiver vazio
@@ -635,7 +634,6 @@ $select = new select();
                     e.preventDefault();
                     $(this).attr('type', 'date');
                     $(this).removeAttr('readonly');
-                    $(this).attr('min', '<?= date('Y-m-d') ?>');
                     $(this).focus();
                 }
             });
