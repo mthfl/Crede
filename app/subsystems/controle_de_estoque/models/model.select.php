@@ -87,7 +87,7 @@ class select extends connect
     }
     public function select_responsavel()
     {
-        $consulta = "SELECT u.nome, s.nome AS nome_setor FROM {$this->table6} u INNER JOIN {$this->table7} s ON u.id_setor = s.id";
+        $consulta = "SELECT u.nome, s.nome AS nome_setor FROM $this->table5 u INNER JOIN $this->table6 s ON u.id_setor = s.id";
         $query = $this->connect_users->query($consulta);
 
         return $resultado = $query->fetchAll(PDO::FETCH_ASSOC);

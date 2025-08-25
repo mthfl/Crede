@@ -304,24 +304,24 @@ $select = new select();
             .mb-6.flex.flex-col.md\\:flex-row {
                 gap: 1rem;
             }
-            
+
             .mb-6.flex.flex-col.md\\:flex-row .flex-1 {
                 order: 1;
             }
-            
+
             .mb-6.flex.flex-col.md\\:flex-row .flex.gap-2 {
                 order: 2;
                 flex-wrap: wrap;
                 justify-content: center;
                 gap: 0.5rem;
             }
-            
+
             .mb-6.flex.flex-col.md\\:flex-row .flex.gap-2 select {
                 font-size: 0.875rem;
                 padding: 0.5rem 0.75rem;
                 min-width: auto;
             }
-            
+
             #pesquisar {
                 font-size: 1rem;
                 padding: 0.75rem 1rem;
@@ -546,7 +546,7 @@ $select = new select();
             ?>
         </div>
     </main>
-    
+
     <!-- Modal para Nova Categoria -->
     <div id="modalCategoria" class="fixed inset-0 bg-black bg-opacity-50 z-[999999] hidden items-center justify-center">
         <div class="bg-white rounded-xl shadow-2xl p-8 max-w-md w-full mx-4 transform scale-95 opacity-0 transition-all duration-300" id="modalCategoriaContent">
@@ -583,7 +583,7 @@ $select = new select();
             </form>
         </div>
     </div>
-    
+
     <!-- Modal para Confirmação de Exclusão -->
     <div id="modalExcluir" class="fixed inset-0 bg-black bg-opacity-50 z-[999999] hidden items-center justify-center">
         <div class="bg-white rounded-xl shadow-2xl p-8 max-w-md w-full mx-4 transform scale-95 opacity-0 transition-all duration-300" id="modalExcluirContent">
@@ -677,7 +677,7 @@ $select = new select();
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('overlay');
             const closeSidebar = document.getElementById('closeSidebar');
-            
+
             if (menuButton && sidebar) {
                 menuButton.addEventListener('click', function(e) {
                     e.stopPropagation();
@@ -690,7 +690,7 @@ $select = new select();
                     }
                     document.body.style.overflow = sidebar.classList.contains('show') ? 'hidden' : '';
                 });
-                
+
                 if (overlay) {
                     overlay.addEventListener('click', function() {
                         sidebar.classList.remove('show');
@@ -699,7 +699,7 @@ $select = new select();
                         document.body.style.overflow = '';
                     });
                 }
-                
+
                 if (closeSidebar) {
                     closeSidebar.addEventListener('click', function() {
                         sidebar.classList.remove('show');
@@ -708,7 +708,7 @@ $select = new select();
                         document.body.style.overflow = '';
                     });
                 }
-                
+
                 const navLinks = sidebar.querySelectorAll('a');
                 navLinks.forEach(link => {
                     link.addEventListener('click', function() {
@@ -720,7 +720,7 @@ $select = new select();
                         }
                     });
                 });
-                
+
                 document.addEventListener('keydown', function(e) {
                     if (e.key === 'Escape' && sidebar.classList.contains('show')) {
                         sidebar.classList.remove('show');
@@ -729,7 +729,7 @@ $select = new select();
                         document.body.style.overflow = '';
                     }
                 });
-                
+
                 const footerContent = document.getElementById('footerContent');
                 if (footerContent) {
                     const adjustFooter = () => {
@@ -744,7 +744,7 @@ $select = new select();
                     window.addEventListener('resize', adjustFooter);
                 }
             }
-            
+
             const backToTop = document.querySelector('.back-to-top');
             if (backToTop) {
                 window.addEventListener('scroll', () => {
@@ -756,7 +756,7 @@ $select = new select();
                         backToTop.classList.add('hidden');
                     }
                 });
-                
+
                 backToTop.addEventListener('click', () => {
                     window.scrollTo({
                         top: 0,
@@ -764,7 +764,7 @@ $select = new select();
                     });
                 });
             }
-            
+
             const pesquisarInput = document.getElementById('pesquisar');
             const filtroCategoria = document.getElementById('filtroCategoria');
             const tabelaEstoque = document.getElementById('tabelaEstoque');
@@ -772,19 +772,19 @@ $select = new select();
             function filtrarProdutos() {
                 const termo = pesquisarInput.value.toLowerCase();
                 const categoria = filtroCategoria.value;
-                
+
                 // Filtrar tabela desktop
                 const linhasTabela = tabelaEstoque.querySelectorAll('tr');
                 let linhasVisiveis = 0;
-                
+
                 linhasTabela.forEach(linha => {
                     const barcode = linha.cells[0]?.textContent?.toLowerCase() || '';
                     const nome = linha.cells[1]?.textContent?.toLowerCase() || '';
                     const categoriaId = linha.getAttribute('data-categoria-id') || '';
-                    
+
                     const matchTermo = barcode.includes(termo) || nome.includes(termo);
                     const matchCategoria = categoria === '' || categoriaId === categoria;
-                    
+
                     if (matchTermo && matchCategoria) {
                         linha.style.display = '';
                         linha.classList.remove('hidden');
@@ -794,19 +794,19 @@ $select = new select();
                         linha.classList.add('hidden');
                     }
                 });
-                
+
                 // Filtrar cards mobile
                 const cardsMobile = document.querySelectorAll('.mobile-cards .card-item');
                 let cardsVisiveis = 0;
-                
+
                 cardsMobile.forEach(card => {
                     const barcode = card.querySelector('[data-barcode]')?.textContent?.toLowerCase() || '';
                     const nome = card.querySelector('h3')?.textContent?.toLowerCase() || '';
                     const categoriaId = card.getAttribute('data-categoria-id') || '';
-                    
+
                     const matchTermo = barcode.includes(termo) || nome.includes(termo);
                     const matchCategoria = categoria === '' || categoriaId === categoria;
-                    
+
                     if (matchTermo && matchCategoria) {
                         card.style.display = '';
                         card.classList.remove('hidden');
@@ -816,26 +816,26 @@ $select = new select();
                         card.classList.add('hidden');
                     }
                 });
-                
+
                 // Mostrar mensagem quando não há resultados
                 const mensagemTabela = tabelaEstoque.querySelector('.no-results-message');
                 if (mensagemTabela) {
                     mensagemTabela.remove();
                 }
-                
+
                 if (linhasVisiveis === 0) {
                     const mensagem = document.createElement('tr');
                     mensagem.className = 'no-results-message';
                     mensagem.innerHTML = '<td colspan="8" class="py-4 px-4 text-center text-gray-500">Nenhum produto encontrado com os filtros aplicados</td>';
                     tabelaEstoque.appendChild(mensagem);
                 }
-                
+
                 // Mostrar mensagem para mobile quando não há resultados
                 const mensagemMobile = document.querySelector('.mobile-cards .no-results-message');
                 if (mensagemMobile) {
                     mensagemMobile.remove();
                 }
-                
+
                 if (cardsVisiveis === 0) {
                     const mensagem = document.createElement('div');
                     mensagem.className = 'no-results-message text-center text-gray-500 py-8';
@@ -843,11 +843,11 @@ $select = new select();
                     document.querySelector('.mobile-cards').appendChild(mensagem);
                 }
             }
-            
+
             if (pesquisarInput) {
                 pesquisarInput.addEventListener('input', filtrarProdutos);
             }
-            
+
             if (filtroCategoria) {
                 filtroCategoria.addEventListener('change', filtrarProdutos);
             }
@@ -859,7 +859,10 @@ $select = new select();
                     e.preventDefault();
                     const id = this.getAttribute('data-id');
                     const nome = this.getAttribute('data-nome');
-                    console.log('Botão de exclusão clicado:', { id, nome });
+                    console.log('Botão de exclusão clicado:', {
+                        id,
+                        nome
+                    });
                     abrirModalExcluir(id, nome);
                 });
             });
@@ -868,23 +871,23 @@ $select = new select();
         function abrirModalCategoria() {
             const modal = document.getElementById('modalCategoria');
             const modalContent = document.getElementById('modalCategoriaContent');
-            
+
             if (!modal || !modalContent) {
                 console.error('❌ ERRO: Elementos do modal não encontrados');
                 return;
             }
-            
+
             // Mostrar o modal
             modal.style.display = 'flex';
             modal.classList.remove('hidden');
             modal.classList.add('flex');
-            
+
             // Animar o conteúdo
             setTimeout(() => {
                 modalContent.classList.remove('scale-95', 'opacity-0');
                 modalContent.classList.add('scale-100', 'opacity-100');
             }, 10);
-            
+
             // Focus no input
             const inputCategoria = document.getElementById('nomeCategoria');
             if (inputCategoria) {
@@ -892,7 +895,7 @@ $select = new select();
                     inputCategoria.focus();
                 }, 100);
             }
-            
+
             // Prevenir scroll do body
             document.body.style.overflow = 'hidden';
         }
@@ -900,23 +903,23 @@ $select = new select();
         function fecharModalCategoria() {
             const modal = document.getElementById('modalCategoria');
             const modalContent = document.getElementById('modalCategoriaContent');
-            
+
             if (!modal || !modalContent) {
                 console.error('❌ ERRO: Elementos do modal não encontrados ao fechar');
                 return;
             }
-            
+
             // Animar o fechamento
             modalContent.classList.remove('scale-100', 'opacity-100');
             modalContent.classList.add('scale-95', 'opacity-0');
-            
+
             setTimeout(() => {
                 modal.style.display = 'none';
                 modal.classList.add('hidden');
                 modal.classList.remove('flex');
                 document.getElementById('formCategoria').reset();
             }, 300);
-            
+
             // Restaurar scroll do body
             document.body.style.overflow = '';
         }
@@ -935,18 +938,18 @@ $select = new select();
             // Preencher dados do modal
             idExcluir.value = id;
             nomeProdutoExcluir.textContent = nome;
-            
+
             // Mostrar o modal
             modal.style.display = 'flex';
             modal.classList.remove('hidden');
             modal.classList.add('flex');
-            
+
             // Animar o conteúdo
             setTimeout(() => {
                 modalContent.classList.remove('scale-95', 'opacity-0');
                 modalContent.classList.add('scale-100', 'opacity-100');
             }, 10);
-            
+
             // Prevenir scroll do body
             document.body.style.overflow = 'hidden';
         }
@@ -955,22 +958,22 @@ $select = new select();
             console.log('=== INICIANDO fecharModalExcluir ===');
             const modal = document.getElementById('modalExcluir');
             const modalContent = document.getElementById('modalExcluirContent');
-            
+
             if (!modal || !modalContent) {
                 console.error('❌ ERRO: Elementos do modal não encontrados ao fechar');
                 return;
             }
-            
+
             modalContent.classList.remove('scale-100', 'opacity-100');
             modalContent.classList.add('scale-95', 'opacity-0');
-            
+
             setTimeout(() => {
                 modal.classList.add('hidden');
                 modal.classList.remove('flex');
                 document.getElementById('formExcluir').reset();
                 console.log('✅ Modal fechado');
             }, 300);
-            
+
             console.log('=== FIM fecharModalExcluir ===');
         }
 
@@ -994,7 +997,7 @@ $select = new select();
             if (e.key === 'Escape') {
                 const modalCategoria = document.getElementById('modalCategoria');
                 const modalExcluir = document.getElementById('modalExcluir');
-                
+
                 if (modalCategoria && (modalCategoria.style.display === 'flex' || modalCategoria.classList.contains('show'))) {
                     console.log('Fechando modal de categoria via Escape');
                     fecharModalCategoria();

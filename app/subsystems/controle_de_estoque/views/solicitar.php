@@ -413,7 +413,7 @@ $select = new select();
             </div>
 
             <nav class="flex-1 p-4 space-y-2">
-            <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
+                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
                     <a href="index.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
                         <i class="fas fa-home mr-3 text-lg"></i>
                         <span>Início</span>
@@ -502,7 +502,7 @@ $select = new select();
                                     $status_class = $quantidade <= 5 ? 'text-red-600' : ($quantidade <= 10 ? 'text-yellow-600' : 'text-green-600');
                                     $status_text = $quantidade <= 5 ? ' (CRÍTICO)' : ($quantidade <= 10 ? ' (BAIXO)' : '');
                                     echo '<option value="' . $produto['id'] . '" data-barcode="' . $produto['barcode'] . '" data-quantidade="' . $quantidade . '">';
-                                    echo htmlspecialchars($produto['nome_produto']) . ' - ' . htmlspecialchars($produto['categoria']) . $status_text;
+                                    echo htmlspecialchars($produto['nome_produto']) . ' - ' . htmlspecialchars($produto['categoria']). ' - ' . htmlspecialchars($produto['quantidade']) . $status_text;
                                     echo '</option>';
                                 }
                             }
@@ -537,7 +537,19 @@ $select = new select();
                             class="custom-input text-sm md:text-base" aria-label="Quantidade do produto">
                     </div>
 
-
+                    <select id="produto" name="retirante" required class="custom-select text-sm md:text-base" aria-label="Selecionar produto" onchange="validarSelecao()">
+                        <option value="" disabled selected>SELECIONAR PRODUTO</option>
+                        <?php
+                        $produtos = $select->select_responsavel();
+                        if ($produtos && count($produtos) > 0) {
+                            foreach ($produtos as $produto) {
+                                echo '<option value="' . $produto['nome'] . '">';
+                                echo htmlspecialchars($produto['nome']) . ' - ' . htmlspecialchars($produto['nome_setor']);
+                                echo '</option>';
+                            }
+                        }
+                        ?>
+                    </select>
                 </div>
 
                 <button type="submit" name="btn" value="Confirmar" class="w-full bg-secondary text-white font-bold py-2 md:py-3 px-4 rounded-lg hover:bg-opacity-90 transition-colors text-sm md:text-base"
@@ -911,7 +923,7 @@ $select = new select();
                         },
                         body: 'barcode=' + encodeURIComponent(barcode) + '&action=buscar'
                     });
-                    
+
                     // Verificar se a resposta é JSON
                     const contentType = response.headers.get('content-type');
                     if (!contentType || !contentType.includes('application/json')) {
@@ -920,7 +932,7 @@ $select = new select();
                         console.error('Resposta recebida:', text);
                         return null;
                     }
-                    
+
                     if (response.ok) {
                         const data = await response.json();
                         console.log('Resposta do servidor:', data);
@@ -941,29 +953,29 @@ $select = new select();
             function atualizarInfoProduto() {
                 const produtoSelect = document.getElementById('produto');
                 const selectedOption = produtoSelect.options[produtoSelect.selectedIndex];
-                
+
                 if (selectedOption && selectedOption.value) {
                     const barcode = selectedOption.getAttribute('data-barcode');
                     const quantidade = selectedOption.getAttribute('data-quantidade');
                     const nomeProduto = selectedOption.textContent.split(' - ')[0];
-                    
+
                     // Atualizar o campo de código de barras se estiver na opção barcode
                     const barcodeInput = document.getElementById('barcodeInput');
                     if (barcodeInput) {
                         barcodeInput.value = barcode;
                     }
-                    
+
                     // Mostrar informações do produto
                     const produtoInfo = document.getElementById('produtoInfo');
                     const produtoNome = document.getElementById('produtoNome');
                     const produtoEstoque = document.getElementById('produtoEstoque');
-                    
+
                     if (produtoInfo && produtoNome && produtoEstoque) {
                         produtoNome.textContent = nomeProduto;
                         produtoEstoque.textContent = `Estoque: ${quantidade} unidades`;
                         produtoInfo.classList.remove('hidden');
                     }
-                    
+
                     // Atualizar produto selecionado
                     produtoSelecionado = {
                         id: selectedOption.value,
@@ -971,7 +983,7 @@ $select = new select();
                         quantidade: quantidade,
                         barcode: barcode
                     };
-                    
+
                     validarSelecao();
                 }
             }

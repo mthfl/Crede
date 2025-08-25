@@ -8,23 +8,24 @@ require_once(__DIR__ . '/../models/model.liberador.php');
 require_once(__DIR__ . '/../models/model.select.php');
 $select = new liberador();
 $selectModel = new select();
-//print_r($_POST);
+print_r($_POST);
 
 if (
     isset($_POST['opcao_atual']) && $_POST['opcao_atual'] == 'select' &&
     isset($_POST['produto']) && !empty($_POST['produto']) && is_numeric($_POST['produto']) &&
-    isset($_POST['quantidade']) && !empty($_POST['quantidade']) && is_numeric($_POST['quantidade'])
+    isset($_POST['quantidade']) && !empty($_POST['quantidade']) && is_numeric($_POST['quantidade']) &&
+    isset($_POST['retirante']) && !empty($_POST['retirante'])
 ) {
 
     $id_produto = $_POST['produto'];
-    $retirante = $_POST['retirante'];
+    $solicitador = $_POST['retirante'];
     $valor_retirado = $_POST['quantidade'];
-    $liberador = $_SESSION['nome'] ?? null;
+    $liberador = $_SESSION['nome'];
     $model = new liberador();
 
     date_default_timezone_set('America/Fortaleza');
     $datatime = date('Y-m-d H:i:s');
-    $result = $model->solicitar_produto_id($valor_retirado, $id_produto, $retirante, $datatime, $liberador);
+    $result = $model->solicitar_produto_id($valor_retirado, $id_produto, $solicitador, $datatime, $liberador);
 
     switch ($result) {
         case 1:
@@ -45,7 +46,8 @@ if (
     }
 } else if (
     isset($_POST['barcode']) && !empty($_POST['barcode']) &&
-    isset($_POST['quantidade']) && !empty($_POST['quantidade']) && is_numeric($_POST['quantidade'])
+    isset($_POST['quantidade']) && !empty($_POST['quantidade']) && is_numeric($_POST['quantidade']) && 
+    isset($_POST['retirante']) && !empty($_POST['retirante'])
 ) {
 
     $barcode = $_POST['barcode'];
@@ -145,8 +147,8 @@ if (
         'count' => $produtos ? count($produtos) : 0
     ]);
     exit();
-} else {
+} /*else {
 
     header('location:../views/index.php');
     exit();
-}
+}*/

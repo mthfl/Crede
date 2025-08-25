@@ -140,16 +140,15 @@ class liberador extends connect
         }
     }
 
-    public function solicitar_produto_id($valor_retirado, $id_produto, $solicitador, $datetime, $liberador)
+    public function solicitar_produto_id(int $valor_retirado, int  $id_produto, string $solicitador, string $datetime, string $liberador): int
     {
-        try {
+        /*try {*/
 
             $consultaProduto = "SELECT * FROM produtos WHERE id = :id";
             $queryProduto = $this->connect->prepare($consultaProduto);
             $queryProduto->bindValue(":id", $id_produto);
             $queryProduto->execute();
             $produto = $queryProduto->fetch(PDO::FETCH_ASSOC);
-            $barcode_produto = $produto['barcode'];
 
             if ($produto['quantidade'] < $valor_retirado) {
                 return 3;
@@ -161,13 +160,12 @@ class liberador extends connect
             $queryUpdate->bindValue(":id", $id_produto);
             $queryUpdate->execute();
 
-            $consultaInsert = "INSERT INTO movimentacao VALUES (NULL, :id_produtos, :liber, :datareg, :barcode_produto, :quantidade_retirada)";
+            $consultaInsert = "INSERT INTO movimentacao VALUES (NULL, :id_produtos, :liberador, :solicitador, :datareg, :quantidade_retirada)";
             $queryInsert = $this->connect->prepare($consultaInsert);
             $queryInsert->bindValue(":id_produtos", $id_produto);
             $queryInsert->bindValue(":liberador", $liberador);
             $queryInsert->bindValue(":solicitador", $solicitador);
             $queryInsert->bindValue(":datareg", $datetime);
-            $queryInsert->bindValue(":barcode_produto", $barcode_produto);
             $queryInsert->bindValue(":quantidade_retirada", $valor_retirado);
 
             if ($queryInsert->execute()) {
@@ -175,15 +173,15 @@ class liberador extends connect
             } else {
                 return 2;
             }
-        } catch (PDOException $e) {
+        /*} catch (PDOException $e) {
 
             return 0;
-        }
+        }*/
     }
 
     public function solicitar_produto_barcode($valor_retirado, $barcode, $solicitador, $datetime, $liberador)
     {
-        try {
+        /*try {*/
 
             $consultaProduto = "SELECT * FROM produtos WHERE barcode = :barcode";
             $queryProduto = $this->connect->prepare($consultaProduto);
@@ -202,13 +200,12 @@ class liberador extends connect
             $queryUpdate->bindValue(":id", $id_produto);
             $queryUpdate->execute();
 
-            $consultaInsert = "INSERT INTO movimentacao VALUES (NULL, :id_produtos, :liber, :datareg, :barcode_produto, :quantidade_retirada)";
+            $consultaInsert = "INSERT INTO movimentacao VALUES (NULL, :id_produtos, :liberador, :solicitador, :datareg, :quantidade_retirada)";
             $queryInsert = $this->connect->prepare($consultaInsert);
             $queryInsert->bindValue(":id_produtos", $id_produto);
             $queryInsert->bindValue(":liberador", $liberador);
             $queryInsert->bindValue(":solicitador", $solicitador);
             $queryInsert->bindValue(":datareg", $datetime);
-            $queryInsert->bindValue(":barcode_produto", $barcode);
             $queryInsert->bindValue(":quantidade_retirada", $valor_retirado);
 
             if ($queryInsert->execute()) {
@@ -216,10 +213,10 @@ class liberador extends connect
             } else {
                 return 2;
             }
-        } catch (PDOException $e) {
+        /*} catch (PDOException $e) {
 
             return 0;
-        }
+        }*/
     }
     public function select_produto_nome($barcode)
     {

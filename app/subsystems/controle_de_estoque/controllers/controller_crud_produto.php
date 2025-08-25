@@ -203,9 +203,9 @@ else if (
             header('Location: ../views/estoque.php?falha');
             exit();
     }
-} else if (isset($_GET['id_excluir']) && !empty($_GET['id_excluir'])) {
+} else if (isset($_POST['id_excluir']) && !empty($_POST['id_excluir'])) {
 
-    $id_produto = $_GET['id_excluir'];
+    $id_produto = $_POST['id_excluir'];
     $obj = new admin();
     $result = $obj->excluir_produto($id_produto);
 
