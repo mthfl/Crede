@@ -1014,7 +1014,7 @@ $session->tempo_session();
                     placeholder="Buscar aplicativos e sistemas..."
                     class="search-input"
                     autocomplete="off">
-                <i class="fas fa-search search-icon"></i>
+                <i class="fas fa-search search-icon mx-2"></i>
             </div>
         </div>
 

@@ -177,11 +177,35 @@ $select = new select();
                 margin-top: 1rem;
                 padding: 0 0.5rem;
                 width: 100%;
+                max-width: 100%;
+                overflow-x: hidden;
             }
 
             .categoria-header {
                 margin-top: 1.5rem;
                 margin-bottom: 0.75rem;
+                text-align: center;
+            }
+
+            .card-item {
+                min-width: 0;
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+            .card-item .flex {
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+
+            .card-item .flex-1 {
+                min-width: 0;
+                flex: 1 1 200px;
+            }
+
+            .card-item .flex.flex-col.gap-2 {
+                flex-shrink: 0;
+                min-width: auto;
             }
         }
 
