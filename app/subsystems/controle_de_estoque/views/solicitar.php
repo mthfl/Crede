@@ -537,8 +537,8 @@ $select = new select();
                             class="custom-input text-sm md:text-base" aria-label="Quantidade do produto">
                     </div>
 
-                    <select id="produto" name="retirante" required class="custom-select text-sm md:text-base" aria-label="Selecionar produto" onchange="validarSelecao()">
-                        <option value="" disabled selected>SELECIONAR PRODUTO</option>
+                    <select id="produto" name="retirante" required class="custom-select text-sm md:text-base" aria-label="Solicitante" onchange="validarSelecao()">
+                        <option value="" disabled selected>SOLICITADOR</option>
                         <?php
                         $produtos = $select->select_responsavel();
                         if ($produtos && count($produtos) > 0) {
@@ -616,8 +616,16 @@ $select = new select();
 
     <script>
         $(document).ready(function() {
-            $('.custom-select').select2({
-                placeholder: "SELECIONAR",
+            // Configure Select2 for product selection
+            $('#produto[name="produto"]').select2({
+                placeholder: "SELECIONAR PRODUTO",
+                allowClear: true,
+                width: '100%'
+            });
+            
+            // Configure Select2 for user selection
+            $('#produto[name="retirante"]').select2({
+                placeholder: "SOLICITADOR",
                 allowClear: true,
                 width: '100%'
             });

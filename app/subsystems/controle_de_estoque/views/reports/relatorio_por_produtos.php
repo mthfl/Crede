@@ -19,13 +19,13 @@ class relatorio extends connect
         parent::__construct();
         require(__DIR__ . '/../../models/private/tables.php');
         $this->table1 = $table['crede_estoque'][1]; // Categories table
-        $this->table2 = $table['crede_estoque'][2];
-        $this->table3 = $table['crede_estoque'][3]; // Perdas produtos table
+        $this->table2 = $table['crede_estoque'][2]; // Movimentacao table
+        $this->table3 = $table['crede_estoque'][3];
         $this->table4 = $table['crede_estoque'][4]; // Products table
-        $this->relatorio_perdas_geral();
+        $this->relatorio_produtos_geral();
     }
 
-    public function relatorio_perdas_geral()
+    public function relatorio_produtos_geral()
     {
         $pdf = new FPDF('L', 'cm', 'A4');
         $pdf->AddPage();
@@ -36,20 +36,38 @@ class relatorio extends connect
         // Add date on the top right
         $pdf->SetFont('Arial', '', 10);
         $pdf->SetTextColor(0, 0, 0);
-        $data_geracao = date('d/m/Y H:i:s'); // Exemplo: 25/08/2025 16:36:00 -03
+        $data_geracao = date('d/m/Y H:i:s');
         $pdf->SetXY($pdf->GetPageWidth() - 7.2, 6.8);
         $pdf->Cell(4, 0.6, 'Gerado em: ' . $data_geracao, 0, 0, 'R');
 
-        // Fetch perdas with product details
-        $query = $this->connect->query("SELECT p.barcode, p.nome_produto, pp.quantidade, pp.tipo, pp.data 
-                                        FROM $this->table3 pp 
-                                        LEFT JOIN $this->table4 p ON pp.id_produto = p.id 
-                                        ORDER BY pp.data");
-        $resultado = $query->fetchAll(PDO::FETCH_ASSOC);
+        // Get date range from POST
+        $data_inicio = isset($_POST['data_inicio']) ? $_POST['data_inicio'] : '';
+        $data_fim = isset($_POST['data_fim']) ? $_POST['data_fim'] : '';
+        $id_produto = $_POST['produto'];
+        // Fetch movimentacoes within date range with product details
+        $query = $this->connect->prepare("SELECT m.id, p.barcode, p.nome_produto, m.quantidade_retirada, m.liberador, m.solicitador, m.datareg 
+                                         FROM $this->table2 m 
+                                         LEFT JOIN $this->table4 p ON m.id_produtos = p.id 
+                                         WHERE p.id = :id_produto AND m.datareg BETWEEN :data_inicio AND :data_fim 
+                                         ORDER BY m.datareg");
+        $query->bindValue(':id_produto', $id_produto);
+        $query->bindValue(':data_inicio', $data_inicio . ' 00:00:00');
+        $query->bindValue(':data_fim', $data_fim . ' 23:59:59');
+        $query->execute();
+        $movimentacoes = $query->fetchAll(PDO::FETCH_ASSOC);
 
-        // Calculate summary
-        $total_perdas = count($resultado);
-        $total_quantidade_perdida = array_sum(array_column($resultado, 'quantidade'));
+        // Group movimentacoes by date for better organization
+        $movimentacoes_por_data = [];
+        foreach ($movimentacoes as $mov) {
+            $data = $mov['datareg'];
+            if (!isset($movimentacoes_por_data[$data])) {
+                $movimentacoes_por_data[$data] = [];
+            }
+            $movimentacoes_por_data[$data][] = $mov;
+        }
+
+        // Calculate summary (total movimentacoes)
+        $total_movimentacoes = count($movimentacoes);
 
         // Add summary on the left side
         $y_position = 5;
@@ -62,25 +80,13 @@ class relatorio extends connect
         $pdf->SetFont('Arial', '', 10);
         $pdf->SetY(6.2);
         $pdf->SetX(2.5);
-        $pdf->Cell(3, 0.6, 'Total de Perdas: ' . $total_perdas, 0, 1, 'L');
-        $pdf->SetX(2.5);
-        $pdf->Cell(3, 0.6, 'Total Quantidade Perdida: ' . $total_quantidade_perdida, 0, 1, 'L');
+        $pdf->Cell(3, 0.6, utf8_decode('Total de Movimentações: ') . $total_movimentacoes, 0, 1, 'L');
         $y_position += 2.5;
 
         $page_height = $pdf->GetPageHeight();
         $margin_bottom = 2;
 
-        // Group perdas by date
-        $perdas_por_data = [];
-        foreach ($resultado as $perda) {
-            $data = $perda['data'];
-            if (!isset($perdas_por_data[$data])) {
-                $perdas_por_data[$data] = [];
-            }
-            $perdas_por_data[$data][] = $perda;
-        }
-
-        foreach ($perdas_por_data as $data => $perdas) {
+        foreach ($movimentacoes_por_data as $data => $movs) {
             // Check if we need a new page
             if ($y_position > $page_height - 6) {
                 $pdf->AddPage();
@@ -101,27 +107,28 @@ class relatorio extends connect
             $pdf->SetTextColor(255, 255, 255);
             $pdf->SetFillColor(1, 88, 36);
             $pdf->SetY($y_position);
-            $pdf->SetX(2.5);
-            $pdf->Cell(24, 1, 'DATA: ' . date('d/m/Y', strtotime($data)), 1, 1, 'C', true); // Only date
+            $pdf->SetX(1);
+            $pdf->Cell(28, 1, 'DATA: ' . date('d/m/Y H:i:s', strtotime($data)), 1, 1, 'C', true); // Increased to 28cm
             $y_position += 1;
 
-            // Table header for perdas
+            // Table header for movimentacoes
             $pdf->SetFont('Arial', 'B', 12);
             $pdf->SetTextColor(0, 0, 0);
             $pdf->SetFillColor(255, 221, 119);
             $pdf->SetY($y_position);
-            $pdf->SetX(2.5);
+            $pdf->SetX(1);
+            $pdf->Cell(2, 0.8, 'ID', 1, 0, 'C', true);
             $pdf->Cell(4, 0.8, 'BARCODE', 1, 0, 'C', true);
-            $pdf->Cell(10, 0.8, 'NOME DO PRODUTO', 1, 0, 'C', true);
-            $pdf->Cell(4, 0.8, 'QUANTIDADE', 1, 0, 'C', true);
-            $pdf->Cell(4, 0.8, 'TIPO DE PERDA', 1, 0, 'C', true);
-            $pdf->Cell(2, 0.8, 'DATA', 1, 1, 'C', true);
+            $pdf->Cell(6, 0.8, 'NOME', 1, 0, 'C', true);
+            $pdf->Cell(4, 0.8, 'QTD RETIRADA', 1, 0, 'C', true);
+            $pdf->Cell(6, 0.8, 'LIBERADOR', 1, 0, 'C', true); // Increased to 6cm
+            $pdf->Cell(6, 0.8, 'SOLICITADOR', 1, 1, 'C', true); // Increased to 6cm
             $y_position += 0.8;
 
-            // Perdas for this date
+            // Movimentacoes for this date
             $pdf->SetFont('Arial', '', 11);
             $fill = false;
-            foreach ($perdas as $perda) {
+            foreach ($movs as $mov) {
                 if ($y_position > $page_height - 3) {
                     $pdf->AddPage();
                     $pdf->Image('../../assets/images/fundo_horizontal.png', 0, 0, $pdf->GetPageWidth(), $pdf->GetPageHeight(), 'png', '', 0.1);
@@ -129,7 +136,7 @@ class relatorio extends connect
                     // Repeat date on new page
                     $pdf->SetFont('Arial', '', 10);
                     $pdf->SetTextColor(0, 0, 0);
-                    $pdf->SetXY($pdf->GetPageWidth() - 5, 1);
+                    $pdf->SetXY($pdf->GetPageWidth() - 7.2, 6.8);
                     $pdf->Cell(4, 0.6, 'Gerado em: ' . $data_geracao, 0, 0, 'R');
 
                     $y_position = 1;
@@ -142,9 +149,7 @@ class relatorio extends connect
 
                     $pdf->SetFont('Arial', '', 10);
                     $pdf->SetX(1);
-                    $pdf->Cell(3, 0.6, 'Total de Perdas: ' . $total_perdas, 0, 1, 'L');
-                    $pdf->SetX(1);
-                    $pdf->Cell(3, 0.6, 'Total Quantidade Perdida: ' . $total_quantidade_perdida, 0, 1, 'L');
+                    $pdf->Cell(3, 0.6, 'Total de Movimentações: ' . $total_movimentacoes, 0, 1, 'L');
                     $y_position += 2.5;
 
                     // Repeat date header
@@ -152,37 +157,42 @@ class relatorio extends connect
                     $pdf->SetFillColor(1, 88, 36);
                     $pdf->SetY($y_position);
                     $pdf->SetX(2.5);
-                    $pdf->Cell(24, 1, 'DATA: ' . date('d/m/Y', strtotime($data)) . ' (continuação)', 1, 1, 'C', true);
+                    $pdf->Cell(28, 1, 'DATA: ' . date('d/m/Y H:i:s', strtotime($data)) . ' (continuação)', 1, 1, 'C', true);
                     $y_position += 1;
 
                     // Repeat table header
                     $pdf->SetFont('Arial', 'B', 12);
                     $pdf->SetFillColor(255, 221, 119);
                     $pdf->SetY($y_position);
-                    $pdf->SetX(2.5);
+                    $pdf->SetX(1);
+                    $pdf->Cell(2, 0.8, 'ID', 1, 0, 'C', true);
                     $pdf->Cell(4, 0.8, 'BARCODE', 1, 0, 'C', true);
-                    $pdf->Cell(10, 0.8, 'NOME DO PRODUTO', 1, 0, 'C', true);
-                    $pdf->Cell(4, 0.8, 'QUANTIDADE', 1, 0, 'C', true);
-                    $pdf->Cell(4, 0.8, 'TIPO DE PERDA', 1, 0, 'C', true);
-                    $pdf->Cell(2, 0.8, 'DATA', 1, 1, 'C', true);
+                    $pdf->Cell(6, 0.8, 'NOME', 1, 0, 'C', true);
+                    $pdf->Cell(4, 0.8, 'QTD RETIRADA', 1, 0, 'C', true);
+                    $pdf->Cell(6, 0.8, 'LIBERADOR', 1, 0, 'C', true);
+                    $pdf->Cell(6, 0.8, 'SOLICITADOR', 1, 1, 'C', true);
                     $y_position += 0.8;
                     $pdf->SetFont('Arial', '', 11);
                     $fill = false;
                 }
 
                 $pdf->SetY($y_position);
-                $pdf->SetX(2.5);
+                $pdf->SetX(1);
                 $cor1 = $fill ? 230 : 255;
                 $cor2 = $fill ? 230 : 255;
                 $cor3 = $fill ? 230 : 255;
                 $pdf->SetFillColor($cor1, $cor2, $cor3);
 
+                // Set text color to red for quantity retirada
                 $pdf->SetTextColor(0, 0, 0);
-                $pdf->Cell(4, 0.8, utf8_decode($perda['barcode'] ?: 'Sem código'), 1, 0, 'L', true);
-                $pdf->Cell(10, 0.8, utf8_decode($perda['nome_produto']), 1, 0, 'L', true);
-                $pdf->Cell(4, 0.8, utf8_decode($perda['quantidade']), 1, 0, 'C', true);
-                $pdf->Cell(4, 0.8, utf8_decode($perda['tipo']), 1, 0, 'L', true);
-                $pdf->Cell(2, 0.8, utf8_decode(date('d/m/Y', strtotime($perda['data']))), 1, 1, 'C', true);
+                $pdf->Cell(2, 0.8, utf8_decode($mov['id']), 1, 0, 'C', true);
+                $pdf->Cell(4, 0.8, utf8_decode($mov['barcode'] ?: 'Sem código'), 1, 0, 'C', true);
+                $pdf->Cell(6, 0.8, utf8_decode($mov['nome_produto']), 1, 0, 'L', true);
+                $pdf->SetTextColor(255, 0, 0); // Red for quantity retirada
+                $pdf->Cell(4, 0.8, utf8_decode($mov['quantidade_retirada']), 1, 0, 'C', true);
+                $pdf->SetTextColor(0, 0, 0);
+                $pdf->Cell(6, 0.8, utf8_decode($mov['liberador']), 1, 0, 'L', true);
+                $pdf->Cell(6, 0.8, utf8_decode($mov['solicitador']), 1, 1, 'L', true);
 
                 $y_position += 0.8;
                 $fill = !$fill;
@@ -192,8 +202,17 @@ class relatorio extends connect
         }
 
         // Output PDF
-        $pdf->Output('I', 'relatorio_perdas_geral.pdf');
+        $pdf->Output('I', 'relatorio_movimentações_por_produto.pdf');
     }
 }
 
+if (
+    isset($_POST['data_inicio']) && isset($_POST['data_fim']) && isset($_POST['produto']) &&
+    !empty($_POST['data_inicio']) && !empty($_POST['data_fim']) && !empty($_POST['produto'])
+) {
+
 $relatorio = new relatorio();
+} else {
+    header('location:../relatorios.php');
+    exit();
+}

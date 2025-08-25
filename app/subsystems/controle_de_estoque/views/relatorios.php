@@ -18,7 +18,10 @@ $select = new select();
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -98,6 +101,78 @@ $select = new select();
             left: 50%;
             transform: translateX(-50%);
             width: 80px;
+
+        /* Select2 Styles */
+        .select2-container {
+            width: 100% !important;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .select2-container--default .select2-selection--single {
+            background-color: #fff;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.5rem;
+            height: 3rem;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            color: #374151;
+            font-size: 0.875rem;
+            line-height: 1.25rem;
+            padding-left: 0.75rem;
+            padding-right: 2rem;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__placeholder {
+            color: #9ca3af;
+            font-weight: 500;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 100%;
+            width: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .select2-container--default.select2-container--focus .select2-selection--single,
+        .select2-container--default.select2-container--open .select2-selection--single {
+            border-color: #005A24;
+            box-shadow: 0 0 0 3px rgba(0, 90, 36, 0.1);
+        }
+
+        .select2-dropdown {
+            border: 2px solid #005A24;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .select2-results__option {
+            padding: 0.5rem 0.75rem;
+            font-size: 0.875rem;
+        }
+
+        .select2-container--default .select2-results__option--highlighted.select2-results__option--selectable {
+            background-color: #005A24;
+            color: white;
+        }
+
+        .select2-search--dropdown .select2-search__field {
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            padding: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .select2-search--dropdown .select2-search__field:focus {
+            outline: none;
+            border-color: #005A24;
+            box-shadow: 0 0 0 3px rgba(0, 90, 36, 0.1);
+        }
             height: 3px;
             background: linear-gradient(90deg, #FFA500, #FF8C00);
             border-radius: 3px;
@@ -598,35 +673,35 @@ $select = new select();
 
             <!-- Menu de navegação -->
             <nav class="flex-1 p-4 space-y-2">
-            <?php if(isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])){?>
-                <a href="index.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
-                    <i class="fas fa-home mr-3 text-lg"></i>
-                    <span>Início</span>
-                </a>
+                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
+                    <a href="index.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                        <i class="fas fa-home mr-3 text-lg"></i>
+                        <span>Início</span>
+                    </a>
                 <?php } ?>
-                <?php if(isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])){?>
-                <a href="estoque.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
-                    <i class="fas fa-boxes mr-3 text-lg"></i>
-                    <span>Estoque</span>
-                </a>
+                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
+                    <a href="estoque.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                        <i class="fas fa-boxes mr-3 text-lg"></i>
+                        <span>Estoque</span>
+                    </a>
                 <?php } ?>
-                <?php if(isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])){?>
-                <a href="./products/adc_produto.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
-                    <i class="fas fa-plus-circle mr-3 text-lg"></i>
-                    <span>Adicionar</span>
-                </a>
+                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
+                    <a href="./products/adc_produto.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                        <i class="fas fa-plus-circle mr-3 text-lg"></i>
+                        <span>Adicionar</span>
+                    </a>
                 <?php } ?>
-                <?php if(isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])){?>
-                <a href="solicitar.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
-                    <i class="fas fa-clipboard-list mr-3 text-lg"></i>
-                    <span>Solicitar</span>
-                </a>
+                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
+                    <a href="solicitar.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                        <i class="fas fa-clipboard-list mr-3 text-lg"></i>
+                        <span>Solicitar</span>
+                    </a>
                 <?php } ?>
-                <?php if(isset($_SESSION['Admin_estoque']) || isset($_SESSION['Dev_estoque'])){?>
-                <a href="relatorios.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2 active">
-                    <i class="fas fa-clipboard-list mr-3 text-lg"></i>
-                    <span>Relatórios</span>
-                </a>
+                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
+                    <a href="relatorios.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2 active">
+                        <i class="fas fa-clipboard-list mr-3 text-lg"></i>
+                        <span>Relatórios</span>
+                    </a>
                 <?php } ?>
 
             </nav>
@@ -733,7 +808,6 @@ $select = new select();
 
         <!-- Relatórios Disponíveis -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!--Relatório de Estoque Completo
             <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in">
                 <div class="card-shine"></div>
                 <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
@@ -747,7 +821,6 @@ $select = new select();
                 </a>
             </div>
 
-            Relatório por Período
             <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in" style="animation-delay: 0.1s">
                 <div class="card-shine"></div>
                 <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
@@ -761,7 +834,6 @@ $select = new select();
                 </button>
             </div>
 
-            Relatório de Estoque Crítico
             <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in" style="animation-delay: 0.2s">
                 <div class="card-shine"></div>
                 <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
@@ -769,13 +841,12 @@ $select = new select();
                 </div>
                 <h3 class="text-lg font-bold text-primary mb-2 text-center">Estoque Crítico</h3>
                 <p class="text-gray-600 text-center mb-4 text-sm">Produtos com estoque baixo (≤ 5 unidades)</p>
-                <a href="#" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105" target="_blank">
+                <a href="reports/relatorio_critico.php" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105" target="_blank">
                     <i class="fas fa-file-pdf mr-2"></i>
                     Gerar PDF
                 </a>
             </div>
 
-            Relatório por Produto
             <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in" style="animation-delay: 0.3s">
                 <div class="card-shine"></div>
                 <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
@@ -789,35 +860,6 @@ $select = new select();
                 </button>
             </div>
 
-            Relatório por Data (Produtos Cadastrados)
-            <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in" style="animation-delay: 0.4s">
-                <div class="card-shine"></div>
-                <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
-                    <i class="fas fa-plus-circle text-4xl"></i>
-                </div>
-                <h3 class="text-lg font-bold text-primary mb-2 text-center">Produtos Cadastrados</h3>
-                <p class="text-gray-600 text-center mb-4 text-sm">Relatório de produtos adicionados em período específico</p>
-                <button id="openProdutosCadastradosModal" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105">
-                    <i class="fas fa-calendar-plus mr-2"></i>
-                    Selecionar Período
-                </button>
-            </div>
-
-            Relatório de Produtos sem Código de Barras
-            <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in" style="animation-delay: 0.5s">
-                <div class="card-shine"></div>
-                <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
-                    <i class="fas fa-barcode text-4xl"></i>
-                </div>
-                <h3 class="text-lg font-bold text-primary mb-2 text-center">Sem Código de Barras</h3>
-                <p class="text-gray-600 text-center mb-4 text-sm">Relatório detalhado de produtos sem código de barras</p>
-                <a href="reports/relatorioscb.php" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105" target="_blank">
-                    <i class="fas fa-file-pdf mr-2"></i>
-                    Gerar Relatório
-                </a>
-            </div>
-
-            Relatório de Perdas
             <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in" style="animation-delay: 0.6s">
                 <div class="card-shine"></div>
                 <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
@@ -825,13 +867,12 @@ $select = new select();
                 </div>
                 <h3 class="text-lg font-bold text-primary mb-2 text-center">Relatório de Perdas</h3>
                 <p class="text-gray-600 text-center mb-4 text-sm">Relatório detalhado de todas as perdas registradas no sistema</p>
-                <a href="#" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105" target="_blank">
+                <a href="./reports/relatorio_perdas.php" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105" target="_blank">
                     <i class="fas fa-file-pdf mr-2"></i>
                     Gerar PDF
                 </a>
             </div>
 
-            Relatório por categoria
             <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in" style="animation-delay: 0.6s">
                 <div class="card-shine"></div>
                 <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
@@ -839,11 +880,11 @@ $select = new select();
                 </div>
                 <h3 class="text-lg font-bold text-primary mb-2 text-center">Relatório por Categoria</h3>
                 <p class="text-gray-600 text-center mb-4 text-sm">Relatório detalhado de produtos por categoria específica</p>
-                <button onclick="openCategoryModal()" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105">
+                <button id="openCategoryModalBtn" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105">
                     <i class="fas fa-file-pdf mr-2"></i>
                     Gerar PDF
                 </button>
-            </div>-->
+            </div>
         </div>
 
     </main>
@@ -856,7 +897,7 @@ $select = new select();
                 <i class="fas fa-calendar-alt mr-2 text-secondary"></i>
                 Selecionar Período
             </h2>
-            <form id="dateForm" action="#" method="GET" target="_blank" class="space-y-4">
+            <form id="dateForm" action="reports/relatorio_movimentacoes.php" method="POST" target="_blank" class="space-y-4">
                 <div class="form-group">
                     <label for="data_inicio" class="font-semibold">
                         <i class="fas fa-play mr-1"></i>
@@ -887,7 +928,7 @@ $select = new select();
                 <i class="fas fa-search mr-2 text-secondary"></i>
                 Selecionar Produto
             </h2>
-            <form id="productForm" action="#" method="GET" target="_blank" class="space-y-4">
+            <form id="productForm" action="./reports/relatorio_por_produtos.php" method="POST" target="_blank" class="space-y-4">
                 <div class="form-group">
                     <label for="data_inicio" class="font-semibold">
                         <i class="fas fa-play mr-1"></i>
@@ -907,41 +948,15 @@ $select = new select();
                         <i class="fas fa-box mr-1"></i>
                         Produto
                     </label>
-                    <select id="produto" name="produto" required>
+                    <select id="produto" name="produto" required class="select2-product">
                         <option value="" disabled selected>SELECIONAR PRODUTO</option>
-
+                        <?php
+                            $dados = $select->select_produtos();
+                            foreach ($dados as $dado) {
+                        ?>
+                        <option value="<?=$dado['id']?>"><?=$dado['nome_produto']?></option>
+                        <?php } ?>
                     </select>
-                </div>
-                <button type="submit" class="confirm-btn">
-                    <i class="fas fa-file-pdf mr-2"></i>
-                    Gerar Relatório
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Modal para Produtos Cadastrados -->
-    <div id="produtosCadastradosModal" class="modal">
-        <div class="modal-content">
-            <button class="close-btn" id="closeProdutosCadastradosModal">×</button>
-            <h2 class="font-heading">
-                <i class="fas fa-plus-circle mr-2 text-secondary"></i>
-                Selecionar Período
-            </h2>
-            <form id="produtosCadastradosForm" action="#" method="GET" target="_blank" class="space-y-4">
-                <div class="form-group">
-                    <label for="data_inicio_cadastrados" class="font-semibold">
-                        <i class="fas fa-play mr-1"></i>
-                        Data de Início
-                    </label>
-                    <input type="date" id="data_inicio_cadastrados" name="data_inicio" required>
-                </div>
-                <div class="form-group">
-                    <label for="data_fim_cadastrados" class="font-semibold">
-                        <i class="fas fa-stop mr-1"></i>
-                        Data de Fim
-                    </label>
-                    <input type="date" id="data_fim_cadastrados" name="data_fim" required>
                 </div>
                 <button type="submit" class="confirm-btn">
                     <i class="fas fa-file-pdf mr-2"></i>
@@ -959,24 +974,20 @@ $select = new select();
                 <i class="fas fa-tags mr-2 text-secondary"></i>
                 Selecionar Categoria
             </h2>
-            <form id="categoryForm" action="#" method="POST" target="_blank" class="space-y-4">
+            <form id="categoryForm" action="./reports/relatorio_categoria.php" method="POST" target="_blank" class="space-y-4">
                 <div class="form-group">
                     <label for="categoria" class="font-semibold">
                         <i class="fas fa-tag mr-1"></i>
                         Categoria do Produto
                     </label>
-                    <select id="categoria" name="categoria" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+                    <select id="categoria" name="categoria" required class="select2-category">
                         <option value="" disabled selected>SELECIONAR CATEGORIA</option>
-                        <option value="informatica">Informática</option>
-                        <option value="epi">EPI (Equipamentos de Proteção Individual)</option>
-                        <option value="limpeza">Limpeza</option>
-                        <option value="escritorio">Material de Escritório</option>
-                        <option value="manutencao">Material de Manutenção</option>
-                        <option value="seguranca">Segurança</option>
-                        <option value="alimentacao">Alimentação</option>
-                        <option value="higiene">Higiene</option>
-                        <option value="ferramentas">Ferramentas</option>
-                        <option value="outros">Outros</option>
+                        <?php
+                            $dados = $select->select_categoria();
+                            foreach ($dados as $dado) {
+                        ?>
+                       <option value="<?=$dado['id']?>"><?=$dado['nome_categoria']?></option>
+                        <?php } ?>
                     </select>
                 </div>
                 <button type="submit" class="confirm-btn">
@@ -1134,14 +1145,32 @@ $select = new select();
             const closeProductModalBtn = document.getElementById('closeProductModal');
             const productForm = document.getElementById('productForm');
 
-            const openProdutosCadastradosModalBtn = document.getElementById('openProdutosCadastradosModal');
-            const produtosCadastradosModal = document.getElementById('produtosCadastradosModal');
-            const closeProdutosCadastradosModalBtn = document.getElementById('closeProdutosCadastradosModal');
-            const produtosCadastradosForm = document.getElementById('produtosCadastradosForm');
-
             const categoryModal = document.getElementById('categoryModal');
             const closeCategoryModalBtn = document.getElementById('closeCategoryModal');
             const categoryForm = document.getElementById('categoryForm');
+            const openCategoryModalBtn = document.getElementById('openCategoryModalBtn');
+
+            // Debug: Verificar se os elementos foram encontrados
+            console.log('Elementos encontrados:', {
+                openCategoryModalBtn: openCategoryModalBtn,
+                categoryModal: categoryModal,
+                closeCategoryModalBtn: closeCategoryModalBtn,
+                categoryForm: categoryForm
+            });
+
+            // Verificar se todos os elementos necessários existem
+            if (!openCategoryModalBtn) {
+                console.error('❌ ERRO: openCategoryModalBtn não encontrado');
+            }
+            if (!categoryModal) {
+                console.error('❌ ERRO: categoryModal não encontrado');
+            }
+            if (!closeCategoryModalBtn) {
+                console.error('❌ ERRO: closeCategoryModalBtn não encontrado');
+            }
+            if (!categoryForm) {
+                console.error('❌ ERRO: categoryForm não encontrado');
+            }
 
             // Carregar estatísticas em tempo real
             loadStatistics();
@@ -1176,6 +1205,23 @@ $select = new select();
                 thirtyDaysAgo.setDate(today.getDate() - 30);
                 document.getElementById('data_inicio_product').value = thirtyDaysAgo.toISOString().split('T')[0];
                 document.getElementById('data_fim_product').value = today.toISOString().split('T')[0];
+                
+                // Initialize Select2 for product selection when modal opens
+                setTimeout(() => {
+                    $('.select2-product').select2({
+                        placeholder: "SELECIONAR PRODUTO",
+                        allowClear: true,
+                        width: '100%',
+                        language: {
+                            noResults: function() {
+                                return "Nenhum produto encontrado";
+                            },
+                            searching: function() {
+                                return "Pesquisando...";
+                            }
+                        }
+                    });
+                }, 100);
             });
 
             // Fechar Modal de Produto
@@ -1185,29 +1231,65 @@ $select = new select();
             });
 
             // Abrir Modal de Produtos Cadastrados
-            openProdutosCadastradosModalBtn.addEventListener('click', function() {
-                produtosCadastradosModal.classList.add('show');
-                const today = new Date();
-                const thirtyDaysAgo = new Date(today);
-                thirtyDaysAgo.setDate(today.getDate() - 30);
-                document.getElementById('data_inicio_cadastrados').value = thirtyDaysAgo.toISOString().split('T')[0];
-                document.getElementById('data_fim_cadastrados').value = today.toISOString().split('T')[0];
-            });
+            // openProdutosCadastradosModalBtn.addEventListener('click', function() {
+            //     produtosCadastradosModal.classList.add('show');
+            //     const today = new Date();
+            //     const thirtyDaysAgo = new Date(today);
+            //     thirtyDaysAgo.setDate(today.getDate() - 30);
+            //     document.getElementById('data_inicio_cadastrados').value = thirtyDaysAgo.toISOString().split('T')[0];
+            //     document.getElementById('data_fim_cadastrados').value = today.toISOString().split('T')[0];
+            // });
 
             // Fechar Modal de Produtos Cadastrados
-            closeProdutosCadastradosModalBtn.addEventListener('click', function() {
-                produtosCadastradosModal.classList.remove('show');
-                produtosCadastradosForm.reset();
-            });
+            // closeProdutosCadastradosModalBtn.addEventListener('click', function() {
+            //     produtosCadastradosModal.classList.remove('show');
+            //     produtosCadastradosForm.reset();
+            // });
+
+            // Abrir Modal de Categoria
+            if (openCategoryModalBtn) {
+                openCategoryModalBtn.addEventListener('click', function() {
+                    console.log('🎯 Botão de categoria clicado!');
+                    categoryModal.classList.add('show');
+                    console.log('✅ Modal de categoria aberto');
+                    
+                    // Initialize Select2 for category selection when modal opens
+                    setTimeout(() => {
+                        $('.select2-category').select2({
+                            placeholder: "SELECIONAR CATEGORIA",
+                            allowClear: true,
+                            width: '100%',
+                            language: {
+                                noResults: function() {
+                                    return "Nenhuma categoria encontrada";
+                                },
+                                searching: function() {
+                                    return "Pesquisando...";
+                                }
+                            }
+                        });
+                        console.log('✅ Select2 inicializado para categoria');
+                    }, 100);
+                });
+                console.log('✅ Event listener adicionado ao botão de categoria');
+            } else {
+                console.error('❌ ERRO: Não foi possível adicionar event listener ao botão de categoria');
+            }
 
             // Fechar Modal de Categoria
-            closeCategoryModalBtn.addEventListener('click', function() {
-                categoryModal.classList.remove('show');
-                categoryForm.reset();
-            });
+            if (closeCategoryModalBtn) {
+                closeCategoryModalBtn.addEventListener('click', function() {
+                    console.log('🔒 Fechando modal de categoria');
+                    categoryModal.classList.remove('show');
+                    categoryForm.reset();
+                });
+                console.log('✅ Event listener adicionado ao botão de fechar categoria');
+            } else {
+                console.error('❌ ERRO: closeCategoryModalBtn não encontrado');
+            }
 
             // Fechar Modais ao clicar fora
-            [dateModal, productModal, produtosCadastradosModal, categoryModal].forEach(modal => {
+            [dateModal, productModal, categoryModal].forEach(modal => {
                 modal.addEventListener('click', function(e) {
                     if (e.target === modal) {
                         modal.classList.remove('show');
@@ -1215,8 +1297,6 @@ $select = new select();
                             dateForm.reset();
                         } else if (modal === productModal) {
                             productForm.reset();
-                        } else if (modal === produtosCadastradosModal) {
-                            produtosCadastradosForm.reset();
                         } else if (modal === categoryModal) {
                             categoryForm.reset();
                         }
@@ -1261,40 +1341,40 @@ $select = new select();
             });
 
             // Validação do formulário de produtos cadastrados
-            produtosCadastradosForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const data_inicio = document.getElementById('data_inicio_cadastrados').value;
-                const data_fim = document.getElementById('data_fim_cadastrados').value;
+            // produtosCadastradosForm.addEventListener('submit', function(e) {
+            //     e.preventDefault();
+            //     const data_inicio = document.getElementById('data_inicio_cadastrados').value;
+            //     const data_fim = document.getElementById('data_fim_cadastrados').value;
 
-                if (!data_inicio || !data_fim) {
-                    showNotification('Por favor, preencha ambas as datas.', 'error');
-                    return;
-                }
+            //     if (!data_inicio || !data_fim) {
+            //         showNotification('Por favor, preencha ambas as datas.', 'error');
+            //         return;
+            //     }
 
-                if (new Date(data_inicio) > new Date(data_fim)) {
-                    showNotification('A data de início deve ser anterior à data de fim.', 'error');
-                    return;
-                }
+            //     if (new Date(data_inicio) > new Date(data_fim)) {
+            //         showNotification('A data de início deve ser anterior à data de fim.', 'error');
+            //         return;
+            //     }
 
-                // Mostrar loading
-                const submitBtn = produtosCadastradosForm.querySelector('button[type="submit"]');
-                const originalText = submitBtn.innerHTML;
-                submitBtn.innerHTML = '<span class="loading-spinner"></span> Gerando...';
-                submitBtn.disabled = true;
+            //     // Mostrar loading
+            //     const submitBtn = produtosCadastradosForm.querySelector('button[type="submit"]');
+            //     const originalText = submitBtn.innerHTML;
+            //     submitBtn.innerHTML = '<span class="loading-spinner"></span> Gerando...';
+            //     submitBtn.disabled = true;
 
-                // Simular delay e enviar
-                setTimeout(() => {
-                    produtosCadastradosForm.submit();
-                }, 1000);
+            //     // Simular delay e enviar
+            //     setTimeout(() => {
+            //         produtosCadastradosForm.submit();
+            //     }, 1000);
 
-                // Timeout de segurança para resetar o botão caso algo dê errado
-                setTimeout(() => {
-                    if (submitBtn.disabled) {
-                        submitBtn.innerHTML = originalText;
-                        submitBtn.disabled = false;
-                    }
-                }, 5000);
-            });
+            //     // Timeout de segurança para resetar o botão caso algo dê errado
+            //     setTimeout(() => {
+            //         if (submitBtn.disabled) {
+            //             submitBtn.innerHTML = originalText;
+            //             submitBtn.disabled = false;
+            //         }
+            //     }, 5000);
+            // });
 
             // Validação do formulário de produto
             productForm.addEventListener('submit', function(e) {
@@ -1541,10 +1621,7 @@ $select = new select();
                 resetButtonStates();
             });
 
-            // Função para abrir modal de categoria
-            window.openCategoryModal = function() {
-                categoryModal.classList.add('show');
-            };
+
 
             // Validação do formulário de categoria
             categoryForm.addEventListener('submit', function(e) {
@@ -1597,9 +1674,40 @@ $select = new select();
                 // Ajustar quando a sidebar é aberta/fechada
                 menuButton.addEventListener('click', adjustFooter);
 
-                // Ajustar quando a janela é redimensionada
+                            // Ajustar quando a janela é redimensionada
                 window.addEventListener('resize', adjustFooter);
             }
+        });
+
+        // Initialize Select2 for product selection
+        $(document).ready(function() {
+            $('.select2-product').select2({
+                placeholder: "SELECIONAR PRODUTO",
+                allowClear: true,
+                width: '100%',
+                language: {
+                    noResults: function() {
+                        return "Nenhum produto encontrado";
+                    },
+                    searching: function() {
+                        return "Pesquisando...";
+                    }
+                }
+            });
+            
+            $('.select2-category').select2({
+                placeholder: "SELECIONAR CATEGORIA",
+                allowClear: true,
+                width: '100%',
+                language: {
+                    noResults: function() {
+                        return "Nenhuma categoria encontrada";
+                    },
+                    searching: function() {
+                        return "Pesquisando...";
+                    }
+                }
+            });
         });
     </script>
 </body>
