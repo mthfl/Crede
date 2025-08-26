@@ -49,7 +49,7 @@ if (
             exit();
     }
 } else if (
-    !isset($_POST["user_id"]) && empty($_POST["user_id"]) &&
+    empty($_POST["user_id"]) &&
     isset($_POST["nome"]) && !empty($_POST["nome"]) &&
     isset($_POST["email"]) && !empty($_POST["email"]) &&
     isset($_POST["cpf"]) && !empty($_POST["cpf"]) &&
