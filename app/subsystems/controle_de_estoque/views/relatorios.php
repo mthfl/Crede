@@ -751,46 +751,33 @@ $select = new select();
 
         <!-- Estatísticas Rápidas -->
         <div class="quick-stats mb-8">
+            <?php
+            $total_produtos = $select->select_produtos_total()[0]['total'];
+            $produtos_criticos = $select->select_produtos_critico()[0]['total'];
+            $total_categorias = $select->select_total_categorias()[0]['total'];
+            $em_estoque = $select->select_produtos_em_estoque();
+            $estoque_critico = $select->select_produtos_estoque_critico();
+            $sem_estoque = $select->select_produtos_sem_estoque();
+            ?>
             <div class="stat-item">
                 <div class="stat-icon">
-                    <i class="fas fa-boxes">
-                        <?php
-                        $dados = $select->select_produtos_total();
-                        foreach ($dados as $dado) {
-                            echo $dado['total'];
-                        }
-                        ?>
-                    </i>
+                    <i class="fas fa-boxes"></i>
                 </div>
-                <div class="stat-number" id="totalProdutos">-</div>
+                <div class="stat-number"><?= $total_produtos ?></div>
                 <div class="stat-label">Total de Produtos</div>
             </div>
             <div class="stat-item">
                 <div class="stat-icon">
-                    <i class="fas fa-exclamation-triangle text-warning">
-                        <?php
-                        $dados = $select->select_produtos_critico();
-                        foreach ($dados as $dado) {
-                            echo $dado['total'];
-                        }
-                        ?>
-                    </i>
+                    <i class="fas fa-exclamation-triangle text-warning"></i>
                 </div>
-                <div class="stat-number" id="produtosCriticos">-</div>
+                <div class="stat-number"><?= $produtos_criticos ?></div>
                 <div class="stat-label">Estoque Crítico</div>
             </div>
             <div class="stat-item">
                 <div class="stat-icon">
-                    <i class="fas fa-tags">
-                        <?php
-                        $dados = $select->select_total_categorias();
-                        foreach ($dados as $dado) {
-                            echo $dado['total'];
-                        }
-                        ?>
-                    </i>
+                    <i class="fas fa-tags"></i>
                 </div>
-                <div class="stat-number" id="totalCategorias">-</div>
+                <div class="stat-number"><?= $total_categorias ?></div>
                 <div class="stat-label">Categorias</div>
             </div>
         </div>
@@ -1172,14 +1159,15 @@ $select = new select();
                 console.error('❌ ERRO: categoryForm não encontrado');
             }
 
-            // Carregar estatísticas em tempo real
-            loadStatistics();
+            // Configurar gráfico com dados PHP
+            setupChart({
+                em_estoque: <?= $em_estoque ?>,
+                estoque_critico: <?= $estoque_critico ?>,
+                sem_estoque: <?= $sem_estoque ?>
+            });
 
             // Resetar estados dos botões ao carregar a página
             resetButtonStates();
-
-            // Configurar gráfico
-            // setupChart(); // Remover chamada antiga
 
             // Abrir Modal de Data
             openDateModalBtn.addEventListener('click', function() {
@@ -1470,46 +1458,7 @@ $select = new select();
                 });
             }
 
-            // Função para carregar estatísticas e gráfico reais
-            function loadStatistics() {
-                console.log('Carregando estatísticas...');
-                fetch('control/controllerEstatisticas.php')
-                    .then(response => {
-                        console.log('Response status:', response.status);
-                        return response.json();
-                    })
-                    .then(data => {
-                        console.log('Dados recebidos:', data);
-                        if (data.success) {
-                            document.getElementById('totalProdutos').textContent = data.estatisticas.total_produtos;
-                            document.getElementById('produtosCriticos').textContent = data.estatisticas.produtos_criticos;
-                            document.getElementById('totalCategorias').textContent = data.estatisticas.total_categorias;
-                            setupChart(data.grafico);
-                            console.log('Estatísticas carregadas com sucesso');
-                        } else {
-                            console.error('Erro nos dados:', data.error);
-                            document.getElementById('totalProdutos').textContent = '-';
-                            document.getElementById('produtosCriticos').textContent = '-';
-                            document.getElementById('totalCategorias').textContent = '-';
-                            setupChart({
-                                em_estoque: 0,
-                                estoque_critico: 0,
-                                sem_estoque: 0
-                            });
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Erro ao carregar estatísticas:', error);
-                        document.getElementById('totalProdutos').textContent = '-';
-                        document.getElementById('produtosCriticos').textContent = '-';
-                        document.getElementById('totalCategorias').textContent = '-';
-                        setupChart({
-                            em_estoque: 0,
-                            estoque_critico: 0,
-                            sem_estoque: 0
-                        });
-                    });
-            }
+
 
             // Função para resetar estado dos botões
             function resetButtonStates() {
@@ -1600,26 +1549,7 @@ $select = new select();
                 }, 3000);
             }
 
-            // Listener para quando a página volta a ficar visível (resolve o bug do loading infinito)
-            document.addEventListener('visibilitychange', function() {
-                if (!document.hidden) {
-                    // Página voltou a ficar visível, resetar estados dos botões
-                    resetButtonStates();
-                }
-            });
 
-            // Listener para quando a página é carregada novamente
-            window.addEventListener('pageshow', function(event) {
-                // Se a página foi carregada do cache (back/forward), resetar estados
-                if (event.persisted) {
-                    resetButtonStates();
-                }
-            });
-
-            // Listener para quando a página é focada novamente
-            window.addEventListener('focus', function() {
-                resetButtonStates();
-            });
 
 
 

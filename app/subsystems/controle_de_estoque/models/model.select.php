@@ -1,8 +1,11 @@
 <?php
 require_once('sessions.php');
-$session = new sessions();
-$session->autenticar_session();
-$session->tempo_session();
+// Permitir que APIs retornem JSON sem redirecionar a login
+if (!defined('SKIP_AUTH')) {
+    $session = new sessions();
+    $session->autenticar_session();
+    $session->tempo_session();
+}
 
 require_once(__DIR__ . '/../config/connect.php');
 //print_r($_POST);
@@ -91,6 +94,28 @@ class select extends connect
         $query = $this->connect_users->query($consulta);
 
         return $resultado = $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // Métodos para estatísticas do gráfico
+    public function select_produtos_em_estoque()
+    {
+        $query = $this->connect->query("SELECT count(*) as total FROM $this->table4 WHERE quantidade > 5");
+        $resultado = $query->fetch(PDO::FETCH_ASSOC);
+        return $resultado['total'];
+    }
+
+    public function select_produtos_estoque_critico()
+    {
+        $query = $this->connect->query("SELECT count(*) as total FROM $this->table4 WHERE quantidade > 0 AND quantidade <= 5");
+        $resultado = $query->fetch(PDO::FETCH_ASSOC);
+        return $resultado['total'];
+    }
+
+    public function select_produtos_sem_estoque()
+    {
+        $query = $this->connect->query("SELECT count(*) as total FROM $this->table4 WHERE quantidade = 0");
+        $resultado = $query->fetch(PDO::FETCH_ASSOC);
+        return $resultado['total'];
     }
     
 }
