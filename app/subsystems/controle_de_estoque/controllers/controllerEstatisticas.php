@@ -10,19 +10,10 @@ if (function_exists('ob_start')) {
 }
 
 require_once(__DIR__ . '/../models/sessions.php');
-// Se a sessão não estiver válida, retornar JSON com erro ao invés de HTML
-if (!isset($_SESSION['email']) || !isset($_SESSION['nome']) || !isset($_SESSION['id']) || !isset($_SESSION['Estoque'])) {
-    if (function_exists('ob_get_length') && @ob_get_length()) {
-        @ob_clean();
-    }
-    echo json_encode([
-        'success' => false,
-        'error' => 'Sessão expirada. Faça login novamente.'
-    ]);
-    exit;
-}
+$session = new sessions();
+$session->autenticar_session();
+$session->tempo_session();
 
-define('SKIP_AUTH', true);
 require_once(__DIR__ . '/../models/model.select.php');
 
 try {

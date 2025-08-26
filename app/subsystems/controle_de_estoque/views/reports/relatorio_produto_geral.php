@@ -56,28 +56,10 @@ class relatorio extends connect
             }
         }
 
-        // Calculate summary
-        $total_categorias = count($categorias);
-        $total_produtos = 0;
-        foreach ($categorias as $produtos) {
-            $total_produtos += count($produtos);
-        }
 
-        // Add summary on the left side
+
+        // Start content from top
         $y_position = 5;
-        $pdf->SetFont('Arial', 'B', 12);
-        $pdf->SetTextColor(0, 0, 0);
-        $pdf->SetY(5.5);
-        $pdf->SetX(2.5); // Left alignment
-        $pdf->Cell(3, 0.8, 'RESUMO:', 0, 1, 'L');
-
-        $pdf->SetFont('Arial', '', 10);
-        $pdf->SetY(6.2);
-        $pdf->SetX(2.5);
-        $pdf->Cell(3, 0.6, 'Total de Categorias: ' . $total_categorias, 0, 1, 'L');
-        $pdf->SetX(2.5);
-        $pdf->Cell(3, 0.6, 'Total de Produtos: ' . $total_produtos, 0, 1, 'L');
-        $y_position += 2.5;
 
         $page_height = $pdf->GetPageHeight();
         $margin_bottom = 2;
@@ -95,8 +77,7 @@ class relatorio extends connect
                 $pdf->SetXY($pdf->GetPageWidth() - 7.2, 6.8); // Top right corner
                 $pdf->Cell(4, 0.6, 'Gerado em: ' . $data_geracao, 0, 0, 'R');
 
-                $y_position = 4;
-                $y_position += 4;
+                $y_position = 5;
             }
 
             // Category header with darker green
@@ -131,26 +112,14 @@ class relatorio extends connect
                     // Repeat date on new page
                     $pdf->SetFont('Arial', '', 10);
                     $pdf->SetTextColor(0, 0, 0);
-                    $pdf->SetXY($pdf->GetPageWidth() - 5, 1);
+                    $pdf->SetXY($pdf->GetPageWidth() - 7.2, 0.5);
                     $pdf->Cell(4, 0.6, 'Gerado em: ' . $data_geracao, 0, 0, 'R');
 
-                    $y_position = 1;
-
-                    // Repeat summary on new page
-                    $pdf->SetFont('Arial', 'B', 12);
-                    $pdf->SetTextColor(0, 0, 0);
-                    $pdf->SetX(1);
-                    $pdf->Cell(3, 0.8, 'RESUMO:', 0, 1, 'L');
-
-                    $pdf->SetFont('Arial', '', 10);
-                    $pdf->SetX(1);
-                    $pdf->Cell(3, 0.6, 'Total de Categorias: ' . $total_categorias, 0, 1, 'L');
-                    $pdf->SetX(1);
-                    $pdf->Cell(3, 0.6, 'Total de Produtos: ' . $total_produtos, 0, 1, 'L');
-                    $y_position += 2.5;
+                    $y_position = 5;
 
                     // Repeat category header
                     $pdf->SetFont('Arial', 'B', 14);
+                    $pdf->SetTextColor(255, 255, 255); // White text
                     $pdf->SetFillColor(1, 88, 36); // Darker green
                     $pdf->SetY($y_position);
                     $pdf->SetX(2.5);

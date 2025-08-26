@@ -751,33 +751,25 @@ $select = new select();
 
         <!-- Estatísticas Rápidas -->
         <div class="quick-stats mb-8">
-            <?php
-            $total_produtos = $select->select_produtos_total()[0]['total'];
-            $produtos_criticos = $select->select_produtos_critico()[0]['total'];
-            $total_categorias = $select->select_total_categorias()[0]['total'];
-            $em_estoque = $select->select_produtos_em_estoque();
-            $estoque_critico = $select->select_produtos_estoque_critico();
-            $sem_estoque = $select->select_produtos_sem_estoque();
-            ?>
             <div class="stat-item">
                 <div class="stat-icon">
                     <i class="fas fa-boxes"></i>
                 </div>
-                <div class="stat-number"><?= $total_produtos ?></div>
+                <div class="stat-number" id="totalProdutos">-</div>
                 <div class="stat-label">Total de Produtos</div>
             </div>
             <div class="stat-item">
                 <div class="stat-icon">
                     <i class="fas fa-exclamation-triangle text-warning"></i>
                 </div>
-                <div class="stat-number"><?= $produtos_criticos ?></div>
+                <div class="stat-number" id="produtosCriticos">-</div>
                 <div class="stat-label">Estoque Crítico</div>
             </div>
             <div class="stat-item">
                 <div class="stat-icon">
                     <i class="fas fa-tags"></i>
                 </div>
-                <div class="stat-number"><?= $total_categorias ?></div>
+                <div class="stat-number" id="totalCategorias">-</div>
                 <div class="stat-label">Categorias</div>
             </div>
         </div>
@@ -1159,15 +1151,14 @@ $select = new select();
                 console.error('❌ ERRO: categoryForm não encontrado');
             }
 
-            // Configurar gráfico com dados PHP
-            setupChart({
-                em_estoque: <?= $em_estoque ?>,
-                estoque_critico: <?= $estoque_critico ?>,
-                sem_estoque: <?= $sem_estoque ?>
-            });
+            // Carregar estatísticas em tempo real
+            loadStatistics();
 
             // Resetar estados dos botões ao carregar a página
             resetButtonStates();
+
+            // Configurar gráfico
+            // setupChart(); // Remover chamada antiga
 
             // Abrir Modal de Data
             openDateModalBtn.addEventListener('click', function() {
@@ -1458,7 +1449,54 @@ $select = new select();
                 });
             }
 
-
+            // Função para carregar estatísticas e gráfico reais
+            function loadStatistics() {
+                console.log('Carregando estatísticas...');
+                fetch('../controllers/controllerEstatisticas.php', { cache: 'no-store' })
+                    .then(async response => {
+                        console.log('Response status:', response.status);
+                        const text = await response.text();
+                        try {
+                            return JSON.parse(text);
+                        } catch (e) {
+                            console.error('Resposta não-JSON do endpoint:', text);
+                            return { success: false };
+                        }
+                    })
+                                         .then(data => {
+                         console.log('Dados recebidos:', data);
+                         if (data.success) {
+                             document.getElementById('totalProdutos').textContent = data.estatisticas.total_produtos;
+                             document.getElementById('produtosCriticos').textContent = data.estatisticas.produtos_criticos;
+                             document.getElementById('totalCategorias').textContent = data.estatisticas.total_categorias;
+                             
+                             console.log('Chamando setupChart com dados:', data.grafico);
+                             setupChart(data.grafico);
+                             console.log('Estatísticas carregadas com sucesso');
+                         } else {
+                            console.error('Erro nos dados:', data.error);
+                            document.getElementById('totalProdutos').textContent = '-';
+                            document.getElementById('produtosCriticos').textContent = '-';
+                            document.getElementById('totalCategorias').textContent = '-';
+                            setupChart({
+                                em_estoque: 0,
+                                estoque_critico: 0,
+                                sem_estoque: 0
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erro ao carregar estatísticas:', error);
+                        document.getElementById('totalProdutos').textContent = '-';
+                        document.getElementById('produtosCriticos').textContent = '-';
+                        document.getElementById('totalCategorias').textContent = '-';
+                        setupChart({
+                            em_estoque: 0,
+                            estoque_critico: 0,
+                            sem_estoque: 0
+                        });
+                    });
+            }
 
             // Função para resetar estado dos botões
             function resetButtonStates() {
@@ -1476,20 +1514,51 @@ $select = new select();
 
             // Função para configurar gráfico com dados reais
             function setupChart(graficoData) {
-                const ctx = document.getElementById('estoqueChart').getContext('2d');
+                const canvas = document.getElementById('estoqueChart');
+                if (!canvas) {
+                    console.error('Canvas do gráfico não encontrado!');
+                    return;
+                }
+                
+                const ctx = canvas.getContext('2d');
+                if (!ctx) {
+                    console.error('Contexto 2D não disponível!');
+                    return;
+                }
+                
                 if (window.estoqueChartInstance) {
                     window.estoqueChartInstance.destroy();
                 }
-                window.estoqueChartInstance = new Chart(ctx, {
-                    type: 'doughnut',
-                    data: {
-                        labels: ['Em Estoque', 'Estoque Crítico', 'Sem Estoque'],
-                        datasets: [{
-                            data: [
-                                graficoData.em_estoque || 0,
-                                graficoData.estoque_critico || 0,
-                                graficoData.sem_estoque || 0
-                            ],
+                
+                                // Ajustar dados para mostrar categorias corretas
+                const emEstoque = parseInt(graficoData.em_estoque) || 0;
+                const critico = parseInt(graficoData.estoque_critico) || 0;
+                const semEstoque = parseInt(graficoData.sem_estoque) || 0;
+                
+                const totalProdutos = emEstoque + critico + semEstoque;
+                
+                // Calcular estoque crítico real (excluindo os sem estoque)
+                const criticoReal = Math.max(0, critico - semEstoque);
+                
+                console.log('Dados do gráfico:', {
+                    emEstoque,
+                    totalProdutos,
+                    critico,
+                    semEstoque,
+                    criticoReal
+                });
+                
+                try {
+                    window.estoqueChartInstance = new Chart(ctx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['Total de Produtos', 'Estoque Crítico (1-5)', 'Sem Estoque (0)'],
+                            datasets: [{
+                                data: [
+                                    totalProdutos,
+                                    criticoReal,
+                                    semEstoque
+                                ],
                             backgroundColor: [
                                 '#28A745',
                                 '#FFC107',
@@ -1499,26 +1568,45 @@ $select = new select();
                             borderColor: '#FFFFFF'
                         }]
                     },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                position: 'bottom',
-                                labels: {
-                                    padding: 20,
-                                    usePointStyle: true,
-                                    font: {
-                                        size: 12
+                                            options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            interaction: {
+                                intersect: false,
+                                mode: 'index'
+                            },
+                            plugins: {
+                                legend: {
+                                    position: 'bottom',
+                                    labels: {
+                                        padding: 20,
+                                        usePointStyle: true,
+                                        font: {
+                                            size: 12
+                                        }
+                                    }
+                                },
+                                tooltip: {
+                                    enabled: true,
+                                    callbacks: {
+                                        label: function(context) {
+                                            const label = context.label || '';
+                                            const value = context.parsed || 0;
+                                            return label + ': ' + value + ' produtos';
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
                 });
+                
+                console.log('Gráfico criado com sucesso!');
+            } catch (error) {
+                console.error('Erro ao criar gráfico:', error);
             }
+        }
 
-            // Função para mostrar notificações
+        // Função para mostrar notificações
             function showNotification(message, type = 'info') {
                 const notification = document.createElement('div');
                 notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg transform transition-all duration-300 translate-x-full`;
@@ -1549,7 +1637,26 @@ $select = new select();
                 }, 3000);
             }
 
+            // Listener para quando a página volta a ficar visível (resolve o bug do loading infinito)
+            document.addEventListener('visibilitychange', function() {
+                if (!document.hidden) {
+                    // Página voltou a ficar visível, resetar estados dos botões
+                    resetButtonStates();
+                }
+            });
 
+            // Listener para quando a página é carregada novamente
+            window.addEventListener('pageshow', function(event) {
+                // Se a página foi carregada do cache (back/forward), resetar estados
+                if (event.persisted) {
+                    resetButtonStates();
+                }
+            });
+
+            // Listener para quando a página é focada novamente
+            window.addEventListener('focus', function() {
+                resetButtonStates();
+            });
 
 
 
