@@ -107,7 +107,7 @@ if (
             header('Location: ../views/usuario.php?falha');
             exit();
     }
-} else {
+} /*else {
     header('Location: ../index.php');
     exit();
-}
+}*/

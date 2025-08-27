@@ -1030,7 +1030,7 @@ $session->tempo_session();
                         aria-label="Acessar Gerenciador de Usuários - Sistema de gestão de usuários, setores e permissões"
                         data-system="usuarios">
                         <div class="card-icon">
-                            <img src="https://i.postimg.cc/0N0dsxrM/Bras-o-do-Cear-svg-removebg-preview.png" alt="Ícone Gerenciador de Usuários" class="w-24 h-24 object-contain">
+                            <img src="https://i.postimg.cc/ZqY5Z9TG/useradm.png" alt="Ícone Gerenciador de Usuários" class="w-24 h-24 object-contain">
                         </div>
                         <h3 class="card-title">Gerenciador de Usuários</h3>
                         <p class="card-description">Gestão de usuários, setores e permissões</p>
