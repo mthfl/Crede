@@ -22,7 +22,7 @@ class sessions
         }
     }
 
-    function tempo_session($tempo = 600)
+    function tempo_session($tempo = 10)
     {
         try {
             if (isset($_SESSION['ultimo_acesso'])) {
