@@ -1530,45 +1530,38 @@ $select = new select();
                     window.estoqueChartInstance.destroy();
                 }
                 
-                                // Ajustar dados para mostrar categorias corretas
+                // Usar os dados reais do backend
                 const emEstoque = parseInt(graficoData.em_estoque) || 0;
                 const critico = parseInt(graficoData.estoque_critico) || 0;
                 const semEstoque = parseInt(graficoData.sem_estoque) || 0;
                 
-                const totalProdutos = emEstoque + critico + semEstoque;
-                
-                // Calcular estoque crítico real (excluindo os sem estoque)
-                const criticoReal = Math.max(0, critico - semEstoque);
-                
                 console.log('Dados do gráfico:', {
                     emEstoque,
-                    totalProdutos,
                     critico,
-                    semEstoque,
-                    criticoReal
+                    semEstoque
                 });
                 
                 try {
                     window.estoqueChartInstance = new Chart(ctx, {
                         type: 'doughnut',
                         data: {
-                            labels: ['Total de Produtos', 'Estoque Crítico (1-5)', 'Sem Estoque (0)'],
+                            labels: ['Em Estoque (>5)', 'Estoque Crítico (1-5)', 'Sem Estoque (0)'],
                             datasets: [{
                                 data: [
-                                    totalProdutos,
-                                    criticoReal,
+                                    emEstoque,
+                                    critico,
                                     semEstoque
                                 ],
-                            backgroundColor: [
-                                '#28A745',
-                                '#FFC107',
-                                '#DC3545'
-                            ],
-                            borderWidth: 2,
-                            borderColor: '#FFFFFF'
-                        }]
-                    },
-                                            options: {
+                                backgroundColor: [
+                                    '#28A745',
+                                    '#FFC107',
+                                    '#DC3545'
+                                ],
+                                borderWidth: 2,
+                                borderColor: '#FFFFFF'
+                            }]
+                        },
+                        options: {
                             responsive: true,
                             maintainAspectRatio: false,
                             interaction: {
@@ -1598,13 +1591,13 @@ $select = new select();
                                 }
                             }
                         }
-                });
-                
-                console.log('Gráfico criado com sucesso!');
-            } catch (error) {
-                console.error('Erro ao criar gráfico:', error);
+                    });
+                    
+                    console.log('Gráfico criado com sucesso!');
+                } catch (error) {
+                    console.error('Erro ao criar gráfico:', error);
+                }
             }
-        }
 
         // Função para mostrar notificações
             function showNotification(message, type = 'info') {
