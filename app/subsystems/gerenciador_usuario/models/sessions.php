@@ -9,7 +9,7 @@ class sessions
     function autenticar_session()
     {
         try {
-            if (!isset($_SESSION['email']) || !isset($_SESSION['nome']) || !isset($_SESSION['id'])) {
+            if (!isset($_SESSION['email']) || !isset($_SESSION['nome']) || !isset($_SESSION['id']) || !isset($_SESSION['usuario'])) {
 
                 session_unset();
                 session_destroy();
@@ -22,7 +22,7 @@ class sessions
         }
     }
 
-    function tempo_session($tempo = 10)
+    function tempo_session($tempo = 600)
     {
         try {
             if (isset($_SESSION['ultimo_acesso'])) {

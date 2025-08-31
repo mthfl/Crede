@@ -11,7 +11,7 @@ class connect
     function connect_database()
     {
         try {
-            $config = require(__DIR__."/../models/private/config.php");
+            $config = require(__DIR__."/../../.env/config.php");
 
             // Tentar primeiro o banco local
             try {

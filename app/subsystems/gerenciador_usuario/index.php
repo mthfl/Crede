@@ -1,6 +1,5 @@
 <?php
-require_once(__DIR__ . '/../../main/models/sessions.php');
-require_once(__DIR__ . '/../../main/models/model.usuario.php');
+require_once(__DIR__ . '/models/sessions.php');
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -9,21 +8,6 @@ if (session_status() === PHP_SESSION_NONE) {
 $session = new sessions();
 $session->autenticar_session();
 $session->tempo_session();
-
-$modelUsuario = new model_usuario();
-$dadosUsuario = [];
-try {
-    $dadosUsuario = $modelUsuario->getDadosUsuario((int)($_SESSION['id'] ?? 0));
-} catch (Throwable $e) {
-    $dadosUsuario = [];
-}
-
-
-$userName = isset($_SESSION['nome']) ? $_SESSION['nome'] : 'Usuário';
-$userSetor = isset($_SESSION['setor']) ? $_SESSION['setor'] : 'Sistema de Gestão';
-$userEmail = isset($_SESSION['email']) ? $_SESSION['email'] : '';
-$userInitial = function_exists('mb_substr') ? mb_strtoupper(mb_substr($userName, 0, 1, 'UTF-8'), 'UTF-8') : strtoupper(substr($userName, 0, 1));
-$fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -97,40 +81,84 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
                     },
                     keyframes: {
                         fadeIn: {
-                            '0%': { opacity: '0', transform: 'translateY(10px)' },
-                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                            '0%': {
+                                opacity: '0',
+                                transform: 'translateY(10px)'
+                            },
+                            '100%': {
+                                opacity: '1',
+                                transform: 'translateY(0)'
+                            }
                         },
                         slideUp: {
-                            '0%': { opacity: '0', transform: 'translateY(30px)' },
-                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                            '0%': {
+                                opacity: '0',
+                                transform: 'translateY(30px)'
+                            },
+                            '100%': {
+                                opacity: '1',
+                                transform: 'translateY(0)'
+                            }
                         },
                         slideIn: {
-                            '0%': { transform: 'translateX(-100%)', opacity: '0' },
-                            '100%': { transform: 'translateX(0)', opacity: '1' }
+                            '0%': {
+                                transform: 'translateX(-100%)',
+                                opacity: '0'
+                            },
+                            '100%': {
+                                transform: 'translateX(0)',
+                                opacity: '1'
+                            }
                         },
                         bounceSubtle: {
-                            '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-8px)' }
+                            '0%, 100%': {
+                                transform: 'translateY(0)'
+                            },
+                            '50%': {
+                                transform: 'translateY(-8px)'
+                            }
                         },
                         float: {
-                            '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
-                            '50%': { transform: 'translateY(-20px) rotate(3deg)' }
+                            '0%, 100%': {
+                                transform: 'translateY(0px) rotate(0deg)'
+                            },
+                            '50%': {
+                                transform: 'translateY(-20px) rotate(3deg)'
+                            }
                         },
                         sway: {
-                            '0%, 100%': { transform: 'translateX(0px) rotate(0deg)' },
-                            '50%': { transform: 'translateX(10px) rotate(1deg)' }
+                            '0%, 100%': {
+                                transform: 'translateX(0px) rotate(0deg)'
+                            },
+                            '50%': {
+                                transform: 'translateX(10px) rotate(1deg)'
+                            }
                         },
                         pulseGlow: {
-                            '0%, 100%': { boxShadow: '0 0 20px rgba(0, 90, 36, 0.3)' },
-                            '50%': { boxShadow: '0 0 30px rgba(0, 90, 36, 0.5)' }
+                            '0%, 100%': {
+                                boxShadow: '0 0 20px rgba(0, 90, 36, 0.3)'
+                            },
+                            '50%': {
+                                boxShadow: '0 0 30px rgba(0, 90, 36, 0.5)'
+                            }
                         },
                         scaleIn: {
-                            '0%': { transform: 'scale(0.9)', opacity: '0' },
-                            '100%': { transform: 'scale(1)', opacity: '1' }
+                            '0%': {
+                                transform: 'scale(0.9)',
+                                opacity: '0'
+                            },
+                            '100%': {
+                                transform: 'scale(1)',
+                                opacity: '1'
+                            }
                         },
                         shimmer: {
-                            '0%': { transform: 'translateX(-100%)' },
-                            '100%': { transform: 'translateX(100%)' }
+                            '0%': {
+                                transform: 'translateX(-100%)'
+                            },
+                            '100%': {
+                                transform: 'translateX(100%)'
+                            }
                         }
                     }
                 }
@@ -161,14 +189,14 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
             transition: left 0.6s;
         }
 
         .card-enhanced:hover::before {
             left: 100%;
         }
-        
+
         .card-enhanced:hover {
             transform: translateY(-8px) scale(1.02);
             box-shadow: 0 20px 60px -10px rgba(0, 0, 0, 0.15), 0 8px 25px -5px rgba(0, 0, 0, 0.1);
@@ -204,7 +232,7 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(45deg, transparent 30%, rgba(255,255,255,0.3) 50%, transparent 70%);
+            background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.3) 50%, transparent 70%);
             transform: translateX(-100%);
             transition: transform 0.6s;
         }
@@ -231,8 +259,13 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         /* Floating background elements */
@@ -288,9 +321,17 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
         }
 
         /* Staggered animation for cards */
-        .card-1 { animation-delay: 0.1s; }
-        .card-2 { animation-delay: 0.2s; }
-        .card-3 { animation-delay: 0.3s; }
+        .card-1 {
+            animation-delay: 0.1s;
+        }
+
+        .card-2 {
+            animation-delay: 0.2s;
+        }
+
+        .card-3 {
+            animation-delay: 0.3s;
+        }
     </style>
 </head>
 
@@ -298,30 +339,30 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
     <!-- Background decorations -->
     <div class="bg-decoration bg-circle-1"></div>
     <div class="bg-decoration bg-circle-2"></div>
-    
-   
+
+
 
     <div class="min-h-screen">
         <!-- Header -->
         <header class="header-glass sticky top-0 z-40 px-6 py-4 animate-slide-in">
             <div class="flex items-center justify-between max-w-7xl mx-auto">
-            <div class="flex items-center gap-4">
+                <div class="flex items-center gap-4">
                     <div class="w-12 h-12 rounded-2xl flex items-center justify-center">
                         <img class="w-8 h-8 object-contain" src="https://i.postimg.cc/0N0dsxrM/Bras-o-do-Cear-svg-removebg-preview.png" alt="Logo CREDE">
-                </div>
-                <div>
+                    </div>
+                    <div>
                         <h1 class="font-bold text-xl text-dark font-heading">CREDE 1</h1>
-                       
+
                     </div>
                 </div>
-                
+
                 <div class="flex items-center gap-4">
-                  
+
                     <button onclick="logout()" class="btn-logout">
                         <i class="fa-solid fa-arrow-left"></i>
                         <span class="hidden sm:inline">Voltar</span>
                     </button>
-                    </div>
+                </div>
             </div>
         </header>
 
@@ -335,7 +376,7 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
                         <span>Sistema Seguro e Confiável</span>
                     </div>
                     <h1 class="text-4xl md:text-5xl font-bold text-dark font-heading mb-4 leading-tight">
-                        Sistema de 
+                        Sistema de
                         <span class="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
                             Gerenciamento
                         </span>
@@ -345,14 +386,14 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
                     </p>
                 </div>
 
-               
-                
+
+
                 <!-- Menu Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     <!-- Usuários Card -->
                     <a href="views/usuario.php" class="card-enhanced card-1 rounded-3xl p-8 group animate-fade-in">
-                        <div class="icon-container w-20 h-20 rounded-3xl flex items-center justify-center mb-6 group-hover:scale-110 transition-all duration-500" 
-                             style="--bg-from: rgba(0, 90, 36, 0.1); --bg-to: rgba(0, 90, 36, 0.05);">
+                        <div class="icon-container w-20 h-20 rounded-3xl flex items-center justify-center mb-6 group-hover:scale-110 transition-all duration-500"
+                            style="--bg-from: rgba(0, 90, 36, 0.1); --bg-to: rgba(0, 90, 36, 0.05);">
                             <i class="fa-solid fa-user-plus text-3xl text-primary group-hover:text-white transition-colors duration-300"></i>
                         </div>
                         <h3 class="text-2xl font-bold text-dark mb-3 font-heading group-hover:text-primary transition-colors">
@@ -370,7 +411,7 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
                     <!-- Setores Card -->
                     <a href="views/setor.php" class="card-enhanced card-2 rounded-3xl p-8 group animate-fade-in">
                         <div class="icon-container w-20 h-20 rounded-3xl flex items-center justify-center mb-6 group-hover:scale-110 transition-all duration-500"
-                             style="--bg-from: rgba(255, 165, 0, 0.1); --bg-to: rgba(255, 165, 0, 0.05);">
+                            style="--bg-from: rgba(255, 165, 0, 0.1); --bg-to: rgba(255, 165, 0, 0.05);">
                             <i class="fa-solid fa-building text-3xl text-primary group-hover:text-white transition-colors duration-300"></i>
                         </div>
                         <h3 class="text-2xl font-bold text-dark mb-3 font-heading group-hover:text-primary transition-colors">
@@ -388,7 +429,7 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
                     <!-- Permissões Card -->
                     <a href="views/permissoes.php" class="card-enhanced card-3 rounded-3xl p-8 group animate-fade-in md:col-span-2 lg:col-span-1">
                         <div class="icon-container w-20 h-20 rounded-3xl flex items-center justify-center mb-6 group-hover:scale-110 transition-all duration-500"
-                             style="--bg-from: rgba(59, 130, 246, 0.1); --bg-to: rgba(59, 130, 246, 0.05);">
+                            style="--bg-from: rgba(59, 130, 246, 0.1); --bg-to: rgba(59, 130, 246, 0.05);">
                             <i class="fa-solid fa-shield-halved text-3xl text-primary group-hover:text-white transition-colors duration-300"></i>
                         </div>
                         <h3 class="text-2xl font-bold text-dark mb-3 font-heading group-hover:text-primary transition-colors">
@@ -404,7 +445,7 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
                     </a>
                 </div>
 
-                
+
             </main>
         </div>
     </div>
@@ -439,16 +480,16 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
                     }
                 });
             }
-            
+
             // Add smooth scroll behavior
             document.documentElement.style.scrollBehavior = 'smooth';
-            
+
             // Add intersection observer for animations
             const observerOptions = {
                 threshold: 0.1,
                 rootMargin: '0px 0px -50px 0px'
             };
-            
+
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
@@ -457,7 +498,7 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
                     }
                 });
             }, observerOptions);
-            
+
             // Observe all animated elements
             document.querySelectorAll('.animate-fade-in, .animate-slide-up').forEach(el => {
                 el.style.opacity = '0';
@@ -478,38 +519,38 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
         document.querySelectorAll('.card-enhanced').forEach(card => {
             card.addEventListener('mouseenter', function() {
                 this.style.transform = 'translateY(-8px) scale(1.02)';
-                
+
                 // Ensure text colors are maintained on hover for all cards
                 const title = this.querySelector('h3');
                 const description = this.querySelector('p');
                 const linkText = this.querySelector('.text-primary');
-                
+
                 if (title) title.style.color = '#005A24';
                 if (description) description.style.color = '#374151';
                 if (linkText) linkText.style.color = '#005A24';
             });
-            
+
             card.addEventListener('mouseleave', function() {
                 this.style.transform = 'translateY(0) scale(1)';
-                
+
                 // Reset text colors for all cards
                 const title = this.querySelector('h3');
                 const description = this.querySelector('p');
                 const linkText = this.querySelector('.text-primary');
-                
+
                 if (title) title.style.color = '';
                 if (description) description.style.color = '';
                 if (linkText) linkText.style.color = '';
             });
         });
 
-  
+
         const preloadLinks = [
             'views/usuario.php',
-            'views/setor.php', 
+            'views/setor.php',
             'views/permissoes.php'
         ];
-        
+
         preloadLinks.forEach(link => {
             const linkElement = document.createElement('link');
             linkElement.rel = 'prefetch';
@@ -517,7 +558,7 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
             document.head.appendChild(linkElement);
         });
 
-      
+
         function logout() {
             window.location.href = '../../main/views/subsystems.php';
         }

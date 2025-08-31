@@ -11,7 +11,7 @@ class model_usuario extends connect
     function __construct()
     {
         parent::__construct();
-        $table = require(__DIR__ . '/private/tables.php');
+        $table = require(__DIR__ . '/../../.env/tables.php');
         $this->table1 = $table['crede_users'][1];
         $this->table2 = $table['crede_users'][2];
         $this->table3 = $table['crede_users'][3];

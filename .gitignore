@@ -1,15 +1,4 @@
-# Pastas Private - Segurança
-**/private/
-**/private/*
-**/models/private/
-**/models/private/*
-**/config/private/
-**/config/private/*
-**/app/main/models/private/
-**/app/main/models/private/*
-**/app/subsystems/*/app/main/models/private/
-**/app/subsystems/*/app/main/models/private/*
-
+**/.env/
 # Arquivos de configuração sensíveis
 **/config.php
 **/tables.php
