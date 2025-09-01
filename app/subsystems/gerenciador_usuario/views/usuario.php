@@ -916,12 +916,7 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
                 // Validar formato do CPF antes de enviar (com máscara)
                 const cpf = this.inpCpf.value;
                 if (cpf.length !== 14 || !/^\d{3}\.\d{3}\.\d{3}-\d{2}$/.test(cpf)) {
-                    e.preventDefault();
                     showNotification('CPF deve estar no formato 000.000.000-00.', 'error');
-                // Validar formato do CPF antes de enviar
-                const cpf = removerMascaraCPF(this.inpCpf.value);
-                if (cpf.length !== 11) {
-                    showNotification('CPF deve conter 11 dígitos.', 'error');
                     return;
                 }
                 
