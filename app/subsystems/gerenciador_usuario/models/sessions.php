@@ -9,7 +9,7 @@ class sessions
     function autenticar_session()
     {
         try {
-            if (!isset($_SESSION['email']) || !isset($_SESSION['nome']) || !isset($_SESSION['id']) || !isset($_SESSION['usuario'])) {
+            if (!isset($_SESSION['email']) || !isset($_SESSION['nome']) || !isset($_SESSION['id']) || !isset($_SESSION['Gerenciador de usuarios'])) {
 
                 session_unset();
                 session_destroy();

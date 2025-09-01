@@ -1,10 +1,6 @@
 <?php
 require_once(__DIR__ . '/models/sessions.php');
 
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
 $session = new sessions();
 $session->autenticar_session();
 $session->tempo_session();

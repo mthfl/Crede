@@ -475,7 +475,7 @@ if (isset($_GET['id_produto']) && !empty($_GET['id_produto'])) {
                     <input type="hidden" name="id_produto" value="<?= $id_produto ?>">
                     <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
                         <div>
-                            <input value="<?= $dados['barcode'] ?>" type="text" placeholder="BARCODE" id="barcode" name="barcode" style="text-transform: uppercase;" oninput="this.value = this.value.toUpperCase();" required
+                            <input value="<?= $dados['barcode'] ?>" type="text" placeholder="BARCODE" id="barcode" name="barcode" style="text-transform: uppercase;" oninput="this.value = this.value.toUpperCase();"
                                 class="w-full px-4 py-3 border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent text-center font-semibold"
                                 aria-label="Nome do produto">
                         </div>
