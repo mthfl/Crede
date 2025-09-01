@@ -199,12 +199,12 @@ class relatorio extends connect
             $pdf->SetX($start_x);
             $pdf->Cell($card_width, 1, utf8_to_iso($categoria), 1, 0, 'C', true);
             
-            // Card 2: Total da Categoria
+            // Card 2: Quantidade Total da Categoria
             $pdf->SetFont('Arial', 'B', 10);
             $pdf->SetTextColor(255, 255, 255);
             $pdf->SetFillColor(1, 88, 36); // Dark green
             $pdf->SetX($start_x + $card_width + $card_spacing);
-            $pdf->Cell($card_width, 1, utf8_to_iso('TOTAL'), 1, 0, 'C', true);
+            $pdf->Cell($card_width, 1, utf8_to_iso('quantidade total'), 1, 0, 'C', true);
             
             // Values row
             $pdf->SetFont('Arial', 'B', 12);
@@ -212,13 +212,13 @@ class relatorio extends connect
             $pdf->SetFillColor(255, 255, 255); // White
             $pdf->SetY($y_position + 1);
             $pdf->SetX($start_x);
-            $pdf->Cell($card_width, 1, utf8_to_iso('PRODUTOS: ' . count($produtos)), 1, 0, 'C', true);
+            $pdf->Cell($card_width, 1, utf8_to_iso('PRODUTOS: ' . number_format(count($produtos), 0, ',', '.')), 1, 0, 'C', true);
             
             $pdf->SetFont('Arial', 'B', 12);
             $pdf->SetTextColor(0, 0, 0);
             $pdf->SetFillColor(255, 255, 255); // White
             $pdf->SetX($start_x + $card_width + $card_spacing);
-            $pdf->Cell($card_width, 1, count($produtos), 1, 1, 'C', true);
+            $pdf->Cell($card_width, 1, number_format($soma_categoria, 0, ',', '.'), 1, 1, 'C', true);
             
             $y_position += 2.5;
 
@@ -290,7 +290,7 @@ class relatorio extends connect
                 $pdf->Cell(2, 0.8, utf8_decode($produto['id']), 1, 0, 'C', true);
                 $pdf->Cell(4, 0.8, utf8_decode($produto['barcode'] ?: 'Sem código'), 1, 0, 'L', true);
                 $pdf->Cell(14, 0.8, utf8_decode($produto['nome_produto']), 1, 0, 'L', true);
-                $pdf->Cell(4, 0.8, utf8_decode($produto['quantidade']), 1, 1, 'C', true);
+                $pdf->Cell(4, 0.8, utf8_decode(number_format($produto['quantidade'], 0, ',', '.')), 1, 1, 'C', true);
 
                 // Reset text color to black for the next cell
                 $pdf->SetTextColor(0, 0, 0);

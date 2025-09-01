@@ -1666,7 +1666,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
                         <div class="info-label">CPF</div>
                         <div class="info-value">
-                            <?php echo $dados_usuario['cpf'] ?? 'Sem CPF'; ?>
+                            <?php 
+                            if (isset($dados_usuario['cpf']) && !empty($dados_usuario['cpf'])) {
+                                $cpf = $dados_usuario['cpf'];
+                                if (strlen($cpf) === 11) {
+                                    echo substr($cpf, 0, 3) . '.' . substr($cpf, 3, 3) . '.' . substr($cpf, 6, 3) . '-' . substr($cpf, 9, 2);
+                                } else {
+                                    echo $cpf;
+                                }
+                            } else {
+                                echo 'Sem CPF';
+                            }
+                            ?>
                         </div>
                     </div>
 

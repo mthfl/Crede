@@ -764,19 +764,8 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
                 document.getElementById('inpNome').value = user.nome || '';
                 document.getElementById('inpEmail').value = user.email || '';
                 
-                // Aplicar máscara ao CPF se existir
-                if (user.cpf) {
-                    const cpf = user.cpf.toString();
-                    if (cpf.length === 11) {
-                        // Formatar CPF com máscara
-                        const cpfFormatado = cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
-                        document.getElementById('inpCpf').value = cpfFormatado;
-                    } else {
-                        document.getElementById('inpCpf').value = user.cpf || '';
-                    }
-                } else {
-                    document.getElementById('inpCpf').value = '';
-                }
+                // O CPF já vem com máscara do banco
+                document.getElementById('inpCpf').value = user.cpf || '';
                 
                 document.getElementById('inpSetor').value = user.id_setor || ''; // Use id_setor instead of setor_id
                 document.getElementById('userForm').action = '../controllers/controller_usuario.php';
@@ -913,16 +902,16 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
                     return;
                 }
                 
-                // Validar formato do CPF antes de enviar
-                const cpf = removerMascaraCPF(this.inpCpf.value);
-                if (cpf.length !== 11) {
+                // Validar formato do CPF antes de enviar (com máscara)
+                const cpf = this.inpCpf.value;
+                if (cpf.length !== 14 || !/^\d{3}\.\d{3}\.\d{3}-\d{2}$/.test(cpf)) {
                     e.preventDefault();
-                    showNotification('CPF deve conter 11 dígitos.', 'error');
+                    showNotification('CPF deve estar no formato 000.000.000-00.', 'error');
                     return;
                 }
                 
-                // Atualizar o valor do campo CPF para enviar apenas números
-                this.inpCpf.value = cpf;
+                // Manter a máscara no campo para enviar com formatação
+                // Não alterar o valor do campo - enviar com máscara
             });
 
             document.getElementById('userTypeForm').addEventListener('submit', function(e) {
