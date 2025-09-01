@@ -472,8 +472,6 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
                         <p class="text-xs text-gray-500 font-medium hidden sm:block">Gerenciamento de Usuários</p>
                     </div>
                 </div>
-
-                
             </div>
         </header>
 
@@ -651,7 +649,6 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
                                 <?php endforeach; ?>
                             </select>
                         </div>
-
                     </div>
                     <div class="p-6 sm:p-8 border-t border-gray-100 bg-gray-50/50 flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-3">
                         <button type="button" class="px-6 py-3 rounded-xl border-2 border-gray-300 font-semibold text-gray-700 hover:bg-gray-100 hover:border-gray-400 transition-all text-base" onclick="closeModal('modalUser')">
@@ -738,8 +735,6 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
     <script>
         const usuarios = <?php echo json_encode($usuarios); ?>;
 
-
-
         function openUserForm() {
             document.getElementById('modalTitle').textContent = 'Cadastrar Usuário';
             document.getElementById('inpUserId').value = '';
@@ -767,7 +762,7 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
                 // O CPF já vem com máscara do banco
                 document.getElementById('inpCpf').value = user.cpf || '';
                 
-                document.getElementById('inpSetor').value = user.id_setor || ''; // Use id_setor instead of setor_id
+                document.getElementById('inpSetor').value = user.id_setor || '';
                 document.getElementById('userForm').action = '../controllers/controller_usuario.php';
                 openModal('modalUser');
             }
@@ -862,9 +857,12 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
         // Função para aplicar máscara de CPF
         function aplicarMascaraCPF(input) {
             let value = input.value.replace(/\D/g, ''); // Remove tudo que não é dígito
-            value = value.replace(/(\d{3})(\d)/, '$1.$2'); // Coloca ponto depois do 3º dígito
-            value = value.replace(/(\d{3})(\d)/, '$1.$2'); // Coloca ponto depois do 6º dígito
-            value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2'); // Coloca hífen antes dos últimos 2 dígitos
+            if (value.length > 11) value = value.slice(0, 11); // Limita a 11 dígitos
+            if (value.length > 0) {
+                value = value.replace(/(\d{3})(\d)/, '$1.$2'); // Coloca ponto depois do 3º dígito
+                value = value.replace(/(\d{3})(\d)/, '$1.$2'); // Coloca ponto depois do 6º dígito
+                value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2'); // Coloca hífen antes dos últimos 2 dígitos
+            }
             input.value = value;
         }
 
@@ -885,19 +883,32 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
                     aplicarMascaraCPF(this);
                 });
                 
-                // Limitar o campo a 14 caracteres (formato: 000.000.000-00)
+                // Limitar o campo a 11 dígitos (sem máscara)
                 cpfInput.addEventListener('keypress', function(e) {
-                    if (this.value.length >= 14 && e.key !== 'Backspace' && e.key !== 'Delete') {
+                    if (removerMascaraCPF(this.value).length >= 11 && e.key !== 'Backspace' && e.key !== 'Delete') {
                         e.preventDefault();
+                    }
+                });
+
+                // Reaplicar máscara ao focar no campo
+                cpfInput.addEventListener('focus', function() {
+                    aplicarMascaraCPF(this);
+                });
+
+                // Manter máscara ao desfocar, mas apenas se houver valor
+                cpfInput.addEventListener('blur', function() {
+                    if (this.value) {
+                        aplicarMascaraCPF(this);
                     }
                 });
             }
 
             // Form submissions
             document.getElementById('userForm').addEventListener('submit', function(e) {
+                e.preventDefault(); // Prevenir envio padrão para validação
+                
                 // Validação
                 if (!this.inpNome.value.trim() || !this.inpEmail.value.trim() || !this.inpCpf.value.trim() || !this.inpSetor.value) {
-                    e.preventDefault();
                     showNotification('Preencha todos os campos obrigatórios.', 'error');
                     return;
                 }
@@ -907,11 +918,24 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
                 if (cpf.length !== 14 || !/^\d{3}\.\d{3}\.\d{3}-\d{2}$/.test(cpf)) {
                     e.preventDefault();
                     showNotification('CPF deve estar no formato 000.000.000-00.', 'error');
+                // Validar formato do CPF antes de enviar
+                const cpf = removerMascaraCPF(this.inpCpf.value);
+                if (cpf.length !== 11) {
+                    showNotification('CPF deve conter 11 dígitos.', 'error');
                     return;
                 }
                 
+                // Armazenar o valor mascarado para manter no campo após a validação
+                const cpfMascarado = this.inpCpf.value;
+                
                 // Manter a máscara no campo para enviar com formatação
                 // Não alterar o valor do campo - enviar com máscara
+                
+                // Enviar o formulário
+                this.submit();
+                
+                // Restaurar o valor mascarado no campo após o envio
+                this.inpCpf.value = cpfMascarado;
             });
 
             document.getElementById('userTypeForm').addEventListener('submit', function(e) {
