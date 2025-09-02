@@ -8,7 +8,7 @@ require_once(__DIR__ . '/../models/model.liberador.php');
 require_once(__DIR__ . '/../models/model.admin.php');
 $select = new liberador();
 //print_r($_GET);
-print_r($_POST);
+//print_r($_POST);
 
 //cadastrar produto com codigo de barra
 if (
@@ -31,13 +31,10 @@ if (
 
             switch ($result) {
                 case 1:
-                    header('Location: ../views/estoque.php?cadastrado');
+                    header('Location: ../views/estoque.php?editado');
                     exit();
                 case 2:
                     header('Location: ../views/estoque.php?erro');
-                    exit();
-                case 3:
-                    header('Location: ../views/products/adc_novo_produto.php?ja_cadastrado');
                     exit();
                 default:
                     header('Location: ../views/estoque.php?falha');
@@ -49,13 +46,10 @@ if (
 
             switch ($result) {
                 case 1:
-                    header('Location: ../views/estoque.php?cadastrado');
+                    header('Location: ../views/estoque.php?editado');
                     exit();
                 case 2:
                     header('Location: ../views/estoque.php?erro');
-                    exit();
-                case 3:
-                    header('Location: ../views/products/adc_novo_produto.php?ja_cadastrado');
                     exit();
                 default:
                     header('Location: ../views/estoque.php?falha');

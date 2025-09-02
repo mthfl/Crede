@@ -519,7 +519,7 @@ if (isset($_GET['id_produto']) && !empty($_GET['id_produto'])) {
                         </div>
                     <?php } ?>
                 </div>
-                <button type="submit" name="editar" value="Adicionar" class="w-full bg-secondary text-white font-bold py-3 px-4 rounded-lg hover:bg-opacity-90 transition-colors"
+                <button type="submit" name="editar" value="EDITAR" class="w-full bg-secondary text-white font-bold py-3 px-4 rounded-lg hover:bg-opacity-90 transition-colors"
                     aria-label="Adicionar produto">
                     ADICIONAR
                 </button>

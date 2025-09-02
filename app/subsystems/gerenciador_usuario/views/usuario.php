@@ -211,7 +211,7 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
             border-color: rgba(0, 90, 36, 0.3);
         }
 
-        /* Responsive grid improvements - FIXED */
+        /* Responsive grid improvements */
         @media (min-width: 1024px) {
             .card-enhanced {
                 min-width: 100%;
@@ -497,7 +497,7 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
                 </div>
 
                 <!-- Users Table -->
-                <div class="table-enhanced rounded-3xl overflow-hidden animate-fade-in">
+                <div class="table-enhanced rounded-3xl overflow-hidden">
                     <!-- Table Header -->
                     <div class="p-4 sm:p-6 lg:p-8 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 sm:gap-6 border-b border-gray-200/50">
                         <div class="flex flex-col sm:flex-row flex-wrap items-start sm:items-center gap-3 sm:gap-4 w-full lg:w-auto">
@@ -518,19 +518,19 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
                     <div class="p-4 sm:p-6">
                         <div id="usersCards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-5 sm:gap-6 w-full">
                             <?php foreach ($usuarios as $user): ?>
-                                <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl animate-fade-in user-card group hover:shadow-2xl transition-all duration-500" data-nome="<?php echo strtolower(htmlspecialchars($user['nome'])); ?>" data-email="<?php echo strtolower(htmlspecialchars($user['email'])); ?>" data-setor="<?php echo strtolower(htmlspecialchars($user['id_setor'])); ?>">
+                                <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl user-card group hover:shadow-2xl transition-all duration-500" data-nome="<?php echo strtolower(htmlspecialchars($user['nome'] ?? '')); ?>" data-email="<?php echo strtolower(htmlspecialchars($user['email'] ?? '')); ?>" data-setor="<?php echo strtolower(htmlspecialchars($user['id_setor'] ?? '')); ?>">
                                     
                                     <!-- Header do Card com Avatar e Nome -->
                                     <div class="flex items-start gap-3 mb-4">
                                         <?php if (!empty($user['foto_perfil']) && $user['foto_perfil'] !== 'default.png') { ?>
                                             <div class="relative">
-                                                <img src="<?php echo '../../../main/assets/fotos_perfil/' . htmlspecialchars($user['foto_perfil'], ENT_QUOTES, 'UTF-8'); ?>" alt="Foto de perfil de <?php echo htmlspecialchars($user['nome']); ?>" class="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-2xl object-cover border-2 border-white shadow-lg flex-shrink-0">
+                                                <img src="<?php echo '../../../main/assets/fotos_perfil/' . htmlspecialchars($user['foto_perfil'], ENT_QUOTES, 'UTF-8'); ?>" alt="Foto de perfil de <?php echo htmlspecialchars($user['nome'] ?? 'Usuário'); ?>" class="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-2xl object-cover border-2 border-white shadow-lg flex-shrink-0">
                                                 <div class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
                                             </div>
                                         <?php } else { ?>
                                             <div class="relative">
                                                 <div class="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-2xl bg-gradient-to-br from-primary via-primary to-dark text-white flex items-center justify-center font-bold text-base sm:text-lg lg:text-xl flex-shrink-0 shadow-lg">
-                                                    <?php echo htmlspecialchars($user['nome'][0]); ?>
+                                                    <?php echo htmlspecialchars($user['nome'][0] ?? 'U'); ?>
                                                 </div>
                                                 <div class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
                                             </div>
@@ -538,11 +538,11 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
                                         
                                         <div class="min-w-0 flex-1 pt-1">
                                             <h3 class="font-bold text-dark text-base sm:text-lg lg:text-xl truncate mb-1 group-hover:text-primary transition-colors duration-300">
-                                                <?php echo htmlspecialchars($user['nome']); ?>
+                                                <?php echo htmlspecialchars($user['nome'] ?? 'Sem Nome'); ?>
                                             </h3>
                                             <p class="text-gray-500 text-sm sm:text-base truncate flex items-center gap-2">
                                                 <i class="fa-solid fa-envelope text-xs text-gray-400"></i>
-                                                <?php echo htmlspecialchars($user['email']); ?>
+                                                <?php echo htmlspecialchars($user['email'] ?? 'Sem E-mail'); ?>
                                             </p>
                                         </div>
                                     </div>
@@ -555,7 +555,7 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
                                                 <i class="fa-solid fa-id-card text-primary mr-2"></i>CPF
                                             </label>
                                             <span class="text-sm font-mono text-gray-800 bg-white px-2.5 py-1.5 rounded-lg border border-gray-200/50 block">
-                                                <?php echo htmlspecialchars($user['cpf']); ?>
+                                                <?php echo htmlspecialchars($user['cpf'] ?? 'Não Informado'); ?>
                                             </span>
                                         </div>
                                         
@@ -565,7 +565,7 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
                                                 <i class="fa-solid fa-building text-primary mr-2"></i>Setor
                                             </label>
                                             <span class="status-badge px-3 py-1.5 text-sm font-semibold rounded-xl bg-white text-primary border-2 border-accent/50 shadow-sm">
-                                                <?php echo htmlspecialchars($user['nome_setor']); ?>
+                                                <?php echo htmlspecialchars($user['nome_setor'] ?? 'Sem Setor'); ?>
                                             </span>
                                         </div>
                                     </div>
@@ -574,14 +574,14 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
                                     <div class="flex items-center justify-between pt-4 border-t border-gray-200/50">
                                         <div class="text-xs text-gray-400 font-medium">
                                             <i class="fa-solid fa-clock mr-1"></i>
-                                            ID: <?php echo $user['id']; ?>
+                                            ID: <?php echo $user['id'] ?? 'N/A'; ?>
                                         </div>
                                         
                                         <div class="flex items-center gap-2">
-                                            <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(<?php echo $user['id']; ?>)" title="Editar usuário">
+                                            <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(<?php echo $user['id'] ?? 0; ?>)" title="Editar usuário">
                                                 <i class='fa-solid fa-pen text-sm'></i>
                                             </button>
-                                            <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeleteUser(<?php echo $user['id']; ?>, '<?php echo htmlspecialchars($user['nome'], ENT_QUOTES, 'UTF-8'); ?>')" title="Remover usuário">
+                                            <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeleteUser(<?php echo $user['id'] ?? 0; ?>, '<?php echo htmlspecialchars($user['nome'] ?? 'Usuário', ENT_QUOTES, 'UTF-8'); ?>')" title="Remover usuário">
                                                 <i class='fa-solid fa-trash text-sm'></i>
                                             </button>
                                         </div>
@@ -758,10 +758,7 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
                 document.getElementById('inpUserId').value = user.id || '';
                 document.getElementById('inpNome').value = user.nome || '';
                 document.getElementById('inpEmail').value = user.email || '';
-                
-                // O CPF já vem com máscara do banco
                 document.getElementById('inpCpf').value = user.cpf || '';
-                
                 document.getElementById('inpSetor').value = user.id_setor || '';
                 document.getElementById('userForm').action = '../controllers/controller_usuario.php';
                 openModal('modalUser');
@@ -832,22 +829,22 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
         }
 
         function applyFilters() {
-            const q = document.getElementById('tableSearch').value.toLowerCase();
+            const q = document.getElementById('tableSearch').value.toLowerCase().trim();
             const cards = document.querySelectorAll('.user-card');
             let count = 0;
 
             cards.forEach(card => {
-                const nome = card.dataset.nome;
-                const email = card.dataset.email;
-                const setor = card.dataset.setor;
+                const nome = card.dataset.nome || '';
+                const email = card.dataset.email || '';
+                const setor = card.dataset.setor || '';
 
-                const matchesQuery = (nome.includes(q) || email.includes(q) || setor.includes(q));
-
-                if (matchesQuery) {
+                if (q === '') {
                     card.style.display = '';
                     count++;
                 } else {
-                    card.style.display = 'none';
+                    const matchesQuery = (nome.includes(q) || email.includes(q) || setor.includes(q));
+                    card.style.display = matchesQuery ? '' : 'none';
+                    if (matchesQuery) count++;
                 }
             });
 
@@ -856,12 +853,12 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
 
         // Função para aplicar máscara de CPF
         function aplicarMascaraCPF(input) {
-            let value = input.value.replace(/\D/g, ''); // Remove tudo que não é dígito
-            if (value.length > 11) value = value.slice(0, 11); // Limita a 11 dígitos
+            let value = input.value.replace(/\D/g, '');
+            if (value.length > 11) value = value.slice(0, 11);
             if (value.length > 0) {
-                value = value.replace(/(\d{3})(\d)/, '$1.$2'); // Coloca ponto depois do 3º dígito
-                value = value.replace(/(\d{3})(\d)/, '$1.$2'); // Coloca ponto depois do 6º dígito
-                value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2'); // Coloca hífen antes dos últimos 2 dígitos
+                value = value.replace(/(\d{3})(\d)/, '$1.$2');
+                value = value.replace(/(\d{3})(\d)/, '$1.$2');
+                value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
             }
             input.value = value;
         }
@@ -873,8 +870,15 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
 
         // Event listeners
         document.addEventListener('DOMContentLoaded', function() {
-            applyFilters(); // Inicial
-            document.getElementById('tableSearch').addEventListener('input', applyFilters);
+            // Inicializar contagem de resultados
+            const cards = document.querySelectorAll('.user-card');
+            document.getElementById('resultCount').textContent = `${cards.length} resultado${cards.length !== 1 ? 's' : ''}`;
+
+            // Adicionar listener para o campo de busca
+            const searchInput = document.getElementById('tableSearch');
+            if (searchInput) {
+                searchInput.addEventListener('input', applyFilters);
+            }
 
             // Aplicar máscara de CPF
             const cpfInput = document.getElementById('inpCpf');
@@ -883,19 +887,16 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
                     aplicarMascaraCPF(this);
                 });
                 
-                // Limitar o campo a 11 dígitos (sem máscara)
                 cpfInput.addEventListener('keypress', function(e) {
                     if (removerMascaraCPF(this.value).length >= 11 && e.key !== 'Backspace' && e.key !== 'Delete') {
                         e.preventDefault();
                     }
                 });
 
-                // Reaplicar máscara ao focar no campo
                 cpfInput.addEventListener('focus', function() {
                     aplicarMascaraCPF(this);
                 });
 
-                // Manter máscara ao desfocar, mas apenas se houver valor
                 cpfInput.addEventListener('blur', function() {
                     if (this.value) {
                         aplicarMascaraCPF(this);
@@ -905,31 +906,21 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
 
             // Form submissions
             document.getElementById('userForm').addEventListener('submit', function(e) {
-                e.preventDefault(); // Prevenir envio padrão para validação
+                e.preventDefault();
                 
-                // Validação
                 if (!this.inpNome.value.trim() || !this.inpEmail.value.trim() || !this.inpCpf.value.trim() || !this.inpSetor.value) {
                     showNotification('Preencha todos os campos obrigatórios.', 'error');
                     return;
                 }
                 
-                // Validar formato do CPF antes de enviar (com máscara)
                 const cpf = this.inpCpf.value;
                 if (cpf.length !== 14 || !/^\d{3}\.\d{3}\.\d{3}-\d{2}$/.test(cpf)) {
                     showNotification('CPF deve estar no formato 000.000.000-00.', 'error');
                     return;
                 }
                 
-                // Armazenar o valor mascarado para manter no campo após a validação
                 const cpfMascarado = this.inpCpf.value;
-                
-                // Manter a máscara no campo para enviar com formatação
-                // Não alterar o valor do campo - enviar com máscara
-                
-                // Enviar o formulário
                 this.submit();
-                
-                // Restaurar o valor mascarado no campo após o envio
                 this.inpCpf.value = cpfMascarado;
             });
 
@@ -940,22 +931,9 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
                 }
             });
 
-            // Outros listeners existentes
-            const userBtn = document.getElementById('userMenuButton');
-            const userMenu = document.getElementById('userMenu');
-            if (userBtn && userMenu) {
-                userBtn.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    userMenu.classList.toggle('hidden');
-                });
-                document.addEventListener('click', function(e) {
-                    if (!userMenu.contains(e.target)) {
-                        userMenu.classList.add('hidden');
-                    }
-                });
-            }
             document.documentElement.style.scrollBehavior = 'smooth';
 
+            // IntersectionObserver para animações suaves
             const observerOptions = {
                 threshold: 0.1,
                 rootMargin: '0px 0px -50px 0px'
@@ -964,15 +942,15 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
+                        entry.target.classList.add('animate-fade-in');
                         entry.target.style.opacity = '1';
                         entry.target.style.transform = 'translateY(0)';
+                        observer.unobserve(entry.target); // Parar de observar após a animação
                     }
                 });
             }, observerOptions);
 
-            document.querySelectorAll('.animate-fade-in, .animate-slide-up').forEach(el => {
-                el.style.opacity = '0';
-                el.style.transform = 'translateY(20px)';
+            document.querySelectorAll('.card-enhanced').forEach(el => {
                 observer.observe(el);
             });
 

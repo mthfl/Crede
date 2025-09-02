@@ -144,78 +144,6 @@ class admin extends connect
         }
     }
 
-    /**
-     * Editar tipo de usuário existente
-     */
-    public function editarTipoUsuario(int $id, string $tipo): array
-    {
-        try {
-            // Verificar se o tipo existe
-            $stmt_check = $this->connect->prepare("SELECT id FROM {$this->table3} WHERE id = :id");
-            $stmt_check->bindValue(":id", $id);
-            $stmt_check->execute();
-
-            if ($stmt_check->rowCount() == 0) {
-                return ['success' => false, 'message' => 'Tipo de usuário não encontrado'];
-            }
-
-            // Verificar se o novo tipo já existe em outro registro
-            $stmt_check = $this->connect->prepare("SELECT id FROM {$this->table3} WHERE tipo = :tipo AND id != :id");
-            $stmt_check->bindValue(":tipo", trim($tipo));
-            $stmt_check->bindValue(":id", $id);
-            $stmt_check->execute();
-
-            if ($stmt_check->rowCount() > 0) {
-                return ['success' => false, 'message' => 'Tipo de usuário já existe'];
-            }
-
-            $stmt = $this->connect->prepare("UPDATE {$this->table3} SET tipo = :tipo WHERE id = :id");
-            $stmt->bindValue(":tipo", trim($tipo));
-            $stmt->bindValue(":id", $id);
-
-            if ($stmt->execute()) {
-                return ['success' => true, 'message' => 'Tipo de usuário atualizado com sucesso'];
-            } else {
-                return ['success' => false, 'message' => 'Erro ao atualizar tipo de usuário'];
-            }
-        } catch (Exception $e) {
-            error_log("Erro ao editar tipo de usuário: " . $e->getMessage());
-            return ['success' => false, 'message' => 'Erro interno do sistema'];
-        }
-    }
-
-    /**
-     * Excluir tipo de usuário
-     */
-    public function excluirTipoUsuario(int $id): array
-    {
-        try {
-            // Verificar se há permissões usando este tipo
-            $stmt_check = $this->connect->prepare("SELECT id FROM {$this->table4} WHERE id_tipos_usuarios = :id");
-            $stmt_check->bindValue(":id", $id);
-            $stmt_check->execute();
-
-            if ($stmt_check->rowCount() > 0) {
-                return ['success' => false, 'message' => 'Não é possível excluir o tipo. Existem permissões vinculadas a ele.'];
-            }
-
-            $stmt = $this->connect->prepare("DELETE FROM {$this->table3} WHERE id = :id");
-            $stmt->bindValue(":id", $id);
-
-            if ($stmt->execute()) {
-                return ['success' => true, 'message' => 'Tipo de usuário excluído com sucesso'];
-            } else {
-                return ['success' => false, 'message' => 'Erro ao excluir tipo de usuário'];
-            }
-        } catch (Exception $e) {
-            error_log("Erro ao excluir tipo de usuário: " . $e->getMessage());
-            return ['success' => false, 'message' => 'Erro interno do sistema'];
-        }
-    }
-
-
-
-
     // ==================== FUNÇÕES PARA USUÁRIOS ====================
 
     /**
@@ -352,14 +280,13 @@ class admin extends connect
         try {
 
             // Verificar se a permissão já existe
-            $stmt_check = $this->connect->prepare("SELECT id FROM {$this->table4} WHERE id_usuarios = :id_usuario AND id_tipos_usuarios = :id_tipo_usuario AND id_sistemas = :id_sistema");
+            $stmt_check = $this->connect->prepare("SELECT id FROM {$this->table4} WHERE id_usuarios = :id_usuario AND id_sistemas = :id_sistema");
             $stmt_check->bindValue(":id_usuario", $id_usuario);
-            $stmt_check->bindValue(":id_tipo_usuario", $id_tipo_usuario);
             $stmt_check->bindValue(":id_sistema", $id_sistema);
             $stmt_check->execute();
 
             if ($stmt_check->rowCount() > 0) {
-                return 0;
+                return 3;
             }
 
             $stmt = $this->connect->prepare("INSERT INTO {$this->table4} (id_usuarios, id_tipos_usuarios, id_sistemas) VALUES (:id_usuario, :id_tipo_usuario, :id_sistema)");
