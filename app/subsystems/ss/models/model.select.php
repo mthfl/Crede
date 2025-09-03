@@ -1,0 +1,49 @@
+<?php
+require_once(__DIR__ . '/../config/connect.php');
+class select extends connect
+{
+    protected string $table1;
+    protected string $table2;
+    protected string $table3;
+    protected string $table4;
+    protected string $table5;
+    protected string $table6;
+    protected string $table7;
+    protected string $table8;
+    protected string $table9;
+    protected string $table10;
+    protected string $table11;
+    protected string $table12;
+
+    function __construct($escola)
+    {
+        parent::__construct($escola);
+        $table = require(__DIR__ . '/../../../.env/tables.php');
+        $this->table1 = $table["crede_ss_$escola"][1];
+        $this->table2 = $table["crede_ss_$escola"][2];
+        $this->table3 = $table["crede_ss_$escola"][3];
+        $this->table4 = $table["crede_ss_$escola"][4];
+        $this->table5 = $table["crede_ss_$escola"][5];
+        $this->table6 = $table["crede_ss_$escola"][6];
+        $this->table7 = $table["crede_ss_$escola"][7];
+        $this->table8 = $table["crede_ss_$escola"][8];
+        $this->table9 = $table["crede_ss_$escola"][9];
+        $this->table10 = $table["crede_ss_$escola"][10];
+        $this->table11 = $table["crede_ss_$escola"][11];
+        $this->table12 = $table["crede_ss_$escola"][12];
+    }
+
+    public function select_cursos(): array{
+
+        $stmt_cursos = $this->connect->query("SELECT * FROM $this->table2");
+
+        return $cursos = $stmt_cursos->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function select_usuarios(): array{
+
+        $stmt_cursos = $this->connect->query("SELECT * FROM $this->table5");
+
+        return $cursos = $stmt_cursos->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+}

@@ -109,7 +109,7 @@ class model_usuario extends connect
                     }
 
                     $_SESSION['id'] = $user['id'];
-                    $_SESSION['nome'] = $user['nome'];
+                    $_SESSION['nome'] = $user['nome_user'];
                     $_SESSION['email'] = $user['email'];
                     $_SESSION['tipo_usuario'] = $user['tipo_usuario'];
                     $_SESSION['escola'] = $escola;
