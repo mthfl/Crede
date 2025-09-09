@@ -35,10 +35,10 @@ class connect
             }
         } catch (PDOException $e) {
 
-            /*error_log("Erro de conexão com banco: " . $e->getMessage());
+            error_log("Erro de conexão com banco: " . $e->getMessage());
             $this->connect = null;
             header('location:../views/windows/desconnect.php');
-            exit();*/
+            exit();
         }
     }
 }
