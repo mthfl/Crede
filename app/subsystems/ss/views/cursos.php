@@ -1,0 +1,770 @@
+<?php
+require_once(__DIR__ . '/../models/sessions.php');
+$session = new sessions();
+$session->autenticar_session();
+$session->tempo_session();
+
+require_once(__DIR__ . '/../config/connect.php');
+$escola = $_SESSION['escola'];
+
+new connect($escola);
+require_once(__DIR__ . '/../models/model.select.php');
+$select = new select($escola);
+?>
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Escolar - Cursos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#005A24',
+                        secondary: '#FFA500',
+                        accent: '#E6F4EA',
+                        dark: '#1A3C34',
+                        light: '#F8FAF9',
+                    },
+                    fontFamily: {
+                        'display': ['Inter', 'system-ui', 'sans-serif'],
+                        'body': ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    spacing: {
+                        '18': '4.5rem',
+                        '88': '22rem',
+                    },
+                    animation: {
+                        'slide-in-left': 'slideInLeft 0.5s ease-out',
+                        'slide-in-right': 'slideInRight 0.5s ease-out',
+                        'fade-in-up': 'fadeInUp 0.6s ease-out',
+                        'scale-in': 'scaleIn 0.4s ease-out',
+                        'pulse-soft': 'pulseSoft 2s ease-in-out infinite',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+        :root {
+            --primary: #005A24;
+            --secondary: #FFA500;
+            --accent: #E6F4EA;
+            --dark: #1A3C34;
+            --light: #F8FAF9;
+        }
+
+        * {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        .sidebar {
+            transform: translateX(-100%);
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            backdrop-filter: blur(10px);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 100%);
+        }
+
+        .sidebar.open {
+            transform: translateX(0);
+        }
+
+        .overlay {
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            backdrop-filter: blur(2px);
+        }
+
+        .overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes pulseSoft {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.8;
+            }
+        }
+
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-hover::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .card-hover:hover::before {
+            left: 100%;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 25px 50px -12px rgba(0, 90, 36, 0.25), 0 0 0 1px rgba(0, 90, 36, 0.05);
+        }
+
+        .btn-animate {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .btn-animate::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s;
+        }
+
+        .btn-animate:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn-animate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-animate:active {
+            transform: translateY(0);
+        }
+
+        .nav-item {
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            border-radius: 12px;
+        }
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: var(--secondary);
+            border-radius: 0 4px 4px 0;
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .nav-item:hover::before {
+            transform: scaleY(1);
+        }
+
+        .nav-item:hover {
+            transform: translateX(8px);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar {
+            z-index: 50;
+        }
+
+        .overlay {
+            z-index: 45;
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            width: 100vw;
+            max-width: 20rem;
+            z-index: 50;
+        }
+
+        @media (min-width: 1024px) {
+            .sidebar {
+                width: 20rem;
+                position: static;
+                flex-shrink: 0;
+            }
+
+            .main-content {
+                flex: 1;
+                min-width: 0;
+                margin-left: 0;
+                overflow-x: hidden;
+            }
+
+            body {
+                overflow-x: hidden;
+            }
+        }
+
+        .grid-item {
+            animation: fadeInUp 0.6s ease-out forwards;
+            opacity: 0;
+        }
+
+        .grid-item:nth-child(1) { animation-delay: 0.1s; }
+        .grid-item:nth-child(2) { animation-delay: 0.2s; }
+        .grid-item:nth-child(3) { animation-delay: 0.3s; }
+        .grid-item:nth-child(4) { animation-delay: 0.4s; }
+        .grid-item:nth-child(5) { animation-delay: 0.5s; }
+        .grid-item:nth-child(6) { animation-delay: 0.6s; }
+
+        .focus-ring:focus {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+        }
+
+        /* Foco usando paleta */
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        input[type="color"]:focus,
+        select:focus,
+        textarea:focus,
+        button:focus,
+        .btn-animate:focus {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+            border-color: var(--primary);
+        }
+
+        input[type="checkbox"]:focus,
+        input[type="radio"]:focus {
+            outline: 2px solid var(--secondary);
+            outline-offset: 2px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 3px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 3px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: var(--dark);
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100vw;
+                max-width: 320px;
+            }
+
+            .card-hover:hover {
+                transform: none;
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            }
+
+            .nav-item:hover {
+                transform: none;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-white min-h-screen font-body">
+    <div id="overlay" class="overlay fixed inset-0 bg-black/30 z-40 lg:hidden"></div>
+    <div class="flex h-screen bg-gray-50 overflow-hidden">
+        <aside id="sidebar" class="sidebar fixed left-0 top-0 h-screen w-80 shadow-2xl z-50 lg:translate-x-0 lg:static lg:z-auto custom-scrollbar overflow-y-auto">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-8 pb-6 border-b border-white/20">
+                    <div class="animate-slide-in-left">
+                        <div class="flex items-center space-x-3 mb-2">
+                            <img src="https://i.postimg.cc/0N0dsxrM/Bras-o-do-Cear-svg-removebg-preview.png" alt="Brasão do Ceará" class="w-8 h-10 transition-transform hover:scale-105">
+                            <h2 class="text-white text-2xl font-bold font-display">Sistema Seleção</h2>
+                        </div>
+                    </div>
+                    <button id="closeSidebar" class="text-white lg:hidden btn-animate p-2 rounded-xl hover:bg-white/10 focus-ring">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <nav class="space-y-2">
+                    <div class="animate-slide-in-left" style="animation-delay: 0.1s;">
+                        <a href="../index.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
+                            <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5a2 2 0 012-2h4a2 2 0 012 2v2H8V5z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <span class="font-semibold text-base">Dashboard</span>
+                                <p class="text-green-200 text-xs mt-1">Página inicial</p>
+                            </div>
+                        </a>
+                    </div>
+                    <?php if ($_SESSION['tipo_usuario'] == 'admin') { ?>
+                        <div class="animate-slide-in-left" style="animation-delay: 0.2s;">
+                            <a href="#" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
+                                <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <span class="font-semibold text-base">Resultados</span>
+                                    <p class="text-green-200 text-xs mt-1">Visualizar dados</p>
+                                </div>
+                            </a>
+                        </div>
+                    <?php } ?>
+                    <div class="animate-slide-in-left" style="animation-delay: 0.3s;">
+                        <a href="#" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
+                            <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <span class="font-semibold text-base">Relatórios</span>
+                                <p class="text-green-200 text-xs mt-1">Gerar documentos</p>
+                            </div>
+                        </a>
+                    </div>
+                    <?php if ($_SESSION['tipo_usuario'] == 'admin') { ?>
+                        <div class="animate-slide-in-left" style="animation-delay: 0.4s;">
+                            <a href="candidatos.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
+                                <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <span class="font-semibold text-base">Candidatos</span>
+                                    <p class="text-green-200 text-xs mt-1">Gerenciar inscrições</p>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="animate-slide-in-left" style="animation-delay: 0.5s;">
+                            <a href="cursos.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring bg-white/10">
+                                <div class="w-12 h-12 bg-secondary rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <span class="font-semibold text-base">Cursos</span>
+                                    <p class="text-green-200 text-xs mt-1">Administrar cursos</p>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="animate-slide-in-left" style="animation-delay: 0.6s;">
+                            <a href="usuario.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
+                                <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <span class="font-semibold text-base">Usuários</span>
+                                    <p class="text-green-200 text-xs mt-1">Controle de acesso</p>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="animate-slide-in-left" style="animation-delay: 0.7s;">
+                            <a href="#" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
+                                <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-red-500 group-hover:scale-110 transition-all duration-300">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <span class="font-semibold text-base">Limpar Banco</span>
+                                    <p class="text-green-200 text-xs mt-1">Resetar dados</p>
+                                </div>
+                            </a>
+                        </div>
+                    <?php } ?>
+                </nav>
+            </div>
+        </aside>
+        <div class="main-content flex-1 bg-white">
+            <header class="bg-white shadow-sm border-b border-gray-200 z-30 sticky top-0">
+                <div class="px-3 sm:px-4 md:px-6 lg:px-8 py-3 sm:py-4">
+                    <div class="flex flex-col space-y-3 sm:space-y-4 lg:flex-row lg:items-center lg:justify-between">
+                        <div class="flex items-center justify-between lg:justify-start">
+                            <button id="openSidebar" class="text-primary lg:hidden btn-animate p-2 sm:p-3 rounded-xl hover:bg-accent focus-ring">
+                                <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                                </svg>
+                            </button>
+                            <div class="ml-4">
+                                <h1 class="text-xl sm:text-2xl font-bold text-primary font-display">Gerenciar Cursos</h1>
+                                <p class="text-sm text-gray-600 mt-1">Administre os cursos disponíveis no sistema</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between lg:justify-end space-x-2 sm:space-x-4">
+                            <div class="hidden sm:block text-right">
+                                <p class="text-xs sm:text-sm font-semibold text-gray-900">Bem-vindo,</p>
+                                <p class="text-xs sm:text-sm text-primary font-medium"><?= $_SESSION['nome'] ?? 'Usuário' ?></p>
+                            </div>
+                            <div class="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-primary to-dark rounded-full flex items-center justify-center">
+                                <span class="text-white font-bold text-xs sm:text-sm"><?= strtoupper(substr($_SESSION['nome'] ?? 'U', 0, 1)) ?></span>
+                            </div>
+                            <a href="../logout.php" class="bg-primary text-white px-3 sm:px-4 md:px-6 py-2 sm:py-3 rounded-xl hover:bg-dark btn-animate font-semibold shadow-lg focus-ring text-xs sm:text-sm">
+                                <span class="hidden sm:inline">Sair</span>
+                                <svg class="w-4 h-4 sm:w-5 sm:h-5 sm:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            <main class="p-4 sm:p-6 lg:p-8">
+                <?php $cursos = $select->select_cursos(); ?>
+                <?php if (count($cursos) === 0) { ?>
+                    <div class="bg-white border border-gray-200 rounded-2xl p-8 text-center max-w-2xl mx-auto">
+                        <h3 class="text-2xl font-bold text-primary mb-2 font-display">Nenhum curso cadastrado</h3>
+                        <p class="text-gray-600 mb-6">Crie o primeiro curso para começar a gerenciar.</p>
+                        <button onclick="openCreateModal()" class="inline-flex items-center bg-gradient-to-r from-primary to-dark text-white px-6 py-3 rounded-xl hover:from-dark hover:to-primary btn-animate font-semibold shadow-xl focus-ring">
+                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                            Criar novo curso
+                        </button>
+                    </div>
+                <?php } else { ?>
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="text-lg font-semibold text-gray-800">Cursos cadastrados</div>
+                        <button onclick="openCreateModal()" class="inline-flex items-center bg-gradient-to-r from-primary to-dark text-white px-6 py-3 rounded-xl hover:from-dark hover:to-primary btn-animate font-semibold shadow-xl focus-ring">
+                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                            Criar novo curso
+                        </button>
+                    </div>
+                    <div id="gridCursos" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                        <?php foreach ($cursos as $index => $curso) { ?>
+                            <div 
+                                class="grid-item card-hover bg-white rounded-2xl shadow-xl border-0 overflow-hidden group relative" 
+                                data-curso-id="<?= (int)$curso['id'] ?>"
+                                data-curso-nome="<?= htmlspecialchars($curso['nome_curso'], ENT_QUOTES, 'UTF-8') ?>"
+                                data-curso-cor="<?= htmlspecialchars($curso['cor_curso'], ENT_QUOTES, 'UTF-8') ?>"
+                            >
+                                <div class="h-2 w-full curso-bar" style="background-color: <?= $curso['cor_curso'] ?>"></div>
+                                <div class="p-6">
+                                    <div class="text-center mb-6">
+                                        <h3 class="curso-title text-xl font-bold leading-tight font-display group-hover:scale-105 transition-all duration-300" style="color: <?= $curso['cor_curso'] ?>">
+                                            <?= $curso['nome_curso'] ?>
+                                        </h3>
+                                        <div class="w-16 h-0.5 mx-auto mt-3 rounded-full curso-underline" style="background-color: <?= $curso['cor_curso'] ?>40"></div>
+                                    </div>
+                                    <div class="flex space-x-2 mt-6">
+                                        <button onclick="editCursoById(<?= (int)$curso['id'] ?>)" class="flex-1 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-all duration-300 font-medium text-sm">
+                                            <span class="flex items-center justify-center">
+                                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                                </svg>
+                                                Editar
+                                            </span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php } ?>
+                    </div>
+                <?php } ?>
+            </main>
+        </div>
+    </div>
+
+    <!-- Modal para criar/editar curso -->
+    <div id="cursoModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 hidden animate-scale-in">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md border border-gray-200/50 relative">
+                <!-- Modal Header -->
+                <div id="modalHeader" class="text-white p-4 rounded-t-2xl relative overflow-hidden" style="background: linear-gradient(135deg, #005A24, #1A3C34);">
+                    <div class="absolute inset-0 bg-gradient-to-br from-black/20 to-transparent"></div>
+                    <div class="relative flex justify-between items-center">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm border border-white/30 shadow-lg">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h2 id="modalTitle" class="text-lg sm:text-xl font-bold font-display tracking-tight">Adicionar Curso</h2>
+                                <p class="text-white/90 text-sm mt-1 font-medium">Preencha os dados do curso</p>
+                            </div>
+                        </div>
+                        <button onclick="closeModal()" class="w-8 h-8 bg-white/20 hover:bg-white/30 rounded-xl flex items-center justify-center transition-all duration-300 backdrop-blur-sm group border border-white/30 shadow-lg">
+                            <svg class="w-4 h-4 group-hover:rotate-90 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Modal Content -->
+                <div class="p-6">
+                    <form id="cursoForm" class="space-y-4">
+                        <input type="hidden" id="cursoId" name="curso_id">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Nome do Curso *</label>
+                            <input type="text" id="nomeCurso" name="nome_curso" required placeholder="Digite o nome do curso" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300 text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Cor do Curso *</label>
+                            <div class="flex items-center space-x-3">
+                                <input type="color" id="corCurso" name="cor_curso" value="#005A24" class="w-12 h-10 border border-gray-300 rounded-lg cursor-pointer">
+                                <input type="text" id="corCursoText" placeholder="#005A24" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300 text-sm">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Modal Actions -->
+                <div class="flex justify-between p-4 border-t border-gray-200 bg-white">
+                    <button onclick="closeModal()" class="px-6 py-3 border-2 border-primary text-primary rounded-lg hover:bg-primary/10 transition-all duration-300 font-semibold text-sm group">
+                        <span class="flex items-center">
+                            <svg class="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                            Cancelar
+                        </span>
+                    </button>
+                    <button onclick="saveCurso()" class="px-6 py-3 bg-primary text-white rounded-lg hover:bg-dark transition-all duration-300 font-semibold text-sm group">
+                        <span class="flex items-center">
+                            <svg class="w-4 h-4 mr-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span id="saveButtonText">Salvar</span>
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+        const openSidebar = document.getElementById('openSidebar');
+        const closeSidebar = document.getElementById('closeSidebar');
+
+        // Sidebar toggle functionality
+        openSidebar.addEventListener('click', () => {
+            sidebar.classList.add('open');
+            overlay.classList.add('show');
+        });
+
+        closeSidebar.addEventListener('click', () => {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('show');
+        });
+
+        overlay.addEventListener('click', () => {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('show');
+        });
+
+        // Modal functions
+        function openCreateModal() {
+            document.getElementById('modalTitle').textContent = 'Adicionar Curso';
+            document.getElementById('saveButtonText').textContent = 'Salvar';
+            document.getElementById('cursoForm').reset();
+            document.getElementById('cursoId').value = '';
+            document.getElementById('corCurso').value = '#005A24';
+            document.getElementById('corCursoText').value = '#005A24';
+            document.getElementById('cursoModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function editCursoById(id) {
+            const card = document.querySelector(`[data-curso-id="${id}"]`);
+            if (!card) return;
+            const nome = card.getAttribute('data-curso-nome') || '';
+            const cor = card.getAttribute('data-curso-cor') || '#005A24';
+            document.getElementById('modalTitle').textContent = 'Editar Curso';
+            document.getElementById('saveButtonText').textContent = 'Atualizar';
+            document.getElementById('cursoId').value = id;
+            document.getElementById('nomeCurso').value = nome;
+            document.getElementById('corCurso').value = cor;
+            document.getElementById('corCursoText').value = cor;
+            document.getElementById('cursoModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('cursoModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function deleteCurso(id, nome) {
+            if (confirm(`Tem certeza que deseja excluir o curso "${nome}"? Esta ação não pode ser desfeita.`)) {
+                // Aqui você pode implementar a lógica para excluir o curso
+                fetch('processar_curso.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `action=delete&curso_id=${id}`
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Curso excluído com sucesso!');
+                        location.reload();
+                    } else {
+                        alert('Erro ao excluir curso: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro:', error);
+                    alert('Ocorreu um erro ao excluir o curso.');
+                });
+            }
+        }
+
+        function saveCurso() {
+            const id = document.getElementById('cursoId').value;
+            const nome = document.getElementById('nomeCurso').value.trim();
+            const cor = document.getElementById('corCurso').value.trim();
+
+            // Atualiza visualmente o card se existir (edição sem backend)
+            if (id) {
+                const card = document.querySelector(`[data-curso-id="${id}"]`);
+                if (card) {
+                    const title = card.querySelector('.curso-title');
+                    const bar = card.querySelector('.curso-bar');
+                    const underline = card.querySelector('.curso-underline');
+                    if (title) {
+                        title.textContent = nome || title.textContent;
+                        title.style.color = cor || title.style.color;
+                    }
+                    if (bar) bar.style.backgroundColor = cor || bar.style.backgroundColor;
+                    if (underline) underline.style.backgroundColor = (cor ? `${cor}40` : underline.style.backgroundColor);
+                    // Atualiza data-attributes
+                    card.setAttribute('data-curso-nome', nome);
+                    card.setAttribute('data-curso-cor', cor);
+                }
+                closeModal();
+                return;
+            }
+
+            // Criação visual de um novo card quando não há backend
+            const grid = document.getElementById('gridCursos');
+            if (grid) {
+                const newId = Date.now();
+                const corVal = cor || '#005A24';
+                const nomeVal = nome || 'Novo Curso';
+                const wrapper = document.createElement('div');
+                wrapper.className = 'grid-item card-hover bg-white rounded-2xl shadow-xl border-0 overflow-hidden group relative';
+                wrapper.setAttribute('data-curso-id', newId);
+                wrapper.setAttribute('data-curso-nome', nomeVal);
+                wrapper.setAttribute('data-curso-cor', corVal);
+                wrapper.innerHTML = `
+                    <div class="h-2 w-full curso-bar" style="background-color: ${corVal}"></div>
+                    <div class="p-6">
+                        <div class="text-center mb-6">
+                            <h3 class="curso-title text-xl font-bold leading-tight font-display group-hover:scale-105 transition-all duration-300" style="color: ${corVal}">${nomeVal}</h3>
+                            <div class="w-16 h-0.5 mx-auto mt-3 rounded-full curso-underline" style="background-color: ${corVal}40"></div>
+                        </div>
+                        <div class="flex space-x-2 mt-6">
+                            <button onclick="editCursoById(${newId})" class="flex-1 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-all duration-300 font-medium text-sm">
+                                <span class="flex items-center justify-center">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                    </svg>
+                                    Editar
+                                </span>
+                            </button>
+                        </div>
+                    </div>`;
+
+                grid.prepend(wrapper);
+                closeModal();
+            }
+        }
+
+        // Sincronizar inputs de cor
+        document.getElementById('corCurso').addEventListener('input', function() {
+            document.getElementById('corCursoText').value = this.value;
+        });
+
+        document.getElementById('corCursoText').addEventListener('input', function() {
+            if (this.value.match(/^#[0-9A-F]{6}$/i)) {
+                document.getElementById('corCurso').value = this.value;
+            }
+        });
+    </script>
+</body>
+
+</html>
