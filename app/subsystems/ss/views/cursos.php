@@ -355,6 +355,7 @@ $select = new select($escola);
                     </button>
                 </div>
                 <nav class="space-y-2">
+                    <!-- Dashboard -->
                     <div class="animate-slide-in-left" style="animation-delay: 0.1s;">
                         <a href="../index.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
                             <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
@@ -369,22 +370,54 @@ $select = new select($escola);
                             </div>
                         </a>
                     </div>
-                    <?php if ($_SESSION['tipo_usuario'] == 'admin') { ?>
-                        <div class="animate-slide-in-left" style="animation-delay: 0.2s;">
-                            <a href="#" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
-                                <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
-                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <span class="font-semibold text-base">Resultados</span>
-                                    <p class="text-green-200 text-xs mt-1">Visualizar dados</p>
-                                </div>
-                            </a>
-                        </div>
-                    <?php } ?>
+
+                    <!-- Cursos -->
+                    <div class="animate-slide-in-left" style="animation-delay: 0.2s;">
+                        <a href="cursos.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring bg-white/10">
+                            <div class="w-12 h-12 bg-secondary rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <span class="font-semibold text-base">Cursos</span>
+                                <p class="text-green-200 text-xs mt-1">Administrar cursos</p>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- Candidatos -->
                     <div class="animate-slide-in-left" style="animation-delay: 0.3s;">
+                        <a href="candidatos.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
+                            <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <span class="font-semibold text-base">Candidatos</span>
+                                <p class="text-green-200 text-xs mt-1">Gerenciar inscrições</p>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- Usuários -->
+                    <div class="animate-slide-in-left" style="animation-delay: 0.4s;">
+                        <a href="usuario.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
+                            <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <span class="font-semibold text-base">Usuários</span>
+                                <p class="text-green-200 text-xs mt-1">Controle de acesso</p>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- Relatórios -->
+                    <div class="animate-slide-in-left" style="animation-delay: 0.5s;">
                         <a href="#" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
                             <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -397,60 +430,21 @@ $select = new select($escola);
                             </div>
                         </a>
                     </div>
-                    <?php if ($_SESSION['tipo_usuario'] == 'admin') { ?>
-                        <div class="animate-slide-in-left" style="animation-delay: 0.4s;">
-                            <a href="candidatos.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
-                                <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
-                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <span class="font-semibold text-base">Candidatos</span>
-                                    <p class="text-green-200 text-xs mt-1">Gerenciar inscrições</p>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="animate-slide-in-left" style="animation-delay: 0.5s;">
-                            <a href="cursos.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring bg-white/10">
-                                <div class="w-12 h-12 bg-secondary rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
-                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <span class="font-semibold text-base">Cursos</span>
-                                    <p class="text-green-200 text-xs mt-1">Administrar cursos</p>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="animate-slide-in-left" style="animation-delay: 0.6s;">
-                            <a href="usuario.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
-                                <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
-                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <span class="font-semibold text-base">Usuários</span>
-                                    <p class="text-green-200 text-xs mt-1">Controle de acesso</p>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="animate-slide-in-left" style="animation-delay: 0.7s;">
-                            <a href="#" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
-                                <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-red-500 group-hover:scale-110 transition-all duration-300">
-                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <span class="font-semibold text-base">Limpar Banco</span>
-                                    <p class="text-green-200 text-xs mt-1">Resetar dados</p>
-                                </div>
-                            </a>
-                        </div>
-                    <?php } ?>
+
+                    <!-- Limpar Banco -->
+                    <div class="animate-slide-in-left" style="animation-delay: 0.6s;">
+                        <a href="#" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
+                            <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-red-500 group-hover:scale-110 transition-all duration-300">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <span class="font-semibold text-base">Limpar Banco</span>
+                                <p class="text-green-200 text-xs mt-1">Resetar dados</p>
+                            </div>
+                        </a>
+                    </div>
                 </nav>
             </div>
         </aside>
@@ -464,10 +458,7 @@ $select = new select($escola);
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                                 </svg>
                             </button>
-                            <div class="ml-4">
-                                <h1 class="text-xl sm:text-2xl font-bold text-primary font-display">Gerenciar Cursos</h1>
-                                <p class="text-sm text-gray-600 mt-1">Administre os cursos disponíveis no sistema</p>
-                            </div>
+                        
                         </div>
                         <div class="flex items-center justify-between lg:justify-end space-x-2 sm:space-x-4">
                             <div class="hidden sm:block text-right">
@@ -502,7 +493,7 @@ $select = new select($escola);
                     </div>
                 <?php } else { ?>
                     <div class="flex items-center justify-between mb-6">
-                        <div class="text-lg font-semibold text-gray-800">Cursos cadastrados</div>
+                  
                         <button onclick="openCreateModal()" class="inline-flex items-center bg-gradient-to-r from-primary to-dark text-white px-6 py-3 rounded-xl hover:from-dark hover:to-primary btn-animate font-semibold shadow-xl focus-ring">
                             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
@@ -510,34 +501,27 @@ $select = new select($escola);
                             Criar novo curso
                         </button>
                     </div>
-                    <div id="gridCursos" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                    <div id="gridCursos" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
                         <?php foreach ($cursos as $index => $curso) { ?>
-                            <div 
-                                class="grid-item card-hover bg-white rounded-2xl shadow-xl border-0 overflow-hidden group relative" 
-                                data-curso-id="<?= (int)$curso['id'] ?>"
-                                data-curso-nome="<?= htmlspecialchars($curso['nome_curso'], ENT_QUOTES, 'UTF-8') ?>"
-                                data-curso-cor="<?= htmlspecialchars($curso['cor_curso'], ENT_QUOTES, 'UTF-8') ?>"
-                            >
-                                <div class="h-2 w-full curso-bar" style="background-color: <?= $curso['cor_curso'] ?>"></div>
-                                <div class="p-6">
-                                    <div class="text-center mb-6">
-                                        <h3 class="curso-title text-xl font-bold leading-tight font-display group-hover:scale-105 transition-all duration-300" style="color: <?= $curso['cor_curso'] ?>">
-                                            <?= $curso['nome_curso'] ?>
-                                        </h3>
-                                        <div class="w-16 h-0.5 mx-auto mt-3 rounded-full curso-underline" style="background-color: <?= $curso['cor_curso'] ?>40"></div>
+                            <article class="grid-item card-hover bg-white rounded-2xl shadow-xl border-0 overflow-hidden group relative">
+                                <div class="h-2 w-full" style="background-color: <?= $curso['cor_curso'] ?>"></div>
+                                <div class="p-8">
+                                    <div class="text-center mb-8">
+                                        <h3 class="text-2xl font-bold leading-tight font-display group-hover:scale-105 transition-all duration-300" style="color: <?= $curso['cor_curso'] ?>"><?= $curso['nome_curso'] ?></h3>
+                                        <div class="w-16 h-0.5 mx-auto mt-3 rounded-full" style="background-color: <?= $curso['cor_curso'] ?>40"></div>
                                     </div>
-                                    <div class="flex space-x-2 mt-6">
-                                        <button onclick="editCursoById(<?= (int)$curso['id'] ?>)" class="flex-1 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-all duration-300 font-medium text-sm">
-                                            <span class="flex items-center justify-center">
-                                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div class="space-y-4">
+                                        <button onclick="editCurso(<?= $curso['id'] ?>, '<?= $curso['nome_curso'] ?>', '<?= $curso['cor_curso'] ?>')" class="w-full bg-transparent py-2.5 px-5 rounded-lg hover:bg-gray-50 btn-animate flex items-center justify-center font-medium shadow-sm group/btn focus-ring transition-all duration-300 border hover:border-opacity-80" style="border-color: <?= $curso['cor_curso'] ?>; color: <?= $curso['cor_curso'] ?>">
+                                            <div class="w-6 h-6 rounded-md flex items-center justify-center mr-3 group-hover/btn:scale-110 transition-all duration-300" style="background-color: <?= $curso['cor_curso'] ?>15">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: <?= $curso['cor_curso'] ?>">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                                 </svg>
-                                                Editar
-                                            </span>
+                                            </div>
+                                            <span class="text-sm font-medium">Editar Curso</span>
                                         </button>
                                     </div>
                                 </div>
-                            </div>
+                            </article>
                         <?php } ?>
                     </div>
                 <?php } ?>
@@ -647,11 +631,7 @@ $select = new select($escola);
             document.body.style.overflow = 'hidden';
         }
 
-        function editCursoById(id) {
-            const card = document.querySelector(`[data-curso-id="${id}"]`);
-            if (!card) return;
-            const nome = card.getAttribute('data-curso-nome') || '';
-            const cor = card.getAttribute('data-curso-cor') || '#005A24';
+        function editCurso(id, nome, cor) {
             document.getElementById('modalTitle').textContent = 'Editar Curso';
             document.getElementById('saveButtonText').textContent = 'Atualizar';
             document.getElementById('cursoId').value = id;
@@ -694,64 +674,30 @@ $select = new select($escola);
         }
 
         function saveCurso() {
-            const id = document.getElementById('cursoId').value;
-            const nome = document.getElementById('nomeCurso').value.trim();
-            const cor = document.getElementById('corCurso').value.trim();
+            const form = document.getElementById('cursoForm');
+            const formData = new FormData(form);
+            
+            const action = document.getElementById('cursoId').value ? 'update' : 'create';
+            formData.append('action', action);
 
-            // Atualiza visualmente o card se existir (edição sem backend)
-            if (id) {
-                const card = document.querySelector(`[data-curso-id="${id}"]`);
-                if (card) {
-                    const title = card.querySelector('.curso-title');
-                    const bar = card.querySelector('.curso-bar');
-                    const underline = card.querySelector('.curso-underline');
-                    if (title) {
-                        title.textContent = nome || title.textContent;
-                        title.style.color = cor || title.style.color;
-                    }
-                    if (bar) bar.style.backgroundColor = cor || bar.style.backgroundColor;
-                    if (underline) underline.style.backgroundColor = (cor ? `${cor}40` : underline.style.backgroundColor);
-                    // Atualiza data-attributes
-                    card.setAttribute('data-curso-nome', nome);
-                    card.setAttribute('data-curso-cor', cor);
+            fetch('processar_curso.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(action === 'create' ? 'Curso criado com sucesso!' : 'Curso atualizado com sucesso!');
+                    closeModal();
+                    location.reload();
+                } else {
+                    alert('Erro: ' + data.message);
                 }
-                closeModal();
-                return;
-            }
-
-            // Criação visual de um novo card quando não há backend
-            const grid = document.getElementById('gridCursos');
-            if (grid) {
-                const newId = Date.now();
-                const corVal = cor || '#005A24';
-                const nomeVal = nome || 'Novo Curso';
-                const wrapper = document.createElement('div');
-                wrapper.className = 'grid-item card-hover bg-white rounded-2xl shadow-xl border-0 overflow-hidden group relative';
-                wrapper.setAttribute('data-curso-id', newId);
-                wrapper.setAttribute('data-curso-nome', nomeVal);
-                wrapper.setAttribute('data-curso-cor', corVal);
-                wrapper.innerHTML = `
-                    <div class="h-2 w-full curso-bar" style="background-color: ${corVal}"></div>
-                    <div class="p-6">
-                        <div class="text-center mb-6">
-                            <h3 class="curso-title text-xl font-bold leading-tight font-display group-hover:scale-105 transition-all duration-300" style="color: ${corVal}">${nomeVal}</h3>
-                            <div class="w-16 h-0.5 mx-auto mt-3 rounded-full curso-underline" style="background-color: ${corVal}40"></div>
-                        </div>
-                        <div class="flex space-x-2 mt-6">
-                            <button onclick="editCursoById(${newId})" class="flex-1 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-all duration-300 font-medium text-sm">
-                                <span class="flex items-center justify-center">
-                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                                    </svg>
-                                    Editar
-                                </span>
-                            </button>
-                        </div>
-                    </div>`;
-
-                grid.prepend(wrapper);
-                closeModal();
-            }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                alert('Ocorreu um erro ao processar o curso.');
+            });
         }
 
         // Sincronizar inputs de cor

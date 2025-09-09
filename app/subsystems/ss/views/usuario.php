@@ -6,9 +6,18 @@ $session->tempo_session();
 
 require_once(__DIR__ . '/../config/connect.php');
 $escola = $_SESSION['escola'];
+
+// Verificar se a escola existe e tem pelo menos 3 palavras
 $nome_completo_escola = strtolower($escola);
 $nome_array = explode(' ', $nome_completo_escola);
+
+if (count($nome_array) >= 3) {
 $nome_escola_banco = $nome_array[1] . '_' . $nome_array[2];
+} else {
+    // Fallback: usar o nome completo da escola se não tiver 3 palavras
+    $nome_escola_banco = str_replace(' ', '_', $nome_completo_escola);
+}
+
 new connect($nome_escola_banco);
 
 require_once(__DIR__ . '/../models/model.select.php');
@@ -20,12 +29,8 @@ $select = new select($nome_escola_banco);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="content-language" content="pt-BR">
-    <title>Gerenciar Usuários - CREDE</title>
-    <link rel="icon" type="image/png" href="https://i.postimg.cc/0N0dsxrM/Bras-o-do-Cear-svg-removebg-preview.png">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Sistema Escolar - Usuários</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
@@ -36,462 +41,551 @@ $select = new select($nome_escola_banco);
                         accent: '#E6F4EA',
                         dark: '#1A3C34',
                         light: '#F8FAF9',
-                        white: '#FFFFFF',
-                        gray: {
-                            50: '#F9FAFB',
-                            100: '#F3F4F6',
-                            200: '#E5E7EB',
-                            300: '#D1D5DB',
-                            400: '#9CA3AF',
-                            500: '#6B7280',
-                            600: '#4B5563',
-                            700: '#374151',
-                            800: '#1F2937',
-                            900: '#111827'
-                        }
                     },
                     fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        heading: ['Poppins', 'sans-serif']
+                        'display': ['Inter', 'system-ui', 'sans-serif'],
+                        'body': ['Inter', 'system-ui', 'sans-serif'],
                     },
-                    backgroundImage: {
-                        'gradient-primary': 'linear-gradient(135deg, #005A24 0%, #1A3C34 100%)',
-                        'gradient-secondary': 'linear-gradient(135deg, #F4A261 0%, #E76F51 100%)',
-                        'gradient-light': 'linear-gradient(135deg, #E8F4F8 0%, #F7F3E9 100%)',
-                        'gradient-dark': 'linear-gradient(135deg, #2D5016 0%, #005A24 100%)',
-                        'gradient-hero': 'linear-gradient(135deg, #005A24 0%, #2D5016 25%, #7FB069 50%, #005A24 75%, #1A3C34 100%)',
-                        'gradient-card': 'linear-gradient(145deg, #ffffff 0%, #f8faf9 100%)',
-                        'gradient-glass': 'linear-gradient(145deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.7) 100%)'
-                    },
-                    boxShadow: {
-                        'strong': '0 10px 40px -10px rgba(0, 0, 0, 0.15), 0 2px 10px -2px rgba(0, 0, 0, 0.05)',
-                        'primary': '0 10px 25px -5px rgba(0, 90, 36, 0.3)',
-                        'secondary': '0 10px 25px -5px rgba(255, 165, 0, 0.3)',
-                        'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
-                        'glow': '0 0 20px rgba(0, 90, 36, 0.3)',
-                        'card-hover': '0 20px 60px -10px rgba(0, 0, 0, 0.15), 0 8px 25px -5px rgba(0, 0, 0, 0.1)'
+                    spacing: {
+                        '18': '4.5rem',
+                        '88': '22rem',
                     },
                     animation: {
-                        'fade-in': 'fadeIn 0.6s ease-out',
-                        'slide-up': 'slideUp 0.6s ease-out',
-                        'slide-in': 'slideIn 0.5s ease-out',
-                        'bounce-subtle': 'bounceSubtle 0.8s ease-in-out',
-                        'float': 'float 6s ease-in-out infinite',
-                        'sway': 'sway 4s ease-in-out infinite',
-                        'pulse-glow': 'pulseGlow 2s ease-in-out infinite',
+                        'slide-in-left': 'slideInLeft 0.5s ease-out',
+                        'slide-in-right': 'slideInRight 0.5s ease-out',
+                        'fade-in-up': 'fadeInUp 0.6s ease-out',
                         'scale-in': 'scaleIn 0.4s ease-out',
-                        'shimmer': 'shimmer 2s linear infinite'
-                    },
-                    keyframes: {
-                        fadeIn: {
-                            '0%': {
-                                opacity: '0',
-                                transform: 'translateY(10px)'
-                            },
-                            '100%': {
-                                opacity: '1',
-                                transform: 'translateY(0)'
-                            }
-                        },
-                        slideUp: {
-                            '0%': {
-                                opacity: '0',
-                                transform: 'translateY(30px)'
-                            },
-                            '100%': {
-                                opacity: '1',
-                                transform: 'translateY(0)'
-                            }
-                        },
-                        slideIn: {
-                            '0%': {
-                                transform: 'translateX(-100%)',
-                                opacity: '0'
-                            },
-                            '100%': {
-                                transform: 'translateX(0)',
-                                opacity: '1'
-                            }
-                        },
-                        bounceSubtle: {
-                            '0%, 100%': {
-                                transform: 'translateY(0)'
-                            },
-                            '50%': {
-                                transform: 'translateY(-8px)'
-                            }
-                        },
-                        float: {
-                            '0%, 100%': {
-                                transform: 'translateY(0px) rotate(0deg)'
-                            },
-                            '50%': {
-                                transform: 'translateY(-20px) rotate(3deg)'
-                            }
-                        },
-                        sway: {
-                            '0%, 100%': {
-                                transform: 'translateX(0px) rotate(0deg)'
-                            },
-                            '50%': {
-                                transform: 'translateX(10px) rotate(1deg)'
-                            }
-                        },
-                        pulseGlow: {
-                            '0%, 100%': {
-                                boxShadow: '0 0 20px rgba(0, 90, 36, 0.3)'
-                            },
-                            '50%': {
-                                boxShadow: '0 0 30px rgba(0, 90, 36, 0.5)'
-                            }
-                        },
-                        scaleIn: {
-                            '0%': {
-                                transform: 'scale(0.9)',
-                                opacity: '0'
-                            },
-                            '100%': {
-                                transform: 'scale(1)',
-                                opacity: '1'
-                            }
-                        },
-                        shimmer: {
-                            '0%': {
-                                transform: 'translateX(-100%)'
-                            },
-                            '100%': {
-                                transform: 'translateX(100%)'
-                            }
-                        }
+                        'pulse-soft': 'pulseSoft 2s ease-in-out infinite',
                     }
                 }
             }
         }
     </script>
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #F8FAF9 0%, #E8F4F8 100%);
-            min-height: 100vh;
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+        :root {
+            --primary: #005A24;
+            --secondary: #FFA500;
+            --accent: #E6F4EA;
+            --dark: #1A3C34;
+            --light: #F8FAF9;
         }
 
-        /* Enhanced card styles */
-        .card-enhanced {
-            background: linear-gradient(145deg, #ffffff 0%, #f8faf9 100%);
-            border: 1px solid rgba(229, 231, 235, 0.8);
+        * {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        .sidebar {
+            transform: translateX(-100%);
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             backdrop-filter: blur(10px);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 100%);
+        }
+
+        .sidebar.open {
+            transform: translateX(0);
+        }
+
+        .overlay {
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            backdrop-filter: blur(2px);
+        }
+
+        .overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes pulseSoft {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.8;
+            }
+        }
+
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             position: relative;
             overflow: hidden;
-            width: 100%;
-            height: fit-content;
-            min-height: 280px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
         }
 
-        .card-enhanced::before {
+        .card-hover::before {
             content: '';
             position: absolute;
             top: 0;
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 90, 36, 0.05), transparent);
-            transition: left 0.6s ease;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s;
         }
 
-        .card-enhanced:hover::before {
+        .card-hover:hover::before {
             left: 100%;
         }
 
-        .card-enhanced:hover {
+        .card-hover:hover {
             transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 25px 60px -15px rgba(0, 90, 36, 0.15), 0 15px 35px -10px rgba(0, 0, 0, 0.1);
-            border-color: rgba(0, 90, 36, 0.3);
+            box-shadow: 0 25px 50px -12px rgba(0, 90, 36, 0.25), 0 0 0 1px rgba(0, 90, 36, 0.05);
         }
 
-        /* Responsive grid improvements */
-        @media (min-width: 1024px) {
-            .card-enhanced {
-                min-width: 100%;
-                max-width: 100%;
-                width: 100%;
-            }
-        }
-
-        @media (min-width: 1280px) {
-            .card-enhanced {
-                min-width: 100%;
-                max-width: 100%;
-                width: 100%;
-            }
-        }
-
-        @media (min-width: 1536px) {
-            .card-enhanced {
-                min-width: 100%;
-                max-width: 100%;
-                width: 100%;
-            }
-        }
-
-        /* Icon container with gradient background */
-        .icon-container {
-            background: linear-gradient(135deg, var(--bg-from), var(--bg-to));
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        .btn-animate {
             position: relative;
             overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
-        .icon-container::after {
+        .btn-animate::before {
             content: '';
             position: absolute;
-            inset: 0;
-            background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.3) 50%, transparent 70%);
-            transform: translateX(-100%);
-            transition: transform 0.6s;
-        }
-
-        .card-enhanced:hover .icon-container::after {
-            transform: translateX(100%);
-        }
-
-        /* Header with glass effect */
-        .header-glass {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(229, 231, 235, 0.8);
-        }
-
-        /* Loading animation improvements */
-        .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid #f3f4f6;
-            border-top: 4px solid #005A24;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
             border-radius: 50%;
-            animation: spin 1s linear infinite;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s;
         }
 
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
+        .btn-animate:hover::before {
+            width: 300px;
+            height: 300px;
         }
 
-        /* Floating background elements */
-        .bg-decoration {
+        .btn-animate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-animate:active {
+            transform: translateY(0);
+        }
+
+        .nav-item {
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            border-radius: 12px;
+        }
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: var(--secondary);
+            border-radius: 0 4px 4px 0;
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .nav-item:hover::before {
+            transform: scaleY(1);
+        }
+
+        .nav-item:hover {
+            transform: translateX(8px);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar {
+            z-index: 50;
+        }
+
+        .overlay {
+            z-index: 45;
+        }
+
+        .sidebar {
             position: fixed;
-            pointer-events: none;
-            z-index: -1;
-        }
-
-        .bg-circle-1 {
-            top: 10%;
-            right: 10%;
-            width: 200px;
-            height: 200px;
-            background: radial-gradient(circle, rgba(0, 90, 36, 0.1) 0%, transparent 70%);
-            border-radius: 50%;
-            animation: float 8s ease-in-out infinite;
-        }
-
-        .bg-circle-2 {
-            bottom: 20%;
-            left: 5%;
-            width: 150px;
-            height: 150px;
-            background: radial-gradient(circle, rgba(255, 165, 0, 0.1) 0%, transparent 70%);
-            border-radius: 50%;
-            animation: sway 6s ease-in-out infinite reverse;
-        }
-
-        /* Button enhancements */
-        .btn-logout {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-logout::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transform: translateX(-100%);
-            transition: transform 0.6s;
-        }
-
-        .btn-logout:hover::before {
-            transform: translateX(100%);
-        }
-
-        .btn-logout:hover {
-            background: #f3f4f6;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Staggered animation for cards */
-        .card-1 {
-            animation-delay: 0.1s;
-        }
-
-        .card-2 {
-            animation-delay: 0.2s;
-        }
-
-        .card-3 {
-            animation-delay: 0.3s;
-        }
-
-        /* Enhanced input styles */
-        .input-enhanced {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            background: white;
-            border: 2px solid #E5E7EB;
-        }
-
-        .input-enhanced:focus {
-            transform: none;
-            outline: none;
-            border-color: #FFA500;
-            box-shadow: 0 0 0 3px rgba(255, 165, 0, 0.1);
-            background: white;
-        }
-
-        /* Table enhancements */
-        .table-enhanced {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(229, 231, 235, 0.8);
-        }
-
-        .table-row {
-            transition: all 0.2s ease;
-        }
-
-        .table-row:hover {
-            background: rgba(249, 250, 251, 0.8);
-            transform: translateY(-1px);
-        }
-
-        /* Status badge enhancements */
-        .status-badge {
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            font-weight: 600;
-            letter-spacing: 0.025em;
-        }
-
-        .status-badge::before {
-            content: '';
-            position: absolute;
+            left: 0;
             top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-            transition: left 0.5s;
+            height: 100vh;
+            width: 100vw;
+            max-width: 20rem;
+            z-index: 50;
         }
 
-        .status-badge:hover::before {
-            left: 100%;
+        @media (min-width: 1024px) {
+            .sidebar {
+                width: 20rem;
+                position: static;
+                flex-shrink: 0;
+            }
+
+            .main-content {
+                flex: 1;
+                min-width: 0;
+                margin-left: 0;
+                overflow-x: hidden;
+            }
+
+            body {
+                overflow-x: hidden;
+            }
         }
 
-        /* Botão de ação melhorado */
-        .action-btn {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
+        .grid-item {
+            animation: fadeInUp 0.6s ease-out forwards;
+            opacity: 0;
         }
 
-        .action-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.5s;
+        .grid-item:nth-child(1) { animation-delay: 0.1s; }
+        .grid-item:nth-child(2) { animation-delay: 0.2s; }
+        .grid-item:nth-child(3) { animation-delay: 0.3s; }
+        .grid-item:nth-child(4) { animation-delay: 0.4s; }
+        .grid-item:nth-child(5) { animation-delay: 0.5s; }
+        .grid-item:nth-child(6) { animation-delay: 0.6s; }
+
+        .focus-ring:focus {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
         }
 
-        .action-btn:hover::before {
-            left: 100%;
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="number"]:focus,
+        input[type="color"]:focus,
+        select:focus,
+        textarea:focus,
+        button:focus,
+        .btn-animate:focus {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+            border-color: var(--primary);
         }
 
-        /* Avatar com indicador online */
-        .avatar-online {
-            position: relative;
-            transition: all 0.3s ease;
+        input[type="checkbox"]:focus,
+        input[type="radio"]:focus {
+            outline: 2px solid var(--secondary);
+            outline-offset: 2px;
         }
 
-        .avatar-online:hover {
-            transform: scale(1.05);
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
         }
 
-        .online-indicator {
-            position: absolute;
-            bottom: -2px;
-            right: -2px;
-            width: 16px;
-            height: 16px;
-            background: #10B981;
-            border: 2px solid white;
-            border-radius: 50%;
-            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 3px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 3px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: var(--dark);
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 100vw;
+                max-width: 320px;
+            }
+
+            .card-hover:hover {
+                transform: none;
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            }
+
+            .nav-item:hover {
+                transform: none;
+            }
         }
     </style>
 </head>
 
-<body class="text-gray-800 font-sans min-h-screen">
-    <!-- Background decorations -->
-    <div class="bg-decoration bg-circle-1"></div>
-    <div class="bg-decoration bg-circle-2"></div>
+<body class="bg-white min-h-screen font-body">
+    <div id="overlay" class="overlay fixed inset-0 bg-black/30 z-40 lg:hidden"></div>
+    <div class="flex h-screen bg-gray-50 overflow-hidden">
+        <aside id="sidebar" class="sidebar fixed left-0 top-0 h-screen w-80 shadow-2xl z-50 lg:translate-x-0 lg:static lg:z-auto custom-scrollbar overflow-y-auto">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-8 pb-6 border-b border-white/20">
+                    <div class="animate-slide-in-left">
+                        <div class="flex items-center space-x-3 mb-2">
+                            <img src="https://i.postimg.cc/0N0dsxrM/Bras-o-do-Cear-svg-removebg-preview.png" alt="Brasão do Ceará" class="w-8 h-10 transition-transform hover:scale-105">
+                            <h2 class="text-white text-2xl font-bold font-display">Sistema Seleção</h2>
+                        </div>
+                    </div>
+                    <button id="closeSidebar" class="text-white lg:hidden btn-animate p-2 rounded-xl hover:bg-white/10 focus-ring">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <nav class="space-y-2">
+                    <!-- Dashboard -->
+                    <div class="animate-slide-in-left" style="animation-delay: 0.1s;">
+                        <a href="../index.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
+                            <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5a2 2 0 012-2h4a2 2 0 012 2v2H8V5z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <span class="font-semibold text-base">Dashboard</span>
+                                <p class="text-green-200 text-xs mt-1">Página inicial</p>
+                            </div>
+                        </a>
+                    </div>
 
-    <div class="min-h-screen">
-        <!-- Header -->
-        <header class="header-glass sticky top-0 z-40 px-3 sm:px-6 py-3 sm:py-4 animate-slide-in">
-            <div class="flex items-center justify-between max-w-7xl mx-auto">
-                <div class="flex items-center gap-2 sm:gap-4">
-                    <a href="../index.php" class="p-2 sm:p-3 rounded-xl hover:bg-gray-100 text-gray-600 transition-all group">
-                        <i class="fa-solid fa-arrow-left text-base sm:text-lg group-hover:scale-110 transition-transform"></i>
-                    </a>
-                    <div class="w-8 h-8 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center">
-                        <img class="w-6 h-6 sm:w-10 sm:h-10 object-contain" src="https://i.postimg.cc/0N0dsxrM/Bras-o-do-Cear-svg-removebg-preview.png" alt="Logo CREDE">
+                    <!-- Cursos -->
+                    <div class="animate-slide-in-left" style="animation-delay: 0.2s;">
+                        <a href="cursos.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
+                            <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <span class="font-semibold text-base">Cursos</span>
+                                <p class="text-green-200 text-xs mt-1">Administrar cursos</p>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- Candidatos -->
+                    <div class="animate-slide-in-left" style="animation-delay: 0.3s;">
+                        <a href="candidatos.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
+                            <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+                                </svg>
                     </div>
                     <div>
-                        <h1 class="font-bold text-base sm:text-xl text-dark font-heading">CREDE</h1>
-                        <p class="text-xs text-gray-500 font-medium hidden sm:block">Gerenciamento de Usuários</p>
+                                <span class="font-semibold text-base">Candidatos</span>
+                                <p class="text-green-200 text-xs mt-1">Gerenciar inscrições</p>
+                    </div>
+                        </a>
+                </div>
+
+                    <!-- Usuários -->
+                    <div class="animate-slide-in-left" style="animation-delay: 0.4s;">
+                        <a href="usuario.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring bg-white/10">
+                            <div class="w-12 h-12 bg-secondary rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                </svg>
+            </div>
+                            <div>
+                                <span class="font-semibold text-base">Usuários</span>
+                                <p class="text-green-200 text-xs mt-1">Controle de acesso</p>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- Relatórios -->
+                    <div class="animate-slide-in-left" style="animation-delay: 0.5s;">
+                        <a href="#" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
+                            <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <span class="font-semibold text-base">Relatórios</span>
+                                <p class="text-green-200 text-xs mt-1">Gerar documentos</p>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- Limpar Banco -->
+                    <div class="animate-slide-in-left" style="animation-delay: 0.6s;">
+                        <a href="#" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
+                            <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-red-500 group-hover:scale-110 transition-all duration-300">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <span class="font-semibold text-base">Limpar Banco</span>
+                                <p class="text-green-200 text-xs mt-1">Resetar dados</p>
+                            </div>
+                        </a>
+                    </div>
+                </nav>
+            </div>
+        </aside>
+        <div class="main-content flex-1 bg-white">
+            <header class="bg-white shadow-sm border-b border-gray-200 z-30 sticky top-0">
+                <div class="px-3 sm:px-4 md:px-6 lg:px-8 py-3 sm:py-4">
+                    <div class="flex flex-col space-y-3 sm:space-y-4 lg:flex-row lg:items-center lg:justify-between">
+                        <div class="flex items-center justify-between lg:justify-start">
+                            <button id="openSidebar" class="text-primary lg:hidden btn-animate p-2 sm:p-3 rounded-xl hover:bg-accent focus-ring">
+                                <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="flex items-center justify-between lg:justify-end space-x-2 sm:space-x-4">
+                            <div class="hidden sm:block text-right">
+                                <p class="text-xs sm:text-sm font-semibold text-gray-900">Bem-vindo,</p>
+                                <p class="text-xs sm:text-sm text-primary font-medium"><?= $_SESSION['nome'] ?? 'Usuário' ?></p>
+                            </div>
+                            <div class="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-primary to-dark rounded-full flex items-center justify-center">
+                                <span class="text-white font-bold text-xs sm:text-sm"><?= strtoupper(substr($_SESSION['nome'] ?? 'U', 0, 1)) ?></span>
+                            </div>
+                            <a href="../logout.php" class="bg-primary text-white px-3 sm:px-4 md:px-6 py-2 sm:py-3 rounded-xl hover:bg-dark btn-animate font-semibold shadow-lg focus-ring text-xs sm:text-sm">
+                                <span class="hidden sm:inline">Sair</span>
+                                <svg class="w-4 h-4 sm:w-5 sm:h-5 sm:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                                </svg>
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </header>
-
-      
-<main>
-<?php
-        $dados = $select->select_usuarios();
-        if (count($dados) > 0) {
-            foreach ($dados as $dado) {
-        ?>
-        <h1><?= $dado['id'] ?></h1>
-                <h1><?= $dado['nome_user'] ?></h1>
-                <h1><?= $dado['email'] ?></h1>
-                <h1><?= $dado['cpf'] ?></h1>
-                <h1><?= $dado['tipo_usuario'] ?></h1>
-
-            <?php }
-        } else { ?>
-            <p>nenhum usuario cadastrado!</p>
-        <?php } ?> 
-</main>
+            </header>
+            <main class="p-4 sm:p-6 lg:p-8">
+                <?php $dados = $select->select_usuarios(); ?>
+                <?php if (count($dados) === 0) { ?>
+                    <div class="bg-gradient-to-br from-accent via-white to-accent/50 border-2 border-dashed border-primary/30 rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-12 text-center animate-fade-in-up max-w-2xl mx-auto">
+                        <div class="w-20 h-20 sm:w-24 sm:h-24 lg:w-32 lg:h-32 bg-gradient-to-br from-primary/10 to-secondary/10 rounded-full flex items-center justify-center mx-auto mb-6 sm:mb-8 animate-pulse-soft">
+                            <svg class="w-10 h-10 sm:w-12 sm:h-12 lg:w-16 lg:h-16 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl sm:text-2xl lg:text-3xl font-bold text-primary mb-3 sm:mb-4 font-display">Nenhum usuário cadastrado</h3>
+                        <p class="text-gray-600 text-sm sm:text-base lg:text-lg mb-6 sm:mb-8 max-w-md mx-auto leading-relaxed px-4">Comece adicionando usuários para gerenciar o sistema de forma eficiente.</p>
+                        <button onclick="openUserForm()" class="bg-gradient-to-r from-primary to-dark text-white px-6 sm:px-8 lg:px-10 py-3 sm:py-4 rounded-xl sm:rounded-2xl hover:from-dark hover:to-primary btn-animate font-semibold shadow-xl focus-ring">
+                            <span class="flex items-center">
+                                <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                </svg>
+                                Adicionar Primeiro Usuário
+                            </span>
+                        </button>
+                    </div>
+                <?php } else { ?>
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="text-lg font-semibold text-gray-800">Usuários cadastrados</div>
+                        <button onclick="openUserForm()" class="inline-flex items-center bg-gradient-to-r from-primary to-dark text-white px-6 py-3 rounded-xl hover:from-dark hover:to-primary btn-animate font-semibold shadow-xl focus-ring">
+                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                            Adicionar usuário
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
+                        <?php foreach ($dados as $index => $dado) { ?>
+                            <article class="grid-item card-hover bg-white rounded-2xl shadow-xl border-0 overflow-hidden group relative">
+                                <div class="h-2 w-full bg-gradient-to-r from-primary to-secondary"></div>
+                                <div class="p-8">
+                                    <div class="text-center mb-8">
+                                        <div class="w-16 h-16 bg-gradient-to-br from-primary to-dark rounded-full flex items-center justify-center mx-auto mb-4">
+                                            <span class="text-white font-bold text-xl"><?= strtoupper(substr($dado['nome_user'], 0, 1)) ?></span>
+                                        </div>
+                                        <h3 class="text-xl font-bold leading-tight font-display group-hover:scale-105 transition-all duration-300 text-primary"><?= htmlspecialchars($dado['nome_user']) ?></h3>
+                                        <div class="w-16 h-0.5 mx-auto mt-3 rounded-full bg-primary/40"></div>
+                                    </div>
+                                    <div class="space-y-3 mb-6">
+                                        <div class="flex items-center text-sm text-gray-600">
+                                            <svg class="w-4 h-4 mr-2 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                            </svg>
+                                            <span class="font-medium">ID:</span>
+                                            <span class="ml-2"><?= htmlspecialchars($dado['id']) ?></span>
+                                        </div>
+                                        <div class="flex items-center text-sm text-gray-600">
+                                            <svg class="w-4 h-4 mr-2 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                            </svg>
+                                            <span class="font-medium">Email:</span>
+                                            <span class="ml-2 truncate"><?= htmlspecialchars($dado['email']) ?></span>
+                                        </div>
+                                        <div class="flex items-center text-sm text-gray-600">
+                                            <svg class="w-4 h-4 mr-2 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"></path>
+                                            </svg>
+                                            <span class="font-medium">CPF:</span>
+                                            <span class="ml-2"><?= htmlspecialchars($dado['cpf']) ?></span>
+                                        </div>
+                                        <div class="flex items-center text-sm text-gray-600">
+                                            <svg class="w-4 h-4 mr-2 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                            </svg>
+                                            <span class="font-medium">Tipo:</span>
+                                            <span class="ml-2 px-2 py-1 bg-primary/10 text-primary rounded-full text-xs font-medium"><?= htmlspecialchars($dado['tipo_usuario']) ?></span>
+                                        </div>
+                                    </div>
+                                    <div class="flex space-x-2">
+                                        <button onclick="openEditUser(<?= $dado['id'] ?>)" class="flex-1 bg-primary text-white py-2 px-4 rounded-lg hover:bg-dark transition-all duration-300 font-medium text-sm btn-animate focus-ring">
+                                            <span class="flex items-center justify-center">
+                                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                                </svg>
+                                                Editar
+                                            </span>
+                                        </button>
+                                        <button onclick="openDeleteUser(<?= $dado['id'] ?>, '<?= htmlspecialchars($dado['nome_user']) ?>')" class="flex-1 bg-secondary text-white py-2 px-4 rounded-lg hover:bg-orange-600 transition-all duration-300 font-medium text-sm btn-animate focus-ring">
+                                            <span class="flex items-center justify-center">
+                                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                                </svg>
+                                                Excluir
+                                            </span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </article>
+                        <?php } ?>
+                    </div>
+                <?php } ?>
+            </main>
+        </div>
     </div>
 
     <!-- Modal Cadastrar/Editar Usuário -->
@@ -543,17 +637,18 @@ $select = new select($nome_escola_banco);
                             </label>
                             <select id="inpSetor" name="setor" class="input-enhanced w-full px-4 py-4 rounded-xl transition-all text-base border-2 focus:border-primary focus:ring-4 focus:ring-primary/10" required>
                                 <option value="">Selecione um setor</option>
-                                <?php foreach ($setores as $setor): ?>
-                                    <option value="<?php echo htmlspecialchars($setor['id']); ?>"><?php echo htmlspecialchars($setor['nome']); ?></option>
-                                <?php endforeach; ?>
+                                <option value="1">Administração</option>
+                                <option value="2">Secretaria</option>
+                                <option value="3">Coordenação</option>
+                                <option value="4">Direção</option>
                             </select>
                         </div>
                     </div>
                     <div class="p-6 sm:p-8 border-t border-gray-100 bg-gray-50/50 flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-3">
-                        <button type="button" class="px-6 py-3 rounded-xl border-2 border-gray-300 font-semibold text-gray-700 hover:bg-gray-100 hover:border-gray-400 transition-all text-base" onclick="closeModal('modalUser')">
+                        <button type="button" class="px-6 py-3 rounded-xl border-2 border-primary font-semibold text-primary hover:bg-primary/10 hover:border-primary transition-all text-base focus-ring" onclick="closeModal('modalUser')">
                             <i class="fa-solid fa-times mr-2"></i>Cancelar
                         </button>
-                        <button type="submit" class="px-6 py-3 bg-gradient-to-r from-primary to-dark text-white font-semibold rounded-xl hover:from-primary/90 hover:to-dark/90 transition-all text-base shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                        <button type="submit" class="px-6 py-3 bg-gradient-to-r from-primary to-dark text-white font-semibold rounded-xl hover:from-primary/90 hover:to-dark/90 transition-all text-base shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 focus-ring">
                             <i class="fa-solid fa-save mr-2"></i>Salvar Usuário
                         </button>
                     </div>
@@ -589,10 +684,10 @@ $select = new select($nome_escola_banco);
                         <input id="inpNomeTipo" name="nome" type="text" class="input-enhanced w-full px-4 py-4 rounded-xl transition-all text-base border-2 focus:border-secondary focus:ring-4 focus:ring-secondary/10" placeholder="Digite o nome do tipo de usuário" required>
                     </div>
                     <div class="p-6 sm:p-8 border-t border-gray-100 bg-gray-50/50 flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-3">
-                        <button type="button" class="px-6 py-3 rounded-xl border-2 border-gray-300 font-semibold text-gray-700 hover:bg-gray-100 hover:border-gray-400 transition-all text-base" onclick="closeModal('modalTipoUsuario')">
+                        <button type="button" class="px-6 py-3 rounded-xl border-2 border-secondary font-semibold text-secondary hover:bg-secondary/10 hover:border-secondary transition-all text-base focus-ring" onclick="closeModal('modalTipoUsuario')">
                             <i class="fa-solid fa-times mr-2"></i>Cancelar
                         </button>
-                        <button type="submit" class="px-6 py-3 bg-gradient-to-r from-secondary to-orange-500 text-white font-semibold rounded-xl hover:from-secondary/90 hover:to-orange-500/90 transition-all text-base shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                        <button type="submit" class="px-6 py-3 bg-gradient-to-r from-secondary to-orange-500 text-white font-semibold rounded-xl hover:from-secondary/90 hover:to-orange-500/90 transition-all text-base shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 focus-ring">
                             <i class="fa-solid fa-save mr-2"></i>Salvar Tipo
                         </button>
                     </div>
@@ -619,10 +714,10 @@ $select = new select($nome_escola_banco);
                 <form id="deleteForm" action="../controllers/controller_usuario.php" method="POST">
                     <input type="hidden" id="deleteUserId" name="user_id" value="">
                     <div class="flex flex-col sm:flex-row gap-3 justify-center">
-                        <button type="button" class="px-6 py-3 rounded-xl border-2 border-gray-300 font-semibold text-gray-700 hover:bg-gray-100 hover:border-gray-400 transition-all text-base" onclick="closeModal('modalDeleteUser')">
+                        <button type="button" class="px-6 py-3 rounded-xl border-2 border-primary font-semibold text-primary hover:bg-primary/10 hover:border-primary transition-all text-base focus-ring" onclick="closeModal('modalDeleteUser')">
                             <i class="fa-solid fa-times mr-2"></i>Cancelar
                         </button>
-                        <button type="submit" class="px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold rounded-xl hover:from-red-600 hover:to-red-700 transition-all text-base shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                        <button type="submit" class="px-6 py-3 bg-gradient-to-r from-secondary to-orange-600 text-white font-semibold rounded-xl hover:from-secondary/90 hover:to-orange-700 transition-all text-base shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 focus-ring">
                             <i class="fa-solid fa-trash mr-2"></i>Excluir Usuário
                         </button>
                     </div>
@@ -632,7 +727,27 @@ $select = new select($nome_escola_banco);
     </div>
 
     <script>
-        const usuarios = <?php echo json_encode($usuarios); ?>;
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+        const openSidebar = document.getElementById('openSidebar');
+        const closeSidebar = document.getElementById('closeSidebar');
+        const usuarios = <?php echo json_encode($dados ?? []); ?>;
+
+        // Sidebar toggle functionality
+        openSidebar.addEventListener('click', () => {
+            sidebar.classList.add('open');
+            overlay.classList.add('show');
+        });
+
+        closeSidebar.addEventListener('click', () => {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('show');
+        });
+
+        overlay.addEventListener('click', () => {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('show');
+        });
 
         function openUserForm() {
             document.getElementById('modalTitle').textContent = 'Cadastrar Usuário';

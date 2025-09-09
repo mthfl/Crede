@@ -19,18 +19,25 @@ class select extends connect
     {
         parent::__construct($escola);
         $table = require(__DIR__ . '/../../../.env/tables.php');
-        $this->table1 = $table["ss_$escola"][1];
-        $this->table2 = $table["ss_$escola"][2];
-        $this->table3 = $table["ss_$escola"][3];
-        $this->table4 = $table["ss_$escola"][4];
-        $this->table5 = $table["ss_$escola"][5];
-        $this->table6 = $table["ss_$escola"][6];
-        $this->table7 = $table["ss_$escola"][7];
-        $this->table8 = $table["ss_$escola"][8];
-        $this->table9 = $table["ss_$escola"][9];
-        $this->table10 = $table["ss_$escola"][10];
-        $this->table11 = $table["ss_$escola"][11];
-        $this->table12 = $table["ss_$escola"][12];
+        
+        // Verificar se a configuração da escola existe
+        $escola_key = "ss_$escola";
+        if (!isset($table[$escola_key])) {
+            throw new Exception("Configuração de tabelas não encontrada para $escola_key");
+        }
+        
+        $this->table1 = $table[$escola_key][1] ?? 'default_table1';
+        $this->table2 = $table[$escola_key][2] ?? 'default_table2';
+        $this->table3 = $table[$escola_key][3] ?? 'default_table3';
+        $this->table4 = $table[$escola_key][4] ?? 'default_table4';
+        $this->table5 = $table[$escola_key][5] ?? 'default_table5';
+        $this->table6 = $table[$escola_key][6] ?? 'default_table6';
+        $this->table7 = $table[$escola_key][7] ?? 'default_table7';
+        $this->table8 = $table[$escola_key][8] ?? 'default_table8';
+        $this->table9 = $table[$escola_key][9] ?? 'default_table9';
+        $this->table10 = $table[$escola_key][10] ?? 'default_table10';
+        $this->table11 = $table[$escola_key][11] ?? 'default_table11';
+        $this->table12 = $table[$escola_key][12] ?? 'default_table12';
     }
 
     public function select_cursos(): array{
