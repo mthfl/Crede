@@ -1,7 +1,7 @@
 <?php
 class connect
 {
-    protected $connect;
+    protected $connect ;
 
     function __construct()
     {
