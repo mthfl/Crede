@@ -27,7 +27,7 @@ if (
             header("Location: ../views/login.php?escola=$escola&erro");
             exit();
         case 3:
-            header("Location: ../views/login.php?escola=$escola&nao_existe");
+            header("Location: ../views/login.php?escola=$escola&ja_tem_primeiro_acesso");
             exit();
         default:
             header("Location: ../windows/fatal_erro.php");
@@ -109,8 +109,8 @@ else if (
             header("Location: ../views/login.php?escola=$escola&falha");
             exit();
     }
-}/*else{
+}else{
 
     header('location:../login.php');
     exit();
-}*/
+}
