@@ -1,3 +1,8 @@
+<?php 
+require_once(__DIR__ . '/models/model.select.php');
+$select = new model_select();
+$escolas = $select->select_escolas();
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -625,6 +630,7 @@
             <div class="schools-section animate-on-scroll">
 
                 <div class="schools-grid" id="schoolsGrid">
+                    <?php foreach($escolas as $escola): ?>
                     <!-- Card 1 -->
                     <div class="school-card">
                         <div class="school-header">
@@ -632,21 +638,21 @@
                                 <i class="fas fa-school"></i>
                             </div>
                             <div class="school-info">
-                                <h3>EEEP PROFESSORA ALDA FAÇANHA</h3>
+                                <h3><?=$escola['nome_escola']?></h3>
                             </div>
                         </div>
                         <div class="school-details">
                             <div class="detail-item">
                                 <i class="fas fa-map-marker-alt"></i>
-                                <span>Rua das Flores, 123 - Centro</span>
+                                <span><?=$escola['localizacao']?></span>
                             </div>
                             <div class="detail-item">
                                 <i class="fas fa-phone"></i>
-                                <span>(85) 3333-4444</span>
+                                <span><?=$escola['telefone']?></span>
                             </div>
                             <div class="detail-item">
                                 <i class="fas fa-envelope"></i>
-                                <span>salaberga@gmail.com</span>
+                                <span><?=$escola['email']?></span>
                             </div>
                         </div>
                         <div class="school-footer">
@@ -654,372 +660,13 @@
                                 <i class="fas fa-circle"></i>
                                 Ativa
                             </span>
-                            <a href="views/login.php?escola=EEEP%20PROFESSORA%20ALDA%20FA%C3%87ANHA" class="login-btn">
+                            <a href="views/login.php?escola=<?=$escola['nome_escola']?>" class="login-btn">
                                 <i class="fas fa-external-link-alt"></i>
                                 Acessar
                             </a>
                         </div>
                     </div>
-
-                    <!-- Card 2 -->
-                    <div class="school-card">
-                        <div class="school-header">
-                            <div class="school-icon">
-                                <i class="fas fa-school"></i>
-                            </div>
-                            <div class="school-info">
-                                <h3>EEEP PROFESSORA MARLY FERREIRA MARTINS</h3>
-                            </div>
-                        </div>
-                        <div class="school-details">
-                            <div class="detail-item">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <span>Av. Principal, 456 - Bairro Novo</span>
-                            </div>
-                            <div class="detail-item">
-                                <i class="fas fa-phone"></i>
-                                <span>(85) 3333-5555</span>
-                            </div>
-                            <div class="detail-item">
-                                <i class="fas fa-envelope"></i>
-                                <span>falcao@gmail.com</span>
-                            </div>
-                        </div>
-                        <div class="school-footer">
-                            <span class="status-badge status-active">
-                                <i class="fas fa-circle"></i>
-                                Ativa
-                            </span>
-                            <a href="views/login.php?escola=EEEP%20PROFESSORA%20MARLY%20FERREIRA%20MARTINS" class="login-btn">
-                                <i class="fas fa-external-link-alt"></i>
-                                Acessar
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Card 3 -->
-                    <div class="school-card">
-                        <div class="school-header">
-                            <div class="school-icon">
-                                <i class="fas fa-school"></i>
-                            </div>
-                            <div class="school-info">
-                                <h3>EEEP PROF. ANTONIO VALMIR</h3>
-                            </div>
-                        </div>
-                        <div class="school-details">
-                            <div class="detail-item">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <span>Sítio Boa Vista, Zona Rural</span>
-                            </div>
-                            <div class="detail-item">
-                                <i class="fas fa-phone"></i>
-                                <span>(85) 3333-6666</span>
-                            </div>
-                            <div class="detail-item">
-                                <i class="fas fa-envelope"></i>
-                                <span>holanda@gmail.com</span>
-                            </div>
-                        </div>
-                        <div class="school-footer">
-                            <span class="status-badge status-active">
-                                <i class="fas fa-circle"></i>
-                                Ativa
-                            </span>
-                            <a href="views/login.php?escola=EEEP%20PROF.%20ANTONIO%20VALMIR" class="login-btn">
-                                <i class="fas fa-external-link-alt"></i>
-                                Acessar
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Card 4 -->
-                    <div class="school-card">
-                        <div class="school-header">
-                            <div class="school-icon">
-                                <i class="fas fa-school"></i>
-                            </div>
-                            <div class="school-info">
-                                <h3>EEEP EUSÉBIO DE QUEIROZ</h3>
-                            </div>
-                        </div>
-                        <div class="school-details">
-                            <div class="detail-item">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <span>Rua da Alegria, 789 - Jardim</span>
-                            </div>
-                            <div class="detail-item">
-                                <i class="fas fa-phone"></i>
-                                <span>(85) 3333-7777</span>
-                            </div>
-                            <div class="detail-item">
-                                <i class="fas fa-envelope"></i>
-                                <span>celeste@gmail.com</span>
-                            </div>
-                        </div>
-                        <div class="school-footer">
-                            <span class="status-badge status-active">
-                                <i class="fas fa-circle"></i>
-                                Ativa
-                            </span>
-                            <a href="views/login.php?escola=EEEP%20EUS%C3%89BIO%20DE%20QUEIROZ" class="login-btn">
-                                <i class="fas fa-external-link-alt"></i>
-                                Acessar
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Card 5 -->
-                    <div class="school-card">
-                        <div class="school-header">
-                            <div class="school-icon">
-                                <i class="fas fa-school"></i>
-                            </div>
-                            <div class="school-info">
-                                <h3>EEEP JOSÉ IVANILTON NOCRATO</h3>
-                            </div>
-                        </div>
-                        <div class="school-details">
-                            <div class="detail-item">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <span>Av. da Educação, 321 - Cidade Nova</span>
-                            </div>
-                            <div class="detail-item">
-                                <i class="fas fa-phone"></i>
-                                <span>(85) 3333-8888</span>
-                            </div>
-                            <div class="detail-item">
-                                <i class="fas fa-envelope"></i>
-                                <span>futuro@gmail.com</span>
-                            </div>
-                        </div>
-                        <div class="school-footer">
-                            <span class="status-badge status-active">
-                                <i class="fas fa-circle"></i>
-                                Ativa
-                            </span>
-                            <a href="views/login.php?escola=EEEP%20JOS%C3%89%20IVANILTON%20NOCRATO" class="login-btn">
-                                <i class="fas fa-external-link-alt"></i>
-                                Acessar
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Card 6 -->
-                    <div class="school-card">
-                        <div class="school-header">
-                            <div class="school-icon">
-                                <i class="fas fa-school"></i>
-                            </div>
-                            <div class="school-info">
-                                <h3>EEEP PROFº Fcº ARISTÓTELES DE SOUSA</h3>
-                            </div>
-                        </div>
-                        <div class="school-details">
-                            <div class="detail-item">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <span>Aldeia Indígena, Reserva Natural</span>
-                            </div>
-                            <div class="detail-item">
-                                <i class="fas fa-phone"></i>
-                                <span>(85) 3333-9999</span>
-                            </div>
-                            <div class="detail-item">
-                                <i class="fas fa-envelope"></i>
-                                <span>paje@gmail.com</span>
-                            </div>
-                        </div>
-                        <div class="school-footer">
-                            <span class="status-badge status-active">
-                                <i class="fas fa-circle"></i>
-                                Ativa
-                            </span>
-                            <a href="views/login.php?escola=EEEP%20PROF%C2%BA%20Fc%C2%BA%20ARIST%C3%93TELES%20DE%20SOUSA" class="login-btn">
-                                <i class="fas fa-external-link-alt"></i>
-                                Acessar
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Card 7 -->
-                    <div class="school-card">
-                        <div class="school-header">
-                            <div class="school-icon">
-                                <i class="fas fa-school"></i>
-                            </div>
-                            <div class="school-info">
-                                <h3>EEEP MARIA CARMEM VIEIRA MOREIRA</h3>
-                            </div>
-                        </div>
-                        <div class="school-details">
-                            <div class="detail-item">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <span>Aldeia Indígena, Reserva Natural</span>
-                            </div>
-                            <div class="detail-item">
-                                <i class="fas fa-phone"></i>
-                                <span>(85) 3333-9999</span>
-                            </div>
-                            <div class="detail-item">
-                                <i class="fas fa-envelope"></i>
-                                <span>paje@gmail.com</span>
-                            </div>
-                        </div>
-                        <div class="school-footer">
-                            <span class="status-badge status-active">
-                                <i class="fas fa-circle"></i>
-                                Ativa
-                            </span>
-                            <a href="views/login.php?escola=EEEP%20MARIA%20CARMEM%20VIEIRA%20MOREIRA" class="login-btn">
-                                <i class="fas fa-external-link-alt"></i>
-                                Acessar
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Card 8 -->
-                    <div class="school-card">
-                        <div class="school-header">
-                            <div class="school-icon">
-                                <i class="fas fa-school"></i>
-                            </div>
-                            <div class="school-info">
-                                <h3>EEEP GOV. LUIZ GONZAGA FONSECA MOTA</h3>
-                            </div>
-                        </div>
-                        <div class="school-details">
-                            <div class="detail-item">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <span>Aldeia Indígena, Reserva Natural</span>
-                            </div>
-                            <div class="detail-item">
-                                <i class="fas fa-phone"></i>
-                                <span>(85) 3333-9999</span>
-                            </div>
-                            <div class="detail-item">
-                                <i class="fas fa-envelope"></i>
-                                <span>paje@gmail.com</span>
-                            </div>
-                        </div>
-                        <div class="school-footer">
-                            <span class="status-badge status-active">
-                                <i class="fas fa-circle"></i>
-                                Ativa
-                            </span>
-                            <a href="views/login.php?escola=EEEP%20GOV.%20LUIZ%20GONZAGA%20FONSECA%20MOTA" class="login-btn">
-                                <i class="fas fa-external-link-alt"></i>
-                                Acessar
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Card 9 -->
-                    <div class="school-card">
-                        <div class="school-header">
-                            <div class="school-icon">
-                                <i class="fas fa-school"></i>
-                            </div>
-                            <div class="school-info">
-                                <h3>EEEP SALABERGA TORQUATO GOMES DE MATOS</h3>
-                            </div>
-                        </div>
-                        <div class="school-details">
-                            <div class="detail-item">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <span>Aldeia Indígena, Reserva Natural</span>
-                            </div>
-                            <div class="detail-item">
-                                <i class="fas fa-phone"></i>
-                                <span>(85) 3333-9999</span>
-                            </div>
-                            <div class="detail-item">
-                                <i class="fas fa-envelope"></i>
-                                <span>paje@gmail.com</span>
-                            </div>
-                        </div>
-                        <div class="school-footer">
-                            <span class="status-badge status-active">
-                                <i class="fas fa-circle"></i>
-                                Ativa
-                            </span>
-                            <a href="views/login.php?escola=EEEP%20SALABERGA%20TORQUATO%20GOMES%20DE%20MATOS" class="login-btn">
-                                <i class="fas fa-external-link-alt"></i>
-                                Acessar
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Card 10 -->
-                    <div class="school-card">
-                        <div class="school-header">
-                            <div class="school-icon">
-                                <i class="fas fa-school"></i>
-                            </div>
-                            <div class="school-info">
-                                <h3>EEEP PROFª LUIZA DE TEODORO VIEIRA</h3>
-                            </div>
-                        </div>
-                        <div class="school-details">
-                            <div class="detail-item">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <span>Aldeia Indígena, Reserva Natural</span>
-                            </div>
-                            <div class="detail-item">
-                                <i class="fas fa-phone"></i>
-                                <span>(85) 3333-9999</span>
-                            </div>
-                            <div class="detail-item">
-                                <i class="fas fa-envelope"></i>
-                                <span>paje@gmail.com</span>
-                            </div>
-                        </div>
-                        <div class="school-footer">
-                            <span class="status-badge status-active">
-                                <i class="fas fa-circle"></i>
-                                Ativa
-                            </span>
-                            <a href="views/login.php?escola=EEEP%20PROF%C2%AA%20LUIZA%20DE%20TEODORO%20VIEIRA" class="login-btn">
-                                <i class="fas fa-external-link-alt"></i>
-                                Acessar
-                            </a>
-                        </div>
-                    </div>
-
-                    <!-- Card 11 -->
-                    <div class="school-card">
-                        <div class="school-header">
-                            <div class="school-icon">
-                                <i class="fas fa-school"></i>
-                            </div>
-                            <div class="school-info">
-                                <h3>EEEP RAIMUNDO CÉLIO RODRIGUES</h3>
-                            </div>
-                        </div>
-                        <div class="school-details">
-                            <div class="detail-item">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <span>Aldeia Indígena, Reserva Natural</span>
-                            </div>
-                            <div class="detail-item">
-                                <i class="fas fa-phone"></i>
-                                <span>(85) 3333-9999</span>
-                            </div>
-                            <div class="detail-item">
-                                <i class="fas fa-envelope"></i>
-                                <span>paje@gmail.com</span>
-                            </div>
-                        </div>
-                        <div class="school-footer">
-                            <span class="status-badge status-active">
-                                <i class="fas fa-circle"></i>
-                                Ativa
-                            </span>
-                            <a href="views/login.php?escola=EEEP%20RAIMUNDO%20C%C3%89LIO%20RODRIGUES" class="login-btn">
-                                <i class="fas fa-external-link-alt"></i>
-                                Acessar
-                            </a>
-                        </div>
-                    </div>
+                    <?php endforeach; ?>
                 </div>
             </div>
 

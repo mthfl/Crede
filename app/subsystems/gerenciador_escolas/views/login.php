@@ -4,6 +4,9 @@ if(!isset($_GET['escola']) && empty($_GET['escola'])){
     exit();
 }
 $escola = $_GET['escola'];
+require_once(__DIR__ . '/../models/model.select.php');
+$select = new model_select();
+$nome_escola_banco = $select->select_escolas_nome($escola);
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -567,6 +570,7 @@ $escola = $_GET['escola'];
                       method="POST" 
                       class="space-y-4 sm:space-y-6">
                     <input type="hidden" name="escola" value="<?=$escola?>">
+                    <input type="hidden" name="escola_banco" value="<?=$nome_escola_banco?>">
                     <!-- Email Input -->
                     <div class="input-group">
                         <div class="relative">
@@ -626,6 +630,7 @@ $escola = $_GET['escola'];
                       method="POST" 
                       class="space-y-4 sm:space-y-6 hidden">
                       <input type="hidden" name="escola" value="<?=$escola?>">
+                      <input type="hidden" name="escola_banco" value="<?=$nome_escola_banco?>">
                     <!-- Email Input -->
                     <div class="input-group">
                         <div class="relative">

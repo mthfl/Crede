@@ -1,6 +1,6 @@
 <?php
-require_once(__DIR__ . '/../config/connect.php');
-class model_usuario extends connect
+require_once(__DIR__ . '/../config/connect_escolas.php');
+class model_usuario extends connect_escolas
 {
     private string $table1;
     private string $table2;
@@ -15,28 +15,28 @@ class model_usuario extends connect
     private string $table11;
     private string $table12;
 
-    function __construct($escola)
+    function __construct($escola_banco)
     {
-        parent::__construct($escola);
+        parent::__construct($escola_banco);
         $table = require(__DIR__ . '/../../../.env/tables.php');
-        $this->table1 = $table["ss_$escola"][1];
-        $this->table2 = $table["ss_$escola"][2];
-        $this->table3 = $table["ss_$escola"][3];
-        $this->table4 = $table["ss_$escola"][4];
-        $this->table5 = $table["ss_$escola"][5];
-        $this->table6 = $table["ss_$escola"][6];
-        $this->table7 = $table["ss_$escola"][7];
-        $this->table8 = $table["ss_$escola"][8];
-        $this->table9 = $table["ss_$escola"][9];
-        $this->table10 = $table["ss_$escola"][10];
-        $this->table11 = $table["ss_$escola"][11];
-        $this->table12 = $table["ss_$escola"][12];
+        $this->table1 = $table["ss_$escola_banco"][1];
+        $this->table2 = $table["ss_$escola_banco"][2];
+        $this->table3 = $table["ss_$escola_banco"][3];
+        $this->table4 = $table["ss_$escola_banco"][4];
+        $this->table5 = $table["ss_$escola_banco"][5];
+        $this->table6 = $table["ss_$escola_banco"][6];
+        $this->table7 = $table["ss_$escola_banco"][7];
+        $this->table8 = $table["ss_$escola_banco"][8];
+        $this->table9 = $table["ss_$escola_banco"][9];
+        $this->table10 = $table["ss_$escola_banco"][10];
+        $this->table11 = $table["ss_$escola_banco"][11];
+        $this->table12 = $table["ss_$escola_banco"][12];
     }
-
+    
     public function pre_cadastro(string $cpf, string $email): int
     {
         try {
-            $stmt_check = $this->connect->prepare("SELECT * FROM $this->table5 WHERE senha IS NULL AND email = :email AND cpf = :cpf");
+            $stmt_check = $this->connect->prepare("SELECT * FROM $this->table5 WHERE email = :email AND cpf = :cpf");
             $stmt_check->bindValue(":cpf", $cpf);
             $stmt_check->bindValue(":email", $email);
             $stmt_check->execute();

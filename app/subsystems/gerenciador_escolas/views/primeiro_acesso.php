@@ -7,6 +7,7 @@ if (!isset($_GET['escola']) && empty($_GET['escola'])) {
     exit();
 }
 $escola = $_GET['escola'];
+$banco = $_GET['banco'];
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -550,6 +551,7 @@ $escola = $_GET['escola'];
                     id="primeiroAcessoForm"
                     class="space-y-4 sm:space-y-6">
                     <input type="hidden" name="escola" value="<?= $escola ?>">
+                    <input type="hidden" name="banco" value="<?= $banco ?>">
                     
                     <!-- Email Input (Disabled) -->
                     <div class="input-group">

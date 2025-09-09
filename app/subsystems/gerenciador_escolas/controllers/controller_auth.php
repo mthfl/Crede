@@ -1,28 +1,27 @@
 <?php
 require_once(__DIR__ . "/../models/model.usuario.php");
-require_once(__DIR__ . "/../config/connect.php");
+require_once(__DIR__ . "/../config/connect_escolas.php");
 print_r($_POST);
 //pre-cadastro
 if (
     isset($_POST['escola']) && !empty($_POST['escola']) && is_string($_POST['escola']) &&
     isset($_POST['CPF']) && !empty($_POST['CPF']) && is_string($_POST['CPF']) &&
-    isset($_POST['email']) && !empty($_POST['email']) && is_string($_POST['email'])
+    isset($_POST['email']) && !empty($_POST['email']) && is_string($_POST['email']) &&
+    isset($_POST['escola_banco']) && !empty($_POST['escola_banco']) && is_string($_POST['escola_banco'])
 ) {
 
     $escola = $_POST['escola'];
-    $nome_completo_escola = strtolower($escola);
-    $nome_array = explode(' ', $nome_completo_escola);
-    $nome_escola_banco = $nome_array[1] . '_' . $nome_array[2];
     $email = $_POST['email'];
     $cpf = $_POST['CPF'];
+    $nome_escola_banco = $_POST['escola_banco'];
 
-    new connect($nome_escola_banco);
+    new connect_escolas($nome_escola_banco);
     $model_usuario = new model_usuario($nome_escola_banco);
     $result = $model_usuario->pre_cadastro($cpf, $email);
 
     switch ($result) {
         case 1:
-            header("Location: ../views/primeiro_acesso.php?escola=$escola");
+            header("Location: ../views/primeiro_acesso.php?escola=$escola&banco=$nome_escola_banco");
             exit();
         case 2:
             header("Location: ../views/login.php?escola=$escola&erro");
@@ -41,18 +40,16 @@ else if (
     isset($_POST['senha']) && !empty($_POST['senha']) && is_string($_POST['senha']) &&
     isset($_POST['confirmar_senha']) && !empty($_POST['confirmar_senha']) && is_string($_POST['confirmar_senha']) &&
     isset($_POST['cpf']) && !empty($_POST['cpf']) && is_string($_POST['cpf']) &&
-    isset($_POST['email']) && !empty($_POST['email']) && is_string($_POST['email'])
+    isset($_POST['email']) && !empty($_POST['email']) && is_string($_POST['email']) &&
+    isset($_POST['banco']) && !empty($_POST['banco']) && is_string($_POST['banco'])
 ) {
 
     $escola = $_POST['escola'];
-    $nome_completo_escola = strtolower($escola);
-    $nome_array = explode(' ', $nome_completo_escola);
-    $nome_escola_banco = $nome_array[1] . '_' . $nome_array[2];
-
-    $senha = $_POST['senha'];
-    $confirmar_senha = $_POST['confirmar_senha'];
     $email = $_POST['email'];
     $cpf = $_POST['cpf'];
+    $nome_escola_banco = $_POST['banco'];
+    $senha = $_POST['senha'];
+    $confirmar_senha = $_POST['confirmar_senha'];
 
     if ($senha !== $confirmar_senha) {
 
@@ -60,7 +57,7 @@ else if (
         exit();
     }
 
-    new connect($nome_escola_banco);
+    new connect_escolas($nome_escola_banco);
     $model_usuario = new model_usuario($nome_escola_banco);
     $result = $model_usuario->primeiro_acesso($cpf, $email, $senha);
 
@@ -84,21 +81,19 @@ else if (
 else if (
     isset($_POST['escola']) && !empty($_POST['escola']) && is_string($_POST['escola']) &&
     isset($_POST['senha']) && !empty($_POST['senha']) && is_string($_POST['senha']) &&
-    isset($_POST['email']) && !empty($_POST['email']) && is_string($_POST['email'])
+    isset($_POST['email']) && !empty($_POST['email']) && is_string($_POST['email']) &&
+    isset($_POST['escola_banco']) && !empty($_POST['escola_banco']) && is_string($_POST['escola_banco'])
 ) {
 
     $escola = $_POST['escola'];
-    $nome_completo_escola = strtolower($escola);
-    $nome_array = explode(' ', $nome_completo_escola);
-    $nome_escola_banco = $nome_array[1] . '_' . $nome_array[2];
-
     $email = $_POST['email'];
     $senha = $_POST['senha'];
+    $nome_escola_banco = $_POST['escola_banco'];
 
     
-    new connect($nome_escola_banco);
+    new connect_escolas($nome_escola_banco);
     $model_usuario = new model_usuario($nome_escola_banco);
-    $result = $model_usuario->login($email, $senha, $escola);
+    $result = $model_usuario->login($email, $senha, $nome_escola_banco);
 
     switch ($result) {
         case 1:

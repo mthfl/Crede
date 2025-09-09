@@ -6,13 +6,10 @@ $session->tempo_session();
 
 require_once(__DIR__ . '/config/connect.php');
 $escola = $_SESSION['escola'];
-$nome_completo_escola = strtolower($escola);
-$nome_array = explode(' ', $nome_completo_escola);
-$nome_escola_banco = $nome_array[1] . '_' . $nome_array[2];
-new connect($nome_escola_banco);
 
+new connect($escola);
 require_once(__DIR__ . '/models/model.select.php');
-$select = new select($nome_escola_banco);
+$select = new select($escola);
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
