@@ -36,7 +36,7 @@ class model_usuario extends connect_escolas
     public function pre_cadastro(string $cpf, string $email): int
     {
         try {
-            $stmt_check = $this->connect->prepare("SELECT * FROM $this->table5 WHERE email = :email AND cpf = :cpf");
+            $stmt_check = $this->connect->prepare("SELECT * FROM $this->table5 WHERE senha IS NULL AND email = :email AND cpf = :cpf");
             $stmt_check->bindValue(":cpf", $cpf);
             $stmt_check->bindValue(":email", $email);
             $stmt_check->execute();
