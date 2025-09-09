@@ -1,17 +1,27 @@
 <?php
+require_once(__DIR__ . '/../models/sessions.php');
+$session = new sessions();
+$session->autenticar_session();
+$session->tempo_session();
+
+require_once(__DIR__ . '/../config/connect.php');
+$escola = $_SESSION['escola'];
+
+new connect($escola);
+
 require_once(__DIR__ . "/../models/model.admin.php");
 print_r($_POST);
 
 //cadastrar curso
 if (
-    !isset($_POST["id_curso"]) && empty($_POST["id_curso"]) &&
+    empty($_POST["curso_id"]) &&
     isset($_POST["nome_curso"]) && !empty($_POST["nome_curso"]) &&
-    isset($_POST["cor"]) && !empty($_POST["cor"])
+    isset($_POST["cor_curso"]) && !empty($_POST["cor_curso"])
 ) {
     $nome_curso = $_POST["nome_curso"];
-    $cor = $_POST["cor"];
+    $cor = $_POST["cor_curso"];
 
-    $admin_model = new admin();
+    $admin_model = new admin($escola);
     $result = $admin_model->cadastrar_curso($nome_curso, $cor);
 
     switch ($result) {
