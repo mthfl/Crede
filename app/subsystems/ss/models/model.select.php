@@ -46,4 +46,29 @@ class select extends connect
         return $cursos = $stmt_cursos->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function select_tipos_usuarios(): array{
+        try{
+            $stmt = $this->connect->query("SHOW COLUMNS FROM $this->table5 LIKE 'tipo_usuario'");
+            $col = $stmt->fetch(PDO::FETCH_ASSOC);
+            if(!$col || empty($col['Type'])){
+                return [];
+            }
+            $type = $col['Type']; // ex: enum('admin','cadastrador')
+            if (preg_match("/enum\\((.*)\\)/i", $type, $matches)){
+                $vals = $matches[1];
+                $vals = str_getcsv($vals, ',', "'\"");
+                // limpar espaços e chaves vazias
+                $clean = [];
+                foreach($vals as $v){
+                    $v = trim($v);
+                    if($v !== ''){ $clean[] = $v; }
+                }
+                return $clean;
+            }
+            return [];
+        }catch(PDOException $e){
+            return [];
+        }
+    }
+
 }

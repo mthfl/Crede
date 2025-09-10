@@ -12,7 +12,7 @@ $nome_completo_escola = strtolower($escola);
 $nome_array = explode(' ', $nome_completo_escola);
 
 if (count($nome_array) >= 3) {
-$nome_escola_banco = $nome_array[1] . '_' . $nome_array[2];
+    $nome_escola_banco = $nome_array[1] . '_' . $nome_array[2];
 } else {
     // Fallback: usar o nome completo da escola se não tiver 3 palavras
     $nome_escola_banco = str_replace(' ', '_', $nome_completo_escola);
@@ -405,13 +405,13 @@ $select = new select($nome_escola_banco);
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
                                 </svg>
-                    </div>
-                    <div>
+                            </div>
+                            <div>
                                 <span class="font-semibold text-base">Candidatos</span>
                                 <p class="text-green-200 text-xs mt-1">Gerenciar inscrições</p>
-                    </div>
+                            </div>
                         </a>
-                </div>
+                    </div>
 
                     <!-- Usuários -->
                     <div class="animate-slide-in-left" style="animation-delay: 0.4s;">
@@ -420,7 +420,7 @@ $select = new select($nome_escola_banco);
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                                 </svg>
-            </div>
+                            </div>
                             <div>
                                 <span class="font-semibold text-base">Usuários</span>
                                 <p class="text-green-200 text-xs mt-1">Controle de acesso</p>
@@ -491,6 +491,7 @@ $select = new select($nome_escola_banco);
             </header>
             <main class="p-4 sm:p-6 lg:p-8">
                 <?php $dados = $select->select_usuarios(); ?>
+                <?php $tiposUsuarios = method_exists($select, 'select_tipos_usuarios') ? $select->select_tipos_usuarios() : []; ?>
                 <?php if (count($dados) === 0) { ?>
                     <div class="bg-gradient-to-br from-accent via-white to-accent/50 border-2 border-dashed border-primary/30 rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-12 text-center animate-fade-in-up max-w-2xl mx-auto">
                         <div class="w-20 h-20 sm:w-24 sm:h-24 lg:w-32 lg:h-32 bg-gradient-to-br from-primary/10 to-secondary/10 rounded-full flex items-center justify-center mx-auto mb-6 sm:mb-8 animate-pulse-soft">
@@ -521,7 +522,7 @@ $select = new select($nome_escola_banco);
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
                         <?php foreach ($dados as $index => $dado) { ?>
-                            <article class="grid-item card-hover bg-white rounded-2xl shadow-xl border-0 overflow-hidden group relative">
+                            <article class="grid-item card-hover user-card bg-white rounded-2xl shadow-xl border-0 overflow-hidden group relative" data-nome="<?= htmlspecialchars($dado['nome_user']) ?>" data-email="<?= htmlspecialchars($dado['email']) ?>" data-setor="<?= htmlspecialchars($dado['tipo_usuario']) ?>">
                                 <div class="h-2 w-full bg-gradient-to-r from-primary to-secondary"></div>
                                 <div class="p-8">
                                     <div class="text-center mb-8">
@@ -607,7 +608,8 @@ $select = new select($nome_escola_banco);
             </div>
             <div class="p-6 sm:p-8">
                 <form id="userForm" action="../controllers/controller_usuario.php" method="POST" enctype="multipart/form-data">
-                    <input type="hidden" id="inpUserId" name="user_id" value="">
+                    <input type="hidden" name="form" value="usuario">
+                    <input type="hidden" id="inpUserId" name="id_usuario" value="">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label class="block text-sm font-semibold text-dark mb-3 flex items-center gap-2">
@@ -628,19 +630,36 @@ $select = new select($nome_escola_banco);
                                 <i class="fa-solid fa-id-card text-primary"></i>
                                 CPF *
                             </label>
-                            <input id="inpCpf" name="cpf" type="text" class="input-enhanced w-full px-4 py-4 rounded-xl transition-all text-base border-2 focus:border-primary focus:ring-4 focus:ring-primary/10" placeholder="000.000.000-00" required>
+                            <input id="inpCpf" name="cpf" type="text" class="input-enhanced w-full px-4 py-4 rounded-xl transition-all text-base border-2 focus:border-primary focus:ring-4 focus:ring-primary/10" placeholder="000.000.000-00" maxlength="14" inputmode="numeric" autocomplete="off" required>
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-dark mb-3 flex items-center gap-2">
                                 <i class="fa-solid fa-building text-primary"></i>
                                 Setor *
                             </label>
-                            <select id="inpSetor" name="setor" class="input-enhanced w-full px-4 py-4 rounded-xl transition-all text-base border-2 focus:border-primary focus:ring-4 focus:ring-primary/10" required>
-                                <option value="">Selecione um setor</option>
-                                <option value="1">Administração</option>
-                                <option value="2">Secretaria</option>
-                                <option value="3">Coordenação</option>
-                                <option value="4">Direção</option>
+                            <select id="inpSetor" name="tipo" class="input-enhanced w-full px-4 py-4 rounded-xl transition-all text-base border-2 focus:border-primary focus:ring-4 focus:ring-primary/10" required>
+                                <option value="">Selecione um perfil</option>
+                                <?php
+                                if (!empty($tiposUsuarios)) {
+                                    foreach ($tiposUsuarios as $tipo) {
+                                        $safe = htmlspecialchars($tipo);
+                                        echo "<option value=\"{$safe}\">{$safe}</option>";
+                                    }
+                                } else {
+                                    $tipos = [];
+                                    if (!empty($dados)) {
+                                        foreach ($dados as $row) {
+                                            if (!empty($row['tipo_usuario'])) {
+                                                $tipos[$row['tipo_usuario']] = true;
+                                            }
+                                        }
+                                    }
+                                    foreach (array_keys($tipos) as $tipo) {
+                                        $safe = htmlspecialchars($tipo);
+                                        echo "<option value=\"{$safe}\">{$safe}</option>";
+                                    }
+                                }
+                                ?>
                             </select>
                         </div>
                     </div>
@@ -709,10 +728,11 @@ $select = new select($nome_escola_banco);
                 </p>
                 <p class="text-sm text-red-600 bg-red-50 px-4 py-3 rounded-lg border border-red-200 mb-6">
                     <i class="fa-solid fa-info-circle mr-2"></i>
-                    Esta ação não pode ser desfeita.
+                    Esta ação não pode be desfeita.
                 </p>
                 <form id="deleteForm" action="../controllers/controller_usuario.php" method="POST">
-                    <input type="hidden" id="deleteUserId" name="user_id" value="">
+                    <input type="hidden" name="form" value="usuario">
+                    <input type="hidden" id="deleteUserId" name="id_usuario" value="">
                     <div class="flex flex-col sm:flex-row gap-3 justify-center">
                         <button type="button" class="px-6 py-3 rounded-xl border-2 border-primary font-semibold text-primary hover:bg-primary/10 hover:border-primary transition-all text-base focus-ring" onclick="closeModal('modalDeleteUser')">
                             <i class="fa-solid fa-times mr-2"></i>Cancelar
@@ -766,14 +786,22 @@ $select = new select($nome_escola_banco);
         }
 
         function openEditUser(userId) {
-            const user = usuarios.find(u => u.id === userId);
+            const user = usuarios.find(u => parseInt(u.id, 10) === parseInt(userId, 10));
             if (user) {
                 document.getElementById('modalTitle').textContent = 'Editar Usuário';
                 document.getElementById('inpUserId').value = user.id || '';
-                document.getElementById('inpNome').value = user.nome || '';
+                document.getElementById('inpNome').value = user.nome_user || '';
                 document.getElementById('inpEmail').value = user.email || '';
-                document.getElementById('inpCpf').value = user.cpf || '';
-                document.getElementById('inpSetor').value = user.id_setor || '';
+                document.getElementById('inpCpf').value = formatarCPF(user.cpf || '');
+                const selectTipo = document.getElementById('inpSetor');
+                const tipoValor = user.tipo_usuario || '';
+                let hasOption = false;
+                Array.from(selectTipo.options).forEach(opt => { if (opt.value === tipoValor) hasOption = true; });
+                if (!hasOption && tipoValor !== '') {
+                    const opt = new Option(tipoValor, tipoValor, true, true);
+                    selectTipo.add(opt);
+                }
+                selectTipo.value = tipoValor;
                 document.getElementById('userForm').action = '../controllers/controller_usuario.php';
                 openModal('modalUser');
             }
@@ -789,7 +817,6 @@ $select = new select($nome_escola_banco);
             const modal = document.getElementById(modalId);
             modal.classList.remove('hidden');
             modal.classList.add('flex');
-
             setTimeout(() => {
                 const content = modal.querySelector('[id$="Content"]');
                 if (content) {
@@ -802,12 +829,10 @@ $select = new select($nome_escola_banco);
         function closeModal(modalId) {
             const modal = document.getElementById(modalId);
             const content = modal.querySelector('[id$="Content"]');
-
             if (content) {
                 content.style.transform = 'scale(0.95)';
                 content.style.opacity = '0';
             }
-
             setTimeout(() => {
                 modal.classList.add('hidden');
                 modal.classList.remove('flex');
@@ -827,13 +852,10 @@ $select = new select($nome_escola_banco);
                     <span class="font-medium">${message}</span>
                 </div>
             `;
-
             document.body.appendChild(notification);
-
             setTimeout(() => {
                 notification.style.transform = 'translateX(0)';
             }, 10);
-
             setTimeout(() => {
                 notification.style.transform = 'translateX(100%)';
                 setTimeout(() => {
@@ -842,75 +864,90 @@ $select = new select($nome_escola_banco);
             }, 3000);
         }
 
-        function applyFilters() {
-            const q = document.getElementById('tableSearch').value.toLowerCase().trim();
-            const cards = document.querySelectorAll('.user-card');
-            let count = 0;
-
-            cards.forEach(card => {
-                const nome = card.dataset.nome || '';
-                const email = card.dataset.email || '';
-                const setor = card.dataset.setor || '';
-
-                if (q === '') {
-                    card.style.display = '';
-                    count++;
-                } else {
-                    const matchesQuery = (nome.includes(q) || email.includes(q) || setor.includes(q));
-                    card.style.display = matchesQuery ? '' : 'none';
-                    if (matchesQuery) count++;
-                }
-            });
-
-            document.getElementById('resultCount').textContent = `${count} resultado${count !== 1 ? 's' : ''}`;
-        }
-
-        // Função para aplicar máscara de CPF
-        function aplicarMascaraCPF(input) {
-            let value = input.value.replace(/\D/g, '');
+        // Função para formatar CPF
+        function formatarCPF(cpf) {
+            let value = cpf.replace(/\D/g, '');
             if (value.length > 11) value = value.slice(0, 11);
             if (value.length > 0) {
-                value = value.replace(/(\d{3})(\d)/, '$1.$2');
-                value = value.replace(/(\d{3})(\d)/, '$1.$2');
-                value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+                if (value.length <= 3) {
+                    value = value;
+                } else if (value.length <= 6) {
+                    value = value.replace(/(\d{3})(\d)/, '$1.$2');
+                } else if (value.length <= 9) {
+                    value = value.replace(/(\d{3})(\d{3})(\d)/, '$1.$2.$3');
+                } else {
+                    value = value.replace(/(\d{3})(\d{3})(\d{3})(\d{1,2})/, '$1.$2.$3-$4');
+                }
             }
-            input.value = value;
+            return value;
         }
 
-        // Função para remover máscara do CPF (apenas números)
+        // Função para remover máscara do CPF
         function removerMascaraCPF(cpf) {
             return cpf.replace(/\D/g, '');
         }
 
+        // Função para validar CPF
+        function validarCPF(cpf) {
+            cpf = removerMascaraCPF(cpf);
+            if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false;
+
+            let soma = 0;
+            let resto;
+            for (let i = 1; i <= 9; i++) {
+                soma += parseInt(cpf.charAt(i - 1)) * (11 - i);
+            }
+            resto = (soma * 10) % 11;
+            if (resto === 10 || resto === 11) resto = 0;
+            if (resto !== parseInt(cpf.charAt(9))) return false;
+
+            soma = 0;
+            for (let i = 1; i <= 10; i++) {
+                soma += parseInt(cpf.charAt(i - 1)) * (12 - i);
+            }
+            resto = (soma * 10) % 11;
+            if (resto === 10 || resto === 11) resto = 0;
+            if (resto !== parseInt(cpf.charAt(10))) return false;
+
+            return true;
+        }
+
+        // Aplicar máscara de CPF
+        function aplicarMascaraCPF(input) {
+            input.value = formatarCPF(input.value);
+        }
+
         // Event listeners
         document.addEventListener('DOMContentLoaded', function() {
-            // Inicializar contagem de resultados
-            const cards = document.querySelectorAll('.user-card');
-            document.getElementById('resultCount').textContent = `${cards.length} resultado${cards.length !== 1 ? 's' : ''}`;
-
-            // Adicionar listener para o campo de busca
-            const searchInput = document.getElementById('tableSearch');
-            if (searchInput) {
-                searchInput.addEventListener('input', applyFilters);
-            }
-
-            // Aplicar máscara de CPF
             const cpfInput = document.getElementById('inpCpf');
             if (cpfInput) {
+                // Aplicar máscara em tempo real
                 cpfInput.addEventListener('input', function() {
                     aplicarMascaraCPF(this);
                 });
 
+                // Bloquear caracteres não numéricos
                 cpfInput.addEventListener('keypress', function(e) {
+                    if (!/[0-9]/.test(e.key)) {
+                        e.preventDefault();
+                    }
                     if (removerMascaraCPF(this.value).length >= 11 && e.key !== 'Backspace' && e.key !== 'Delete') {
                         e.preventDefault();
                     }
                 });
 
+                // Tratar colagem
+                cpfInput.addEventListener('paste', function(e) {
+                    e.preventDefault();
+                    const text = (e.clipboardData || window.clipboardData).getData('text');
+                    const digits = text.replace(/\D/g, '').slice(0, 11);
+                    this.value = formatarCPF(digits);
+                });
+
+                // Aplicar máscara ao ganhar/perder foco
                 cpfInput.addEventListener('focus', function() {
                     aplicarMascaraCPF(this);
                 });
-
                 cpfInput.addEventListener('blur', function() {
                     if (this.value) {
                         aplicarMascaraCPF(this);
@@ -918,26 +955,36 @@ $select = new select($nome_escola_banco);
                 });
             }
 
-            // Form submissions
+            // Validação do formulário de usuário
             document.getElementById('userForm').addEventListener('submit', function(e) {
                 e.preventDefault();
+                const nomeEl = document.getElementById('inpNome');
+                const emailEl = document.getElementById('inpEmail');
+                const cpfEl = document.getElementById('inpCpf');
+                const tipoEl = document.getElementById('inpSetor');
 
-                if (!this.inpNome.value.trim() || !this.inpEmail.value.trim() || !this.inpCpf.value.trim() || !this.inpSetor.value) {
+                if (!nomeEl.value.trim() || !emailEl.value.trim() || !cpfEl.value.trim() || !tipoEl.value) {
                     showNotification('Preencha todos os campos obrigatórios.', 'error');
                     return;
                 }
 
-                const cpf = this.inpCpf.value;
-                if (cpf.length !== 14 || !/^\d{3}\.\d{3}\.\d{3}-\d{2}$/.test(cpf)) {
-                    showNotification('CPF deve estar no formato 000.000.000-00.', 'error');
+                const cpf = removerMascaraCPF(cpfEl.value);
+                if (cpf.length !== 11) {
+                    showNotification('O CPF deve conter 11 dígitos.', 'error');
                     return;
                 }
 
-                const cpfMascarado = this.inpCpf.value;
+                if (!validarCPF(cpf)) {
+                    showNotification('CPF inválido. Verifique os dígitos.', 'error');
+                    return;
+                }
+
+                // Enviar CPF sem máscara
+                cpfEl.value = cpf;
                 this.submit();
-                this.inpCpf.value = cpfMascarado;
             });
 
+            // Validação do formulário de tipo de usuário
             document.getElementById('userTypeForm').addEventListener('submit', function(e) {
                 if (!this.inpNomeTipo.value.trim()) {
                     e.preventDefault();
@@ -945,29 +992,10 @@ $select = new select($nome_escola_banco);
                 }
             });
 
+            // Smooth scroll
             document.documentElement.style.scrollBehavior = 'smooth';
 
-            // IntersectionObserver para animações suaves
-            const observerOptions = {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
-            };
-
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('animate-fade-in');
-                        entry.target.style.opacity = '1';
-                        entry.target.style.transform = 'translateY(0)';
-                        observer.unobserve(entry.target); // Parar de observar após a animação
-                    }
-                });
-            }, observerOptions);
-
-            document.querySelectorAll('.card-enhanced').forEach(el => {
-                observer.observe(el);
-            });
-
+            // Fechar modais com tecla Escape
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'Escape') {
                     const openModals = document.querySelectorAll('[id^="modal"]:not(.hidden)');
@@ -977,16 +1005,6 @@ $select = new select($nome_escola_banco);
                         }
                     });
                 }
-            });
-
-            document.querySelectorAll('.table-row').forEach(row => {
-                row.addEventListener('mouseenter', function() {
-                    this.style.transform = 'translateY(-1px)';
-                });
-
-                row.addEventListener('mouseleave', function() {
-                    this.style.transform = 'translateY(0)';
-                });
             });
         });
     </script>
