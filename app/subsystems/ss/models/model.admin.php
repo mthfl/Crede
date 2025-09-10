@@ -188,6 +188,92 @@ class admin extends cadastrador
         }
     }
 
+    /*
+     *CRUD bairros de cota
+     */
+    public function cadastrar_bairro(string $nome): int
+    {
+        try {
+            $stmt_check = $this->connect->prepare("SELECT * FROM $this->table13 WHERE nome = :nome");
+            $stmt_check->bindValue(":nome", $nome);
+            $stmt_check->execute();
+
+            if ($stmt_check->rowCount() == 0) {
+
+                $stmt_usuario = $this->connect->prepare("INSERT INTO $this->table13(`nome`) VALUES (:nome)");
+                $stmt_usuario->bindValue(":nome", $nome);
+
+                if ($stmt_usuario->execute()) {
+
+                    return 1;
+                } else {
+
+                    return 2;
+                }
+            } else {
+
+                return 3;
+            }
+        } catch (PDOException $e) {
+            return 0;
+        }
+    }
+    public function editar_bairro(int $id_bairro, string $nome): int
+    {
+        try {
+            $stmt_check = $this->connect->prepare("SELECT * FROM $this->table13 WHERE id = :id_bairro");
+            $stmt_check->bindValue(":id_bairro", $id_bairro);
+            $stmt_check->execute();
+
+            if ($stmt_check->rowCount() == 1) {
+
+                $stmt_usuario = $this->connect->prepare(" UPDATE $this->table13 SET `nome`= :nome WHERE id = :id_bairro");
+                $stmt_usuario->bindValue(":id_bairro", $id_bairro);
+                $stmt_usuario->bindValue(":nome", $nome);
+
+                if ($stmt_usuario->execute()) {
+
+                    return 1;
+                } else {
+
+                    return 2;
+                }
+            } else {
+
+                return 3;
+            }
+        } catch (PDOException $e) {
+            return 0;
+        }
+    }
+    public function excluir_bairro(int $id_bairro): int
+    {
+        try {
+            $stmt_check = $this->connect->prepare("SELECT * FROM $this->table13 WHERE id = :id_bairro");
+            $stmt_check->bindValue(":id_bairro", $id_bairro);
+            $stmt_check->execute();
+
+            if ($stmt_check->rowCount() == 1) {
+
+                $stmt_usuario = $this->connect->prepare(" DELETE FROM $this->table13 WHERE id = :id_bairro");
+                $stmt_usuario->bindValue(":id_bairro", $id_bairro);
+
+                if ($stmt_usuario->execute()) {
+
+                    return 1;
+                } else {
+
+                    return 2;
+                }
+            } else {
+
+                return 3;
+            }
+        } catch (PDOException $e) {
+            return 0;
+        }
+    }
+
     public function limpar_banco(): int
     {
         try {

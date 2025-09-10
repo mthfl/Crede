@@ -107,6 +107,68 @@ $tipo_escola = $_GET['tipo_escola'] ?? '';
             outline-offset: 2px;
         }
 
+        .input-focus:focus {
+            ring-color: rgba(0, 90, 36, 0.3);
+            border-color: rgba(0, 90, 36, 0.5);
+        }
+
+        /* Estilos melhorados para inputs */
+        .input-modern {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        }
+
+        .input-modern:focus {
+            box-shadow: 0 0 0 3px rgba(0, 90, 36, 0.1), 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transform: translateY(-1px);
+        }
+
+        .input-modern:hover:not(:focus):not(:disabled) {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transform: translateY(-1px);
+        }
+
+        .input-disabled {
+            background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+            border-color: #e5e7eb;
+            color: #6b7280;
+            cursor: not-allowed;
+        }
+
+        .input-checkbox {
+            transition: all 0.2s ease-in-out;
+        }
+
+        .input-checkbox:hover {
+            transform: scale(1.05);
+        }
+
+        .input-checkbox:checked {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        /* Remover seta dos selects desabilitados */
+        .input-disabled {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: none;
+        }
+
+        .input-disabled::-ms-expand {
+            display: none;
+        }
+
+        /* Estilos para botões com cores dinâmicas */
+        button[style*="--hover-bg"]:hover {
+            background-color: var(--hover-bg) !important;
+        }
+
+        button[style*="border-color"]:hover {
+            background-color: var(--hover-bg) !important;
+        }
+
         .step {
             display: none;
         }
@@ -130,11 +192,103 @@ $tipo_escola = $_GET['tipo_escola'] ?? '';
             border-radius: 9999px;
             transition: width 0.3s ease-in-out;
         }
+
+        /* Modal de erro */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 1rem;
+            padding: 2rem;
+            max-width: 400px;
+            width: 90%;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-icon {
+            width: 3rem;
+            height: 3rem;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1f2937;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-message {
+            color: #6b7280;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+
+        .modal-button {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .modal-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 25px rgba(239, 68, 68, 0.3);
+        }
     </style>
 </head>
 <body class="bg-gray-50 min-h-screen font-body">
     <main class="p-4 sm:p-6 lg:p-8">
         <div class="max-w-6xl mx-auto">
+            <!-- Botão Voltar - Fora da box -->
+            <div class="mb-6">
+                <button type="button" onclick="window.history.back()" class="flex items-center text-gray-600 hover:text-gray-800 transition-all duration-300 group">
+                    <div class="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center group-hover:scale-105 transition-all duration-300">
+                        <svg class="w-5 h-5 group-hover:-translate-x-0.5 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                    </div>
+                    <span class="ml-3 font-medium">Voltar</span>
+                </button>
+            </div>
+
             <div class="bg-white rounded-2xl shadow-xl border border-gray-200/50 overflow-hidden">
                 <div class="text-white p-6" style="background: linear-gradient(135deg, <?= $curso_cor ?>, #1A3C34);">
                     <div class="flex items-center space-x-3">
@@ -180,19 +334,51 @@ $tipo_escola = $_GET['tipo_escola'] ?? '';
                                 </svg>
                                 Informações Pessoais
                             </h3>
+                            <!-- Primeira linha: Nome e Data de Nascimento -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                <div>
+                                    <input type="text" name="nome" required placeholder="Digite seu nome completo" class="w-full px-4 py-3.5 border border-gray-300 rounded-xl input-modern input-focus" style="--tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;">
+                                </div>
+                                <div>
+                                    <input type="text" name="data_nascimento" required placeholder="DD/MM/AAAA" class="w-full px-4 py-3.5 border border-gray-300 rounded-xl input-modern input-focus" style="--tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;" oninput="applyDateMask(this)">
+                                </div>
+                            </div>
+
+                            <!-- Segunda linha: Bairro e PCD -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                <div>
+                                    <select name="bairro" required class="w-full px-4 py-3.5 border border-gray-300 rounded-xl input-modern input-focus text-gray-500" style="--tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;">
+                                        <option value="" class="text-gray-500">Selecione seu bairro</option>
+                                        <?php
+                                        $bairros = $select->select_bairros();
+                                        if (!empty($bairros)) {
+                                            foreach ($bairros as $bairro) {
+                                                echo "<option value='{$bairro['id']}'>{$bairro['nome_bairro']}</option>";
+                                            }
+                                        } else {
+                                            // Fallback caso não encontre bairros no banco
+                                            echo "<option value='1'>Centro</option>";
+                                            echo "<option value='2'>Bairro A</option>";
+                                            echo "<option value='3'>Bairro B</option>";
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                                <div class="flex items-end">
+                                    <div class="w-full">
+                                        <div class="flex items-center p-4 border border-gray-300 rounded-xl bg-gradient-to-r from-gray-50 to-gray-100 input-modern">
+                                            <input type="checkbox" name="pcd" id="pcd" class="w-5 h-5 text-primary border-gray-300 rounded input-checkbox focus:ring-2 focus:ring-primary focus:ring-opacity-50">
+                                            <label for="pcd" class="ml-3 text-sm font-medium text-gray-700 cursor-pointer">Pessoa com Deficiência (PCD)</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Terceira linha: Curso e Tipo de Escola (Desabilitados) -->
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Nome Completo *</label>
-                                    <input type="text" name="nome" required placeholder="Digite o nome completo" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Data de Nascimento *</label>
-                                    <input type="text" name="data_nascimento" required placeholder="DD/MM/AAAA" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300" oninput="applyDateMask(this)">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Curso Desejado *</label>
-                                    <select name="curso_id" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300">
-                                        <option value="">Selecione um curso</option>
+                                    <select name="curso_id" required disabled class="w-full px-4 py-3.5 border border-gray-300 rounded-xl input-disabled">
+                                        <option value="">Curso selecionado</option>
                                         <?php
                                         $cursos = $select->select_cursos();
                                         foreach ($cursos as $curso) {
@@ -201,27 +387,15 @@ $tipo_escola = $_GET['tipo_escola'] ?? '';
                                         }
                                         ?>
                                     </select>
+                                    <input type="hidden" name="curso_id" value="<?= htmlspecialchars($curso_id) ?>">
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Tipo de Escola *</label>
-                                    <select name="tipo_escola" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300">
-                                        <option value="">Selecione o tipo</option>
+                                    <select name="tipo_escola" required disabled class="w-full px-4 py-3.5 border border-gray-300 rounded-xl input-disabled">
+                                        <option value="">Tipo de escola</option>
                                         <option value="publica" <?= $tipo_escola === 'publica' ? 'selected' : '' ?>>Escola Pública</option>
                                         <option value="privada" <?= $tipo_escola === 'privada' ? 'selected' : '' ?>>Escola Privada</option>
                                     </select>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Bairro *</label>
-                                    <select name="bairro" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300">
-                                        <option value="">Selecione um bairro</option>
-                                        <option value="1">Centro</option>
-                                        <option value="2">Bairro A</option>
-                                        <option value="3">Bairro B</option>
-                                    </select>
-                                </div>
-                                <div class="flex items-center">
-                                    <input type="checkbox" name="pcd" id="pcd" class="w-5 h-5 text-primary border-gray-300 rounded focus:ring-primary">
-                                    <label for="pcd" class="ml-3 text-sm font-medium text-gray-700">Pessoa com Deficiência (PCD)</label>
+                                    <input type="hidden" name="tipo_escola" value="<?= htmlspecialchars($tipo_escola) ?>">
                                 </div>
                             </div>
                         </div>
@@ -249,7 +423,7 @@ $tipo_escola = $_GET['tipo_escola'] ?? '';
                                         <tr class="hover:bg-gray-50">
                                             <td class="border border-gray-300 px-4 py-3 text-sm font-medium text-gray-700">Português</td>
                                             <td class="border border-gray-300 px-4 py-3">
-                                                <input type="text" name="portugues_6" placeholder="0,00" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-center text-sm" oninput="applyGradeMask(this)">
+                                                <input type="text" name="portugues_6" placeholder="0,00" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg input-modern text-center text-sm input-focus" style="--tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;" oninput="applyGradeMask(this)">
                                             </td>
                                             <td class="border border-gray-300 px-4 py-3">
                                                 <input type="text" name="portugues_7" placeholder="0,00" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-center text-sm" oninput="applyGradeMask(this)">
@@ -532,40 +706,35 @@ $tipo_escola = $_GET['tipo_escola'] ?? '';
                         </div>
 
                         <!-- Navigation Buttons -->
-                        <div class="flex justify-between pt-6 border-t border-gray-200">
-                            <button type="button" id="prevBtn" class="px-8 py-3 border-2 border-primary text-primary rounded-lg hover:bg-primary/10 transition-all duration-300 font-semibold group hidden">
-                                <span class="flex items-center">
-                                    <svg class="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                                    </svg>
-                                    Voltar
-                                </span>
-                            </button>
-                            <div class="flex space-x-4">
-                                <button type="button" onclick="window.history.back()" class="px-8 py-3 border-2 border-primary text-primary rounded-lg hover:bg-primary/10 transition-all duration-300 font-semibold group">
+                        <div class="pt-6 border-t border-gray-200">
+                            <div class="flex justify-between items-center">
+                                <button type="button" id="prevBtn" class="px-8 py-3 border-2 rounded-lg transition-all duration-300 font-semibold group hidden" style="border-color: <?= $curso_cor ?>; color: <?= $curso_cor ?>; --hover-bg: <?= $curso_cor ?>20;">
                                     <span class="flex items-center">
                                         <svg class="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                                         </svg>
-                                        Cancelar
+                                        Voltar
                                     </span>
                                 </button>
-                                <button type="button" id="nextBtn" class="px-8 py-3 bg-primary text-white rounded-lg hover:bg-dark transition-all duration-300 font-semibold group">
-                                    <span class="flex items-center">
-                                        <svg class="w-5 h-5 mr-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                                        </svg>
-                                        Avançar
-                                    </span>
-                                </button>
-                                <button type="submit" id="submitBtn" class="px-8 py-3 bg-primary text-white rounded-lg hover:bg-dark transition-all duration-300 font-semibold group hidden">
-                                    <span class="flex items-center">
-                                        <svg class="w-5 h-5 mr-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                        </svg>
-                                        Cadastrar Candidato
-                                    </span>
-                                </button>
+                                
+                                <div class="flex space-x-4">
+                                    <button type="button" id="nextBtn" class="px-8 py-3 text-white rounded-lg transition-all duration-300 font-semibold group" style="background-color: <?= $curso_cor ?>; --hover-bg: <?= $curso_cor ?>dd;">
+                                        <span class="flex items-center">
+                                            <svg class="w-5 h-5 mr-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                            </svg>
+                                            Avançar
+                                        </span>
+                                    </button>
+                                    <button type="submit" id="submitBtn" class="px-8 py-3 text-white rounded-lg transition-all duration-300 font-semibold group hidden" style="background-color: <?= $curso_cor ?>; --hover-bg: <?= $curso_cor ?>dd;">
+                                        <span class="flex items-center">
+                                            <svg class="w-5 h-5 mr-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                            </svg>
+                                            Cadastrar Candidato
+                                        </span>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </form>
@@ -573,6 +742,20 @@ $tipo_escola = $_GET['tipo_escola'] ?? '';
             </div>
         </div>
     </main>
+
+    <!-- Modal de Erro -->
+    <div id="errorModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-icon">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                </svg>
+            </div>
+            <h3 class="modal-title">Campos Obrigatórios</h3>
+            <p class="modal-message">Por favor, preencha todos os campos obrigatórios antes de continuar.</p>
+            <button class="modal-button" onclick="closeErrorModal()">Entendi</button>
+        </div>
+    </div>
 
     <script>
         // Date input mask
@@ -631,17 +814,45 @@ $tipo_escola = $_GET['tipo_escola'] ?? '';
         function validateStep(step) {
             if (step === 1) {
                 const inputs = document.querySelectorAll(`#step-${step} input[required], #step-${step} select[required]`);
+                const emptyFields = [];
+                
                 for (let input of inputs) {
                     if (!input.value.trim()) {
                         input.classList.add('border-red-500');
-                        return false;
+                        emptyFields.push(input);
+                    } else {
+                        input.classList.remove('border-red-500');
                     }
-                    input.classList.remove('border-red-500');
+                }
+                
+                if (emptyFields.length > 0) {
+                    showErrorModal();
+                    return false;
                 }
                 return true;
             }
             return true; // Steps 2 and 3 have no required fields
         }
+
+        // Funções do modal de erro
+        function showErrorModal() {
+            const modal = document.getElementById('errorModal');
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeErrorModal() {
+            const modal = document.getElementById('errorModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Fechar modal clicando fora dele
+        document.getElementById('errorModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeErrorModal();
+            }
+        });
 
         prevBtn.addEventListener('click', () => {
             if (currentStep > 1) {
@@ -654,8 +865,6 @@ $tipo_escola = $_GET['tipo_escola'] ?? '';
             if (currentStep < totalSteps && validateStep(currentStep)) {
                 currentStep++;
                 updateStep();
-            } else if (!validateStep(currentStep)) {
-                alert('Por favor, preencha todos os campos obrigatórios.');
             }
         });
 
@@ -723,10 +932,40 @@ $tipo_escola = $_GET['tipo_escola'] ?? '';
             });
         }
 
+        // Aplicar estilos modernos e cor de foco baseada na cor do curso
+        function applyModernStyles() {
+            const cursoCor = '<?= $curso_cor ?>';
+            const inputs = document.querySelectorAll('input:not([disabled]):not([type="checkbox"]), select:not([disabled])');
+            
+            inputs.forEach(input => {
+                // Remover classes antigas
+                input.classList.remove('focus:ring-blue-500', 'focus:ring-green-500', 'focus:ring-purple-500', 'focus:ring-yellow-500', 'focus:ring-primary');
+                input.classList.remove('focus:border-blue-500', 'focus:border-green-500', 'focus:border-purple-500', 'focus:border-yellow-500', 'focus:border-primary');
+                input.classList.remove('rounded-lg');
+                
+                // Adicionar classes modernas
+                input.classList.add('input-modern', 'input-focus');
+                if (!input.classList.contains('rounded-xl')) {
+                    input.classList.add('rounded-lg');
+                }
+                
+                // Aplicar cor via CSS customizado
+                input.style.setProperty('--tw-ring-color', cursoCor);
+                input.style.setProperty('--tw-border-opacity', '0.5');
+            });
+
+            // Aplicar estilos aos checkboxes
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.classList.add('input-checkbox');
+            });
+        }
+
         // Inicializar
         document.addEventListener('DOMContentLoaded', function() {
             setupExclusiveFields();
             updateStep();
+            applyModernStyles();
         });
 
         // Form submission (unchanged from original)

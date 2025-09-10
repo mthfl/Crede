@@ -14,6 +14,7 @@ class select extends connect
     protected string $table10;
     protected string $table11;
     protected string $table12;
+    protected string $table13;
 
     function __construct($escola)
     {
@@ -31,6 +32,7 @@ class select extends connect
         $this->table10 = $table["ss_$escola"][10];
         $this->table11 = $table["ss_$escola"][11];
         $this->table12 = $table["ss_$escola"][12];
+        $this->table13 = $table["ss_$escola"][13];
     }
 
     public function select_cursos(): array{
@@ -66,6 +68,15 @@ class select extends connect
                 return $clean;
             }
             return [];
+        }catch(PDOException $e){
+            return [];
+        }
+    }
+
+    public function select_bairros(): array{
+        try{
+            $stmt = $this->connect->query("SELECT * FROM $this->table3 ORDER BY nome_bairro ASC");
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
         }catch(PDOException $e){
             return [];
         }

@@ -146,87 +146,130 @@ class cadastrador extends select
                 return 2;
             }
 
-            //9ano
-            $stmt = $this->connect->prepare("INSERT INTO $this->table9 (id_candidato, l_portuguesa, artes, educacao_fisica, l_inglesa, matematica, ciencias, geografia, historia, religiao) VALUES (:id_candidato, :lp,:artes , :ef, :li, :mate, :cien, :geo, :hist, :reli)");
-            $stmt->bindValue(":id_candidato", $id_candidato);
-            $stmt->bindValue(":lp", $lp_9ano);
-            $stmt->bindValue(":artes", $artes_9ano);
-            $stmt->bindValue(":ef", $ef_9ano);
-            $stmt->bindValue(":li", $li_9ano);
-            $stmt->bindValue(":mate", $mate_9ano);
-            $stmt->bindValue(":cien", $cien_9ano);
-            $stmt->bindValue(":geo", $geo_9ano);
-            $stmt->bindValue(":hist", $hist_9ano);
-            $stmt->bindValue(":reli", $reli_9ano);
-            if (!$stmt->execute()) {
-                return 2;
-            }
+            if ($li_1bim_9ano == 0) {
 
-            //1bim_9ano
-            $stmt = $this->connect->prepare("INSERT INTO $this->table10 (id_candidato, l_portuguesa, artes, educacao_fisica, l_inglesa, matematica, ciencias, geografia, historia, religiao) VALUES (:id_candidato, :lp,:artes , :ef, :li, :mate, :cien, :geo, :hist, :reli)");
-            $stmt->bindValue(":id_candidato", $id_candidato);
-            $stmt->bindValue(":lp", $lp_1bim_9ano);
-            $stmt->bindValue(":artes", $artes_1bim_9ano);
-            $stmt->bindValue(":ef", $ef_1bim_9ano);
-            $stmt->bindValue(":li", $li_1bim_9ano);
-            $stmt->bindValue(":mate", $mate_1bim_9ano);
-            $stmt->bindValue(":cien", $cien_1bim_9ano);
-            $stmt->bindValue(":geo", $geo_1bim_9ano);
-            $stmt->bindValue(":hist", $hist_1bim_9ano);
-            $stmt->bindValue(":reli", $reli_1bim_9ano);
-            if (!$stmt->execute()) {
-                return 2;
-            }
+                //9ano
+                $stmt = $this->connect->prepare("INSERT INTO $this->table9 (id_candidato, l_portuguesa, artes, educacao_fisica, l_inglesa, matematica, ciencias, geografia, historia, religiao) VALUES (:id_candidato, :lp,:artes , :ef, :li, :mate, :cien, :geo, :hist, :reli)");
+                $stmt->bindValue(":id_candidato", $id_candidato);
+                $stmt->bindValue(":lp", $lp_9ano);
+                $stmt->bindValue(":artes", $artes_9ano);
+                $stmt->bindValue(":ef", $ef_9ano);
+                $stmt->bindValue(":li", $li_9ano);
+                $stmt->bindValue(":mate", $mate_9ano);
+                $stmt->bindValue(":cien", $cien_9ano);
+                $stmt->bindValue(":geo", $geo_9ano);
+                $stmt->bindValue(":hist", $hist_9ano);
+                $stmt->bindValue(":reli", $reli_9ano);
+                if (!$stmt->execute()) {
+                    return 2;
+                }
+            } else {
+                //1bim_9ano
+                $stmt = $this->connect->prepare("INSERT INTO $this->table10 (id_candidato, l_portuguesa, artes, educacao_fisica, l_inglesa, matematica, ciencias, geografia, historia, religiao) VALUES (:id_candidato, :lp,:artes , :ef, :li, :mate, :cien, :geo, :hist, :reli)");
+                $stmt->bindValue(":id_candidato", $id_candidato);
+                $stmt->bindValue(":lp", $lp_1bim_9ano);
+                $stmt->bindValue(":artes", $artes_1bim_9ano);
+                $stmt->bindValue(":ef", $ef_1bim_9ano);
+                $stmt->bindValue(":li", $li_1bim_9ano);
+                $stmt->bindValue(":mate", $mate_1bim_9ano);
+                $stmt->bindValue(":cien", $cien_1bim_9ano);
+                $stmt->bindValue(":geo", $geo_1bim_9ano);
+                $stmt->bindValue(":hist", $hist_1bim_9ano);
+                $stmt->bindValue(":reli", $reli_1bim_9ano);
+                if (!$stmt->execute()) {
+                    return 2;
+                }
 
-            //2bim_9ano
-            $stmt = $this->connect->prepare("INSERT INTO $this->table11 (id_candidato, l_portuguesa, artes, educacao_fisica, l_inglesa, matematica, ciencias, geografia, historia, religiao) VALUES (:id_candidato, :lp,:artes , :ef, :li, :mate, :cien, :geo, :hist, :reli)");
-            $stmt->bindValue(":id_candidato", $id_candidato);
-            $stmt->bindValue(":lp", $lp_2bim_9ano);
-            $stmt->bindValue(":artes", $artes_2bim_9ano);
-            $stmt->bindValue(":ef", $ef_2bim_9ano);
-            $stmt->bindValue(":li", $li_2bim_9ano);
-            $stmt->bindValue(":mate", $mate_2bim_9ano);
-            $stmt->bindValue(":cien", $cien_2bim_9ano);
-            $stmt->bindValue(":geo", $geo_2bim_9ano);
-            $stmt->bindValue(":hist", $hist_2bim_9ano);
-            $stmt->bindValue(":reli", $reli_2bim_9ano);
-            if (!$stmt->execute()) {
-                return 2;
-            }
+                //2bim_9ano
+                $stmt = $this->connect->prepare("INSERT INTO $this->table11 (id_candidato, l_portuguesa, artes, educacao_fisica, l_inglesa, matematica, ciencias, geografia, historia, religiao) VALUES (:id_candidato, :lp,:artes , :ef, :li, :mate, :cien, :geo, :hist, :reli)");
+                $stmt->bindValue(":id_candidato", $id_candidato);
+                $stmt->bindValue(":lp", $lp_2bim_9ano);
+                $stmt->bindValue(":artes", $artes_2bim_9ano);
+                $stmt->bindValue(":ef", $ef_2bim_9ano);
+                $stmt->bindValue(":li", $li_2bim_9ano);
+                $stmt->bindValue(":mate", $mate_2bim_9ano);
+                $stmt->bindValue(":cien", $cien_2bim_9ano);
+                $stmt->bindValue(":geo", $geo_2bim_9ano);
+                $stmt->bindValue(":hist", $hist_2bim_9ano);
+                $stmt->bindValue(":reli", $reli_2bim_9ano);
+                if (!$stmt->execute()) {
+                    return 2;
+                }
 
-            //3bim_9ano
-            $stmt = $this->connect->prepare("INSERT INTO $this->table12 (id_candidato, l_portuguesa, artes, educacao_fisica, l_inglesa, matematica, ciencias, geografia, historia, religiao) VALUES (:id_candidato, :lp,:artes , :ef, :li, :mate, :cien, :geo, :hist, :reli)");
-            $stmt->bindValue(":id_candidato", $id_candidato);
-            $stmt->bindValue(":lp", $lp_3bim_9ano);
-            $stmt->bindValue(":artes", $artes_3bim_9ano);
-            $stmt->bindValue(":ef", $ef_3bim_9ano);
-            $stmt->bindValue(":li", $li_3bim_9ano);
-            $stmt->bindValue(":mate", $mate_3bim_9ano);
-            $stmt->bindValue(":cien", $cien_3bim_9ano);
-            $stmt->bindValue(":geo", $geo_3bim_9ano);
-            $stmt->bindValue(":hist", $hist_3bim_9ano);
-            $stmt->bindValue(":reli", $reli_3bim_9ano);
-            if (!$stmt->execute()) {
-                return 2;
-            }
+                $li_9ano_media = ($li_1bim_9ano + $li_2bim_9ano + $li_3bim_9ano) / 3;
+                $lp_9ano_media = ($lp_1bim_9ano + $lp_2bim_9ano + $lp_3bim_9ano) / 3;
+                $l_inglesa_9ano_media = ($li_1bim_9ano + $li_2bim_9ano + $li_3bim_9ano) / 3;
+                $matematica_9ano_media = ($mate_1bim_9ano + $mate_2bim_9ano + $mate_3bim_9ano) / 3;
+                $ciencias_9ano_media = ($cien_1bim_9ano + $cien_2bim_9ano + $cien_3bim_9ano) / 3;
+                $geografia_9ano_media = ($geo_1bim_9ano + $geo_2bim_9ano + $geo_3bim_9ano) / 3;
+                $historia_9ano_media = ($hist_1bim_9ano + $hist_2bim_9ano + $hist_3bim_9ano) / 3;
+                if($reli_1bim_9ano == 0){
 
-            //6ano
-            $stmt = $this->connect->prepare("INSERT INTO `medias`(`id_candidato`, `id_notas_6ano`, `id_notas_7ano`, `id_notas_8ano`, `id_notas_9ano`, `l_portuguesa_media`, `artes_media`, `educacao_fisica_media`, `l_inglesa_media`, `matematica_media`, `ciencias_media`, `geografia_media`, `historia_media`, `religiao_media`, `media_final`) 
-            VALUES ()");
-            $stmt->bindValue(":id_candidato", $id_candidato);
-            $stmt->bindValue(":lp", $lp_6ano);
-            $stmt->bindValue(":artes", $artes_6ano);
-            $stmt->bindValue(":ef", $ef_6ano);
-            $stmt->bindValue(":li", $li_6ano);
-            $stmt->bindValue(":mate", $mate_6ano);
-            $stmt->bindValue(":cien", $cien_6ano);
-            $stmt->bindValue(":geo", $geo_6ano);
-            $stmt->bindValue(":hist", $hist_6ano);
-            $stmt->bindValue(":reli", $reli_6ano);
-            if (!$stmt->execute()) {
-                return 2;
-            }
+                
+                //3bim_9ano
+                $stmt = $this->connect->prepare("INSERT INTO $this->table12 (id_candidato, l_portuguesa, artes, educacao_fisica, l_inglesa, matematica, ciencias, geografia, historia, religiao) VALUES (:id_candidato, :lp,:artes , :ef, :li, :mate, :cien, :geo, :hist, :reli)");
+                $stmt->bindValue(":id_candidato", $id_candidato);
+                $stmt->bindValue(":lp", $lp_3bim_9ano);
+                $stmt->bindValue(":artes", $artes_3bim_9ano);
+                $stmt->bindValue(":ef", $ef_3bim_9ano);
+                $stmt->bindValue(":li", $li_3bim_9ano);
+                $stmt->bindValue(":mate", $mate_3bim_9ano);
+                $stmt->bindValue(":cien", $cien_3bim_9ano);
+                $stmt->bindValue(":geo", $geo_3bim_9ano);
+                $stmt->bindValue(":hist", $hist_3bim_9ano);
+                $stmt->bindValue(":reli", $reli_3bim_9ano);
+                if (!$stmt->execute()) {
+                    return 2;
+                }
 
+                
+                $stmt_select_6ano = $this->connect->prepare("SELECT id FROM $this->table6 WHERE id_candidato = :id_candidato");
+                $stmt_select_6ano->bindValue(":id_candidato", $id_candidato);
+                $stmt_select_6ano->execute();
+                $id_notas_6ano = $stmt_select_6ano->fetch(PDO::FETCH_ASSOC);
+                $stmt_select_7ano = $this->connect->prepare("SELECT id FROM $this->table7 WHERE id_candidato = :id_candidato");
+                $stmt_select_7ano->bindValue(":id_candidato", $id_candidato);
+                $stmt_select_7ano->execute();
+                $id_notas_7ano = $stmt_select_7ano->fetch(PDO::FETCH_ASSOC);
+                $stmt_select_8ano = $this->connect->prepare("SELECT id FROM $this->table8 WHERE id_candidato = :id_candidato");
+                $stmt_select_8ano->bindValue(":id_candidato", $id_candidato);
+                $stmt_select_8ano->execute();
+                $id_notas_8ano = $stmt_select_8ano->fetch(PDO::FETCH_ASSOC);
+                $stmt_select_9ano = $this->connect->prepare("SELECT id FROM $this->table9 WHERE id_candidato = :id_candidato");
+                $stmt_select_9ano->bindValue(":id_candidato", $id_candidato);
+                $stmt_select_9ano->execute();
+                $id_notas_9ano = $stmt_select_9ano->fetch(PDO::FETCH_ASSOC);
+
+                //6ano
+                $stmt = $this->connect->prepare("INSERT INTO $this->table13 (`id_candidato`, `id_notas_6ano`, `id_notas_7ano`, `id_notas_8ano`, `id_notas_9ano`, `l_portuguesa_media`, `artes_media`, `educacao_fisica_media`, `l_inglesa_media`, `matematica_media`, `ciencias_media`, `geografia_media`, `historia_media`, `religiao_media`, `media_final`) 
+            VALUES (:id_candidato, :id_notas_6ano, :id_notas_7ano, :id_notas_8ano, :id_notas_9ano, :l_portuguesa_media, :artes_media, :educacao_fisica_media, :l_inglesa_media, :matematica_media, :ciencias_media, :geografia_media, :historia_media, :religiao_media, :media_final)");
+                $stmt->bindValue(":id_candidato", $id_candidato);
+                $stmt->bindValue(":id_notas_6ano", $id_notas_6ano);
+                $stmt->bindValue(":id_notas_7ano", $id_notas_7ano);
+                $stmt->bindValue(":id_notas_8ano", $id_notas_8ano);
+                $stmt->bindValue(":id_notas_9ano", $id_notas_9ano);
+                $stmt->bindValue(":l_portuguesa_media", $l_portuguesa_media);
+                $stmt->bindValue(":artes_media", $artes_media);
+                $stmt->bindValue(":educacao_fisica_media", $educacao_fisica_media);
+                $stmt->bindValue(":l_inglesa_media", $l_inglesa_media);
+                $stmt->bindValue(":matematica_media", $matematica_media);
+                $stmt->bindValue(":ciencias_media", $ciencias_media);
+                $stmt->bindValue(":geografia_media", $geografia_media);
+                $stmt->bindValue(":historia_media", $historia_media);
+                $stmt->bindValue(":religiao_media", $religiao_media);
+                $stmt->bindValue(":media_final", $media_final);
+                $stmt->bindValue(":artes", $artes_6ano);
+                $stmt->bindValue(":ef", $ef_6ano);
+                $stmt->bindValue(":li", $li_6ano);
+                $stmt->bindValue(":mate", $mate_6ano);
+                $stmt->bindValue(":cien", $cien_6ano);
+                $stmt->bindValue(":geo", $geo_6ano);
+                $stmt->bindValue(":hist", $hist_6ano);
+                $stmt->bindValue(":reli", $reli_6ano);
+                if (!$stmt->execute()) {
+                    return 2;
+                }
+            }
             return 1;
         } catch (PDOException $e) {
             return 0;
