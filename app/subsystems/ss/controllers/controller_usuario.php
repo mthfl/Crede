@@ -24,7 +24,7 @@ if (isset($_POST['form']) && $_POST['form'] === 'usuario') {
     $cpf = isset($_POST['cpf']) ? trim($_POST['cpf']) : '';
     $tipo = isset($_POST['tipo']) ? trim($_POST['tipo']) : '';
 
-    $cpf = preg_replace('/\D+/', '', $cpf);
+    // Mantém o CPF com máscara (não remover caracteres não numéricos)
 
     if ($id_usuario === '' && $nome !== '' && $email !== '' && $cpf !== '' && $tipo !== '') {
         $result = $admin_model->cadastrar_usuario($nome, $email, $cpf, $tipo);

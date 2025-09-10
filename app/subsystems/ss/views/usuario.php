@@ -887,30 +887,7 @@ $select = new select($nome_escola_banco);
             return cpf.replace(/\D/g, '');
         }
 
-        // Função para validar CPF
-        function validarCPF(cpf) {
-            cpf = removerMascaraCPF(cpf);
-            if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false;
-
-            let soma = 0;
-            let resto;
-            for (let i = 1; i <= 9; i++) {
-                soma += parseInt(cpf.charAt(i - 1)) * (11 - i);
-            }
-            resto = (soma * 10) % 11;
-            if (resto === 10 || resto === 11) resto = 0;
-            if (resto !== parseInt(cpf.charAt(9))) return false;
-
-            soma = 0;
-            for (let i = 1; i <= 10; i++) {
-                soma += parseInt(cpf.charAt(i - 1)) * (12 - i);
-            }
-            resto = (soma * 10) % 11;
-            if (resto === 10 || resto === 11) resto = 0;
-            if (resto !== parseInt(cpf.charAt(10))) return false;
-
-            return true;
-        }
+        
 
         // Aplicar máscara de CPF
         function aplicarMascaraCPF(input) {
@@ -955,7 +932,7 @@ $select = new select($nome_escola_banco);
                 });
             }
 
-            // Validação do formulário de usuário
+            // Envio do formulário de usuário (somente com máscara e preenchimento obrigatório)
             document.getElementById('userForm').addEventListener('submit', function(e) {
                 e.preventDefault();
                 const nomeEl = document.getElementById('inpNome');
@@ -967,20 +944,7 @@ $select = new select($nome_escola_banco);
                     showNotification('Preencha todos os campos obrigatórios.', 'error');
                     return;
                 }
-
-                const cpf = removerMascaraCPF(cpfEl.value);
-                if (cpf.length !== 11) {
-                    showNotification('O CPF deve conter 11 dígitos.', 'error');
-                    return;
-                }
-
-                if (!validarCPF(cpf)) {
-                    showNotification('CPF inválido. Verifique os dígitos.', 'error');
-                    return;
-                }
-
-                // Enviar CPF sem máscara
-                cpfEl.value = cpf;
+                // Mantém a máscara; envio do valor exatamente como digitado
                 this.submit();
             });
 
