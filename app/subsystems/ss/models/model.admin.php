@@ -19,11 +19,11 @@ class admin extends cadastrador
 
             if ($stmt_check->rowCount() == 0) {
 
-                $stmt_check = $this->connect->prepare("INSERT INTO $this->table2 VALUES(NULL, :curso, :cor)");
+                $stmt_check = $this->connect->prepare("INSERT INTO $this->table2 VALUES (NULL, :curso, :cor)");
                 $stmt_check->bindValue(":curso", $curso);
                 $stmt_check->bindValue(":cor", $cor);
 
-                if ($stmt_check->$stmt_check->execute()) {
+                if ($stmt_check->execute()) {
 
                     return 1;
                 } else {
@@ -52,7 +52,7 @@ class admin extends cadastrador
                 $stmt_check->bindValue(":nome_curso", $curso);
                 $stmt_check->bindValue(":cor", $cor);
 
-                if ($stmt_check->$stmt_check->execute()) {
+                if ($stmt_check->execute()) {
 
                     return 1;
                 } else {

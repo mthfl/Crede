@@ -92,6 +92,7 @@ $select = new select($escola);
                 opacity: 0;
                 transform: translateX(-30px);
             }
+
             to {
                 opacity: 1;
                 transform: translateX(0);
@@ -103,6 +104,7 @@ $select = new select($escola);
                 opacity: 0;
                 transform: translateX(30px);
             }
+
             to {
                 opacity: 1;
                 transform: translateX(0);
@@ -114,6 +116,7 @@ $select = new select($escola);
                 opacity: 0;
                 transform: translateY(20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -125,6 +128,7 @@ $select = new select($escola);
                 opacity: 0;
                 transform: scale(0.95);
             }
+
             to {
                 opacity: 1;
                 transform: scale(1);
@@ -132,9 +136,12 @@ $select = new select($escola);
         }
 
         @keyframes pulseSoft {
-            0%, 100% {
+
+            0%,
+            100% {
                 opacity: 1;
             }
+
             50% {
                 opacity: 0.8;
             }
@@ -269,12 +276,29 @@ $select = new select($escola);
             opacity: 0;
         }
 
-        .grid-item:nth-child(1) { animation-delay: 0.1s; }
-        .grid-item:nth-child(2) { animation-delay: 0.2s; }
-        .grid-item:nth-child(3) { animation-delay: 0.3s; }
-        .grid-item:nth-child(4) { animation-delay: 0.4s; }
-        .grid-item:nth-child(5) { animation-delay: 0.5s; }
-        .grid-item:nth-child(6) { animation-delay: 0.6s; }
+        .grid-item:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .grid-item:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .grid-item:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .grid-item:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+        .grid-item:nth-child(5) {
+            animation-delay: 0.5s;
+        }
+
+        .grid-item:nth-child(6) {
+            animation-delay: 0.6s;
+        }
 
         .focus-ring:focus {
             outline: 2px solid var(--primary);
@@ -458,7 +482,7 @@ $select = new select($escola);
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                                 </svg>
                             </button>
-                        
+
                         </div>
                         <div class="flex items-center justify-between lg:justify-end space-x-2 sm:space-x-4">
                             <div class="hidden sm:block text-right">
@@ -493,7 +517,7 @@ $select = new select($escola);
                     </div>
                 <?php } else { ?>
                     <div class="flex items-center justify-between mb-6">
-                  
+
                         <button onclick="openCreateModal()" class="inline-flex items-center bg-gradient-to-r from-primary to-dark text-white px-6 py-3 rounded-xl hover:from-dark hover:to-primary btn-animate font-semibold shadow-xl focus-ring">
                             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
@@ -555,10 +579,10 @@ $select = new select($escola);
                         </button>
                     </div>
                 </div>
+                <form action="../controllers/controller_curso.php" method="post" id="cursoForm" class="space-y-4">
+                    <!-- Modal Content -->
+                    <div class="p-6">
 
-                <!-- Modal Content -->
-                <div class="p-6">
-                    <form id="cursoForm" class="space-y-4">
                         <input type="hidden" id="cursoId" name="curso_id">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Nome do Curso *</label>
@@ -571,28 +595,29 @@ $select = new select($escola);
                                 <input type="text" id="corCursoText" placeholder="#005A24" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300 text-sm">
                             </div>
                         </div>
-                    </form>
-                </div>
 
-                <!-- Modal Actions -->
-                <div class="flex justify-between p-4 border-t border-gray-200 bg-white">
-                    <button onclick="closeModal()" class="px-6 py-3 border-2 border-primary text-primary rounded-lg hover:bg-primary/10 transition-all duration-300 font-semibold text-sm group">
-                        <span class="flex items-center">
-                            <svg class="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                            </svg>
-                            Cancelar
-                        </span>
-                    </button>
-                    <button onclick="saveCurso()" class="px-6 py-3 bg-primary text-white rounded-lg hover:bg-dark transition-all duration-300 font-semibold text-sm group">
-                        <span class="flex items-center">
-                            <svg class="w-4 h-4 mr-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                            <span id="saveButtonText">Salvar</span>
-                        </span>
-                    </button>
-                </div>
+                    </div>
+
+                    <!-- Modal Actions -->
+                    <div class="flex justify-between p-4 border-t border-gray-200 bg-white">
+                        <button onclick="closeModal()" class="px-6 py-3 border-2 border-primary text-primary rounded-lg hover:bg-primary/10 transition-all duration-300 font-semibold text-sm group">
+                            <span class="flex items-center">
+                                <svg class="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                                Cancelar
+                            </span>
+                        </button>
+                        <button type="submit" class="px-6 py-3 bg-primary text-white rounded-lg hover:bg-dark transition-all duration-300 font-semibold text-sm group">
+                            <span class="flex items-center">
+                                <svg class="w-4 h-4 mr-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <span id="saveButtonText">Salvar</span>
+                            </span>
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -651,53 +676,53 @@ $select = new select($escola);
             if (confirm(`Tem certeza que deseja excluir o curso "${nome}"? Esta ação não pode ser desfeita.`)) {
                 // Aqui você pode implementar a lógica para excluir o curso
                 fetch('processar_curso.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: `action=delete&curso_id=${id}`
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert('Curso excluído com sucesso!');
-                        location.reload();
-                    } else {
-                        alert('Erro ao excluir curso: ' + data.message);
-                    }
-                })
-                .catch(error => {
-                    console.error('Erro:', error);
-                    alert('Ocorreu um erro ao excluir o curso.');
-                });
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: `action=delete&curso_id=${id}`
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert('Curso excluído com sucesso!');
+                            location.reload();
+                        } else {
+                            alert('Erro ao excluir curso: ' + data.message);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erro:', error);
+                        alert('Ocorreu um erro ao excluir o curso.');
+                    });
             }
         }
 
         function saveCurso() {
             const form = document.getElementById('cursoForm');
             const formData = new FormData(form);
-            
+
             const action = document.getElementById('cursoId').value ? 'update' : 'create';
             formData.append('action', action);
 
             fetch('processar_curso.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert(action === 'create' ? 'Curso criado com sucesso!' : 'Curso atualizado com sucesso!');
-                    closeModal();
-                    location.reload();
-                } else {
-                    alert('Erro: ' + data.message);
-                }
-            })
-            .catch(error => {
-                console.error('Erro:', error);
-                alert('Ocorreu um erro ao processar o curso.');
-            });
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(action === 'create' ? 'Curso criado com sucesso!' : 'Curso atualizado com sucesso!');
+                        closeModal();
+                        location.reload();
+                    } else {
+                        alert('Erro: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro:', error);
+                    alert('Ocorreu um erro ao processar o curso.');
+                });
         }
 
         // Sincronizar inputs de cor

@@ -6,10 +6,6 @@ $session->tempo_session();
 
 require_once(__DIR__ . '/../config/connect.php');
 $escola = $_SESSION['escola'];
-$nome_completo_escola = strtolower($escola);
-$nome_array = explode(' ', $nome_completo_escola);
-$nome_escola_banco = $nome_array[1] . '_' . $nome_array[2];
-new connect($nome_escola_banco);
 
 require_once(__DIR__ . "/../models/model.cadastrador.php");
 print_r($_POST);
@@ -27,7 +23,7 @@ if (
     $cpf = $_POST["cpf"];
     $id_setor = $_POST["setor"];
 
-    $admin_model = new admin();
+    $admin_model = new admin($escola);
     $result = $admin_model->cadastrar_candidato($id_usuario, $nome, $email, $cpf, $id_setor);
 
     switch ($result) {
