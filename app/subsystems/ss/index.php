@@ -513,15 +513,15 @@ $select = new select($escola);
                                         <div class="w-16 h-0.5 mx-auto mt-3 rounded-full" style="background-color: <?= $dado['cor_curso'] ?>40"></div>
                                     </div>
                                     <div class="space-y-4">
-                                        <button onclick="openModalWithCourse('modalCadastro', '<?= $dado['nome_curso'] ?>', '<?= $dado['cor_curso'] ?>', 'publica', <?= $dado['id'] ?>)" class="w-full bg-transparent py-2.5 px-5 rounded-lg hover:bg-gray-50 btn-animate flex items-center justify-center font-medium shadow-sm group/btn focus-ring transition-all duration-300 border hover:border-opacity-80" style="border-color: <?= $dado['cor_curso'] ?>; color: <?= $dado['cor_curso'] ?>">
+                                        <a href="views/cadastro.php?curso_id=<?= $dado['id'] ?>&curso_nome=<?= urlencode($dado['nome_curso']) ?>&curso_cor=<?= urlencode($dado['cor_curso']) ?>&tipo_escola=publica" class="w-full bg-transparent py-2.5 px-5 rounded-lg hover:bg-gray-50 btn-animate flex items-center justify-center font-medium shadow-sm group/btn focus-ring transition-all duration-300 border hover:border-opacity-80" style="border-color: <?= $dado['cor_curso'] ?>; color: <?= $dado['cor_curso'] ?>">
                                             <div class="w-6 h-6 rounded-md flex items-center justify-center mr-3 group-hover/btn:scale-110 transition-all duration-300" style="background-color: <?= $dado['cor_curso'] ?>15">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: <?= $dado['cor_curso'] ?>">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
                                                 </svg>
                                             </div>
                                             <span class="text-sm font-medium">Escola Pública</span>
-                                        </button>
-                                        <button onclick="openModalWithCourse('modalCadastro', '<?= $dado['nome_curso'] ?>', '<?= $dado['cor_curso'] ?>', 'privada', <?= $dado['id'] ?>)" class="w-full bg-transparent py-2.5 px-5 rounded-lg hover:bg-gray-50 btn-animate flex items-center justify-center font-medium shadow-sm group/btn focus-ring transition-all duration-300 border hover:border-opacity-80" style="border-color: <?= $dado['cor_curso'] ?>; color: <?= $dado['cor_curso'] ?>">
+                                        </a>
+                                        <a href="views/cadastro.php?curso_id=<?= $dado['id'] ?>&curso_nome=<?= urlencode($dado['nome_curso']) ?>&curso_cor=<?= urlencode($dado['cor_curso']) ?>&tipo_escola=privada" class="w-full bg-transparent py-2.5 px-5 rounded-lg hover:bg-gray-50 btn-animate flex items-center justify-center font-medium shadow-sm group/btn focus-ring transition-all duration-300 border hover:border-opacity-80" style="border-color: <?= $dado['cor_curso'] ?>; color: <?= $dado['cor_curso'] ?>">
                                             <div class="w-6 h-6 rounded-md flex items-center justify-center mr-3 group-hover/btn:scale-110 transition-all duration-300" style="background-color: <?= $dado['cor_curso'] ?>15">
                                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: <?= $dado['cor_curso'] ?>">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"></path>
@@ -529,7 +529,7 @@ $select = new select($escola);
                                                 </svg>
                                             </div>
                                             <span class="text-sm font-medium">Escola Privada</span>
-                                        </button>
+                                        </a>
                                     </div>
                                 </div>
                             </article>

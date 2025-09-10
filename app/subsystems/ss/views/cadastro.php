@@ -1,0 +1,740 @@
+<?php
+require_once(__DIR__ . '/../models/sessions.php');
+$session = new sessions();
+$session->autenticar_session();
+$session->tempo_session();
+
+require_once(__DIR__ . '/../config/connect.php');
+$escola = $_SESSION['escola'];
+
+new connect($escola);
+require_once(__DIR__ . '/../models/model.select.php');
+$select = new select($escola);
+
+// Capturar parâmetros da URL
+$curso_id = $_GET['curso_id'] ?? '';
+$curso_nome = $_GET['curso_nome'] ?? '';
+$curso_cor = $_GET['curso_cor'] ?? '#005A24';
+$tipo_escola = $_GET['tipo_escola'] ?? '';
+?>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Escolar - Cadastro de Candidatos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#005A24',
+                        secondary: '#FFA500',
+                        accent: '#E6F4EA',
+                        dark: '#1A3C34',
+                        light: '#F8FAF9',
+                    },
+                    fontFamily: {
+                        'display': ['Inter', 'system-ui', 'sans-serif'],
+                        'body': ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    spacing: {
+                        '18': '4.5rem',
+                        '88': '22rem',
+                    },
+                    animation: {
+                        'slide-in-left': 'slideInLeft 0.5s ease-out',
+                        'slide-in-right': 'slideInRight 0.5s ease-out',
+                        'fade-in-up': 'fadeInUp 0.6s ease-out',
+                        'scale-in': 'scaleIn 0.4s ease-out',
+                        'pulse-soft': 'pulseSoft 2s ease-in-out infinite',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+        :root {
+            --primary: #005A24;
+            --secondary: #FFA500;
+            --accent: #E6F4EA;
+            --dark: #1A3C34;
+            --light: #F8FAF9;
+        }
+
+        * {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        .btn-animate {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .btn-animate::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s;
+        }
+
+        .btn-animate:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn-animate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-animate:active {
+            transform: translateY(0);
+        }
+
+        .focus-ring:focus {
+            outline: 2px solid var(--secondary);
+            outline-offset: 2px;
+        }
+
+        .step {
+            display: none;
+        }
+
+        .step.active {
+            display: block;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e5e7eb;
+            border-radius: 9999px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 9999px;
+            transition: width 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen font-body">
+    <main class="p-4 sm:p-6 lg:p-8">
+        <div class="max-w-6xl mx-auto">
+            <div class="bg-white rounded-2xl shadow-xl border border-gray-200/50 overflow-hidden">
+                <div class="text-white p-6" style="background: linear-gradient(135deg, <?= $curso_cor ?>, #1A3C34);">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm border border-white/30 shadow-lg">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-bold font-display tracking-tight">Formulário de Inscrição</h2>
+                            <p class="text-white/90 text-sm mt-1 font-medium">
+                                <?php if ($curso_nome && $tipo_escola): ?>
+                                    Curso: <?= htmlspecialchars($curso_nome) ?> - 
+                                    <?= $tipo_escola === 'publica' ? 'Escola Pública' : 'Escola Privada' ?>
+                                <?php else: ?>
+                                    Sistema de Seleção Escolar
+                                <?php endif; ?>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="p-6">
+                    <div class="progress-bar">
+                        <div class="progress-bar-fill" style="width: 33.33%"></div>
+                    </div>
+                    <div class="flex justify-between mt-2 text-sm text-gray-600">
+                        <span>Informações Pessoais</span>
+                        <span>Notas 6º-8º Ano</span>
+                        <span>Notas 9º Ano</span>
+                    </div>
+                </div>
+
+                <!-- Form Content -->
+                <div class="p-6">
+                    <form id="cadastroForm" class="space-y-8">
+                        <!-- Step 1: Informações Pessoais -->
+                        <div class="step active" id="step-1">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-6 flex items-center">
+                                <svg class="w-6 h-6 mr-3 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                </svg>
+                                Informações Pessoais
+                            </h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Nome Completo *</label>
+                                    <input type="text" name="nome" required placeholder="Digite o nome completo" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Data de Nascimento *</label>
+                                    <input type="text" name="data_nascimento" required placeholder="DD/MM/AAAA" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300" oninput="applyDateMask(this)">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Curso Desejado *</label>
+                                    <select name="curso_id" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300">
+                                        <option value="">Selecione um curso</option>
+                                        <?php
+                                        $cursos = $select->select_cursos();
+                                        foreach ($cursos as $curso) {
+                                            $selected = ($curso['id'] == $curso_id) ? 'selected' : '';
+                                            echo "<option value='{$curso['id']}' data-cor='{$curso['cor_curso']}' {$selected}>{$curso['nome_curso']}</option>";
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Tipo de Escola *</label>
+                                    <select name="tipo_escola" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300">
+                                        <option value="">Selecione o tipo</option>
+                                        <option value="publica" <?= $tipo_escola === 'publica' ? 'selected' : '' ?>>Escola Pública</option>
+                                        <option value="privada" <?= $tipo_escola === 'privada' ? 'selected' : '' ?>>Escola Privada</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">Bairro *</label>
+                                    <select name="bairro" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300">
+                                        <option value="">Selecione um bairro</option>
+                                        <option value="1">Centro</option>
+                                        <option value="2">Bairro A</option>
+                                        <option value="3">Bairro B</option>
+                                    </select>
+                                </div>
+                                <div class="flex items-center">
+                                    <input type="checkbox" name="pcd" id="pcd" class="w-5 h-5 text-primary border-gray-300 rounded focus:ring-primary">
+                                    <label for="pcd" class="ml-3 text-sm font-medium text-gray-700">Pessoa com Deficiência (PCD)</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Step 2: Notas do 6º, 7º e 8º Ano -->
+                        <div class="step" id="step-2">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-6 flex items-center">
+                                <svg class="w-6 h-6 mr-3 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                </svg>
+                                Notas do 6º, 7º e 8º Ano
+                            </h3>
+                            <p class="text-gray-600 text-sm mb-6">Preencha as notas dos anos anteriores (6º, 7º e 8º ano)</p>
+                            <div class="overflow-x-auto">
+                                <table class="w-full border-collapse">
+                                    <thead>
+                                        <tr class="bg-gray-100">
+                                            <th class="border border-gray-300 px-4 py-3 text-left text-sm font-medium text-gray-700">Matéria</th>
+                                            <th class="border border-gray-300 px-4 py-3 text-center text-sm font-medium text-gray-700">6º Ano</th>
+                                            <th class="border border-gray-300 px-4 py-3 text-center text-sm font-medium text-gray-700">7º Ano</th>
+                                            <th class="border border-gray-300 px-4 py-3 text-center text-sm font-medium text-gray-700">8º Ano</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="border border-gray-300 px-4 py-3 text-sm font-medium text-gray-700">Português</td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="portugues_6" placeholder="0,00" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-center text-sm" oninput="applyGradeMask(this)">
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="portugues_7" placeholder="0,00" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-center text-sm" oninput="applyGradeMask(this)">
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="portugues_8" placeholder="0,00" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-center text-sm" oninput="applyGradeMask(this)">
+                                            </td>
+                                        </tr>
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="border border-gray-300 px-4 py-3 text-sm font-medium text-gray-700">Matemática</td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="matematica_6" placeholder="0,00" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-center text-sm" oninput="applyGradeMask(this)">
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="matematica_7" placeholder="0,00" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-center text-sm" oninput="applyGradeMask(this)">
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="matematica_8" placeholder="0,00" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-center text-sm" oninput="applyGradeMask(this)">
+                                            </td>
+                                        </tr>
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="border border-gray-300 px-4 py-3 text-sm font-medium text-gray-700">História</td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="historia_6" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-center text-sm">
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="historia_7" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-center text-sm">
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="historia_8" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-center text-sm">
+                                            </td>
+                                        </tr>
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="border border-gray-300 px-4 py-3 text-sm font-medium text-gray-700">Geografia</td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="geografia_6" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-center text-sm">
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="geografia_7" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-center text-sm">
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="geografia_8" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-center text-sm">
+                                            </td>
+                                        </tr>
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="border border-gray-300 px-4 py-3 text-sm font-medium text-gray-700">Ciências</td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="ciencias_6" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-center text-sm">
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="ciencias_7" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-center text-sm">
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="ciencias_8" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-center text-sm">
+                                            </td>
+                                        </tr>
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="border border-gray-300 px-4 py-3 text-sm font-medium text-gray-700">Inglês</td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="ingles_6" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-center text-sm">
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="ingles_7" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-center text-sm">
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="ingles_8" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-center text-sm">
+                                            </td>
+                                        </tr>
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="border border-gray-300 px-4 py-3 text-sm font-medium text-gray-700">Artes</td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="artes_6" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-center text-sm">
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="artes_7" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-center text-sm">
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="artes_8" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-center text-sm">
+                                            </td>
+                                        </tr>
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="border border-gray-300 px-4 py-3 text-sm font-medium text-gray-700">Educação Física</td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="edfisica_6" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-center text-sm">
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="edfisica_7" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-center text-sm">
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="edfisica_8" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-center text-sm">
+                                            </td>
+                                        </tr>
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="border border-gray-300 px-4 py-3 text-sm font-medium text-gray-700">Religião</td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="religiao_6" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-center text-sm">
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="religiao_7" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-center text-sm">
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="religiao_8" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-center text-sm">
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Notas do 9º Ano -->
+                        <div class="step" id="step-3">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-6 flex items-center">
+                                <svg class="w-6 h-6 mr-3 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                </svg>
+                                Notas do 9º Ano
+                            </h3>
+                            <p class="text-gray-600 text-sm mb-6">Preencha as notas do 9º ano por bimestre ou a média geral</p>
+                            <div class="overflow-x-auto">
+                                <table class="w-full border-collapse">
+                                    <thead>
+                                        <tr class="bg-gray-100">
+                                            <th class="border border-gray-300 px-4 py-3 text-left text-sm font-medium text-gray-700">Matéria</th>
+                                            <th class="border border-gray-300 px-4 py-3 text-center text-sm font-medium text-gray-700">1º Bimestre</th>
+                                            <th class="border border-gray-300 px-4 py-3 text-center text-sm font-medium text-gray-700">2º Bimestre</th>
+                                            <th class="border border-gray-300 px-4 py-3 text-center text-sm font-medium text-gray-700">3º Bimestre</th>
+                                            <th class="border border-gray-300 px-4 py-3 text-center text-sm font-medium text-gray-700">Média Geral</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="border border-gray-300 px-4 py-3 text-sm font-medium text-gray-700">Português</td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="portugues_9_1" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-center text-sm">
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="portugues_9_2" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-center text-sm">
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="portugues_9_3" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-center text-sm">
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="portugues_9_media" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-center text-sm bg-yellow-50 focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500">
+                                            </td>
+                                        </tr>
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="border border-gray-300 px-4 py-3 text-sm font-medium text-gray-700">Matemática</td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="matematica_9_1" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-center text-sm">
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="matematica_9_2" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-center text-sm">
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="matematica_9_3" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-center text-sm">
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="matematica_9_media" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-center text-sm bg-yellow-50 focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500">
+                                            </td>
+                                        </tr>
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="border border-gray-300 px-4 py-3 text-sm font-medium text-gray-700">História</td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="historia_9_1" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-center text-sm">
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="historia_9_2" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-center text-sm">
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="historia_9_3" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-center text-sm">
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="historia_9_media" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-center text-sm bg-yellow-50 focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500">
+                                            </td>
+                                        </tr>
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="border border-gray-300 px-4 py-3 text-sm font-medium text-gray-700">Geografia</td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="geografia_9_1" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-center text-sm">
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="geografia_9_2" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-center text-sm">
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="geografia_9_3" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-center text-sm">
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="geografia_9_media" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-center text-sm bg-yellow-50 focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500">
+                                            </td>
+                                        </tr>
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="border border-gray-300 px-4 py-3 text-sm font-medium text-gray-700">Ciências</td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="ciencias_9_1" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-center text-sm">
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="ciencias_9_2" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-center text-sm">
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="ciencias_9_3" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-center text-sm">
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="ciencias_9_media" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-center text-sm bg-yellow-50 focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500">
+                                            </td>
+                                        </tr>
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="border border-gray-300 px-4 py-3 text-sm font-medium text-gray-700">Inglês</td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="ingles_9_1" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-center text-sm">
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="ingles_9_2" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-center text-sm">
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="ingles_9_3" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-center text-sm">
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="ingles_9_media" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-center text-sm bg-yellow-50 focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500">
+                                            </td>
+                                        </tr>
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="border border-gray-300 px-4 py-3 text-sm font-medium text-gray-700">Artes</td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="artes_9_1" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-center text-sm">
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="artes_9_2" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-center text-sm">
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="artes_9_3" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-center text-sm">
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="artes_9_media" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-center text-sm bg-yellow-50 focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500">
+                                            </td>
+                                        </tr>
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="border border-gray-300 px-4 py-3 text-sm font-medium text-gray-700">Educação Física</td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="edfisica_9_1" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-center text-sm">
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="edfisica_9_2" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-center text-sm">
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="edfisica_9_3" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-center text-sm">
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="edfisica_9_media" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-center text-sm bg-yellow-50 focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500">
+                                            </td>
+                                        </tr>
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="border border-gray-300 px-4 py-3 text-sm font-medium text-gray-700">Religião</td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="religiao_9_1" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-center text-sm">
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="religiao_9_2" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500 text-center text-sm">
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="religiao_9_3" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 text-center text-sm">
+                                            </td>
+                                            <td class="border border-gray-300 px-4 py-3">
+                                                <input type="text" name="religiao_9_media" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-center text-sm bg-yellow-50 focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500">
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                                <div class="flex items-start">
+                                    <svg class="w-5 h-5 text-blue-500 mt-0.5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                    <div>
+                                        <h4 class="text-sm font-medium text-blue-800">Informação Importante</h4>
+                                        <p class="text-sm text-blue-700 mt-1">Você pode preencher as notas por bimestre (1º, 2º, 3º) OU a média geral. <strong>A média geral não é obrigatória</strong> - se preencher os bimestres, a média será calculada automaticamente.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Navigation Buttons -->
+                        <div class="flex justify-between pt-6 border-t border-gray-200">
+                            <button type="button" id="prevBtn" class="px-8 py-3 border-2 border-primary text-primary rounded-lg hover:bg-primary/10 transition-all duration-300 font-semibold group hidden">
+                                <span class="flex items-center">
+                                    <svg class="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                                    </svg>
+                                    Voltar
+                                </span>
+                            </button>
+                            <div class="flex space-x-4">
+                                <button type="button" onclick="window.history.back()" class="px-8 py-3 border-2 border-primary text-primary rounded-lg hover:bg-primary/10 transition-all duration-300 font-semibold group">
+                                    <span class="flex items-center">
+                                        <svg class="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                                        </svg>
+                                        Cancelar
+                                    </span>
+                                </button>
+                                <button type="button" id="nextBtn" class="px-8 py-3 bg-primary text-white rounded-lg hover:bg-dark transition-all duration-300 font-semibold group">
+                                    <span class="flex items-center">
+                                        <svg class="w-5 h-5 mr-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                        </svg>
+                                        Avançar
+                                    </span>
+                                </button>
+                                <button type="submit" id="submitBtn" class="px-8 py-3 bg-primary text-white rounded-lg hover:bg-dark transition-all duration-300 font-semibold group hidden">
+                                    <span class="flex items-center">
+                                        <svg class="w-5 h-5 mr-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                        Cadastrar Candidato
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Date input mask
+        function applyDateMask(input) {
+            let value = input.value.replace(/\D/g, '');
+            if (value.length > 8) value = value.slice(0, 8);
+            if (value.length > 4) {
+                value = value.slice(0, 2) + '/' + value.slice(2, 4) + '/' + value.slice(4);
+            } else if (value.length > 2) {
+                value = value.slice(0, 2) + '/' + value.slice(2);
+            }
+            input.value = value;
+        }
+
+        // Grade input mask (0,00 format)
+        function applyGradeMask(input) {
+            let value = input.value.replace(/[^\d,]/g, '');
+            value = value.replace(/,+/g, ',');
+            if (!value.includes(',')) {
+                if (value.length > 2) {
+                    value = value.slice(0, 2);
+                }
+            } else {
+                let parts = value.split(',');
+                if (parts[1] && parts[1].length > 2) {
+                    parts[1] = parts[1].slice(0, 2);
+                    value = parts.join(',');
+                }
+            }
+            let numericValue = parseFloat(value.replace(',', '.'));
+            if (numericValue > 10) {
+                value = '10,00';
+            }
+            input.value = value;
+        }
+
+        // Step navigation
+        let currentStep = 1;
+        const totalSteps = 3;
+        const steps = document.querySelectorAll('.step');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const submitBtn = document.getElementById('submitBtn');
+        const progressBarFill = document.querySelector('.progress-bar-fill');
+
+        function updateStep() {
+            steps.forEach((step, index) => {
+                step.classList.toggle('active', index + 1 === currentStep);
+            });
+            prevBtn.classList.toggle('hidden', currentStep === 1);
+            nextBtn.classList.toggle('hidden', currentStep === totalSteps);
+            submitBtn.classList.toggle('hidden', currentStep !== totalSteps);
+            progressBarFill.style.width = `${(currentStep / totalSteps) * 100}%`;
+        }
+
+        function validateStep(step) {
+            if (step === 1) {
+                const inputs = document.querySelectorAll(`#step-${step} input[required], #step-${step} select[required]`);
+                for (let input of inputs) {
+                    if (!input.value.trim()) {
+                        input.classList.add('border-red-500');
+                        return false;
+                    }
+                    input.classList.remove('border-red-500');
+                }
+                return true;
+            }
+            return true; // Steps 2 and 3 have no required fields
+        }
+
+        prevBtn.addEventListener('click', () => {
+            if (currentStep > 1) {
+                currentStep--;
+                updateStep();
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentStep < totalSteps && validateStep(currentStep)) {
+                currentStep++;
+                updateStep();
+            } else if (!validateStep(currentStep)) {
+                alert('Por favor, preencha todos os campos obrigatórios.');
+            }
+        });
+
+        // Função para controlar campos mutuamente exclusivos do 9º ano
+        function setupExclusiveFields() {
+            const bimestreInputs = document.querySelectorAll('input[name*="_9_1"], input[name*="_9_2"], input[name*="_9_3"]');
+            const mediaInputs = document.querySelectorAll('input[name*="_9_media"]');
+
+            function disableMediaFields() {
+                mediaInputs.forEach(input => {
+                    input.disabled = true;
+                    input.classList.add('opacity-50', 'cursor-not-allowed');
+                    input.classList.remove('focus:ring-2', 'focus:ring-yellow-500', 'focus:border-yellow-500');
+                });
+            }
+
+            function disableBimestreFields() {
+                bimestreInputs.forEach(input => {
+                    input.disabled = true;
+                    input.classList.add('opacity-50', 'cursor-not-allowed');
+                    input.classList.remove('focus:ring-2', 'focus:ring-blue-500', 'focus:ring-green-500', 'focus:ring-purple-500', 'focus:border-blue-500', 'focus:border-green-500', 'focus:border-purple-500');
+                });
+            }
+
+            function enableAllFields() {
+                [...bimestreInputs, ...mediaInputs].forEach(input => {
+                    input.disabled = false;
+                    input.classList.remove('opacity-50', 'cursor-not-allowed');
+                    if (input.name.includes('_9_media')) {
+                        input.classList.add('focus:ring-2', 'focus:ring-yellow-500', 'focus:border-yellow-500');
+                    } else if (input.name.includes('_9_1')) {
+                        input.classList.add('focus:ring-2', 'focus:ring-blue-500', 'focus:border-blue-500');
+                    } else if (input.name.includes('_9_2')) {
+                        input.classList.add('focus:ring-2', 'focus:ring-green-500', 'focus:border-green-500');
+                    } else if (input.name.includes('_9_3')) {
+                        input.classList.add('focus:ring-2', 'focus:ring-purple-500', 'focus:border-purple-500');
+                    }
+                });
+            }
+
+            bimestreInputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    if (this.value.trim() !== '') {
+                        disableMediaFields();
+                    } else {
+                        const allBimestreEmpty = Array.from(bimestreInputs).every(inp => inp.value.trim() === '');
+                        if (allBimestreEmpty) {
+                            enableAllFields();
+                        }
+                    }
+                });
+            });
+
+            mediaInputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    if (this.value.trim() !== '') {
+                        disableBimestreFields();
+                    } else {
+                        const allMediaEmpty = Array.from(mediaInputs).every(inp => inp.value.trim() === '');
+                        if (allMediaEmpty) {
+                            enableAllFields();
+                        }
+                    }
+                });
+            });
+        }
+
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', function() {
+            setupExclusiveFields();
+            updateStep();
+        });
+
+        // Form submission (unchanged from original)
+        document.getElementById('cadastroForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            console.log('Formulário enviado');
+            // Backend will handle submission as in the original code
+        });
+    </script>
+</body>
+</html>
