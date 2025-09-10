@@ -19,6 +19,7 @@ $tipo_escola = $_GET['tipo_escola'] ?? '';
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -112,7 +113,6 @@ $tipo_escola = $_GET['tipo_escola'] ?? '';
             border-color: rgba(0, 90, 36, 0.5);
         }
 
-        /* Estilos melhorados para inputs */
         .input-modern {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
@@ -148,7 +148,6 @@ $tipo_escola = $_GET['tipo_escola'] ?? '';
             border-color: var(--primary);
         }
 
-        /* Remover seta dos selects desabilitados */
         .input-disabled {
             -webkit-appearance: none;
             -moz-appearance: none;
@@ -160,7 +159,6 @@ $tipo_escola = $_GET['tipo_escola'] ?? '';
             display: none;
         }
 
-        /* Estilos para botões com cores dinâmicas */
         button[style*="--hover-bg"]:hover {
             background-color: var(--hover-bg) !important;
         }
@@ -193,7 +191,6 @@ $tipo_escola = $_GET['tipo_escola'] ?? '';
             transition: width 0.3s ease-in-out;
         }
 
-        /* Modal de erro */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -274,10 +271,10 @@ $tipo_escola = $_GET['tipo_escola'] ?? '';
         }
     </style>
 </head>
+
 <body class="bg-gray-50 min-h-screen font-body">
     <main class="p-4 sm:p-6 lg:p-8">
         <div class="max-w-6xl mx-auto">
-            <!-- Botão Voltar - Fora da box -->
             <div class="mb-6">
                 <button type="button" onclick="window.history.back()" class="flex items-center text-gray-600 hover:text-gray-800 transition-all duration-300 group">
                     <div class="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center group-hover:scale-105 transition-all duration-300">
@@ -301,7 +298,7 @@ $tipo_escola = $_GET['tipo_escola'] ?? '';
                             <h2 class="text-2xl font-bold font-display tracking-tight">Formulário de Inscrição</h2>
                             <p class="text-white/90 text-sm mt-1 font-medium">
                                 <?php if ($curso_nome && $tipo_escola): ?>
-                                    Curso: <?= htmlspecialchars($curso_nome) ?> - 
+                                    Curso: <?= htmlspecialchars($curso_nome) ?> -
                                     <?= $tipo_escola === 'publica' ? 'Escola Pública' : 'Escola Privada' ?>
                                 <?php else: ?>
                                     Sistema de Seleção Escolar
@@ -311,7 +308,6 @@ $tipo_escola = $_GET['tipo_escola'] ?? '';
                     </div>
                 </div>
 
-                <!-- Progress Bar -->
                 <div class="p-6">
                     <div class="progress-bar">
                         <div class="progress-bar-fill" style="width: 33.33%"></div>
@@ -323,10 +319,8 @@ $tipo_escola = $_GET['tipo_escola'] ?? '';
                     </div>
                 </div>
 
-                <!-- Form Content -->
                 <div class="p-6">
-                    <form id="cadastroForm" class="space-y-8">
-                        <!-- Step 1: Informações Pessoais -->
+                    <form action="../controllers/controller_candidato.php" method="POST" id="cadastroForm" class="space-y-8">
                         <div class="step active" id="step-1">
                             <h3 class="text-xl font-semibold text-gray-800 mb-6 flex items-center">
                                 <svg class="w-6 h-6 mr-3 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -334,7 +328,6 @@ $tipo_escola = $_GET['tipo_escola'] ?? '';
                                 </svg>
                                 Informações Pessoais
                             </h3>
-                            <!-- Primeira linha: Nome e Data de Nascimento -->
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                                 <div>
                                     <input type="text" name="nome" required placeholder="Digite seu nome completo" class="w-full px-4 py-3.5 border border-gray-300 rounded-xl input-modern input-focus" style="--tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;">
@@ -344,26 +337,7 @@ $tipo_escola = $_GET['tipo_escola'] ?? '';
                                 </div>
                             </div>
 
-                            <!-- Segunda linha: Bairro e PCD -->
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                                <div>
-                                    <select name="bairro" required class="w-full px-4 py-3.5 border border-gray-300 rounded-xl input-modern input-focus text-gray-500" style="--tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;">
-                                        <option value="" class="text-gray-500">Selecione seu bairro</option>
-                                        <?php
-                                        $bairros = $select->select_bairros();
-                                        if (!empty($bairros)) {
-                                            foreach ($bairros as $bairro) {
-                                                echo "<option value='{$bairro['id']}'>{$bairro['nome_bairro']}</option>";
-                                            }
-                                        } else {
-                                            // Fallback caso não encontre bairros no banco
-                                            echo "<option value='1'>Centro</option>";
-                                            echo "<option value='2'>Bairro A</option>";
-                                            echo "<option value='3'>Bairro B</option>";
-                                        }
-                                        ?>
-                                    </select>
-                                </div>
                                 <div class="flex items-end">
                                     <div class="w-full">
                                         <div class="flex items-center p-4 border border-gray-300 rounded-xl bg-gradient-to-r from-gray-50 to-gray-100 input-modern">
@@ -371,10 +345,21 @@ $tipo_escola = $_GET['tipo_escola'] ?? '';
                                             <label for="pcd" class="ml-3 text-sm font-medium text-gray-700 cursor-pointer">Pessoa com Deficiência (PCD)</label>
                                         </div>
                                     </div>
+                                    <div class="w-full">
+                                        <div class="flex items-center p-4 border border-gray-300 rounded-xl bg-gradient-to-r from-gray-50 to-gray-100 input-modern">
+                                            <input type="checkbox" name="bairro" id="bairro" class="w-5 h-5 text-primary border-gray-300 rounded input-checkbox focus:ring-2 focus:ring-primary focus:ring-opacity-50">
+                                            <label for="bairro" class="ml-3 text-sm font-medium text-gray-700 cursor-pointer">Cota bairro</label>
+                                        </div>
+                                    </div>
+                                    <div class="w-full">
+                                        <div class="flex items-center p-4 border border-gray-300 rounded-xl bg-gradient-to-r from-gray-50 to-gray-100 input-modern">
+                                            <input type="checkbox" name="ampla" id="ampla" class="w-5 h-5 text-primary border-gray-300 rounded input-checkbox focus:ring-2 focus:ring-primary focus:ring-opacity-50">
+                                            <label for="ampla" class="ml-3 text-sm font-medium text-gray-700 cursor-pointer">Ampla</label>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
-                            <!-- Terceira linha: Curso e Tipo de Escola (Desabilitados) -->
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
                                     <select name="curso_id" required disabled class="w-full px-4 py-3.5 border border-gray-300 rounded-xl input-disabled">
@@ -400,7 +385,6 @@ $tipo_escola = $_GET['tipo_escola'] ?? '';
                             </div>
                         </div>
 
-                        <!-- Step 2: Notas do 6º, 7º e 8º Ano -->
                         <div class="step" id="step-2">
                             <h3 class="text-xl font-semibold text-gray-800 mb-6 flex items-center">
                                 <svg class="w-6 h-6 mr-3 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -533,7 +517,6 @@ $tipo_escola = $_GET['tipo_escola'] ?? '';
                             </div>
                         </div>
 
-                        <!-- Step 3: Notas do 9º Ano -->
                         <div class="step" id="step-3">
                             <h3 class="text-xl font-semibold text-gray-800 mb-6 flex items-center">
                                 <svg class="w-6 h-6 mr-3 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -705,7 +688,6 @@ $tipo_escola = $_GET['tipo_escola'] ?? '';
                             </div>
                         </div>
 
-                        <!-- Navigation Buttons -->
                         <div class="pt-6 border-t border-gray-200">
                             <div class="flex justify-between items-center">
                                 <button type="button" id="prevBtn" class="px-8 py-3 border-2 rounded-lg transition-all duration-300 font-semibold group hidden" style="border-color: <?= $curso_cor ?>; color: <?= $curso_cor ?>; --hover-bg: <?= $curso_cor ?>20;">
@@ -716,7 +698,7 @@ $tipo_escola = $_GET['tipo_escola'] ?? '';
                                         Voltar
                                     </span>
                                 </button>
-                                
+
                                 <div class="flex space-x-4">
                                     <button type="button" id="nextBtn" class="px-8 py-3 text-white rounded-lg transition-all duration-300 font-semibold group" style="background-color: <?= $curso_cor ?>; --hover-bg: <?= $curso_cor ?>dd;">
                                         <span class="flex items-center">
@@ -743,7 +725,6 @@ $tipo_escola = $_GET['tipo_escola'] ?? '';
         </div>
     </main>
 
-    <!-- Modal de Erro -->
     <div id="errorModal" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-icon">
@@ -758,7 +739,6 @@ $tipo_escola = $_GET['tipo_escola'] ?? '';
     </div>
 
     <script>
-        // Date input mask
         function applyDateMask(input) {
             let value = input.value.replace(/\D/g, '');
             if (value.length > 8) value = value.slice(0, 8);
@@ -770,7 +750,6 @@ $tipo_escola = $_GET['tipo_escola'] ?? '';
             input.value = value;
         }
 
-        // Grade input mask (0,00 format)
         function applyGradeMask(input) {
             let value = input.value.replace(/[^\d,]/g, '');
             value = value.replace(/,+/g, ',');
@@ -792,7 +771,6 @@ $tipo_escola = $_GET['tipo_escola'] ?? '';
             input.value = value;
         }
 
-        // Step navigation
         let currentStep = 1;
         const totalSteps = 3;
         const steps = document.querySelectorAll('.step');
@@ -815,7 +793,7 @@ $tipo_escola = $_GET['tipo_escola'] ?? '';
             if (step === 1) {
                 const inputs = document.querySelectorAll(`#step-${step} input[required], #step-${step} select[required]`);
                 const emptyFields = [];
-                
+
                 for (let input of inputs) {
                     if (!input.value.trim()) {
                         input.classList.add('border-red-500');
@@ -824,17 +802,16 @@ $tipo_escola = $_GET['tipo_escola'] ?? '';
                         input.classList.remove('border-red-500');
                     }
                 }
-                
+
                 if (emptyFields.length > 0) {
                     showErrorModal();
                     return false;
                 }
                 return true;
             }
-            return true; // Steps 2 and 3 have no required fields
+            return true;
         }
 
-        // Funções do modal de erro
         function showErrorModal() {
             const modal = document.getElementById('errorModal');
             modal.classList.add('active');
@@ -847,7 +824,6 @@ $tipo_escola = $_GET['tipo_escola'] ?? '';
             document.body.style.overflow = 'auto';
         }
 
-        // Fechar modal clicando fora dele
         document.getElementById('errorModal').addEventListener('click', function(e) {
             if (e.target === this) {
                 closeErrorModal();
@@ -868,7 +844,6 @@ $tipo_escola = $_GET['tipo_escola'] ?? '';
             }
         });
 
-        // Função para controlar campos mutuamente exclusivos do 9º ano
         function setupExclusiveFields() {
             const bimestreInputs = document.querySelectorAll('input[name*="_9_1"], input[name*="_9_2"], input[name*="_9_3"]');
             const mediaInputs = document.querySelectorAll('input[name*="_9_media"]');
@@ -932,48 +907,36 @@ $tipo_escola = $_GET['tipo_escola'] ?? '';
             });
         }
 
-        // Aplicar estilos modernos e cor de foco baseada na cor do curso
         function applyModernStyles() {
             const cursoCor = '<?= $curso_cor ?>';
             const inputs = document.querySelectorAll('input:not([disabled]):not([type="checkbox"]), select:not([disabled])');
-            
+
             inputs.forEach(input => {
-                // Remover classes antigas
                 input.classList.remove('focus:ring-blue-500', 'focus:ring-green-500', 'focus:ring-purple-500', 'focus:ring-yellow-500', 'focus:ring-primary');
                 input.classList.remove('focus:border-blue-500', 'focus:border-green-500', 'focus:border-purple-500', 'focus:border-yellow-500', 'focus:border-primary');
                 input.classList.remove('rounded-lg');
-                
-                // Adicionar classes modernas
+
                 input.classList.add('input-modern', 'input-focus');
                 if (!input.classList.contains('rounded-xl')) {
                     input.classList.add('rounded-lg');
                 }
-                
-                // Aplicar cor via CSS customizado
+
                 input.style.setProperty('--tw-ring-color', cursoCor);
                 input.style.setProperty('--tw-border-opacity', '0.5');
             });
 
-            // Aplicar estilos aos checkboxes
             const checkboxes = document.querySelectorAll('input[type="checkbox"]');
             checkboxes.forEach(checkbox => {
                 checkbox.classList.add('input-checkbox');
             });
         }
 
-        // Inicializar
         document.addEventListener('DOMContentLoaded', function() {
             setupExclusiveFields();
             updateStep();
             applyModernStyles();
         });
-
-        // Form submission (unchanged from original)
-        document.getElementById('cadastroForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            console.log('Formulário enviado');
-            // Backend will handle submission as in the original code
-        });
     </script>
 </body>
+
 </html>
