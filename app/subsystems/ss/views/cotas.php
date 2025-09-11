@@ -206,7 +206,7 @@ $bairros = method_exists($select, 'select_bairros') ? $select->select_bairros() 
 
                     <!-- Limpar Banco -->
                     <div class="animate-slide-in-left" style="animation-delay: 0.6s;">
-                        <a href="#" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
+                        <a href="#" onclick="openAdminConfirm()" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
                             <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-red-500 group-hover:scale-110 transition-all duration-300">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
@@ -308,6 +308,53 @@ $bairros = method_exists($select, 'select_bairros') ? $select->select_bairros() 
         </div>
     </div>
 
+    <!-- Admin Two-Step Confirm Modal -->
+    <div id="modalAdminConfirm" class="fixed inset-0 bg-black/70 backdrop-blur-md hidden items-center justify-center p-2 sm:p-4 z-50">
+        <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl transform transition-all duration-300 scale-95 opacity-0" id="modalAdminConfirmContent">
+            <div class="p-6 sm:p-8 border-b border-gray-100 bg-gradient-to-r from-white to-gray-50">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary to-dark text-white flex items-center justify-center shadow-md">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c1.657 0 3 1.567 3 3.5S13.657 18 12 18s-3-1.567-3-3.5 1.343-3.5 3-3.5zm4-4V7a4 4 0 01-8 0V7m12 4H4a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2v-6a2 2 0 00-2-2z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-xl sm:text-2xl font-bold text-dark">Confirmar Ação</h3>
+                        <p class="text-gray-600 text-sm">Informe seu e-mail e valide com o código recebido.</p>
+                    </div>
+                </div>
+                <button class="absolute top-6 right-6 p-2 rounded-xl hover:bg-gray-100 transition-all group" onclick="closeAdminConfirm()">
+                    <svg class="w-5 h-5 text-gray-400 group-hover:text-gray-600 group-hover:scale-110 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <div class="p-6 sm:p-8">
+                <form id="adminConfirmForm" class="space-y-6">
+                    <div id="stepEmail">
+                        <label class="block text-sm font-semibold text-dark mb-3">E-mail do Administrador</label>
+                        <input id="adminEmailInput" type="email" class="w-full px-4 py-3.5 rounded-xl transition-all text-base border-2 border-gray-300 focus:outline-none outline-none focus:ring-0" placeholder="admin@dominio.com" required>
+                        <p class="text-xs text-gray-500 mt-2">Enviaremos um código de verificação para este e-mail.</p>
+                    </div>
+                    <div id="stepCode" class="hidden">
+                        <label class="block text-sm font-semibold text-dark mb-3">Código de Verificação</label>
+                        <input id="adminCodeInput" type="text" inputmode="numeric" maxlength="6" class="w-full px-4 py-3.5 rounded-xl transition-all text-base border-2 border-gray-300 tracking-widest text-center focus:outline-none outline-none focus:ring-0" placeholder="••••••">
+                        <p class="text-xs text-gray-500 mt-2">Digite o código enviado para o seu e-mail.</p>
+                    </div>
+                    <input type="hidden" id="adminEmailHidden" name="admin_email" value="">
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center gap-3">
+                            <button type="button" id="btnBackStep" class="px-6 py-3 rounded-xl border-2 border-primary font-semibold text-primary hover:bg-primary/10 hover:border-primary transition-all text-base hidden" onclick="prevAdminStep()">Voltar</button>
+                            <button type="button" id="btnCancel" class="px-6 py-3 rounded-xl border-2 border-primary font-semibold text-primary hover:bg-primary/10 hover:border-primary transition-all text-base" onclick="closeAdminConfirm()">Cancelar</button>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <button type="submit" id="btnNextStep" class="px-6 py-3 bg-gradient-to-r from-primary to-dark text-white font-semibold rounded-xl hover:from-dark hover:to-primary transition-all text-base shadow-lg">Enviar código</button>
+                            <button type="submit" id="btnConfirmAction" class="px-6 py-3 bg-gradient-to-r from-primary to-dark text-white font-semibold rounded-xl hover:from-dark hover:to-primary transition-all text-base shadow-lg hidden">Confirmar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal Criar/Editar Bairro -->
     <div id="modalBairro" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-2 sm:p-4 z-40">
         <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl max-h-[90vh] overflow-y-auto transform transition-all duration-300 scale-95 opacity-0" id="modalBairroContent">
@@ -391,6 +438,81 @@ $bairros = method_exists($select, 'select_bairros') ? $select->select_bairros() 
         }
         if (overlay) {
             overlay.addEventListener('click', () => { sidebar.classList.remove('open'); overlay.classList.remove('show'); });
+        }
+
+        function openAdminConfirm() {
+            const modal = document.getElementById('modalAdminConfirm');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            setTimeout(() => {
+                const content = document.getElementById('modalAdminConfirmContent');
+                content.style.transform = 'scale(1)';
+                content.style.opacity = '1';
+            }, 10);
+        }
+
+        function closeAdminConfirm() {
+            const modal = document.getElementById('modalAdminConfirm');
+            const content = document.getElementById('modalAdminConfirmContent');
+            content.style.transform = 'scale(0.95)';
+            content.style.opacity = '0';
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 300);
+        }
+
+        // Two-step flow (email -> code) in same form
+        const adminForm = document.getElementById('adminConfirmForm');
+        const stepEmail = document.getElementById('stepEmail');
+        const stepCode = document.getElementById('stepCode');
+        const btnNextStep = document.getElementById('btnNextStep');
+        const btnConfirmAction = document.getElementById('btnConfirmAction');
+        const btnBackStep = document.getElementById('btnBackStep');
+        const btnCancel = document.getElementById('btnCancel');
+        const emailInput = document.getElementById('adminEmailInput');
+        const codeInput = document.getElementById('adminCodeInput');
+        const emailHidden = document.getElementById('adminEmailHidden');
+
+        function nextAdminStep() {
+            stepEmail.classList.add('hidden');
+            stepCode.classList.remove('hidden');
+            btnNextStep.classList.add('hidden');
+            btnConfirmAction.classList.remove('hidden');
+            btnBackStep.classList.remove('hidden');
+            if (btnCancel) btnCancel.classList.add('hidden');
+            if (emailInput && emailHidden) {
+                emailHidden.value = emailInput.value.trim();
+                emailInput.setAttribute('disabled', 'disabled');
+            }
+            setTimeout(() => codeInput && codeInput.focus(), 50);
+        }
+
+        function prevAdminStep() {
+            stepCode.classList.add('hidden');
+            stepEmail.classList.remove('hidden');
+            btnConfirmAction.classList.add('hidden');
+            btnBackStep.classList.add('hidden');
+            btnNextStep.classList.remove('hidden');
+            if (btnCancel) btnCancel.classList.remove('hidden');
+            if (emailInput) emailInput.removeAttribute('disabled');
+            setTimeout(() => emailInput && emailInput.focus(), 50);
+        }
+
+        if (adminForm) {
+            adminForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                if (!stepEmail.classList.contains('hidden')) {
+                    if (!emailInput.value.trim()) return;
+                    // TODO: send code to email via backend
+                    nextAdminStep();
+                    return;
+                }
+                // Confirm action with code
+                if (!codeInput.value.trim()) return;
+                alert('Código validado. Ação confirmada.');
+                closeAdminConfirm();
+            });
         }
 
         function openModal(modalId) {
