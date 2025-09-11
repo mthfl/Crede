@@ -13,15 +13,12 @@
 
     <title>Login CREDE 1</title>
 
-    <!-- SEO Meta Tags -->
     <meta name="description" content="Acesso ao Sistema CREDE1 - Coordenadoria Regional de Desenvolvimento da Educação">
     <meta name="author" content="CREDE 1">
     <meta name="keywords" content="login, acesso, CREDE 1, sistema, educação">
 
-    <!-- Favicon -->
     <link rel="icon" type="image/png" href="https://i.postimg.cc/0N0dsxrM/Bras-o-do-Cear-svg-removebg-preview.png">
 
-    <!-- Fontes -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -34,7 +31,6 @@
             theme: {
                 extend: {
                     colors: {
-                        // Paleta original
                         primary: '#005A24',
                         secondary: '#FFA500',
                         accent: '#E6F4EA',
@@ -84,13 +80,11 @@
     </script>
 
     <style>
-        /* Fonte principal */
         body {
             font-family: 'Inter', sans-serif;
             background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
         }
 
-        /* Animações */
         @keyframes float {
             0%, 100% {
                 transform: translateY(0px) rotate(0deg);
@@ -171,7 +165,6 @@
             }
         }
 
-        /* Elementos flutuantes */
         .floating-elements {
             position: fixed;
             top: 0;
@@ -250,7 +243,6 @@
             right: 10px;
         }
 
-        /* Enhanced input styles */
         .input-group {
             position: relative;
         }
@@ -298,7 +290,6 @@
             border-radius: 4px;
         }
 
-        /* Enhanced button styles */
         .btn-enhanced {
             background: linear-gradient(135deg, #005A24 0%, #1A3C34 100%);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -328,7 +319,6 @@
             box-shadow: 0 15px 35px rgba(0, 90, 36, 0.4);
         }
 
-        /* Password strength indicator */
         .strength-bar {
             height: 4px;
             border-radius: 2px;
@@ -336,7 +326,6 @@
             background: linear-gradient(90deg, #ff4444 0%, #ffaa00 50%, #005A24 100%);
         }
 
-        /* Error message styling */
         .error-message {
             background: linear-gradient(135deg, #E76F51 0%, #F4A261 100%);
             color: white;
@@ -349,7 +338,6 @@
             font-family: 'Inter', sans-serif;
         }
 
-        /* Loading state */
         .loading {
             position: relative;
             pointer-events: none;
@@ -374,7 +362,6 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* Efeitos especiais */
         .sparkle {
             position: absolute;
             width: 4px;
@@ -384,7 +371,6 @@
             animation: sparkle 2s ease-in-out infinite;
         }
 
-        /* Elementos com brilho mágico */
         .magical-glow {
             box-shadow: 0 0 20px rgba(0, 90, 36, 0.4), 0 0 40px rgba(255, 165, 0, 0.2);
         }
@@ -405,14 +391,12 @@
             animation: pulse-glow 2s infinite;
         }
 
-        /* Focus styles */
         *:focus {
             outline: 2px solid #FFA500;
             outline-offset: 2px;
             border-radius: 4px;
         }
 
-        /* Custom scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -431,7 +415,6 @@
             background: linear-gradient(135deg, #1A3C34 0%, #E76F51 100%);
         }
         
-        /* Enhanced responsive styles */
         @media (max-width: 640px) {
             .main-container {
                 width: 95%;
@@ -464,9 +447,7 @@
 
 <body class="font-sans bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200 min-h-screen flex items-center justify-center p-0 sm:p-4">
     
-    <!-- Elementos flutuantes -->
     <div class="floating-elements">
-        <!-- Nuvens flutuantes -->
         <div class="cloud small" style="top: 20%; animation-delay: 0s;"></div>
         <div class="cloud small" style="top: 60%; animation-delay: -10s;"></div>
         <div class="cloud small" style="top: 40%; animation-delay: -20s;"></div>
@@ -475,12 +456,10 @@
     <div class="main-container w-full max-w-6xl bg-white rounded-none sm:rounded-3xl shadow-strong overflow-hidden animate-fade-in-up relative z-10">
         <div class="flex flex-col lg:flex-row min-h-[100vh] sm:min-h-[600px]">
             
-            <!-- Enhanced Image Container -->
             <div class="hidden md:block lg:flex-1 bg-gradient-primary relative overflow-hidden animate-slide-in-left">
                 <div class="absolute inset-0 bg-black/40"></div>
                 <div class="absolute inset-0 bg-gradient-to-br from-primary/80 via-transparent to-secondary/80"></div>
                 
-                <!-- Elementos decorativos -->
                 <div class="absolute top-10 left-10 w-20 h-20 border-2 border-white/30 rounded-full animate-float"></div>
                 <div class="absolute bottom-20 right-10 w-16 h-16 border-2 border-white/30 rounded-full animate-sway"></div>
                 <div class="absolute top-1/3 right-20 w-12 h-12 bg-white/20 rounded-full animate-bounce-gentle"></div>
@@ -517,12 +496,10 @@
                 </div>
             </div>
 
-            <!-- Enhanced Form Container -->
             <div class="w-full lg:flex-1 p-4 xs:p-6 sm:p-8 lg:p-12 flex flex-col justify-center animate-slide-in-right relative">
                 
                 
                 
-                <!-- Logo Container -->
                 <div class="text-center mb-6 sm:mb-8">
                     <div class="inline-block p-3 sm:p-4 rounded-2xl">
                         <img src="https://i.postimg.cc/0N0dsxrM/Bras-o-do-Cear-svg-removebg-preview.png" 
@@ -555,13 +532,11 @@
                     </div>
                 </div>
 
-                <!-- Formulário de Login -->
                 <form id="loginForm" 
                       action="controllers/controller_auth.php" 
                       method="POST" 
                       class="space-y-4 sm:space-y-6">
                     
-                    <!-- Email Input -->
                     <div class="input-group">
                         <div class="relative">
                             <input type="email" 
@@ -578,7 +553,6 @@
                         </div>
                     </div>
 
-                    <!-- Password Input -->
                     <div class="input-group">
                         <div class="relative">
                             <input type="password" 
@@ -596,7 +570,6 @@
                         </div>
                     </div>
 
-                    <!-- Error Message -->
                     <?php if (isset($_GET['login']) && $_GET['login'] == 'erro'): ?>
                         <div class="error-message flex items-center text-sm sm:text-base">
                             <i class="fas fa-exclamation-triangle mr-2 sm:mr-3"></i>
@@ -604,7 +577,6 @@
                         </div>
                     <?php endif; ?>
 
-                    <!-- Submit Button Login -->
                     <div class="mt-4 sm:mt-6">
                         <button type="submit" 
                                 class="btn-enhanced w-full px-6 py-3 sm:py-4 text-white rounded-xl transition-all duration-300 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50 text-sm sm:text-base font-semibold bg-gradient-to-r from-primary to-dark hover:from-dark hover:to-primary">
@@ -614,13 +586,11 @@
                     </div>
                 </form>
 
-                <!-- Formulário de Primeiro Acesso -->
                 <form id="primeiroAcessoForm" 
                       action="controllers/controller_auth.php" 
                       method="POST" 
                       class="space-y-4 sm:space-y-6 hidden">
                     
-                    <!-- Email Input -->
                     <div class="input-group">
                         <div class="relative">
                             <input type="email" 
@@ -637,7 +607,6 @@
                         </div>
                     </div>
 
-                    <!-- CPF Input -->
                     <div class="input-group">
                         <div class="relative">
                             <input type="text" 
@@ -655,7 +624,6 @@
                         </div>
                     </div>
 
-                    <!-- Submit Button Primeiro Acesso -->
                     <div class="mt-4 sm:mt-6">
                         <button type="submit"
                                 class="btn-enhanced w-full px-6 py-3 sm:py-4 text-white rounded-xl transition-all duration-300 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50 text-sm sm:text-base font-semibold bg-gradient-to-r from-primary to-dark hover:from-dark hover:to-primary">
@@ -665,7 +633,6 @@
                     </div>
                 </form>
 
-                <!-- Additional Links -->
                 <div class="mt-6 sm:mt-8 text-center space-y-3 sm:space-y-4">
                     <div class="pt-3 sm:pt-4 border-t border-gray-200">
                         <p class="text-gray-500 text-xs sm:text-sm font-sans">
@@ -684,10 +651,9 @@
         </div>
     </div>
 
-    <!-- Enhanced JavaScript -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Elementos dos formulários
+
             const loginForm = document.getElementById('loginForm');
             const primeiroAcessoForm = document.getElementById('primeiroAcessoForm');
             const togglePassword = document.querySelector('.toggle-password');
@@ -696,46 +662,37 @@
             const loginEmailInput = document.getElementById('loginEmail');
             const primeiroAcessoEmailInput = document.getElementById('primeiroAcessoEmail');
             
-            // Elementos de controle
             const loginOption = document.getElementById('loginOption');
             const primeiroAcessoOption = document.getElementById('primeiroAcessoOption');
 
-            // Função para alternar entre login e primeiro acesso
             function toggleMode(isPrimeiroAcessoMode) {
                 if (isPrimeiroAcessoMode) {
-                    // Modo primeiro acesso
                     loginOption.classList.remove('bg-white', 'text-primary', 'shadow-sm');
                     loginOption.classList.add('text-gray-600');
                     primeiroAcessoOption.classList.remove('text-gray-600');
                     primeiroAcessoOption.classList.add('bg-white', 'text-primary', 'shadow-sm');
                     
-                    // Mostrar formulário de primeiro acesso, esconder login
                     loginForm.classList.add('hidden');
                     primeiroAcessoForm.classList.remove('hidden');
                     
                 } else {
-                    // Modo login
                     primeiroAcessoOption.classList.remove('bg-white', 'text-primary', 'shadow-sm');
                     primeiroAcessoOption.classList.add('text-gray-600');
                     loginOption.classList.remove('text-gray-600');
                     loginOption.classList.add('bg-white', 'text-primary', 'shadow-sm');
                     
-                    // Mostrar formulário de login, esconder primeiro acesso
                     primeiroAcessoForm.classList.add('hidden');
                     loginForm.classList.remove('hidden');
                 }
             }
 
-            // Event listeners para os botões de opção
             loginOption.addEventListener('click', () => toggleMode(false));
             primeiroAcessoOption.addEventListener('click', () => toggleMode(true));
 
-            // Enhanced password visibility toggle
             togglePassword.addEventListener('click', function() {
                 const type = loginPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
                 loginPasswordInput.setAttribute('type', type);
                 
-                // Enhanced icon animation
                 this.classList.toggle('fa-eye');
                 this.classList.toggle('fa-eye-slash');
                 this.style.transform = 'scale(1.2) rotate(10deg)';
@@ -744,7 +701,6 @@
                 }, 200);
             });
 
-            // CPF mask para primeiro acesso
             primeiroAcessoCpfInput.addEventListener('input', function(e) {
                 let value = e.target.value.replace(/\D/g, '');
                 value = value.replace(/(\d{3})(\d)/, '$1.$2');
@@ -755,13 +711,11 @@
 
 
 
-            // Enhanced form submission for login
             loginForm.addEventListener('submit', function(e) {
                 
                 const email = loginEmailInput.value.trim();
                 const password = loginPasswordInput.value;
 
-                // Validação básica
                 if (!email) {
                     alert('Por favor, insira seu e-mail.');
                     loginEmailInput.focus();
@@ -774,7 +728,6 @@
                     return;
                 }
                 
-                // Simula login normal
                 const submitButton = loginForm.querySelector('button[type="submit"]');
                 submitButton.classList.add('loading');
                 submitButton.disabled = true;
@@ -787,21 +740,16 @@
                     submitButton.disabled = false;
                     submitButton.innerHTML = originalText;
                     
-                    // Simula sucesso no login
                     alert('Login realizado com sucesso!');
-                    // Aqui você pode redirecionar para o sistema
-                    // window.location.href = 'dashboard.php';
                 }, 2000);
             });
 
-            // Enhanced form submission for primeiro acesso
             primeiroAcessoForm.addEventListener('submit', function(e) {
                
                 
                 const email = primeiroAcessoEmailInput.value.trim();
                 const cpf = primeiroAcessoCpfInput.value.trim();
 
-                // Validação básica
                 if (!email) {
                     alert('Por favor, insira seu e-mail.');
                     primeiroAcessoEmailInput.focus();
@@ -814,7 +762,6 @@
                     return;
                 }
                 
-                // Simula verificação de primeiro acesso
                 const submitButton = primeiroAcessoForm.querySelector('button[type="submit"]');
                 submitButton.classList.add('loading');
                 submitButton.disabled = true;
@@ -825,7 +772,6 @@
                 
             });
 
-            // Enhanced input animations
             const inputs = document.querySelectorAll('input');
             inputs.forEach(input => {
                 input.addEventListener('focus', function() {
@@ -839,7 +785,6 @@
                 });
             });
 
-            // Add ripple effect to button
             submitButton.addEventListener('click', function(e) {
                 const ripple = document.createElement('span');
                 const rect = this.getBoundingClientRect();
@@ -867,7 +812,6 @@
                 }, 600);
             });
 
-            // Add CSS for ripple animation
             const style = document.createElement('style');
             style.textContent = `
                 @keyframes ripple {
@@ -884,7 +828,6 @@
             
         });
 
-        // Enhanced accessibility
             document.addEventListener('keydown', function(e) {
             if (e.key === 'Tab') {
                 document.body.classList.add('keyboard-navigation');
@@ -895,16 +838,13 @@
             document.body.classList.remove('keyboard-navigation');
         });
         
-        // Handle orientation changes on mobile
         window.addEventListener('orientationchange', function() {
-            // Small delay to allow the browser to update dimensions
             setTimeout(() => {
                 const vh = window.innerHeight * 0.01;
                 document.documentElement.style.setProperty('--vh', `${vh}px`);
             }, 100);
         });
         
-        // Set initial viewport height variable
         (function() {
             const vh = window.innerHeight * 0.01;
             document.documentElement.style.setProperty('--vh', `${vh}px`);
