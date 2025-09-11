@@ -75,7 +75,7 @@ class select extends connect
 
     public function select_bairros(): array{
         try{
-            $stmt = $this->connect->query("SELECT * FROM $this->table3 ORDER BY nome_bairro ASC");
+            $stmt = $this->connect->query("SELECT * FROM $this->table13 ORDER BY nome_bairro ASC");
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         }catch(PDOException $e){
             return [];

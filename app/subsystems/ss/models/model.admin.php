@@ -194,13 +194,13 @@ class admin extends cadastrador
     public function cadastrar_bairro(string $nome): int
     {
         try {
-            $stmt_check = $this->connect->prepare("SELECT * FROM $this->table13 WHERE nome = :nome");
+            $stmt_check = $this->connect->prepare("SELECT * FROM $this->table13 WHERE bairros = :nome");
             $stmt_check->bindValue(":nome", $nome);
             $stmt_check->execute();
 
             if ($stmt_check->rowCount() == 0) {
 
-                $stmt_usuario = $this->connect->prepare("INSERT INTO $this->table13(`nome`) VALUES (:nome)");
+                $stmt_usuario = $this->connect->prepare("INSERT INTO $this->table13(`bairros`) VALUES (:nome)");
                 $stmt_usuario->bindValue(":nome", $nome);
 
                 if ($stmt_usuario->execute()) {
@@ -227,7 +227,7 @@ class admin extends cadastrador
 
             if ($stmt_check->rowCount() == 1) {
 
-                $stmt_usuario = $this->connect->prepare(" UPDATE $this->table13 SET `nome`= :nome WHERE id = :id_bairro");
+                $stmt_usuario = $this->connect->prepare(" UPDATE $this->table13 SET `bairros`= :nome WHERE id = :id_bairro");
                 $stmt_usuario->bindValue(":id_bairro", $id_bairro);
                 $stmt_usuario->bindValue(":nome", $nome);
 

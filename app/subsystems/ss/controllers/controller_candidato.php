@@ -195,7 +195,6 @@ if (
             header('Location: ../views/cadastro.php?falha');
             exit();
     }
-}
-/*else {
+} else {
     header("location:../index.php");
-}*/
+}
