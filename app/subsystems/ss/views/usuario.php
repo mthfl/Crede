@@ -338,7 +338,7 @@ $select = new select($escola);
 
 <body class="bg-white min-h-screen font-body">
     <div id="overlay" class="overlay fixed inset-0 bg-black/30 z-40 lg:hidden"></div>
-    <div class="flex h-screen bg-gray-50 overflow-hidden">
+    <div class="flex min-h-screen bg-gray-50 overflow-y-auto lg:overflow-hidden">
         <aside id="sidebar" class="sidebar fixed left-0 top-0 h-screen w-80 shadow-2xl z-50 lg:translate-x-0 lg:static lg:z-auto custom-scrollbar overflow-y-auto">
             <div class="p-6">
                 <div class="flex items-center justify-between mb-8 pb-6 border-b border-white/20">
@@ -466,22 +466,20 @@ $select = new select($escola);
         <div class="main-content flex-1 bg-white">
             <header class="bg-white shadow-sm border-b border-gray-200 z-30 sticky top-0">
                 <div class="px-3 sm:px-4 md:px-6 lg:px-8 py-3 sm:py-4">
-                    <div class="flex flex-col space-y-3 sm:space-y-4 lg:flex-row lg:items-center lg:justify-between">
-                        <div class="flex items-center justify-between lg:justify-start">
-                            <button id="openSidebar" class="text-primary lg:hidden btn-animate p-2 sm:p-3 rounded-xl hover:bg-accent focus-ring">
-                                <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                                </svg>
-                            </button>
-                        </div>
-                        <div class="flex items-center justify-between lg:justify-end space-x-2 sm:space-x-4">
+                    <div class="flex items-center justify-between">
+                        <button id="openSidebar" class="text-primary lg:hidden btn-animate p-2 sm:p-3 rounded-xl hover:bg-accent focus-ring">
+                            <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                            </svg>
+                        </button>
+                        <div class="flex items-center space-x-2 sm:space-x-4 lg:ml-auto">
                             <div class="hidden sm:block text-right">
                                 <p class="text-xs sm:text-sm font-semibold text-gray-900">Bem-vindo,</p>
                                 <p class="text-xs sm:text-sm text-primary font-medium"><?= $_SESSION['nome'] ?? 'Usuário' ?></p>
                             </div>
-                            <div class="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-primary to-dark rounded-full flex items-center justify-center">
+                            <a href="../../main/views/perfil.php" title="Perfil" class="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-primary to-dark rounded-full flex items-center justify-center hover:brightness-95 focus-ring">
                                 <span class="text-white font-bold text-xs sm:text-sm"><?= strtoupper(substr($_SESSION['nome'] ?? 'U', 0, 1)) ?></span>
-                            </div>
+                            </a>
                             <a href="../logout.php" class="bg-primary text-white px-3 sm:px-4 md:px-6 py-2 sm:py-3 rounded-xl hover:bg-dark btn-animate font-semibold shadow-lg focus-ring text-xs sm:text-sm">
                                 <span class="hidden sm:inline">Sair</span>
                                 <svg class="w-4 h-4 sm:w-5 sm:h-5 sm:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -515,7 +513,7 @@ $select = new select($escola);
                     </div>
                 <?php } else { ?>
                     <div class="flex items-center justify-between mb-6">
-                        <div class="text-lg font-semibold text-gray-800">Usuários cadastrados</div>
+                    
                         <button onclick="openUserForm()" class="inline-flex items-center bg-gradient-to-r from-primary to-dark text-white px-6 py-3 rounded-xl hover:from-dark hover:to-primary btn-animate font-semibold shadow-xl focus-ring">
                             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>

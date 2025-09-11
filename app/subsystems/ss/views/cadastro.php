@@ -301,6 +301,18 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
             transition: width 0.3s ease-in-out;
         }
 
+        /* Tabelas compactas para caber sem rolagem */
+        .compact-table th,
+        .compact-table td {
+            padding: 0.5rem 0.5rem !important;
+        }
+        .compact-table input[type="text"] {
+            padding-top: 0.4rem !important;
+            padding-bottom: 0.4rem !important;
+            padding-left: 0.5rem !important;
+            padding-right: 0.5rem !important;
+        }
+
         /* Usar cor do banco para controles nativos também */
         input[type="checkbox"], input[type="radio"] {
             accent-color: var(--primary);
@@ -423,7 +435,7 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
                     </div>
                 </div>
 
-                <div class="p-6">
+                <div class="p-6 pb-2">
                     <div class="progress-bar">
                         <div class="progress-bar-fill" style="width: 33.33%"></div>
                     </div>
@@ -434,7 +446,7 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
                     </div>
                 </div>
 
-                <div class="p-6">
+                <div class="p-6 pt-2">
                     <form action="../controllers/controller_candidato.php" method="POST" id="cadastroForm" class="space-y-8">
                         <div class="step active" id="step-1">
                             <h3 class="text-xl font-semibold text-gray-800 mb-6 flex items-center">
@@ -456,6 +468,12 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
                                 <div class="flex space-x-4">
                                     <div class="flex-1">
                                         <div class="flex items-center px-4 py-3.5 border border-gray-300 rounded-xl   input-modern radio-card">
+                                            <input type="radio" name="cota" value="ampla" id="ampla" class="w-5 h-5 text-primary border-gray-300 rounded input-radio focus:ring-2 focus:ring-primary focus:ring-opacity-50" checked>
+                                            <label for="ampla" class="ml-3 text-sm font-medium text-gray-700 cursor-pointer">Ampla</label>
+                                        </div>
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="flex items-center px-4 py-3.5 border border-gray-300 rounded-xl   input-modern radio-card">
                                             <input type="radio" name="cota" value="pcd" id="pcd" class="w-5 h-5 text-primary border-gray-300 rounded input-radio focus:ring-2 focus:ring-primary focus:ring-opacity-50">
                                             <label for="pcd" class="ml-3 text-sm font-medium text-gray-700 cursor-pointer">Pessoa com Deficiência (PCD)</label>
                                         </div>
@@ -464,12 +482,6 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
                                         <div class="flex items-center px-4 py-3.5 border border-gray-300 rounded-xl   input-modern radio-card">
                                             <input type="radio" name="cota" value="bairro" id="bairro" class="w-5 h-5 text-primary border-gray-300 rounded input-radio focus:ring-2 focus:ring-primary focus:ring-opacity-50">
                                             <label for="bairro" class="ml-3 text-sm font-medium text-gray-700 cursor-pointer">Cota bairro</label>
-                                        </div>
-                                    </div>
-                                    <div class="flex-1">
-                                        <div class="flex items-center px-4 py-3.5 border border-gray-300 rounded-xl   input-modern radio-card">
-                                            <input type="radio" name="cota" value="ampla" id="ampla" class="w-5 h-5 text-primary border-gray-300 rounded input-radio focus:ring-2 focus:ring-primary focus:ring-opacity-50">
-                                            <label for="ampla" class="ml-3 text-sm font-medium text-gray-700 cursor-pointer">Ampla</label>
                                         </div>
                                     </div>
                                 </div>
@@ -501,15 +513,11 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
                         </div>
 
                         <div class="step" id="step-2">
-                            <h3 class="text-xl font-semibold text-gray-800 mb-6 flex items-center">
-                                <svg class="w-6 h-6 mr-3 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-                                </svg>
-                                Notas do 6º, 7º e 8º Ano
-                            </h3>
-                            <p class="text-gray-600 text-sm mb-6">Preencha as notas dos anos anteriores (6º, 7º e 8º ano)</p>
+                     
+                       
+                            
                             <div class="overflow-x-auto">
-                                <table class="w-full border-collapse">
+                                <table class="w-full border-collapse compact-table text-sm">
                                     <thead>
                                         <tr class="bg-gray-100">
                                             <th class="border border-gray-300 px-4 py-3 text-left text-sm font-medium text-gray-700">Matéria</th>
@@ -633,15 +641,10 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
                         </div>
 
                         <div class="step" id="step-3">
-                            <h3 class="text-xl font-semibold text-gray-800 mb-6 flex items-center">
-                                <svg class="w-6 h-6 mr-3 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-                                </svg>
-                                Notas do 9º Ano
-                            </h3>
-                            <p class="text-gray-600 text-sm mb-6">Preencha as notas do 9º ano por bimestre ou a média geral</p>
+                          
+                          
                             <div class="overflow-x-auto">
-                                <table class="w-full border-collapse">
+                                <table class="w-full border-collapse compact-table text-sm">
                                     <thead>
                                         <tr class="bg-gray-100">
                                             <th class="border border-gray-300 px-4 py-3 text-left text-sm font-medium text-gray-700">Matéria</th>

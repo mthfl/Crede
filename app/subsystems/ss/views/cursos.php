@@ -136,7 +136,6 @@ $select = new select($escola);
         }
 
         @keyframes pulseSoft {
-
             0%,
             100% {
                 opacity: 1;
@@ -305,7 +304,6 @@ $select = new select($escola);
             outline-offset: 2px;
         }
 
-        /* Foco usando paleta */
         input[type="text"]:focus,
         input[type="number"]:focus,
         input[type="color"]:focus,
@@ -362,7 +360,7 @@ $select = new select($escola);
 
 <body class="bg-white min-h-screen font-body">
     <div id="overlay" class="overlay fixed inset-0 bg-black/30 z-40 lg:hidden"></div>
-    <div class="flex h-screen bg-gray-50 overflow-hidden">
+    <div class="flex min-h-screen bg-gray-50 overflow-y-auto lg:overflow-hidden">
         <aside id="sidebar" class="sidebar fixed left-0 top-0 h-screen w-80 shadow-2xl z-50 lg:translate-x-0 lg:static lg:z-auto custom-scrollbar overflow-y-auto">
             <div class="p-6">
                 <div class="flex items-center justify-between mb-8 pb-6 border-b border-white/20">
@@ -379,7 +377,6 @@ $select = new select($escola);
                     </button>
                 </div>
                 <nav class="space-y-2">
-                    <!-- Dashboard -->
                     <div class="animate-slide-in-left" style="animation-delay: 0.1s;">
                         <a href="../index.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
                             <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
@@ -394,8 +391,6 @@ $select = new select($escola);
                             </div>
                         </a>
                     </div>
-
-                    <!-- Cursos -->
                     <div class="animate-slide-in-left" style="animation-delay: 0.2s;">
                         <a href="cursos.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring bg-white/10">
                             <div class="w-12 h-12 bg-secondary rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
@@ -409,8 +404,6 @@ $select = new select($escola);
                             </div>
                         </a>
                     </div>
-
-                    <!-- Candidatos -->
                     <div class="animate-slide-in-left" style="animation-delay: 0.3s;">
                         <a href="candidatos.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
                             <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
@@ -424,8 +417,6 @@ $select = new select($escola);
                             </div>
                         </a>
                     </div>
-
-                    <!-- Cotas -->
                     <div class="animate-slide-in-left" style="animation-delay: 0.35s;">
                         <a href="cotas.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
                             <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
@@ -439,8 +430,6 @@ $select = new select($escola);
                             </div>
                         </a>
                     </div>
-
-                    <!-- Usuários -->
                     <div class="animate-slide-in-left" style="animation-delay: 0.4s;">
                         <a href="usuario.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
                             <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
@@ -454,8 +443,6 @@ $select = new select($escola);
                             </div>
                         </a>
                     </div>
-
-                    <!-- Relatórios -->
                     <div class="animate-slide-in-left" style="animation-delay: 0.5s;">
                         <a href="#" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
                             <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
@@ -469,8 +456,6 @@ $select = new select($escola);
                             </div>
                         </a>
                     </div>
-
-                    <!-- Limpar Banco -->
                     <div class="animate-slide-in-left" style="animation-delay: 0.6s;">
                         <a href="#" onclick="openAdminConfirm()" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
                             <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-red-500 group-hover:scale-110 transition-all duration-300">
@@ -490,23 +475,20 @@ $select = new select($escola);
         <div class="main-content flex-1 bg-white">
             <header class="bg-white shadow-sm border-b border-gray-200 z-30 sticky top-0">
                 <div class="px-3 sm:px-4 md:px-6 lg:px-8 py-3 sm:py-4">
-                    <div class="flex flex-col space-y-3 sm:space-y-4 lg:flex-row lg:items-center lg:justify-between">
-                        <div class="flex items-center justify-between lg:justify-start">
-                            <button id="openSidebar" class="text-primary lg:hidden btn-animate p-2 sm:p-3 rounded-xl hover:bg-accent focus-ring">
-                                <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                                </svg>
-                            </button>
-
-                        </div>
-                        <div class="flex items-center justify-between lg:justify-end space-x-2 sm:space-x-4">
+                    <div class="flex items-center justify-between">
+                        <button id="openSidebar" class="text-primary lg:hidden btn-animate p-2 sm:p-3 rounded-xl hover:bg-accent focus-ring">
+                            <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                            </svg>
+                        </button>
+                        <div class="flex items-center space-x-2 sm:space-x-4 lg:ml-auto">
                             <div class="hidden sm:block text-right">
                                 <p class="text-xs sm:text-sm font-semibold text-gray-900">Bem-vindo,</p>
                                 <p class="text-xs sm:text-sm text-primary font-medium"><?= $_SESSION['nome'] ?? 'Usuário' ?></p>
                             </div>
-                            <div class="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-primary to-dark rounded-full flex items-center justify-center">
+                            <a href="../../main/views/perfil.php" title="Perfil" class="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-primary to-dark rounded-full flex items-center justify-center hover:brightness-95 focus-ring">
                                 <span class="text-white font-bold text-xs sm:text-sm"><?= strtoupper(substr($_SESSION['nome'] ?? 'U', 0, 1)) ?></span>
-                            </div>
+                            </a>
                             <a href="../logout.php" class="bg-primary text-white px-3 sm:px-4 md:px-6 py-2 sm:py-3 rounded-xl hover:bg-dark btn-animate font-semibold shadow-lg focus-ring text-xs sm:text-sm">
                                 <span class="hidden sm:inline">Sair</span>
                                 <svg class="w-4 h-4 sm:w-5 sm:h-5 sm:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -532,7 +514,6 @@ $select = new select($escola);
                     </div>
                 <?php } else { ?>
                     <div class="flex items-center justify-between mb-6">
-
                         <button onclick="openCreateModal()" class="inline-flex items-center bg-gradient-to-r from-primary to-dark text-white px-6 py-3 rounded-xl hover:from-dark hover:to-primary btn-animate font-semibold shadow-xl focus-ring">
                             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
@@ -549,14 +530,22 @@ $select = new select($escola);
                                         <h3 class="text-2xl font-bold leading-tight font-display group-hover:scale-105 transition-all duration-300" style="color: <?= $curso['cor_curso'] ?>"><?= $curso['nome_curso'] ?></h3>
                                         <div class="w-16 h-0.5 mx-auto mt-3 rounded-full" style="background-color: <?= $curso['cor_curso'] ?>40"></div>
                                     </div>
-                                    <div class="space-y-4">
-                                        <button onclick="editCurso(<?= $curso['id'] ?>, '<?= $curso['nome_curso'] ?>', '<?= $curso['cor_curso'] ?>')" class="w-full bg-transparent py-2.5 px-5 rounded-lg hover:bg-gray-50 btn-animate flex items-center justify-center font-medium shadow-sm group/btn focus-ring transition-all duration-300 border hover:border-opacity-80" style="border-color: <?= $curso['cor_curso'] ?>; color: <?= $curso['cor_curso'] ?>">
-                                            <div class="w-6 h-6 rounded-md flex items-center justify-center mr-3 group-hover/btn:scale-110 transition-all duration-300" style="background-color: <?= $curso['cor_curso'] ?>15">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="color: <?= $curso['cor_curso'] ?>">
+                                    <div class="flex space-x-2">
+                                        <button onclick="editCurso(<?= $curso['id'] ?>, '<?= $curso['nome_curso'] ?>', '<?= $curso['cor_curso'] ?>')" class="flex-1 bg-transparent py-2 px-4 rounded-lg transition-all duration-300 font-medium text-sm btn-animate focus-ring hover:bg-gray-50 border" style="border-color: <?= $curso['cor_curso'] ?>; color: <?= $curso['cor_curso'] ?>;">
+                                            <span class="flex items-center justify-center">
+                                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                                 </svg>
-                                            </div>
-                                            <span class="text-sm font-medium">Editar Curso</span>
+                                                Editar
+                                            </span>
+                                        </button>
+                                        <button onclick="deleteCurso(<?= $curso['id'] ?>, '<?= $curso['nome_curso'] ?>')" class="flex-1 bg-transparent py-2 px-4 rounded-lg transition-all duration-300 font-medium text-sm btn-animate focus-ring hover:bg-gray-50 border" style="border-color: <?= $curso['cor_curso'] ?>; color: <?= $curso['cor_curso'] ?>;">
+                                            <span class="flex items-center justify-center">
+                                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                                </svg>
+                                                Excluir
+                                            </span>
                                         </button>
                                     </div>
                                 </div>
@@ -568,7 +557,6 @@ $select = new select($escola);
         </div>
     </div>
 
-    <!-- Admin Two-Step Confirm Modal -->
     <div id="modalAdminConfirm" class="fixed inset-0 bg-black/70 backdrop-blur-md hidden items-center justify-center p-2 sm:p-4 z-50">
         <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl transform transition-all duration-300 scale-95 opacity-0" id="modalAdminConfirmContent">
             <div class="p-6 sm:p-8 border-b border-gray-100 bg-gradient-to-r from-white to-gray-50">
@@ -615,11 +603,9 @@ $select = new select($escola);
         </div>
     </div>
 
-    <!-- Modal para criar/editar curso -->
     <div id="cursoModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 hidden animate-scale-in">
         <div class="flex items-center justify-center min-h-screen p-4">
             <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md border border-gray-200/50 relative">
-                <!-- Modal Header -->
                 <div id="modalHeader" class="text-white p-4 rounded-t-2xl relative overflow-hidden" style="background: linear-gradient(135deg, #005A24, #1A3C34);">
                     <div class="absolute inset-0 bg-gradient-to-br from-black/20 to-transparent"></div>
                     <div class="relative flex justify-between items-center">
@@ -642,9 +628,7 @@ $select = new select($escola);
                     </div>
                 </div>
                 <form action="../controllers/controller_curso.php" method="post" id="cursoForm" class="space-y-4">
-                    <!-- Modal Content -->
                     <div class="p-6">
-
                         <input type="hidden" id="cursoId" name="curso_id">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Nome do Curso *</label>
@@ -657,10 +641,7 @@ $select = new select($escola);
                                 <input type="text" id="corCursoText" placeholder="#005A24" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300 text-sm">
                             </div>
                         </div>
-
                     </div>
-
-                    <!-- Modal Actions -->
                     <div class="flex justify-between p-4 border-t border-gray-200 bg-white">
                         <button onclick="closeModal()" class="px-6 py-3 border-2 border-primary text-primary rounded-lg hover:bg-primary/10 transition-all duration-300 font-semibold text-sm group">
                             <span class="flex items-center">
@@ -690,7 +671,6 @@ $select = new select($escola);
         const openSidebar = document.getElementById('openSidebar');
         const closeSidebar = document.getElementById('closeSidebar');
 
-        // Sidebar toggle functionality
         openSidebar.addEventListener('click', () => {
             sidebar.classList.add('open');
             overlay.classList.add('show');
@@ -706,7 +686,6 @@ $select = new select($escola);
             overlay.classList.remove('show');
         });
 
-        // Modal functions
         function openAdminConfirm() {
             const modal = document.getElementById('modalAdminConfirm');
             modal.classList.remove('hidden');
@@ -729,7 +708,6 @@ $select = new select($escola);
             }, 300);
         }
 
-        // Two-step flow (email -> code) in same form
         const adminForm = document.getElementById('adminConfirmForm');
         const stepEmail = document.getElementById('stepEmail');
         const stepCode = document.getElementById('stepCode');
@@ -771,11 +749,9 @@ $select = new select($escola);
                 e.preventDefault();
                 if (!stepEmail.classList.contains('hidden')) {
                     if (!emailInput.value.trim()) return;
-                    // TODO: send code to email via backend
                     nextAdminStep();
                     return;
                 }
-                // Confirm action with code
                 if (!codeInput.value.trim()) return;
                 alert('Código validado. Ação confirmada.');
                 closeAdminConfirm();
@@ -804,34 +780,28 @@ $select = new select($escola);
             document.body.style.overflow = 'hidden';
         }
 
-        function closeModal() {
-            document.getElementById('cursoModal').classList.add('hidden');
-            document.body.style.overflow = 'auto';
-        }
-
         function deleteCurso(id, nome) {
             if (confirm(`Tem certeza que deseja excluir o curso "${nome}"? Esta ação não pode ser desfeita.`)) {
-                // Aqui você pode implementar a lógica para excluir o curso
                 fetch('processar_curso.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
-                        },
-                        body: `action=delete&curso_id=${id}`
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            alert('Curso excluído com sucesso!');
-                            location.reload();
-                        } else {
-                            alert('Erro ao excluir curso: ' + data.message);
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Erro:', error);
-                        alert('Ocorreu um erro ao excluir o curso.');
-                    });
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `action=delete&curso_id=${id}`
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Curso excluído com sucesso!');
+                        location.reload();
+                    } else {
+                        alert('Erro ao excluir curso: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro:', error);
+                    alert('Ocorreu um erro ao excluir o curso.');
+                });
             }
         }
 
@@ -843,26 +813,25 @@ $select = new select($escola);
             formData.append('action', action);
 
             fetch('processar_curso.php', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert(action === 'create' ? 'Curso criado com sucesso!' : 'Curso atualizado com sucesso!');
-                        closeModal();
-                        location.reload();
-                    } else {
-                        alert('Erro: ' + data.message);
-                    }
-                })
-                .catch(error => {
-                    console.error('Erro:', error);
-                    alert('Ocorreu um erro ao processar o curso.');
-                });
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(action === 'create' ? 'Curso criado com sucesso!' : 'Curso atualizado com sucesso!');
+                    closeModal();
+                    location.reload();
+                } else {
+                    alert('Erro: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Erro:', error);
+                alert('Ocorreu um erro ao processar o curso.');
+            });
         }
 
-        // Sincronizar inputs de cor
         document.getElementById('corCurso').addEventListener('input', function() {
             document.getElementById('corCursoText').value = this.value;
         });
