@@ -1,4 +1,9 @@
 <?php
+require_once(__DIR__ . '/../models/sessions.php');
+$session = new sessions();
+$session->autenticar_session();
+$session->tempo_session();
+
 require_once(__DIR__ . '/model.select.php');
 
 class cadastrador extends select
@@ -9,82 +14,80 @@ class cadastrador extends select
     }
     public function cadastrar_candidato(
         string $nome,
-        int $id_curso1,
-        int $id_curso2,
-        string $data_nascimento,
+        float $id_curso1,
+        $data_nascimento,
         bool $bairro,
         bool $publica,
         bool $pcd,
         int $id_cadastrador,
-        int $lp_6ano,
-        int $artes_6ano,
-        int $ef_6ano,
-        int $li_6ano,
-        int $mate_6ano,
-        int $cien_6ano,
-        int $geo_6ano,
-        int $hist_6ano,
-        int $reli_6ano,
-        int $lp_7ano,
-        int $artes_7ano,
-        int $ef_7ano,
-        int $li_7ano,
-        int $mate_7ano,
-        int $cien_7ano,
-        int $geo_7ano,
-        int $hist_7ano,
-        int $reli_7ano,
-        int $lp_8ano,
-        int $artes_8ano,
-        int $ef_8ano,
-        int $li_8ano,
-        int $mate_8ano,
-        int $cien_8ano,
-        int $geo_8ano,
-        int $hist_8ano,
-        int $reli_8ano,
-        int $lp_9ano,
-        int $artes_9ano,
-        int $ef_9ano,
-        int $li_9ano,
-        int $mate_9ano,
-        int $cien_9ano,
-        int $geo_9ano,
-        int $hist_9ano,
-        int $reli_9ano,
-        int $lp_1bim_9ano,
-        int $artes_1bim_9ano,
-        int $ef_1bim_9ano,
-        int $li_1bim_9ano,
-        int $mate_1bim_9ano,
-        int $cien_1bim_9ano,
-        int $geo_1bim_9ano,
-        int $hist_1bim_9ano,
-        int $reli_1bim_9ano,
-        int $lp_2bim_9ano,
-        int $artes_2bim_9ano,
-        int $ef_2bim_9ano,
-        int $li_2bim_9ano,
-        int $mate_2bim_9ano,
-        int $cien_2bim_9ano,
-        int $geo_2bim_9ano,
-        int $hist_2bim_9ano,
-        int $reli_2bim_9ano,
-        int $lp_3bim_9ano,
-        int $artes_3bim_9ano,
-        int $ef_3bim_9ano,
-        int $li_3bim_9ano,
-        int $mate_3bim_9ano,
-        int $cien_3bim_9ano,
-        int $geo_3bim_9ano,
-        int $hist_3bim_9ano,
-        int $reli_3bim_9ano,
+        float $lp_6ano,
+        float $artes_6ano,
+        float $ef_6ano,
+        float $li_6ano,
+        float $mate_6ano,
+        float $cien_6ano,
+        float $geo_6ano,
+        float $hist_6ano,
+        float $reli_6ano,
+        float $lp_7ano,
+        float $artes_7ano,
+        float $ef_7ano,
+        float $li_7ano,
+        float $mate_7ano,
+        float $cien_7ano,
+        float $geo_7ano,
+        float $hist_7ano,
+        float $reli_7ano,
+        float $lp_8ano,
+        float $artes_8ano,
+        float $ef_8ano,
+        float $li_8ano,
+        float $mate_8ano,
+        float $cien_8ano,
+        float $geo_8ano,
+        float $hist_8ano,
+        float $reli_8ano,
+        float $lp_9ano,
+        float $artes_9ano,
+        float $ef_9ano,
+        float $li_9ano,
+        float $mate_9ano,
+        float $cien_9ano,
+        float $geo_9ano,
+        float $hist_9ano,
+        float $reli_9ano,
+        float $lp_1bim_9ano,
+        float $artes_1bim_9ano,
+        float $ef_1bim_9ano,
+        float $li_1bim_9ano,
+        float $mate_1bim_9ano,
+        float $cien_1bim_9ano,
+        float $geo_1bim_9ano,
+        float $hist_1bim_9ano,
+        float $reli_1bim_9ano,
+        float $lp_2bim_9ano,
+        float $artes_2bim_9ano,
+        float $ef_2bim_9ano,
+        float $li_2bim_9ano,
+        float $mate_2bim_9ano,
+        float $cien_2bim_9ano,
+        float $geo_2bim_9ano,
+        float $hist_2bim_9ano,
+        float $reli_2bim_9ano,
+        float $lp_3bim_9ano,
+        float $artes_3bim_9ano,
+        float $ef_3bim_9ano,
+        float $li_3bim_9ano,
+        float $mate_3bim_9ano,
+        float $cien_3bim_9ano,
+        float $geo_3bim_9ano,
+        float $hist_3bim_9ano,
+        float $reli_3bim_9ano,
     ): int {
         try {
-            $stmt_candidato = $this->connect->prepare("INSERT INTO $this->table1 (nome, id_curso1, id_curso2, data_nascimento, bairro, publica, pcd, id_cadastrador) VALUES (:nome, :id_curso1, :id_curso2, :data_nascimento, :bairro, :publica, :pcd, :id_cadastrador)");
+            $stmt_candidato = $this->connect->prepare("INSERT INTO $this->table1 (nome, id_curso1, data_nascimento, bairro, publica, pcd, id_cadastrador) VALUES (:nome, :id_curso1, :data_nascimento, :bairro, :publica, :pcd, :id_cadastrador)");
             $stmt_candidato->bindValue(":nome", $nome);
             $stmt_candidato->bindValue(":id_curso1", $id_curso1);
-            $stmt_candidato->bindValue(":id_curso2", $id_curso2);
             $stmt_candidato->bindValue(":data_nascimento", $data_nascimento);
             $stmt_candidato->bindValue(":bairro", $bairro);
             $stmt_candidato->bindValue(":publica", $publica);
@@ -93,14 +96,13 @@ class cadastrador extends select
             if (!$stmt_candidato->execute()) {
                 return 2;
             }
-            $stmt_id = $this->connect->prepare("SELECT id FROM $this->table1 WHERE nome = :nome");
+            $stmt_id = $this->connect->prepare("SELECT * FROM $this->table1 WHERE nome = :nome");
             $stmt_id->bindValue(":nome", $nome);
             $stmt_id->execute();
             $id_candidato = $stmt_id->fetch(PDO::FETCH_ASSOC);
-
             //6ano
-            $stmt = $this->connect->prepare("INSERT INTO $this->table6 (id_candidato, l_portuguesa, artes, educacao_fisica, l_inglesa, matematica, ciencias, geografia, historia, religiao) VALUES (:id_candidato, :lp,:artes , :ef, :li, :mate, :cien, :geo, :hist, :reli)");
-            $stmt->bindValue(":id_candidato", $id_candidato);
+            $stmt = $this->connect->prepare("INSERT INTO $this->table6 VALUES (null, :id_candidato, :lp,:artes , :ef, :li, :mate, :cien, :geo, :hist, :reli)");
+            $stmt->bindValue(":id_candidato", $id_candidato['id']);
             $stmt->bindValue(":lp", $lp_6ano);
             $stmt->bindValue(":artes", $artes_6ano);
             $stmt->bindValue(":ef", $ef_6ano);
@@ -115,8 +117,8 @@ class cadastrador extends select
             }
 
             //7ano
-            $stmt = $this->connect->prepare("INSERT INTO $this->table7 (id_candidato, l_portuguesa, artes, educacao_fisica, l_inglesa, matematica, ciencias, geografia, historia, religiao) VALUES (:id_candidato, :lp,:artes , :ef, :li, :mate, :cien, :geo, :hist, :reli)");
-            $stmt->bindValue(":id_candidato", $id_candidato);
+            $stmt = $this->connect->prepare("INSERT INTO $this->table7 VALUES (NULL, :id_candidato, :lp,:artes , :ef, :li, :mate, :cien, :geo, :hist, :reli)");
+            $stmt->bindValue(":id_candidato", $id_candidato['id']);
             $stmt->bindValue(":lp", $lp_7ano);
             $stmt->bindValue(":artes", $artes_7ano);
             $stmt->bindValue(":ef", $ef_7ano);
@@ -132,7 +134,7 @@ class cadastrador extends select
 
             //8ano
             $stmt = $this->connect->prepare("INSERT INTO $this->table8 (id_candidato, l_portuguesa, artes, educacao_fisica, l_inglesa, matematica, ciencias, geografia, historia, religiao) VALUES (:id_candidato, :lp,:artes , :ef, :li, :mate, :cien, :geo, :hist, :reli)");
-            $stmt->bindValue(":id_candidato", $id_candidato);
+            $stmt->bindValue(":id_candidato", $id_candidato['id']);
             $stmt->bindValue(":lp", $lp_8ano);
             $stmt->bindValue(":artes", $artes_8ano);
             $stmt->bindValue(":ef", $ef_8ano);
@@ -150,7 +152,7 @@ class cadastrador extends select
 
                 //9ano
                 $stmt = $this->connect->prepare("INSERT INTO $this->table9 (id_candidato, l_portuguesa, artes, educacao_fisica, l_inglesa, matematica, ciencias, geografia, historia, religiao) VALUES (:id_candidato, :lp,:artes , :ef, :li, :mate, :cien, :geo, :hist, :reli)");
-                $stmt->bindValue(":id_candidato", $id_candidato);
+                $stmt->bindValue(":id_candidato", $id_candidato['id']);
                 $stmt->bindValue(":lp", $lp_9ano);
                 $stmt->bindValue(":artes", $artes_9ano);
                 $stmt->bindValue(":ef", $ef_9ano);
@@ -166,7 +168,7 @@ class cadastrador extends select
             } else {
                 //1bim_9ano
                 $stmt = $this->connect->prepare("INSERT INTO $this->table10 (id_candidato, l_portuguesa, artes, educacao_fisica, l_inglesa, matematica, ciencias, geografia, historia, religiao) VALUES (:id_candidato, :lp,:artes , :ef, :li, :mate, :cien, :geo, :hist, :reli)");
-                $stmt->bindValue(":id_candidato", $id_candidato);
+                $stmt->bindValue(":id_candidato", $id_candidato['id']);
                 $stmt->bindValue(":lp", $lp_1bim_9ano);
                 $stmt->bindValue(":artes", $artes_1bim_9ano);
                 $stmt->bindValue(":ef", $ef_1bim_9ano);
@@ -182,7 +184,7 @@ class cadastrador extends select
 
                 //2bim_9ano
                 $stmt = $this->connect->prepare("INSERT INTO $this->table11 (id_candidato, l_portuguesa, artes, educacao_fisica, l_inglesa, matematica, ciencias, geografia, historia, religiao) VALUES (:id_candidato, :lp,:artes , :ef, :li, :mate, :cien, :geo, :hist, :reli)");
-                $stmt->bindValue(":id_candidato", $id_candidato);
+                $stmt->bindValue(":id_candidato", $id_candidato['id']);
                 $stmt->bindValue(":lp", $lp_2bim_9ano);
                 $stmt->bindValue(":artes", $artes_2bim_9ano);
                 $stmt->bindValue(":ef", $ef_2bim_9ano);
@@ -198,7 +200,7 @@ class cadastrador extends select
 
                 //3bim_9ano
                 $stmt = $this->connect->prepare("INSERT INTO $this->table12 (id_candidato, l_portuguesa, artes, educacao_fisica, l_inglesa, matematica, ciencias, geografia, historia, religiao) VALUES (:id_candidato, :lp,:artes , :ef, :li, :mate, :cien, :geo, :hist, :reli)");
-                $stmt->bindValue(":id_candidato", $id_candidato);
+                $stmt->bindValue(":id_candidato", $id_candidato['id']);
                 $stmt->bindValue(":lp", $lp_3bim_9ano);
                 $stmt->bindValue(":artes", $artes_3bim_9ano);
                 $stmt->bindValue(":ef", $ef_3bim_9ano);
@@ -270,7 +272,7 @@ class cadastrador extends select
 
                 //9ano_media
                 $stmt = $this->connect->prepare("INSERT INTO $this->table9 (id_candidato, l_portuguesa, artes, educacao_fisica, l_inglesa, matematica, ciencias, geografia, historia, religiao) VALUES (:id_candidato, :lp,:artes , :ef, :li, :mate, :cien, :geo, :hist, :reli)");
-                $stmt->bindValue(":id_candidato", $id_candidato);
+                $stmt->bindValue(":id_candidato", $id_candidato['id']);
                 $stmt->bindValue(":lp", $lp_9ano);
                 $stmt->bindValue(":artes", $artes_9ano);
                 $stmt->bindValue(":ef", $ef_9ano);
@@ -286,19 +288,19 @@ class cadastrador extends select
             }
 
             $stmt_select_6ano = $this->connect->prepare("SELECT id FROM $this->table6 WHERE id_candidato = :id_candidato");
-            $stmt_select_6ano->bindValue(":id_candidato", $id_candidato);
+            $stmt_select_6ano->bindValue(":id_candidato", $id_candidato['id']);
             $stmt_select_6ano->execute();
             $id_notas_6ano = $stmt_select_6ano->fetch(PDO::FETCH_ASSOC);
             $stmt_select_7ano = $this->connect->prepare("SELECT id FROM $this->table7 WHERE id_candidato = :id_candidato");
-            $stmt_select_7ano->bindValue(":id_candidato", $id_candidato);
+            $stmt_select_7ano->bindValue(":id_candidato", $id_candidato['id']);
             $stmt_select_7ano->execute();
             $id_notas_7ano = $stmt_select_7ano->fetch(PDO::FETCH_ASSOC);
             $stmt_select_8ano = $this->connect->prepare("SELECT id FROM $this->table8 WHERE id_candidato = :id_candidato");
-            $stmt_select_8ano->bindValue(":id_candidato", $id_candidato);
+            $stmt_select_8ano->bindValue(":id_candidato", $id_candidato['id']);
             $stmt_select_8ano->execute();
             $id_notas_8ano = $stmt_select_8ano->fetch(PDO::FETCH_ASSOC);
             $stmt_select_9ano = $this->connect->prepare("SELECT id FROM $this->table9 WHERE id_candidato = :id_candidato");
-            $stmt_select_9ano->bindValue(":id_candidato", $id_candidato);
+            $stmt_select_9ano->bindValue(":id_candidato", $id_candidato['id']);
             $stmt_select_9ano->execute();
             $id_notas_9ano = $stmt_select_9ano->fetch(PDO::FETCH_ASSOC);
 
@@ -308,71 +310,70 @@ class cadastrador extends select
             $ciencias_media = ($cien_6ano + $cien_7ano + $cien_8ano + $cien_9ano) / 4;
             $geografia_media = ($geo_6ano + $geo_7ano + $geo_8ano + $geo_9ano) / 4;
             $historia_media = ($hist_6ano + $hist_7ano + $hist_8ano + $hist_9ano) / 4;
-            
+
             $d_media = 4;
-            if($artes_6ano == 0){
+            if ($artes_6ano == 0) {
                 $d_media -= 1;
             }
-            if($artes_7ano == 0){
+            if ($artes_7ano == 0) {
                 $d_media -= 1;
             }
-            if($artes_8ano == 0){
+            if ($artes_8ano == 0) {
                 $d_media -= 1;
             }
-            if($artes_9ano == 0){
+            if ($artes_9ano == 0) {
                 $d_media -= 1;
             }
             $artes_media = ($ef_6ano + $ef_7ano + $ef_8ano + $ef_9ano) / $d_media;
 
             $d_media = 4;
-            if($ef_6ano == 0){
+            if ($ef_6ano == 0) {
                 $d_media -= 1;
             }
-            if($ef_7ano == 0){
+            if ($ef_7ano == 0) {
                 $d_media -= 1;
             }
-            if($ef_8ano == 0){
+            if ($ef_8ano == 0) {
                 $d_media -= 1;
             }
-            if($ef_9ano == 0){
+            if ($ef_9ano == 0) {
                 $d_media -= 1;
             }
             $ef_media = ($ef_6ano + $ef_7ano + $ef_8ano + $ef_9ano) / $d_media;
 
             $d_media = 4;
-            if($reli_6ano == 0){
+            if ($reli_6ano == 0) {
                 $d_media -= 1;
             }
-            if($reli_7ano == 0){
+            if ($reli_7ano == 0) {
                 $d_media -= 1;
             }
-            if($reli_8ano == 0){
+            if ($reli_8ano == 0) {
                 $d_media -= 1;
             }
-            if($reli_9ano == 0){
+            if ($reli_9ano == 0) {
                 $d_media -= 1;
             }
             $reli_media = ($reli_6ano + $reli_7ano + $reli_8ano + $reli_9ano) / $d_media;
 
             $d_media_final = 9;
-            if($artes_media == 0){
+            if ($artes_media == 0) {
                 $d_media_final -= 1;
             }
-            if($ef_media == 0){
+            if ($ef_media == 0) {
                 $d_media_final -= 1;
             }
-            if($reli_media == 0){
+            if ($reli_media == 0) {
                 $d_media -= 1;
             }
             $media_final = ($l_portuguesa_media + $artes_media + $ef_media + $l_inglesa_media + $matematica_media + $ciencias_media + $geografia_media + $historia_media + $reli_media) / $d_media_final;
             //media final
-            $stmt = $this->connect->prepare("INSERT INTO $this->table13 (`id_candidato`, `id_notas_6ano`, `id_notas_7ano`, `id_notas_8ano`, `id_notas_9ano`, `l_portuguesa_media`, `artes_media`, `educacao_fisica_media`, `l_inglesa_media`, `matematica_media`, `ciencias_media`, `geografia_media`, `historia_media`, `religiao_media`, `media_final`) 
-            VALUES (:id_candidato, :id_notas_6ano, :id_notas_7ano, :id_notas_8ano, :id_notas_9ano, :l_portuguesa_media, :artes_media, :educacao_fisica_media, :l_inglesa_media, :matematica_media, :ciencias_media, :geografia_media, :historia_media, :religiao_media, :media_final)");
-            $stmt->bindValue(":id_candidato", $id_candidato);
-            $stmt->bindValue(":id_notas_6ano", $id_notas_6ano);
-            $stmt->bindValue(":id_notas_7ano", $id_notas_7ano);
-            $stmt->bindValue(":id_notas_8ano", $id_notas_8ano);
-            $stmt->bindValue(":id_notas_9ano", $id_notas_9ano);
+            $stmt = $this->connect->prepare("INSERT INTO $this->table4 VALUES (null, :id_candidato, :id_notas_6ano, :id_notas_7ano, :id_notas_8ano, :id_notas_9ano, :l_portuguesa_media, :artes_media, :educacao_fisica_media, :l_inglesa_media, :matematica_media, :ciencias_media, :geografia_media, :historia_media, :religiao_media, :media_final)");
+            $stmt->bindValue(":id_candidato", $id_candidato['id']);
+            $stmt->bindValue(":id_notas_6ano", $id_notas_6ano['id']);
+            $stmt->bindValue(":id_notas_7ano", $id_notas_7ano['id']);
+            $stmt->bindValue(":id_notas_8ano", $id_notas_8ano['id']);
+            $stmt->bindValue(":id_notas_9ano", $id_notas_9ano['id']);
             $stmt->bindValue(":l_portuguesa_media", $l_portuguesa_media);
             $stmt->bindValue(":artes_media", $artes_media);
             $stmt->bindValue(":educacao_fisica_media", $ef_media);
@@ -383,18 +384,11 @@ class cadastrador extends select
             $stmt->bindValue(":historia_media", $historia_media);
             $stmt->bindValue(":religiao_media", $reli_media);
             $stmt->bindValue(":media_final", $media_final);
-            $stmt->bindValue(":artes", $artes_6ano);
-            $stmt->bindValue(":ef", $ef_6ano);
-            $stmt->bindValue(":li", $li_6ano);
-            $stmt->bindValue(":mate", $mate_6ano);
-            $stmt->bindValue(":cien", $cien_6ano);
-            $stmt->bindValue(":geo", $geo_6ano);
-            $stmt->bindValue(":hist", $hist_6ano);
-            $stmt->bindValue(":reli", $reli_6ano);
             if (!$stmt->execute()) {
                 return 2;
             }
 
+            $_SESSION['candidato'] = $nome;
             return 1;
         } catch (PDOException $e) {
             return 0;
