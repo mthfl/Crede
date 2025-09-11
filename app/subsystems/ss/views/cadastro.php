@@ -255,7 +255,7 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
         .radio-card.selected {
             border-color: var(--primary);
             box-shadow: 0 0 0 3px <?= $primary_rgba_02 ?>;
-            background: linear-gradient(135deg, #f8fff9, #f3fff6);
+          
         }
 
         .input-disabled {
@@ -455,19 +455,19 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
                             <div class="grid grid-cols-1 gap-6 mb-6">
                                 <div class="flex space-x-4">
                                     <div class="flex-1">
-                                        <div class="flex items-center px-4 py-3.5 border border-gray-300 rounded-xl bg-gradient-to-r from-gray-50 to-gray-100 input-modern radio-card">
+                                        <div class="flex items-center px-4 py-3.5 border border-gray-300 rounded-xl   input-modern radio-card">
                                             <input type="radio" name="cota" value="pcd" id="pcd" class="w-5 h-5 text-primary border-gray-300 rounded input-radio focus:ring-2 focus:ring-primary focus:ring-opacity-50">
                                             <label for="pcd" class="ml-3 text-sm font-medium text-gray-700 cursor-pointer">Pessoa com Deficiência (PCD)</label>
                                         </div>
                                     </div>
                                     <div class="flex-1">
-                                        <div class="flex items-center px-4 py-3.5 border border-gray-300 rounded-xl bg-gradient-to-r from-gray-50 to-gray-100 input-modern radio-card">
+                                        <div class="flex items-center px-4 py-3.5 border border-gray-300 rounded-xl   input-modern radio-card">
                                             <input type="radio" name="cota" value="bairro" id="bairro" class="w-5 h-5 text-primary border-gray-300 rounded input-radio focus:ring-2 focus:ring-primary focus:ring-opacity-50">
                                             <label for="bairro" class="ml-3 text-sm font-medium text-gray-700 cursor-pointer">Cota bairro</label>
                                         </div>
                                     </div>
                                     <div class="flex-1">
-                                        <div class="flex items-center px-4 py-3.5 border border-gray-300 rounded-xl bg-gradient-to-r from-gray-50 to-gray-100 input-modern radio-card">
+                                        <div class="flex items-center px-4 py-3.5 border border-gray-300 rounded-xl   input-modern radio-card">
                                             <input type="radio" name="cota" value="ampla" id="ampla" class="w-5 h-5 text-primary border-gray-300 rounded input-radio focus:ring-2 focus:ring-primary focus:ring-opacity-50">
                                             <label for="ampla" class="ml-3 text-sm font-medium text-gray-700 cursor-pointer">Ampla</label>
                                         </div>
