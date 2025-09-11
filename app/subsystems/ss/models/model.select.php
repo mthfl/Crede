@@ -82,4 +82,13 @@ class select extends connect
         }
     }
 
+    public function select_candidatos(): array{
+        try{
+            $stmt = $this->connect->query("SELECT * FROM $this->table1");
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }catch(PDOException $e){
+            return [];
+        }
+    }
+
 }
