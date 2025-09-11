@@ -16,6 +16,43 @@ $curso_id = $_GET['curso_id'] ?? '';
 $curso_nome = $_GET['curso_nome'] ?? '';
 $curso_cor = $_GET['curso_cor'] ?? '#005A24';
 $tipo_escola = $_GET['tipo_escola'] ?? '';
+
+// Se houver curso_id, tenta obter a cor do curso a partir do banco
+if (!empty($curso_id)) {
+    try {
+        $cursos = $select->select_cursos();
+        foreach ($cursos as $curso) {
+            if ((string)$curso['id'] === (string)$curso_id) {
+                if (!empty($curso['cor_curso'])) {
+                    $curso_cor = $curso['cor_curso'];
+                }
+                break;
+            }
+        }
+    } catch (Exception $e) {
+        // mantém a cor padrão ou a recebida por GET em caso de erro
+    }
+}
+
+// helpers de cor para usar transparências no CSS
+function hex2rgba($hex, $alpha = 0.2) {
+    $hex = str_replace('#', '', trim($hex));
+    if (strlen($hex) === 3) {
+        $r = hexdec(str_repeat(substr($hex, 0, 1), 2));
+        $g = hexdec(str_repeat(substr($hex, 1, 1), 2));
+        $b = hexdec(str_repeat(substr($hex, 2, 1), 2));
+    } else {
+        $r = hexdec(substr($hex, 0, 2));
+        $g = hexdec(substr($hex, 2, 2));
+        $b = hexdec(substr($hex, 4, 2));
+    }
+    $a = is_numeric($alpha) ? max(0, min(1, (float)$alpha)) : 0.2;
+    return "rgba($r, $g, $b, $a)";
+}
+
+$primary_rgba_01 = hex2rgba($curso_cor, 0.10);
+$primary_rgba_015 = hex2rgba($curso_cor, 0.15);
+$primary_rgba_02 = hex2rgba($curso_cor, 0.20);
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -30,7 +67,7 @@ $tipo_escola = $_GET['tipo_escola'] ?? '';
             theme: {
                 extend: {
                     colors: {
-                        primary: '#005A24',
+                        primary: '<?= $curso_cor ?>',
                         secondary: '#FFA500',
                         accent: '#E6F4EA',
                         dark: '#1A3C34',
@@ -59,7 +96,7 @@ $tipo_escola = $_GET['tipo_escola'] ?? '';
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
         :root {
-            --primary: #005A24;
+            --primary: <?= $curso_cor ?>;
             --secondary: #FFA500;
             --accent: #E6F4EA;
             --dark: #1A3C34;
@@ -109,7 +146,8 @@ $tipo_escola = $_GET['tipo_escola'] ?? '';
         }
 
         .input-focus:focus {
-            border-color: rgba(0, 90, 36, 0.5);
+            border-color: var(--primary);
+            outline: none;
         }
 
         .input-modern {
@@ -118,7 +156,8 @@ $tipo_escola = $_GET['tipo_escola'] ?? '';
         }
 
         .input-modern:focus {
-            box-shadow: 0 0 0 3px rgba(0, 90, 36, 0.1), 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            outline: none;
+            box-shadow: 0 0 0 3px <?= $primary_rgba_01 ?>, 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             transform: translateY(-1px);
         }
 
@@ -168,7 +207,40 @@ $tipo_escola = $_GET['tipo_escola'] ?? '';
         }
 
         .input-radio:focus {
-            box-shadow: 0 0 0 3px rgba(0, 90, 36, 0.15);
+            box-shadow: 0 0 0 3px <?= $primary_rgba_015 ?>;
+        }
+
+        /* Checkbox customizado usando cor do banco */
+        .input-checkbox {
+            transition: all 0.2s ease-in-out;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid #cbd5e1; /* gray-300 */
+            border-radius: 0.25rem;
+            background-color: #fff;
+            position: relative;
+        }
+
+        .input-checkbox:hover { transform: scale(1.05); }
+
+        .input-checkbox:checked {
+            border-color: var(--primary);
+            background-color: var(--primary);
+        }
+
+        .input-checkbox:checked::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0.45rem;
+            height: 0.45rem;
+            background: #ffffff;
+            transform: translate(-50%, -50%);
+            clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 15%, 80% 0, 43% 62%);
         }
 
         .radio-card {
@@ -182,7 +254,7 @@ $tipo_escola = $_GET['tipo_escola'] ?? '';
 
         .radio-card.selected {
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(0, 90, 36, 0.1);
+            box-shadow: 0 0 0 3px <?= $primary_rgba_02 ?>;
             background: linear-gradient(135deg, #f8fff9, #f3fff6);
         }
 
@@ -227,6 +299,11 @@ $tipo_escola = $_GET['tipo_escola'] ?? '';
             background: var(--primary);
             border-radius: 9999px;
             transition: width 0.3s ease-in-out;
+        }
+
+        /* Usar cor do banco para controles nativos também */
+        input[type="checkbox"], input[type="radio"] {
+            accent-color: var(--primary);
         }
 
         .modal-overlay {
@@ -966,6 +1043,12 @@ $tipo_escola = $_GET['tipo_escola'] ?? '';
             const radios = document.querySelectorAll('input[type="radio"]');
             radios.forEach(radio => {
                 radio.classList.add('input-radio');
+            });
+
+            // aplicar estilo para checkboxes
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.classList.add('input-checkbox');
             });
         }
 
