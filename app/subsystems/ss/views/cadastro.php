@@ -109,7 +109,6 @@ $tipo_escola = $_GET['tipo_escola'] ?? '';
         }
 
         .input-focus:focus {
-            ring-color: rgba(0, 90, 36, 0.3);
             border-color: rgba(0, 90, 36, 0.5);
         }
 
@@ -135,17 +134,56 @@ $tipo_escola = $_GET['tipo_escola'] ?? '';
             cursor: not-allowed;
         }
 
-        .input-checkbox {
+        .input-radio {
             transition: all 0.2s ease-in-out;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            width: 1rem;
+            height: 1rem;
+            border: 2px solid #cbd5e1; /* gray-300 */
+            border-radius: 9999px;
+            background-color: #fff;
+            position: relative;
         }
 
-        .input-checkbox:hover {
+        .input-radio:hover {
             transform: scale(1.05);
         }
 
-        .input-checkbox:checked {
-            background-color: var(--primary);
+        .input-radio:checked {
             border-color: var(--primary);
+        }
+
+        .input-radio:checked::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0.5rem;
+            height: 0.5rem;
+            background-color: var(--primary);
+            border-radius: 9999px;
+            transform: translate(-50%, -50%);
+        }
+
+        .input-radio:focus {
+            box-shadow: 0 0 0 3px rgba(0, 90, 36, 0.15);
+        }
+
+        .radio-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .radio-card:hover {
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+            transform: translateY(-1px);
+        }
+
+        .radio-card.selected {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 90, 36, 0.1);
+            background: linear-gradient(135deg, #f8fff9, #f3fff6);
         }
 
         .input-disabled {
@@ -337,23 +375,23 @@ $tipo_escola = $_GET['tipo_escola'] ?? '';
                                 </div>
                             </div>
 
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                                <div class="flex items-end">
-                                    <div class="w-full">
-                                        <div class="flex items-center p-4 border border-gray-300 rounded-xl bg-gradient-to-r from-gray-50 to-gray-100 input-modern">
-                                            <input type="checkbox" name="pcd" id="pcd" class="w-5 h-5 text-primary border-gray-300 rounded input-checkbox focus:ring-2 focus:ring-primary focus:ring-opacity-50">
+                            <div class="grid grid-cols-1 gap-6 mb-6">
+                                <div class="flex space-x-4">
+                                    <div class="flex-1">
+                                        <div class="flex items-center px-4 py-3.5 border border-gray-300 rounded-xl bg-gradient-to-r from-gray-50 to-gray-100 input-modern radio-card">
+                                            <input type="radio" name="cota" value="pcd" id="pcd" class="w-5 h-5 text-primary border-gray-300 rounded input-radio focus:ring-2 focus:ring-primary focus:ring-opacity-50">
                                             <label for="pcd" class="ml-3 text-sm font-medium text-gray-700 cursor-pointer">Pessoa com Deficiência (PCD)</label>
                                         </div>
                                     </div>
-                                    <div class="w-full">
-                                        <div class="flex items-center p-4 border border-gray-300 rounded-xl bg-gradient-to-r from-gray-50 to-gray-100 input-modern">
-                                            <input type="checkbox" name="bairro" id="bairro" class="w-5 h-5 text-primary border-gray-300 rounded input-checkbox focus:ring-2 focus:ring-primary focus:ring-opacity-50">
+                                    <div class="flex-1">
+                                        <div class="flex items-center px-4 py-3.5 border border-gray-300 rounded-xl bg-gradient-to-r from-gray-50 to-gray-100 input-modern radio-card">
+                                            <input type="radio" name="cota" value="bairro" id="bairro" class="w-5 h-5 text-primary border-gray-300 rounded input-radio focus:ring-2 focus:ring-primary focus:ring-opacity-50">
                                             <label for="bairro" class="ml-3 text-sm font-medium text-gray-700 cursor-pointer">Cota bairro</label>
                                         </div>
                                     </div>
-                                    <div class="w-full">
-                                        <div class="flex items-center p-4 border border-gray-300 rounded-xl bg-gradient-to-r from-gray-50 to-gray-100 input-modern">
-                                            <input type="checkbox" name="ampla" id="ampla" class="w-5 h-5 text-primary border-gray-300 rounded input-checkbox focus:ring-2 focus:ring-primary focus:ring-opacity-50">
+                                    <div class="flex-1">
+                                        <div class="flex items-center px-4 py-3.5 border border-gray-300 rounded-xl bg-gradient-to-r from-gray-50 to-gray-100 input-modern radio-card">
+                                            <input type="radio" name="cota" value="ampla" id="ampla" class="w-5 h-5 text-primary border-gray-300 rounded input-radio focus:ring-2 focus:ring-primary focus:ring-opacity-50">
                                             <label for="ampla" class="ml-3 text-sm font-medium text-gray-700 cursor-pointer">Ampla</label>
                                         </div>
                                     </div>
@@ -925,9 +963,9 @@ $tipo_escola = $_GET['tipo_escola'] ?? '';
                 input.style.setProperty('--tw-border-opacity', '0.5');
             });
 
-            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-            checkboxes.forEach(checkbox => {
-                checkbox.classList.add('input-checkbox');
+            const radios = document.querySelectorAll('input[type="radio"]');
+            radios.forEach(radio => {
+                radio.classList.add('input-radio');
             });
         }
 
@@ -935,6 +973,31 @@ $tipo_escola = $_GET['tipo_escola'] ?? '';
             setupExclusiveFields();
             updateStep();
             applyModernStyles();
+            // Toggle selected state on radio cards
+            const radioCards = document.querySelectorAll('.radio-card');
+            const radioInputs = document.querySelectorAll('input[name="cota"]');
+
+            function syncSelected() {
+                radioCards.forEach(card => card.classList.remove('selected'));
+                const checked = document.querySelector('input[name="cota"]:checked');
+                if (checked) {
+                    const card = checked.closest('.radio-card');
+                    if (card) card.classList.add('selected');
+                }
+            }
+
+            radioCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    const input = card.querySelector('input[name="cota"]');
+                    if (input) {
+                        input.checked = true;
+                        syncSelected();
+                    }
+                });
+            });
+
+            radioInputs.forEach(input => input.addEventListener('change', syncSelected));
+            syncSelected();
         });
     </script>
 </body>
