@@ -79,7 +79,7 @@ class admin extends cadastrador
                 $stmt_check = $this->connect->prepare(" DELETE FROM $this->table2 WHERE id = :id_curso");
                 $stmt_check->bindValue(":id_curso", $id_curso);
 
-                if ($stmt_check->$stmt_check->execute()) {
+                if ($stmt_check->execute()) {
 
                     return 1;
                 } else {

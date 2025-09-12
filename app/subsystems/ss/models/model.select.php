@@ -75,7 +75,7 @@ class select extends connect
 
     public function select_bairros(): array{
         try{
-            $stmt = $this->connect->query("SELECT * FROM $this->table13 ORDER BY nome_bairro ASC");
+            $stmt = $this->connect->query("SELECT * FROM $this->table13");
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         }catch(PDOException $e){
             return [];
@@ -84,7 +84,7 @@ class select extends connect
 
     public function select_candidatos(): array{
         try{
-            $stmt = $this->connect->query("SELECT * FROM $this->table1");
+            $stmt = $this->connect->query("SELECT can.*, cur.nome_curso AS nome_curso, user.nome_user AS nome_user  FROM $this->table1 can INNER JOIN $this->table2 cur ON cur.id = can.id_curso1 INNER JOIN $this->table5 user ON user.id = can.id_cadastrador");
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         }catch(PDOException $e){
             return [];
