@@ -11,8 +11,6 @@ new connect($escola);
 require_once(__DIR__ . '/../models/model.select.php');
 $select = new select($escola);
 
-// Busca bairros, se existir no model; caso contrário, usa array vazio
-$bairros = method_exists($select, 'select_bairros') ? $select->select_bairros() : [];
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -58,42 +56,218 @@ $bairros = method_exists($select, 'select_bairros') ? $select->select_bairros() 
             --light: #F8FAF9;
         }
 
-        * { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+        * {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
 
-        .sidebar { transform: translateX(-100%); transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); backdrop-filter: blur(10px); background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 100%); }
-        .sidebar.open { transform: translateX(0); }
-        .overlay { opacity: 0; visibility: hidden; transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94); backdrop-filter: blur(2px); }
-        .overlay.show { opacity: 1; visibility: visible; }
+        .sidebar {
+            transform: translateX(-100%);
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            backdrop-filter: blur(10px);
+            background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 100%);
+        }
 
-        @keyframes slideInLeft { from { opacity: 0; transform: translateX(-30px);} to { opacity: 1; transform: translateX(0);} }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px);} to { opacity: 1; transform: translateY(0);} }
-        @keyframes scaleIn { from { opacity: 0; transform: scale(0.95);} to { opacity: 1; transform: scale(1);} }
-        @keyframes pulseSoft { 0%,100% { opacity: 1;} 50% { opacity: 0.8;} }
+        .sidebar.open {
+            transform: translateX(0);
+        }
 
-        .card-hover { transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94); position: relative; overflow: hidden; }
-        .card-hover::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent); transition: left 0.5s; }
-        .card-hover:hover::before { left: 100%; }
-        .card-hover:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 25px 50px -12px rgba(0, 90, 36, 0.25), 0 0 0 1px rgba(0, 90, 36, 0.05); }
+        .overlay {
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            backdrop-filter: blur(2px);
+        }
 
-        .btn-animate { position: relative; overflow: hidden; transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
-        .btn-animate::before { content: ''; position: absolute; top: 50%; left: 50%; width: 0; height: 0; background: rgba(255,255,255,0.2); border-radius: 50%; transform: translate(-50%, -50%); transition: width 0.3s, height 0.3s; }
-        .btn-animate:hover::before { width: 300px; height: 300px; }
-        .btn-animate:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0,0,0,0.15); }
-        .btn-animate:active { transform: translateY(0); }
+        .overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
 
-        .nav-item { position: relative; transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94); border-radius: 12px; }
-        .nav-item::before { content: ''; position: absolute; left: 0; top: 0; height: 100%; width: 4px; background: var(--secondary); border-radius: 0 4px 4px 0; transform: scaleY(0); transition: transform 0.3s ease; }
-        .nav-item:hover::before { transform: scaleY(1); }
-        .nav-item:hover { transform: translateX(8px); background: rgba(255,255,255,0.1); }
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
 
-        .sidebar { z-index: 50; position: fixed; left: 0; top: 0; height: 100vh; width: 100vw; max-width: 20rem; }
-        .overlay { z-index: 45; }
-        @media (min-width: 1024px) { .sidebar { width: 20rem; position: static; flex-shrink: 0; } .main-content { flex: 1; min-width: 0; margin-left: 0; overflow-x: hidden; } body { overflow-x: hidden; } }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
 
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); border-radius: 3px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 3px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: var(--dark); }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes pulseSoft {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.8;
+            }
+        }
+
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-hover::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .card-hover:hover::before {
+            left: 100%;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 25px 50px -12px rgba(0, 90, 36, 0.25), 0 0 0 1px rgba(0, 90, 36, 0.05);
+        }
+
+        .btn-animate {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .btn-animate::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s;
+        }
+
+        .btn-animate:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn-animate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-animate:active {
+            transform: translateY(0);
+        }
+
+        .nav-item {
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            border-radius: 12px;
+        }
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: var(--secondary);
+            border-radius: 0 4px 4px 0;
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .nav-item:hover::before {
+            transform: scaleY(1);
+        }
+
+        .nav-item:hover {
+            transform: translateX(8px);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar {
+            z-index: 50;
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            width: 100vw;
+            max-width: 20rem;
+        }
+
+        .overlay {
+            z-index: 45;
+        }
+
+        @media (min-width: 1024px) {
+            .sidebar {
+                width: 20rem;
+                position: static;
+                flex-shrink: 0;
+            }
+
+            .main-content {
+                flex: 1;
+                min-width: 0;
+                margin-left: 0;
+                overflow-x: hidden;
+            }
+
+            body {
+                overflow-x: hidden;
+            }
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 3px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 3px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: var(--dark);
+        }
     </style>
 </head>
 
@@ -116,108 +290,125 @@ $bairros = method_exists($select, 'select_bairros') ? $select->select_bairros() 
                     </button>
                 </div>
                 <nav class="space-y-2">
-                    <div class="animate-slide-in-left" style="animation-delay: 0.1s;">
-                        <a href="../index.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
-                            <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5a2 2 0 012-2h4a2 2 0 012 2v2H8V5z"></path>
-                                </svg>
-                            </div>
-                            <div>
-                                <span class="font-semibold text-base">Dashboard</span>
-                                <p class="text-green-200 text-xs mt-1">Página inicial</p>
-                            </div>
-                        </a>
-                    </div>
+                    <!-- Dashboard -->
+                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin' || $_SESSION['tipo_usuario'] === 'cadastrador') { ?>
+                        <div class="animate-slide-in-left" style="animation-delay: 0.1s;">
+                            <a href="../index.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring bg-white/10">
+                                <div class="w-12 h-12 bg-secondary rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5a2 2 0 012-2h4a2 2 0 012 2v2H8V5z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <span class="font-semibold text-base">Dashboard</span>
+                                    <p class="text-green-200 text-xs mt-1">Página inicial</p>
+                                </div>
+                            </a>
+                        </div>
+                    <?php } ?>
 
-                    <div class="animate-slide-in-left" style="animation-delay: 0.2s;">
-                        <a href="cursos.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
-                            <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
-                                </svg>
-                            </div>
-                            <div>
-                                <span class="font-semibold text-base">Cursos</span>
-                                <p class="text-green-200 text-xs mt-1">Administrar cursos</p>
-                            </div>
-                        </a>
-                    </div>
+                    <!-- Cursos -->
+                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
+                        <div class="animate-slide-in-left" style="animation-delay: 0.2s;">
+                            <a href="cursos.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
+                                <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <span class="font-semibold text-base">Cursos</span>
+                                    <p class="text-green-200 text-xs mt-1">Administrar cursos</p>
+                                </div>
+                            </a>
+                        </div>
+                    <?php } ?>
 
-                    <div class="animate-slide-in-left" style="animation-delay: 0.3s;">
-                        <a href="candidatos.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
-                            <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
-                                </svg>
-                            </div>
-                            <div>
-                                <span class="font-semibold text-base">Candidatos</span>
-                                <p class="text-green-200 text-xs mt-1">Gerenciar inscrições</p>
-                            </div>
-                        </a>
-                    </div>
+                    <!-- Candidatos -->
+                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin' || $_SESSION['tipo_usuario'] === 'cadastrador') { ?>
+                        <div class="animate-slide-in-left" style="animation-delay: 0.3s;">
+                            <a href="candidatos.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
+                                <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <span class="font-semibold text-base">Candidatos</span>
+                                    <p class="text-green-200 text-xs mt-1">Gerenciar inscrições</p>
+                                </div>
+                            </a>
+                        </div>
+                    <?php } ?>
 
-                    <!-- Cotas (active) -->
-                    <div class="animate-slide-in-left" style="animation-delay: 0.35s;">
-                        <a href="cotas.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring bg-white/10">
-                            <div class="w-12 h-12 bg-secondary rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a5 5 0 10-10 0v2M5 9h14l-1 11H6L5 9z"></path>
-                                </svg>
-                            </div>
-                            <div>
-                                <span class="font-semibold text-base">Cotas</span>
-                                <p class="text-green-200 text-xs mt-1">Bairros e regras</p>
-                            </div>
-                        </a>
-                    </div>
+                    <!-- Cotas -->
+                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
+                        <div class="animate-slide-in-left" style="animation-delay: 0.35s;">
+                            <a href="cotas.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
+                                <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a5 5 0 10-10 0v2M5 9h14l-1 11H6L5 9z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <span class="font-semibold text-base">Cotas</span>
+                                    <p class="text-green-200 text-xs mt-1">Regras e perfis</p>
+                                </div>
+                            </a>
+                        </div>
+                    <?php } ?>
 
                     <!-- Usuários -->
-                    <div class="animate-slide-in-left" style="animation-delay: 0.4s;">
-                        <a href="usuario.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
-                            <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                                </svg>
-                            </div>
-                            <div>
-                                <span class="font-semibold text-base">Usuários</span>
-                                <p class="text-green-200 text-xs mt-1">Controle de acesso</p>
-                            </div>
-                        </a>
-                    </div>
+                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
+                        <div class="animate-slide-in-left" style="animation-delay: 0.4s;">
+                            <a href="usuario.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
+                                <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <span class="font-semibold text-base">Usuários</span>
+                                    <p class="text-green-200 text-xs mt-1">Controle de acesso</p>
+                                </div>
+                            </a>
+                        </div>
+                    <?php } ?>
 
                     <!-- Relatórios -->
-                    <div class="animate-slide-in-left" style="animation-delay: 0.5s;">
-                        <a href="#" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
-                            <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                </svg>
-                            </div>
-                            <div>
-                                <span class="font-semibold text-base">Relatórios</span>
-                                <p class="text-green-200 text-xs mt-1">Gerar documentos</p>
-                            </div>
-                        </a>
-                    </div>
+                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin' || $_SESSION['tipo_usuario'] === 'cadastrador') { ?>
+                        <div class="animate-slide-in-left" style="animation-delay: 0.5s;">
+                            <a href="#" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
+                                <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <span class="font-semibold text-base">Relatórios</span>
+                                    <p class="text-green-200 text-xs mt-1">Gerar documentos</p>
+                                </div>
+                            </a>
+                        </div>
+                    <?php } ?>
 
                     <!-- Limpar Banco -->
-                    <div class="animate-slide-in-left" style="animation-delay: 0.6s;">
-                        <a href="#" onclick="openAdminConfirm()" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
-                            <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-red-500 group-hover:scale-110 transition-all duration-300">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                </svg>
-                            </div>
-                            <div>
-                                <span class="font-semibold text-base">Limpar Banco</span>
-                                <p class="text-green-200 text-xs mt-1">Resetar dados</p>
-                            </div>
-                        </a>
-                    </div>
+                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
+                        <div class="animate-slide-in-left" style="animation-delay: 0.6s;">
+                            <a href="#" onclick="openAdminConfirm()" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
+                                <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-red-500 group-hover:scale-110 transition-all duration-300">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <span class="font-semibold text-base">Limpar Banco</span>
+                                    <p class="text-green-200 text-xs mt-1">Resetar dados</p>
+                                </div>
+                            </a>
+                        </div>
+                    <?php } ?>
                 </nav>
             </div>
         </aside>
@@ -249,7 +440,9 @@ $bairros = method_exists($select, 'select_bairros') ? $select->select_bairros() 
                 </div>
             </header>
             <main class="p-4 sm:p-6 lg:p-8">
-                <?php if (count($bairros) === 0) { ?>
+                <?php
+                $bairros = $select->select_bairros();
+                if (count($bairros) === 0) { ?>
                     <div class="bg-gradient-to-br from-accent via-white to-accent/50 border-2 border-dashed border-primary/30 rounded-2xl p-8 text-center animate-fade-in-up max-w-2xl mx-auto">
                         <div class="w-20 h-20 bg-gradient-to-br from-primary/10 to-secondary/10 rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse-soft">
                             <svg class="w-10 h-10 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -277,11 +470,11 @@ $bairros = method_exists($select, 'select_bairros') ? $select->select_bairros() 
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
                         <?php foreach ($bairros as $bairro) { ?>
-                            <article class="grid-item card-hover bg-white rounded-2xl shadow-xl border-0 overflow-hidden group relative" data-id="<?= htmlspecialchars($bairro['id'] ?? '') ?>" data-nome="<?= htmlspecialchars($bairro['nome'] ?? ($bairro['bairro'] ?? '')) ?>">
+                            <article class="grid-item card-hover bg-white rounded-2xl shadow-xl border-0 overflow-hidden group relative" data-id="<?= htmlspecialchars($bairro['id']) ?>" data-nome="<?= htmlspecialchars($bairro['bairros']) ?>">
                                 <div class="h-2 w-full bg-gradient-to-r from-primary to-secondary"></div>
                                 <div class="p-8">
                                     <div class="text-center mb-8">
-                                        <h3 class="text-xl font-bold leading-tight font-display group-hover:scale-105 transition-all duration-300 text-primary"><?= htmlspecialchars($bairro['nome'] ?? ($bairro['bairro'] ?? 'Sem nome')) ?></h3>
+                                        <h3 class="text-xl font-bold leading-tight font-display group-hover:scale-105 transition-all duration-300 text-primary"><?= htmlspecialchars($bairro['bairros'] ?? ($bairro['bairros'] ?? 'Sem nome')) ?></h3>
                                         <div class="w-16 h-0.5 mx-auto mt-3 rounded-full bg-primary/40"></div>
                                     </div>
                                     <div class="space-y-3 mb-6">
@@ -294,8 +487,8 @@ $bairros = method_exists($select, 'select_bairros') ? $select->select_bairros() 
                                         </div>
                                     </div>
                                     <div class="flex space-x-2">
-                                        <button onclick="openEditBairro(<?= json_encode($bairro['id'] ?? '') ?>, <?= json_encode($bairro['nome'] ?? ($bairro['bairro'] ?? '')) ?>)" class="flex-1 bg-primary text-white py-2 px-4 rounded-lg hover:bg-dark transition-all duration-300 font-medium text-sm btn-animate focus-ring">Editar</button>
-                                        <button onclick="openDeleteBairro(<?= json_encode($bairro['id'] ?? '') ?>, <?= json_encode($bairro['nome'] ?? ($bairro['bairro'] ?? '')) ?>)" class="flex-1 bg-secondary text-white py-2 px-4 rounded-lg hover:bg-orange-600 transition-all duration-300 font-medium text-sm btn-animate focus-ring">Excluir</button>
+                                        <button type="button" onclick='openEditBairro(<?= json_encode($bairro['id'] ?? '') ?>, <?= json_encode($bairro['bairros']) ?>)' class="flex-1 bg-primary text-white py-2 px-4 rounded-lg hover:bg-dark transition-all duration-300 font-medium text-sm btn-animate focus-ring">Editar</button>
+                                        <button type="button" onclick='openDeleteBairro(<?= json_encode($bairro['id'] ?? '') ?>, <?= json_encode($bairro['bairros']) ?>)' class="flex-1 bg-secondary text-white py-2 px-4 rounded-lg hover:bg-orange-600 transition-all duration-300 font-medium text-sm btn-animate focus-ring">Excluir</button>
                                     </div>
                                 </div>
                             </article>
@@ -313,7 +506,7 @@ $bairros = method_exists($select, 'select_bairros') ? $select->select_bairros() 
                 <div class="flex items-center gap-4">
                     <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary to-dark text-white flex items-center justify-center shadow-md">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c1.657 0 3 1.567 3 3.5S13.657 18 12 18s-3-1.567-3-3.5 1.343-3.5 3-3.5zm4-4V7a4 4 0 01-8 0V7m12 4H4a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2v-6a2 2 0 00-2-2z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c1.657 0 3 1.567 3 3.5S13.657 18 12 18s-3-1.567-3-3.5 1.343-3.5 3-3.5zm4-4V7a4 4 0 01-8 0V7m12 4H4a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2v-6a2 2 0 00-2-2z" />
                         </svg>
                     </div>
                     <div>
@@ -322,7 +515,9 @@ $bairros = method_exists($select, 'select_bairros') ? $select->select_bairros() 
                     </div>
                 </div>
                 <button class="absolute top-6 right-6 p-2 rounded-xl hover:bg-gray-100 transition-all group" onclick="closeAdminConfirm()">
-                    <svg class="w-5 h-5 text-gray-400 group-hover:text-gray-600 group-hover:scale-110 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                    <svg class="w-5 h-5 text-gray-400 group-hover:text-gray-600 group-hover:scale-110 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
                 </button>
             </div>
             <div class="p-6 sm:p-8">
@@ -429,13 +624,22 @@ $bairros = method_exists($select, 'select_bairros') ? $select->select_bairros() 
         const bairros = <?php echo json_encode($bairros ?? []); ?>;
 
         if (openSidebar) {
-            openSidebar.addEventListener('click', () => { sidebar.classList.add('open'); overlay.classList.add('show'); });
+            openSidebar.addEventListener('click', () => {
+                sidebar.classList.add('open');
+                overlay.classList.add('show');
+            });
         }
         if (closeSidebar) {
-            closeSidebar.addEventListener('click', () => { sidebar.classList.remove('open'); overlay.classList.remove('show'); });
+            closeSidebar.addEventListener('click', () => {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('show');
+            });
         }
         if (overlay) {
-            overlay.addEventListener('click', () => { sidebar.classList.remove('open'); overlay.classList.remove('show'); });
+            overlay.addEventListener('click', () => {
+                sidebar.classList.remove('open');
+                overlay.classList.remove('show');
+            });
         }
 
         function openAdminConfirm() {
@@ -519,15 +723,24 @@ $bairros = method_exists($select, 'select_bairros') ? $select->select_bairros() 
             modal.classList.add('flex');
             setTimeout(() => {
                 const content = modal.querySelector('[id$="Content"]');
-                if (content) { content.style.transform = 'scale(1)'; content.style.opacity = '1'; }
+                if (content) {
+                    content.style.transform = 'scale(1)';
+                    content.style.opacity = '1';
+                }
             }, 10);
         }
 
         function closeModal(modalId) {
             const modal = document.getElementById(modalId);
             const content = modal.querySelector('[id$="Content"]');
-            if (content) { content.style.transform = 'scale(0.95)'; content.style.opacity = '0'; }
-            setTimeout(() => { modal.classList.add('hidden'); modal.classList.remove('flex'); }, 300);
+            if (content) {
+                content.style.transform = 'scale(0.95)';
+                content.style.opacity = '0';
+            }
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 300);
         }
 
         function openBairroModal() {
@@ -567,5 +780,3 @@ $bairros = method_exists($select, 'select_bairros') ? $select->select_bairros() 
 </body>
 
 </html>
-
-

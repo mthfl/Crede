@@ -48,16 +48,16 @@ if (
 
         switch ($result) {
             case 1:
-                header('Location: ../views/cursos.php?criado');
+                header('Location: ../views/cotas.php?criado');
                 exit();
             case 2:
-                header('Location: ../views/cursos.php?erro');
+                header('Location: ../views/cotas.php?erro');
                 exit();
             case 3:
-                header('Location: ../views/cursos.php?ja_existe');
+                header('Location: ../views/cotas.php?ja_existe');
                 exit();
             default:
-                header('Location: ../views/cursos.php?falha');
+                header('Location: ../views/cotas.php?falha');
                 exit();
         }
     } else
@@ -71,20 +71,20 @@ if (
 
             $escola = $_SESSION['escola'];
             $admin_model = new admin($escola);
-            $result = $admin_model->excluir_curso($id_bairro);
+            $result = $admin_model->excluir_bairro($id_bairro);
 
             switch ($result) {
                 case 1:
-                    header('Location: ../views/usuario.php?criado');
+                    header('Location: ../views/cotas.php?criado');
                     exit();
                 case 2:
-                    header('Location: ../views/usuario.php?erro');
+                    header('Location: ../views/cotas.php?erro');
                     exit();
                 case 3:
-                    header('Location: ../views/usuario.php?ja_existe');
+                    header('Location: ../views/cotas.php?ja_existe');
                     exit();
                 default:
-                    header('Location: ../views/usuario.php?falha');
+                    header('Location: ../views/cotas.php?falha');
                     exit();
             }
         } /*else {
