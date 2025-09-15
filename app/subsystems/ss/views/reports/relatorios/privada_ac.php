@@ -58,45 +58,24 @@ class relatorios extends connect
             $orientacao = 'P';
         }
 
-        if (isset($_SESSION['status']) && $_SESSION['status'] == 1) {
-            $stmtSelect = $this->connect->prepare(
-                "SELECT candidato.id_candidato, candidato.id_cadastrador, usuario.nome_user, candidato.nome, 
-            candidato.id_curso1_fk, candidato.publica, candidato.bairro, candidato.pcd, nota.media
-            FROM candidato 
-            INNER JOIN nota ON nota.candidato_id_candidato = candidato.id_candidato 
-            INNER JOIN usuario ON candidato.id_cadastrador = usuario.id
-            WHERE candidato.id_curso1_fk = :curso
-        AND candidato.publica = 0 
-        AND candidato.pcd = 0 
-        AND candidato.bairro = 0
-        ORDER BY nota.media DESC,
-        candidato.data_nascimento DESC,
-        nota.l_portuguesa DESC,
-        nota.matematica DESC;
-        "
-            );
-        } else if (isset($_SESSION['status']) && $_SESSION['status'] == 0) {
-            $stmtSelect = $this->connect->prepare(
-        "SELECT candidato.nome, candidato.id_curso1_fk, candidato.publica, candidato.bairro, candidato.pcd
-        FROM candidato 
-        INNER JOIN nota ON nota.candidato_id_candidato = candidato.id_candidato 
-        WHERE candidato.id_curso1_fk = :curso
-        AND candidato.publica = 0 
-        AND candidato.pcd = 0 
-        AND candidato.bairro = 0
-        ORDER BY nome ASC
-            ");
-        }
+        $stmtSelect = $this->connect->prepare(
+ "SELECT can.nome, cur.nome_curso, can.publica, can.bairro, can.pcd, m.media_final, u.nome_user 
+        FROM $this->table1 can    
+        INNER JOIN $this->table4 m ON m.id_candidato = can.id 
+        INNER JOIN $this->table5 u ON can.id_cadastrador = u.id 
+        INNER JOIN $this->table2 cur ON can.id_curso1 = cur.id 
+        WHERE can.id_curso1 = :curso AND can.publica = 0 AND can.pcd = 0 AND can.bairro = 0 
+        ORDER BY m.media_final DESC, can.data_nascimento DESC, m.l_portuguesa_media DESC, m.matematica_media DESC;"
+        );
         $stmtSelect->BindValue(':curso', $curso);
         $stmtSelect->execute();
-        $result = $stmtSelect->fetchAll(PDO::FETCH_ASSOC);
+        $dados = $stmtSelect->fetchAll(PDO::FETCH_ASSOC);
 
-        require_once('../assets/fpdf/fpdf.php');
         $pdf = new FPDF($orientacao, 'mm', 'A4');
         $pdf->AddPage();
 
         // Cabeçalho com larguras ajustadas
-        $pdf->Image('../assets/images/logo.png', 8, 8, 15, 0, 'PNG');
+        $pdf->Image('../../../assets/imgs/logo.png', 8, 8, 15, 0, 'PNG');
         $pdf->SetFont('Arial', 'B', 25);
         $pdf->Cell(90, 5, ('PRIVADA AC'), 0, 1, 'C');
         $pdf->SetFont('Arial', 'B', 8);
@@ -104,6 +83,22 @@ class relatorios extends connect
         $pdf->SetFont('Arial', 'b', 12);
         $pdf->Cell(185, 10, '', 0, 1, 'C');
 
+        $stmt_bairros = $this->connect->query("SELECT * FROM $this->table13");
+        $dados_bairros = $stmt_bairros->fetchAll(PDO::FETCH_ASSOC);
+       
+        $pdf->SetFont('Arial', 'B', 11);
+        $pdf->SetY(8);
+        $pdf->SetX(190);
+        $pdf->Cell(50, 10, 'Bairros de Cotas:', 0, 1, 'C');
+         $pdf->SetFont('Arial', 'B', 8);
+        $pdf->SetY(10);
+        foreach ($dados_bairros as $dado) {
+            $pdf->SetX(233);
+                $pdf->Cell(10, 5, strtoupper(utf8_decode($dado['bairros'])), 0, 1, 'L');
+        }
+
+        $pdf->SetFont('Arial', 'b', 12);
+        $pdf->Cell(185, 10, '', 0, 1, 'C');
         // Fonte do cabeçalho
         $pdf->SetFont('Arial', 'B', 10);
         $pdf->SetFillColor(93, 164, 67); //fundo verde
@@ -112,9 +107,8 @@ class relatorios extends connect
         $pdf->Cell($n, 7, 'Nome', 1, 0, 'C', true);
         $pdf->Cell(30, 7, 'Curso', 1, 0, 'C', true);
         $pdf->Cell(18, 7, 'Origem', 1, 0, 'C', true);
-        if (isset($_SESSION['status']) && $_SESSION['status'] == 1) {
+        if ((isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin')) {
             $pdf->Cell(26, 7, 'Segmento', 1, 0, 'C', true);
-            $pdf->Cell(20, 7, 'Id Aluno', 1, 0, 'C', true);
             $pdf->Cell(15, 7, 'Media', 1, 0, 'C', true);
             $pdf->Cell(55, 7, 'Resp. Cadastro', 1, 1, 'C', true);
         } else {
@@ -127,33 +121,15 @@ class relatorios extends connect
         // Dados com cores alternadas
         $classificacao = 001;
 
-        foreach ($result as $row) {
-            // Definir curso
-            switch ($row['id_curso1_fk']) {
-                case 1:
-                    $curso = ('ENFERMAGEM');
-                    break;
-                case 2:
-                    $curso = ('INFORMATICA');
-                    break;
-                case 3:
-                    $curso = ('ADMINISTRACAO');
-                    break;
-                case 4:
-                    $curso = ('EDIFICACOES');
-                    break;
-                default:
-                    $curso = ('Não definido');
-                    break;
-            }
+        foreach ($dados as $dado) {
 
             // Definir escola
-            $escola = ($row['publica'] == 1) ? ('PUBLICA') : ('PRIVADA');
+            $escola = ($dado['publica'] == 1) ? ('PUBLICA') : ('PRIVADA');
 
             // Definir cota
-            if ($row['pcd'] == 1) {
+            if ($dado['pcd'] == 1) {
                 $cota = 'PCD';
-            } else if ($row['publica'] == 0 && $row['bairro'] == 1) {
+            } else if ($dado['publica'] == 0 && $dado['bairro'] == 1) {
                 $cota = 'COTISTA';
             } else {
                 $cota = 'AC';
@@ -165,25 +141,24 @@ class relatorios extends connect
 
             // Imprimir linha no PDF
             $pdf->Cell(10, 7, sprintf("%03d", $classificacao), 1, 0, 'C', true);
-            $pdf->Cell($n, 7, strToUpper(utf8_decode($row['nome'])), 1, 0, 'L', true);
-            $pdf->Cell(30, 7, $curso, 1, 0, 'L', true);
+            $pdf->Cell($n, 7, strToUpper(utf8_decode($dado['nome'])), 1, 0, 'L', true);
+            $pdf->Cell(30, 7, strToUpper(utf8_decode($dado['nome_curso'])), 1, 0, 'L', true);
             $pdf->Cell(18, 7, $escola, 1, 0, 'L', true);
             $pdf->Cell(26, 7, $cota, 1, $p, 'L', true); // verificar parâmetro 'p' na parte superior do relatório
-            if (isset($_SESSION['status']) && $_SESSION['status'] == 1) {
-                $pdf->Cell(20, 7, $row['id_candidato'], 1, 0, 'C', true);
-                $pdf->Cell(15, 7, number_format($row['media'], 2), 1, 0, 'C', true);
-                $pdf->Cell(55, 7, strtoupper(utf8_decode($row['nome_user'])), 1, 1, 'L', true);
+            if ((isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin')) {
+                $pdf->Cell(15, 7, number_format($dado['media_final'], 2), 1, 0, 'C', true);
+                $pdf->Cell(55, 7, strtoupper(utf8_decode($dado['nome_user'])), 1, 1, 'L', true);
             }
             $classificacao++;
         }
         $pdf->Output('classificacao.pdf', 'I');
     }
-    
 }
-if(isset($_GET['curso']) && !empty($_GET['curso'])){
-$relatorios = new relatorios($escola);
-$relatorios->private_ac($curso);
-}else{
-    //header('location:../../../index.php');
-    //exit();
+if (isset($_GET['curso']) && !empty($_GET['curso'])) {
+    $relatorios = new relatorios($escola);
+    $curso = $_GET['curso'];
+    $relatorios->private_ac($curso);
+} else {
+    header('location:../../../index.php');
+    exit();
 }
