@@ -1,3 +1,4 @@
+
 <?php
 require_once(__DIR__ . '/../models/sessions.php');
 $session = new sessions();
@@ -123,12 +124,9 @@ $usuarios = $select->select_usuarios();
         }
 
         @keyframes pulseSoft {
-
-            0%,
-            100% {
+            0%, 100% {
                 opacity: 1;
             }
-
             50% {
                 opacity: 0.8;
             }
@@ -245,6 +243,37 @@ $usuarios = $select->select_usuarios();
         .btn-animate:active {
             transform: translateY(0);
         }
+
+        /* Card styles for mobile */
+        .candidate-card {
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            background: #ffffff;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            padding: 16px;
+            margin-bottom: 16px;
+            transition: transform 0.2s ease;
+        }
+
+        .candidate-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .candidate-card .field {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .candidate-card .field-label {
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .candidate-card .field-value {
+            color: #4b5563;
+            text-align: right;
+        }
     </style>
 </head>
 
@@ -267,11 +296,11 @@ $usuarios = $select->select_usuarios();
                     </button>
                 </div>
                 <nav class="space-y-2">
-                      <!-- Dashboard -->
-                      <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin' || $_SESSION['tipo_usuario'] === 'cadastrador') { ?>
+              
+                    <?php if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'admin' || $_SESSION['tipo_usuario'] === 'cadastrador')) { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.1s;">
-                            <a href="../index.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring bg-white/10">
-                                <div class="w-12 h-12 bg-secondary rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
+                            <a href="../index.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring ">
+                                <div class="w-12 h-12 bg-white/10  rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path>
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5a2 2 0 012-2h4a2 2 0 012 2v2H8V5z"></path>
@@ -285,10 +314,10 @@ $usuarios = $select->select_usuarios();
                         </div>
                     <?php } ?>
 
-                    <!-- Cursos -->
+                
                     <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.2s;">
-                            <a href="cursos.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
+                            <a href="cursos.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring ">
                                 <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
@@ -303,10 +332,10 @@ $usuarios = $select->select_usuarios();
                     <?php } ?>
 
                     <!-- Candidatos -->
-                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin' || $_SESSION['tipo_usuario'] === 'cadastrador') { ?>
+                    <?php if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'admin' || $_SESSION['tipo_usuario'] === 'cadastrador')) { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.3s;">
-                            <a href="candidatos.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
-                                <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
+                            <a href="candidatos.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring bg-white/10">
+                                <div class="w-12 h-12  bg-secondary rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
                                     </svg>
@@ -354,7 +383,7 @@ $usuarios = $select->select_usuarios();
                     <?php } ?>
 
                     <!-- Relatórios -->
-                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin' || $_SESSION['tipo_usuario'] === 'cadastrador') { ?>
+                    <?php if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'admin' || $_SESSION['tipo_usuario'] === 'cadastrador')) { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.5s;">
                             <a href="#" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
                                 <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
@@ -423,7 +452,8 @@ $usuarios = $select->select_usuarios();
 
                 <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
                     <div class="overflow-x-auto">
-                        <table class="min-w-full text-sm">
+                        <!-- Table for desktop (sm and above) -->
+                        <table class="min-w-full text-sm hidden sm:table">
                             <thead>
                                 <tr class="bg-gradient-to-r from-primary/10 to-accent/50 text-left text-gray-700">
                                     <th class="px-4 py-3">ID</th>
@@ -458,8 +488,14 @@ $usuarios = $select->select_usuarios();
                                         <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
                                             <td class="px-4 py-3">
                                                 <div class="flex space-x-2">
-                                                    <button onclick="openEditCandidato(<?= json_encode($cand['id'] ?? ''), ', ', json_encode($cand['nome'] ?? ''), ', ', json_encode($cand['id_curso'] ?? ''), ', ', json_encode($cand['publica'] ?? 0) ?>)" class="flex-1 bg-primary text-white py-2 px-4 rounded-lg hover:bg-dark transition-all duration-300 font-medium text-sm btn-animate focus-ring">Editar</button>
-                                                    <button onclick="openDeleteCandidato(<?= json_encode($cand['id'] ?? ''), ', ', json_encode($cand['nome'] ?? '') ?>)" class="flex-1 bg-secondary text-white py-2 px-4 rounded-lg hover:bg-orange-600 transition-all duration-300 font-medium text-sm btn-animate focus-ring">Excluir</button>
+                                                    <button class="edit-candidato flex-1 bg-primary text-white py-2 px-4 rounded-lg hover:bg-dark transition-all duration-300 font-medium text-sm btn-animate focus-ring"
+                                                            data-id="<?= htmlspecialchars((string)($cand['id'] ?? '')) ?>"
+                                                            data-nome="<?= htmlspecialchars((string)($cand['nome'] ?? '')) ?>"
+                                                            data-id_curso="<?= htmlspecialchars((string)($cand['id_curso'] ?? '')) ?>"
+                                                            data-publica="<?= htmlspecialchars((string)($cand['publica'] ?? 0)) ?>">Editar</button>
+                                                    <button class="delete-candidato flex-1 bg-secondary text-white py-2 px-4 rounded-lg hover:bg-orange-600 transition-all duration-300 font-medium text-sm btn-animate focus-ring"
+                                                            data-id="<?= htmlspecialchars((string)($cand['id'] ?? '')) ?>"
+                                                            data-nome="<?= htmlspecialchars((string)($cand['nome'] ?? '')) ?>">Excluir</button>
                                                 </div>
                                             </td>
                                         <?php } ?>
@@ -472,6 +508,62 @@ $usuarios = $select->select_usuarios();
                                 <?php } ?>
                             </tbody>
                         </table>
+
+                        <!-- Cards for mobile (below sm) -->
+                        <div class="sm:hidden grid gap-4 p-4">
+                            <?php foreach ($candidatos as $cand) {
+                                $id = $cand['id'] ?? '-';
+                                $nome = $cand['nome'] ?? '-';
+                                $cursoNome = $cand['nome_curso'] ?? '-';
+                                $publica = $cand['publica'] === 1 ? 'Sim' : 'Não';
+                                $data = $cand['data'] ?? '-';
+                                $cadastradorNome = $cand['nome_user'] ?? '-';
+                            ?>
+                                <div class="candidate-card">
+                                    <div class="field">
+                                        <span class="field-label">ID</span>
+                                        <span class="field-value"><?= htmlspecialchars((string)$id) ?></span>
+                                    </div>
+                                    <div class="field">
+                                        <span class="field-label">Nome</span>
+                                        <span class="field-value font-medium"><?= htmlspecialchars((string)$nome) ?></span>
+                                    </div>
+                                    <div class="field">
+                                        <span class="field-label">Curso</span>
+                                        <span class="field-value"><?= htmlspecialchars((string)$cursoNome) ?></span>
+                                    </div>
+                                    <div class="field">
+                                        <span class="field-label">Pública</span>
+                                        <span class="field-value">
+                                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold <?= $publica === 'Sim' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700' ?>"><?= $publica ?></span>
+                                        </span>
+                                    </div>
+                                    <div class="field">
+                                        <span class="field-label">Data</span>
+                                        <span class="field-value"><?= htmlspecialchars((string)$data) ?></span>
+                                    </div>
+                                    <div class="field">
+                                        <span class="field-label">Cadastrador</span>
+                                        <span class="field-value"><?= htmlspecialchars((string)$cadastradorNome) ?></span>
+                                    </div>
+                                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
+                                        <div class="flex space-x-2 mt-4">
+                                            <button class="edit-candidato flex-1 bg-primary text-white py-2 px-4 rounded-lg hover:bg-dark transition-all duration-300 font-medium text-sm btn-animate focus-ring"
+                                                    data-id="<?= htmlspecialchars((string)($cand['id'] ?? '')) ?>"
+                                                    data-nome="<?= htmlspecialchars((string)($cand['nome'] ?? '')) ?>"
+                                                    data-id_curso="<?= htmlspecialchars((string)($cand['id_curso'] ?? '')) ?>"
+                                                    data-publica="<?= htmlspecialchars((string)($cand['publica'] ?? 0)) ?>">Editar</button>
+                                            <button class="delete-candidato flex-1 bg-secondary text-white py-2 px-4 rounded-lg hover:bg-orange-600 transition-all duration-300 font-medium text-sm btn-animate focus-ring"
+                                                    data-id="<?= htmlspecialchars((string)($cand['id'] ?? '')) ?>"
+                                                    data-nome="<?= htmlspecialchars((string)($cand['nome'] ?? '')) ?>">Excluir</button>
+                                        </div>
+                                    <?php } ?>
+                                </div>
+                            <?php } ?>
+                            <?php if (count($candidatos) === 0) { ?>
+                                <div class="text-center text-gray-500 py-8">Nenhum candidato encontrado.</div>
+                            <?php } ?>
+                        </div>
                     </div>
                 </div>
             </main>
@@ -611,24 +703,40 @@ $usuarios = $select->select_usuarios();
             }, 300);
         }
 
-        function openEditCandidato(id, nome, id_curso, publica) {
-            document.getElementById('modalCandidatoTitle').textContent = 'Editar Candidato';
-            document.getElementById('inpCandidatoId').value = id || '';
-            document.getElementById('inpCandidatoNome').value = nome || '';
-            document.getElementById('inpCandidatoCurso').value = id_curso || '';
-            document.getElementById('inpCandidatoPublica').value = publica || 0;
-            document.getElementById('candidatoForm').action = '../controllers/controller_candidato.php';
-            openModal('modalCandidato');
-        }
-
-        function openDeleteCandidato(id, nome) {
-            document.getElementById('deleteCandidatoName').textContent = nome || '';
-            document.getElementById('deleteCandidatoId').value = id || '';
-            openModal('modalDeleteCandidato');
-        }
-
-        // Validação simples do formulário de edição
+        // Event delegation for edit and delete buttons
         document.addEventListener('DOMContentLoaded', function() {
+            const container = document.querySelector('.bg-white.rounded-2xl');
+            
+            container.addEventListener('click', function(e) {
+                const target = e.target;
+
+                // Handle Edit button
+                if (target.classList.contains('edit-candidato')) {
+                    const id = target.dataset.id || '';
+                    const nome = target.dataset.nome || '';
+                    const id_curso = target.dataset.id_curso || '';
+                    const publica = target.dataset.publica || 0;
+
+                    document.getElementById('modalCandidatoTitle').textContent = 'Editar Candidato';
+                    document.getElementById('inpCandidatoId').value = id;
+                    document.getElementById('inpCandidatoNome').value = nome;
+                    document.getElementById('inpCandidatoCurso').value = id_curso;
+                    document.getElementById('inpCandidatoPublica').value = publica;
+                    document.getElementById('candidatoForm').action = '../controllers/controller_candidato.php';
+                    openModal('modalCandidato');
+                }
+
+                // Handle Delete button
+                if (target.classList.contains('delete-candidato')) {
+                    const id = target.dataset.id || '';
+                    const nome = target.dataset.nome || '';
+                    document.getElementById('deleteCandidatoName').textContent = nome;
+                    document.getElementById('deleteCandidatoId').value = id;
+                    openModal('modalDeleteCandidato');
+                }
+            });
+
+            // Form validation
             const form = document.getElementById('candidatoForm');
             form.addEventListener('submit', function(e) {
                 const nome = document.getElementById('inpCandidatoNome');
