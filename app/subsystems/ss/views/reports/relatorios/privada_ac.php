@@ -141,7 +141,7 @@ class relatorios extends connect
         $pdf->Output('classificacao.pdf', 'I');
     }
 }
-if (isset($_GET['curso']) && !empty($_GET['curso'])) {
+if (isset($_GET['curso']) && !empty($_GET['curso']) && ) {
     $relatorios = new relatorios($escola);
     $curso = $_GET['curso'];
     $relatorios->private_ac($curso);
