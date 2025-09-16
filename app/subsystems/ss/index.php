@@ -640,8 +640,8 @@ $select = new select($escola);
                         <div class="flex items-center gap-3">
                             <button type="button" id="btnBackStep" class="px-6 py-3 rounded-xl border-2 border-primary font-semibold text-primary hover:bg-primary/10 hover:border-primary transition-all text-base focus-ring hidden" onclick="prevAdminStep()">Voltar</button>
                             <button type="button" id="btnCancel" class="px-6 py-3 rounded-xl border-2 border-primary font-semibold text-primary hover:bg-primary/10 hover:border-primary transition-all text-base focus-ring" onclick="closeAdminConfirm()">Cancelar</button>
-                        </div>
-                        <div class="flex items-center gap-3">
+                                    <button type="button" id="toggleDebugBtn" class="text-blue-600 hover:text-blue-800 text-xs px-2 py-1 bg-blue-100 rounded" onclick="toggleDebugSections()">
+                                        Mostrar Detalhes
                             <button type="submit" id="btnNextStep" class="px-6 py-3 bg-gradient-to-r from-primary to-dark text-white font-semibold rounded-xl hover:from-dark hover:to-primary transition-all text-base shadow-lg focus-ring">Enviar código</button>
                             <button type="submit" id="btnConfirmAction" class="px-6 py-3 bg-gradient-to-r from-primary to-dark text-white font-semibold rounded-xl hover:from-dark hover:to-primary transition-all text-base shadow-lg focus-ring hidden">Confirmar</button>
                         </div>
@@ -661,7 +661,7 @@ $select = new select($escola);
                     <div class="relative flex justify-between items-center">
                         <div class="flex items-center space-x-3">
                             <div class="w-8 h-8 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm border border-white/30 shadow-lg">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div id="debugDetails" class="hidden">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                                 </svg>
                             </div>
@@ -1103,73 +1103,11 @@ $select = new select($escola);
             if (modalId === 'modalNonoAno') {
                 // Pequeno delay para garantir que o modal esteja renderizado
                 setTimeout(() => {
-                    initializeExclusiveFields();
-                }, 200);
-            }
-        }
-
-        function closeModal(modalId) {
-            const modal = document.getElementById(modalId);
-            modal.classList.add('hidden');
-            document.body.style.overflow = 'auto';
-        }
-
-        function openNonoAnoModal() {
-            // Salvar dados do primeiro modal antes de fechar
-            saveFirstModalData();
-
-            closeModal('modalCadastro');
-
-            // Usar a cor armazenada na variável global
-            openModalWithCourse('modalNonoAno', currentCursoNome, currentCorCurso, currentTipoEscola);
-        }
-
-        // Date input mask
-        function applyDateMask(input) {
-            let value = input.value.replace(/\D/g, '');
-            if (value.length > 8) value = value.slice(0, 8);
-            if (value.length > 4) {
-                value = value.slice(0, 2) + '/' + value.slice(2, 4) + '/' + value.slice(4);
-            } else if (value.length > 2) {
-                value = value.slice(0, 2) + '/' + value.slice(2);
-            }
-            input.value = value;
-        }
-
-        // Função para controlar campos mutuamente exclusivos
-        function setupExclusiveFields() {
-            const bimestreInputs = document.querySelectorAll('#nonoAnoForm input[name*="_9_1"], #nonoAnoForm input[name*="_9_2"], #nonoAnoForm input[name*="_9_3"]');
-            const mediaInputs = document.querySelectorAll('#nonoAnoForm input[name*="_9_media"]');
-
-            // Função para desabilitar campos de média quando bimestres são preenchidos
-            function disableMediaFields() {
-                mediaInputs.forEach(input => {
-                    input.disabled = true;
-                    input.classList.add('opacity-50', 'cursor-not-allowed');
-                    input.classList.remove('focus:ring-2', 'focus:ring-yellow-500', 'focus:border-yellow-500');
-                });
-            }
-
-            // Função para desabilitar campos de bimestre quando médias são preenchidas
-            function disableBimestreFields() {
-                bimestreInputs.forEach(input => {
-                    input.disabled = true;
-                    input.classList.add('opacity-50', 'cursor-not-allowed');
-                    input.classList.remove('focus:ring-2', 'focus:ring-yellow-500', 'focus:border-yellow-500');
-                });
-            }
-
-            // Função para habilitar todos os campos
-            function enableAllFields() {
-                [...bimestreInputs, ...mediaInputs].forEach(input => {
-                    input.disabled = false;
-                    input.classList.remove('opacity-50', 'cursor-not-allowed');
-                    if (input.name.includes('_9_media')) {
-                        input.classList.add('focus:ring-2', 'focus:ring-yellow-500', 'focus:border-yellow-500');
-                    } else {
-                        input.classList.add('focus:ring-2', 'focus:ring-yellow-500', 'focus:border-yellow-500');
+                    const debugContent = document.getElementById('debugContent');
+                    if (debugContent && typeof data !== 'undefined' && data.debug) {
+                        debugContent.textContent = data.debug;
                     }
-                });
+                }, 100);
             }
 
             // Event listeners para campos de bimestre
