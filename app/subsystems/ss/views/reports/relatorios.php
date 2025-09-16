@@ -1,16 +1,16 @@
 <?php
-require_once(__DIR__ . '/../../../models/sessions.php');
+require_once(__DIR__ . '/../../models/sessions.php');
 $session = new sessions();
 $session->autenticar_session();
 $session->tempo_session();
 
-require_once(__DIR__ . '/../../../config/connect.php');
+require_once(__DIR__ . '/../../config/connect.php');
 $escola = $_SESSION['escola'];
 
 new connect($escola);
-require_once(__DIR__ . '/../../../assets/libs/fpdf/fpdf.php');
+require_once(__DIR__ . '/../../assets/libs/fpdf/fpdf.php');
 
-class relatorios extends connect
+    class relatorios extends connect
 {
     protected string $table1;
     protected string $table2;
@@ -23,7 +23,7 @@ class relatorios extends connect
     function __construct($escola)
     {
         parent::__construct($escola);
-        $table = require(__DIR__ . '/../../../../../.env/tables.php');
+        $table = require(__DIR__ . '/../../../../.env/tables.php');
         $this->table1 = $table["ss_$escola"][1];
         $this->table2 = $table["ss_$escola"][2];
         $this->table3 = $table["ss_$escola"][3];
@@ -31,7 +31,7 @@ class relatorios extends connect
         $this->table5 = $table["ss_$escola"][5];
         $this->table13 = $table["ss_$escola"][13];
     }
-    public function private_ac($curso)
+    public function gerarRelatorio($curso, $tipo_relatorio = 'PRIVADA AC')
     {
         if ((isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin')) {
             //ADMIN
@@ -45,15 +45,72 @@ class relatorios extends connect
             $orientacao = 'P';
         }
 
-        $stmtSelect = $this->connect->prepare(
- "SELECT can.nome, cur.nome_curso, can.publica, can.bairro, can.pcd, m.media_final, u.nome_user 
-        FROM $this->table1 can    
-        INNER JOIN $this->table4 m ON m.id_candidato = can.id 
-        INNER JOIN $this->table5 u ON can.id_cadastrador = u.id 
-        INNER JOIN $this->table2 cur ON can.id_curso1 = cur.id 
-        WHERE can.id_curso1 = :curso AND can.publica = 1
-        ORDER BY m.media_final DESC, can.data_nascimento DESC, m.l_portuguesa_media DESC, m.matematica_media DESC;"
-        );
+        // Definir a consulta SQL com base no tipo de relatório
+        $sql = "";
+        $publica = 0;
+        $pcd = 0;
+        $bairro = 0;
+        
+        // Determinar os parâmetros da consulta com base no tipo de relatório
+        switch ($tipo_relatorio) {
+            case 'PRIVADA AC':
+                $publica = 0;
+                $pcd = 0;
+                $bairro = 0;
+                break;
+            case 'PRIVADA COTAS':
+                $publica = 0;
+                $pcd = 0;
+                $bairro = 1;
+                break;
+            case 'PRIVADA GERAL':
+                $publica = 0;
+                $pcd = 0;
+                $bairro = null; // Não filtrar por bairro
+                break;
+            case 'PÚBLICA AC':
+                $publica = 1;
+                $pcd = 0;
+                $bairro = 0;
+                break;
+            case 'PÚBLICA COTAS':
+                $publica = 1;
+                $pcd = 0;
+                $bairro = 1;
+                break;
+            case 'PÚBLICA GERAL':
+                $publica = 1;
+                $pcd = 0;
+                $bairro = null; // Não filtrar por bairro
+                break;
+            default:
+                $publica = 0;
+                $pcd = 0;
+                $bairro = 0;
+                $tipo_relatorio = 'PRIVADA AC';
+                break;
+        }
+
+        // Construir a consulta SQL com base nos parâmetros
+        if ($bairro !== null) {
+            $sql = "SELECT can.nome, cur.nome_curso, can.publica, can.bairro, can.pcd, m.media_final, u.nome_user 
+                    FROM $this->table1 can    
+                    INNER JOIN $this->table4 m ON m.id_candidato = can.id 
+                    INNER JOIN $this->table5 u ON can.id_cadastrador = u.id 
+                    INNER JOIN $this->table2 cur ON can.id_curso1 = cur.id 
+                    WHERE can.id_curso1 = :curso AND can.publica = $publica AND can.pcd = $pcd AND can.bairro = $bairro 
+                    ORDER BY m.media_final DESC, can.data_nascimento DESC, m.l_portuguesa_media DESC, m.matematica_media DESC;";
+        } else {
+            $sql = "SELECT can.nome, cur.nome_curso, can.publica, can.bairro, can.pcd, m.media_final, u.nome_user 
+                    FROM $this->table1 can    
+                    INNER JOIN $this->table4 m ON m.id_candidato = can.id 
+                    INNER JOIN $this->table5 u ON can.id_cadastrador = u.id 
+                    INNER JOIN $this->table2 cur ON can.id_curso1 = cur.id 
+                    WHERE can.id_curso1 = :curso AND can.publica = $publica AND can.pcd = $pcd 
+                    ORDER BY m.media_final DESC, can.data_nascimento DESC, m.l_portuguesa_media DESC, m.matematica_media DESC;";
+        }
+        
+        $stmtSelect = $this->connect->prepare($sql);
         $stmtSelect->BindValue(':curso', $curso);
         $stmtSelect->execute();
         $dados = $stmtSelect->fetchAll(PDO::FETCH_ASSOC);
@@ -62,9 +119,9 @@ class relatorios extends connect
         $pdf->AddPage();
 
         // Cabeçalho com larguras ajustadas
-        $pdf->Image('../../../assets/imgs/logo.png', 8, 8, 15, 0, 'PNG');
+        $pdf->Image(__DIR__ . '/../../assets/imgs/logo.png', 8, 8, 15, 0, 'PNG');
         $pdf->SetFont('Arial', 'B', 25);
-        $pdf->Cell(90, 5, ('PÚBLICA GERAL'), 0, 1, 'C');
+        $pdf->Cell(90, 5, utf8_decode($tipo_relatorio), 0, 1, 'C');
         $pdf->SetFont('Arial', 'B', 8);
         $pdf->Cell(188, 10, ('PCD = PESSOA COM DEFICIENCIA | COTISTA = INCLUSO NA COTA DO BAIRRO | AC = AMPLA CONCORRENCIA'), 0, 1, 'C');
         $pdf->SetFont('Arial', 'b', 12);
@@ -144,7 +201,8 @@ class relatorios extends connect
 if (isset($_GET['curso']) && !empty($_GET['curso'])) {
     $relatorios = new relatorios($escola);
     $curso = $_GET['curso'];
-    $relatorios->private_ac($curso);
+    $tipo_relatorio = isset($_GET['tipo_relatorio']) ? $_GET['tipo_relatorio'] : 'PRIVADA AC';
+    $relatorios->gerarRelatorio($curso, $tipo_relatorio);
 } else {
     header('location:../../../index.php');
     exit();

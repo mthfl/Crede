@@ -14,22 +14,22 @@ if (
     $tipo_relatorio = $_POST['tipo_relatorio'];
     switch ($tipo_relatorio) {
         case 'privada_ac':
-            header("location:../views/reports/relatorios/privada_ac.php?curso=". $curso);
+            header("location:../views/reports/relatorios.php?curso=". $curso. "&tipo_relatorio=PRIVADA AC");
             exit();
         case 'privada_cotas':
-            header("location:../views/reports/relatorios/privada_cotas.php?curso=". $curso);
+            header("location:../views/reports/relatorios.php?curso=". $curso . "&tipo_relatorio=PRIVADA COTAS");
             exit();
         case 'privada_geral':
-            header("location:../views/reports/relatorios/privada_geral.php?curso=". $curso);
+            header("location:../views/reports/relatorios.php?curso=". $curso . "&tipo_relatorio=PRIVADA GERAL");
             exit();
         case 'publica_ac':
-            header("location:../views/reports/relatorios/publica_ac.php?curso=". $curso);
+            header("location:../views/reports/relatorios.php?curso=". $curso . "&tipo_relatorio=PÚBLICA AC");    
             exit();
         case 'publica_cotas':
-            header("location:../views/reports/relatorios/publica_cotas.php?curso=". $curso);
+            header("location:../views/reports/relatorios.php?curso=". $curso . "&tipo_relatorio=PÚBLICA COTAS");
             exit();
         case 'publica_geral':
-            header("location:../views/reports/relatorios/publica_geral.php?curso=". $curso);
+            header("location:../views/reports/relatorios.php?curso=". $curso . "&tipo_relatorio=PÚBLICA GERAL");
             exit();
     }
 }else if (
