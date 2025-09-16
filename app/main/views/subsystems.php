@@ -1057,6 +1057,24 @@ $session->tempo_session();
                 </a>
             <?php } ?>
 
+            <!-- Card 3: Controle de Estoque -->
+            <?php if (isset($_SESSION['SS'])) { ?>
+                <a href="../../subsystems/gerenciador_escolas/index.php">
+                    <div class="system-card animate-on-scroll"
+                        tabindex="0"
+                        role="button"
+                        aria-label="Acessar Controle de Estoque - Sistema de gestão de materiais e recursos"
+                        data-system="estoque">
+                        <div class="card-icon">
+                            <img src="https://i.postimg.cc/wT8bLxNS/Design-sem-nome-7.png" alt="Ícone Controle de Estoque" class="w-24 h-24 object-contain">
+                        </div>
+                        <h3 class="card-title">Gerenciador de escolas</h3>
+                        <p class="card-description">Gestão completa de materiais e recursos</p>
+                        <span class="card-badge">Sistema Ativo</span>
+                    </div>
+                </a>
+            <?php } ?>
+
         </div>
     </main>
 
