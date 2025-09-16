@@ -7,69 +7,7 @@ $session->tempo_session();
 require_once(__DIR__ . '/../../config/connect.php');
 $escola = $_SESSION['escola'];
 
-$conexao = new connect($escola);
-$conn = $GLOBALS['conn']; // Garantir que a variável $conn está disponível
-
-// Obter a cor do curso
-$curso_cor = '#005A24'; // Cor padrão
-
-// Verificar se o curso_id está disponível na URL ou na sessão
-$curso_id = isset($_GET['curso_id']) ? $_GET['curso_id'] : null;
-
-// Se não tiver na URL, tenta pegar da sessão
-if (!$curso_id && isset($_SESSION['curso_id'])) {
-    $curso_id = $_SESSION['curso_id'];
-}
-
-// Remover código de debug que estava causando erro
-// Não vamos mais usar logs para debug
-
-if ($curso_id) {
-    // Consultar a cor do curso no banco de dados
-    $sql = "SELECT cor_curso FROM cursos WHERE id = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $curso_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    
-    if ($row = $result->fetch_assoc()) {
-        $curso_cor = $row['cor_curso'];
-    }
-}
-
-// Função para converter hex para rgba
-function hex2rgba($color, $opacity = false) {
-    $default = 'rgb(0,0,0)';
-    
-    if(empty($color))
-        return $default; 
-    
-    if ($color[0] == '#')
-        $color = substr($color, 1);
-    
-    if (strlen($color) == 6)
-        $hex = array( $color[0] . $color[1], $color[2] . $color[3], $color[4] . $color[5] );
-    elseif (strlen($color) == 3)
-        $hex = array( $color[0] . $color[0], $color[1] . $color[1], $color[2] . $color[2] );
-    else
-        return $default;
-    
-    $rgb = array_map('hexdec', $hex);
-    
-    if($opacity){
-        if(abs($opacity) > 1)
-            $opacity = 1.0;
-        $output = 'rgba('.implode(",",$rgb).','.$opacity.')';
-    } else {
-        $output = 'rgb('.implode(",",$rgb).')';
-    }
-    
-    return $output;
-}
-
-// Definir cores com base na cor do curso
-$curso_cor_light = hex2rgba($curso_cor, 0.8);
-$curso_cor_dark = '#1A3C34'; // Cor escura padrão para o gradiente
+new connect($escola);
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -88,6 +26,13 @@ $curso_cor_dark = '#1A3C34'; // Cor escura padrão para o gradiente
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
   <style>
+    :root {
+      --ceara-green: #008C45;
+      --ceara-green-light: #00b357;
+      --ceara-orange: #FFA500;
+      --ceara-white: #FFFFFF;
+    }
+
     * {
       margin: 0;
       padding: 0;
@@ -101,7 +46,7 @@ $curso_cor_dark = '#1A3C34'; // Cor escura padrão para o gradiente
       align-items: center;
       justify-content: center;
       padding: 20px;
-      background: linear-gradient(135deg, <?= $curso_cor ?> 0%, <?= $curso_cor_dark ?> 100%);
+      background: linear-gradient(135deg, var(--ceara-green) 0%, var(--ceara-green-light) 100%);
       position: relative;
       overflow: hidden;
     }
@@ -144,7 +89,7 @@ $curso_cor_dark = '#1A3C34'; // Cor escura padrão para o gradiente
     }
 
     .success-card {
-      background-color: #FFFFFF;
+      background-color: var(--ceara-white);
       border-radius: 20px;
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
       padding: 3rem 2rem;
@@ -156,7 +101,7 @@ $curso_cor_dark = '#1A3C34'; // Cor escura padrão para o gradiente
     .success-icon {
       width: 90px;
       height: 90px;
-      background: <?= $curso_cor ?>;
+      background: var(--ceara-green);
       border-radius: 50%;
       display: flex;
       align-items: center;
@@ -167,7 +112,7 @@ $curso_cor_dark = '#1A3C34'; // Cor escura padrão para o gradiente
     }
 
     .success-icon i {
-      color: #FFFFFF;
+      color: var(--ceara-white);
       font-size: 40px;
     }
 
@@ -189,7 +134,7 @@ $curso_cor_dark = '#1A3C34'; // Cor escura padrão para o gradiente
 
     .congratulations {
       display: block;
-      color: <?= $curso_cor ?>;
+      color: var(--ceara-green);
       font-size: 1.4rem;
       font-weight: 700;
       margin-bottom: -15px;
@@ -201,7 +146,7 @@ $curso_cor_dark = '#1A3C34'; // Cor escura padrão para o gradiente
       align-items: center;
       justify-content: center;
       gap: 10px;
-      color: <?= $curso_cor ?>;
+      color: var(--ceara-orange);
       font-size: 1rem;
       font-weight: 500;
     }
@@ -214,7 +159,7 @@ $curso_cor_dark = '#1A3C34'; // Cor escura padrão para o gradiente
     .dot {
       width: 8px;
       height: 8px;
-      background-color: <?= $curso_cor ?>;
+      background-color: var(--ceara-orange);
       border-radius: 50%;
       animation: dotAnimation 1.4s infinite;
     }
@@ -230,17 +175,17 @@ $curso_cor_dark = '#1A3C34'; // Cor escura padrão para o gradiente
     @keyframes pulseAnimation {
       0% {
         transform: scale(1);
-        box-shadow: 0 0 0 0 <?= hex2rgba($curso_cor, 0.4) ?>;
+        box-shadow: 0 0 0 0 rgba(0, 140, 69, 0.4);
       }
 
       70% {
         transform: scale(1.05);
-        box-shadow: 0 0 0 15px <?= hex2rgba($curso_cor, 0) ?>;
+        box-shadow: 0 0 0 15px rgba(0, 140, 69, 0);
       }
 
       100% {
         transform: scale(1);
-        box-shadow: 0 0 0 0 <?= hex2rgba($curso_cor, 0) ?>;
+        box-shadow: 0 0 0 0 rgba(0, 140, 69, 0);
       }
     }
 
@@ -304,7 +249,7 @@ $curso_cor_dark = '#1A3C34'; // Cor escura padrão para o gradiente
     // Redireciona a página após 2 segundos
     setTimeout(function() {
       window.location.href = "../../index.php";
-    }, 2000000);
+    }, 2000);
 </script>
 </body>
 

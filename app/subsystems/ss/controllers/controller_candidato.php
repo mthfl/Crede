@@ -42,7 +42,6 @@ if (
         $bairro = 0;
     }
     $id_curso1 = (int)$_POST["curso_id"];
-    $curso_id = $id_curso1; // Garantir que a variável curso_id esteja definida para o redirecionamento
     $publica = $_POST["tipo_escola"] == 'publica' ? 1 : 0;
     $id_cadastrador = $_SESSION['id'];
     $lp_6ano = (int)str_replace(',', '.', $_POST["portugues_6"]);
@@ -186,7 +185,7 @@ if (
 
     switch ($result) {
         case 1:
-            header('Location: ../views/windows/success.php?criado&curso_id=' . $curso_id);
+            header('Location: ../views/windows/success.php?criado');
             exit();
         case 2:
             header('Location: ../views/cadastro.php?erro');
