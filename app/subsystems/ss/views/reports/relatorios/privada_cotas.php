@@ -17,13 +17,6 @@ class relatorios extends connect
     protected string $table3;
     protected string $table4;
     protected string $table5;
-    protected string $table6;
-    protected string $table7;
-    protected string $table8;
-    protected string $table9;
-    protected string $table10;
-    protected string $table11;
-    protected string $table12;
     protected string $table13;
 
     function __construct($escola)
@@ -35,13 +28,6 @@ class relatorios extends connect
         $this->table3 = $table["ss_$escola"][3];
         $this->table4 = $table["ss_$escola"][4];
         $this->table5 = $table["ss_$escola"][5];
-        $this->table6 = $table["ss_$escola"][6];
-        $this->table7 = $table["ss_$escola"][7];
-        $this->table8 = $table["ss_$escola"][8];
-        $this->table9 = $table["ss_$escola"][9];
-        $this->table10 = $table["ss_$escola"][10];
-        $this->table11 = $table["ss_$escola"][11];
-        $this->table12 = $table["ss_$escola"][12];
         $this->table13 = $table["ss_$escola"][13];
     }
     public function private_ac($curso)

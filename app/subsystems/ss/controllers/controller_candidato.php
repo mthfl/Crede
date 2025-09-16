@@ -3,6 +3,7 @@ require_once(__DIR__ . '/../models/sessions.php');
 $session = new sessions();
 $session->autenticar_session();
 $session->tempo_session();
+require_once(__DIR__ . "/../models/model.admin.php");
 require_once(__DIR__ . "/../models/model.cadastrador.php");
 print_r($_POST);
 
@@ -195,6 +196,28 @@ if (
             header('Location: ../views/cadastro.php?falha');
             exit();
     }
-} else {
+} else if(isset($_POST['id_candidato']) && !empty($_POST['id_candidato'])){
+    $escola = $_SESSION['escola'];
+    $admin_model = new admin($escola);
+    
+    $id_candidato = $_POST['id_candidato'];
+    echo $result = $admin_model->excluir_candidato($id_candidato);
+    switch ($result) {
+        case 1:
+            header('Location: ../views/candidatos.php?deletado');
+            exit();
+        case 2:
+            header('Location: ../views/candidatos.php?erro');
+            exit();
+        case 3:
+            header('Location: ../views/candidatos.php?nao_existe');
+            exit();
+        default:
+            header('Location: ../views/candidatos.php?falha');
+            exit();
+    }
+
+}else{
     header("location:../index.php");
+    exit();
 }
