@@ -1,4 +1,3 @@
-
 <?php
 require_once(__DIR__ . '/../models/sessions.php');
 $session = new sessions();
@@ -124,9 +123,12 @@ $usuarios = $select->select_usuarios();
         }
 
         @keyframes pulseSoft {
-            0%, 100% {
+
+            0%,
+            100% {
                 opacity: 1;
             }
+
             50% {
                 opacity: 0.8;
             }
@@ -296,7 +298,7 @@ $usuarios = $select->select_usuarios();
                     </button>
                 </div>
                 <nav class="space-y-2">
-              
+
                     <?php if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'admin' || $_SESSION['tipo_usuario'] === 'cadastrador')) { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.1s;">
                             <a href="../index.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring ">
@@ -314,7 +316,7 @@ $usuarios = $select->select_usuarios();
                         </div>
                     <?php } ?>
 
-                
+
                     <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.2s;">
                             <a href="cursos.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring ">
@@ -415,7 +417,7 @@ $usuarios = $select->select_usuarios();
                             </a>
                         </div>
                     <?php } ?>
-                    
+
                     <!-- Limpar Banco -->
                     <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.6s;">
@@ -505,14 +507,10 @@ $usuarios = $select->select_usuarios();
                                         <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
                                             <td class="px-4 py-3">
                                                 <div class="flex space-x-2">
-                                                    <button class="edit-candidato flex-1 bg-primary text-white py-2 px-4 rounded-lg hover:bg-dark transition-all duration-300 font-medium text-sm btn-animate focus-ring"
-                                                            data-id="<?= htmlspecialchars((string)($cand['id'] ?? '')) ?>"
-                                                            data-nome="<?= htmlspecialchars((string)($cand['nome'] ?? '')) ?>"
-                                                            data-id_curso="<?= htmlspecialchars((string)($cand['id_curso'] ?? '')) ?>"
-                                                            data-publica="<?= htmlspecialchars((string)($cand['publica'] ?? 0)) ?>">Editar</button>
+                                                    <a href="../controllers/controller_candidato.php?id_candidato=<?= $id ?>" class="edit-candidato f-4 rounded-lg hover:bg-dark transition-all duration-300 font-medium text-sm btn-animate focus-ring">Editar</a>
                                                     <button class="delete-candidato flex-1 bg-secondary text-white py-2 px-4 rounded-lg hover:bg-orange-600 transition-all duration-300 font-medium text-sm btn-animate focus-ring"
-                                                            data-id="<?= htmlspecialchars((string)($cand['id'] ?? '')) ?>"
-                                                            data-nome="<?= htmlspecialchars((string)($cand['nome'] ?? '')) ?>">Excluir</button>
+                                                        data-id="<?= htmlspecialchars((string)($cand['id'] ?? '')) ?>"
+                                                        data-nome="<?= htmlspecialchars((string)($cand['nome'] ?? '')) ?>">Excluir</button>
                                                 </div>
                                             </td>
                                         <?php } ?>
@@ -565,14 +563,10 @@ $usuarios = $select->select_usuarios();
                                     </div>
                                     <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
                                         <div class="flex space-x-2 mt-4">
-                                            <button class="edit-candidato flex-1 bg-primary text-white py-2 px-4 rounded-lg hover:bg-dark transition-all duration-300 font-medium text-sm btn-animate focus-ring"
-                                                    data-id="<?= htmlspecialchars((string)($cand['id'] ?? '')) ?>"
-                                                    data-nome="<?= htmlspecialchars((string)($cand['nome'] ?? '')) ?>"
-                                                    data-id_curso="<?= htmlspecialchars((string)($cand['id_curso'] ?? '')) ?>"
-                                                    data-publica="<?= htmlspecialchars((string)($cand['publica'] ?? 0)) ?>">Editar</button>
+                                            <a href="../controllers/controller_candidato.php?id_candidato=<?= $id ?>" class="edit-candidato f-4 rounded-lg hover:bg-dark transition-all duration-300 font-medium text-sm btn-animate focus-ring">Editar</a>
                                             <button class="delete-candidato flex-1 bg-secondary text-white py-2 px-4 rounded-lg hover:bg-orange-600 transition-all duration-300 font-medium text-sm btn-animate focus-ring"
-                                                    data-id="<?= htmlspecialchars((string)($cand['id'] ?? '')) ?>"
-                                                    data-nome="<?= htmlspecialchars((string)($cand['nome'] ?? '')) ?>">Excluir</button>
+                                                data-id="<?= htmlspecialchars((string)($cand['id'] ?? '')) ?>"
+                                                data-nome="<?= htmlspecialchars((string)($cand['nome'] ?? '')) ?>">Excluir</button>
                                         </div>
                                     <?php } ?>
                                 </div>
@@ -584,60 +578,6 @@ $usuarios = $select->select_usuarios();
                     </div>
                 </div>
             </main>
-        </div>
-    </div>
-
-    <!-- Modal Criar/Editar Candidato -->
-    <div id="modalCandidato" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-2 sm:p-4 z-40">
-        <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl max-h-[90vh] overflow-y-auto transform transition-all duration-300 scale-95 opacity-0" id="modalCandidatoContent">
-            <div class="p-6 sm:p-8 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white">
-                <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary to-dark text-white flex items-center justify-center">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                        </svg>
-                    </div>
-                    <div>
-                        <h3 id="modalCandidatoTitle" class="text-xl sm:text-2xl font-bold text-dark font-heading">Editar Candidato</h3>
-                        <p class="text-gray-600 text-sm">Atualize as informações do candidato</p>
-                    </div>
-                </div>
-                <button class="absolute top-6 right-6 p-2 rounded-xl hover:bg-gray-100 transition-all group" onclick="closeModal('modalCandidato')">
-                    <svg class="w-5 h-5 text-gray-400 group-hover:text-gray-600 group-hover:scale-110 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                </button>
-            </div>
-            <div class="p-6 sm:p-8">
-                <form id="candidatoForm" action="../controllers/controller_candidato.php" method="POST">
-                    <input type="hidden" name="form" value="candidato">
-                    <input type="hidden" id="inpCandidatoId" name="id_candidato" value="">
-                    <div class="mb-4">
-                        <label class="block text-sm font-semibold text-dark mb-3">Nome do Candidato *</label>
-                        <input id="inpCandidatoNome" name="nome" type="text" class="w-full px-4 py-3.5 rounded-xl transition-all text-base border-2 focus:border-primary focus:ring-4 focus:ring-primary/10" placeholder="Digite o nome do candidato" required>
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-sm font-semibold text-dark mb-3">Curso *</label>
-                        <select id="inpCandidatoCurso" name="id_curso" class="w-full px-4 py-3.5 rounded-xl transition-all text-base border-2 focus:border-primary focus:ring-4 focus:ring-primary/10" required>
-                            <option value="">Selecione um curso</option>
-                            <?php foreach ($cursos as $curso) { ?>
-                                <option value="<?= htmlspecialchars($curso['id']) ?>"><?= htmlspecialchars($curso['nome_curso']) ?></option>
-                            <?php } ?>
-                        </select>
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-sm font-semibold text-dark mb-3">Escola Pública *</label>
-                        <select id="inpCandidatoPublica" name="publica" class="w-full px-4 py-3.5 rounded-xl transition-all text-base border-2 focus:border-primary focus:ring-4 focus:ring-primary/10" required>
-                            <option value="0">Não</option>
-                            <option value="1">Sim</option>
-                        </select>
-                    </div>
-                    <div class="p-6 sm:p-8 border-t border-gray-100 bg-gray-50/50 flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-3 mt-6 -mx-6 -mb-6 sm:-mx-8 sm:-mb-8">
-                        <button type="button" class="px-6 py-3 rounded-xl border-2 border-primary font-semibold text-primary hover:bg-primary/10 hover:border-primary transition-all text-base focus-ring" onclick="closeModal('modalCandidato')">Cancelar</button>
-                        <button type="submit" class="px-6 py-3 bg-gradient-to-r from-primary to-dark text-white font-semibold rounded-xl hover:from-primary/90 hover:to-dark/90 transition-all text-base shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 focus-ring">Salvar Candidato</button>
-                    </div>
-                </form>
-            </div>
         </div>
     </div>
 
@@ -859,25 +799,10 @@ $usuarios = $select->select_usuarios();
         // Event delegation for edit and delete buttons
         document.addEventListener('DOMContentLoaded', function() {
             const container = document.querySelector('.bg-white.rounded-2xl');
-            
+
             container.addEventListener('click', function(e) {
                 const target = e.target;
 
-                // Handle Edit button
-                if (target.classList.contains('edit-candidato')) {
-                    const id = target.dataset.id || '';
-                    const nome = target.dataset.nome || '';
-                    const id_curso = target.dataset.id_curso || '';
-                    const publica = target.dataset.publica || 0;
-
-                    document.getElementById('modalCandidatoTitle').textContent = 'Editar Candidato';
-                    document.getElementById('inpCandidatoId').value = id;
-                    document.getElementById('inpCandidatoNome').value = nome;
-                    document.getElementById('inpCandidatoCurso').value = id_curso;
-                    document.getElementById('inpCandidatoPublica').value = publica;
-                    document.getElementById('candidatoForm').action = '../controllers/controller_candidato.php';
-                    openModal('modalCandidato');
-                }
 
                 // Handle Delete button
                 if (target.classList.contains('delete-candidato')) {

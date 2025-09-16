@@ -14,11 +14,11 @@ class cadastrador extends select
     }
     public function cadastrar_candidato(
         string $nome,
-        float $id_curso1,
+        int $id_curso1,
         $data_nascimento,
-        bool $bairro,
-        bool $publica,
-        bool $pcd,
+        int $bairro,
+        int $publica,
+        int $pcd,
         int $id_cadastrador,
         float $lp_6ano,
         float $artes_6ano,
@@ -85,7 +85,7 @@ class cadastrador extends select
         float $reli_3bim_9ano,
     ): int {
         try {
-            $stmt_candidato = $this->connect->prepare("INSERT INTO $this->table1 (nome, id_curso1, data_nascimento, bairro, publica, pcd, id_cadastrador) VALUES (:nome, :id_curso1, :data_nascimento, :bairro, :publica, :pcd, :id_cadastrador)");
+            $stmt_candidato = $this->connect->prepare("INSERT INTO $this->table1 VALUES (NULL, :nome, :id_curso1, :data_nascimento, :bairro, :publica, :pcd, NULL, :id_cadastrador)");
             $stmt_candidato->bindValue(":nome", $nome);
             $stmt_candidato->bindValue(":id_curso1", $id_curso1);
             $stmt_candidato->bindValue(":data_nascimento", $data_nascimento);

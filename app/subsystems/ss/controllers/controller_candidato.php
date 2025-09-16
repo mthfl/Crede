@@ -109,7 +109,7 @@ if (
 
     $escola = $_SESSION['escola'];
     $admin_model = new cadastrador($escola);
-    echo $result = $admin_model->cadastrar_candidato(
+    $result = $admin_model->cadastrar_candidato(
         $nome,
         $id_curso1,
         $data_nascimento,
