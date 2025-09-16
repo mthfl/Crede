@@ -5,7 +5,7 @@ $session->autenticar_session();
 $session->tempo_session();
 
 require_once(__DIR__ . "/../models/model.admin.php");
-//print_r($_POST);
+print_r($_POST);
 
 //cadastrar curso
 if (
@@ -80,16 +80,16 @@ if (
 
     switch ($result) {
         case 1:
-            header('Location: ../views/usuario.php?criado');
+            header('Location: ../views/cursos.php?deletado');
             exit();
         case 2:
-            header('Location: ../views/usuario.php?erro');
+            header('Location: ../views/cursos.php?erro');
             exit();
         case 3:
-            header('Location: ../views/usuario.php?ja_existe');
+            header('Location: ../views/cursos.php?nao_existe');
             exit();
         default:
-            header('Location: ../views/usuario.php?falha');
+            header('Location: ../views/cursos.php?falha');
             exit();
     }
 } else {
