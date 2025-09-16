@@ -136,6 +136,7 @@ $select = new select($escola);
         }
 
         @keyframes pulseSoft {
+
             0%,
             100% {
                 opacity: 1;
@@ -377,10 +378,10 @@ $select = new select($escola);
                     </button>
                 </div>
                 <nav class="space-y-2">
-                   <!-- Dashboard -->
-                   <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin' || $_SESSION['tipo_usuario'] === 'cadastrador') { ?>
+                    <!-- Dashboard -->
+                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin' || $_SESSION['tipo_usuario'] === 'cadastrador') { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.1s;">
-                        <a href="../index.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring ">
+                            <a href="../index.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring ">
                                 <div class="w-12 h-12 bg-white/10  rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path>
@@ -574,6 +575,7 @@ $select = new select($escola);
                                         <h3 class="text-2xl font-bold leading-tight font-display group-hover:scale-105 transition-all duration-300" style="color: <?= $curso['cor_curso'] ?>"><?= $curso['nome_curso'] ?></h3>
                                         <div class="w-16 h-0.5 mx-auto mt-3 rounded-full" style="background-color: <?= $curso['cor_curso'] ?>40"></div>
                                     </div>
+
                                     <div class="flex space-x-2">
                                         <button onclick="editCurso(<?= $curso['id'] ?>, '<?= $curso['nome_curso'] ?>', '<?= $curso['cor_curso'] ?>')" class="flex-1 bg-transparent py-2 px-4 rounded-lg transition-all duration-300 font-medium text-sm btn-animate focus-ring hover:bg-gray-50 border" style="border-color: <?= $curso['cor_curso'] ?>; color: <?= $curso['cor_curso'] ?>;">
                                             <span class="flex items-center justify-center">
@@ -582,16 +584,21 @@ $select = new select($escola);
                                                 </svg>
                                                 Editar
                                             </span>
+
                                         </button>
-                                        <button onclick="deleteCurso(<?= $curso['id'] ?>, '<?= $curso['nome_curso'] ?>')" class="flex-1 bg-transparent py-2 px-4 rounded-lg transition-all duration-300 font-medium text-sm btn-animate focus-ring hover:bg-gray-50 border" style="border-color: <?= $curso['cor_curso'] ?>; color: <?= $curso['cor_curso'] ?>;">
-                                            <span class="flex items-center justify-center">
-                                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                                </svg>
-                                                Excluir
-                                            </span>
-                                        </button>
+                                        <form action="../controllers/controller_curso.php" method="post">
+                                            <input type="hidden" name="id_curso" value="<?= $curso['id'] ?>">
+                                            <button class="flex-1 bg-transparent py-2 px-4 rounded-lg transition-all duration-300 font-medium text-sm btn-animate focus-ring hover:bg-gray-50 border" style="border-color: <?= $curso['cor_curso'] ?>; color: <?= $curso['cor_curso'] ?>;">
+                                                <span class="flex items-center justify-center">
+                                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                                    </svg>
+                                                    Excluir
+                                                </span>
+                                            </button>
+                                        </form>
                                     </div>
+                                    </form>
                                 </div>
                             </article>
                         <?php } ?>
@@ -607,7 +614,7 @@ $select = new select($escola);
                 <div class="flex items-center gap-4">
                     <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary to-dark text-white flex items-center justify-center shadow-md">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c1.657 0 3 1.567 3 3.5S13.657 18 12 18s-3-1.567-3-3.5 1.343-3.5 3-3.5zm4-4V7a4 4 0 01-8 0V7m12 4H4a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2v-6a2 2 0 00-2-2z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c1.657 0 3 1.567 3 3.5S13.657 18 12 18s-3-1.567-3-3.5 1.343-3.5 3-3.5zm4-4V7a4 4 0 01-8 0V7m12 4H4a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2v-6a2 2 0 00-2-2z" />
                         </svg>
                     </div>
                     <div>
@@ -616,7 +623,9 @@ $select = new select($escola);
                     </div>
                 </div>
                 <button class="absolute top-6 right-6 p-2 rounded-xl hover:bg-gray-100 transition-all group" onclick="closeAdminConfirm()">
-                    <svg class="w-5 h-5 text-gray-400 group-hover:text-gray-600 group-hover:scale-110 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                    <svg class="w-5 h-5 text-gray-400 group-hover:text-gray-600 group-hover:scale-110 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
                 </button>
             </div>
             <div class="p-6 sm:p-8">
@@ -686,24 +695,27 @@ $select = new select($escola);
                             </div>
                         </div>
                     </div>
-                    <div class="flex justify-between p-4 border-t border-gray-200 bg-white">
-                        <button onclick="closeModal()" class="px-6 py-3 border-2 border-primary text-primary rounded-lg hover:bg-primary/10 transition-all duration-300 font-semibold text-sm group">
-                            <span class="flex items-center">
-                                <svg class="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                </svg>
-                                Cancelar
-                            </span>
-                        </button>
-                        <button type="submit" class="px-6 py-3 bg-primary text-white rounded-lg hover:bg-dark transition-all duration-300 font-semibold text-sm group">
-                            <span class="flex items-center">
-                                <svg class="w-4 h-4 mr-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                </svg>
-                                <span id="saveButtonText">Salvar</span>
-                            </span>
-                        </button>
-                    </div>
+                    <form action="../controllers/controller_curso.php" method="post">
+                        <input type="hidden" name="id_curso" value="<?= $dado['id'] ?>">
+                        <div class="flex justify-between p-4 border-t border-gray-200 bg-white">
+                            <button onclick="closeModal()" class="px-6 py-3 border-2 border-primary text-primary rounded-lg hover:bg-primary/10 transition-all duration-300 font-semibold text-sm group">
+                                <span class="flex items-center">
+                                    <svg class="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
+                                    Cancelar
+                                </span>
+                            </button>
+                            <button type="submit" class="px-6 py-3 bg-primary text-white rounded-lg hover:bg-dark transition-all duration-300 font-semibold text-sm group">
+                                <span class="flex items-center">
+                                    <svg class="w-4 h-4 mr-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <span id="saveButtonText">Salvar</span>
+                                </span>
+                            </button>
+                        </div>
+                    </form>
                 </form>
             </div>
         </div>
@@ -947,31 +959,6 @@ $select = new select($escola);
             document.body.style.overflow = 'hidden';
         }
 
-        function deleteCurso(id, nome) {
-            if (confirm(`Tem certeza que deseja excluir o curso "${nome}"? Esta ação não pode ser desfeita.`)) {
-                fetch('processar_curso.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: `action=delete&curso_id=${id}`
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert('Curso excluído com sucesso!');
-                        location.reload();
-                    } else {
-                        alert('Erro ao excluir curso: ' + data.message);
-                    }
-                })
-                .catch(error => {
-                    console.error('Erro:', error);
-                    alert('Ocorreu um erro ao excluir o curso.');
-                });
-            }
-        }
-
         function saveCurso() {
             const form = document.getElementById('cursoForm');
             const formData = new FormData(form);
@@ -980,23 +967,23 @@ $select = new select($escola);
             formData.append('action', action);
 
             fetch('processar_curso.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert(action === 'create' ? 'Curso criado com sucesso!' : 'Curso atualizado com sucesso!');
-                    closeModal();
-                    location.reload();
-                } else {
-                    alert('Erro: ' + data.message);
-                }
-            })
-            .catch(error => {
-                console.error('Erro:', error);
-                alert('Ocorreu um erro ao processar o curso.');
-            });
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(action === 'create' ? 'Curso criado com sucesso!' : 'Curso atualizado com sucesso!');
+                        closeModal();
+                        location.reload();
+                    } else {
+                        alert('Erro: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro:', error);
+                    alert('Ocorreu um erro ao processar o curso.');
+                });
         }
 
         document.getElementById('corCurso').addEventListener('input', function() {
