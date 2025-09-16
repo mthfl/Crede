@@ -5,7 +5,8 @@ $session->autenticar_session();
 $session->tempo_session();
 require_once(__DIR__ . "/../models/model.admin.php");
 require_once(__DIR__ . "/../models/model.cadastrador.php");
-print_r($_POST);
+require_once(__DIR__ . "/../models/model.select.php");
+//print_r($_POST);
 
 if (
     isset($_POST["nome"]) && !empty($_POST["nome"]) &&
@@ -217,7 +218,28 @@ if (
             exit();
     }
 
-}else{
+}else if(isset($_GET['id_candidato']) && !empty($_GET['id_candidato'])){
+    $escola = $_SESSION['escola'];
+    $admin_model = new select($escola);
+    
+    $id_candidato = $_GET['id_candidato'];
+    $result = $admin_model->select_candidato_notas($id_candidato);
+    switch ($result) {
+        case 1:
+            header('Location: ../views/candidatos.php?deletado');
+            exit();
+        case 2:
+            header('Location: ../views/candidatos.php?erro');
+            exit();
+        case 3:
+            header('Location: ../views/candidatos.php?nao_existe');
+            exit();
+        default:
+            header('Location: ../views/candidatos.php?falha');
+            exit();
+    }
+
+}/*else{
     header("location:../index.php");
     exit();
-}
+}*/

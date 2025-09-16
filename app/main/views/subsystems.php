@@ -1058,7 +1058,7 @@ $session->tempo_session();
             <?php } ?>
 
             <!-- Card 3: Controle de Estoque -->
-            <?php if (isset($_SESSION['SS'])) { ?>
+            <?php if (isset($_SESSION['Escolas'])) { ?>
                 <a href="../../subsystems/gerenciador_escolas/index.php">
                     <div class="system-card animate-on-scroll"
                         tabindex="0"

@@ -91,4 +91,24 @@ class select extends connect
         }
     }
 
+    public function select_candidato_notas(int $id_candidato){
+        try{
+            $stmt = $this->connect->query(
+                "SELECT can.*, cur.nome_curso AS nome_curso, n6.*,n7.*,n8.*,n9.*,n1b.*,n2b.*,n3b.* 
+                FROM $this->table1 can 
+                INNER JOIN $this->table2 cur ON cur.id = can.id_curso1
+                INNER JOIN $this->table6 n6 ON can.id = n6.id_candidato
+                INNER JOIN $this->table7 n7 ON can.id = n7.id_candidato
+                INNER JOIN $this->table8 n8 ON can.id = n8.id_candidato
+                INNER JOIN $this->table9 n9 ON can.id = n9.id_candidato
+                INNER JOIN $this->table10 n1b ON can.id = n1b.id_candidato
+                INNER JOIN $this->table11 n2b ON can.id = n2b.id_candidato
+                INNER JOIN $this->table12 n3b ON can.id = n3b.id_candidato
+                WHERE can.id = '$id_candidato'");
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        }catch(PDOException $e){
+            return [];
+        }
+    }
+
 }
