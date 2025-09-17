@@ -10,6 +10,37 @@ $escola = $_SESSION['escola'];
 new connect($escola);
 require_once(__DIR__ . '/../models/model.select.php');
 $select = new select($escola);
+
+// Verificar se há candidato associado e implementar autenticação de dois fatores
+$step = 'email';
+$postedEmail = '';
+
+if (isset($_GET['candidato_associado'])) {
+    if (isset($_POST['email']) && filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) && !empty($_POST['email']) && !isset($_POST['codigo'])) {
+        $codigo = rand(100000, 999999);
+        $_SESSION['codigo'] = $codigo;
+        $_SESSION['codigo_email'] = $_POST['email'];
+        $postedEmail = $_POST['email'];
+        
+        // Enviar email com código de verificação
+        mail($postedEmail, 'Código de verificação - Sistema Escolar', "Seu código de verificação é: $codigo");
+        $step = 'code';
+    }
+
+    if (isset($_POST['codigo']) && !empty($_POST['codigo']) && isset($_POST['email']) && !empty($_POST['email'])) {
+        $codigo = $_POST['codigo'];
+        $email = $_POST['email'];
+        if ($codigo == $_SESSION['codigo'] && $email == $_SESSION['codigo_email']) {
+            // Código validado com sucesso, continuar normalmente
+            unset($_SESSION['codigo']);
+            unset($_SESSION['codigo_email']);
+        } else {
+            // Código inválido, redirecionar com erro
+            header('Location: cursos.php?erro_codigo');
+            exit();
+        }
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -545,6 +576,106 @@ $select = new select($escola);
                 </div>
             </header>
             <main class="p-4 sm:p-6 lg:p-8">
+                <?php if (isset($_GET['candidato_associado']) && $step === 'email') { ?>
+                    <!-- Modal de Autenticação de Dois Fatores - Email -->
+                    <div class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4">
+                        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md border border-gray-200/50">
+                            <div class="text-white p-6 rounded-t-2xl relative overflow-hidden" style="background: linear-gradient(135deg, #DC2626, #991B1B);">
+                                <div class="absolute inset-0 bg-gradient-to-br from-black/20 to-transparent"></div>
+                                <div class="relative flex justify-between items-center">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-8 h-8 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm border border-white/30 shadow-lg">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <h2 class="text-lg sm:text-xl font-bold font-display tracking-tight">Autenticação de Dois Fatores</h2>
+                                            <p class="text-white/90 text-sm mt-1 font-medium">Candidato associado detectado</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <form action="cursos.php?candidato_associado=1" method="post" class="space-y-4">
+                                <div class="p-6">
+                                    <div class="bg-red-50 border border-red-200 rounded-xl p-4 mb-6">
+                                        <div class="flex items-start">
+                                            <div class="flex-shrink-0">
+                                                <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                                                </svg>
+                                            </div>
+                                            <div class="ml-3">
+                                                <h3 class="text-sm font-medium text-red-800">Atenção!</h3>
+                                                <div class="mt-2 text-sm text-red-700">
+                                                    <p>Foi detectado um candidato associado a este curso. Para continuar, é necessária autenticação de dois fatores.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">E-mail do Administrador</label>
+                                        <input type="email" name="email" required value="<?= htmlspecialchars($_SESSION['email'] ?? '') ?>" placeholder="admin@dominio.com" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300 text-sm">
+                                        <p class="text-xs text-gray-500 mt-2">Enviaremos um código de verificação para este e-mail.</p>
+                                    </div>
+                                </div>
+                                <div class="flex justify-end p-4 border-t border-gray-200 bg-white">
+                                    <button type="submit" class="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all duration-300 font-semibold text-sm group">
+                                        <span class="flex items-center">
+                                            <svg class="w-4 h-4 mr-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                                            </svg>
+                                            Enviar código
+                                        </span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                <?php } elseif (isset($_GET['candidato_associado']) && $step === 'code') { ?>
+                    <!-- Modal de Autenticação de Dois Fatores - Código -->
+                    <div class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4">
+                        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md border border-gray-200/50">
+                            <div class="text-white p-6 rounded-t-2xl relative overflow-hidden" style="background: linear-gradient(135deg, #DC2626, #991B1B);">
+                                <div class="absolute inset-0 bg-gradient-to-br from-black/20 to-transparent"></div>
+                                <div class="relative flex justify-between items-center">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-8 h-8 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm border border-white/30 shadow-lg">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <h2 class="text-lg sm:text-xl font-bold font-display tracking-tight">Verificar Código</h2>
+                                            <p class="text-white/90 text-sm mt-1 font-medium">Digite o código enviado por e-mail</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <form action="cursos.php?candidato_associado=1" method="post" class="space-y-4">
+                                <div class="p-6">
+                                    <input type="hidden" name="email" value="<?= htmlspecialchars($postedEmail ?: ($_SESSION['codigo_email'] ?? '')) ?>" />
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Código de Verificação</label>
+                                        <input type="number" name="codigo" inputmode="numeric" maxlength="6" minlength="6" required placeholder="000000" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300 text-sm tracking-widest text-center">
+                                        <p class="text-xs text-gray-500 mt-2">Digite o código enviado para o e-mail <?= htmlspecialchars($postedEmail ?: ($_SESSION['codigo_email'] ?? '')) ?>.</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between p-4 border-t border-gray-200 bg-white">
+                                    <a href="cursos.php" class="px-6 py-3 rounded-lg border-2 border-gray-300 text-gray-700 font-semibold hover:bg-gray-50 transition-all text-sm">Cancelar</a>
+                                    <button type="submit" class="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all duration-300 font-semibold text-sm group">
+                                        <span class="flex items-center">
+                                            <svg class="w-4 h-4 mr-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                            </svg>
+                                            Validar Código
+                                        </span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                <?php } ?>
                 <?php $cursos = $select->select_cursos(); ?>
                 <?php if (count($cursos) === 0) { ?>
                     <div class="bg-white border border-gray-200 rounded-2xl p-8 text-center max-w-2xl mx-auto">
@@ -559,12 +690,22 @@ $select = new select($escola);
                     </div>
                 <?php } else { ?>
                     <div class="flex items-center justify-between mb-6">
-                        <button onclick="openCreateModal()" class="inline-flex items-center bg-gradient-to-r from-primary to-dark text-white px-6 py-3 rounded-xl hover:from-dark hover:to-primary btn-animate font-semibold shadow-xl focus-ring">
-                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                            </svg>
-                            Criar novo curso
-                        </button>
+                        <div class="flex space-x-3">
+                            <button onclick="openCreateModal()" class="inline-flex items-center bg-gradient-to-r from-primary to-dark text-white px-6 py-3 rounded-xl hover:from-dark hover:to-primary btn-animate font-semibold shadow-xl focus-ring">
+                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                </svg>
+                                Criar novo curso
+                            </button>
+                            <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
+                                <a href="cursos.php?candidato_associado=1" class="inline-flex items-center bg-gradient-to-r from-red-600 to-red-700 text-white px-6 py-3 rounded-xl hover:from-red-700 hover:to-red-800 btn-animate font-semibold shadow-xl focus-ring">
+                                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                                    </svg>
+                                    Testar 2FA
+                                </a>
+                            <?php } ?>
+                        </div>
                     </div>
                     <div id="gridCursos" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
                         <?php foreach ($cursos as $index => $curso) { ?>
@@ -670,6 +811,18 @@ $select = new select($escola);
                         </div>
                     </form>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feedback Modal -->
+    <div id="modalFeedback" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-2 sm:p-4 z-50">
+        <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl transform transition-all duration-300 scale-95 opacity-0" id="modalFeedbackContent">
+            <div class="p-6 sm:p-8 text-center">
+                <div id="modalFeedbackIcon" class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6"></div>
+                <h3 id="modalFeedbackTitle" class="text-xl sm:text-2xl font-bold text-dark font-heading mb-2"></h3>
+                <p id="modalFeedbackMsg" class="text-gray-600 text-base mb-6 leading-relaxed"></p>
+                <button type="button" class="px-6 py-3 rounded-xl border-2 border-primary font-semibold text-primary hover:bg-primary/10 hover:border-primary transition-all text-base focus-ring" onclick="closeModal('modalFeedback')">Fechar</button>
             </div>
         </div>
     </div>
@@ -910,6 +1063,59 @@ $select = new select($escola);
                 }, 300);
             }
         }
+
+        // Feedback by GET flags
+        (function() {
+            const params = new URLSearchParams(window.location.search);
+            if (!params.toString()) return;
+            const entidade = 'Curso';
+            let title = '';
+            let message = '';
+            let type = 'info';
+            if (params.has('criado')) {
+                title = `${entidade} cadastrado com sucesso`;
+                message = '';
+                type = 'success';
+            } else if (params.has('editado')) {
+                title = `${entidade} editado com sucesso`;
+                message = '';
+                type = 'success';
+            } else if (params.has('excluido')) {
+                title = `${entidade} excluído com sucesso`;
+                message = '';
+                type = 'success';
+            } else if (params.has('ja_existe')) {
+                title = `${entidade} já existe`;
+                message = '';
+                type = 'warning';
+            } else if (params.has('nao_existe')) {
+                title = `${entidade} não encontrado`;
+                message = '';
+                type = 'warning';
+            } else if (params.has('erro_codigo')) {
+                title = 'Código de verificação inválido';
+                message = 'O código informado não confere. Tente novamente.';
+                type = 'error';
+            } else if (params.has('erro') || params.has('falha')) {
+                title = `Erro ao processar ${entidade.toLowerCase()}`;
+                message = '';
+                type = 'error';
+            } else {
+                return;
+            }
+            const icon = document.getElementById('modalFeedbackIcon');
+            const titleEl = document.getElementById('modalFeedbackTitle');
+            const msgEl = document.getElementById('modalFeedbackMsg');
+            icon.className = 'w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 ' + (type === 'success' ? 'bg-green-100' : type === 'error' ? 'bg-red-100' : 'bg-yellow-100');
+            icon.innerHTML = type === 'success'
+                ? '<svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>'
+                : type === 'error'
+                ? '<svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M4.93 4.93l14.14 14.14"></path></svg>'
+                : '<svg class="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M9.93 4.93l-7 12.12A2 2 0 004.76 21h14.48a2 2 0 001.83-2.95l-7-12.12a2 2 0 00-3.54 0z"></path></svg>';
+            titleEl.textContent = title;
+            msgEl.textContent = message;
+            openModal('modalFeedback');
+        })();
     </script>
 </body>
 

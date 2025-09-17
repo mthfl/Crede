@@ -517,6 +517,18 @@ $select = new select($escola);
     </div>
 
 
+    <!-- Feedback Modal -->
+    <div id="modalFeedback" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-2 sm:p-4 z-50">
+        <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl transform transition-all duration-300 scale-95 opacity-0" id="modalFeedbackContent">
+            <div class="p-6 sm:p-8 text-center">
+                <div id="modalFeedbackIcon" class="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6"></div>
+                <h3 id="modalFeedbackTitle" class="text-xl sm:text-2xl font-bold text-dark font-heading mb-2"></h3>
+                <p id="modalFeedbackMsg" class="text-gray-600 text-base mb-6 leading-relaxed"></p>
+                <button type="button" class="px-6 py-3 rounded-xl border-2 border-primary font-semibold text-primary hover:bg-primary/10 hover:border-primary transition-all text-base focus-ring" onclick="closeModal('modalFeedback')">Fechar</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal Criar/Editar Bairro -->
     <div id="modalBairro" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-2 sm:p-4 z-40">
         <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl max-h-[90vh] overflow-y-auto transform transition-all duration-300 scale-95 opacity-0" id="modalBairroContent">
@@ -830,6 +842,55 @@ $select = new select($escola);
                 }, 300);
             }
         }
+
+        // Feedback by GET flags
+        (function() {
+            const params = new URLSearchParams(window.location.search);
+            if (!params.toString()) return;
+            const entidade = 'Bairro';
+            let title = '';
+            let message = '';
+            let type = 'info';
+            if (params.has('criado')) {
+                title = `${entidade} cadastrado com sucesso`;
+                message = '';
+                type = 'success';
+            } else if (params.has('editado')) {
+                title = `${entidade} editado com sucesso`;
+                message = '';
+                type = 'success';
+            } else if (params.has('excluido')) {
+                title = `${entidade} excluído com sucesso`;
+                message = '';
+                type = 'success';
+            } else if (params.has('ja_existe')) {
+                title = `${entidade} já existe`;
+                message = '';
+                type = 'warning';
+            } else if (params.has('nao_existe')) {
+                title = `${entidade} não encontrado`;
+                message = '';
+                type = 'warning';
+            } else if (params.has('erro') || params.has('falha')) {
+                title = `Erro ao processar ${entidade.toLowerCase()}`;
+                message = '';
+                type = 'error';
+            } else {
+                return;
+            }
+            const icon = document.getElementById('modalFeedbackIcon');
+            const titleEl = document.getElementById('modalFeedbackTitle');
+            const msgEl = document.getElementById('modalFeedbackMsg');
+            icon.className = 'w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 ' + (type === 'success' ? 'bg-green-100' : type === 'error' ? 'bg-red-100' : 'bg-yellow-100');
+            icon.innerHTML = type === 'success'
+                ? '<svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>'
+                : type === 'error'
+                ? '<svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M4.93 4.93l14.14 14.14"></path></svg>'
+                : '<svg class="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M9.93 4.93l-7 12.12A2 2 0 004.76 21h14.48a2 2 0 001.83-2.95l-7-12.12a2 2 0 00-3.54 0z"></path></svg>';
+            titleEl.textContent = title;
+            msgEl.textContent = message;
+            openModal('modalFeedback');
+        })();
     </script>
 </body>
 

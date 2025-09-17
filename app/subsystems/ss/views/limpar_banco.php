@@ -12,13 +12,33 @@ require_once(__DIR__ . '/../models/model.select.php');
 $select = new select($escola);
 $step = 'email';
 $postedEmail = '';
-if (isset($_POST['email']) && filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
-    $postedEmail = $_POST['email'];
+
+if (isset($_POST['email']) && filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) && !empty($_POST['email']) && !isset($_POST['codigo'])) {
     $codigo = rand(100000, 999999);
-    $_SESSION['codigo'] = $codigo;
+    echo $_SESSION['codigo'] = $codigo;
     $_SESSION['codigo_email'] = $postedEmail;
     mail($postedEmail, 'Código de verificação', "Seu código de verificação é: $codigo");
     $step = 'code';
+}
+
+if (isset($_POST['codigo']) && !empty($_POST['codigo']) && isset($_POST['email']) && !empty($_POST['email'])) {
+    $codigo = $_POST['codigo'];
+    $email = $_POST['email'];
+    if ($codigo == $_SESSION['codigo'] && $email == $_SESSION['codigo_email']) {
+        require_once(__DIR__ . '/../models/model.admin.php');
+        $admin = new admin($escola);
+        $result = $admin->limpar_banco();
+        if ($result == 1) {
+            header('Location: limpar_banco.php?limpar');
+            exit();
+        } else {
+            header('Location: limpar_banco.php?erro');
+            exit();
+        }
+    } else {
+        header('Location: limpar_banco.php?erro');
+        exit();
+    }
 }
 ?>
 <!DOCTYPE html>

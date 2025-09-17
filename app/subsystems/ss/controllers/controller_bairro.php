@@ -48,7 +48,7 @@ if (
 
         switch ($result) {
             case 1:
-                header('Location: ../views/cotas.php?criado');
+                header('Location: ../views/cotas.php?editado');
                 exit();
             case 2:
                 header('Location: ../views/cotas.php?erro');
@@ -75,19 +75,19 @@ if (
 
             switch ($result) {
                 case 1:
-                    header('Location: ../views/cotas.php?criado');
+                    header('Location: ../views/cotas.php?excluido');
                     exit();
                 case 2:
                     header('Location: ../views/cotas.php?erro');
                     exit();
                 case 3:
-                    header('Location: ../views/cotas.php?ja_existe');
+                    header('Location: ../views/cotas.php?nao_existe');
                     exit();
                 default:
                     header('Location: ../views/cotas.php?falha');
                     exit();
             }
-        } /*else {
-    header('Location: ../index.php');
-    exit();
-}*/
+        } else {
+            header('Location: ../index.php');
+            exit();
+        }

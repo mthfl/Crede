@@ -60,7 +60,7 @@ if (
 
     switch ($result) {
         case 1:
-            header('Location: ../views/usuario.php?criado');
+            header('Location: ../views/usuario.php?editado');
             exit();
         case 2:
             header('Location: ../views/usuario.php?erro');
@@ -90,13 +90,13 @@ if (
 
     switch ($result) {
         case 1:
-            header('Location: ../views/usuario.php?criado');
+            header('Location: ../views/usuario.php?excluido');
             exit();
         case 2:
             header('Location: ../views/usuario.php?erro');
             exit();
         case 3:
-            header('Location: ../views/usuario.php?ja_existe');
+            header('Location: ../views/usuario.php?nao_existe');
             exit();
         default:
             header('Location: ../views/usuario.php?falha');

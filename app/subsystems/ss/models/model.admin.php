@@ -76,6 +76,14 @@ class admin extends cadastrador
 
             if ($stmt_check->rowCount() == 1) {
 
+                $stmt_check = $this->connect->prepare("SELECT * FROM $this->table1 WHERE id_curso1 = :id_curso");
+                $stmt_check->bindValue(":id_curso", $id_curso);
+                $stmt_check->execute();
+
+                if ($stmt_check->rowCount() > 0) {
+                    return 4;
+                }
+
                 $stmt_check = $this->connect->prepare(" DELETE FROM $this->table2 WHERE id = :id_curso");
                 $stmt_check->bindValue(":id_curso", $id_curso);
 
@@ -89,6 +97,28 @@ class admin extends cadastrador
             } else {
 
                 return 3;
+            }
+        } catch (PDOException $e) {
+            return 0;
+        }
+    }
+
+    public function excluir_candidato_curso(int $id_curso): int
+    {
+        try {
+            $stmt_check = $this->connect->prepare("DELETE FROM $this->table1 WHERE id_curso1 = :id_curso");
+            $stmt_check->bindValue(":id_curso", $id_curso);
+            $stmt_check->execute();
+
+            $stmt_check = $this->connect->prepare(" DELETE FROM $this->table2 WHERE id = :id_curso");
+            $stmt_check->bindValue(":id_curso", $id_curso);
+
+            if ($stmt_check->execute()) {
+
+                return 1;
+            } else {
+
+                return 2;
             }
         } catch (PDOException $e) {
             return 0;
@@ -278,50 +308,50 @@ class admin extends cadastrador
     {
 
         //try {
-            $stmt_check = $this->connect->prepare("SELECT * FROM $this->table1 WHERE id = :id_candidato");
-            $stmt_check->bindValue(":id_candidato", $id_candidato);
-            $stmt_check->execute();
+        $stmt_check = $this->connect->prepare("SELECT * FROM $this->table1 WHERE id = :id_candidato");
+        $stmt_check->bindValue(":id_candidato", $id_candidato);
+        $stmt_check->execute();
 
-            if ($stmt_check->rowCount() == 1) {
+        if ($stmt_check->rowCount() == 1) {
 
-                $stmt_delete = $this->connect->prepare("DELETE FROM $this->table4 WHERE id_candidato = :id_candidato");
-                $stmt_delete->bindValue(":id_candidato", $id_candidato);
-                $stmt_delete->execute();
-                $stmt_delete = $this->connect->prepare("DELETE FROM $this->table9 WHERE id_candidato = :id_candidato");
-                $stmt_delete->bindValue(":id_candidato", $id_candidato);
-                $stmt_delete->execute();
-                $stmt_delete = $this->connect->prepare("DELETE FROM $this->table12 WHERE id_candidato = :id_candidato");
-                $stmt_delete->bindValue(":id_candidato", $id_candidato);
-                $stmt_delete->execute();
-                $stmt_delete = $this->connect->prepare("DELETE FROM $this->table11 WHERE id_candidato = :id_candidato");
-                $stmt_delete->bindValue(":id_candidato", $id_candidato);
-                $stmt_delete->execute();
-                $stmt_delete = $this->connect->prepare("DELETE FROM $this->table10 WHERE id_candidato = :id_candidato");
-                $stmt_delete->bindValue(":id_candidato", $id_candidato);
-                $stmt_delete->execute();
-                $stmt_delete = $this->connect->prepare("DELETE FROM $this->table8 WHERE id_candidato = :id_candidato");
-                $stmt_delete->bindValue(":id_candidato", $id_candidato);
-                $stmt_delete->execute();
-                $stmt_delete = $this->connect->prepare("DELETE FROM $this->table7 WHERE id_candidato = :id_candidato");
-                $stmt_delete->bindValue(":id_candidato", $id_candidato);
-                $stmt_delete->execute();
-                $stmt_delete = $this->connect->prepare("DELETE FROM $this->table6 WHERE id_candidato = :id_candidato");
-                $stmt_delete->bindValue(":id_candidato", $id_candidato);
-                $stmt_delete->execute();
-                $stmt_candidato = $this->connect->prepare(" DELETE FROM $this->table1 WHERE id = :id_candidato");
-                $stmt_candidato->bindValue(":id_candidato", $id_candidato);
+            $stmt_delete = $this->connect->prepare("DELETE FROM $this->table4 WHERE id_candidato = :id_candidato");
+            $stmt_delete->bindValue(":id_candidato", $id_candidato);
+            $stmt_delete->execute();
+            $stmt_delete = $this->connect->prepare("DELETE FROM $this->table9 WHERE id_candidato = :id_candidato");
+            $stmt_delete->bindValue(":id_candidato", $id_candidato);
+            $stmt_delete->execute();
+            $stmt_delete = $this->connect->prepare("DELETE FROM $this->table12 WHERE id_candidato = :id_candidato");
+            $stmt_delete->bindValue(":id_candidato", $id_candidato);
+            $stmt_delete->execute();
+            $stmt_delete = $this->connect->prepare("DELETE FROM $this->table11 WHERE id_candidato = :id_candidato");
+            $stmt_delete->bindValue(":id_candidato", $id_candidato);
+            $stmt_delete->execute();
+            $stmt_delete = $this->connect->prepare("DELETE FROM $this->table10 WHERE id_candidato = :id_candidato");
+            $stmt_delete->bindValue(":id_candidato", $id_candidato);
+            $stmt_delete->execute();
+            $stmt_delete = $this->connect->prepare("DELETE FROM $this->table8 WHERE id_candidato = :id_candidato");
+            $stmt_delete->bindValue(":id_candidato", $id_candidato);
+            $stmt_delete->execute();
+            $stmt_delete = $this->connect->prepare("DELETE FROM $this->table7 WHERE id_candidato = :id_candidato");
+            $stmt_delete->bindValue(":id_candidato", $id_candidato);
+            $stmt_delete->execute();
+            $stmt_delete = $this->connect->prepare("DELETE FROM $this->table6 WHERE id_candidato = :id_candidato");
+            $stmt_delete->bindValue(":id_candidato", $id_candidato);
+            $stmt_delete->execute();
+            $stmt_candidato = $this->connect->prepare(" DELETE FROM $this->table1 WHERE id = :id_candidato");
+            $stmt_candidato->bindValue(":id_candidato", $id_candidato);
 
-                if ($stmt_candidato->execute()) {
+            if ($stmt_candidato->execute()) {
 
-                    return 1;
-                } else {
-
-                    return 2;
-                }
+                return 1;
             } else {
 
-                return 3;
+                return 2;
             }
+        } else {
+
+            return 3;
+        }
         /*} catch (PDOException $e) {
             return 0;
         }*/
@@ -474,9 +504,11 @@ class admin extends cadastrador
             $stmt->execute();
 
             // Se houver bimestres informados, atualiza 1º, 2º e 3º bimestres do 9º ano; caso contrário, usa médias
-            if ($li_1bim_9ano > 0 || $lp_1bim_9ano > 0 || $mate_1bim_9ano > 0 || $cien_1bim_9ano > 0 || $geo_1bim_9ano > 0 || $hist_1bim_9ano > 0 || $reli_1bim_9ano > 0 || $artes_1bim_9ano > 0 || $ef_1bim_9ano > 0
+            if (
+                $li_1bim_9ano > 0 || $lp_1bim_9ano > 0 || $mate_1bim_9ano > 0 || $cien_1bim_9ano > 0 || $geo_1bim_9ano > 0 || $hist_1bim_9ano > 0 || $reli_1bim_9ano > 0 || $artes_1bim_9ano > 0 || $ef_1bim_9ano > 0
                 || $li_2bim_9ano > 0 || $lp_2bim_9ano > 0 || $mate_2bim_9ano > 0 || $cien_2bim_9ano > 0 || $geo_2bim_9ano > 0 || $hist_2bim_9ano > 0 || $reli_2bim_9ano > 0 || $artes_2bim_9ano > 0 || $ef_2bim_9ano > 0
-                || $li_3bim_9ano > 0 || $lp_3bim_9ano > 0 || $mate_3bim_9ano > 0 || $cien_3bim_9ano > 0 || $geo_3bim_9ano > 0 || $hist_3bim_9ano > 0 || $reli_3bim_9ano > 0 || $artes_3bim_9ano > 0 || $ef_3bim_9ano > 0) {
+                || $li_3bim_9ano > 0 || $lp_3bim_9ano > 0 || $mate_3bim_9ano > 0 || $cien_3bim_9ano > 0 || $geo_3bim_9ano > 0 || $hist_3bim_9ano > 0 || $reli_3bim_9ano > 0 || $artes_3bim_9ano > 0 || $ef_3bim_9ano > 0
+            ) {
 
                 // 1º bimestre
                 $stmt = $this->connect->prepare("UPDATE $this->table10 SET l_portuguesa=:lp, artes=:artes, educacao_fisica=:ef, l_inglesa=:li, matematica=:mate, ciencias=:cien, geografia=:geo, historia=:hist, religiao=:reli WHERE id_candidato=:id");
@@ -530,9 +562,15 @@ class admin extends cadastrador
                 $geo_9ano = ($geo_1bim_9ano + $geo_2bim_9ano + $geo_3bim_9ano) / 3;
                 $hist_9ano = ($hist_1bim_9ano + $hist_2bim_9ano + $hist_3bim_9ano) / 3;
                 $d = 3;
-                if ($reli_1bim_9ano == 0) { $d -= 1; }
-                if ($reli_2bim_9ano == 0) { $d -= 1; }
-                if ($reli_3bim_9ano == 0) { $d -= 1; }
+                if ($reli_1bim_9ano == 0) {
+                    $d -= 1;
+                }
+                if ($reli_2bim_9ano == 0) {
+                    $d -= 1;
+                }
+                if ($reli_3bim_9ano == 0) {
+                    $d -= 1;
+                }
                 $reli_9ano = $d == 0 ? 0 : ($reli_1bim_9ano + $reli_2bim_9ano + $reli_3bim_9ano) / $d;
             }
 
@@ -579,30 +617,60 @@ class admin extends cadastrador
             $historia_media = ($hist_6ano + $hist_7ano + $hist_8ano + $hist_9ano) / 4;
 
             $d_media = 4;
-            if ($artes_6ano == 0) { $d_media -= 1; }
-            if ($artes_7ano == 0) { $d_media -= 1; }
-            if ($artes_8ano == 0) { $d_media -= 1; }
-            if ($artes_9ano == 0) { $d_media -= 1; }
+            if ($artes_6ano == 0) {
+                $d_media -= 1;
+            }
+            if ($artes_7ano == 0) {
+                $d_media -= 1;
+            }
+            if ($artes_8ano == 0) {
+                $d_media -= 1;
+            }
+            if ($artes_9ano == 0) {
+                $d_media -= 1;
+            }
             $artes_media = ($ef_6ano + $ef_7ano + $ef_8ano + $ef_9ano) / $d_media; // espelha a lógica existente no cadastro
 
             $d_media = 4;
-            if ($ef_6ano == 0) { $d_media -= 1; }
-            if ($ef_7ano == 0) { $d_media -= 1; }
-            if ($ef_8ano == 0) { $d_media -= 1; }
-            if ($ef_9ano == 0) { $d_media -= 1; }
+            if ($ef_6ano == 0) {
+                $d_media -= 1;
+            }
+            if ($ef_7ano == 0) {
+                $d_media -= 1;
+            }
+            if ($ef_8ano == 0) {
+                $d_media -= 1;
+            }
+            if ($ef_9ano == 0) {
+                $d_media -= 1;
+            }
             $ef_media = ($ef_6ano + $ef_7ano + $ef_8ano + $ef_9ano) / $d_media;
 
             $d_media = 4;
-            if ($reli_6ano == 0) { $d_media -= 1; }
-            if ($reli_7ano == 0) { $d_media -= 1; }
-            if ($reli_8ano == 0) { $d_media -= 1; }
-            if ($reli_9ano == 0) { $d_media -= 1; }
+            if ($reli_6ano == 0) {
+                $d_media -= 1;
+            }
+            if ($reli_7ano == 0) {
+                $d_media -= 1;
+            }
+            if ($reli_8ano == 0) {
+                $d_media -= 1;
+            }
+            if ($reli_9ano == 0) {
+                $d_media -= 1;
+            }
             $reli_media = ($reli_6ano + $reli_7ano + $reli_8ano + $reli_9ano) / $d_media;
 
             $d_media_final = 9;
-            if ($artes_media == 0) { $d_media_final -= 1; }
-            if ($ef_media == 0) { $d_media_final -= 1; }
-            if ($reli_media == 0) { $d_media -= 1; }
+            if ($artes_media == 0) {
+                $d_media_final -= 1;
+            }
+            if ($ef_media == 0) {
+                $d_media_final -= 1;
+            }
+            if ($reli_media == 0) {
+                $d_media -= 1;
+            }
             $media_final = ($l_portuguesa_media + $artes_media + $ef_media + $l_inglesa_media + $matematica_media + $ciencias_media + $geografia_media + $historia_media + $reli_media) / $d_media_final;
 
             // Upsert na tabela de médias

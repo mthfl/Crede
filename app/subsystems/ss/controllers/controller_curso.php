@@ -34,10 +34,9 @@ if (
             header('Location: ../views/cursos.php?falha');
             exit();
     }
-} else 
-
+}
 //editar curso
-if (
+else if (
     isset($_POST["curso_id"]) && !empty($_POST["curso_id"]) &&
     isset($_POST["nome_curso"]) && !empty($_POST["nome_curso"]) &&
     isset($_POST["cor_curso"]) && !empty($_POST["cor_curso"])
@@ -52,7 +51,7 @@ if (
 
     switch ($result) {
         case 1:
-            header('Location: ../views/cursos.php?criado');
+            header('Location: ../views/cursos.php?editado');
             exit();
         case 2:
             header('Location: ../views/cursos.php?erro');
@@ -64,10 +63,8 @@ if (
             header('Location: ../views/cursos.php?falha');
             exit();
     }
-} else 
-
-//excluir curso
-if (
+} //excluir curso
+else if (
     isset($_POST["id_curso"]) && !empty($_POST["id_curso"]) &&
     !isset($_POST["nome_curso"]) && empty($_POST["nome_curso"]) &&
     !isset($_POST["cor"]) && empty($_POST["cor"])
@@ -80,13 +77,16 @@ if (
 
     switch ($result) {
         case 1:
-            header('Location: ../views/cursos.php?deletado');
+            header('Location: ../views/cursos.php?excluido');
             exit();
         case 2:
             header('Location: ../views/cursos.php?erro');
             exit();
         case 3:
             header('Location: ../views/cursos.php?nao_existe');
+            exit();
+        case 4:
+            header('Location: ../views/cursos.php?candidato_associado');
             exit();
         default:
             header('Location: ../views/cursos.php?falha');
