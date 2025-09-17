@@ -568,7 +568,12 @@ $usuarios = $select->select_usuarios();
                                     </div>
                                     <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
                                         <div class="flex space-x-2 mt-4">
-                                            <a href="../views/editar_candidato.php?id=<?= $id ?>" class="edit-candidato f-4 rounded-lg hover:bg-dark transition-all duration-300 font-medium text-sm btn-animate focus-ring">Editar</a>
+                                            <a href="../views/editar_candidato.php?id=<?= $id ?>" class="edit-candidato bg-primary text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-all duration-300 font-medium text-sm btn-animate focus-ring flex items-center justify-center">
+                                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                                </svg>
+                                                Editar
+                                            </a>
                                             <button class="delete-candidato flex-1 bg-secondary text-white py-2 px-4 rounded-lg hover:bg-orange-600 transition-all duration-300 font-medium text-sm btn-animate focus-ring"
                                                 data-id="<?= htmlspecialchars((string)($cand['id'] ?? '')) ?>"
                                                 data-nome="<?= htmlspecialchars((string)($cand['nome'] ?? '')) ?>">Excluir</button>
