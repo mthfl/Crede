@@ -21,7 +21,7 @@ if (isset($_GET['candidato_associado'])) {
         $_SESSION['codigo'] = $codigo;
         $_SESSION['codigo_email'] = $_POST['email'];
         $postedEmail = $_POST['email'];
-        
+
         // Enviar email com código de verificação
         mail($postedEmail, 'Código de verificação - Sistema Escolar', "Seu código de verificação é: $codigo");
         $step = 'code';
@@ -32,8 +32,16 @@ if (isset($_GET['candidato_associado'])) {
         $email = $_POST['email'];
         if ($codigo == $_SESSION['codigo'] && $email == $_SESSION['codigo_email']) {
             // Código validado com sucesso, continuar normalmente
-            unset($_SESSION['codigo']);
-            unset($_SESSION['codigo_email']);
+            require_once(__DIR__ . '/../models/model.admin.php');
+            $admin = new admin($escola);
+            $result = $admin->excluir_candidato_curso($id_curso);
+            if ($result == 1) {
+                header('Location: cursos.php?limpar');
+                exit();
+            } else {
+                header('Location: cursos.php?erro');
+                exit();
+            }
         } else {
             // Código inválido, redirecionar com erro
             header('Location: cursos.php?erro_codigo');
@@ -1107,11 +1115,11 @@ if (isset($_GET['candidato_associado'])) {
             const titleEl = document.getElementById('modalFeedbackTitle');
             const msgEl = document.getElementById('modalFeedbackMsg');
             icon.className = 'w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 ' + (type === 'success' ? 'bg-green-100' : type === 'error' ? 'bg-red-100' : 'bg-yellow-100');
-            icon.innerHTML = type === 'success'
-                ? '<svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>'
-                : type === 'error'
-                ? '<svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M4.93 4.93l14.14 14.14"></path></svg>'
-                : '<svg class="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M9.93 4.93l-7 12.12A2 2 0 004.76 21h14.48a2 2 0 001.83-2.95l-7-12.12a2 2 0 00-3.54 0z"></path></svg>';
+            icon.innerHTML = type === 'success' ?
+                '<svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>' :
+                type === 'error' ?
+                '<svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M4.93 4.93l14.14 14.14"></path></svg>' :
+                '<svg class="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M9.93 4.93l-7 12.12A2 2 0 004.76 21h14.48a2 2 0 001.83-2.95l-7-12.12a2 2 0 00-3.54 0z"></path></svg>';
             titleEl.textContent = title;
             msgEl.textContent = message;
             openModal('modalFeedback');
