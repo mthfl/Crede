@@ -15,7 +15,7 @@ $postedEmail = '';
 
 if (isset($_POST['email']) && filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) && !empty($_POST['email']) && !isset($_POST['codigo'])) {
     $codigo = rand(100000, 999999);
-    echo $_SESSION['codigo'] = $codigo;
+    $_SESSION['codigo'] = $codigo;
     $_SESSION['codigo_email'] = $postedEmail;
     mail($postedEmail, 'Código de verificação', "Seu código de verificação é: $codigo");
     $step = 'code';
