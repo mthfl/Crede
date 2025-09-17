@@ -312,49 +312,60 @@ class cadastrador extends select
             $historia_media = ($hist_6ano + $hist_7ano + $hist_8ano + $hist_9ano) / 4;
 
             $d_media = 4;
-            if ($artes_6ano == 0) {
-                $d_media -= 1;
+            if ($ef_6ano == 0 && $ef_7ano == 0 && $ef_8ano == 0 && $ef_9ano == 0) {
+                $artes_media = 0;
+            } else {
+                if ($artes_6ano == 0) {
+                    $d_media -= 1;
+                }
+                if ($artes_7ano == 0) {
+                    $d_media -= 1;
+                }
+                if ($artes_8ano == 0) {
+                    $d_media -= 1;
+                }
+                if ($artes_9ano == 0) {
+                    $d_media -= 1;
+                }
+                $artes_media = ($ef_6ano + $ef_7ano + $ef_8ano + $ef_9ano) / $d_media;
             }
-            if ($artes_7ano == 0) {
-                $d_media -= 1;
+            if ($ef_6ano == 0 && $ef_7ano == 0 && $ef_8ano == 0 && $ef_9ano == 0) {
+                $ef_media = 0;
+            } else {
+                $d_media = 4;
+                if ($ef_6ano == 0) {
+                    $d_media -= 1;
+                }
+                if ($ef_7ano == 0) {
+                    $d_media -= 1;
+                }
+                if ($ef_8ano == 0) {
+                    $d_media -= 1;
+                }
+                if ($ef_9ano == 0) {
+                    $d_media -= 1;
+                }
+                $ef_media = ($ef_6ano + $ef_7ano + $ef_8ano + $ef_9ano) / $d_media;
             }
-            if ($artes_8ano == 0) {
-                $d_media -= 1;
-            }
-            if ($artes_9ano == 0) {
-                $d_media -= 1;
-            }
-            $artes_media = ($ef_6ano + $ef_7ano + $ef_8ano + $ef_9ano) / $d_media;
 
-            $d_media = 4;
-            if ($ef_6ano == 0) {
-                $d_media -= 1;
+            if ($reli_6ano == 0 && $reli_7ano == 0 && $reli_8ano == 0 && $reli_9ano == 0) {
+                $reli_media = 0;
+            } else {
+                $d_media = 4;
+                if ($reli_6ano == 0) {
+                    $d_media -= 1;
+                }
+                if ($reli_7ano == 0) {
+                    $d_media -= 1;
+                }
+                if ($reli_8ano == 0) {
+                    $d_media -= 1;
+                }
+                if ($reli_9ano == 0) {
+                    $d_media -= 1;
+                }
+                $reli_media = ($reli_6ano + $reli_7ano + $reli_8ano + $reli_9ano) / $d_media;
             }
-            if ($ef_7ano == 0) {
-                $d_media -= 1;
-            }
-            if ($ef_8ano == 0) {
-                $d_media -= 1;
-            }
-            if ($ef_9ano == 0) {
-                $d_media -= 1;
-            }
-            $ef_media = ($ef_6ano + $ef_7ano + $ef_8ano + $ef_9ano) / $d_media;
-
-            $d_media = 4;
-            if ($reli_6ano == 0) {
-                $d_media -= 1;
-            }
-            if ($reli_7ano == 0) {
-                $d_media -= 1;
-            }
-            if ($reli_8ano == 0) {
-                $d_media -= 1;
-            }
-            if ($reli_9ano == 0) {
-                $d_media -= 1;
-            }
-            $reli_media = ($reli_6ano + $reli_7ano + $reli_8ano + $reli_9ano) / $d_media;
 
             $d_media_final = 9;
             if ($artes_media == 0) {
