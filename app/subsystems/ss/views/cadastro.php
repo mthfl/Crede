@@ -858,60 +858,78 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
             }
             input.value = value;
         }
-
-        function applyGradeMask(input) {
-    let value = input.value.replace(/[^\d,]/g, ''); // Remove tudo exceto dígitos e vírgula
-    value = value.replace(/,+/g, ','); // Garante apenas uma vírgula
+function applyGradeMask(input) {
+    // Armazena a posição do cursor
+    let cursorPosition = input.selectionStart;
+    let value = input.value;
     
-    // Se há vírgula, separa as partes
-    let parts = value.split(',');
-    let integerPart = parts[0] || '';
-    let decimalPart = parts[1] || '';
+    // Remove tudo exceto dígitos e vírgula
+    let cleanValue = value.replace(/[^\d,]/g, '');
     
-    // Se digitou 3 ou mais dígitos seguidos (sem vírgula), define como 10,0
-    if (parts.length === 1 && integerPart.length >= 3) {
-        input.value = '10,0';
+    // Se o campo está vazio ou sendo limpo, permite
+    if (cleanValue === '' || cleanValue === ',') {
+        input.value = cleanValue === ',' ? '' : cleanValue;
         return;
     }
     
-    // Se há vírgula e a parte decimal tem 2 ou mais dígitos, verifica se são zeros
-    if (parts.length > 1 && decimalPart.length >= 2) {
-        // Se digitou algo como "1,00", "2,00", etc., converte para "10,0"
-        if (decimalPart === '00' || decimalPart.startsWith('00')) {
-            input.value = '10,0';
-            return;
+    // Garante apenas uma vírgula
+    cleanValue = cleanValue.replace(/,+/g, ',');
+    
+    // Se começar com vírgula, adiciona 0
+    if (cleanValue.startsWith(',')) {
+        cleanValue = '0' + cleanValue;
+    }
+    
+    // Separa partes
+    let parts = cleanValue.split(',');
+    let integerPart = parts[0];
+    let decimalPart = parts[1] || '';
+    
+    // Se digitou 3+ dígitos sem vírgula, converte para 10,00
+    if (parts.length === 1 && integerPart.length >= 3) {
+        input.value = '10,00';
+        return;
+    }
+    
+    // Processa parte inteira
+    if (integerPart.length > 2) {
+        integerPart = integerPart.slice(0, 2);
+    }
+    
+    // Se tem 2 dígitos na parte inteira e não é "10"
+    if (integerPart.length === 2 && integerPart !== '10' && parts.length === 1) {
+        // Move o segundo dígito para decimal
+        decimalPart = integerPart[1] + decimalPart;
+        integerPart = integerPart[0];
+    }
+    
+    // Limita parte decimal a 2 dígitos
+    if (decimalPart.length > 2) {
+        decimalPart = decimalPart.slice(0, 2);
+    }
+    
+    // Monta o resultado
+    let result = integerPart;
+    if (parts.length > 1 || decimalPart.length > 0) {
+        result += ',' + decimalPart;
+    }
+    
+    // Verifica se excede 10
+    if (result.includes(',')) {
+        let numValue = parseFloat(result.replace(',', '.'));
+        if (numValue > 10) {
+            result = '10,00';
         }
-        // Caso contrário, limita a 1 dígito decimal
-        decimalPart = decimalPart[0];
     }
     
-    // Limita a parte inteira a 1 dígito (0-9)
-    if (integerPart.length > 1) {
-        // Se digitou dois dígitos, pega o primeiro como inteiro e o segundo como decimal
-        if (integerPart.length === 2 && !parts[1]) {
-            const firstDigit = integerPart[0];
-            const secondDigit = integerPart[1];
-            input.value = `${firstDigit},${secondDigit}`;
-            return;
-        } else {
-            integerPart = integerPart[0]; // Mantém apenas o primeiro dígito
-        }
-    }
+    // Aplica o resultado
+    input.value = result;
     
-    // Monta o valor final
-    if (parts.length > 1) {
-        // Se há vírgula
-        input.value = `${integerPart},${decimalPart}`;
-    } else {
-        // Se não há vírgula
-        input.value = integerPart;
-    }
-    
-    // Validação final: se o valor numérico excede 10, define como 10,0
-    let numericValue = parseFloat(input.value.replace(',', '.'));
-    if (numericValue > 10) {
-        input.value = '10,0';
-    }
+    // Restaura a posição do cursor (aproximadamente)
+    let newCursorPos = Math.min(cursorPosition, result.length);
+    setTimeout(() => {
+        input.setSelectionRange(newCursorPos, newCursorPos);
+    }, 0);
 }
 
         let currentStep = 1;
