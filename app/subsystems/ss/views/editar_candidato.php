@@ -548,44 +548,81 @@ function simnao($v) {
             }
         }
 
-        function applyGradeMask(input) {
-            if (!input.disabled) {
-                let value = input.value.replace(/[^\d,]/g, '');
-                value = value.replace(/,+/g, ',');
-                let parts = value.split(',');
-
-                let integerPart = parts[0] || '';
-                if (integerPart.length > 2) {
-                    input.value = '10,00';
-                    return;
-                }
-
-                if (integerPart.length <= 1) {
-                    if (integerPart === '') {
-                        input.value = '';
-                        return;
-                    }
-                    input.value = integerPart;
-                    return;
-                }
-
-                let decimalPart = parts[1] || '';
-                if (decimalPart.length > 1) {
-                    decimalPart = decimalPart.slice(0, 1);
-                }
-
-                if (decimalPart) {
-                    input.value = `${integerPart},${decimalPart.padEnd(1, '0')}`;
-                } else {
-                    input.value = integerPart;
-                }
-
-                let numericValue = parseFloat(input.value.replace(',', '.'));
-                if (numericValue > 10) {
-                    input.value = '10,00';
-                }
+    function applyGradeMask(input) {
+    if (!input.disabled) {
+        // Armazena a posição do cursor
+        let cursorPosition = input.selectionStart;
+        let value = input.value;
+        
+        // Remove tudo exceto dígitos e vírgula
+        let cleanValue = value.replace(/[^\d,]/g, '');
+        
+        // Se o campo está vazio ou sendo limpo, permite
+        if (cleanValue === '' || cleanValue === ',') {
+            input.value = cleanValue === ',' ? '' : cleanValue;
+            return;
+        }
+        
+        // Garante apenas uma vírgula
+        cleanValue = cleanValue.replace(/,+/g, ',');
+        
+        // Se começar com vírgula, adiciona 0
+        if (cleanValue.startsWith(',')) {
+            cleanValue = '0' + cleanValue;
+        }
+        
+        // Separa partes
+        let parts = cleanValue.split(',');
+        let integerPart = parts[0];
+        let decimalPart = parts[1] || '';
+        
+        // Se digitou 3+ dígitos sem vírgula, converte para 10,00
+        if (parts.length === 1 && integerPart.length >= 3) {
+            input.value = '10,00';
+            return;
+        }
+        
+        // Processa parte inteira
+        if (integerPart.length > 2) {
+            integerPart = integerPart.slice(0, 2);
+        }
+        
+        // Se tem 2 dígitos na parte inteira e não é "10"
+        if (integerPart.length === 2 && integerPart !== '10' && parts.length === 1) {
+            // Move o segundo dígito para decimal
+            decimalPart = integerPart[1] + decimalPart;
+            integerPart = integerPart[0];
+        }
+        
+        // Limita parte decimal a 2 dígitos
+        if (decimalPart.length > 2) {
+            decimalPart = decimalPart.slice(0, 2);
+        }
+        
+        // Monta o resultado
+        let result = integerPart;
+        if (parts.length > 1 || decimalPart.length > 0) {
+            result += ',' + decimalPart;
+        }
+        
+        // Verifica se excede 10
+        if (result.includes(',')) {
+            let numValue = parseFloat(result.replace(',', '.'));
+            if (numValue > 10) {
+                result = '10,00';
             }
         }
+        
+        // Aplica o resultado
+        input.value = result;
+        
+        // Restaura a posição do cursor (aproximadamente)
+        let newCursorPos = Math.min(cursorPosition, result.length);
+        setTimeout(() => {
+            input.setSelectionRange(newCursorPos, newCursorPos);
+        }, 0);
+    }
+}
 
         function validateForm() {
             const requiredInputs = document.querySelectorAll('#editarForm input[required]:not(:disabled)');
