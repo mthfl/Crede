@@ -121,24 +121,33 @@ require_once(__DIR__ . '/../../assets/libs/fpdf/fpdf.php');
         // Cabeçalho com larguras ajustadas
         $pdf->Image(__DIR__ . '/../../assets/imgs/logo.png', 8, 8, 15, 0, 'PNG');
         $pdf->SetFont('Arial', 'B', 25);
-        $pdf->Cell(90, 5, utf8_decode($tipo_relatorio), 0, 1, 'C');
+        $pdf->SetY(8);
+        $pdf->SetX(20);
+        $pdf->Cell(90, 8, utf8_decode($tipo_relatorio), 0, 1, 'C');
         $pdf->SetFont('Arial', 'B', 8);
-        $pdf->Cell(188, 10, ('PCD = PESSOA COM DEFICIENCIA | COTISTA = INCLUSO NA COTA DO BAIRRO | AC = AMPLA CONCORRENCIA'), 0, 1, 'C');
+        $pdf->SetY(16);
+        $pdf->SetX(11);
+        $pdf->Cell(188, 6, ('PCD = PESSOA COM DEFICIENCIA | COTISTA = INCLUSO NA COTA DO BAIRRO | AC = AMPLA CONCORRENCIA'), 0, 1, 'C');
         $pdf->SetFont('Arial', 'b', 12);
         $pdf->Cell(185, 10, '', 0, 1, 'C');
 
         $stmt_bairros = $this->connect->query("SELECT * FROM $this->table13");
         $dados_bairros = $stmt_bairros->fetchAll(PDO::FETCH_ASSOC);
+        $bairros_para_mostrar = array_slice($dados_bairros, 0, 5);
        
-        $pdf->SetFont('Arial', 'B', 11);
-        $pdf->SetY(8);
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->SetY(16);
         $pdf->SetX(190);
-        $pdf->Cell(50, 10, 'Bairros de Cotas:', 0, 1, 'C');
-         $pdf->SetFont('Arial', 'B', 8);
-        $pdf->SetY(10);
-        foreach ($dados_bairros as $dado) {
-            $pdf->SetX(233);
-                $pdf->Cell(10, 5, strtoupper(utf8_decode($dado['bairros'])), 0, 1, 'L');
+        // Título e bairros alinhados na mesma linha
+        $pdf->Cell(50, 6, 'Bairros de Cotas:', 0, 0, 'C');
+        $pdf->SetFont('Arial', 'B', 8);
+        $x_pos = 183 + 45 + 2; // inicia logo após o título
+        $item_width = 12; // largura reduzida para caber 5 bairros
+        $pdf->SetY(16);
+        foreach ($bairros_para_mostrar as $dado) {
+            $pdf->SetX($x_pos);
+            $pdf->Cell($item_width, 6, strtoupper(utf8_decode($dado['bairros'])), 0, 0, 'L');
+            $x_pos += $item_width;
         }
 
         $pdf->SetFont('Arial', 'b', 12);
