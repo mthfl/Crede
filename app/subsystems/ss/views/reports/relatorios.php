@@ -198,7 +198,7 @@ require_once(__DIR__ . '/../../assets/libs/fpdf/fpdf.php');
         $pdf->Output('classificacao.pdf', 'I');
     }
 }
-if (isset($_GET['curso']) && !empty($_GET['curso']) && ) {
+if (isset($_GET['curso']) && !empty($_GET['curso'])) {
     $relatorios = new relatorios($escola);
     $curso = $_GET['curso'];
     $tipo_relatorio = isset($_GET['tipo_relatorio']) ? $_GET['tipo_relatorio'] : 'PRIVADA AC';

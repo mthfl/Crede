@@ -465,7 +465,7 @@ $select = new select($escola);
                     <!-- Relatórios -->
                     <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin' || $_SESSION['tipo_usuario'] === 'cadastrador') { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.5s;">
-                            <a href="views/relatorios.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
+                            <a href="#" onclick="openModal('modalRelatorios')" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
                                 <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
@@ -482,7 +482,7 @@ $select = new select($escola);
                     <!--Resultados-->
                     <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.5s;">
-                            <a href="relatorios.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
+                            <a href="#" onclick="openModal('modalResultados')" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
                                 <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
@@ -499,7 +499,7 @@ $select = new select($escola);
                     <!-- Limpar Banco -->
                     <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.6s;">
-                            <a href="#" onclick="openAdminConfirm()" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
+                            <a href="views/limpar_banco.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
                                 <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-red-500 group-hover:scale-110 transition-all duration-300">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
@@ -602,49 +602,127 @@ $select = new select($escola);
         </div>
     </div>
 
-
-    <div id="modalAdminConfirm" class="fixed inset-0 bg-black/70 backdrop-blur-md hidden items-center justify-center p-2 sm:p-4 z-50">
-        <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl transform transition-all duration-300 scale-95 opacity-0" id="modalAdminConfirmContent">
-            <div class="p-6 sm:p-8 border-b border-gray-100 bg-gradient-to-r from-white to-gray-50">
-                <div class="flex items-center gap-4">
-                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary to-dark text-white flex items-center justify-center shadow-md">
+    <!-- Modal Relatórios -->
+    <div id="modalRelatorios" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-2 sm:p-4 z-50">
+        <div class="bg-white w-full max-w-2xl rounded-2xl shadow-2xl max-h-[90vh] overflow-y-auto transform transition-all duration-300 scale-95 opacity-0" id="modalRelatoriosContent">
+            <div class="bg-gradient-to-r from-primary to-dark text-white p-6">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm border border-white/30 shadow-lg">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c1.657 0 3 1.567 3 3.5S13.657 18 12 18s-3-1.567-3-3.5 1.343-3.5 3-3.5zm4-4V7a4 4 0 01-8 0V7m12 4H4a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2v-6a2 2 0 00-2-2z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                         </svg>
                     </div>
                     <div>
-                        <h3 class="text-xl sm:text-2xl font-bold text-dark">Confirmar Ação</h3>
-                        <p class="text-gray-600 text-sm">Digite a senha do administrador para prosseguir.
+                        <h2 class="text-xl font-bold font-display">Gerar Relatórios PDF</h2>
+                        <p class="text-white/90 text-sm mt-1">Crie documentos em PDF com dados do sistema</p>
                     </div>
                 </div>
-                <button class="absolute top-6 right-6 p-2 rounded-xl hover:bg-gray-100 transition-all group" onclick="closeAdminConfirm()">
-                    <svg class="w-5 h-5 text-gray-400 group-hover:text-gray-600 group-hover:scale-110 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                <button class="absolute top-6 right-6 p-2 rounded-xl hover:bg-white/10 transition-all group" onclick="closeModal('modalRelatorios')">
+                    <svg class="w-5 h-5 text-white group-hover:scale-110 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
                 </button>
             </div>
-            <div class="p-6 sm:p-8">
-                <form id="adminConfirmForm" class="space-y-6">
-                    <div id="stepEmail">
-                        <label class="block text-sm font-semibold text-dark mb-3">E-mail do Administrador</label>
-                        <input name="email" id="adminEmailInput" type="email" class="w-full px-4 py-3.5 rounded-xl transition-all text-base border-2 border-gray-300 focus:outline-none outline-none focus:ring-0" placeholder="<?=$_SESSION['email']?>" value="<?=$_SESSION['email']?>" required>
-                        <p class="text-xs text-gray-500 mt-2">Enviaremos um código de verificação para este e-mail.</p>
+            <div class="p-6">
+                <form action="controllers/controller_relatorios.php" method="POST" class="space-y-6">
+                    <input type="hidden" name="form" value="relatorio_pdf">
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-3">Tipo de Relatório *</label>
+                        <select name="tipo_relatorio" required class="w-full px-4 py-3.5 border border-gray-300 rounded-xl input-modern focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-base">
+                            <option value="" selected disabled>Selecione o tipo de relatório</option>
+                            <option value="privada_ac">Privada AC</option>
+                            <option value="privada_cotas">Privada Cotas</option>
+                            <option value="privada_geral">Privada Geral</option>
+                            <option value="publica_ac">Pública AC</option>
+                            <option value="publica_cotas">Publica Cotas</option>
+                            <option value="publica_geral">Pública Geral</option>
+                        </select>
                     </div>
-                    <div id="stepCode" class="hidden">
-                        <label class="block text-sm font-semibold text-dark mb-3">Código de Verificação</label>
-                        <input id="adminCodeInput" type="text" inputmode="numeric" maxlength="6" class="w-full px-4 py-3.5 rounded-xl transition-all text-base border-2 border-gray-300 tracking-widest text-center focus:outline-none outline-none focus:ring-0" placeholder="••••••">
-                        <p class="text-xs text-gray-500 mt-2">Digite o código enviado para o seu e-mail.</p>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-3">Curso (Opcional)</label>
+                        <select name="curso_id" class="w-full px-4 py-3.5 border border-gray-300 rounded-xl input-modern focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-base">
+                            <option value="">Todos os cursos</option>
+                            <?php 
+                            $cursos = $select->select_cursos();
+                            foreach ($cursos as $curso) { ?>
+                                <option value="<?= htmlspecialchars($curso['id']) ?>"><?= htmlspecialchars($curso['nome_curso']) ?></option>
+                            <?php } ?>
+                        </select>
                     </div>
-                    <input type="hidden" id="adminEmailHidden" name="admin_email" value="">
-                    <div class="flex justify-between items-center">
-                        <div class="flex items-center gap-3">
-                            <button type="button" id="btnBackStep" class="px-6 py-3 rounded-xl border-2 border-primary font-semibold text-primary hover:bg-primary/10 hover:border-primary transition-all text-base focus-ring hidden" onclick="prevAdminStep()">Voltar</button>
-                            <button type="button" id="btnCancel" class="px-6 py-3 rounded-xl border-2 border-primary font-semibold text-primary hover:bg-primary/10 hover:border-primary transition-all text-base focus-ring" onclick="closeAdminConfirm()">Cancelar</button>
-                                    <button type="button" id="toggleDebugBtn" class="text-blue-600 hover:text-blue-800 text-xs px-2 py-1 bg-blue-100 rounded" onclick="toggleDebugSections()">
-                                        Mostrar Detalhes
-                            <button type="submit" id="btnNextStep" class="px-6 py-3 bg-gradient-to-r from-primary to-dark text-white font-semibold rounded-xl hover:from-dark hover:to-primary transition-all text-base shadow-lg focus-ring">Enviar código</button>
-                            <button type="submit" id="btnConfirmAction" class="px-6 py-3 bg-gradient-to-r from-primary to-dark text-white font-semibold rounded-xl hover:from-dark hover:to-primary transition-all text-base shadow-lg focus-ring hidden">Confirmar</button>
-                        </div>
+
+                    <div class="pt-4 border-t border-gray-200">
+                        <button type="submit" class="w-full bg-gradient-to-r from-primary to-dark text-white px-6 py-3.5 rounded-xl hover:from-dark hover:to-primary btn-animate font-semibold shadow-lg focus-ring transition-all text-base">
+                            <span class="flex items-center justify-center">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                                Gerar PDF
+                            </span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Resultados -->
+    <div id="modalResultados" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-2 sm:p-4 z-50">
+        <div class="bg-white w-full max-w-2xl rounded-2xl shadow-2xl max-h-[90vh] overflow-y-auto transform transition-all duration-300 scale-95 opacity-0" id="modalResultadosContent">
+            <div class="bg-gradient-to-r from-secondary to-orange-600 text-white p-6">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm border border-white/30 shadow-lg">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold font-display">Consultar Resultados</h2>
+                        <p class="text-white/90 text-sm mt-1">Visualize rankings e estatísticas do sistema</p>
+                    </div>
+                </div>
+                <button class="absolute top-6 right-6 p-2 rounded-xl hover:bg-white/10 transition-all group" onclick="closeModal('modalResultados')">
+                    <svg class="w-5 h-5 text-white group-hover:scale-110 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="p-6">
+                <form action="controllers/controller_relatorios.php" method="POST" class="space-y-6">
+                    <input type="hidden" name="form" value="resultados">
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-3">Tipo de Consulta *</label>
+                        <select name="tipo_consulta" required class="w-full px-4 py-3.5 border border-gray-300 rounded-xl input-modern focus:border-secondary focus:ring-4 focus:ring-secondary/10 transition-all text-base">
+                            <option value="" selected disabled>Selecione o tipo de consulta</option>
+                            <option value="classificados">Classificados</option>
+                            <option value="classificaveis">Classificáveis</option>
+                            <option value="resultado_final">Resultado Final</option>
+                            <option value="resultado_preliminar">Resultado Preliminar</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-3">Curso (Opcional)</label>
+                        <select name="curso_id" class="w-full px-4 py-3.5 border border-gray-300 rounded-xl input-modern focus:border-secondary focus:ring-4 focus:ring-secondary/10 transition-all text-base">
+                            <option value="">Todos os cursos</option>
+                            <?php 
+                            $cursos = $select->select_cursos();
+                            foreach ($cursos as $curso) { ?>
+                                <option value="<?= htmlspecialchars($curso['id']) ?>"><?= htmlspecialchars($curso['nome_curso']) ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                    <div class="pt-4 border-t border-gray-200">
+                        <button type="submit" class="w-full bg-gradient-to-r from-secondary to-orange-600 text-white px-6 py-3.5 rounded-xl hover:from-orange-500 hover:to-orange-700 btn-animate font-semibold shadow-lg focus-ring transition-all text-base">
+                            <span class="flex items-center justify-center">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                                </svg>
+                                Consultar Resultados
+                            </span>
+                        </button>
                     </div>
                 </form>
             </div>
@@ -990,85 +1068,6 @@ $select = new select($escola);
             overlay.classList.remove('show');
         });
 
-        // Modal handling functions
-        function openAdminConfirm() {
-            const modal = document.getElementById('modalAdminConfirm');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-            setTimeout(() => {
-                const content = document.getElementById('modalAdminConfirmContent');
-                content.style.transform = 'scale(1)';
-                content.style.opacity = '1';
-            }, 10);
-        }
-
-        function closeAdminConfirm() {
-            const modal = document.getElementById('modalAdminConfirm');
-            const content = document.getElementById('modalAdminConfirmContent');
-            content.style.transform = 'scale(0.95)';
-            content.style.opacity = '0';
-            setTimeout(() => {
-                modal.classList.add('hidden');
-                modal.classList.remove('flex');
-            }, 300);
-        }
-
-        // Fluxo em 2 etapas (email -> código) no mesmo form
-        const adminForm = document.getElementById('adminConfirmForm');
-        const stepEmail = document.getElementById('stepEmail');
-        const stepCode = document.getElementById('stepCode');
-        const btnNextStep = document.getElementById('btnNextStep');
-        const btnConfirmAction = document.getElementById('btnConfirmAction');
-        const btnBackStep = document.getElementById('btnBackStep');
-        const emailInput = document.getElementById('adminEmailInput');
-        const codeInput = document.getElementById('adminCodeInput');
-        const emailHidden = document.getElementById('adminEmailHidden');
-        const btnCancel = document.getElementById('btnCancel');
-
-        function nextAdminStep() {
-            stepEmail.classList.add('hidden');
-            stepCode.classList.remove('hidden');
-            btnNextStep.classList.add('hidden');
-            btnConfirmAction.classList.remove('hidden');
-            btnBackStep.classList.remove('hidden');
-            if (btnCancel) btnCancel.classList.add('hidden');
-            // preservar e bloquear o e-mail
-            if (emailInput && emailHidden) {
-                emailHidden.value = emailInput.value.trim();
-                emailInput.setAttribute('disabled', 'disabled');
-            }
-            setTimeout(() => codeInput && codeInput.focus(), 50);
-        }
-
-        function prevAdminStep() {
-            stepCode.classList.add('hidden');
-            stepEmail.classList.remove('hidden');
-            btnConfirmAction.classList.add('hidden');
-            btnBackStep.classList.add('hidden');
-            btnNextStep.classList.remove('hidden');
-            if (btnCancel) btnCancel.classList.remove('hidden');
-            if (emailInput) emailInput.removeAttribute('disabled');
-            setTimeout(() => emailInput && emailInput.focus(), 50);
-        }
-
-        adminForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            if (!stepEmail.classList.contains('hidden')) {
-                if (!emailInput.value.trim()) return;
-                // TODO: chamada backend para enviar o código por e-mail
-                nextAdminStep();
-                return;
-            }
-            // Já está na etapa de código: confirmar ação
-            confirmDangerousAction();
-        });
-
-        function confirmDangerousAction() {
-            if (!codeInput.value.trim()) return;
-            // Aqui validaria o código no backend antes de executar a ação
-            alert('Código validado. Ação confirmada.');
-            closeAdminConfirm();
-        }
 
         function openModalWithCourse(modalId, cursoNome, corCurso, tipoEscola, cursoId = null) {
             currentTipoEscola = tipoEscola;
@@ -1278,6 +1277,47 @@ $select = new select($escola);
                     alert('Ocorreu um erro ao processar o cadastro.');
                 });
         }
+        
+        // Funções genéricas de abrir/fechar modais (Relatórios/Resultados e outros)
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                document.body.style.overflow = 'hidden';
+                setTimeout(() => {
+                    const content = modal.querySelector('[id$="Content"]');
+                    if (content) {
+                        content.style.transform = 'scale(1)';
+                        content.style.opacity = '1';
+                    }
+                }, 10);
+            }
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                const content = modal.querySelector('[id$="Content"]');
+                if (content) {
+                    content.style.transform = 'scale(0.95)';
+                    content.style.opacity = '0';
+                }
+                setTimeout(() => {
+                    modal.classList.add('hidden');
+                    modal.classList.remove('flex');
+                    document.body.style.overflow = 'auto';
+                }, 300);
+            }
+        }
+
+        // Fechar modais com tecla Escape
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const openModals = document.querySelectorAll('[id^="modal"]:not(.hidden)');
+                openModals.forEach(modal => closeModal(modal.id));
+            }
+        });
     </script>
 </body>
 
