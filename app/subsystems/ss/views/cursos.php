@@ -634,7 +634,7 @@
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"></path>
                                                     </svg>
                                                 </div>
-                                                <input type="email" name="email" required value="<?= htmlspecialchars($_SESSION['email'] ?? '') ?>" placeholder="admin@dominio.com" class="w-full pl-10 px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all duration-300 text-sm shadow-sm">
+                                                <input type="email" name="email" required value="<?= htmlspecialchars($_SESSION['email'] ?? '') ?>" placeholder="admin@dominio.com" class="w-full pl-10 px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all duration-300 text-sm shadow-sm">
                                             </div>
                                             <p class="text-xs text-gray-500 mt-2 flex items-center">
                                                 <svg class="w-4 h-4 mr-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -694,7 +694,7 @@
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
                                                     </svg>
                                                 </div>
-                                                <input type="number" name="codigo" inputmode="numeric" maxlength="6" minlength="6" required placeholder="000000" class="w-full pl-10 px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all duration-300 text-sm tracking-widest text-center shadow-sm">
+                                                <input type="number" name="codigo" inputmode="numeric" maxlength="6" minlength="6" required placeholder="000000" class="w-full pl-10 px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all duration-300 text-sm tracking-widest text-center shadow-sm">
                                             </div>
                                             <p class="text-xs text-gray-500 mt-2 flex items-center">
                                                 <svg class="w-4 h-4 mr-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
