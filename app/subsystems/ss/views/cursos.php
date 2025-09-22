@@ -1,4 +1,4 @@
-    <?php
+<?php
     require_once(__DIR__ . '/../models/sessions.php');
     $session = new sessions();
     $session->autenticar_session();
@@ -586,14 +586,14 @@
                 <main class="p-4 sm:p-6 lg:p-8">
                     <?php if (isset($_GET['candidato_associado']) && $step === 'email') { ?>
                         <!-- Modal de Autenticação de Dois Fatores - Email -->
-                        <div class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4">
-                            <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md border border-gray-200/50">
+                        <div class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-fadeIn">
+                            <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md border border-gray-200/50 transform transition-all duration-300 animate-scaleIn">
                                 <div class="text-white p-6 rounded-t-2xl relative overflow-hidden" style="background: linear-gradient(135deg, #DC2626, #991B1B);">
                                     <div class="absolute inset-0 bg-gradient-to-br from-black/20 to-transparent"></div>
                                     <div class="relative flex justify-between items-center">
                                         <div class="flex items-center space-x-3">
-                                            <div class="w-8 h-8 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm border border-white/30 shadow-lg">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm border border-white/30 shadow-lg transform hover:rotate-12 transition-transform duration-300">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
                                                 </svg>
                                             </div>
@@ -602,14 +602,19 @@
                                                 <p class="text-white/90 text-sm mt-1 font-medium">Candidato associado detectado</p>
                                             </div>
                                         </div>
+                                        <button type="button" onclick="window.location.href='cursos.php'" class="text-white/80 hover:text-white transition-colors duration-300">
+                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                            </svg>
+                                        </button>
                                     </div>
                                 </div>
                                 <form action="cursos.php?candidato_associado=1" method="post" class="space-y-4">
                                     <div class="p-6">
-                                        <div class="bg-red-50 border border-red-200 rounded-xl p-4 mb-6">
+                                        <div class="bg-red-50 border border-red-200 rounded-xl p-4 mb-6 shadow-sm hover:shadow-md transition-shadow duration-300">
                                             <div class="flex items-start">
                                                 <div class="flex-shrink-0">
-                                                    <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                                                    <svg class="h-6 w-6 text-red-500" fill="currentColor" viewBox="0 0 20 20">
                                                         <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
                                                     </svg>
                                                 </div>
@@ -621,14 +626,27 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div>
+                                        <div class="bg-gray-50 p-4 rounded-xl transition-all duration-300 hover:bg-gray-100">
                                             <label class="block text-sm font-medium text-gray-700 mb-2">E-mail do Administrador</label>
-                                            <input type="email" name="email" required value="<?= htmlspecialchars($_SESSION['email'] ?? '') ?>" placeholder="admin@dominio.com" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300 text-sm">
-                                            <p class="text-xs text-gray-500 mt-2">Enviaremos um código de verificação para este e-mail.</p>
+                                            <div class="relative">
+                                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"></path>
+                                                    </svg>
+                                                </div>
+                                                <input type="email" name="email" required value="<?= htmlspecialchars($_SESSION['email'] ?? '') ?>" placeholder="admin@dominio.com" class="w-full pl-10 px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all duration-300 text-sm shadow-sm">
+                                            </div>
+                                            <p class="text-xs text-gray-500 mt-2 flex items-center">
+                                                <svg class="w-4 h-4 mr-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                </svg>
+                                                Enviaremos um código de verificação para este e-mail.
+                                            </p>
                                         </div>
                                     </div>
-                                    <div class="flex justify-end p-4 border-t border-gray-200 bg-white">
-                                        <button type="submit" class="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all duration-300 font-semibold text-sm group">
+                                    <div class="flex justify-between p-4 border-t border-gray-200 bg-gray-50 rounded-b-2xl">
+                                        <a href="cursos.php" class="px-6 py-3 rounded-lg border-2 border-gray-300 text-gray-700 font-semibold hover:bg-gray-50 transition-all text-sm shadow-sm hover:shadow-md">Cancelar</a>
+                                        <button type="submit" class="px-6 py-3 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-lg hover:from-red-700 hover:to-red-800 transition-all duration-300 font-semibold text-sm group shadow-md hover:shadow-lg">
                                             <span class="flex items-center">
                                                 <svg class="w-4 h-4 mr-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
@@ -642,14 +660,14 @@
                         </div>
                     <?php } elseif (isset($_GET['candidato_associado']) && $step === 'code') { ?>
                         <!-- Modal de Autenticação de Dois Fatores - Código -->
-                        <div class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4">
-                            <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md border border-gray-200/50">
+                        <div class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-fadeIn">
+                            <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md border border-gray-200/50 transform transition-all duration-300 animate-scaleIn">
                                 <div class="text-white p-6 rounded-t-2xl relative overflow-hidden" style="background: linear-gradient(135deg, #DC2626, #991B1B);">
                                     <div class="absolute inset-0 bg-gradient-to-br from-black/20 to-transparent"></div>
                                     <div class="relative flex justify-between items-center">
                                         <div class="flex items-center space-x-3">
-                                            <div class="w-8 h-8 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm border border-white/30 shadow-lg">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm border border-white/30 shadow-lg transform hover:rotate-12 transition-transform duration-300">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                                 </svg>
                                             </div>
@@ -658,20 +676,37 @@
                                                 <p class="text-white/90 text-sm mt-1 font-medium">Digite o código enviado por e-mail</p>
                                             </div>
                                         </div>
+                                        <button type="button" onclick="window.location.href='cursos.php'" class="text-white/80 hover:text-white transition-colors duration-300">
+                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                            </svg>
+                                        </button>
                                     </div>
                                 </div>
                                 <form action="cursos.php?candidato_associado=1" method="post" class="space-y-4">
                                     <div class="p-6">
                                         <input type="hidden" name="email" value="<?= htmlspecialchars($postedEmail ?: ($_SESSION['codigo_email'] ?? '')) ?>" />
-                                        <div>
+                                        <div class="bg-gray-50 p-4 rounded-xl transition-all duration-300 hover:bg-gray-100">
                                             <label class="block text-sm font-medium text-gray-700 mb-2">Código de Verificação</label>
-                                            <input type="number" name="codigo" inputmode="numeric" maxlength="6" minlength="6" required placeholder="000000" class="w-full px-3 py-2 border border-gray-300 rounded-lg  transition-all duration-300 text-sm tracking-widest text-center">
-                                            <p class="text-xs text-gray-500 mt-2">Digite o código enviado para o e-mail <?= htmlspecialchars($postedEmail ?: ($_SESSION['codigo_email'] ?? '')) ?>.</p>
+                                            <div class="relative">
+                                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                                                    </svg>
+                                                </div>
+                                                <input type="number" name="codigo" inputmode="numeric" maxlength="6" minlength="6" required placeholder="000000" class="w-full pl-10 px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all duration-300 text-sm tracking-widest text-center shadow-sm">
+                                            </div>
+                                            <p class="text-xs text-gray-500 mt-2 flex items-center">
+                                                <svg class="w-4 h-4 mr-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                </svg>
+                                                Digite o código enviado para o e-mail <?= htmlspecialchars($postedEmail ?: ($_SESSION['codigo_email'] ?? '')) ?>.
+                                            </p>
                                         </div>
                                     </div>
-                                    <div class="flex items-center justify-between p-4 border-t border-gray-200 bg-white">
-                                        <a href="cursos.php" class="px-6 py-3 rounded-lg border-2 border-gray-300 text-gray-700 font-semibold hover:bg-gray-50 transition-all text-sm">Cancelar</a>
-                                        <button type="submit" class="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-all duration-300 font-semibold text-sm group">
+                                    <div class="flex items-center justify-between p-4 border-t border-gray-200 bg-gray-50 rounded-b-2xl">
+                                        <a href="cursos.php" class="px-6 py-3 rounded-lg border-2 border-gray-300 text-gray-700 font-semibold hover:bg-gray-50 transition-all text-sm shadow-sm hover:shadow-md">Cancelar</a>
+                                        <button type="submit" class="px-6 py-3 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-lg hover:from-red-700 hover:to-red-800 transition-all duration-300 font-semibold text-sm group shadow-md hover:shadow-lg">
                                             <span class="flex items-center">
                                                 <svg class="w-4 h-4 mr-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
