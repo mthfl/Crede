@@ -106,20 +106,44 @@ class admin extends cadastrador
     public function excluir_candidato_curso(int $id_curso): int
     {
         try {
-            $stmt_check = $this->connect->prepare("DELETE FROM $this->table1 WHERE id_curso1 = :id_curso");
-            $stmt_check->bindValue(":id_curso", $id_curso);
-            $stmt_check->execute();
 
-            $stmt_check = $this->connect->prepare(" DELETE FROM $this->table2 WHERE id = :id_curso");
-            $stmt_check->bindValue(":id_curso", $id_curso);
+            $stmt_candidato = $this->connect->query("SELECT * FROM $this->table1 WHERE id_curso1 = '$id_curso'");
+            $id_candidatos = $stmt_candidato->fetchAll(PDO::FETCH_ASSOC);
 
-            if ($stmt_check->execute()) {
-
-                return 1;
-            } else {
-
-                return 2;
+            foreach ($id_candidatos as $id_candidato) {
+                $stmt_delete = $this->connect->prepare("DELETE FROM $this->table4 WHERE id_candidato = :id_candidato");
+                $stmt_delete->bindValue(":id_candidato", $id_candidato['id']);
+                $stmt_delete->execute();
+                $stmt_delete = $this->connect->prepare("DELETE FROM $this->table9 WHERE id_candidato = :id_candidato");
+                $stmt_delete->bindValue(":id_candidato", $id_candidato['id']);
+                $stmt_delete->execute();
+                $stmt_delete = $this->connect->prepare("DELETE FROM $this->table12 WHERE id_candidato = :id_candidato");
+                $stmt_delete->bindValue(":id_candidato", $id_candidato['id']);
+                $stmt_delete->execute();
+                $stmt_delete = $this->connect->prepare("DELETE FROM $this->table11 WHERE id_candidato = :id_candidato");
+                $stmt_delete->bindValue(":id_candidato", $id_candidato['id']);
+                $stmt_delete->execute();
+                $stmt_delete = $this->connect->prepare("DELETE FROM $this->table10 WHERE id_candidato = :id_candidato");
+                $stmt_delete->bindValue(":id_candidato", $id_candidato['id']);
+                $stmt_delete->execute();
+                $stmt_delete = $this->connect->prepare("DELETE FROM $this->table8 WHERE id_candidato = :id_candidato");
+                $stmt_delete->bindValue(":id_candidato", $id_candidato['id']);
+                $stmt_delete->execute();
+                $stmt_delete = $this->connect->prepare("DELETE FROM $this->table7 WHERE id_candidato = :id_candidato");
+                $stmt_delete->bindValue(":id_candidato", $id_candidato['id']);
+                $stmt_delete->execute();
+                $stmt_delete = $this->connect->prepare("DELETE FROM $this->table6 WHERE id_candidato = :id_candidato");
+                $stmt_delete->bindValue(":id_candidato", $id_candidato['id']);
+                $stmt_delete->execute();
+                $stmt_candidato = $this->connect->prepare(" DELETE FROM $this->table1 WHERE id = :id_candidato");
+                $stmt_candidato->bindValue(":id_candidato", $id_candidato['id']);
+                $stmt_candidato->execute();
+                $stmt_candidato = $this->connect->prepare(" DELETE FROM $this->table2 WHERE id = :id_curso");
+                $stmt_candidato->bindValue(":id_curso", $id_curso);
+                $stmt_candidato->execute();
             }
+
+            return 1;
         } catch (PDOException $e) {
             return 0;
         }
