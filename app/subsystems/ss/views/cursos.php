@@ -16,37 +16,40 @@ $step = 'email';
 $postedEmail = '';
 
 if (isset($_GET['candidato_associado'])) {
-    if (isset($_POST['email']) && filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) && !empty($_POST['email']) && !isset($_POST['codigo'])) {
-        $codigo = rand(100000, 999999);
-        $_SESSION['codigo'] = $codigo;
+    if (isset($_POST['email']) && filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) && !empty($_POST['email']) && !isset($_POST['senha'])) {
+        $_SESSION['senha'] = $codigo;
         $_SESSION['codigo_email'] = $_POST['email'];
         $_SESSION['curso'] = $_POST['id_curso'];
         $postedEmail = $_POST['email'];
 
-        mail($postedEmail, 'Código de verificação - Sistema Escolar', "Seu código de verificação é: $codigo");
+
+        //date_default_timezone_set('America/Fortaleza');
+        //mail($postedEmail, 'Código de verificação - Sistema Escolar', "Seu código de verificação é: $codigo");
         $step = 'code';
     }
 
-    if (isset($_POST['codigo']) && !empty($_POST['codigo']) && isset($_POST['email']) && !empty($_POST['email'])) {
-        $codigo = $_POST['codigo'];
+    if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) && !empty($_POST['email'])) {
+        $senha = $_POST['senha'];
         $email = $_POST['email'];
-        if ($codigo == $_SESSION['codigo'] && $email == $_SESSION['codigo_email']) {
 
-            $id_curso = $_SESSION['curso'];
-            require_once(__DIR__ . '/../models/model.admin.php');
-            $admin = new admin($escola);
-            $result = $admin->excluir_candidato_curso($id_curso);
-            if ($result === 1) {
-                header("Location: cursos.php?limpar=$result");
-                exit();
-            } else {
-                header('Location: cursos.php?erro');
-                exit();
-            }
-        } else {
+        require_once(__DIR__ . '/../models/model.admin.php');
+        $admin = new admin($escola);
+        $result = $admin->verificar_senha($email, $senha);
 
-            header('Location: cursos.php?erro_codigo');
-            exit();
+        switch ($result) {
+            case 1:
+                header("Location: cursos.php?excluido");
+                exit();
+            case 2:
+                header("Location: cursos.php?erro_senha");
+                exit();
+            case 3:
+                header("Location: cursos.php?erro_senha");
+                exit();
+
+            default:
+                header("Location: cursos.php?fatal");
+                exit();
         }
     }
 }
@@ -723,7 +726,7 @@ if (isset($_GET['candidato_associado'])) {
                                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
                                                             </svg>
                                                         </div>
-                                                        <input type="number" name="codigo" inputmode="numeric" maxlength="6" minlength="6" required placeholder="000000" class="w-full pl-10 px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all duration-300 text-sm tracking-widest text-center shadow-sm">
+                                                        <input type="password" name="senha" inputmode="numeric" maxlength="6" minlength="6" required placeholder="000000" class="w-full pl-10 px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all duration-300 text-sm tracking-widest text-center shadow-sm">
                                                     </div>
                                                     <p class="text-xs text-gray-500 mt-2 flex items-center">
                                                         <svg class="w-4 h-4 mr-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -2,11 +2,40 @@
 require_once(__DIR__ . '/model.cadastrador.php');
 class admin extends cadastrador
 {
+    protected string $table_user1;
+    protected string $table_user2;
     function __construct($escola)
     {
         parent::__construct($escola);
+        $table = require(__DIR__ . '/../../../.env/tables.php');
+        $this->table_user1 = $table["crede_users"][1];
+        $this->table_user2 = $table["crede_users"][2];
     }
 
+    public function verificar_senha($email, $senha){
+        //try {
+            $stmt_check = $this->connect_users->prepare("SELECT u.* FROM $this->table_user1 u INNER JOIN $this->table_user2 s ON u.id_setor = s.id WHERE email = :email");
+            $stmt_check->bindValue(':email', $email);
+            $stmt_check->execute();
+
+            $user = $stmt_check->fetch(PDO::FETCH_ASSOC);
+            if ($user) {
+                if (password_verify($senha, $user['senha'])) {
+
+                    return 1;
+                } else {
+                    return 2;
+                }
+            } else {
+
+                return 3;
+            }
+        /*} catch (Exception $e) {
+
+            error_log("Erro no login: " . $e->getMessage());
+            return 0;
+        }*/
+    }
     /**
      * CRUD curso
      */
