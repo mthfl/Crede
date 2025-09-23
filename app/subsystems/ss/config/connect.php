@@ -32,14 +32,16 @@ class connect
                 $this->connect = new PDO('mysql:host=' . $host . ';dbname=' . $database . ';charset=utf8', $user, $password);
                 $this->connect->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 $this->connect->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+                
             } catch (PDOException $e) {
+                
                 // Se falhar, tentar o banco da hospedagem
                 $host_user = $config['hospedagem']["crede_users"]['host'];
                 $database_user = $config['hospedagem']["crede_users"]['banco'];
                 $user_user = $config['hospedagem']["crede_users"]['user'];
                 $password_user = $config['hospedagem']["crede_users"]['senha'];
 
-                $this->connect_users = new PDO('mysql:host=' . $host_user . ';dbname=' . $database_user . ';charset=utf8', $user_user, $passwor_user);
+                $this->connect_users = new PDO('mysql:host=' . $host_user . ';dbname=' . $database_user . ';charset=utf8', $user_user, $password_user);
                 $this->connect_users->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 $this->connect_users->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 
