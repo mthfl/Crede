@@ -11,7 +11,6 @@ new connect($escola);
 require_once(__DIR__ . '/../models/model.select.php');
 $select = new select($escola);
 $step = 'email';
-$postedEmail = '';
 
 if (isset($_POST['email']) && filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) && !empty($_POST['email']) && !isset($_POST['senha'])) {
     $step = 'code';
@@ -147,26 +146,26 @@ if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) 
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-3">E-mail do Administrador</label>
                                 <input type="email" name="email" id="email" required value="<?= htmlspecialchars($_SESSION['email'] ?? '') ?>" placeholder="admin@dominio.com" class="w-full px-4 py-3.5 rounded-xl transition-all text-base border-2 border-gray-300 focus:outline-none outline-none focus:ring-0" />
-                                <p class="text-xs text-gray-500 mt-2">Enviaremos um código de verificação para este e-mail.</p>
+                                <p class="text-xs text-gray-500 mt-2">Enviaremos uma senha para este e-mail.</p>
                             </div>
                             <div class="flex justify-end space-x-3 pt-4 border-t border-gray-200">
                                 <button type="submit" class="px-6 py-3 rounded-xl bg-red-600 text-white font-semibold hover:bg-red-700 transition-all btn-animate focus-ring">
-                                    Enviar código
+                                    Validar senha
                                 </button>
                             </div>
                         </form>
                     <?php } else { ?>
-                        <!-- Step 2: Código -->
+                        <!-- Step 2: Senha -->
                         <form action="limpar_banco.php" method="post" class="space-y-6">
-                            <input type="hidden" name="email" value="<?= htmlspecialchars($postedEmail ?: ($_SESSION['codigo_email'] ?? '')) ?>" />
+                            <input type="hidden" name="email" value="<?= htmlspecialchars($_SESSION['email'] ?? '') ?>" />
                             <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-3">Código de Verificação</label>
+                                <label class="block text-sm font-semibold text-gray-700 mb-3">Senha</label>
                                 <input type="password" name="senha" required placeholder="senha" class="w-full px-4 py-3.5 rounded-xl transition-all text-base border-2 border-gray-300 tracking-widest text-center focus:outline-none outline-none focus:ring-0" />
-                                <p class="text-xs text-gray-500 mt-2">Digite o código enviado para o e-mail <?= htmlspecialchars($postedEmail ?: ($_SESSION['codigo_email'] ?? '')) ?>.</p>
                             </div>
+                            <p class="text-xs text-gray-500 mt-2">Digite a senha enviada para o e-mail <?= htmlspecialchars($_SESSION['email'] ?? '') ?>.</p></div>
                             <div class="flex items-center justify-between pt-4 border-t border-gray-200">
                                 <a href="limpar_banco.php" class="px-6 py-3 rounded-xl border-2 border-gray-300 text-gray-700 font-semibold hover:bg-gray-50 transition-all">Voltar</a>
-                                <button type="submit" class="px-6 py-3 rounded-xl bg-red-600 text-white font-semibold hover:bg-red-700 transition-all btn-animate focus-ring">Validar Código</button>
+                                <button type="submit" class="px-6 py-3 rounded-xl bg-red-600 text-white font-semibold hover:bg-red-700 transition-all btn-animate focus-ring">Validar senha</button>
                             </div>
                         </form>
                     <?php } ?>

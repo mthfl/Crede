@@ -420,7 +420,7 @@ class admin extends cadastrador
     }
     public function limpar_banco(): int
     {
-        //try {
+        try {
             $stmt_delete = $this->connect->query("DELETE FROM $this->table4");
             $stmt_delete = $this->connect->query("DELETE FROM $this->table9");
             $stmt_delete = $this->connect->query("DELETE FROM $this->table12");
@@ -434,9 +434,9 @@ class admin extends cadastrador
             $stmt_delete = $this->connect->query("DELETE FROM $this->table13");
 
             return 1;
-        /*} catch (PDOException $e) {
+        } catch (PDOException $e) {
             return 0;
-        }*/
+        }
     }
 
     /**

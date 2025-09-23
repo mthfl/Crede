@@ -674,7 +674,7 @@ if (isset($_GET['candidato_associado'])) {
                                                         <svg class="w-4 h-4 mr-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
                                                         </svg>
-                                                        Enviar código
+                                                        Validar senha
                                                     </span>
                                                 </button>
                                             </div>
@@ -695,8 +695,8 @@ if (isset($_GET['candidato_associado'])) {
                                                         </svg>
                                                     </div>
                                                     <div>
-                                                        <h2 class="text-lg sm:text-xl font-bold font-display tracking-tight">Verificar Código</h2>
-                                                        <p class="text-white/90 text-sm mt-1 font-medium">Digite o código enviado por e-mail</p>
+                                                        <h2 class="text-lg sm:text-xl font-bold font-display tracking-tight">Verificar senha</h2>
+                                                        <p class="text-white/90 text-sm mt-1 font-medium">Digite a senha enviada por e-mail</p>
                                                     </div>
                                                 </div>
                                                 <button type="button" onclick="window.location.href='cursos.php'" class="text-white/80 hover:text-white transition-colors duration-300">
@@ -735,7 +735,7 @@ if (isset($_GET['candidato_associado'])) {
                                                         <svg class="w-4 h-4 mr-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                                         </svg>
-                                                        Validar Código
+                                                        Validar senha
                                                     </span>
                                                 </button>
                                             </div>
