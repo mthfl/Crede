@@ -15,36 +15,35 @@ $select = new select($escola);
 $step = 'email';
 $postedEmail = '';
 
-if (isset($_GET['candidato_associado'])) {
-    if (isset($_POST['email']) && filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) && !empty($_POST['email']) && !isset($_POST['senha'])) {
-        $step = 'code';
-    }
+if (isset($_POST['email']) && filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) && !empty($_POST['email']) && !isset($_POST['senha'])) {
+    $step = 'code';
+}
 
-    if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) && !empty($_POST['email']) && isset($_POST['id_curso']) && !empty($_POST['id_curso'])) {
-        $senha = $_POST['senha'];
-        $email = $_POST['email'];
-        $id_curso = $_POST['id_curso'];
-        require_once(__DIR__ . '/../models/model.admin.php');
-        $admin = new admin($escola);
-        $result = $admin->verificar_senha($email, $senha, $id_curso);
+if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) && !empty($_POST['email']) && isset($_POST['id_curso']) && !empty($_POST['id_curso'])) {
+    $senha = $_POST['senha'];
+    $email = $_POST['email'];
+    $id_curso = $_POST['id_curso'];
+    require_once(__DIR__ . '/../models/model.admin.php');
+    $admin = new admin($escola);
+    $result = $admin->verificar_senha($email, $senha, $id_curso);
 
-        switch ($result) {
-            case 1:
-                header("Location: cursos.php?excluido");
-                exit();
-            case 2:
-                header("Location: cursos.php?erro_senha");
-                exit();
-            case 3:
-                header("Location: cursos.php?erro_senha");
-                exit();
+    switch ($result) {
+        case 1:
+            header("Location: cursos.php?excluido");
+            exit();
+        case 2:
+            header("Location: cursos.php?erro_senha");
+            exit();
+        case 3:
+            header("Location: cursos.php?erro_senha");
+            exit();
 
-            default:
-                header("Location: cursos.php?fatal");
-                exit();
-        }
+        default:
+            header("Location: cursos.php?fatal");
+            exit();
     }
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -706,10 +705,10 @@ if (isset($_GET['candidato_associado'])) {
                                                 </button>
                                             </div>
                                         </div>
-                                        <form action="cursos.php?candidato_associado=1" method="post" class="space-y-4">
+                                        <form action="cursos.php" method="post" class="space-y-4">
                                             <div class="p-6">
                                                 <input type="hidden" name="id_curso" value="<?= $curso['id'] ?>">
-                                                <input type="hidden" name="email" value="<?= htmlspecialchars($postedEmail ?: ($_SESSION['codigo_email'] ?? '')) ?>" />
+                                                <input type="hidden" name="email" value="<?= htmlspecialchars($_SESSION['email']) ?>" />
                                                 <div class="bg-gray-50 p-4 rounded-xl transition-all duration-300 hover:bg-gray-100">
                                                     <label class="block text-sm font-medium text-gray-700 mb-2">Código de Verificação</label>
                                                     <div class="relative">
@@ -724,7 +723,7 @@ if (isset($_GET['candidato_associado'])) {
                                                         <svg class="w-4 h-4 mr-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                                         </svg>
-                                                        Digite o código enviado para o e-mail <?= htmlspecialchars($postedEmail ?: ($_SESSION['codigo_email'] ?? '')) ?>.
+                                                        Digite o código enviado para o e-mail <?= htmlspecialchars($_SESSION['email']) ?>.
                                                     </p>
                                                 </div>
                                             </div>
