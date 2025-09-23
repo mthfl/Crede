@@ -43,10 +43,10 @@ class connect
                 $this->connect_users->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 $this->connect_users->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 
-                $host = $config['local']["ss_$escola_banco"]['host'];
-                $database = $config['local']["ss_$escola_banco"]['banco'];
-                $user = $config['local']["ss_$escola_banco"]['user'];
-                $password = $config['local']["ss_$escola_banco"]['senha'];
+                $host = $config['hospedagem']["ss_$escola_banco"]['host'];
+                $database = $config['hospedagem']["ss_$escola_banco"]['banco'];
+                $user = $config['hospedagem']["ss_$escola_banco"]['user'];
+                $password = $config['hospedagem']["ss_$escola_banco"]['senha'];
 
                 $this->connect = new PDO('mysql:host=' . $host . ';dbname=' . $database . ';charset=utf8', $user, $password);
                 $this->connect->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

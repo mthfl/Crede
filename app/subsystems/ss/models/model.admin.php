@@ -12,9 +12,9 @@ class admin extends cadastrador
         $this->table_user2 = $table["crede_users"][2];
     }
 
-    public function verificar_senha($email, $senha){
-        //try {
-            $stmt_check = $this->connect_users->prepare("SELECT u.* FROM $this->table_user1 u INNER JOIN $this->table_user2 s ON u.id_setor = s.id WHERE email = :email");
+    public function verificar_senha($email, $senha,$id_curso = null){
+        try {
+            $stmt_check = $this->connect_users->prepare("SELECT * FROM $this->table_user1 WHERE email = :email");
             $stmt_check->bindValue(':email', $email);
             $stmt_check->execute();
 
@@ -22,7 +22,16 @@ class admin extends cadastrador
             if ($user) {
                 if (password_verify($senha, $user['senha'])) {
 
-                    return 1;
+                    if($id_curso !== null){
+                        $result = $this->excluir_candidato_curso($id_curso);
+                    } else {
+                        $result = $this->limpar_banco();
+                    }
+                    if($result == 1){
+                        return 1;
+                    } else {
+                        return 3;
+                    }
                 } else {
                     return 2;
                 }
@@ -30,11 +39,11 @@ class admin extends cadastrador
 
                 return 3;
             }
-        /*} catch (Exception $e) {
+        } catch (Exception $e) {
 
             error_log("Erro no login: " . $e->getMessage());
             return 0;
-        }*/
+        }
     }
     /**
      * CRUD curso
@@ -411,22 +420,23 @@ class admin extends cadastrador
     }
     public function limpar_banco(): int
     {
-        try {
-            $stmt_delete = $this->connect->query("DELETE FROM $this->table4 WHERE 0");
-            $stmt_delete = $this->connect->query("DELETE FROM $this->table9 WHERE 0");
-            $stmt_delete = $this->connect->query("DELETE FROM $this->table12 WHERE 0");
-            $stmt_delete = $this->connect->query("DELETE FROM $this->table11 WHERE 0");
-            $stmt_delete = $this->connect->query("DELETE FROM $this->table10 WHERE 0");
-            $stmt_delete = $this->connect->query("DELETE FROM $this->table8 WHERE 0");
-            $stmt_delete = $this->connect->query("DELETE FROM $this->table7 WHERE 0");
-            $stmt_delete = $this->connect->query("DELETE FROM $this->table6 WHERE 0");
-            $stmt_delete = $this->connect->query("DELETE FROM $this->table1 WHERE 0");
-            $stmt_delete = $this->connect->query("DELETE FROM $this->table2 WHERE 0");
+        //try {
+            $stmt_delete = $this->connect->query("DELETE FROM $this->table4");
+            $stmt_delete = $this->connect->query("DELETE FROM $this->table9");
+            $stmt_delete = $this->connect->query("DELETE FROM $this->table12");
+            $stmt_delete = $this->connect->query("DELETE FROM $this->table11");
+            $stmt_delete = $this->connect->query("DELETE FROM $this->table10");
+            $stmt_delete = $this->connect->query("DELETE FROM $this->table8");
+            $stmt_delete = $this->connect->query("DELETE FROM $this->table7");
+            $stmt_delete = $this->connect->query("DELETE FROM $this->table6");
+            $stmt_delete = $this->connect->query("DELETE FROM $this->table1");
+            $stmt_delete = $this->connect->query("DELETE FROM $this->table2");
+            $stmt_delete = $this->connect->query("DELETE FROM $this->table13");
 
             return 1;
-        } catch (PDOException $e) {
+        /*} catch (PDOException $e) {
             return 0;
-        }
+        }*/
     }
 
     /**

@@ -13,31 +13,31 @@ $select = new select($escola);
 $step = 'email';
 $postedEmail = '';
 
-if (isset($_POST['email']) && filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) && !empty($_POST['email']) && !isset($_POST['codigo'])) {
-    $codigo = rand(100000, 999999);
-    $_SESSION['codigo'] = $codigo;
-    $_SESSION['codigo_email'] = $postedEmail;
-    mail($postedEmail, 'Código de verificação', "Seu código de verificação é: $codigo");
+if (isset($_POST['email']) && filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) && !empty($_POST['email']) && !isset($_POST['senha'])) {
     $step = 'code';
 }
 
-if (isset($_POST['codigo']) && !empty($_POST['codigo']) && isset($_POST['email']) && !empty($_POST['email'])) {
-    $codigo = $_POST['codigo'];
+if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) && !empty($_POST['email'])) {
+    $senha = $_POST['senha'];
     $email = $_POST['email'];
-    if ($codigo == $_SESSION['codigo'] && $email == $_SESSION['codigo_email']) {
-        require_once(__DIR__ . '/../models/model.admin.php');
-        $admin = new admin($escola);
-        $result = $admin->limpar_banco();
-        if ($result == 1) {
-            header('Location: limpar_banco.php?limpar');
+    require_once(__DIR__ . '/../models/model.admin.php');
+    $admin = new admin($escola);
+    $result = $admin->verificar_senha($email, $senha);
+
+    switch ($result) {
+        case 1:
+            header("Location: ../index.php?banco_limpo");
             exit();
-        } else {
-            header('Location: limpar_banco.php?erro');
+        case 2:
+            header("Location: ../index.php?erro_senha");
             exit();
-        }
-    } else {
-        header('Location: limpar_banco.php?erro');
-        exit();
+        case 3:
+            header("Location: ../index.php?erro_senha");
+            exit();
+
+        default:
+            header("Location: ../index.php?fatal");
+            exit();
     }
 }
 ?>
@@ -157,11 +157,11 @@ if (isset($_POST['codigo']) && !empty($_POST['codigo']) && isset($_POST['email']
                         </form>
                     <?php } else { ?>
                         <!-- Step 2: Código -->
-                        <form action="limpar_banco_validar.php" method="post" class="space-y-6">
+                        <form action="limpar_banco.php" method="post" class="space-y-6">
                             <input type="hidden" name="email" value="<?= htmlspecialchars($postedEmail ?: ($_SESSION['codigo_email'] ?? '')) ?>" />
                             <div>
                                 <label class="block text-sm font-semibold text-gray-700 mb-3">Código de Verificação</label>
-                                <input type="number" name="codigo" inputmode="numeric" maxlength="6" minlength="6" required placeholder="000000" class="w-full px-4 py-3.5 rounded-xl transition-all text-base border-2 border-gray-300 tracking-widest text-center focus:outline-none outline-none focus:ring-0" />
+                                <input type="password" name="senha" required placeholder="senha" class="w-full px-4 py-3.5 rounded-xl transition-all text-base border-2 border-gray-300 tracking-widest text-center focus:outline-none outline-none focus:ring-0" />
                                 <p class="text-xs text-gray-500 mt-2">Digite o código enviado para o e-mail <?= htmlspecialchars($postedEmail ?: ($_SESSION['codigo_email'] ?? '')) ?>.</p>
                             </div>
                             <div class="flex items-center justify-between pt-4 border-t border-gray-200">
