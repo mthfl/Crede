@@ -142,16 +142,20 @@ require_once(__DIR__ . '/../../assets/libs/fpdf/fpdf.php');
         $pdf->SetFont('Arial', 'B', 10);
         $pdf->SetY(16);
         $pdf->SetX(190);
-        // Título e bairros alinhados na mesma linha
-        $pdf->Cell(50, 6, 'Bairros de Cotas:', 0, 0, 'C');
-        $pdf->SetFont('Arial', 'B', 8);
-        $x_pos = 183 + 45 + 2; // inicia logo após o título
-        $item_width = 12; // largura reduzida para caber 5 bairros
-        $pdf->SetY(16);
-        foreach ($bairros_para_mostrar as $dado) {
-            $pdf->SetX($x_pos);
-            $pdf->Cell($item_width, 6, strtoupper(utf8_decode($dado['bairros'])), 0, 0, 'L');
-            $x_pos += $item_width;
+        // Título e bairros alinhados na mesma linha, exceto para PRIVADA AC e PÚBLICA AC
+        if ($tipo_relatorio !== 'PRIVADA AC' && $tipo_relatorio !== 'PÚBLICA AC') {
+            $pdf->Cell(50, 6, 'Bairros de Cotas:', 0, 0, 'C');
+            $pdf->SetFont('Arial', 'B', 8);
+            $x_pos = 183 + 45 + 2; // Inicia logo após o título
+            $item_width = 35; // Ajustado para caber 2 bairros com separador
+            foreach ($bairros_para_mostrar as $index => $dado) {
+                $pdf->SetX($x_pos);
+                $bairro = strtoupper(utf8_decode($dado['bairros']));
+                // Adiciona vírgula e espaço, exceto no último bairro
+                $texto = ($index < count($bairros_para_mostrar) - 1) ? $bairro . ', ' : $bairro;
+                $pdf->Cell($item_width, 6, $texto, 0, 0, 'L');
+                $x_pos += $item_width;
+            }
         }
 
         $pdf->SetFont('Arial', 'b', 12);
@@ -163,11 +167,11 @@ require_once(__DIR__ . '/../../assets/libs/fpdf/fpdf.php');
         $pdf->Cell(10, 7, 'CH', 1, 0, 'C', true);
         $pdf->Cell($n, 7, 'Nome', 1, 0, 'C', true);
         $pdf->Cell(30, 7, 'Curso', 1, 0, 'C', true);
-        $pdf->Cell(18, 7, 'Origem', 1, 0, 'C', true);
+        $pdf->Cell(20, 7, 'Origem', 1, 0, 'C', true);
         if ((isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin')) {
-            $pdf->Cell(26, 7, 'Segmento', 1, 0, 'C', true);
-            $pdf->Cell(15, 7, 'Media', 1, 0, 'C', true);
-            $pdf->Cell(55, 7, 'Resp. Cadastro', 1, 1, 'C', true);
+            $pdf->Cell(24, 7, 'Segmento', 1, 0, 'C', true);
+            $pdf->Cell(17, 7, 'Media', 1, 0, 'C', true);
+            $pdf->Cell(60, 7, 'Resp. Cadastro', 1, 1, 'C', true);
         } else {
             $pdf->Cell(26, 7, 'Segmento', 1, 1, 'C', true);
         }
@@ -202,11 +206,11 @@ require_once(__DIR__ . '/../../assets/libs/fpdf/fpdf.php');
             $pdf->Cell(10, 7, sprintf("%03d", $classificacao), 1, 0, 'C', true);
             $pdf->Cell($n, 7, strToUpper(utf8_decode($dado['nome'])), 1, 0, 'L', true);
             $pdf->Cell(30, 7, strToUpper(utf8_decode($dado['nome_curso'])), 1, 0, 'L', true);
-            $pdf->Cell(18, 7, $escola, 1, 0, 'L', true);
-            $pdf->Cell(26, 7, $cota, 1, $p, 'L', true); // verificar parâmetro 'p' na parte superior do relatório
+            $pdf->Cell(20, 7, $escola, 1, 0, 'L', true);
+            $pdf->Cell(24, 7, $cota, 1, $p, 'C', true); // verificar parâmetro 'p' na parte superior do relatório
             if ((isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin')) {
-                $pdf->Cell(15, 7, number_format($dado['media_final'], 2), 1, 0, 'C', true);
-                $pdf->Cell(55, 7, strtoupper(utf8_decode($dado['nome_user'])), 1, 1, 'L', true);
+                $pdf->Cell(17, 7, number_format($dado['media_final'], 2), 1, 0, 'C', true);
+                $pdf->Cell(60, 7, strtoupper(utf8_decode($dado['nome_user'])), 1, 1, 'L', true);
             }
             $classificacao++;
         }
