@@ -92,26 +92,30 @@ require_once(__DIR__ . '/../../assets/libs/fpdf/fpdf.php');
         }
 
         // Construir a consulta SQL com base nos parâmetros
+        $sql = "SELECT can.nome, cur.nome_curso, can.publica, can.bairro, can.pcd, m.media_final, u.nome_user 
+                FROM $this->table1 can    
+                INNER JOIN $this->table4 m ON m.id_candidato = can.id 
+                INNER JOIN $this->table5 u ON can.id_cadastrador = u.id 
+                INNER JOIN $this->table2 cur ON can.id_curso1 = cur.id 
+                WHERE can.id_curso1 = :curso AND can.publica = :publica AND can.pcd = :pcd";
+        
+        // Adicionar filtro de bairro apenas se necessário
         if ($bairro !== null) {
-            $sql = "SELECT can.nome, cur.nome_curso, can.publica, can.bairro, can.pcd, m.media_final, u.nome_user 
-                    FROM $this->table1 can    
-                    INNER JOIN $this->table4 m ON m.id_candidato = can.id 
-                    INNER JOIN $this->table5 u ON can.id_cadastrador = u.id 
-                    INNER JOIN $this->table2 cur ON can.id_curso1 = cur.id 
-                    WHERE can.id_curso1 = :curso AND can.publica = $publica AND can.pcd = $pcd AND can.bairro = $bairro 
-                    ORDER BY m.media_final DESC, can.data_nascimento DESC, m.l_portuguesa_media DESC, m.matematica_media DESC;";
-        } else {
-            $sql = "SELECT can.nome, cur.nome_curso, can.publica, can.bairro, can.pcd, m.media_final, u.nome_user 
-                    FROM $this->table1 can    
-                    INNER JOIN $this->table4 m ON m.id_candidato = can.id 
-                    INNER JOIN $this->table5 u ON can.id_cadastrador = u.id 
-                    INNER JOIN $this->table2 cur ON can.id_curso1 = cur.id 
-                    WHERE can.id_curso1 = :curso AND can.publica = $publica AND can.pcd = $pcd 
-                    ORDER BY m.media_final DESC, can.data_nascimento DESC, m.l_portuguesa_media DESC, m.matematica_media DESC;";
+            $sql .= " AND can.bairro = :bairro";
         }
+        
+        $sql .= " ORDER BY m.media_final DESC, can.data_nascimento DESC, m.l_portuguesa_media DESC, m.matematica_media DESC;";
         
         $stmtSelect = $this->connect->prepare($sql);
         $stmtSelect->BindValue(':curso', $curso);
+        $stmtSelect->BindValue(':publica', $publica);
+        $stmtSelect->BindValue(':pcd', $pcd);
+        
+        // Vincular parâmetro de bairro apenas se necessário
+        if ($bairro !== null) {
+            $stmtSelect->BindValue(':bairro', $bairro);
+        }
+        
         $stmtSelect->execute();
         $dados = $stmtSelect->fetchAll(PDO::FETCH_ASSOC);
 
@@ -183,7 +187,9 @@ require_once(__DIR__ . '/../../assets/libs/fpdf/fpdf.php');
             if ($dado['pcd'] == 1) {
                 $cota = 'PCD';
             } else if ($dado['publica'] == 0 && $dado['bairro'] == 1) {
-                $cota = 'COTISTA';
+                $cota = 'COTAS';
+            } else if ($dado['publica'] == 1 && $dado['bairro'] == 1) {
+                    $cota = 'COTAS';
             } else {
                 $cota = 'AC';
             }
