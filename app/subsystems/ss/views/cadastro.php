@@ -460,7 +460,7 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
                             </h3>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                                 <div>
-                                    <input type="text" name="nome" required placeholder="Digite seu nome completo" class="w-full px-4 py-3.5 border border-gray-300 rounded-xl input-modern input-focus" style="--tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;">
+                                    <input type="text" name="nome" required placeholder="Digite seu nome completo" class="w-full px-4 py-3.5 border border-gray-300 rounded-xl input-modern input-focus" style="--tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;" oninput="this.value = this.value.toUpperCase()">
                                 </div>
                                 <div>
                                     <input type="text" name="data_nascimento" required placeholder="DD/MM/AAAA" class="w-full px-4 py-3.5 border border-gray-300 rounded-xl input-modern input-focus" style="--tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;" oninput="applyDateMask(this)">
@@ -855,6 +855,13 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
     </div>
 
     <script>
+
+
+  function applyUppercase(input) {
+            input.value = input.value.toUpperCase();
+        }
+
+
         function applyDateMask(input) {
             let value = input.value.replace(/\D/g, '');
             if (value.length > 8) value = value.slice(0, 8);
