@@ -35,7 +35,8 @@ if (!empty($curso_id)) {
 }
 
 // helpers de cor para usar transparências no CSS
-function hex2rgba($hex, $alpha = 0.2) {
+function hex2rgba($hex, $alpha = 0.2)
+{
     $hex = str_replace('#', '', trim($hex));
     if (strlen($hex) === 3) {
         $r = hexdec(str_repeat(substr($hex, 0, 1), 2));
@@ -180,7 +181,8 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
             appearance: none;
             width: 1rem;
             height: 1rem;
-            border: 2px solid #cbd5e1; /* gray-300 */
+            border: 2px solid #cbd5e1;
+            /* gray-300 */
             border-radius: 9999px;
             background-color: #fff;
             position: relative;
@@ -217,13 +219,16 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
             appearance: none;
             width: 1rem;
             height: 1rem;
-            border: 2px solid #cbd5e1; /* gray-300 */
+            border: 2px solid #cbd5e1;
+            /* gray-300 */
             border-radius: 0.25rem;
             background-color: #fff;
             position: relative;
         }
 
-        .input-checkbox:hover { transform: scale(1.05); }
+        .input-checkbox:hover {
+            transform: scale(1.05);
+        }
 
         .input-checkbox:checked {
             border-color: var(--primary);
@@ -247,7 +252,7 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
         }
 
         .radio-card:hover {
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             transform: translateY(-1px);
         }
 
@@ -303,6 +308,7 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
         .compact-table td {
             padding: 0.5rem 0.5rem !important;
         }
+
         .compact-table input[type="text"] {
             padding-top: 0.4rem !important;
             padding-bottom: 0.4rem !important;
@@ -310,7 +316,8 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
             padding-right: 0.5rem !important;
         }
 
-        input[type="checkbox"], input[type="radio"] {
+        input[type="checkbox"],
+        input[type="radio"] {
             accent-color: var(--primary);
         }
 
@@ -858,84 +865,85 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
             }
             input.value = value;
         }
-function applyGradeMask(input) {
-    let value = input.value;
-    
-    // Remove tudo exceto dígitos e ponto
-    let cleanValue = value.replace(/[^\d.]/g, '');
-    
-    // Se o campo está vazio ou sendo limpo, permite
-    if (cleanValue === '' || cleanValue === '.') {
-        input.value = cleanValue === '.' ? '' : cleanValue;
-        // Posiciona cursor no final
-        setTimeout(() => {
-            input.setSelectionRange(input.value.length, input.value.length);
-        }, 0);
-        return;
-    }
-    
-    // Garante apenas um ponto
-    cleanValue = cleanValue.replace(/\.+/g, '.');
-    
-    // Se começar com ponto, adiciona 0
-    if (cleanValue.startsWith('.')) {
-        cleanValue = '0' + cleanValue;
-    }
-    
-    // Separa partes
-    let parts = cleanValue.split('.');
-    let integerPart = parts[0];
-    let decimalPart = parts[1] || '';
-    
-    // Se digitou 3+ dígitos sem ponto, converte para 10.00
-    if (parts.length === 1 && integerPart.length >= 3) {
-        input.value = '10.00';
-        // Posiciona cursor no final
-        setTimeout(() => {
-            input.setSelectionRange(input.value.length, input.value.length);
-        }, 0);
-        return;
-    }
-    
-    // Processa parte inteira
-    if (integerPart.length > 2) {
-        integerPart = integerPart.slice(0, 2);
-    }
-    
-    // Se tem 2 dígitos na parte inteira e não é "10"
-    if (integerPart.length === 2 && integerPart !== '10' && parts.length === 1) {
-        // Move o segundo dígito para decimal
-        decimalPart = integerPart[1] + decimalPart;
-        integerPart = integerPart[0];
-    }
-    
-    // Limita parte decimal a 2 dígitos
-    if (decimalPart.length > 2) {
-        decimalPart = decimalPart.slice(0, 2);
-    }
-    
-    // Monta o resultado
-    let result = integerPart;
-    if (parts.length > 1 || decimalPart.length > 0) {
-        result += '.' + decimalPart;
-    }
-    
-    // Verifica se excede 10
-    if (result.includes('.')) {
-        let numValue = parseFloat(result);
-        if (numValue > 10) {
-            result = '10.00';
+
+        function applyGradeMask(input) {
+            let value = input.value;
+
+            // Remove tudo exceto dígitos e ponto
+            let cleanValue = value.replace(/[^\d.]/g, '');
+
+            // Se o campo está vazio ou sendo limpo, permite
+            if (cleanValue === '' || cleanValue === '.') {
+                input.value = cleanValue === '.' ? '' : cleanValue;
+                // Posiciona cursor no final
+                setTimeout(() => {
+                    input.setSelectionRange(input.value.length, input.value.length);
+                }, 0);
+                return;
+            }
+
+            // Garante apenas um ponto
+            cleanValue = cleanValue.replace(/\.+/g, '.');
+
+            // Se começar com ponto, adiciona 0
+            if (cleanValue.startsWith('.')) {
+                cleanValue = '0' + cleanValue;
+            }
+
+            // Separa partes
+            let parts = cleanValue.split('.');
+            let integerPart = parts[0];
+            let decimalPart = parts[1] || '';
+
+            // Se digitou 3+ dígitos sem ponto, converte para 10.00
+            if (parts.length === 1 && integerPart.length >= 3) {
+                input.value = '10.00';
+                // Posiciona cursor no final
+                setTimeout(() => {
+                    input.setSelectionRange(input.value.length, input.value.length);
+                }, 0);
+                return;
+            }
+
+            // Processa parte inteira
+            if (integerPart.length > 2) {
+                integerPart = integerPart.slice(0, 2);
+            }
+
+            // Se tem 2 dígitos na parte inteira e não é "10"
+            if (integerPart.length === 2 && integerPart !== '10' && parts.length === 1) {
+                // Move o segundo dígito para decimal
+                decimalPart = integerPart[1] + decimalPart;
+                integerPart = integerPart[0];
+            }
+
+            // Limita parte decimal a 2 dígitos
+            if (decimalPart.length > 2) {
+                decimalPart = decimalPart.slice(0, 2);
+            }
+
+            // Monta o resultado
+            let result = integerPart;
+            if (parts.length > 1 || decimalPart.length > 0) {
+                result += '.' + decimalPart;
+            }
+
+            // Verifica se excede 10
+            if (result.includes('.')) {
+                let numValue = parseFloat(result);
+                if (numValue > 10) {
+                    result = '10.00';
+                }
+            }
+
+            // Aplica o resultado
+            input.value = result;
+
+            // Posiciona cursor sempre no final
+            setTimeout(() => {
+                input.setSelectionRange(input.value.length, input.value.length);
+            }, 0);
         }
-    }
-    
-    // Aplica o resultado
-    input.value = result;
-    
-    // Posiciona cursor sempre no final
-    setTimeout(() => {
-        input.setSelectionRange(input.value.length, input.value.length);
-    }, 0);
-}
 
         let currentStep = 1;
         const totalSteps = 3;
@@ -981,9 +989,9 @@ function applyGradeMask(input) {
                     const subject = input.name.split('_')[0];
                     return subjectMap[subject] || subject;
                 }))].join(', ');
-                const message = step === 2 
-                    ? `Por favor, preencha todas as notas obrigatórias para as matérias: ${missingSubjects} (6º, 7º e 8º anos).`
-                    : `Por favor, preencha todas as notas obrigatórias para as matérias: ${missingSubjects} (1º, 2º e 3º bimestres).`;
+                const message = step === 2 ?
+                    `Por favor, preencha todas as notas obrigatórias para as matérias: ${missingSubjects} (6º, 7º e 8º anos).` :
+                    `Por favor, preencha todas as notas obrigatórias para as matérias: ${missingSubjects} (1º, 2º e 3º bimestres).`;
                 showErrorModal(message);
                 return false;
             }
