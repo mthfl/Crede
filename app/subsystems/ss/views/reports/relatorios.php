@@ -223,6 +223,6 @@ if (isset($_GET['curso']) && !empty($_GET['curso'])) {
     $tipo_relatorio = isset($_GET['tipo_relatorio']) ? $_GET['tipo_relatorio'] : 'PRIVADA AC';
     $relatorios->gerarRelatorio($curso, $tipo_relatorio);
 } else {
-    header('location:../../../index.php');
+    header('location:../../index.php');
     exit();
 }
