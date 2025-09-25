@@ -19,8 +19,10 @@ if (
     $data_nascimento = trim($_POST['data_nascimento'] ?? '');
     $tipo_escola = $_POST['tipo_escola'] ?? 'publica';
     $publica = $tipo_escola === 'publica' ? 1 : 0;
-    $pcd = isset($_POST['pcd']) ? 1 : 0;
-    $bairro = isset($_POST['cotas']) ? 1 : 0;
+    // Processar campo cota do formulário
+    $cota = $_POST['cota'] ?? 'ampla';
+    $pcd = ($cota === 'pcd') ? 1 : 0;
+    $bairro = ($cota === 'bairro') ? 1 : 0;
 
     // helper para converter nota
     $f = function($key) {
@@ -217,13 +219,10 @@ if (
 ) {
     $nome = $_POST["nome"];
     $data_nascimento = $_POST["data_nascimento"];
-    if (isset($_POST['ampla'])) {
-        $pcd = isset($_POST["pcd"]) && $_POST["pcd"] == 'on' ? 1 : 0;
-        $bairro = isset($_POST["bairro"]) && $_POST["bairro"] == 'on' ? 1 : 0;
-    } else {
-        $pcd = 0;
-        $bairro = 0;
-    }
+    // Processar campo cota do formulário
+    $cota = $_POST['cota'] ?? 'ampla';
+    $pcd = ($cota === 'pcd') ? 1 : 0;
+    $bairro = ($cota === 'bairro') ? 1 : 0;
     $id_curso1 = (int)$_POST["curso_id"];
     $publica = $_POST["tipo_escola"] == 'publica' ? 1 : 0;
     $id_cadastrador = $_SESSION['id'];

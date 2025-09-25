@@ -1018,10 +1018,8 @@ $session->tempo_session();
             </div>
         </div>
 
-        <!-- Application Cards Grid -->
         <div class="card-grid">
 
-            <!-- Card 1: Gerenciador de Usuários -->
             <?php if (isset($_SESSION['Gerenciador de usuarios'])) { ?>
                 <a href="../../subsystems/gerenciador_usuario/index.php">
                     <div class="system-card animate-on-scroll"
@@ -1034,12 +1032,11 @@ $session->tempo_session();
                         </div>
                         <h3 class="card-title">Gerenciador de Usuários</h3>
                         <p class="card-description">Gestão de usuários, setores e permissões</p>
-                        <span class="card-badge">Sistema Ativo</span>
+                        <span class="card-badge">Acessar Sistema</span>
                     </div>
                 </a>
             <?php } ?>
 
-            <!-- Card 2: Controle de Estoque -->
             <?php if (isset($_SESSION['Estoque'])) { ?>
                 <a href="../../subsystems/controle_de_estoque/default.php">
                     <div class="system-card animate-on-scroll"
@@ -1052,28 +1049,45 @@ $session->tempo_session();
                         </div>
                         <h3 class="card-title">Controle de Estoque</h3>
                         <p class="card-description">Gestão completa de materiais e recursos</p>
-                        <span class="card-badge">Sistema Ativo</span>
+                        <span class="card-badge">Acessar Sistema</span>
                     </div>
                 </a>
             <?php } ?>
 
-            <!-- Card 3: Controle de Estoque -->
             <?php if (isset($_SESSION['Escolas'])) { ?>
                 <a href="../../subsystems/gerenciador_escolas/index.php">
                     <div class="system-card animate-on-scroll"
                         tabindex="0"
                         role="button"
-                        aria-label="Acessar Controle de Estoque - Sistema de gestão de materiais e recursos"
-                        data-system="estoque">
+                        aria-label="Acessar Gerenciador de Escolas - Sistema de gestão de escolas"
+                        data-system="escolas">
                         <div class="card-icon">
-                            <img src="https://i.postimg.cc/wT8bLxNS/Design-sem-nome-7.png" alt="Ícone Controle de Estoque" class="w-24 h-24 object-contain">
+                            <img src="https://i.postimg.cc/wT8bLxNS/Design-sem-nome-7.png" alt="Ícone Gerenciador de Escolas" class="w-24 h-24 object-contain">
                         </div>
-                        <h3 class="card-title">Gerenciador de escolas</h3>
-                        <p class="card-description">Gestão completa de materiais e recursos</p>
-                        <span class="card-badge">Sistema Ativo</span>
+                        <h3 class="card-title">Gerenciador de Escolas</h3>
+                        <p class="card-description">Gestão completa de escolas e recursos</p>
+                        <span class="card-badge">Acessar Sistema</span>
                     </div>
                 </a>
             <?php } ?>
+            
+            
+            
+                <a href="../../subsystems/gerenciador_admin_crede/index.php">
+                    <div class="system-card animate-on-scroll"
+                        tabindex="0"
+                        role="button"
+                        aria-label="Acessar Gerenciador Admin CREDE - Sistema de administração central"
+                        data-system="admin">
+                        <div class="card-icon">
+                            <img src="https://i.postimg.cc/ZqY5Z9TG/useradm.png" alt="Ícone Gerenciador Admin CREDE" class="w-24 h-24 object-contain">
+                        </div>
+                        <h3 class="card-title">Gerenciador Admin CREDE</h3>
+                        <p class="card-description">Administração central do sistema CREDE</p>
+                        <span class="card-badge">Acessar Sistema</span>
+                    </div>
+                </a>
+            
 
         </div>
     </main>
