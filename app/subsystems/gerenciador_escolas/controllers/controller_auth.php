@@ -27,7 +27,7 @@ if (
             header("Location: ../views/login.php?escola=$escola&erro");
             exit();
         case 3:
-            header("Location: ../views/login.php?escola=$escola&ja_tem_primeiro_acesso");
+            header("Location: ../views/login.php?escola=$escola&ja_tem_primeiro_acesso_ou_erro_senha_email");
             exit();
         default:
             header("Location: ../windows/fatal_erro.php");
