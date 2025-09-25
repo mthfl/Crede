@@ -602,14 +602,6 @@ $escolas = $select->select_escolas();
                     </div>
                 </div>
 
-                <div class="hidden md:flex items-center space-x-4">
-                    <button class="w-10 h-10 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-600 transition-all duration-300 flex items-center justify-center"
-                        title="Voltar"
-                        onclick="window.location.href='../../main/views/subsystems.php'">
-                        <i class="fas fa-arrow-left"></i>
-                    </button>
-
-                </div>
             </div>
         </div>
     </header>
