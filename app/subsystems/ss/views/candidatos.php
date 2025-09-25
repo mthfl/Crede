@@ -482,7 +482,7 @@ $usuarios = $select->select_usuarios();
                                     <th class="px-4 py-3">Data</th>
                                     <th class="px-4 py-3">Cadastrador</th>
                                     <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
-                                        <th class="px-4 py-3">Ações</th>
+                                        <th class="px-4 py-3 text-center">Ações</th>
                                     <?php } ?>
                                 </tr>
                             </thead>
@@ -506,16 +506,21 @@ $usuarios = $select->select_usuarios();
                                         <td class="px-4 py-3 text-gray-700"><?= htmlspecialchars((string)$cadastradorNome) ?></td>
                                         <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
                                             <td class="px-4 py-3">
-                                                <div class="flex space-x-2">
-                                                    <a href="../views/editar_candidato.php?id=<?= $id ?>" class="edit-candidato bg-primary text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-all duration-300 font-medium text-sm btn-animate focus-ring flex items-center justify-center">
+                                                <div class="flex space-x-2 justify-center">
+                                                    <a href="../views/editar_candidato.php?id=<?= $id ?>" class="edit-candidato bg-primary text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-all duration-300 font-medium text-sm btn-animate focus-ring flex items-center justify-center w-24">
                                                         <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                                         </svg>
                                                         Editar
                                                     </a>
-                                                    <button class="delete-candidato flex-1 bg-secondary text-white py-2 px-4 rounded-lg hover:bg-orange-600 transition-all duration-300 font-medium text-sm btn-animate focus-ring"
+                                                    <button class="delete-candidato bg-secondary text-white py-2 px-4 rounded-lg hover:bg-orange-600 transition-all duration-300 font-medium text-sm btn-animate focus-ring flex items-center justify-center w-24"
                                                         data-id="<?= htmlspecialchars((string)($cand['id'] ?? '')) ?>"
-                                                        data-nome="<?= htmlspecialchars((string)($cand['nome'] ?? '')) ?>">Excluir</button>
+                                                        data-nome="<?= htmlspecialchars((string)($cand['nome'] ?? '')) ?>">
+                                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                                        </svg>
+                                                        Excluir
+                                                    </button>
                                                 </div>
                                             </td>
                                         <?php } ?>
@@ -567,16 +572,21 @@ $usuarios = $select->select_usuarios();
                                         <span class="field-value"><?= htmlspecialchars((string)$cadastradorNome) ?></span>
                                     </div>
                                     <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
-                                        <div class="flex space-x-2 mt-4">
-                                            <a href="../views/editar_candidato.php?id=<?= $id ?>" class="edit-candidato bg-primary text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-all duration-300 font-medium text-sm btn-animate focus-ring flex items-center justify-center">
+                                        <div class="flex space-x-2 mt-4 justify-center">
+                                            <a href="../views/editar_candidato.php?id=<?= $id ?>" class="edit-candidato bg-primary text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-all duration-300 font-medium text-sm btn-animate focus-ring flex items-center justify-center w-24">
                                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                                 </svg>
                                                 Editar
                                             </a>
-                                            <button class="delete-candidato flex-1 bg-secondary text-white py-2 px-4 rounded-lg hover:bg-orange-600 transition-all duration-300 font-medium text-sm btn-animate focus-ring"
+                                            <button class="delete-candidato bg-secondary text-white py-2 px-4 rounded-lg hover:bg-orange-600 transition-all duration-300 font-medium text-sm btn-animate focus-ring flex items-center justify-center w-24"
                                                 data-id="<?= htmlspecialchars((string)($cand['id'] ?? '')) ?>"
-                                                data-nome="<?= htmlspecialchars((string)($cand['nome'] ?? '')) ?>">Excluir</button>
+                                                data-nome="<?= htmlspecialchars((string)($cand['nome'] ?? '')) ?>">
+                                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                                </svg>
+                                                Excluir
+                                            </button>
                                         </div>
                                     <?php } ?>
                                 </div>

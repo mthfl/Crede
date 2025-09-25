@@ -491,13 +491,13 @@ function simnao($v) {
                                                 echo '<tr class="hover:bg-gray-50">';
                                                 echo '<td class="border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700">' . fmt($label) . '</td>';
                                                 echo '<td class="border border-gray-300 px-2 py-2 text-center">';
-                                                echo '<input type="text" name="' . $n1 . '" value="' . fmt($candidato[$b1] ?? '') . '" class="w-full px-2 py-1.5 border border-gray-300 rounded-lg input-modern input-focus input-disabled text-center text-sm" style="--tw-ring-color: ' . $cursoCor . '; --tw-border-opacity: 0.5;" oninput="applyGradeMask(this)"' . ($required ? ' required' : '') . ' disabled>';
+                                                echo '<input type="text" name="' . $n1 . '" value="' . fmt($candidato[$b1] ?? '') . '" class="w-full px-2 py-1.5 border border-gray-300 rounded-lg input-modern input-focus input-disabled text-center text-sm" style="--tw-ring-color: ' . $cursoCor . '; --tw-border-opacity: 0.5;" oninput="applyGradeMask(this)" disabled>';
                                                 echo '</td>';
                                                 echo '<td class="border border-gray-300 px-2 py-2 text-center">';
-                                                echo '<input type="text" name="' . $n2 . '" value="' . fmt($candidato[$b2] ?? '') . '" class="w-full px-2 py-1.5 border border-gray-300 rounded-lg input-modern input-focus input-disabled text-center text-sm" style="--tw-ring-color: ' . $cursoCor . '; --tw-border-opacity: 0.5;" oninput="applyGradeMask(this)"' . ($required ? ' required' : '') . ' disabled>';
+                                                echo '<input type="text" name="' . $n2 . '" value="' . fmt($candidato[$b2] ?? '') . '" class="w-full px-2 py-1.5 border border-gray-300 rounded-lg input-modern input-focus input-disabled text-center text-sm" style="--tw-ring-color: ' . $cursoCor . '; --tw-border-opacity: 0.5;" oninput="applyGradeMask(this)" disabled>';
                                                 echo '</td>';
                                                 echo '<td class="border border-gray-300 px-2 py-2 text-center">';
-                                                echo '<input type="text" name="' . $n3 . '" value="' . fmt($candidato[$b3] ?? '') . '" class="w-full px-2 py-1.5 border border-gray-300 rounded-lg input-modern input-focus input-disabled text-center text-sm" style="--tw-ring-color: ' . $cursoCor . '; --tw-border-opacity: 0.5;" oninput="applyGradeMask(this)"' . ($required ? ' required' : '') . ' disabled>';
+                                                echo '<input type="text" name="' . $n3 . '" value="' . fmt($candidato[$b3] ?? '') . '" class="w-full px-2 py-1.5 border border-gray-300 rounded-lg input-modern input-focus input-disabled text-center text-sm" style="--tw-ring-color: ' . $cursoCor . '; --tw-border-opacity: 0.5;" oninput="applyGradeMask(this)" disabled>';
                                                 echo '</td>';
                                                 echo '<td class="border border-gray-300 px-2 py-2 text-center">';
                                                 echo '<input type="text" name="' . $nMed . '" value="' . fmt($candidato[$med] ?? '') . '" class="w-full px-2 py-1.5 border border-gray-300 rounded-lg input-modern input-focus input-disabled text-center text-sm bg-yellow-50" style="--tw-ring-color: ' . $cursoCor . '; --tw-border-opacity: 0.5;" oninput="applyGradeMask(this)" disabled>';
@@ -616,8 +616,8 @@ function simnao($v) {
         // Aplica o resultado
         input.value = result;
 
-        // Restaura a posição do cursor (aproximadamente)
-        let newCursorPos = Math.min(cursorPosition, result.length);
+        // Posiciona o cursor sempre no final do número
+        let newCursorPos = result.length;
         setTimeout(() => {
             input.setSelectionRange(newCursorPos, newCursorPos);
         }, 0);
