@@ -859,35 +859,41 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
             input.value = value;
         }
 function applyGradeMask(input) {
-    // Armazena a posição do cursor
-    let cursorPosition = input.selectionStart;
     let value = input.value;
     
-    // Remove tudo exceto dígitos e vírgula
-    let cleanValue = value.replace(/[^\d,]/g, '');
+    // Remove tudo exceto dígitos e ponto
+    let cleanValue = value.replace(/[^\d.]/g, '');
     
     // Se o campo está vazio ou sendo limpo, permite
-    if (cleanValue === '' || cleanValue === ',') {
-        input.value = cleanValue === ',' ? '' : cleanValue;
+    if (cleanValue === '' || cleanValue === '.') {
+        input.value = cleanValue === '.' ? '' : cleanValue;
+        // Posiciona cursor no final
+        setTimeout(() => {
+            input.setSelectionRange(input.value.length, input.value.length);
+        }, 0);
         return;
     }
     
-    // Garante apenas uma vírgula
-    cleanValue = cleanValue.replace(/,+/g, ',');
+    // Garante apenas um ponto
+    cleanValue = cleanValue.replace(/\.+/g, '.');
     
-    // Se começar com vírgula, adiciona 0
-    if (cleanValue.startsWith(',')) {
+    // Se começar com ponto, adiciona 0
+    if (cleanValue.startsWith('.')) {
         cleanValue = '0' + cleanValue;
     }
     
     // Separa partes
-    let parts = cleanValue.split(',');
+    let parts = cleanValue.split('.');
     let integerPart = parts[0];
     let decimalPart = parts[1] || '';
     
-    // Se digitou 3+ dígitos sem vírgula, converte para 10,00
+    // Se digitou 3+ dígitos sem ponto, converte para 10.00
     if (parts.length === 1 && integerPart.length >= 3) {
-        input.value = '10,00';
+        input.value = '10.00';
+        // Posiciona cursor no final
+        setTimeout(() => {
+            input.setSelectionRange(input.value.length, input.value.length);
+        }, 0);
         return;
     }
     
@@ -911,24 +917,23 @@ function applyGradeMask(input) {
     // Monta o resultado
     let result = integerPart;
     if (parts.length > 1 || decimalPart.length > 0) {
-        result += ',' + decimalPart;
+        result += '.' + decimalPart;
     }
     
     // Verifica se excede 10
-    if (result.includes(',')) {
-        let numValue = parseFloat(result.replace(',', '.'));
+    if (result.includes('.')) {
+        let numValue = parseFloat(result);
         if (numValue > 10) {
-            result = '10,00';
+            result = '10.00';
         }
     }
     
     // Aplica o resultado
     input.value = result;
     
-    // Restaura a posição do cursor (aproximadamente)
-    let newCursorPos = Math.min(cursorPosition, result.length);
+    // Posiciona cursor sempre no final
     setTimeout(() => {
-        input.setSelectionRange(newCursorPos, newCursorPos);
+        input.setSelectionRange(input.value.length, input.value.length);
     }, 0);
 }
 
