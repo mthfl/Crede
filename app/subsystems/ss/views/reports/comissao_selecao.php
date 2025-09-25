@@ -1,4 +1,5 @@
 <?php
+
 require_once(__DIR__ . '/../../models/sessions.php');
 $session = new sessions();
 $session->autenticar_session();
@@ -29,29 +30,24 @@ class relatorios extends connect
         $stmtSelect = $this->connect->query($sql);
         $dados = $stmtSelect->fetchAll(PDO::FETCH_ASSOC);
 
-        $pdf = new FPDF('L', 'mm', 'A4');
+        $pdf = new FPDF('P', 'mm', 'A4');
         $pdf->AddPage();
 
         // Cabeçalho com larguras ajustadas
         $pdf->Image(__DIR__ . '/../../assets/imgs/logo.png', 8, 8, 15, 0, 'PNG');
         $pdf->SetFont('Arial', 'B', 25);
-        $pdf->SetY(8);
-        $pdf->SetX(20);
-        $pdf->Cell(90, 8, utf8_decode('COMISSÃO DE SELEÇÃO'), 0, 1, 'C');
+        $pdf->SetY(10);
+        $pdf->SetX(55);
+        $pdf->Cell(110, 8,mb_convert_encoding('COMISSÃO DE SELEÇÃO', 'ISO-8859-1', 'UTF-8'), 0, 1, 'C');
         $pdf->SetFont('Arial', 'B', 8);
         $pdf->SetY(16);
-        $pdf->SetX(11);
-        $pdf->Cell(188, 6, ('PCD = PESSOA COM DEFICIENCIA | COTISTA = INCLUSO NA COTA DO BAIRRO | AC = AMPLA CONCORRENCIA'), 0, 1, 'C');
+        $pdf->SetX(55);
         $pdf->SetFont('Arial', 'b', 12);
         $pdf->Cell(185, 10, '', 0, 1, 'C');
 
-        $stmt_bairros = $this->connect->query("SELECT * FROM $this->table13");
-        $dados_bairros = $stmt_bairros->fetchAll(PDO::FETCH_ASSOC);
-        $bairros_para_mostrar = array_slice($dados_bairros, 0, 5);
-
         $pdf->SetFont('Arial', 'B', 10);
         $pdf->SetY(16);
-        $pdf->SetX(190);
+        $pdf->SetX(55);
 
         $pdf->SetFont('Arial', 'b', 12);
         $pdf->Cell(185, 10, '', 0, 1, 'C');
@@ -59,17 +55,12 @@ class relatorios extends connect
         $pdf->SetFont('Arial', 'B', 10);
         $pdf->SetFillColor(93, 164, 67); //fundo verde
         $pdf->SetTextColor(255, 255, 255);  //texto branco
+        $pdf->SetY(40);
+        $pdf->SetX(40);
         $pdf->Cell(10, 7, 'CH', 1, 0, 'C', true);
-        $pdf->Cell(30, 7, 'Nome', 1, 0, 'C', true);
-        $pdf->Cell(30, 7, 'Curso', 1, 0, 'C', true);
-        $pdf->Cell(20, 7, 'Origem', 1, 0, 'C', true);
-        if ((isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin')) {
-            $pdf->Cell(24, 7, 'Segmento', 1, 0, 'C', true);
-            $pdf->Cell(17, 7, 'Media', 1, 0, 'C', true);
-            $pdf->Cell(60, 7, 'Resp. Cadastro', 1, 1, 'C', true);
-        } else {
-            $pdf->Cell(26, 7, 'Segmento', 1, 1, 'C', true);
-        }
+        $pdf->Cell(60, 7, 'Nome', 1, 0, 'C', true);
+        $pdf->Cell(60, 7, 'Tipo', 1, 1, 'C', true);
+
         // Resetar cor do texto para preto
         $pdf->SetTextColor(0, 0, 0);
         $pdf->SetFont('Arial', '', 8);
@@ -84,9 +75,11 @@ class relatorios extends connect
             $pdf->SetFillColor($cor, $cor, $cor);
 
             // Imprimir linha no PDF
+            $pdf->SetY(47);
+            $pdf->SetX(40);
             $pdf->Cell(10, 7, sprintf("%03d", $classificacao), 1, 0, 'C', true);
-            $pdf->Cell(30, 7, strToUpper(utf8_decode($dado['nome'])), 1, 0, 'L', true);
-            $pdf->Cell(30, 7, strToUpper(utf8_decode($dado['nome_curso'])), 1, 0, 'L', true);
+            $pdf->Cell(60, 7, strToUpper(mb_convert_encoding($dado['nome_user'], 'ISO-8859-1', 'UTF-8')), 1, 0, 'L', true);
+            $pdf->Cell(60, 7, strToUpper(mb_convert_encoding($dado['tipo_usuario'], 'ISO-8859-1', 'UTF-8')), 1, 0, 'L', true);
 
             $classificacao++;
         }
@@ -95,7 +88,7 @@ class relatorios extends connect
 }
 if(isset($_GET['usuarios'])){
 
-    $relatorio = new relatorios($escolas);
+    $relatorio = new relatorios($escola);
     $relatorio->comissao_selecao();
 } else {
     header('location:../../index.php');

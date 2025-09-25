@@ -517,6 +517,7 @@ $usuarios = $select->select_usuarios();
                                     <th class="px-4 py-3">ID</th>
                                     <th class="px-4 py-3">Nome</th>
                                     <th class="px-4 py-3">Curso</th>
+                                    <th class="px-4 py-3">Cota</th>
                                     <th class="px-4 py-3">Pública</th>
                                     <th class="px-4 py-3">Data</th>
                                     <th class="px-4 py-3">Cadastrador</th>
@@ -533,11 +534,21 @@ $usuarios = $select->select_usuarios();
                                     $publica = $cand['publica'] === 1 ? 'Sim' : 'Não';
                                     $data = $cand['data'] ?? '-';
                                     $cadastradorNome = $cand['nome_user'] ?? '-';
+
+                                    if($cand['bairro']){
+
+                                        $cota = 'BAIRRO';
+                                    }else if($cand['pcd'] == 0){
+                                        $cota = 'PCD';
+                                    }else{
+                                        $cota='AMPLA';
+                                    }
                                 ?>
                                     <tr class="hover:bg-accent/30">
                                         <td class="px-4 py-3 text-gray-700"><?= htmlspecialchars((string)$id) ?></td>
                                         <td class="px-4 py-3 font-medium text-gray-900"><?= htmlspecialchars((string)$nome) ?></td>
                                         <td class="px-4 py-3 text-gray-700"><?= htmlspecialchars((string)$cursoNome) ?></td>
+                                        <td class="px-4 py-3 text-gray-700"><?= htmlspecialchars((string)$cota) ?></td>
                                         <td class="px-4 py-3">
                                             <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold <?= $publica === 'Sim' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700' ?>"><?= $publica ?></span>
                                         </td>
