@@ -11,9 +11,7 @@ new connect($escola);
 require_once(__DIR__ . '/../models/model.select.php');
 $select = new select($escola);
 
-$candidatos = $select->select_candidatos();
-$cursos = $select->select_cursos();
-$usuarios = $select->select_usuarios();
+$cursos = $select->select_cursos(); // Para modais, se necessário
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -21,7 +19,7 @@ $usuarios = $select->select_usuarios();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema Escolar - Candidatos</title>
+    <title>Sistema Escolar - Solicitação de Alteração</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -91,7 +89,6 @@ $usuarios = $select->select_usuarios();
                 opacity: 0;
                 transform: translateX(-30px);
             }
-
             to {
                 opacity: 1;
                 transform: translateX(0);
@@ -103,7 +100,6 @@ $usuarios = $select->select_usuarios();
                 opacity: 0;
                 transform: translateY(20px);
             }
-
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -115,7 +111,6 @@ $usuarios = $select->select_usuarios();
                 opacity: 0;
                 transform: scale(0.95);
             }
-
             to {
                 opacity: 1;
                 transform: scale(1);
@@ -123,15 +118,8 @@ $usuarios = $select->select_usuarios();
         }
 
         @keyframes pulseSoft {
-
-            0%,
-            100% {
-                opacity: 1;
-            }
-
-            50% {
-                opacity: 0.8;
-            }
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
         }
 
         .nav-item {
@@ -143,10 +131,8 @@ $usuarios = $select->select_usuarios();
         .nav-item::before {
             content: '';
             position: absolute;
-            left: 0;
-            top: 0;
-            height: 100%;
-            width: 4px;
+            left: 0; top: 0;
+            height: 100%; width: 4px;
             background: var(--secondary);
             border-radius: 0 4px 4px 0;
             transform: scaleY(0);
@@ -164,17 +150,11 @@ $usuarios = $select->select_usuarios();
 
         .sidebar {
             z-index: 50;
-            position: fixed;
-            left: 0;
-            top: 0;
-            height: 100vh;
-            width: 100vw;
-            max-width: 20rem;
+            position: fixed; left: 0; top: 0;
+            height: 100vh; width: 100vw; max-width: 20rem;
         }
 
-        .overlay {
-            z-index: 45;
-        }
+        .overlay { z-index: 45; }
 
         @media (min-width: 1024px) {
             .sidebar {
@@ -182,104 +162,79 @@ $usuarios = $select->select_usuarios();
                 position: static;
                 flex-shrink: 0;
             }
-
             .main-content {
-                flex: 1;
-                min-width: 0;
+                flex: 1; min-width: 0;
                 margin-left: 0;
                 overflow-x: hidden;
             }
-
-            body {
-                overflow-x: hidden;
-            }
+            body { overflow-x: hidden; }
         }
 
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.1);
-            border-radius: 3px;
-        }
-
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: var(--primary);
-            border-radius: 3px;
-        }
-
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: var(--dark);
-        }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.1); border-radius: 3px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 3px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: var(--dark); }
 
         .btn-animate {
-            position: relative;
-            overflow: hidden;
+            position: relative; overflow: hidden;
             transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
         .btn-animate::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
+            content: ''; position: absolute;
+            top: 50%; left: 50%; width: 0; height: 0;
+            background: rgba(255, 255, 255, 0.2); border-radius: 50%;
             transform: translate(-50%, -50%);
             transition: width 0.3s, height 0.3s;
         }
 
-        .btn-animate:hover::before {
-            width: 300px;
-            height: 300px;
+        .btn-animate:hover::before { width: 300px; height: 300px; }
+        .btn-animate:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15); }
+        .btn-animate:active { transform: translateY(0); }
+
+        .focus-ring:focus { outline: 2px solid var(--primary); outline-offset: 2px; }
+
+        input[type="text"]:focus, input[type="email"]:focus, input[type="number"]:focus,
+        select:focus, textarea:focus, button:focus, .btn-animate:focus {
+            outline: 2px solid var(--primary); outline-offset: 2px; border-color: var(--primary);
         }
 
-        .btn-animate:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative; overflow: hidden;
         }
 
-        .btn-animate:active {
-            transform: translateY(0);
+        .card-hover::before {
+            content: ''; position: absolute; top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s;
         }
 
-        /* Card styles for mobile */
-        .candidate-card {
-            border: 1px solid #e5e7eb;
-            border-radius: 12px;
-            background: #ffffff;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            padding: 16px;
-            margin-bottom: 16px;
-            transition: transform 0.2s ease;
+        .card-hover:hover::before { left: 100%; }
+        .card-hover:hover { transform: translateY(-4px) scale(1.01); box-shadow: 0 20px 40px -12px rgba(0, 90, 36, 0.15); }
+
+        .status-badge {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            padding: 0.5rem 1rem; border-radius: 9999px;
+            font-size: 0.875rem; font-weight: 500;
         }
 
-        .candidate-card:hover {
-            transform: translateY(-2px);
-        }
+        .status-pendente { background-color: #fef3c7; color: #92400e; }
+        .status-aprovada { background-color: #d1fae5; color: #065f46; }
+        .status-rejeitada { background-color: #fee2e2; color: #991b1b; }
 
-        .candidate-card .field {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-        }
+        .grid-item { animation: fadeInUp 0.6s ease-out forwards; opacity: 0; }
+        .grid-item:nth-child(1) { animation-delay: 0.1s; }
+        .grid-item:nth-child(2) { animation-delay: 0.2s; }
 
-        .candidate-card .field-label {
-            font-weight: 600;
-            color: #374151;
-        }
-
-        .candidate-card .field-value {
-            color: #4b5563;
-            text-align: right;
+        @media (max-width: 768px) {
+            .card-hover:hover { transform: none; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
         }
     </style>
 </head>
 
-<body class="bg-white min-h-screen font-body">
+<body class="bg-gray-50 min-h-screen font-body">
     <div id="overlay" class="overlay fixed inset-0 bg-black/30 z-40 lg:hidden"></div>
     <div class="flex min-h-screen bg-gray-50 overflow-y-auto lg:overflow-hidden">
         <aside id="sidebar" class="sidebar fixed left-0 top-0 h-screen w-80 shadow-2xl z-50 lg:translate-x-0 lg:static lg:z-auto custom-scrollbar overflow-y-auto">
@@ -298,11 +253,10 @@ $usuarios = $select->select_usuarios();
                     </button>
                 </div>
                 <nav class="space-y-2">
-
                     <?php if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'admin' || $_SESSION['tipo_usuario'] === 'cadastrador')) { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.1s;">
-                            <a href="../index.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring ">
-                                <div class="w-12 h-12 bg-white/10  rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
+                            <a href="../index.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
+                                <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path>
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5a2 2 0 012-2h4a2 2 0 012 2v2H8V5z"></path>
@@ -316,10 +270,9 @@ $usuarios = $select->select_usuarios();
                         </div>
                     <?php } ?>
 
-
                     <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.2s;">
-                            <a href="cursos.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring ">
+                            <a href="cursos.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
                                 <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
@@ -333,8 +286,8 @@ $usuarios = $select->select_usuarios();
                         </div>
                     <?php } ?>
 
-                    <!-- Candidatos -->
-                    <?php if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'admin' || $_SESSION['tipo_usuario'] === 'cadastrador')) { ?>
+                     <!-- Candidatos -->
+                     <?php if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'admin' || $_SESSION['tipo_usuario'] === 'cadastrador')) { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.3s;">
                             <a href="candidatos.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring bg-white/10">
                                 <div class="w-12 h-12  bg-secondary rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
@@ -350,9 +303,11 @@ $usuarios = $select->select_usuarios();
                         </div>
                     <?php } ?>
 
+          
+
                     <!-- Cotas -->
                     <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
-                        <div class="animate-slide-in-left" style="animation-delay: 0.35s;">
+                        <div class="animate-slide-in-left" style="animation-delay: 0.4s;">
                             <a href="cotas.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
                                 <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -369,7 +324,7 @@ $usuarios = $select->select_usuarios();
 
                     <!-- Usuários -->
                     <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
-                        <div class="animate-slide-in-left" style="animation-delay: 0.4s;">
+                        <div class="animate-slide-in-left" style="animation-delay: 0.45s;">
                             <a href="usuario.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
                                 <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -385,7 +340,7 @@ $usuarios = $select->select_usuarios();
                     <?php } ?>
 
                     <!-- Relatórios -->
-                    <?php if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'admin')) { ?>
+                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.5s;">
                             <a href="#" onclick="openModal('modalRelatorios')" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
                                 <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
@@ -401,9 +356,9 @@ $usuarios = $select->select_usuarios();
                         </div>
                     <?php } ?>
 
-                    <!--Resultados-->
+                    <!-- Resultados -->
                     <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
-                        <div class="animate-slide-in-left" style="animation-delay: 0.5s;">
+                        <div class="animate-slide-in-left" style="animation-delay: 0.55s;">
                             <a href="#" onclick="openModal('modalResultados')" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
                                 <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -437,7 +392,8 @@ $usuarios = $select->select_usuarios();
                 </nav>
             </div>
         </aside>
-        <div class="main-content flex-1 bg-white">
+
+        <div class="main-content flex-1">
             <header class="bg-white shadow-sm border-b border-gray-200 z-30 sticky top-0">
                 <div class="px-3 sm:px-4 md:px-6 lg:px-8 py-3 sm:py-4">
                     <div class="flex items-center justify-between">
@@ -464,204 +420,194 @@ $usuarios = $select->select_usuarios();
                     </div>
                 </div>
             </header>
-            <main class="p-4 sm:p-6 lg:p-8">
-                <div class="flex items-center justify-between mb-6">
-                    <div class="text-lg font-semibold text-gray-800">Lista de Candidatos</div>
-                </div>
 
-                <!-- Barra de Pesquisa -->
-<div class="mb-6">
-    <div class="flex items-center max-w-md space-x-3">
-        <div class="relative flex-1">
-            <input type="text" id="searchInput" placeholder="Pesquisar por nome do candidato..." class="w-full px-4 py-3 pr-10 border border-gray-300 rounded-xl focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-sm" onkeyup="filterCandidates()">
-            <svg class="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-            </svg>
-        </div>
-        <button onclick="window.location.href='solicitar_alteracao.php'" class="bg-primary text-white px-4 py-3 rounded-xl hover:bg-green-700 transition-all duration-300 font-medium text-sm btn-animate focus-ring flex items-center">
-            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-            </svg>
-            Solicitar Alteração
-        </button>
-    </div>
-</div>
-
-<style>
-    input:focus,
-    select:focus,
-    button:focus,
-    a:focus {
-        outline: 2px solid var(--primary);
-        outline-offset: 2px;
-    }
-</style>
-
-                <script>
-                    function filterCandidates() {
-                        const searchInput = document.getElementById('searchInput').value.toLowerCase();
-                        const tableRows = document.querySelectorAll('tbody tr');
-                        const candidateCards = document.querySelectorAll('.candidate-card');
-
-                      
-                        tableRows.forEach(row => {
-                            const nome = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
-                            row.style.display = nome.includes(searchInput) ? '' : 'none';
-                        });
-
-                        candidateCards.forEach(card => {
-                            const nome = card.querySelector('.field:nth-child(2) .field-value').textContent.toLowerCase();
-                            card.style.display = nome.includes(searchInput) ? '' : 'none';
-                        });
-                    }
-                </script>
-
-                <style>
-                    input:focus,
-                    select:focus,
-                    button:focus,
-                    a:focus {
-                        outline: 2px solid var(--primary);
-                        outline-offset: 2px;
-                    }
-                </style>
-
-                <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
-                    <div class="overflow-x-auto">
-                        <!-- Table for desktop (sm and above) -->
-                        <table class="min-w-full text-sm hidden sm:table">
-                            <thead>
-                                <tr class="bg-gradient-to-r from-primary/10 to-accent/50 text-left text-gray-700">
-                                    <th class="px-4 py-3">ID</th>
-                                    <th class="px-4 py-3">Nome</th>
-                                    <th class="px-4 py-3">Curso</th>
-                                    <th class="px-4 py-3">Cota</th>
-                                    <th class="px-4 py-3">Pública</th>
-                                    <th class="px-4 py-3">Data</th>
-                                    <th class="px-4 py-3">Cadastrador</th>
-                                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
-                                        <th class="px-4 py-3 text-center">Ações</th>
-                                    <?php } ?>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-gray-100">
-                                <?php foreach ($candidatos as $cand) {
-                                    $id = $cand['id'] ?? '-';
-                                    $nome = $cand['nome'] ?? '-';
-                                    $cursoNome = $cand['nome_curso'] ?? '-';
-                                    $publica = $cand['publica'] === 1 ? 'Sim' : 'Não';
-                                    $data = $cand['data'] ?? '-';
-                                    $cadastradorNome = $cand['nome_user'] ?? '-';
-
-                                    if($cand['bairro']){
-
-                                        $cota = 'BAIRRO';
-                                    }else if($cand['pcd'] == 0){
-                                        $cota = 'PCD';
-                                    }else{
-                                        $cota='AMPLA';
-                                    }
-                                ?>
-                                    <tr class="hover:bg-accent/30">
-                                        <td class="px-4 py-3 text-gray-700"><?= htmlspecialchars((string)$id) ?></td>
-                                        <td class="px-4 py-3 font-medium text-gray-900"><?= htmlspecialchars((string)$nome) ?></td>
-                                        <td class="px-4 py-3 text-gray-700"><?= htmlspecialchars((string)$cursoNome) ?></td>
-                                        <td class="px-4 py-3 text-gray-700"><?= htmlspecialchars((string)$cota) ?></td>
-                                        <td class="px-4 py-3">
-                                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold <?= $publica === 'Sim' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700' ?>"><?= $publica ?></span>
-                                        </td>
-                                        <td class="px-4 py-3 text-gray-700"><?= htmlspecialchars((string)$data) ?></td>
-                                        <td class="px-4 py-3 text-gray-700"><?= htmlspecialchars((string)$cadastradorNome) ?></td>
-                                        <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
-                                            <td class="px-4 py-3">
-                                                <div class="flex space-x-2 justify-center">
-                                                    <a href="../views/editar_candidato.php?id=<?= $id ?>" class="edit-candidato bg-primary text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-all duration-300 font-medium text-sm btn-animate focus-ring flex items-center justify-center w-24">
-                                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                                                        </svg>
-                                                        Editar
-                                                    </a>
-                                                    <button class="delete-candidato bg-secondary text-white py-2 px-4 rounded-lg hover:bg-orange-600 transition-all duration-300 font-medium text-sm btn-animate focus-ring flex items-center justify-center w-24"
-                                                        data-id="<?= htmlspecialchars((string)($cand['id'] ?? '')) ?>"
-                                                        data-nome="<?= htmlspecialchars((string)($cand['nome'] ?? '')) ?>">
-                                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                                        </svg>
-                                                        Excluir
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        <?php } ?>
-                                    </tr>
-                                <?php } ?>
-                                <?php if (count($candidatos) === 0) { ?>
-                                    <tr>
-                                        <td colspan="7" class="px-4 py-8 text-center text-gray-500">Nenhum candidato encontrado.</td>
-                                    </tr>
-                                <?php } ?>
-                            </tbody>
-                        </table>
-
-                        <!-- Cards for mobile (below sm) -->
-                        <div class="sm:hidden grid gap-4 p-4">
-                            <?php foreach ($candidatos as $cand) {
-                                $id = $cand['id'] ?? '-';
-                                $nome = $cand['nome'] ?? '-';
-                                $cursoNome = $cand['nome_curso'] ?? '-';
-                                $publica = $cand['publica'] === 1 ? 'Sim' : 'Não';
-                                $data = $cand['data'] ?? '-';
-                                $cadastradorNome = $cand['nome_user'] ?? '-';
-                            ?>
-                                <div class="candidate-card">
-                                    <div class="field">
-                                        <span class="field-label">ID</span>
-                                        <span class="field-value"><?= htmlspecialchars((string)$id) ?></span>
+            <main class="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Formulário de Solicitação -->
+                    <div class="grid-item">
+                        <div class="bg-white rounded-2xl shadow-xl border-0 overflow-hidden card-hover">
+                            <div class="h-2 w-full bg-gradient-to-r from-primary to-secondary"></div>
+                            <div class="p-8">
+                                <div class="flex items-center gap-4 mb-8">
+                                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary to-dark text-white flex items-center justify-center">
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                        </svg>
                                     </div>
-                                    <div class="field">
-                                        <span class="field-label">Nome</span>
-                                        <span class="field-value font-medium"><?= htmlspecialchars((string)$nome) ?></span>
+                                    <div>
+                                        <h2 class="text-xl font-bold text-primary font-display">Nova Solicitação</h2>
+                                        <p class="text-gray-600 text-sm">Solicite alterações nos dados dos alunos</p>
                                     </div>
-                                    <div class="field">
-                                        <span class="field-label">Curso</span>
-                                        <span class="field-value"><?= htmlspecialchars((string)$cursoNome) ?></span>
-                                    </div>
-                                    <div class="field">
-                                        <span class="field-label">Pública</span>
-                                        <span class="field-value">
-                                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold <?= $publica === 'Sim' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700' ?>"><?= $publica ?></span>
-                                        </span>
-                                    </div>
-                                    <div class="field">
-                                        <span class="field-label">Data</span>
-                                        <span class="field-value"><?= htmlspecialchars((string)$data) ?></span>
-                                    </div>
-                                    <div class="field">
-                                        <span class="field-label">Cadastrador</span>
-                                        <span class="field-value"><?= htmlspecialchars((string)$cadastradorNome) ?></span>
-                                    </div>
-                                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
-                                        <div class="flex space-x-2 mt-4 justify-center">
-                                            <a href="../views/editar_candidato.php?id=<?= $id ?>" class="edit-candidato bg-primary text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-all duration-300 font-medium text-sm btn-animate focus-ring flex items-center justify-center w-24">
-                                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                                                </svg>
-                                                Editar
-                                            </a>
-                                            <button class="delete-candidato bg-secondary text-white py-2 px-4 rounded-lg hover:bg-orange-600 transition-all duration-300 font-medium text-sm btn-animate focus-ring flex items-center justify-center w-24"
-                                                data-id="<?= htmlspecialchars((string)($cand['id'] ?? '')) ?>"
-                                                data-nome="<?= htmlspecialchars((string)($cand['nome'] ?? '')) ?>">
-                                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                                </svg>
-                                                Excluir
-                                            </button>
-                                        </div>
-                                    <?php } ?>
                                 </div>
-                            <?php } ?>
-                            <?php if (count($candidatos) === 0) { ?>
-                                <div class="text-center text-gray-500 py-8">Nenhum candidato encontrado.</div>
-                            <?php } ?>
+
+                                <form id="solicitacaoForm" class="space-y-6">
+                                    <div>
+                                        <label class="block text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                                            <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                            </svg>
+                                            Selecionar Aluno *
+                                        </label>
+                                        <select id="selectAluno" name="aluno_id" class="w-full px-4 py-4 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-base" required>
+                                            <option value="">Selecione um aluno</option>
+                                            <option value="1">João Silva - CPF: 123.456.789-01</option>
+                                            <option value="2">Maria Santos - CPF: 234.567.890-12</option>
+                                            <option value="3">Pedro Oliveira - CPF: 345.678.901-23</option>
+                                            <option value="4">Ana Costa - CPF: 456.789.012-34</option>
+                                            <option value="5">Carlos Lima - CPF: 567.890.123-45</option>
+                                        </select>
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                                            <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                            </svg>
+                                            Descrição da Alteração *
+                                        </label>
+                                        <textarea id="descricaoAlteracao" name="descricao" class="w-full px-4 py-4 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-base resize-none" rows="4" placeholder="Descreva detalhadamente a alteração necessária nos dados do aluno (ex: correção de nome, CPF, endereço, etc.)" required></textarea>
+                                        <div class="flex justify-between items-center mt-2">
+                                            <span class="text-xs text-gray-500">Máximo 500 caracteres</span>
+                                            <span id="contadorCaracteres" class="text-xs text-gray-500">0/500</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="pt-4">
+                                        <button type="submit" class="w-full bg-gradient-to-r from-primary to-dark text-white px-6 py-4 rounded-xl hover:from-dark hover:to-primary btn-animate font-semibold shadow-lg focus-ring text-base">
+                                            <span class="flex items-center justify-center">
+                                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                                                </svg>
+                                                Enviar Solicitação
+                                            </span>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Lista de Solicitações -->
+                    <div class="grid-item">
+                        <div class="bg-white rounded-2xl shadow-xl border-0 overflow-hidden">
+                            <div class="h-2 w-full bg-gradient-to-r from-secondary to-primary"></div>
+                            <div class="p-8">
+                                <div class="flex items-center gap-4 mb-8">
+                                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-secondary to-orange-500 text-white flex items-center justify-center">
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h2 class="text-xl font-bold text-primary font-display">Minhas Solicitações</h2>
+                                        <p class="text-gray-600 text-sm">Acompanhe o status das suas solicitações</p>
+                                    </div>
+                                </div>
+
+                                <div class="space-y-4 max-h-[calc(100vh-300px)] overflow-y-auto">
+                                    <!-- Solicitação Exemplo 1 -->
+                                    <div class="border border-gray-200 rounded-xl p-6 hover:border-primary/30 transition-all">
+                                        <div class="flex flex-col md:flex-row justify-between items-start mb-4">
+                                            <div class="mb-2 md:mb-0">
+                                                <h4 class="font-semibold text-gray-900 text-base">João Silva</h4>
+                                                <p class="text-sm text-gray-500">Enviado em 20/09/2025</p>
+                                            </div>
+                                            <span class="status-badge status-pendente">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                </svg>
+                                                Pendente
+                                            </span>
+                                        </div>
+                                        <p class="text-sm text-gray-600 mb-4">Correção do nome completo no cadastro - falta sobrenome materno</p>
+                                        <div class="text-sm text-gray-500 bg-gray-50 p-3 rounded-lg">
+                                            <strong>Status:</strong> Aguardando análise do administrador
+                                        </div>
+                                    </div>
+
+                                    <!-- Solicitação Exemplo 2 -->
+                                    <div class="border border-gray-200 rounded-xl p-6 hover:border-primary/30 transition-all">
+                                        <div class="flex flex-col md:flex-row justify-between items-start mb-4">
+                                            <div class="mb-2 md:mb-0">
+                                                <h4 class="font-semibold text-gray-900 text-base">Maria Santos</h4>
+                                                <p class="text-sm text-gray-500">Enviado em 18/09/2025</p>
+                                            </div>
+                                            <span class="status-badge status-aprovada">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                </svg>
+                                                Aprovada
+                                            </span>
+                                        </div>
+                                        <p class="text-sm text-gray-600 mb-4">Atualização do endereço residencial conforme comprovante</p>
+                                        <div class="text-sm text-gray-700 bg-green-50 p-3 rounded-lg border border-green-200">
+                                            <strong>Resposta do Administrador:</strong><br>
+                                            Alteração aprovada e realizada. O endereço foi atualizado conforme solicitado. Data da alteração: 19/09/2025.
+                                        </div>
+                                    </div>
+
+                                    <!-- Solicitação Exemplo 3 -->
+                                    <div class="border border-gray-200 rounded-xl p-6 hover:border-primary/30 transition-all">
+                                        <div class="flex flex-col md:flex-row justify-between items-start mb-4">
+                                            <div class="mb-2 md:mb-0">
+                                                <h4 class="font-semibold text-gray-900 text-base">Pedro Oliveira</h4>
+                                                <p class="text-sm text-gray-500">Enviado em 15/09/2025</p>
+                                            </div>
+                                            <span class="status-badge status-rejeitada">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                </svg>
+                                                Rejeitada
+                                            </span>
+                                        </div>
+                                        <p class="text-sm text-gray-600 mb-4">Correção da data de nascimento</p>
+                                        <div class="text-sm text-gray-700 bg-red-50 p-3 rounded-lg border border-red-200">
+                                            <strong>Resposta do Administrador:</strong><br>
+                                            Solicitação rejeitada. A documentação enviada não é suficiente para comprovar a correção solicitada. Favor enviar certidão de nascimento atualizada.
+                                        </div>
+                                    </div>
+
+                                    <!-- Mais exemplos para preencher o espaço -->
+                                    <div class="border border-gray-200 rounded-xl p-6 hover:border-primary/30 transition-all">
+                                        <div class="flex flex-col md:flex-row justify-between items-start mb-4">
+                                            <div class="mb-2 md:mb-0">
+                                                <h4 class="font-semibold text-gray-900 text-base">Ana Costa</h4>
+                                                <p class="text-sm text-gray-500">Enviado em 12/09/2025</p>
+                                            </div>
+                                            <span class="status-badge status-aprovada">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                </svg>
+                                                Aprovada
+                                            </span>
+                                        </div>
+                                        <p class="text-sm text-gray-600 mb-4">Correção de CPF</p>
+                                        <div class="text-sm text-gray-700 bg-green-50 p-3 rounded-lg border border-green-200">
+                                            <strong>Resposta do Administrador:</strong><br>
+                                            CPF corrigido com sucesso. Obrigado pelo reporte.
+                                        </div>
+                                    </div>
+
+                                    <div class="border border-gray-200 rounded-xl p-6 hover:border-primary/30 transition-all">
+                                        <div class="flex flex-col md:flex-row justify-between items-start mb-4">
+                                            <div class="mb-2 md:mb-0">
+                                                <h4 class="font-semibold text-gray-900 text-base">Carlos Lima</h4>
+                                                <p class="text-sm text-gray-500">Enviado em 10/09/2025</p>
+                                            </div>
+                                            <span class="status-badge status-pendente">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                </svg>
+                                                Pendente
+                                            </span>
+                                        </div>
+                                        <p class="text-sm text-gray-600 mb-4">Atualização de telefone de contato</p>
+                                        <div class="text-sm text-gray-500 bg-gray-50 p-3 rounded-lg">
+                                            <strong>Status:</strong> Aguardando análise do administrador
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -669,30 +615,22 @@ $usuarios = $select->select_usuarios();
         </div>
     </div>
 
-    <!-- Modal Confirmar Exclusão -->
-    <div id="modalDeleteCandidato" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-2 sm:p-4 z-50">
-        <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl transform transition-all duration-300 scale-95 opacity-0" id="modalDeleteCandidatoContent">
-            <div class="p-6 sm:p-8 text-center">
-                <div class="w-20 h-20 rounded-full bg-secondary/20 flex items-center justify-center mx-auto mb-6">
-                    <svg class="w-10 h-10 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M4.93 4.93l14.14 14.14"></path>
+    <!-- Modal de Confirmação -->
+    <div id="modalConfirmacao" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4 z-50">
+        <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl transform transition-all duration-300 scale-95 opacity-0" id="modalConfirmacaoContent">
+            <div class="p-8 text-center">
+                <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                     </svg>
                 </div>
-                <h3 class="text-xl sm:text-2xl font-bold text-dark font-heading mb-4">Confirmar Exclusão</h3>
+                <h3 class="text-xl font-bold text-dark font-display mb-4">Solicitação Enviada!</h3>
                 <p class="text-gray-600 text-base mb-6 leading-relaxed">
-                    Tem certeza que deseja excluir o candidato <span class="font-semibold text-dark" id="deleteCandidatoName"></span>?
+                    Sua solicitação de alteração foi enviada com sucesso e será analisada pelo administrador.
                 </p>
-                <p class="text-sm text-secondary bg-secondary/10 px-4 py-3 rounded-lg border border-secondary/20 mb-6">
-                    Esta ação não pode ser desfeita.
-                </p>
-                <form id="deleteCandidatoForm" action="../controllers/controller_candidato.php" method="POST">
-                    <input type="hidden" name="form" value="candidato">
-                    <input type="hidden" id="deleteCandidatoId" name="id_candidato" value="">
-                    <div class="flex flex-col sm:flex-row gap-3 justify-center">
-                        <button type="button" class="px-6 py-3 rounded-xl border-2 border-secondary font-semibold text-secondary hover:bg-secondary/10 hover:border-secondary transition-all text-base focus-ring" onclick="closeModal('modalDeleteCandidato')">Cancelar</button>
-                        <button type="submit" name="acao" value="delete" class="px-6 py-3 bg-gradient-to-r from-secondary to-orange-600 text-white font-semibold rounded-xl hover:from-secondary/90 hover:to-orange-700 transition-all text-base shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 focus-ring">Excluir Candidato</button>
-                    </div>
-                </form>
+                <button type="button" class="px-6 py-3 rounded-xl border-2 border-primary font-semibold text-primary hover:bg-primary/10 hover:border-primary transition-all text-base focus-ring" onclick="closeModal('modalConfirmacao')">
+                    Fechar
+                </button>
             </div>
         </div>
     </div>
@@ -871,49 +809,91 @@ $usuarios = $select->select_usuarios();
             }, 300);
         }
 
-        function openModal(modalId) {
-            const modal = document.getElementById(modalId);
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-            setTimeout(() => {
-                const content = modal.querySelector('[id$="Content"]');
-                if (content) {
-                    content.style.transform = 'scale(1)';
-                    content.style.opacity = '1';
-                }
-            }, 10);
-        }
-
-        // Event delegation for edit and delete buttons
-        document.addEventListener('DOMContentLoaded', function() {
-            const container = document.querySelector('.bg-white.rounded-2xl');
-
-            container.addEventListener('click', function(e) {
-                const target = e.target;
-
-
-                // Handle Delete button
-                if (target.classList.contains('delete-candidato')) {
-                    const id = target.dataset.id || '';
-                    const nome = target.dataset.nome || '';
-                    document.getElementById('deleteCandidatoName').textContent = nome;
-                    document.getElementById('deleteCandidatoId').value = id;
-                    openModal('modalDeleteCandidato');
-                }
-            });
-
-            // Form validation
-            const form = document.getElementById('candidatoForm');
-            form.addEventListener('submit', function(e) {
-                const nome = document.getElementById('inpCandidatoNome');
-                const curso = document.getElementById('inpCandidatoCurso');
-                if (!nome.value.trim() || !curso.value) {
-                    e.preventDefault();
-                    alert('Por favor, preencha todos os campos obrigatórios.');
-                }
-            });
+        // Contador de caracteres
+        const textarea = document.getElementById('descricaoAlteracao');
+        const contador = document.getElementById('contadorCaracteres');
+        
+        textarea.addEventListener('input', function() {
+            const caracteresDigitados = this.value.length;
+            const limite = 500;
+            
+            if (caracteresDigitados > limite) {
+                this.value = this.value.substring(0, limite);
+                return;
+            }
+            
+            contador.textContent = `${caracteresDigitados}/500`;
+            
+            if (caracteresDigitados > 450) {
+                contador.classList.add('text-red-500');
+                contador.classList.remove('text-gray-500');
+            } else {
+                contador.classList.add('text-gray-500');
+                contador.classList.remove('text-red-500');
+            }
         });
+
+        // Envio do formulário
+        document.getElementById('solicitacaoForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const aluno = document.getElementById('selectAluno').value;
+            const descricao = document.getElementById('descricaoAlteracao').value.trim();
+            
+            if (!aluno || !descricao) {
+                showNotification('Por favor, preencha todos os campos obrigatórios.', 'error');
+                return;
+            }
+            
+            if (descricao.length < 20) {
+                showNotification('A descrição deve ter pelo menos 20 caracteres.', 'error');
+                return;
+            }
+            
+            // Simular envio
+            setTimeout(() => {
+                openModal('modalConfirmacao');
+                this.reset();
+                contador.textContent = '0/500';
+            }, 500);
+        });
+
+        // Função de notificação
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 p-4 rounded-xl shadow-lg transform transition-all duration-300 translate-x-full ${
+                type === 'success' ? 'bg-green-500 text-white' : 
+                type === 'error' ? 'bg-red-500 text-white' : 
+                'bg-blue-500 text-white'
+            }`;
+            notification.innerHTML = `
+                <div class="flex items-center gap-3">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        ${type === 'success' ? 
+                            '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>' : 
+                            type === 'error' ? 
+                            '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01"></path>' :
+                            '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01"></path>'
+                        }
+                    </svg>
+                    <span class="font-medium">${message}</span>
+                </div>
+            `;
+            document.body.appendChild(notification);
+
+            // Animação de entrada
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 10);
+
+            // Remover notificação após 3 segundos
+            setTimeout(() => {
+                notification.style.transform = 'translateX(full)';
+                setTimeout(() => {
+                    notification.remove();
+                }, 300);
+            }, 3000);
+        }
     </script>
 </body>
-
 </html>
