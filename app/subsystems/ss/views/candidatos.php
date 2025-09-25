@@ -605,8 +605,8 @@ $usuarios = $select->select_usuarios();
     <div id="modalDeleteCandidato" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-2 sm:p-4 z-50">
         <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl transform transition-all duration-300 scale-95 opacity-0" id="modalDeleteCandidatoContent">
             <div class="p-6 sm:p-8 text-center">
-                <div class="w-20 h-20 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-6">
-                    <svg class="w-10 h-10 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="w-20 h-20 rounded-full bg-secondary/20 flex items-center justify-center mx-auto mb-6">
+                    <svg class="w-10 h-10 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M4.93 4.93l14.14 14.14"></path>
                     </svg>
                 </div>
@@ -614,14 +614,14 @@ $usuarios = $select->select_usuarios();
                 <p class="text-gray-600 text-base mb-6 leading-relaxed">
                     Tem certeza que deseja excluir o candidato <span class="font-semibold text-dark" id="deleteCandidatoName"></span>?
                 </p>
-                <p class="text-sm text-red-600 bg-red-50 px-4 py-3 rounded-lg border border-red-200 mb-6">
+                <p class="text-sm text-secondary bg-secondary/10 px-4 py-3 rounded-lg border border-secondary/20 mb-6">
                     Esta ação não pode ser desfeita.
                 </p>
                 <form id="deleteCandidatoForm" action="../controllers/controller_candidato.php" method="POST">
                     <input type="hidden" name="form" value="candidato">
                     <input type="hidden" id="deleteCandidatoId" name="id_candidato" value="">
                     <div class="flex flex-col sm:flex-row gap-3 justify-center">
-                        <button type="button" class="px-6 py-3 rounded-xl border-2 border-primary font-semibold text-primary hover:bg-primary/10 hover:border-primary transition-all text-base focus-ring" onclick="closeModal('modalDeleteCandidato')">Cancelar</button>
+                        <button type="button" class="px-6 py-3 rounded-xl border-2 border-secondary font-semibold text-secondary hover:bg-secondary/10 hover:border-secondary transition-all text-base focus-ring" onclick="closeModal('modalDeleteCandidato')">Cancelar</button>
                         <button type="submit" name="acao" value="delete" class="px-6 py-3 bg-gradient-to-r from-secondary to-orange-600 text-white font-semibold rounded-xl hover:from-secondary/90 hover:to-orange-700 transition-all text-base shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 focus-ring">Excluir Candidato</button>
                     </div>
                 </form>

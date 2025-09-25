@@ -500,7 +500,19 @@ function simnao($v) {
                                                 echo '<input type="text" name="' . $n3 . '" value="' . fmt($candidato[$b3] ?? '') . '" class="w-full px-2 py-1.5 border border-gray-300 rounded-lg input-modern input-focus input-disabled text-center text-sm" style="--tw-ring-color: ' . $cursoCor . '; --tw-border-opacity: 0.5;" oninput="applyGradeMask(this)" disabled>';
                                                 echo '</td>';
                                                 echo '<td class="border border-gray-300 px-2 py-2 text-center">';
-                                                echo '<input type="text" name="' . $nMed . '" value="' . fmt($candidato[$med] ?? '') . '" class="w-full px-2 py-1.5 border border-gray-300 rounded-lg input-modern input-focus input-disabled text-center text-sm bg-yellow-50" style="--tw-ring-color: ' . $cursoCor . '; --tw-border-opacity: 0.5;" oninput="applyGradeMask(this)" disabled>';
+                                                
+                                                // Verifica se os 3 bimestres estão preenchidos
+                                                $bim1 = isset($candidato[$b1]) && !empty($candidato[$b1]);
+                                                $bim2 = isset($candidato[$b2]) && !empty($candidato[$b2]);
+                                                $bim3 = isset($candidato[$b3]) && !empty($candidato[$b3]);
+                                                
+                                                // Se todos os 3 bimestres estiverem preenchidos, não mostra a média
+                                                if ($bim1 && $bim2 && $bim3) {
+                                                    echo '<span class="text-sm text-gray-500">Completo</span>';
+                                                } else {
+                                                    echo '<input type="text" name="' . $nMed . '" value="' . fmt($candidato[$med] ?? '') . '" class="w-full px-2 py-1.5 border border-gray-300 rounded-lg input-modern input-focus input-disabled text-center text-sm bg-yellow-50" style="--tw-ring-color: ' . $cursoCor . '; --tw-border-opacity: 0.5;" oninput="applyGradeMask(this)" disabled>';
+                                                }
+                                                
                                                 echo '</td>';
                                                 echo '</tr>';
                                             }
