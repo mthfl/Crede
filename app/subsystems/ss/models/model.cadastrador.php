@@ -405,4 +405,33 @@ class cadastrador extends select
             return 0;
         }
     }
+
+    public function requisicao_alteracao(int $id_usuario, int $id_candidato, string $requisicao): int
+    {
+        try {
+            $stmt_usuario = $this->connect->prepare("SELECT * FROM $this->table5 WHERE id = :id");
+            $stmt_usuario->bindValue(":id", $id_usuario);
+            $stmt_usuario->execute();
+            $stmt_candidato = $this->connect->prepare("SELECT * FROM $this->table1 WHERE id = :id");
+            $stmt_candidato->bindValue(":id", $id_candidato);
+            $stmt_candidato->execute();
+            if ($stmt_candidato->rowCount() == 1 && $stmt_usuario->rowCount() == 1) {
+                $stmt_requisicao = $this->connect->query("INSERT INTO $this->table14 VALUES (NULL, :id_usuario, :id_candidato, :requisicao)");
+                $stmt_candidato->bindValue(":id_usuario", $id_usuario);
+                $stmt_candidato->bindValue(":id_candidatos", $id_candidato);
+                $stmt_candidato->bindValue(":requisicao", $requisicao);
+
+                if ($stmt_candidato->execute()) {
+                    return 1;
+                } else {
+                    return 2;
+                }
+            }else{
+
+                return 3;
+            }
+        } catch (PDOException $e) {
+            return 0;
+        }
+    }
 }

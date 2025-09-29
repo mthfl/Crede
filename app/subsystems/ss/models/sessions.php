@@ -13,7 +13,7 @@ class sessions
 
                 session_unset();
                 session_destroy();
-                header('location:../../gerenciador_escolas/index.php');
+                header('location:../gerenciador_escolas/index.php');
                 exit();
             }
         } catch (PDOException $e) {

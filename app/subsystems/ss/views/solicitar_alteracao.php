@@ -89,6 +89,7 @@ $cursos = $select->select_cursos(); // Para modais, se necessário
                 opacity: 0;
                 transform: translateX(-30px);
             }
+
             to {
                 opacity: 1;
                 transform: translateX(0);
@@ -100,6 +101,7 @@ $cursos = $select->select_cursos(); // Para modais, se necessário
                 opacity: 0;
                 transform: translateY(20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -111,6 +113,7 @@ $cursos = $select->select_cursos(); // Para modais, se necessário
                 opacity: 0;
                 transform: scale(0.95);
             }
+
             to {
                 opacity: 1;
                 transform: scale(1);
@@ -118,8 +121,15 @@ $cursos = $select->select_cursos(); // Para modais, se necessário
         }
 
         @keyframes pulseSoft {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.8;
+            }
         }
 
         .nav-item {
@@ -131,8 +141,10 @@ $cursos = $select->select_cursos(); // Para modais, se necessário
         .nav-item::before {
             content: '';
             position: absolute;
-            left: 0; top: 0;
-            height: 100%; width: 4px;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
             background: var(--secondary);
             border-radius: 0 4px 4px 0;
             transform: scaleY(0);
@@ -150,11 +162,17 @@ $cursos = $select->select_cursos(); // Para modais, se necessário
 
         .sidebar {
             z-index: 50;
-            position: fixed; left: 0; top: 0;
-            height: 100vh; width: 100vw; max-width: 20rem;
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            width: 100vw;
+            max-width: 20rem;
         }
 
-        .overlay { z-index: 45; }
+        .overlay {
+            z-index: 45;
+        }
 
         @media (min-width: 1024px) {
             .sidebar {
@@ -162,74 +180,156 @@ $cursos = $select->select_cursos(); // Para modais, se necessário
                 position: static;
                 flex-shrink: 0;
             }
+
             .main-content {
-                flex: 1; min-width: 0;
+                flex: 1;
+                min-width: 0;
                 margin-left: 0;
                 overflow-x: hidden;
             }
-            body { overflow-x: hidden; }
+
+            body {
+                overflow-x: hidden;
+            }
         }
 
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.1); border-radius: 3px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 3px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: var(--dark); }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 3px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 3px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: var(--dark);
+        }
 
         .btn-animate {
-            position: relative; overflow: hidden;
+            position: relative;
+            overflow: hidden;
             transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
         .btn-animate::before {
-            content: ''; position: absolute;
-            top: 50%; left: 50%; width: 0; height: 0;
-            background: rgba(255, 255, 255, 0.2); border-radius: 50%;
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
             transform: translate(-50%, -50%);
             transition: width 0.3s, height 0.3s;
         }
 
-        .btn-animate:hover::before { width: 300px; height: 300px; }
-        .btn-animate:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15); }
-        .btn-animate:active { transform: translateY(0); }
+        .btn-animate:hover::before {
+            width: 300px;
+            height: 300px;
+        }
 
-        .focus-ring:focus { outline: 2px solid var(--primary); outline-offset: 2px; }
+        .btn-animate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
 
-        input[type="text"]:focus, input[type="email"]:focus, input[type="number"]:focus,
-        select:focus, textarea:focus, button:focus, .btn-animate:focus {
-            outline: 2px solid var(--primary); outline-offset: 2px; border-color: var(--primary);
+        .btn-animate:active {
+            transform: translateY(0);
+        }
+
+        .focus-ring:focus {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="number"]:focus,
+        select:focus,
+        textarea:focus,
+        button:focus,
+        .btn-animate:focus {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+            border-color: var(--primary);
         }
 
         .card-hover {
             transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            position: relative; overflow: hidden;
+            position: relative;
+            overflow: hidden;
         }
 
         .card-hover::before {
-            content: ''; position: absolute; top: 0; left: -100%;
-            width: 100%; height: 100%;
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
             background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
             transition: left 0.5s;
         }
 
-        .card-hover:hover::before { left: 100%; }
-        .card-hover:hover { transform: translateY(-4px) scale(1.01); box-shadow: 0 20px 40px -12px rgba(0, 90, 36, 0.15); }
-
-        .status-badge {
-            display: inline-flex; align-items: center; gap: 0.5rem;
-            padding: 0.5rem 1rem; border-radius: 9999px;
-            font-size: 0.875rem; font-weight: 500;
+        .card-hover:hover::before {
+            left: 100%;
         }
 
-        .status-pendente { background-color: #fef3c7; color: #92400e; }
-        .status-aprovada { background-color: #d1fae5; color: #065f46; }
-        .status-rejeitada { background-color: #fee2e2; color: #991b1b; }
+        .card-hover:hover {
+            transform: translateY(-4px) scale(1.01);
+            box-shadow: 0 20px 40px -12px rgba(0, 90, 36, 0.15);
+        }
 
-        .grid-item { animation: fadeInUp 0.6s ease-out forwards; opacity: 0; }
-        .grid-item:nth-child(1) { animation-delay: 0.1s; }
-        .grid-item:nth-child(2) { animation-delay: 0.2s; }
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .status-pendente {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-aprovada {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-rejeitada {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+
+        .grid-item {
+            animation: fadeInUp 0.6s ease-out forwards;
+            opacity: 0;
+        }
+
+        .grid-item:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .grid-item:nth-child(2) {
+            animation-delay: 0.2s;
+        }
 
         @media (max-width: 768px) {
-            .card-hover:hover { transform: none; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+            .card-hover:hover {
+                transform: none;
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            }
         }
     </style>
 </head>
@@ -286,8 +386,8 @@ $cursos = $select->select_cursos(); // Para modais, se necessário
                         </div>
                     <?php } ?>
 
-                     <!-- Candidatos -->
-                     <?php if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'admin' || $_SESSION['tipo_usuario'] === 'cadastrador')) { ?>
+                    <!-- Candidatos -->
+                    <?php if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'admin' || $_SESSION['tipo_usuario'] === 'cadastrador')) { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.3s;">
                             <a href="candidatos.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring bg-white/10">
                                 <div class="w-12 h-12  bg-secondary rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
@@ -303,7 +403,7 @@ $cursos = $select->select_cursos(); // Para modais, se necessário
                         </div>
                     <?php } ?>
 
-          
+
 
                     <!-- Cotas -->
                     <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
@@ -372,6 +472,23 @@ $cursos = $select->select_cursos(); // Para modais, se necessário
                             </a>
                         </div>
                     <?php } ?>
+                    <!-- Requisição de cadastro -->
+                    <?php if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'admin' || $_SESSION['tipo_usuario'] === 'cadastrador')) { ?>
+                        <div class="animate-slide-in-left" style="animation-delay: 0.6s;">
+                            <a href="solicitar_alteracao.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
+                                <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <span class="font-semibold text-base">Requisição de cadastro</span>
+                                    <p class="text-green-200 text-xs mt-1">Alteração de candidato</p>
+                                </div>
+                            </a>
+                        </div>
+                    <?php } ?>
+
 
                     <!-- Limpar Banco -->
                     <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
@@ -410,7 +527,7 @@ $cursos = $select->select_cursos(); // Para modais, se necessário
                             <a href="../../main/views/perfil.php" title="Perfil" class="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-primary to-dark rounded-full flex items-center justify-center hover:brightness-95 focus-ring">
                                 <span class="text-white font-bold text-xs sm:text-sm"><?= strtoupper(substr($_SESSION['nome'] ?? 'U', 0, 1)) ?></span>
                             </a>
-                            <a href="../../gerenciador_escolas/index.php" class="bg-primary text-white px-3 sm:px-4 md:px-6 py-2 sm:py-3 rounded-xl hover:bg-dark btn-animate font-semibold shadow-lg focus-ring text-xs sm:text-sm">
+                            <a href="../models/sessions.php?sair" class="bg-primary text-white px-3 sm:px-4 md:px-6 py-2 sm:py-3 rounded-xl hover:bg-dark btn-animate font-semibold shadow-lg focus-ring text-xs sm:text-sm">
                                 <span class="hidden sm:inline">Sair</span>
                                 <svg class="w-4 h-4 sm:w-5 sm:h-5 sm:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
@@ -423,194 +540,198 @@ $cursos = $select->select_cursos(); // Para modais, se necessário
 
             <main class="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto">
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <!-- Formulário de Solicitação -->
-                    <div class="grid-item">
-                        <div class="bg-white rounded-2xl shadow-xl border-0 overflow-hidden card-hover">
-                            <div class="h-2 w-full bg-gradient-to-r from-primary to-secondary"></div>
-                            <div class="p-8">
-                                <div class="flex items-center gap-4 mb-8">
-                                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary to-dark text-white flex items-center justify-center">
-                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <h2 class="text-xl font-bold text-primary font-display">Nova Solicitação</h2>
-                                        <p class="text-gray-600 text-sm">Solicite alterações nos dados dos alunos</p>
-                                    </div>
-                                </div>
-
-                                <form id="solicitacaoForm" class="space-y-6">
-                                    <div>
-                                        <label class="block text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
-                                            <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'cadastrador') { ?>
+                        <!-- Formulário de Solicitação -->
+                        <div class="grid-item">
+                            <div class="bg-white rounded-2xl shadow-xl border-0 overflow-hidden card-hover">
+                                <div class="h-2 w-full bg-gradient-to-r from-primary to-secondary"></div>
+                                <div class="p-8">
+                                    <div class="flex items-center gap-4 mb-8">
+                                        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary to-dark text-white flex items-center justify-center">
+                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                             </svg>
-                                            Selecionar Aluno *
-                                        </label>
-                                        <select id="selectAluno" name="aluno_id" class="w-full px-4 py-4 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-base" required>
-                                            <option value="">Selecione um aluno</option>
-                                            <option value="1">João Silva - CPF: 123.456.789-01</option>
-                                            <option value="2">Maria Santos - CPF: 234.567.890-12</option>
-                                            <option value="3">Pedro Oliveira - CPF: 345.678.901-23</option>
-                                            <option value="4">Ana Costa - CPF: 456.789.012-34</option>
-                                            <option value="5">Carlos Lima - CPF: 567.890.123-45</option>
-                                        </select>
+                                        </div>
+                                        <div>
+                                            <h2 class="text-xl font-bold text-primary font-display">Nova Solicitação</h2>
+                                            <p class="text-gray-600 text-sm">Solicite alterações nos dados dos alunos</p>
+                                        </div>
                                     </div>
 
+                                    <form action="../controllers/controller_candidato.php" method="post"  class="space-y-6">
+                                    <input type="hidden" name="id_usuario" value="<?=$_SESSION['id']?>">    
                                     <div>
-                                        <label class="block text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
-                                            <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                            </svg>
-                                            Descrição da Alteração *
-                                        </label>
-                                        <textarea id="descricaoAlteracao" name="descricao" class="w-full px-4 py-4 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-base resize-none" rows="4" placeholder="Descreva detalhadamente a alteração necessária nos dados do aluno (ex: correção de nome, CPF, endereço, etc.)" required></textarea>
-                                        <div class="flex justify-between items-center mt-2">
-                                            <span class="text-xs text-gray-500">Máximo 500 caracteres</span>
-                                            <span id="contadorCaracteres" class="text-xs text-gray-500">0/500</span>
-                                        </div>
-                                    </div>
-
-                                    <div class="pt-4">
-                                        <button type="submit" class="w-full bg-gradient-to-r from-primary to-dark text-white px-6 py-4 rounded-xl hover:from-dark hover:to-primary btn-animate font-semibold shadow-lg focus-ring text-base">
-                                            <span class="flex items-center justify-center">
-                                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                                            <label class="block text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                                                <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                                                 </svg>
-                                                Enviar Solicitação
-                                            </span>
-                                        </button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
+                                                Selecionar Aluno *
+                                            </label>
+                                            <select id="selectAluno" name="id_aluno" class="w-full px-4 py-4 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-base" required>
+                                                <option value="" selected disabled>Selecionar aluno</option>
+                                                <?php
+                                                $dados = $select->select_candidatos();
+                                                foreach ($dados as $dado) { ?>
 
-                    <!-- Lista de Solicitações -->
-                    <div class="grid-item">
-                        <div class="bg-white rounded-2xl shadow-xl border-0 overflow-hidden">
-                            <div class="h-2 w-full bg-gradient-to-r from-secondary to-primary"></div>
-                            <div class="p-8">
-                                <div class="flex items-center gap-4 mb-8">
-                                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-secondary to-orange-500 text-white flex items-center justify-center">
-                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <h2 class="text-xl font-bold text-primary font-display">Minhas Solicitações</h2>
-                                        <p class="text-gray-600 text-sm">Acompanhe o status das suas solicitações</p>
-                                    </div>
-                                </div>
+                                                    <option value="<?= $dado['id'] ?>"><?= $dado['nome'] ?> | <?= $dado['nome_curso'] ?></option>
+                                                <?php } ?>
+                                            </select>
+                                        </div>
 
-                                <div class="space-y-4 max-h-[calc(100vh-300px)] overflow-y-auto">
-                                    <!-- Solicitação Exemplo 1 -->
-                                    <div class="border border-gray-200 rounded-xl p-6 hover:border-primary/30 transition-all">
-                                        <div class="flex flex-col md:flex-row justify-between items-start mb-4">
-                                            <div class="mb-2 md:mb-0">
-                                                <h4 class="font-semibold text-gray-900 text-base">João Silva</h4>
-                                                <p class="text-sm text-gray-500">Enviado em 20/09/2025</p>
+                                        <div>
+                                            <label class="block text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                                                <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                                </svg>
+                                                Descrição da Alteração *
+                                            </label>
+                                            <textarea id="descricaoAlteracao" name="descricao" class="w-full px-4 py-4 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-base resize-none" rows="4" placeholder="Descreva detalhadamente a alteração necessária nos dados do aluno (ex: correção de nome, CPF, endereço, etc.)" required></textarea>
+                                            <div class="flex justify-between items-center mt-2">
+                                                <span class="text-xs text-gray-500">Máximo 500 caracteres</span>
+                                                <span id="contadorCaracteres" class="text-xs text-gray-500">0/500</span>
                                             </div>
-                                            <span class="status-badge status-pendente">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                                </svg>
-                                                Pendente
-                                            </span>
                                         </div>
-                                        <p class="text-sm text-gray-600 mb-4">Correção do nome completo no cadastro - falta sobrenome materno</p>
-                                        <div class="text-sm text-gray-500 bg-gray-50 p-3 rounded-lg">
-                                            <strong>Status:</strong> Aguardando análise do administrador
-                                        </div>
-                                    </div>
 
-                                    <!-- Solicitação Exemplo 2 -->
-                                    <div class="border border-gray-200 rounded-xl p-6 hover:border-primary/30 transition-all">
-                                        <div class="flex flex-col md:flex-row justify-between items-start mb-4">
-                                            <div class="mb-2 md:mb-0">
-                                                <h4 class="font-semibold text-gray-900 text-base">Maria Santos</h4>
-                                                <p class="text-sm text-gray-500">Enviado em 18/09/2025</p>
-                                            </div>
-                                            <span class="status-badge status-aprovada">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                                </svg>
-                                                Aprovada
-                                            </span>
+                                        <div class="pt-4">
+                                            <button type="submit" class="w-full bg-gradient-to-r from-primary to-dark text-white px-6 py-4 rounded-xl hover:from-dark hover:to-primary btn-animate font-semibold shadow-lg focus-ring text-base">
+                                                <span class="flex items-center justify-center">
+                                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                                                    </svg>
+                                                    Enviar Solicitação
+                                                </span>
+                                            </button>
                                         </div>
-                                        <p class="text-sm text-gray-600 mb-4">Atualização do endereço residencial conforme comprovante</p>
-                                        <div class="text-sm text-gray-700 bg-green-50 p-3 rounded-lg border border-green-200">
-                                            <strong>Resposta do Administrador:</strong><br>
-                                            Alteração aprovada e realizada. O endereço foi atualizado conforme solicitado. Data da alteração: 19/09/2025.
-                                        </div>
-                                    </div>
-
-                                    <!-- Solicitação Exemplo 3 -->
-                                    <div class="border border-gray-200 rounded-xl p-6 hover:border-primary/30 transition-all">
-                                        <div class="flex flex-col md:flex-row justify-between items-start mb-4">
-                                            <div class="mb-2 md:mb-0">
-                                                <h4 class="font-semibold text-gray-900 text-base">Pedro Oliveira</h4>
-                                                <p class="text-sm text-gray-500">Enviado em 15/09/2025</p>
-                                            </div>
-                                            <span class="status-badge status-rejeitada">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                                </svg>
-                                                Rejeitada
-                                            </span>
-                                        </div>
-                                        <p class="text-sm text-gray-600 mb-4">Correção da data de nascimento</p>
-                                        <div class="text-sm text-gray-700 bg-red-50 p-3 rounded-lg border border-red-200">
-                                            <strong>Resposta do Administrador:</strong><br>
-                                            Solicitação rejeitada. A documentação enviada não é suficiente para comprovar a correção solicitada. Favor enviar certidão de nascimento atualizada.
-                                        </div>
-                                    </div>
-
-                                    <!-- Mais exemplos para preencher o espaço -->
-                                    <div class="border border-gray-200 rounded-xl p-6 hover:border-primary/30 transition-all">
-                                        <div class="flex flex-col md:flex-row justify-between items-start mb-4">
-                                            <div class="mb-2 md:mb-0">
-                                                <h4 class="font-semibold text-gray-900 text-base">Ana Costa</h4>
-                                                <p class="text-sm text-gray-500">Enviado em 12/09/2025</p>
-                                            </div>
-                                            <span class="status-badge status-aprovada">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                                </svg>
-                                                Aprovada
-                                            </span>
-                                        </div>
-                                        <p class="text-sm text-gray-600 mb-4">Correção de CPF</p>
-                                        <div class="text-sm text-gray-700 bg-green-50 p-3 rounded-lg border border-green-200">
-                                            <strong>Resposta do Administrador:</strong><br>
-                                            CPF corrigido com sucesso. Obrigado pelo reporte.
-                                        </div>
-                                    </div>
-
-                                    <div class="border border-gray-200 rounded-xl p-6 hover:border-primary/30 transition-all">
-                                        <div class="flex flex-col md:flex-row justify-between items-start mb-4">
-                                            <div class="mb-2 md:mb-0">
-                                                <h4 class="font-semibold text-gray-900 text-base">Carlos Lima</h4>
-                                                <p class="text-sm text-gray-500">Enviado em 10/09/2025</p>
-                                            </div>
-                                            <span class="status-badge status-pendente">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                                </svg>
-                                                Pendente
-                                            </span>
-                                        </div>
-                                        <p class="text-sm text-gray-600 mb-4">Atualização de telefone de contato</p>
-                                        <div class="text-sm text-gray-500 bg-gray-50 p-3 rounded-lg">
-                                            <strong>Status:</strong> Aguardando análise do administrador
-                                        </div>
-                                    </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    <?php } else if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
+                        <!-- Lista de Solicitações -->
+                        <div class="grid-item">
+                            <div class="bg-white rounded-2xl shadow-xl border-0 overflow-hidden">
+                                <div class="h-2 w-full bg-gradient-to-r from-secondary to-primary"></div>
+                                <div class="p-8">
+                                    <div class="flex items-center gap-4 mb-8">
+                                        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-secondary to-orange-500 text-white flex items-center justify-center">
+                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <h2 class="text-xl font-bold text-primary font-display">Minhas Solicitações</h2>
+                                            <p class="text-gray-600 text-sm">Acompanhe o status das suas solicitações</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="space-y-4 max-h-[calc(100vh-300px)] overflow-y-auto">
+                                        <!-- Solicitação Exemplo 1 -->
+                                        <div class="border border-gray-200 rounded-xl p-6 hover:border-primary/30 transition-all">
+                                            <div class="flex flex-col md:flex-row justify-between items-start mb-4">
+                                                <div class="mb-2 md:mb-0">
+                                                    <h4 class="font-semibold text-gray-900 text-base">João Silva</h4>
+                                                    <p class="text-sm text-gray-500">Enviado em 20/09/2025</p>
+                                                </div>
+                                                <span class="status-badge status-pendente">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                    </svg>
+                                                    Pendente
+                                                </span>
+                                            </div>
+                                            <p class="text-sm text-gray-600 mb-4">Correção do nome completo no cadastro - falta sobrenome materno</p>
+                                            <div class="text-sm text-gray-500 bg-gray-50 p-3 rounded-lg">
+                                                <strong>Status:</strong> Aguardando análise do administrador
+                                            </div>
+                                        </div>
+
+                                        <!-- Solicitação Exemplo 2 -->
+                                        <div class="border border-gray-200 rounded-xl p-6 hover:border-primary/30 transition-all">
+                                            <div class="flex flex-col md:flex-row justify-between items-start mb-4">
+                                                <div class="mb-2 md:mb-0">
+                                                    <h4 class="font-semibold text-gray-900 text-base">Maria Santos</h4>
+                                                    <p class="text-sm text-gray-500">Enviado em 18/09/2025</p>
+                                                </div>
+                                                <span class="status-badge status-aprovada">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                    </svg>
+                                                    Aprovada
+                                                </span>
+                                            </div>
+                                            <p class="text-sm text-gray-600 mb-4">Atualização do endereço residencial conforme comprovante</p>
+                                            <div class="text-sm text-gray-700 bg-green-50 p-3 rounded-lg border border-green-200">
+                                                <strong>Resposta do Administrador:</strong><br>
+                                                Alteração aprovada e realizada. O endereço foi atualizado conforme solicitado. Data da alteração: 19/09/2025.
+                                            </div>
+                                        </div>
+
+                                        <!-- Solicitação Exemplo 3 -->
+                                        <div class="border border-gray-200 rounded-xl p-6 hover:border-primary/30 transition-all">
+                                            <div class="flex flex-col md:flex-row justify-between items-start mb-4">
+                                                <div class="mb-2 md:mb-0">
+                                                    <h4 class="font-semibold text-gray-900 text-base">Pedro Oliveira</h4>
+                                                    <p class="text-sm text-gray-500">Enviado em 15/09/2025</p>
+                                                </div>
+                                                <span class="status-badge status-rejeitada">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                    </svg>
+                                                    Rejeitada
+                                                </span>
+                                            </div>
+                                            <p class="text-sm text-gray-600 mb-4">Correção da data de nascimento</p>
+                                            <div class="text-sm text-gray-700 bg-red-50 p-3 rounded-lg border border-red-200">
+                                                <strong>Resposta do Administrador:</strong><br>
+                                                Solicitação rejeitada. A documentação enviada não é suficiente para comprovar a correção solicitada. Favor enviar certidão de nascimento atualizada.
+                                            </div>
+                                        </div>
+
+                                        <!-- Mais exemplos para preencher o espaço -->
+                                        <div class="border border-gray-200 rounded-xl p-6 hover:border-primary/30 transition-all">
+                                            <div class="flex flex-col md:flex-row justify-between items-start mb-4">
+                                                <div class="mb-2 md:mb-0">
+                                                    <h4 class="font-semibold text-gray-900 text-base">Ana Costa</h4>
+                                                    <p class="text-sm text-gray-500">Enviado em 12/09/2025</p>
+                                                </div>
+                                                <span class="status-badge status-aprovada">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                    </svg>
+                                                    Aprovada
+                                                </span>
+                                            </div>
+                                            <p class="text-sm text-gray-600 mb-4">Correção de CPF</p>
+                                            <div class="text-sm text-gray-700 bg-green-50 p-3 rounded-lg border border-green-200">
+                                                <strong>Resposta do Administrador:</strong><br>
+                                                CPF corrigido com sucesso. Obrigado pelo reporte.
+                                            </div>
+                                        </div>
+
+                                        <div class="border border-gray-200 rounded-xl p-6 hover:border-primary/30 transition-all">
+                                            <div class="flex flex-col md:flex-row justify-between items-start mb-4">
+                                                <div class="mb-2 md:mb-0">
+                                                    <h4 class="font-semibold text-gray-900 text-base">Carlos Lima</h4>
+                                                    <p class="text-sm text-gray-500">Enviado em 10/09/2025</p>
+                                                </div>
+                                                <span class="status-badge status-pendente">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                    </svg>
+                                                    Pendente
+                                                </span>
+                                            </div>
+                                            <p class="text-sm text-gray-600 mb-4">Atualização de telefone de contato</p>
+                                            <div class="text-sm text-gray-500 bg-gray-50 p-3 rounded-lg">
+                                                <strong>Status:</strong> Aguardando análise do administrador
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                 </div>
+            <?php } ?>
             </main>
         </div>
     </div>
@@ -812,18 +933,18 @@ $cursos = $select->select_cursos(); // Para modais, se necessário
         // Contador de caracteres
         const textarea = document.getElementById('descricaoAlteracao');
         const contador = document.getElementById('contadorCaracteres');
-        
+
         textarea.addEventListener('input', function() {
             const caracteresDigitados = this.value.length;
             const limite = 500;
-            
+
             if (caracteresDigitados > limite) {
                 this.value = this.value.substring(0, limite);
                 return;
             }
-            
+
             contador.textContent = `${caracteresDigitados}/500`;
-            
+
             if (caracteresDigitados > 450) {
                 contador.classList.add('text-red-500');
                 contador.classList.remove('text-gray-500');
@@ -836,20 +957,20 @@ $cursos = $select->select_cursos(); // Para modais, se necessário
         // Envio do formulário
         document.getElementById('solicitacaoForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
+
             const aluno = document.getElementById('selectAluno').value;
             const descricao = document.getElementById('descricaoAlteracao').value.trim();
-            
+
             if (!aluno || !descricao) {
                 showNotification('Por favor, preencha todos os campos obrigatórios.', 'error');
                 return;
             }
-            
+
             if (descricao.length < 20) {
                 showNotification('A descrição deve ter pelo menos 20 caracteres.', 'error');
                 return;
             }
-            
+
             // Simular envio
             setTimeout(() => {
                 openModal('modalConfirmacao');
@@ -896,4 +1017,5 @@ $cursos = $select->select_cursos(); // Para modais, se necessário
         }
     </script>
 </body>
+
 </html>

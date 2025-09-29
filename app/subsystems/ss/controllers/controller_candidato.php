@@ -6,7 +6,7 @@ $session->tempo_session();
 require_once(__DIR__ . "/../models/model.admin.php");
 require_once(__DIR__ . "/../models/model.cadastrador.php");
 require_once(__DIR__ . "/../models/model.select.php");
-//print_r($_POST);
+print_r($_POST);
 
 // Atualizar candidato
 if (
@@ -25,7 +25,7 @@ if (
     $bairro = ($cota === 'bairro') ? 1 : 0;
 
     // helper para converter nota
-    $f = function($key) {
+    $f = function ($key) {
         $v = $_POST[$key] ?? 0;
         if ($v === '' || $v === null) return 0;
         return (float)str_replace(',', '.', $v);
@@ -215,7 +215,7 @@ if (
     isset($_POST["ciencias_8"]) && !empty($_POST["ciencias_8"]) &&
     isset($_POST["ingles_6"]) && !empty($_POST["ingles_6"]) &&
     isset($_POST["ingles_7"]) && !empty($_POST["ingles_7"]) &&
-    isset($_POST["ingles_8"]) && !empty($_POST["ingles_8"]) 
+    isset($_POST["ingles_8"]) && !empty($_POST["ingles_8"])
 ) {
     $nome = $_POST["nome"];
     $data_nascimento = $_POST["data_nascimento"];
@@ -223,7 +223,7 @@ if (
     $cota = $_POST['cota'] ?? 'ampla';
     $pcd = ($cota === 'pcd') ? 1 : 0;
     $bairro = ($cota === 'bairro') ? 1 : 0;
-    $id_curso1 = (float)$_POST["curso_id"];
+    $id_curso1 = (int)$_POST["curso_id"];
     $publica = $_POST["tipo_escola"] == 'publica' ? 1 : 0;
     $id_cadastrador = $_SESSION['id'];
     $lp_6ano = (float)str_replace(',', '.', $_POST["portugues_6"]);
@@ -379,10 +379,10 @@ if (
             header('Location: ../views/cadastro.php?falha');
             exit();
     }
-} else if(isset($_POST['id_candidato']) && !empty($_POST['id_candidato'])){
+} else if (isset($_POST['id_candidato']) && !empty($_POST['id_candidato'])) {
     $escola = $_SESSION['escola'];
     $admin_model = new admin($escola);
-    
+
     $id_candidato = $_POST['id_candidato'];
     echo $result = $admin_model->excluir_candidato($id_candidato);
     switch ($result) {
@@ -399,11 +399,10 @@ if (
             header('Location: ../views/candidatos.php?falha');
             exit();
     }
-
-}else if(isset($_GET['id_candidato']) && !empty($_GET['id_candidato'])){
+} else if (isset($_GET['id_candidato']) && !empty($_GET['id_candidato'])) {
     $escola = $_SESSION['escola'];
     $admin_model = new select($escola);
-    
+
     $id_candidato = $_GET['id_candidato'];
     $result = $admin_model->select_candidato_notas($id_candidato);
     switch ($result) {
@@ -420,7 +419,32 @@ if (
             header('Location: ../views/candidatos.php?falha');
             exit();
     }
+} else if (
+    isset($_GET['descricao']) && !empty($_GET['descricao']) &&
+    isset($_GET['id_candidato']) && !empty($_GET['id_candidato']) &&
+    isset($_GET['id_usuario']) && !empty($_GET['id_usuario'])
+) {
+    $escola = $_SESSION['escola'];
+    $cadastrador_model = new cadastrador($escola);
 
+    $id_candidato = $_GET['id_candidato'];
+    $id_usuario = $_GET['id_usuario'];
+    $descricao = $_GET['descricao'];
+    $result = $cadastrador_model->requisicao_alteracao($id_usuario, $id_candidato, $descricao);
+    switch ($result) {
+        case 1:
+            header('Location: ../views/solicitar_alteracao.php?requisitado');
+            exit();
+        case 2:
+            header('Location: ../views/solicitar_alteracao.php?erro');
+            exit();
+        case 3:
+            header('Location: ../views/solicitar_alteracao.php?usuario_ou_aluno_nao_existe');
+            exit();
+        default:
+            header('Location: ../views/solicitar_alteracao.php?falha');
+            exit();
+    }
 }/*else{
     header("location:../index.php");
     exit();

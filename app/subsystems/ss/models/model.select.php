@@ -15,6 +15,7 @@ class select extends connect
     protected string $table11;
     protected string $table12;
     protected string $table13;
+    protected string $table14;
 
     function __construct($escola)
     {
@@ -33,6 +34,7 @@ class select extends connect
         $this->table11 = $table["ss_$escola"][11];
         $this->table12 = $table["ss_$escola"][12];
         $this->table13 = $table["ss_$escola"][13];
+        $this->table13 = $table["ss_$escola"][14];
     }
 
     public function select_cursos(): array
