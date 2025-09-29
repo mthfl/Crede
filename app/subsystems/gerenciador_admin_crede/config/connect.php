@@ -87,6 +87,7 @@ class connect
                 $this->connect_ejin->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 $this->connect_ejin->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 
+                
                 $host_epfads = $config['local']['ss_epfads']['host'];
                 $database_epfads = $config['local']['ss_epfads']['banco'];
                 $user_epfads = $config['local']['ss_epfads']['user'];
