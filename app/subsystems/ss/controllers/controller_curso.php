@@ -5,7 +5,7 @@ $session->autenticar_session();
 $session->tempo_session();
 
 require_once(__DIR__ . "/../models/model.admin.php");
-print_r($_POST);
+//print_r($_POST);
 
 //cadastrar curso
 if (

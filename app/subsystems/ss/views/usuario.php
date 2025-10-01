@@ -92,6 +92,7 @@ $select = new select($escola);
                 opacity: 0;
                 transform: translateX(-30px);
             }
+
             to {
                 opacity: 1;
                 transform: translateX(0);
@@ -103,6 +104,7 @@ $select = new select($escola);
                 opacity: 0;
                 transform: translateX(30px);
             }
+
             to {
                 opacity: 1;
                 transform: translateX(0);
@@ -114,6 +116,7 @@ $select = new select($escola);
                 opacity: 0;
                 transform: translateY(20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -125,6 +128,7 @@ $select = new select($escola);
                 opacity: 0;
                 transform: scale(0.95);
             }
+
             to {
                 opacity: 1;
                 transform: scale(1);
@@ -132,9 +136,12 @@ $select = new select($escola);
         }
 
         @keyframes pulseSoft {
-            0%, 100% {
+
+            0%,
+            100% {
                 opacity: 1;
             }
+
             50% {
                 opacity: 0.8;
             }
@@ -269,12 +276,29 @@ $select = new select($escola);
             opacity: 0;
         }
 
-        .grid-item:nth-child(1) { animation-delay: 0.1s; }
-        .grid-item:nth-child(2) { animation-delay: 0.2s; }
-        .grid-item:nth-child(3) { animation-delay: 0.3s; }
-        .grid-item:nth-child(4) { animation-delay: 0.4s; }
-        .grid-item:nth-child(5) { animation-delay: 0.5s; }
-        .grid-item:nth-child(6) { animation-delay: 0.6s; }
+        .grid-item:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .grid-item:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .grid-item:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .grid-item:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+        .grid-item:nth-child(5) {
+            animation-delay: 0.5s;
+        }
+
+        .grid-item:nth-child(6) {
+            animation-delay: 0.6s;
+        }
 
         .focus-ring:focus {
             outline: 2px solid var(--primary);
@@ -358,7 +382,7 @@ $select = new select($escola);
                     <!-- Dashboard -->
                     <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin' || $_SESSION['tipo_usuario'] === 'cadastrador') { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.1s;">
-                        <a href="../index.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring ">
+                            <a href="../index.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring ">
                                 <div class="w-12 h-12 bg-white/10  rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path>
@@ -390,6 +414,8 @@ $select = new select($escola);
                         </div>
                     <?php } ?>
 
+
+
                     <!-- Candidatos -->
                     <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin' || $_SESSION['tipo_usuario'] === 'cadastrador') { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.3s;">
@@ -419,6 +445,22 @@ $select = new select($escola);
                                 <div>
                                     <span class="font-semibold text-base">Cotas</span>
                                     <p class="text-green-200 text-xs mt-1">Regras e perfis</p>
+                                </div>
+                            </a>
+                        </div>
+                    <?php } ?>
+
+                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
+                        <div class="animate-slide-in-left" style="animation-delay: 0.375s;">
+                            <a href="perfis.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
+                                <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A4 4 0 018 17h8a4 4 0 012.879 1.196M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <span class="font-semibold text-base">Perfis</span>
+                                    <p class="text-green-200 text-xs mt-1">Gerenciar perfis</p>
                                 </div>
                             </a>
                         </div>
@@ -541,6 +583,7 @@ $select = new select($escola);
             <main class="p-4 sm:p-6 lg:p-8">
                 <?php $dados = $select->select_usuarios(); ?>
                 <?php $tiposUsuarios = method_exists($select, 'select_tipos_usuarios') ? $select->select_tipos_usuarios() : []; ?>
+                <?php $perfis = method_exists($select, 'select_perfis') ? $select->select_perfis() : []; ?>
                 <?php if (count($dados) === 0) { ?>
                     <div class="bg-gradient-to-br from-accent via-white to-accent/50 border-2 border-dashed border-primary/30 rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-12 text-center animate-fade-in-up max-w-2xl mx-auto">
                         <div class="w-20 h-20 sm:w-24 sm:h-24 lg:w-32 lg:h-32 bg-gradient-to-br from-primary/10 to-secondary/10 rounded-full flex items-center justify-center mx-auto mb-6 sm:mb-8 animate-pulse-soft">
@@ -561,7 +604,7 @@ $select = new select($escola);
                     </div>
                 <?php } else { ?>
                     <div class="flex items-center justify-between mb-6">
-                    
+
                         <button onclick="openUserForm()" class="inline-flex items-center bg-gradient-to-r from-primary to-dark text-white px-6 py-3 rounded-xl hover:from-dark hover:to-primary btn-animate font-semibold shadow-xl focus-ring">
                             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
@@ -571,8 +614,11 @@ $select = new select($escola);
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
                         <?php foreach ($dados as $index => $dado) { ?>
-                            <article class="grid-item card-hover user-card bg-white rounded-2xl shadow-xl border-0 overflow-hidden group relative" data-nome="<?= htmlspecialchars($dado['nome_user']) ?>" data-email="<?= htmlspecialchars($dado['email']) ?>" data-setor="<?= htmlspecialchars($dado['tipo_usuario']) ?>">
-                                <div class="h-2 w-full bg-gradient-to-r from-primary to-secondary"></div>
+                            <article class="grid-item card-hover user-card bg-white rounded-2xl shadow-xl border-0 overflow-hidden group relative<?= (isset($dado['status']) && (int)$dado['status'] === 0 ? ' opacity-80 grayscale' : '') ?>" data-nome="<?= htmlspecialchars($dado['nome_user']) ?>" data-email="<?= htmlspecialchars($dado['email']) ?>" data-setor="<?= htmlspecialchars($dado['tipo_usuario']) ?>">
+                                <div class="h-2 w-full bg-gradient-to-r <?= (isset($dado['status']) && (int)$dado['status'] === 0 ? 'from-red-400 to-red-600' : 'from-primary to-secondary') ?>"></div>
+                                <?php if (isset($dado['status']) && (int)$dado['status'] === 0) { ?>
+                                    <span class="absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-700 border border-red-200 shadow-sm">Desativado</span>
+                                <?php } ?>
                                 <div class="p-8">
                                     <div class="text-center mb-8">
                                         <div class="w-16 h-16 bg-gradient-to-br from-primary to-dark rounded-full flex items-center justify-center mx-auto mb-4">
@@ -596,19 +642,26 @@ $select = new select($escola);
                                             <span class="font-medium">Email:</span>
                                             <span class="ml-2 truncate"><?= htmlspecialchars($dado['email']) ?></span>
                                         </div>
-                                        <div class="flex items-center text-sm text-gray-600">
+                        <div class="flex items-center text-sm text-gray-600">
                                             <svg class="w-4 h-4 mr-2 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"></path>
                                             </svg>
-                                            <span class="font-medium">CPF:</span>
+                            <span class="font-medium">CPF:</span>
                                             <span class="ml-2"><?= htmlspecialchars($dado['cpf']) ?></span>
                                         </div>
-                                        <div class="flex items-center text-sm text-gray-600">
+                        <div class="flex items-center text-sm text-gray-600">
                                             <svg class="w-4 h-4 mr-2 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                                             </svg>
-                                            <span class="font-medium">Tipo:</span>
-                                            <span class="ml-2 px-2 py-1 bg-primary/10 text-primary rounded-full text-xs font-medium"><?= htmlspecialchars($dado['tipo_usuario']) ?></span>
+                            <span class="font-medium">Tipo de Usuário:</span>
+                            <span class="ml-2 px-2 py-1 bg-primary/10 text-primary rounded-full text-xs font-medium"><?= htmlspecialchars($dado['tipo_usuario']) ?></span>
+                        </div>
+                        <div class="flex items-center text-sm text-gray-600">
+                            <svg class="w-4 h-4 mr-2 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <span class="font-medium">Perfil:</span>
+                            <span class="ml-2 px-2 py-1 bg-primary/10 text-primary rounded-full text-xs font-medium"><?php if ($dado['id_perfil'] != null) { $perfil = $select->select_perfis_usuarios($dado['id_perfil']); echo htmlspecialchars($perfil['nome_perfil'] ?? 'Sem perfil'); } else { echo 'Sem perfil'; }     ?></span>
                                         </div>
                                     </div>
                                     <div class="flex space-x-2">
@@ -620,14 +673,29 @@ $select = new select($escola);
                                                 Editar
                                             </span>
                                         </button>
-                                        <button onclick="openDeleteUser(<?= $dado['id'] ?>, '<?= htmlspecialchars($dado['nome_user']) ?>')" class="flex-1 bg-secondary text-white py-2 px-4 rounded-lg hover:bg-orange-600 transition-all duration-300 font-medium text-sm btn-animate focus-ring">
-                                            <span class="flex items-center justify-center">
-                                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                                </svg>
-                                                Excluir
-                                            </span>
-                                        </button>
+                                        <?php if (!isset($dado['status']) || (int)$dado['status'] === 1) { ?>
+                                            <button onclick="openDeleteUser(<?= $dado['id'] ?>, '<?= htmlspecialchars($dado['nome_user']) ?>')" class="flex-1 bg-secondary text-white py-2 px-4 rounded-lg hover:bg-orange-600 transition-all duration-300 font-medium text-sm btn-animate focus-ring">
+                                                <span class="flex items-center justify-center">
+                                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                                    </svg>
+                                                    Desativar
+                                                </span>
+                                            </button>
+                                        <?php } else { ?>
+                                            <form action="../controllers/controller_usuario.php" method="POST" class="flex-1">
+                                                <input type="hidden" name="id_usuario" value="<?= htmlspecialchars($dado['id']) ?>">
+                                                <input type="hidden" name="habilitar" value="1">
+                                                <button type="submit" class="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-all duration-300 font-medium text-sm btn-animate focus-ring">
+                                                    <span class="flex items-center justify-center">
+                                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                        </svg>
+                                                        Ativar
+                                                    </span>
+                                                </button>
+                                            </form>
+                                        <?php } ?>
                                     </div>
                                 </div>
                             </article>
@@ -697,10 +765,10 @@ $select = new select($escola);
                         <div>
                             <label class="block text-sm font-semibold text-dark mb-3 flex items-center gap-2">
                                 <i class="fa-solid fa-building text-primary"></i>
-                                Setor *
+                                Tipo de Usuário *
                             </label>
                             <select id="inpSetor" name="tipo" class="input-enhanced w-full px-4 py-4 rounded-xl transition-all text-base border-2 focus:border-primary focus:ring-4 focus:ring-primary/10" required>
-                                <option value="">Selecione um perfil</option>
+                                <option value="">Selecione um tipo de usuário</option>
                                 <?php
                                 if (!empty($tiposUsuarios)) {
                                     foreach ($tiposUsuarios as $tipo) {
@@ -723,6 +791,22 @@ $select = new select($escola);
                                 }
                                 ?>
                             </select>
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-semibold text-dark mb-3 text-center">
+                                <i class="fa-solid fa-user-shield text-primary"></i>
+                                Perfil *
+                            </label>
+                            <div class="flex justify-center">
+                                <div class="w-full max-w-sm">
+                                    <select id="inpPerfil" name="perfil" class="input-enhanced w-full px-4 py-4 rounded-xl transition-all text-base border-2 focus:border-primary focus:ring-4 focus:ring-primary/10" required>
+                                        <option value="">Selecione um perfil</option>
+                                        <?php foreach ($perfis as $perfil): ?>
+                                            <option value="<?php echo htmlspecialchars($perfil['id']); ?>"><?php echo htmlspecialchars($perfil['nome_perfil']); ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="p-6 sm:p-8 border-t border-gray-100 bg-gray-50/50 flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-3">
@@ -786,11 +870,11 @@ $select = new select($escola);
                 </div>
                 <h3 class="text-xl sm:text-2xl font-bold text-dark font-heading mb-4">Confirmar Exclusão</h3>
                 <p class="text-gray-600 text-base mb-6 leading-relaxed">
-                    Tem certeza que deseja excluir o usuário <span class="font-semibold text-dark" id="deleteUserName"></span>?
+                    Tem certeza que deseja desativar o usuário <span class="font-semibold text-dark" id="deleteUserName"></span>?
                 </p>
                 <p class="text-sm text-red-600 bg-red-50 px-4 py-3 rounded-lg border border-red-200 mb-6">
                     <i class="fa-solid fa-info-circle mr-2"></i>
-                    Esta ação não pode be desfeita.
+                    Esta ação não pode ser desfeita.
                 </p>
                 <form id="deleteForm" action="../controllers/controller_usuario.php" method="POST">
                     <input type="hidden" name="form" value="usuario">
@@ -800,7 +884,7 @@ $select = new select($escola);
                             <i class="fa-solid fa-times mr-2"></i>Cancelar
                         </button>
                         <button type="submit" class="px-6 py-3 bg-gradient-to-r from-secondary to-orange-600 text-white font-semibold rounded-xl hover:from-secondary/90 hover:to-orange-700 transition-all text-base shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 focus-ring">
-                            <i class="fa-solid fa-trash mr-2"></i>Excluir Usuário
+                            <i class="fa-solid fa-trash mr-2"></i>Desativar Usuário
                         </button>
                     </div>
                 </form>
@@ -843,6 +927,7 @@ $select = new select($escola);
                             <option value="publica_ac">Pública AC</option>
                             <option value="publica_cotas">Publica Cotas</option>
                             <option value="publica_geral">Pública Geral</option>
+                            <option value="comissao_selecao">Comissão de Seleção</option>
                         </select>
                     </div>
 
@@ -850,7 +935,7 @@ $select = new select($escola);
                         <label class="block text-sm font-semibold text-gray-700 mb-3">Curso (Opcional)</label>
                         <select name="curso_id" class="w-full px-4 py-3.5 border border-gray-300 rounded-xl input-modern focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-base">
                             <option value="">Todos os cursos</option>
-                            <?php 
+                            <?php
                             $cursos = $select->select_cursos();
                             foreach ($cursos as $curso) { ?>
                                 <option value="<?= htmlspecialchars($curso['id']) ?>"><?= htmlspecialchars($curso['nome_curso']) ?></option>
@@ -913,7 +998,7 @@ $select = new select($escola);
                         <label class="block text-sm font-semibold text-gray-700 mb-3">Curso (Opcional)</label>
                         <select name="curso_id" class="w-full px-4 py-3.5 border border-gray-300 rounded-xl input-modern focus:border-secondary focus:ring-4 focus:ring-secondary/10 transition-all text-base">
                             <option value="">Todos os cursos</option>
-                            <?php 
+                            <?php
                             $cursos = $select->select_cursos();
                             foreach ($cursos as $curso) { ?>
                                 <option value="<?= htmlspecialchars($curso['id']) ?>"><?= htmlspecialchars($curso['nome_curso']) ?></option>
@@ -966,6 +1051,8 @@ $select = new select($escola);
             document.getElementById('inpEmail').value = '';
             document.getElementById('inpCpf').value = '';
             document.getElementById('inpSetor').value = '';
+            const perfilSelect = document.getElementById('inpPerfil');
+            if (perfilSelect) perfilSelect.value = '';
             document.getElementById('userForm').action = '../controllers/controller_usuario.php';
             openModal('modalUser');
         }
@@ -984,14 +1071,25 @@ $select = new select($escola);
                 document.getElementById('inpEmail').value = user.email || '';
                 document.getElementById('inpCpf').value = formatarCPF(user.cpf || '');
                 const selectTipo = document.getElementById('inpSetor');
+                const selectPerfil = document.getElementById('inpPerfil');
                 const tipoValor = user.tipo_usuario || '';
                 let hasOption = false;
-                Array.from(selectTipo.options).forEach(opt => { if (opt.value === tipoValor) hasOption = true; });
+                Array.from(selectTipo.options).forEach(opt => {
+                    if (opt.value === tipoValor) hasOption = true;
+                });
                 if (!hasOption && tipoValor !== '') {
                     const opt = new Option(tipoValor, tipoValor, true, true);
                     selectTipo.add(opt);
                 }
                 selectTipo.value = tipoValor;
+                if (selectPerfil) {
+                    // tenta selecionar por nome igual ao tipo_usuario se for o mesmo texto
+                    Array.from(selectPerfil.options).forEach(opt => {
+                        if (opt.value === (user.perfil || user.nome_perfil || '')) {
+                            opt.selected = true;
+                        }
+                    });
+                }
                 document.getElementById('userForm').action = '../controllers/controller_usuario.php';
                 openModal('modalUser');
             }
@@ -1077,7 +1175,7 @@ $select = new select($escola);
             return cpf.replace(/\D/g, '');
         }
 
-        
+
 
         // Aplicar máscara de CPF
         function aplicarMascaraCPF(input) {
@@ -1129,8 +1227,9 @@ $select = new select($escola);
                 const emailEl = document.getElementById('inpEmail');
                 const cpfEl = document.getElementById('inpCpf');
                 const tipoEl = document.getElementById('inpSetor');
+                const perfilEl = document.getElementById('inpPerfil');
 
-                if (!nomeEl.value.trim() || !emailEl.value.trim() || !cpfEl.value.trim() || !tipoEl.value) {
+                if (!nomeEl.value.trim() || !emailEl.value.trim() || !cpfEl.value.trim() || !tipoEl.value || !perfilEl.value) {
                     showNotification('Preencha todos os campos obrigatórios.', 'error');
                     return;
                 }
@@ -1235,11 +1334,11 @@ $select = new select($escola);
             const titleEl = document.getElementById('modalFeedbackTitle');
             const msgEl = document.getElementById('modalFeedbackMsg');
             icon.className = 'w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 ' + (type === 'success' ? 'bg-green-100' : type === 'error' ? 'bg-red-100' : 'bg-yellow-100');
-            icon.innerHTML = type === 'success'
-                ? '<svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>'
-                : type === 'error'
-                ? '<svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M4.93 4.93l14.14 14.14"></path></svg>'
-                : '<svg class="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M9.93 4.93l-7 12.12A2 2 0 004.76 21h14.48a2 2 0 001.83-2.95l-7-12.12a2 2 0 00-3.54 0z"></path></svg>';
+            icon.innerHTML = type === 'success' ?
+                '<svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>' :
+                type === 'error' ?
+                '<svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M4.93 4.93l14.14 14.14"></path></svg>' :
+                '<svg class="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M9.93 4.93l-7 12.12A2 2 0 004.76 21h14.48a2 2 0 001.83-2.95l-7-12.12a2 2 0 00-3.54 0z"></path></svg>';
             titleEl.textContent = title;
             msgEl.textContent = message;
             openModal('modalFeedback');

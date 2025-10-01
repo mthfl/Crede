@@ -408,7 +408,7 @@ class cadastrador extends select
 
     public function requisicao_alteracao(int $id_usuario, int $id_candidato, string $requisicao): int
     {
-        try {
+        //try {
             $stmt_usuario = $this->connect->prepare("SELECT * FROM $this->table5 WHERE id = :id");
             $stmt_usuario->bindValue(":id", $id_usuario);
             $stmt_usuario->execute();
@@ -416,22 +416,23 @@ class cadastrador extends select
             $stmt_candidato->bindValue(":id", $id_candidato);
             $stmt_candidato->execute();
             if ($stmt_candidato->rowCount() == 1 && $stmt_usuario->rowCount() == 1) {
-                $stmt_requisicao = $this->connect->query("INSERT INTO $this->table14 VALUES (NULL, :id_usuario, :id_candidato, :requisicao)");
-                $stmt_candidato->bindValue(":id_usuario", $id_usuario);
-                $stmt_candidato->bindValue(":id_candidatos", $id_candidato);
-                $stmt_candidato->bindValue(":requisicao", $requisicao);
+                $stmt_requisicao = $this->connect->prepare("INSERT INTO $this->table14 VALUES (NULL, :id_candidato, :id_usuario, :requisicao, :status)");
+                $stmt_requisicao->bindValue(":id_usuario", $id_usuario);
+                $stmt_requisicao->bindValue(":id_candidato", $id_candidato);
+                $stmt_requisicao->bindValue(":requisicao", $requisicao);
+                $stmt_requisicao->bindValue(":status", "Pendente");
 
-                if ($stmt_candidato->execute()) {
+                if ($stmt_requisicao->execute()) {
                     return 1;
                 } else {
                     return 2;
                 }
-            }else{
+            } else {
 
                 return 3;
             }
-        } catch (PDOException $e) {
+        /*} catch (PDOException $e) {
             return 0;
-        }
+        }*/
     }
 }

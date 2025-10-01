@@ -29,6 +29,9 @@ if (
         case 3:
             header("Location: ../views/login.php?escola=$escola&ja_tem_primeiro_acesso_ou_erro_senha_email");
             exit();
+        case 4:
+            header("Location: ../views/login.php?escola=$escola&usuario_desativado");
+            exit();
         default:
             header("Location: ../windows/fatal_erro.php");
             exit();
@@ -71,6 +74,9 @@ else if (
         case 3:
             header("Location: ../views/login.php?escola=$escola&nao_existe");
             exit();
+        case 4:
+            header("Location: ../views/login.php?escola=$escola&usuario_desativado");
+            exit();
         default:
             header("Location: ../windows/fatal_erro.php");
             exit();
@@ -104,6 +110,9 @@ else if (
             exit();
         case 3:
             header("Location: ../views/login.php?escola=$escola&erro_email_senha");
+            exit();
+        case 4:
+            header("Location: ../views/login.php?escola=$escola&usuario_desativado");
             exit();
         default:
             header("Location: ../views/login.php?escola=$escola&falha");

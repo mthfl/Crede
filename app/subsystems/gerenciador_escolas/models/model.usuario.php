@@ -41,6 +41,10 @@ class model_usuario extends connect_escolas
             $stmt_check->bindValue(":email", $email);
             $stmt_check->execute();
 
+            $user = $stmt_check->fetch(PDO::FETCH_ASSOC);
+            if ($user['status'] == 0) {
+                return 4;
+            }
             if ($stmt_check->rowCount() == 1) {
 
                 if (session_status() === PHP_SESSION_NONE) {
@@ -69,6 +73,10 @@ class model_usuario extends connect_escolas
             $stmt_check->bindValue(":email", $email);
             $stmt_check->execute();
 
+            $user = $stmt_check->fetch(PDO::FETCH_ASSOC);
+            if ($user['status'] == 0) {
+                return 4;
+            }
             if ($stmt_check->rowCount() > 0) {
 
                 $hash = password_hash($senha, PASSWORD_DEFAULT);
@@ -101,6 +109,9 @@ class model_usuario extends connect_escolas
             $stmt_check->execute();
 
             $user = $stmt_check->fetch(PDO::FETCH_ASSOC);
+            if ($user['status'] == 0) {
+                return 4;
+            }
             if ($user) {
                 if (password_verify($senha, $user['senha'])) {
 
@@ -112,6 +123,7 @@ class model_usuario extends connect_escolas
                     $_SESSION['nome'] = $user['nome_user'];
                     $_SESSION['email'] = $user['email'];
                     $_SESSION['tipo_usuario'] = $user['tipo_usuario'];
+                    $_SESSION['id_perfil'] = $user['id_perfil'];
                     $_SESSION['escola'] = $escola;
                     return 1;
                 } else {

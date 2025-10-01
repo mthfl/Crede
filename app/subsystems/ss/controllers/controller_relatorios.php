@@ -3,8 +3,8 @@ require_once(__DIR__ . '/../models/sessions.php');
 $session = new sessions();
 $session->autenticar_session();
 $session->tempo_session();
+//print_r($_POST);
 
-print_r($_POST);
 if (
     isset($_POST['tipo_relatorio']) && !empty($_POST['tipo_relatorio']) &&
     isset($_POST['curso_id']) && !empty($_POST['curso_id'])
@@ -31,9 +31,6 @@ if (
         case 'publica_geral':
             header("location:../views/reports/relatorios.php?curso=" . $curso . "&tipo_relatorio=PÚBLICA GERAL");
             exit();
-        case 'comissao_selecao':
-            header("location:../views/reports/comissao_selecao.php");
-            exit();
     }
 } else if (
     isset($_POST['tipo_consulta']) && !empty($_POST['tipo_consulta']) &&
@@ -56,6 +53,12 @@ if (
             header("location:../views/reports/resultados/resultado_preliminar.php?curso=" . $curso);
             exit();
     }
+}
+if (isset($_POST['tipo_relatorio']) && !empty($_POST['tipo_relatorio']) && empty($_POST['curso_id'])) {
+
+    header("location:../views/reports/comissao_selecao.php?usuarios");
+    exit();
+
 } else {
     header("location: ../index.php");
     exit();

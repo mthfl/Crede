@@ -325,6 +325,8 @@ $select = new select($escola);
                         </div>
                     <?php } ?>
 
+                    
+
                     <!-- Candidatos -->
                     <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin' || $_SESSION['tipo_usuario'] === 'cadastrador') { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.3s;">
@@ -345,7 +347,7 @@ $select = new select($escola);
                     <!-- Cotas -->
                     <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.35s;">
-                            <a href="cotas.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring bg-white/10 bg-white/10">
+                            <a href="cotas.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring bg-white/10">
                                 <div class="w-12 h-12 bg-secondary rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a5 5 0 10-10 0v2M5 9h14l-1 11H6L5 9z"></path>
@@ -354,6 +356,22 @@ $select = new select($escola);
                                 <div>
                                     <span class="font-semibold text-base">Cotas</span>
                                     <p class="text-green-200 text-xs mt-1">Regras e perfis</p>
+                                </div>
+                            </a>
+                        </div>
+                    <?php } ?>
+
+                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
+                        <div class="animate-slide-in-left" style="animation-delay: 0.375s;">
+                            <a href="perfis.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
+                                <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A4 4 0 018 17h8a4 4 0 012.879 1.196M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <span class="font-semibold text-base">Perfis</span>
+                                    <p class="text-green-200 text-xs mt-1">Gerenciar perfis</p>
                                 </div>
                             </a>
                         </div>
@@ -376,7 +394,7 @@ $select = new select($escola);
                         </div>
                     <?php } ?>
 
-                    <!-- Relatórios -->
+                    <!-- Relatórios --> 
                     <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.5s;">
                             <a href="#" onclick="openModal('modalRelatorios')" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
@@ -649,6 +667,7 @@ $select = new select($escola);
                             <option value="publica_ac">Pública AC</option>
                             <option value="publica_cotas">Publica Cotas</option>
                             <option value="publica_geral">Pública Geral</option>
+                            <option value="comissao_selecao">Comissão de Seleção</option>
                         </select>
                     </div>
 

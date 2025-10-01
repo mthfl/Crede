@@ -444,7 +444,23 @@ $select = new select($escola);
                             </a>
                         </div>
                     <?php } ?>
-
+                    <!-- Perfis -->
+                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
+                        <div class="animate-slide-in-left" style="animation-delay: 0.35s;">
+                            <a href="views/perfis.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
+                                <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a5 5 0 10-10 0v2M5 9h14l-1 11H6L5 9z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <span class="font-semibold text-base">Perfis</span>
+                                    <p class="text-green-200 text-xs mt-1">Controle de acesso</p>
+                                </div>
+                            </a>
+                        </div>
+                    <?php } ?>
+                    
                     <!-- Usuários -->
                     <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.4s;">
@@ -512,7 +528,7 @@ $select = new select($escola);
                             </a>
                         </div>
                     <?php } ?>
-                    
+
                     <!-- Limpar Banco -->
                     <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.6s;">
@@ -604,15 +620,6 @@ $select = new select($escola);
                             </svg>
                         </div>
                         <h3 class="text-xl sm:text-2xl lg:text-3xl font-bold text-primary mb-3 sm:mb-4 font-display">Nenhum curso cadastrado</h3>
-                        <p class="text-gray-600 text-sm sm:text-base lg:text-lg mb-6 sm:mb-8 max-w-md mx-auto leading-relaxed px-4">Comece adicionando cursos para gerenciar o sistema educacional de forma eficiente.</p>
-                        <button onclick="window.location.href='./views/cursos.php'" class="bg-gradient-to-r from-primary to-dark text-white px-6 sm:px-8 lg:px-10 py-3 sm:py-4 rounded-xl sm:rounded-2xl hover:from-dark hover:to-primary btn-animate font-semibold shadow-xl focus-ring">
-                            <span class="flex items-center">
-                                <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                                </svg>
-                                Adicionar Primeiro Curso
-                            </span>
-                        </button>
                     </div>
                 <?php } ?>
             </main>
@@ -662,7 +669,7 @@ $select = new select($escola);
                         <label class="block text-sm font-semibold text-gray-700 mb-3">Curso (Opcional)</label>
                         <select name="curso_id" class="w-full px-4 py-3.5 border border-gray-300 rounded-xl input-modern focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-base">
                             <option value="">Todos os cursos</option>
-                            <?php 
+                            <?php
                             $cursos = $select->select_cursos();
                             foreach ($cursos as $curso) { ?>
                                 <option value="<?= htmlspecialchars($curso['id']) ?>"><?= htmlspecialchars($curso['nome_curso']) ?></option>
@@ -725,7 +732,7 @@ $select = new select($escola);
                         <label class="block text-sm font-semibold text-gray-700 mb-3">Curso (Opcional)</label>
                         <select name="curso_id" class="w-full px-4 py-3.5 border border-gray-300 rounded-xl input-modern focus:border-secondary focus:ring-4 focus:ring-secondary/10 transition-all text-base">
                             <option value="">Todos os cursos</option>
-                            <?php 
+                            <?php
                             $cursos = $select->select_cursos();
                             foreach ($cursos as $curso) { ?>
                                 <option value="<?= htmlspecialchars($curso['id']) ?>"><?= htmlspecialchars($curso['nome_curso']) ?></option>
@@ -757,302 +764,302 @@ $select = new select($escola);
                     <div class="relative flex justify-between items-center">
                         <div class="flex items-center space-x-3">
                             <div class="w-8 h-8 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm border border-white/30 shadow-lg">
-                            <div id="debugDetails" class="hidden">
+                                <div id="debugDetails" class="hidden">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h2 class="text-lg sm:text-xl font-bold font-display tracking-tight">Formulário de <span id="cursoNomeCadastro" class="text-secondary"></span></h2>
+                                    <p id="tipoEscolaCadastro" class="text-white/90 text-sm mt-1 font-medium"></p>
+                                </div>
+                            </div>
+                            <button onclick="closeModal('modalCadastro')" class="w-8 h-8 bg-white/20 hover:bg-white/30 rounded-xl flex items-center justify-center transition-all duration-300 backdrop-blur-sm group border border-white/30 shadow-lg">
+                                <svg class="w-4 h-4 group-hover:rotate-90 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                 </svg>
-                            </div>
-                            <div>
-                                <h2 class="text-lg sm:text-xl font-bold font-display tracking-tight">Formulário de <span id="cursoNomeCadastro" class="text-secondary"></span></h2>
-                                <p id="tipoEscolaCadastro" class="text-white/90 text-sm mt-1 font-medium"></p>
-                            </div>
+                            </button>
                         </div>
-                        <button onclick="closeModal('modalCadastro')" class="w-8 h-8 bg-white/20 hover:bg-white/30 rounded-xl flex items-center justify-center transition-all duration-300 backdrop-blur-sm group border border-white/30 shadow-lg">
-                            <svg class="w-4 h-4 group-hover:rotate-90 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                            </svg>
-                        </button>
                     </div>
-                </div>
-
-               
-    <script>
-        const sidebar = document.getElementById('sidebar');
-        const overlay = document.getElementById('overlay');
-        const openSidebar = document.getElementById('openSidebar');
-        const closeSidebar = document.getElementById('closeSidebar');
-        let currentTipoEscola = 'publica';
-        let currentCursoNome = '';
-        let currentCorCurso = '#005A24';
-        let firstModalData = {}; // Para armazenar os dados do primeiro modal
-        let currentCursoId = null; // Para armazenar o ID do curso selecionado
-
-        // Sidebar toggle functionality
-        openSidebar.addEventListener('click', () => {
-            sidebar.classList.add('open');
-            overlay.classList.add('show');
-        });
-
-        closeSidebar.addEventListener('click', () => {
-            sidebar.classList.remove('open');
-            overlay.classList.remove('show');
-        });
-
-        overlay.addEventListener('click', () => {
-            sidebar.classList.remove('open');
-            overlay.classList.remove('show');
-        });
 
 
-        function openModalWithCourse(modalId, cursoNome, corCurso, tipoEscola, cursoId = null) {
-            currentTipoEscola = tipoEscola;
-            currentCursoNome = cursoNome;
-            currentCorCurso = corCurso;
-            if (cursoId) currentCursoId = cursoId;
+                    <script>
+                        const sidebar = document.getElementById('sidebar');
+                        const overlay = document.getElementById('overlay');
+                        const openSidebar = document.getElementById('openSidebar');
+                        const closeSidebar = document.getElementById('closeSidebar');
+                        let currentTipoEscola = 'publica';
+                        let currentCursoNome = '';
+                        let currentCorCurso = '#005A24';
+                        let firstModalData = {}; // Para armazenar os dados do primeiro modal
+                        let currentCursoId = null; // Para armazenar o ID do curso selecionado
 
-            const modal = document.getElementById(modalId);
-            const cursoNomeElement = document.getElementById(modalId === 'modalCadastro' ? 'cursoNomeCadastro' : 'cursoNomeNonoAno');
-            const tipoEscolaElement = document.getElementById(modalId === 'modalCadastro' ? 'tipoEscolaCadastro' : 'tipoEscolaNonoAno');
-            const tipoEscolaFormElement = document.getElementById('tipoEscolaNonoAnoForm');
-            const cursoInput = document.getElementById('cursoInput');
-            const header = document.getElementById(modalId === 'modalCadastro' ? 'headerCadastro' : 'headerNonoAno');
+                        // Sidebar toggle functionality
+                        openSidebar.addEventListener('click', () => {
+                            sidebar.classList.add('open');
+                            overlay.classList.add('show');
+                        });
 
-            cursoNomeElement.textContent = cursoNome;
-            tipoEscolaElement.textContent = tipoEscola === 'publica' ? 'Escola Pública' : 'Escola Privada';
-            if (tipoEscolaFormElement) {
-                tipoEscolaFormElement.textContent = tipoEscola === 'publica' ? 'Escola Pública' : 'Escola Privada';
-            }
-            cursoInput.value = cursoNome;
-            header.style.background = `linear-gradient(135deg, ${corCurso}, #1A3C34)`;
+                        closeSidebar.addEventListener('click', () => {
+                            sidebar.classList.remove('open');
+                            overlay.classList.remove('show');
+                        });
 
-            modal.classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
+                        overlay.addEventListener('click', () => {
+                            sidebar.classList.remove('open');
+                            overlay.classList.remove('show');
+                        });
 
-            // Aplicar cores do curso aos fundos das linhas
-            setTimeout(() => {
-                applyCourseColorsToBackgrounds();
-            }, 100);
 
-            // Inicializar campos exclusivos se for o modal do 9º ano
-            if (modalId === 'modalNonoAno') {
-                // Pequeno delay para garantir que o modal esteja renderizado
-                setTimeout(() => {
-                    const debugContent = document.getElementById('debugContent');
-                    if (debugContent && typeof data !== 'undefined' && data.debug) {
-                        debugContent.textContent = data.debug;
-                    }
-                }, 100);
-            }
+                        function openModalWithCourse(modalId, cursoNome, corCurso, tipoEscola, cursoId = null) {
+                            currentTipoEscola = tipoEscola;
+                            currentCursoNome = cursoNome;
+                            currentCorCurso = corCurso;
+                            if (cursoId) currentCursoId = cursoId;
 
-            // Event listeners para campos de bimestre
-            bimestreInputs.forEach(input => {
-                input.addEventListener('input', function() {
-                    if (this.value.trim() !== '') {
-                        disableMediaFields();
-                    } else {
-                        // Se todos os campos de bimestre estiverem vazios, habilitar médias
-                        const allBimestreEmpty = Array.from(bimestreInputs).every(inp => inp.value.trim() === '');
-                        if (allBimestreEmpty) {
-                            enableAllFields();
+                            const modal = document.getElementById(modalId);
+                            const cursoNomeElement = document.getElementById(modalId === 'modalCadastro' ? 'cursoNomeCadastro' : 'cursoNomeNonoAno');
+                            const tipoEscolaElement = document.getElementById(modalId === 'modalCadastro' ? 'tipoEscolaCadastro' : 'tipoEscolaNonoAno');
+                            const tipoEscolaFormElement = document.getElementById('tipoEscolaNonoAnoForm');
+                            const cursoInput = document.getElementById('cursoInput');
+                            const header = document.getElementById(modalId === 'modalCadastro' ? 'headerCadastro' : 'headerNonoAno');
+
+                            cursoNomeElement.textContent = cursoNome;
+                            tipoEscolaElement.textContent = tipoEscola === 'publica' ? 'Escola Pública' : 'Escola Privada';
+                            if (tipoEscolaFormElement) {
+                                tipoEscolaFormElement.textContent = tipoEscola === 'publica' ? 'Escola Pública' : 'Escola Privada';
+                            }
+                            cursoInput.value = cursoNome;
+                            header.style.background = `linear-gradient(135deg, ${corCurso}, #1A3C34)`;
+
+                            modal.classList.remove('hidden');
+                            document.body.style.overflow = 'hidden';
+
+                            // Aplicar cores do curso aos fundos das linhas
+                            setTimeout(() => {
+                                applyCourseColorsToBackgrounds();
+                            }, 100);
+
+                            // Inicializar campos exclusivos se for o modal do 9º ano
+                            if (modalId === 'modalNonoAno') {
+                                // Pequeno delay para garantir que o modal esteja renderizado
+                                setTimeout(() => {
+                                    const debugContent = document.getElementById('debugContent');
+                                    if (debugContent && typeof data !== 'undefined' && data.debug) {
+                                        debugContent.textContent = data.debug;
+                                    }
+                                }, 100);
+                            }
+
+                            // Event listeners para campos de bimestre
+                            bimestreInputs.forEach(input => {
+                                input.addEventListener('input', function() {
+                                    if (this.value.trim() !== '') {
+                                        disableMediaFields();
+                                    } else {
+                                        // Se todos os campos de bimestre estiverem vazios, habilitar médias
+                                        const allBimestreEmpty = Array.from(bimestreInputs).every(inp => inp.value.trim() === '');
+                                        if (allBimestreEmpty) {
+                                            enableAllFields();
+                                        }
+                                    }
+                                });
+                            });
+
+                            // Event listeners para campos de média
+                            mediaInputs.forEach(input => {
+                                input.addEventListener('input', function() {
+                                    if (this.value.trim() !== '') {
+                                        disableBimestreFields();
+                                    } else {
+                                        // Se todos os campos de média estiverem vazios, habilitar bimestres
+                                        const allMediaEmpty = Array.from(mediaInputs).every(inp => inp.value.trim() === '');
+                                        if (allMediaEmpty) {
+                                            enableAllFields();
+                                        }
+                                    }
+                                });
+                            });
                         }
-                    }
-                });
-            });
 
-            // Event listeners para campos de média
-            mediaInputs.forEach(input => {
-                input.addEventListener('input', function() {
-                    if (this.value.trim() !== '') {
-                        disableBimestreFields();
-                    } else {
-                        // Se todos os campos de média estiverem vazios, habilitar bimestres
-                        const allMediaEmpty = Array.from(mediaInputs).every(inp => inp.value.trim() === '');
-                        if (allMediaEmpty) {
-                            enableAllFields();
+                        // Inicializar campos exclusivos quando o modal do 9º ano for aberto
+                        function initializeExclusiveFields() {
+                            setupExclusiveFields();
                         }
-                    }
-                });
-            });
-        }
 
-        // Inicializar campos exclusivos quando o modal do 9º ano for aberto
-        function initializeExclusiveFields() {
-            setupExclusiveFields();
-        }
+                        // Função para converter hex para rgba com transparência
+                        function hexToRgba(hex, alpha = 0.1) {
+                            const r = parseInt(hex.slice(1, 3), 16);
+                            const g = parseInt(hex.slice(3, 5), 16);
+                            const b = parseInt(hex.slice(5, 7), 16);
+                            return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+                        }
 
-        // Função para converter hex para rgba com transparência
-        function hexToRgba(hex, alpha = 0.1) {
-            const r = parseInt(hex.slice(1, 3), 16);
-            const g = parseInt(hex.slice(3, 5), 16);
-            const b = parseInt(hex.slice(5, 7), 16);
-            return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-        }
+                        // Função para aplicar cores do banco aos fundos das linhas de notas
+                        function applyCourseColorsToBackgrounds() {
+                            if (!currentCorCurso) return;
 
-        // Função para aplicar cores do banco aos fundos das linhas de notas
-        function applyCourseColorsToBackgrounds() {
-            if (!currentCorCurso) return;
+                            // Aplicar cor apenas às linhas que contêm campos de notas (6º, 7º, 8º ano)
+                            const noteRows = document.querySelectorAll('#cadastroForm .grid');
+                            noteRows.forEach(row => {
+                                // Verificar se a linha contém campos de notas (inputs numéricos)
+                                const hasNoteInputs = row.querySelectorAll('input[type="number"]').length > 0;
+                                if (hasNoteInputs) {
+                                    row.style.backgroundColor = hexToRgba(currentCorCurso, 0.05);
+                                    row.style.borderColor = hexToRgba(currentCorCurso, 0.15);
+                                }
+                            });
 
-            // Aplicar cor apenas às linhas que contêm campos de notas (6º, 7º, 8º ano)
-            const noteRows = document.querySelectorAll('#cadastroForm .grid');
-            noteRows.forEach(row => {
-                // Verificar se a linha contém campos de notas (inputs numéricos)
-                const hasNoteInputs = row.querySelectorAll('input[type="number"]').length > 0;
-                if (hasNoteInputs) {
-                    row.style.backgroundColor = hexToRgba(currentCorCurso, 0.05);
-                    row.style.borderColor = hexToRgba(currentCorCurso, 0.15);
-                }
-            });
+                            // Aplicar cor apenas às linhas que contêm campos de notas do 9º ano
+                            const nonoAnoNoteRows = document.querySelectorAll('#nonoAnoForm .grid');
+                            if (nonoAnoNoteRows.length > 0) {
+                                nonoAnoNoteRows.forEach(row => {
+                                    // Verificar se a linha contém campos de notas
+                                    const hasNoteInputs = row.querySelectorAll('input[type="number"]').length > 0;
+                                    if (hasNoteInputs) {
+                                        row.style.backgroundColor = hexToRgba(currentCorCurso, 0.05);
+                                        row.style.borderColor = hexToRgba(currentCorCurso, 0.15);
+                                    }
+                                });
+                            }
+                        }
 
-            // Aplicar cor apenas às linhas que contêm campos de notas do 9º ano
-            const nonoAnoNoteRows = document.querySelectorAll('#nonoAnoForm .grid');
-            if (nonoAnoNoteRows.length > 0) {
-                nonoAnoNoteRows.forEach(row => {
-                    // Verificar se a linha contém campos de notas
-                    const hasNoteInputs = row.querySelectorAll('input[type="number"]').length > 0;
-                    if (hasNoteInputs) {
-                        row.style.backgroundColor = hexToRgba(currentCorCurso, 0.05);
-                        row.style.borderColor = hexToRgba(currentCorCurso, 0.15);
-                    }
-                });
-            }
-        }
+                        // Função para limpar campos desabilitados antes de enviar o formulário
+                        function clearDisabledFields() {
+                            const bimestreInputs = document.querySelectorAll('#nonoAnoForm input[name*="_9_1"], #nonoAnoForm input[name*="_9_2"], #nonoAnoForm input[name*="_9_3"]');
+                            const mediaInputs = document.querySelectorAll('#nonoAnoForm input[name*="_9_media"]');
 
-        // Função para limpar campos desabilitados antes de enviar o formulário
-        function clearDisabledFields() {
-            const bimestreInputs = document.querySelectorAll('#nonoAnoForm input[name*="_9_1"], #nonoAnoForm input[name*="_9_2"], #nonoAnoForm input[name*="_9_3"]');
-            const mediaInputs = document.querySelectorAll('#nonoAnoForm input[name*="_9_media"]');
-
-            // Limpar campos desabilitados
-            [...bimestreInputs, ...mediaInputs].forEach(input => {
-                if (input.disabled) {
-                    input.value = '';
-                }
-            });
-        }
+                            // Limpar campos desabilitados
+                            [...bimestreInputs, ...mediaInputs].forEach(input => {
+                                if (input.disabled) {
+                                    input.value = '';
+                                }
+                            });
+                        }
 
 
 
-        // Função para salvar dados do primeiro modal
-        function saveFirstModalData() {
-            const form = document.getElementById('cadastroForm');
-            const formData = new FormData(form);
+                        // Função para salvar dados do primeiro modal
+                        function saveFirstModalData() {
+                            const form = document.getElementById('cadastroForm');
+                            const formData = new FormData(form);
 
-            // Salvar todos os campos do formulário
-            firstModalData = {};
-            for (let [key, value] of formData.entries()) {
-                firstModalData[key] = value;
-            }
+                            // Salvar todos os campos do formulário
+                            firstModalData = {};
+                            for (let [key, value] of formData.entries()) {
+                                firstModalData[key] = value;
+                            }
 
-            // Salvar também o tipo de escola e curso
-            firstModalData.tipo_escola = currentTipoEscola;
-            firstModalData.curso = currentCursoNome;
-        }
+                            // Salvar também o tipo de escola e curso
+                            firstModalData.tipo_escola = currentTipoEscola;
+                            firstModalData.curso = currentCursoNome;
+                        }
 
-        // Função para restaurar dados do primeiro modal
-        function restoreFirstModalData() {
-            const form = document.getElementById('cadastroForm');
+                        // Função para restaurar dados do primeiro modal
+                        function restoreFirstModalData() {
+                            const form = document.getElementById('cadastroForm');
 
-            // Restaurar todos os campos
-            Object.keys(firstModalData).forEach(key => {
-                const input = form.querySelector(`[name="${key}"]`);
-                if (input) {
-                    input.value = firstModalData[key];
-                }
-            });
-        }
+                            // Restaurar todos os campos
+                            Object.keys(firstModalData).forEach(key => {
+                                const input = form.querySelector(`[name="${key}"]`);
+                                if (input) {
+                                    input.value = firstModalData[key];
+                                }
+                            });
+                        }
 
-        // Função para voltar ao modal de cadastro
-        function voltarParaModalCadastro() {
-            closeModal('modalNonoAno');
+                        // Função para voltar ao modal de cadastro
+                        function voltarParaModalCadastro() {
+                            closeModal('modalNonoAno');
 
-            // Restaurar dados do primeiro modal
-            restoreFirstModalData();
+                            // Restaurar dados do primeiro modal
+                            restoreFirstModalData();
 
-            // Usar a cor armazenada na variável global
-            openModalWithCourse('modalCadastro', currentCursoNome, currentCorCurso, currentTipoEscola);
-        }
+                            // Usar a cor armazenada na variável global
+                            openModalWithCourse('modalCadastro', currentCursoNome, currentCorCurso, currentTipoEscola);
+                        }
 
-        // Form submission
-        function submitForm() {
-            const cadastroForm = document.getElementById('cadastroForm');
-            const nonoAnoForm = document.getElementById('nonoAnoForm');
+                        // Form submission
+                        function submitForm() {
+                            const cadastroForm = document.getElementById('cadastroForm');
+                            const nonoAnoForm = document.getElementById('nonoAnoForm');
 
-            // Limpar campos desabilitados antes de enviar
-            clearDisabledFields();
+                            // Limpar campos desabilitados antes de enviar
+                            clearDisabledFields();
 
-            const formData = new FormData(cadastroForm);
-            formData.append('tipo_escola', currentTipoEscola);
-            formData.append('curso', currentCursoNome);
-            formData.append('curso_id', currentCursoId);
+                            const formData = new FormData(cadastroForm);
+                            formData.append('tipo_escola', currentTipoEscola);
+                            formData.append('curso', currentCursoNome);
+                            formData.append('curso_id', currentCursoId);
 
-            const nonoAnoData = new FormData(nonoAnoForm);
-            for (let [key, value] of nonoAnoData.entries()) {
-                formData.append(key, value);
-            }
+                            const nonoAnoData = new FormData(nonoAnoForm);
+                            for (let [key, value] of nonoAnoData.entries()) {
+                                formData.append(key, value);
+                            }
 
-            fetch('processar_cadastro.php', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert('Cadastro realizado com sucesso!');
-                        closeModal('modalNonoAno');
-                        cadastroForm.reset();
-                        nonoAnoForm.reset();
-                        // Limpar dados salvos
-                        firstModalData = {};
-                    } else {
-                        alert('Erro ao realizar cadastro: ' + data.message);
-                    }
-                })
-                .catch(error => {
-                    console.error('Erro:', error);
-                    alert('Ocorreu um erro ao processar o cadastro.');
-                });
-        }
-        
-        // Funções genéricas de abrir/fechar modais (Relatórios/Resultados e outros)
-        function openModal(modalId) {
-            const modal = document.getElementById(modalId);
-            if (modal) {
-                modal.classList.remove('hidden');
-                modal.classList.add('flex');
-                document.body.style.overflow = 'hidden';
-                setTimeout(() => {
-                    const content = modal.querySelector('[id$="Content"]');
-                    if (content) {
-                        content.style.transform = 'scale(1)';
-                        content.style.opacity = '1';
-                    }
-                }, 10);
-            }
-        }
+                            fetch('processar_cadastro.php', {
+                                    method: 'POST',
+                                    body: formData
+                                })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        alert('Cadastro realizado com sucesso!');
+                                        closeModal('modalNonoAno');
+                                        cadastroForm.reset();
+                                        nonoAnoForm.reset();
+                                        // Limpar dados salvos
+                                        firstModalData = {};
+                                    } else {
+                                        alert('Erro ao realizar cadastro: ' + data.message);
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Erro:', error);
+                                    alert('Ocorreu um erro ao processar o cadastro.');
+                                });
+                        }
 
-        function closeModal(modalId) {
-            const modal = document.getElementById(modalId);
-            if (modal) {
-                const content = modal.querySelector('[id$="Content"]');
-                if (content) {
-                    content.style.transform = 'scale(0.95)';
-                    content.style.opacity = '0';
-                }
-                setTimeout(() => {
-                    modal.classList.add('hidden');
-                    modal.classList.remove('flex');
-                    document.body.style.overflow = 'auto';
-                }, 300);
-            }
-        }
+                        // Funções genéricas de abrir/fechar modais (Relatórios/Resultados e outros)
+                        function openModal(modalId) {
+                            const modal = document.getElementById(modalId);
+                            if (modal) {
+                                modal.classList.remove('hidden');
+                                modal.classList.add('flex');
+                                document.body.style.overflow = 'hidden';
+                                setTimeout(() => {
+                                    const content = modal.querySelector('[id$="Content"]');
+                                    if (content) {
+                                        content.style.transform = 'scale(1)';
+                                        content.style.opacity = '1';
+                                    }
+                                }, 10);
+                            }
+                        }
 
-        // Fechar modais com tecla Escape
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                const openModals = document.querySelectorAll('[id^="modal"]:not(.hidden)');
-                openModals.forEach(modal => closeModal(modal.id));
-            }
-        });
-    </script>
+                        function closeModal(modalId) {
+                            const modal = document.getElementById(modalId);
+                            if (modal) {
+                                const content = modal.querySelector('[id$="Content"]');
+                                if (content) {
+                                    content.style.transform = 'scale(0.95)';
+                                    content.style.opacity = '0';
+                                }
+                                setTimeout(() => {
+                                    modal.classList.add('hidden');
+                                    modal.classList.remove('flex');
+                                    document.body.style.overflow = 'auto';
+                                }, 300);
+                            }
+                        }
+
+                        // Fechar modais com tecla Escape
+                        document.addEventListener('keydown', function(e) {
+                            if (e.key === 'Escape') {
+                                const openModals = document.querySelectorAll('[id^="modal"]:not(.hidden)');
+                                openModals.forEach(modal => closeModal(modal.id));
+                            }
+                        });
+                    </script>
 </body>
 
 </html>

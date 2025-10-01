@@ -333,6 +333,8 @@ $usuarios = $select->select_usuarios();
                         </div>
                     <?php } ?>
 
+                    
+
                     <!-- Candidatos -->
                     <?php if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'admin' || $_SESSION['tipo_usuario'] === 'cadastrador')) { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.3s;">
@@ -362,6 +364,22 @@ $usuarios = $select->select_usuarios();
                                 <div>
                                     <span class="font-semibold text-base">Cotas</span>
                                     <p class="text-green-200 text-xs mt-1">Regras e perfis</p>
+                                </div>
+                            </a>
+                        </div>
+                    <?php } ?>
+
+                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
+                        <div class="animate-slide-in-left" style="animation-delay: 0.375s;">
+                            <a href="perfis.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
+                                <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A4 4 0 018 17h8a4 4 0 012.879 1.196M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <span class="font-semibold text-base">Perfis</span>
+                                    <p class="text-green-200 text-xs mt-1">Gerenciar perfis</p>
                                 </div>
                             </a>
                         </div>
@@ -570,10 +588,10 @@ $usuarios = $select->select_usuarios();
                                     $data = $cand['data'] ?? '-';
                                     $cadastradorNome = $cand['nome_user'] ?? '-';
 
-                                    if($cand['bairro']){
+                                    if($cand['bairro'] == 1){
 
                                         $cota = 'BAIRRO';
-                                    }else if($cand['pcd'] == 0){
+                                    }else if($cand['pcd'] == 1){
                                         $cota = 'PCD';
                                     }else{
                                         $cota='AMPLA';
@@ -628,6 +646,15 @@ $usuarios = $select->select_usuarios();
                                 $publica = $cand['publica'] === 1 ? 'Sim' : 'Não';
                                 $data = $cand['data'] ?? '-';
                                 $cadastradorNome = $cand['nome_user'] ?? '-';
+
+                                if($cand['bairro'] == 1){
+
+                                    $cota = 'BAIRRO';
+                                }else if($cand['pcd'] == 1){
+                                    $cota = 'PCD';
+                                }else{
+                                    $cota='AMPLA';
+                                }
                             ?>
                                 <div class="candidate-card">
                                     <div class="field">
@@ -638,9 +665,13 @@ $usuarios = $select->select_usuarios();
                                         <span class="field-label">Nome</span>
                                         <span class="field-value font-medium"><?= htmlspecialchars((string)$nome) ?></span>
                                     </div>
+                                        <div class="field">
+                                            <span class="field-label">Curso</span>
+                                            <span class="field-value"><?= htmlspecialchars((string)$cursoNome) ?></span>
+                                        </div>
                                     <div class="field">
-                                        <span class="field-label">Curso</span>
-                                        <span class="field-value"><?= htmlspecialchars((string)$cursoNome) ?></span>
+                                        <span class="field-label">Cota</span>
+                                        <span class="field-value"><?= htmlspecialchars((string)$cota) ?></span>
                                     </div>
                                     <div class="field">
                                         <span class="field-label">Pública</span>
@@ -749,6 +780,7 @@ $usuarios = $select->select_usuarios();
                             <option value="publica_ac">Pública AC</option>
                             <option value="publica_cotas">Publica Cotas</option>
                             <option value="publica_geral">Pública Geral</option>
+                            <option value="comissao_selecao">Comissão de Seleção</option>
                         </select>
                     </div>
 

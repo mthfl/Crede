@@ -419,32 +419,6 @@ if (
             header('Location: ../views/candidatos.php?falha');
             exit();
     }
-} else if (
-    isset($_GET['descricao']) && !empty($_GET['descricao']) &&
-    isset($_GET['id_candidato']) && !empty($_GET['id_candidato']) &&
-    isset($_GET['id_usuario']) && !empty($_GET['id_usuario'])
-) {
-    $escola = $_SESSION['escola'];
-    $cadastrador_model = new cadastrador($escola);
-
-    $id_candidato = $_GET['id_candidato'];
-    $id_usuario = $_GET['id_usuario'];
-    $descricao = $_GET['descricao'];
-    $result = $cadastrador_model->requisicao_alteracao($id_usuario, $id_candidato, $descricao);
-    switch ($result) {
-        case 1:
-            header('Location: ../views/solicitar_alteracao.php?requisitado');
-            exit();
-        case 2:
-            header('Location: ../views/solicitar_alteracao.php?erro');
-            exit();
-        case 3:
-            header('Location: ../views/solicitar_alteracao.php?usuario_ou_aluno_nao_existe');
-            exit();
-        default:
-            header('Location: ../views/solicitar_alteracao.php?falha');
-            exit();
-    }
 }/*else{
     header("location:../index.php");
     exit();

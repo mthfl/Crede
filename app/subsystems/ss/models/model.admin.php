@@ -12,7 +12,8 @@ class admin extends cadastrador
         $this->table_user2 = $table["crede_users"][2];
     }
 
-    public function verificar_senha($email, $senha,$id_curso = null){
+    public function verificar_senha($email, $senha, $id_curso = null)
+    {
         try {
             $stmt_check = $this->connect_users->prepare("SELECT * FROM $this->table_user1 WHERE email = :email");
             $stmt_check->bindValue(':email', $email);
@@ -22,18 +23,18 @@ class admin extends cadastrador
             if ($user) {
                 if (password_verify($senha, $user['senha'])) {
 
-                    if($id_curso !== null){
+                    if ($id_curso !== null) {
                         $result = $this->excluir_candidato_curso($id_curso);
                     } else {
                         $result = $this->limpar_banco();
                     }
-                    if($result == 1){
+                    if ($result == 1) {
                         return 1;
                     } else {
-                        return 3;
+                        return 2;
                     }
                 } else {
-                    return 2;
+                    return 3;
                 }
             } else {
 
@@ -191,7 +192,7 @@ class admin extends cadastrador
      *CRUD usuario 
      */
 
-    public function cadastrar_usuario(string $nome, string $email, string $cpf, string $tipo_usuario): int
+    public function cadastrar_usuario(string $nome, string $email, string $cpf, string $tipo_usuario, string $perfil): int
     {
         try {
             $stmt_check = $this->connect->prepare("SELECT * FROM $this->table5 WHERE cpf = :cpf");
@@ -200,13 +201,13 @@ class admin extends cadastrador
 
             if ($stmt_check->rowCount() == 0) {
 
-                $stmt_usuario = $this->connect->prepare("INSERT INTO $this->table5(`nome_user`, `email`, `cpf`, `tipo_usuario`) VALUES (:nome, :email, :cpf, :tipo)");
+                $stmt_usuario = $this->connect->prepare("INSERT INTO $this->table5(`nome_user`, `email`, `cpf`, `tipo_usuario`, `id_perfil`) VALUES (:nome, :email, :cpf, :tipo, :perfil)");
                 $stmt_usuario->bindValue(":nome", $nome);
                 $stmt_usuario->bindValue(":email", $email);
                 $stmt_usuario->bindValue(":cpf", $cpf);
                 $stmt_usuario->bindValue(":tipo", $tipo_usuario);
-
-                if ($stmt_usuario->execute()) {
+                $stmt_usuario->bindValue(":perfil", $perfil);
+                if ($stmt_usuario->execute())  {
 
                     return 1;
                 } else {
@@ -221,7 +222,7 @@ class admin extends cadastrador
             return 0;
         }
     }
-    public function editar_usuario(int $id_usuario, string $nome, string $email, string $cpf, string $tipo_usuario): int
+    public function editar_usuario(int $id_usuario, string $nome, string $email, string $cpf, string $tipo_usuario, string $perfil): int
     {
         try {
             $stmt_check = $this->connect->prepare("SELECT * FROM $this->table5 WHERE id = :id_usuario");
@@ -230,40 +231,13 @@ class admin extends cadastrador
 
             if ($stmt_check->rowCount() == 1) {
 
-                $stmt_usuario = $this->connect->prepare(" UPDATE $this->table5 SET `nome_user`= :nome, `email`= :email, `cpf`= :cpf,`tipo_usuario`= :tipo WHERE id = :id_usuario");
+                $stmt_usuario = $this->connect->prepare(" UPDATE $this->table5 SET `nome_user`= :nome, `email`= :email, `cpf`= :cpf,`tipo_usuario`= :tipo, `id_perfil`= :perfil WHERE id = :id_usuario");
                 $stmt_usuario->bindValue(":id_usuario", $id_usuario);
                 $stmt_usuario->bindValue(":nome", $nome);
                 $stmt_usuario->bindValue(":email", $email);
                 $stmt_usuario->bindValue(":cpf", $cpf);
                 $stmt_usuario->bindValue(":tipo", $tipo_usuario);
-
-                if ($stmt_usuario->execute()) {
-
-                    return 1;
-                } else {
-
-                    return 2;
-                }
-            } else {
-
-                return 3;
-            }
-        } catch (PDOException $e) {
-            return 0;
-        }
-    }
-    public function excluir_usuario(int $id_usuario): int
-    {
-        try {
-            $stmt_check = $this->connect->prepare("SELECT * FROM $this->table5 WHERE id = :id_usuario");
-            $stmt_check->bindValue(":id_usuario", $id_usuario);
-            $stmt_check->execute();
-
-            if ($stmt_check->rowCount() == 1) {
-
-                $stmt_usuario = $this->connect->prepare(" DELETE FROM $this->table5 WHERE id = :id_usuario");
-                $stmt_usuario->bindValue(":id_usuario", $id_usuario);
-
+                $stmt_usuario->bindValue(":perfil", $perfil);   
                 if ($stmt_usuario->execute()) {
 
                     return 1;
@@ -421,6 +395,7 @@ class admin extends cadastrador
     public function limpar_banco(): int
     {
         try {
+            $stmt_delete = $this->connect->query("DELETE FROM $this->table14");
             $stmt_delete = $this->connect->query("DELETE FROM $this->table4");
             $stmt_delete = $this->connect->query("DELETE FROM $this->table9");
             $stmt_delete = $this->connect->query("DELETE FROM $this->table12");
@@ -781,6 +756,144 @@ class admin extends cadastrador
             }
 
             return 1;
+        } catch (PDOException $e) {
+            return 0;
+        }
+    }
+
+    public function requisicao_alteracao_realizada(int $id_requisicao): int
+    {
+        try {
+            $stmt = $this->connect->prepare("UPDATE $this->table14 SET status = 'Concluido' WHERE id = :id");
+            $stmt->bindValue(":id", $id_requisicao);
+            if ($stmt->execute()) {
+                return 1;
+            } else {
+                return 2;
+            }
+        } catch (PDOException $e) {
+            return 0;
+        }
+    }
+    public function requisicao_alteracao_recusada(int $id_requisicao): int
+    {
+        try {
+            $stmt = $this->connect->prepare("UPDATE $this->table14 SET status = 'Recusado' WHERE id = :id");
+            $stmt->bindValue(":id", $id_requisicao);
+            if ($stmt->execute()) {
+                return 1;
+            } else {
+                return 2;
+            }
+        } catch (PDOException $e) {
+            return 0;
+        }
+ 
+    }
+    public function requisicao_alteracao_pendente(int $id_requisicao): int
+    {
+        try {
+            $stmt = $this->connect->prepare("UPDATE $this->table14 SET status = 'Pendente' WHERE id = :id");
+            $stmt->bindValue(":id", $id_requisicao);
+            if ($stmt->execute()) {
+                return 1;
+            } else {
+                return 2;
+            }
+        } catch (PDOException $e) {
+            return 0;
+        }
+    }
+    public function desabilitar_usuario(int $id_usuario): int
+    {
+        try {
+            $stmt = $this->connect->prepare("UPDATE $this->table5 SET status = 0 WHERE id = :id");
+            $stmt->bindValue(":id", $id_usuario);
+            if ($stmt->execute()) {
+                return 1;
+            } else {
+                return 2;
+            }
+        } catch (PDOException $e) {
+            return 0;
+        }
+    }
+    public function habilitar_usuario(int $id_usuario): int
+    {
+        try {
+            $stmt = $this->connect->prepare("UPDATE $this->table5 SET status = 1 WHERE id = :id");
+            $stmt->bindValue(":id", $id_usuario);
+            if ($stmt->execute()) {
+                return 1;
+            } else {
+                return 2;
+            }
+        } catch (PDOException $e) {
+            return 0;
+        }
+    }
+    public function cadastrar_perfil(string $perfil): int
+    {
+        try {
+            $stmt_check = $this->connect->prepare("SELECT * FROM $this->table15 WHERE nome_perfil = :perfil");
+            $stmt_check->bindValue(":perfil", $perfil);
+            $stmt_check->execute();
+            if ($stmt_check->rowCount() == 1) {
+                return 3;
+            }
+            $stmt = $this->connect->prepare("INSERT INTO $this->table15 (nome_perfil) VALUES (:perfil)");
+            $stmt->bindValue(":perfil", $perfil);
+            if ($stmt->execute()) {
+                return 1;
+            } else {
+                return 2;
+            }
+        } catch (PDOException $e) {
+            return 0;
+        }
+    }
+    public function editar_perfil(int $id_perfil, string $perfil): int
+    {
+        try {
+            $stmt_check = $this->connect->prepare("SELECT * FROM $this->table15 WHERE nome_perfil = :perfil AND id != :id");
+            $stmt_check->bindValue(":perfil", $perfil);
+            $stmt_check->bindValue(":id", $id_perfil);
+            $stmt_check->execute();
+            if ($stmt_check->rowCount() == 1) {
+                return 3;
+            }
+            $stmt = $this->connect->prepare("UPDATE $this->table15 SET nome_perfil = :perfil WHERE id = :id");
+            $stmt->bindValue(":perfil", $perfil);
+            $stmt->bindValue(":id", $id_perfil);
+            if ($stmt->execute()) {
+                return 1;
+            } else {
+                return 2;
+            }
+        } catch (PDOException $e) {
+            return 0;
+        }
+    }
+    public function excluir_perfil(int $id_perfil): int
+    {
+        try {
+            $stmt_check = $this->connect->prepare("SELECT * FROM $this->table15 WHERE id = :id");
+            $stmt_check->bindValue(":id", $id_perfil);
+            $stmt_check->execute();
+            if ($stmt_check->rowCount() == 0) {
+                return 3;
+            }
+            $stmt = $this->connect->prepare("UPDATE $this->table5 SET id_perfil = NULL WHERE id_perfil = :id");
+            $stmt->bindValue(":id", $id_perfil);
+            $stmt->execute();
+            
+            $stmt = $this->connect->prepare("DELETE FROM $this->table15 WHERE id = :id");
+            $stmt->bindValue(":id", $id_perfil);
+            if ($stmt->execute()) {
+                return 1;
+            } else {
+                return 2;
+            }
         } catch (PDOException $e) {
             return 0;
         }

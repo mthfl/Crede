@@ -10,40 +10,6 @@ $escola = $_SESSION['escola'];
 new connect($escola);
 require_once(__DIR__ . '/../models/model.select.php');
 $select = new select($escola);
-
-
-$step = 'email';
-$postedEmail = '';
-
-if (isset($_POST['email']) && filter_var($_POST['email'], FILTER_VALIDATE_EMAIL) && !empty($_POST['email']) && !isset($_POST['senha'])) {
-    $step = 'code';
-}
-
-if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) && !empty($_POST['email']) && isset($_POST['id_curso']) && !empty($_POST['id_curso'])) {
-    $senha = $_POST['senha'];
-    $email = $_POST['email'];
-    $id_curso = $_POST['id_curso'];
-    require_once(__DIR__ . '/../models/model.admin.php');
-    $admin = new admin($escola);
-    $result = $admin->verificar_senha($email, $senha, $id_curso);
-
-    switch ($result) {
-        case 1:
-            header("Location: cursos.php?excluido");
-            exit();
-        case 2:
-            header("Location: cursos.php?erro_senha");
-            exit();
-        case 3:
-            header("Location: cursos.php?erro_senha");
-            exit();
-
-        default:
-            header("Location: cursos.php?fatal");
-            exit();
-    }
-}
-
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -51,7 +17,7 @@ if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema Escolar - Cursos</title>
+    <title>Sistema Escolar - Usuários</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -126,7 +92,6 @@ if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) 
                 opacity: 0;
                 transform: translateX(-30px);
             }
-
             to {
                 opacity: 1;
                 transform: translateX(0);
@@ -138,7 +103,6 @@ if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) 
                 opacity: 0;
                 transform: translateX(30px);
             }
-
             to {
                 opacity: 1;
                 transform: translateX(0);
@@ -150,7 +114,6 @@ if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) 
                 opacity: 0;
                 transform: translateY(20px);
             }
-
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -162,7 +125,6 @@ if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) 
                 opacity: 0;
                 transform: scale(0.95);
             }
-
             to {
                 opacity: 1;
                 transform: scale(1);
@@ -170,12 +132,9 @@ if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) 
         }
 
         @keyframes pulseSoft {
-
-            0%,
-            100% {
+            0%, 100% {
                 opacity: 1;
             }
-
             50% {
                 opacity: 0.8;
             }
@@ -310,29 +269,12 @@ if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) 
             opacity: 0;
         }
 
-        .grid-item:nth-child(1) {
-            animation-delay: 0.1s;
-        }
-
-        .grid-item:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-
-        .grid-item:nth-child(3) {
-            animation-delay: 0.3s;
-        }
-
-        .grid-item:nth-child(4) {
-            animation-delay: 0.4s;
-        }
-
-        .grid-item:nth-child(5) {
-            animation-delay: 0.5s;
-        }
-
-        .grid-item:nth-child(6) {
-            animation-delay: 0.6s;
-        }
+        .grid-item:nth-child(1) { animation-delay: 0.1s; }
+        .grid-item:nth-child(2) { animation-delay: 0.2s; }
+        .grid-item:nth-child(3) { animation-delay: 0.3s; }
+        .grid-item:nth-child(4) { animation-delay: 0.4s; }
+        .grid-item:nth-child(5) { animation-delay: 0.5s; }
+        .grid-item:nth-child(6) { animation-delay: 0.6s; }
 
         .focus-ring:focus {
             outline: 2px solid var(--primary);
@@ -340,6 +282,7 @@ if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) 
         }
 
         input[type="text"]:focus,
+        input[type="email"]:focus,
         input[type="number"]:focus,
         input[type="color"]:focus,
         select:focus,
@@ -415,7 +358,7 @@ if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) 
                     <!-- Dashboard -->
                     <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin' || $_SESSION['tipo_usuario'] === 'cadastrador') { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.1s;">
-                            <a href="../index.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring ">
+                        <a href="../index.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring ">
                                 <div class="w-12 h-12 bg-white/10  rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path>
@@ -433,8 +376,8 @@ if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) 
                     <!-- Cursos -->
                     <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.2s;">
-                            <a href="cursos.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring bg-white/10">
-                                <div class="w-12 h-12 bg-secondary rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
+                            <a href="cursos.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
+                                <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
                                     </svg>
@@ -485,8 +428,8 @@ if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) 
 
                     <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.375s;">
-                            <a href="perfis.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
-                                <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
+                            <a href="perfis.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring bg-white/10">
+                                <div class="w-12 h-12 bg-secondary rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A4 4 0 018 17h8a4 4 0 012.879 1.196M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                     </svg>
@@ -502,8 +445,8 @@ if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) 
                     <!-- Usuários -->
                     <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.4s;">
-                            <a href="usuario.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
-                                <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
+                            <a href="usuario.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring bg-white/10">
+                                <div class="w-12 h-12 bg-secondary rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                                     </svg>
@@ -614,195 +557,75 @@ if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) 
                 </div>
             </header>
             <main class="p-4 sm:p-6 lg:p-8">
-
-                <?php $cursos = $select->select_cursos(); ?>
-                <?php if (count($cursos) === 0) { ?>
-                    <div class="bg-white border border-gray-200 rounded-2xl p-8 text-center max-w-2xl mx-auto">
-                        <h3 class="text-2xl font-bold text-primary mb-2 font-display">Nenhum curso cadastrado</h3>
-                        <p class="text-gray-600 mb-6">Crie o primeiro curso para começar a gerenciar.</p>
-                        <button onclick="openCreateModal()" class="inline-flex items-center bg-gradient-to-r from-primary to-dark text-white px-6 py-3 rounded-xl hover:from-dark hover:to-primary btn-animate font-semibold shadow-xl focus-ring">
-                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                <?php $dados = $select->select_perfis(); ?>
+                <?php $tiposUsuarios = method_exists($select, 'select_tipos_usuarios') ? $select->select_tipos_usuarios() : []; ?>
+                <?php if (count($dados) === 0) { ?>
+                    <div class="bg-gradient-to-br from-accent via-white to-accent/50 border-2 border-dashed border-primary/30 rounded-2xl sm:rounded-3xl p-6 sm:p-8 lg:p-12 text-center animate-fade-in-up max-w-2xl mx-auto">
+                        <div class="w-20 h-20 sm:w-24 sm:h-24 lg:w-32 lg:h-32 bg-gradient-to-br from-primary/10 to-secondary/10 rounded-full flex items-center justify-center mx-auto mb-6 sm:mb-8 animate-pulse-soft">
+                            <svg class="w-10 h-10 sm:w-12 sm:h-12 lg:w-16 lg:h-16 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
                             </svg>
-                            Criar novo curso
+                        </div>
+                        <h3 class="text-xl sm:text-2xl lg:text-3xl font-bold text-primary mb-3 sm:mb-4 font-display">Nenhum perfil cadastrado</h3>
+                        <p class="text-gray-600 text-sm sm:text-base lg:text-lg mb-6 sm:mb-8 max-w-md mx-auto leading-relaxed px-4">Comece adicionando perfis para gerenciar o acesso do sistema.</p>
+                        <button onclick="openPerfilForm()" class="bg-gradient-to-r from-primary to-dark text-white px-6 sm:px-8 lg:px-10 py-3 sm:py-4 rounded-xl sm:rounded-2xl hover:from-dark hover:to-primary btn-animate font-semibold shadow-xl focus-ring">
+                            <span class="flex items-center">
+                                <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-2 sm:mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                </svg>
+                                Adicionar primeiro perfil
+                            </span>
                         </button>
                     </div>
                 <?php } else { ?>
                     <div class="flex items-center justify-between mb-6">
-                        <div class="flex space-x-3">
-                            <button onclick="openCreateModal()" class="inline-flex items-center bg-gradient-to-r from-primary to-dark text-white px-6 py-3 rounded-xl hover:from-dark hover:to-primary btn-animate font-semibold shadow-xl focus-ring">
-                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                                </svg>
-                                Criar novo curso
-                            </button>
-
-                        </div>
+                        <button onclick="openPerfilForm()" class="inline-flex items-center bg-gradient-to-r from-primary to-dark text-white px-6 py-3 rounded-xl hover:from-dark hover:to-primary btn-animate font-semibold shadow-xl focus-ring">
+                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                            Adicionar
+                        </button>
                     </div>
-                    <div id="gridCursos" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
-                        <?php foreach ($cursos as $index => $curso) { ?>
-                            <?php if (isset($_GET['candidato_associado']) && $step === 'email') { ?>
-                                <!-- Modal de Autenticação de Dois Fatores - Email -->
-                                <div class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-fadeIn">
-                                    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md border border-gray-200/50 transform transition-all duration-300 animate-scaleIn">
-                                        <div class="text-white p-6 rounded-t-2xl relative overflow-hidden" style="background: linear-gradient(135deg, #DC2626, #991B1B);">
-                                            <div class="absolute inset-0 bg-gradient-to-br from-black/20 to-transparent"></div>
-                                            <div class="relative flex justify-between items-center">
-                                                <div class="flex items-center space-x-3">
-                                                    <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm border border-white/30 shadow-lg transform hover:rotate-12 transition-transform duration-300">
-                                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
-                                                        </svg>
-                                                    </div>
-                                                    <div>
-                                                        <h2 class="text-lg sm:text-xl font-bold font-display tracking-tight">Autenticação de Dois Fatores</h2>
-                                                        <p class="text-white/90 text-sm mt-1 font-medium">Candidato associado detectado</p>
-                                                    </div>
-                                                </div>
-                                                <button type="button" onclick="window.location.href='cursos.php'" class="text-white/80 hover:text-white transition-colors duration-300">
-                                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                                    </svg>
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <form action="cursos.php?candidato_associado=1" method="post" class="space-y-4">
-                                            <div class="p-6">
-                                                <div class="bg-red-50 border border-red-200 rounded-xl p-4 mb-6 shadow-sm hover:shadow-md transition-shadow duration-300">
-                                                    <div class="flex items-start">
-                                                        <div class="flex-shrink-0">
-                                                            <svg class="h-6 w-6 text-red-500" fill="currentColor" viewBox="0 0 20 20">
-                                                                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                                                            </svg>
-                                                        </div>
-                                                        <div class="ml-3">
-                                                            <h3 class="text-sm font-medium text-red-800">Atenção!</h3>
-                                                            <div class="mt-2 text-sm text-red-700">
-                                                                <p>Foi detectado um candidato associado a este curso. Para continuar, é necessária autenticação de dois fatores.</p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="bg-gray-50 p-4 rounded-xl transition-all duration-300 hover:bg-gray-100">
-                                                    <label class="block text-sm font-medium text-gray-700 mb-2">E-mail do Administrador</label>
-                                                    <div class="relative">
-                                                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                                            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"></path>
-                                                            </svg>
-                                                        </div>
-                                                        <input type="email" name="email" required value="<?= htmlspecialchars($_SESSION['email'] ?? '') ?>" placeholder="admin@dominio.com" class="w-full pl-10 px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all duration-300 text-sm shadow-sm">
-                                                    </div>
-                                                   
-                                                </div>
-                                            </div>
-                                            <div class="flex justify-between p-4 border-t border-gray-200 bg-gray-50 rounded-b-2xl">
-                                                <a href="cursos.php" class="px-6 py-3 rounded-lg border-2 border-gray-300 text-gray-700 font-semibold hover:bg-gray-50 transition-all text-sm shadow-sm hover:shadow-md">Cancelar</a>
-                                                <button type="submit" class="px-6 py-3 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-lg hover:from-red-700 hover:to-red-800 transition-all duration-300 font-semibold text-sm group shadow-md hover:shadow-lg">
-                                                    <span class="flex items-center">
-                                                        <svg class="w-4 h-4 mr-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
-                                                        </svg>
-                                                        confirmar email
-                                                    </span>
-                                                </button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            <?php } elseif (isset($_GET['candidato_associado']) && $step === 'code') { ?>
-                                <!-- Modal de Autenticação de Dois Fatores - Código -->
-                                <div class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-fadeIn">
-                                    <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md border border-gray-200/50 transform transition-all duration-300 animate-scaleIn">
-                                        <div class="text-white p-6 rounded-t-2xl relative overflow-hidden" style="background: linear-gradient(135deg, #DC2626, #991B1B);">
-                                            <div class="absolute inset-0 bg-gradient-to-br from-black/20 to-transparent"></div>
-                                            <div class="relative flex justify-between items-center">
-                                                <div class="flex items-center space-x-3">
-                                                    <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm border border-white/30 shadow-lg transform hover:rotate-12 transition-transform duration-300">
-                                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                                        </svg>
-                                                    </div>
-                                                    <div>
-                                                        <h2 class="text-lg sm:text-xl font-bold font-display tracking-tight">Verificar senha</h2>
-                                                        <p class="text-white/90 text-sm mt-1 font-medium">Digite a senha enviada por e-mail</p>
-                                                    </div>
-                                                </div>
-                                                <button type="button" onclick="window.location.href='cursos.php'" class="text-white/80 hover:text-white transition-colors duration-300">
-                                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                                    </svg>
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <form action="cursos.php" method="post" class="space-y-4">
-                                            <div class="p-6">
-                                                <input type="hidden" name="id_curso" value="<?= $curso['id'] ?>">
-                                                <input type="hidden" name="email" value="<?= htmlspecialchars($_SESSION['email']) ?>" />
-                                                <div class="bg-gray-50 p-4 rounded-xl transition-all duration-300 hover:bg-gray-100">
-                                                    <label class="block text-sm font-medium text-gray-700 mb-2">Código de Verificação</label>
-                                                    <div class="relative">
-                                                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                                            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
-                                                            </svg>
-                                                        </div>
-                                                        <input type="password" name="senha" required placeholder="senha" class="w-full pl-10 px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all duration-300 text-sm tracking-widest text-center shadow-sm">
-                                                    </div>
-                                                    <p class="text-xs text-gray-500 mt-2 flex items-center">
-                                                        <svg class="w-4 h-4 mr-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                                        </svg>
-                                                        Digite a senha <?= htmlspecialchars($_SESSION['email']) ?>.
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <div class="flex items-center justify-between p-4 border-t border-gray-200 bg-gray-50 rounded-b-2xl">
-                                                <a href="cursos.php" class="px-6 py-3 rounded-lg border-2 border-gray-300 text-gray-700 font-semibold hover:bg-gray-50 transition-all text-sm shadow-sm hover:shadow-md">Cancelar</a>
-                                                <button type="submit" class="px-6 py-3 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-lg hover:from-red-700 hover:to-red-800 transition-all duration-300 font-semibold text-sm group shadow-md hover:shadow-lg">
-                                                    <span class="flex items-center">
-                                                        <svg class="w-4 h-4 mr-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                                        </svg>
-                                                        Validar senha
-                                                    </span>
-                                                </button>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            <?php } ?>
-                            <article class="grid-item card-hover bg-white rounded-2xl shadow-xl border-0 overflow-hidden group relative">
-                                <div class="h-2 w-full" style="background-color: <?= $curso['cor_curso'] ?>"></div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
+                        <?php foreach ($dados as $index => $dado) { ?>
+                            <article class="grid-item card-hover bg-white rounded-2xl shadow-xl border-0 overflow-hidden group relative" data-nome="<?= htmlspecialchars($dado['nome_perfil'] ?? ($dado['nome'] ?? '')) ?>">
+                                <div class="h-2 w-full bg-gradient-to-r from-primary to-secondary"></div>
                                 <div class="p-8">
                                     <div class="text-center mb-8">
-                                        <h3 class="text-2xl font-bold leading-tight font-display group-hover:scale-105 transition-all duration-300" style="color: <?= $curso['cor_curso'] ?>"><?= $curso['nome_curso'] ?></h3>
-                                        <div class="w-16 h-0.5 mx-auto mt-3 rounded-full" style="background-color: <?= $curso['cor_curso'] ?>40"></div>
+                                        <div class="w-16 h-16 bg-gradient-to-br from-primary to-dark rounded-full flex items-center justify-center mx-auto mb-4">
+                                            <span class="text-white font-bold text-xl"><?= strtoupper(substr(($dado['nome_perfil'] ?? ($dado['nome'] ?? 'P')), 0, 1)) ?></span>
+                                        </div>
+                                        <h3 class="text-xl font-bold leading-tight font-display group-hover:scale-105 transition-all duration-300 text-primary"><?= htmlspecialchars($dado['nome_perfil'] ?? ($dado['nome'] ?? 'Perfil')) ?></h3>
+                                        <div class="w-16 h-0.5 mx-auto mt-3 rounded-full bg-primary/40"></div>
                                     </div>
-
-                                    <div class="flex justify-center space-x-2">
-                                        <button onclick="editCurso(<?= $curso['id'] ?>, '<?= $curso['nome_curso'] ?>', '<?= $curso['cor_curso'] ?>')" class="w-24 bg-transparent py-2 px-4 rounded-lg transition-all duration-300 font-medium text-sm btn-animate focus-ring hover:bg-gray-50 border" style="border-color: <?= $curso['cor_curso'] ?>; color: <?= $curso['cor_curso'] ?>;">
+                                    <div class="space-y-3 mb-6">
+                                        <div class="flex items-center text-sm text-gray-600">
+                                            <svg class="w-4 h-4 mr-2 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                            </svg>
+                                            <span class="font-medium">ID</span>
+                                            <span class="ml-2"><?= htmlspecialchars($dado['id'] ?? '') ?></span>
+                                        </div>
+                                        
+                                    </div>
+                                    <div class="flex space-x-2">
+                                        <button onclick="openEditPerfil(<?= (int)($dado['id'] ?? 0) ?>, '<?= htmlspecialchars($dado['nome_perfil'] ?? ($dado['nome'] ?? '')) ?>')" class="flex-1 bg-primary text-white py-2 px-4 rounded-lg hover:bg-dark transition-all duration-300 font-medium text-sm btn-animate focus-ring">
                                             <span class="flex items-center justify-center">
                                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                                 </svg>
                                                 Editar
                                             </span>
-
                                         </button>
-                                        <form action="../controllers/controller_curso.php" method="post">
-                                            <input type="hidden" name="id_curso" value="<?= $curso['id'] ?>">
-                                            <button class="w-24 bg-transparent py-2 px-4 rounded-lg transition-all duration-300 font-medium text-sm btn-animate focus-ring hover:bg-gray-50 border" style="border-color: <?= $curso['cor_curso'] ?>; color: <?= $curso['cor_curso'] ?>;">
-                                                <span class="flex items-center justify-center">
-                                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                                    </svg>
-                                                    Excluir
-                                                </span>
-                                            </button>
-                                        </form>
+                                        <button name="excluir" onclick="openDeletePerfil(<?= (int)($dado['id'] ?? 0) ?>, '<?= htmlspecialchars($dado['nome_perfil'] ?? ($dado['nome'] ?? 'Perfil')) ?>')" class="flex-1 bg-secondary text-white py-2 px-4 rounded-lg hover:bg-orange-600 transition-all duration-300 font-medium text-sm btn-animate focus-ring">
+                                            <span class="flex items-center justify-center">
+                                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                                </svg>
+                                                Excluir
+                                            </span>
+                                        </button>
                                     </div>
-                                    </form>
                                 </div>
                             </article>
                         <?php } ?>
@@ -812,71 +635,62 @@ if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) 
         </div>
     </div>
 
-
-    <div id="cursoModal" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 hidden animate-scale-in">
-        <div class="flex items-center justify-center min-h-screen p-4">
-            <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md border border-gray-200/50 relative">
-                <div id="modalHeader" class="text-white p-4 rounded-t-2xl relative overflow-hidden" style="background: linear-gradient(135deg, #005A24, #1A3C34);">
-                    <div class="absolute inset-0 bg-gradient-to-br from-black/20 to-transparent"></div>
-                    <div class="relative flex justify-between items-center">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-8 h-8 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm border border-white/30 shadow-lg">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
-                                </svg>
-                            </div>
-                            <div>
-                                <h2 id="modalTitle" class="text-lg sm:text-xl font-bold font-display tracking-tight">Adicionar Curso</h2>
-                                <p class="text-white/90 text-sm mt-1 font-medium">Preencha os dados do curso</p>
-                            </div>
-                        </div>
-                        <button onclick="closeModal()" class="w-8 h-8 bg-white/20 hover:bg-white/30 rounded-xl flex items-center justify-center transition-all duration-300 backdrop-blur-sm group border border-white/30 shadow-lg">
-                            <svg class="w-4 h-4 group-hover:rotate-90 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                            </svg>
-                        </button>
+    <!-- Modal Cadastrar/Editar Perfil -->
+    <div id="modalPerfil" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-2 sm:p-4 z-40">
+        <div class="bg-white w-full max-w-lg rounded-2xl shadow-2xl max-h-[90vh] overflow-y-auto transform transition-all duration-300 scale-95 opacity-0" id="modalPerfilContent">
+            <div class="p-6 sm:p-8 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white">
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary to-dark text-white flex items-center justify-center">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                    </div>
+                    <div>
+                        <h3 id="modalPerfilTitle" class="text-xl sm:text-2xl font-bold text-dark font-heading">Cadastrar</h3>
+                        <p class="text-gray-600 text-sm">Defina o nome e descrição do perfil</p>
                     </div>
                 </div>
-                <form action="../controllers/controller_curso.php" method="post" id="cursoForm" class="space-y-4">
-                    <div class="p-6">
-                        <input type="hidden" id="cursoId" name="curso_id">
+                <button class="absolute top-6 right-6 p-2 rounded-xl hover:bg-gray-100 transition-all group" onclick="closeModal('modalPerfil')">
+                    <svg class="w-5 h-5 text-gray-400 group-hover:text-gray-600 group-hover:scale-110 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <div class="p-6 sm:p-8">
+                <form id="perfilForm" action="../controllers/controller_usuario.php" method="POST">
+                    <input type="hidden" id="inpPerfilId" name="id_perfil" value="">
+                    <div class="space-y-6">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Nome do Curso *</label>
-                            <input type="text" id="nomeCurso" name="nome_curso" required placeholder="Digite o nome do curso" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300 text-sm">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Cor do Curso *</label>
-                            <div class="flex items-center space-x-3">
-                                <input type="color" id="corCurso" name="cor_curso" value="#005A24" class="w-12 h-10 border border-gray-300 rounded-lg cursor-pointer">
-                                <input type="text" id="corCursoText" placeholder="#005A24" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300 text-sm">
-                            </div>
+                            <label class="block text-sm font-semibold text-dark mb-3">Nome *</label>
+                            <input id="inpPerfilNome" name="nome_perfil" type="text" class="w-full px-4 py-4 rounded-xl border-2 focus:border-primary focus:ring-4 focus:ring-primary/10" placeholder="Ex.: Administrador" required>
                         </div>
                     </div>
-                    <form action="../controllers/controller_curso.php" method="post">
-                        <input type="hidden" name="id_curso" value="<?= $dado['id'] ?>">
-                        <div class="flex justify-between p-4 border-t border-gray-200 bg-white">
-                            <a href="./cursos.php" class="px-6 py-3 border-2 border-primary text-primary rounded-lg hover:bg-primary/10 transition-all duration-300 font-semibold text-sm group">
-                                <span class="flex items-center">
-                                    <svg class="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                    </svg>
-                                    Cancelar
-                                </span>
-                            </a>
-                            <button type="submit" class="px-6 py-3 bg-primary text-white rounded-lg hover:bg-dark transition-all duration-300 font-semibold text-sm group">
-                                <span class="flex items-center">
-                                    <svg class="w-4 h-4 mr-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                    </svg>
-                                    <span id="saveButtonText">Salvar</span>
-                                </span>
-                            </button>
-                        </div>
-                    </form>
+                    <div class="p-6 sm:p-8 border-t border-gray-100 bg-gray-50/50 flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-3 mt-6">
+                        <button type="button" class="px-6 py-3 rounded-xl border-2 border-primary font-semibold text-primary hover:bg-primary/10 transition-all text-base focus-ring" onclick="closeModal('modalPerfil')">Cancelar</button>
+                        <button type="submit" class="px-6 py-3 bg-gradient-to-r from-primary to-dark text-white font-semibold rounded-xl hover:from-primary/90 hover:to-dark/90 transition-all text-base shadow-lg">Salvar Perfil</button>
+                    </div>
                 </form>
             </div>
         </div>
     </div>
+
+    <!-- Modal Excluir Perfil -->
+    <div id="modalDeletePerfil" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-2 sm:p-4 z-50">
+        <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl transform transition-all duration-300 scale-95 opacity-0" id="modalDeletePerfilContent">
+            <div class="p-6 sm:p-8 text-center">
+                <div class="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-6">
+                    <svg class="w-7 h-7 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M4.93 4.93l14.14 14.14"/></svg>
+                </div>
+                <h3 class="text-xl sm:text-2xl font-bold text-dark font-heading mb-4">Excluir Perfil</h3>
+                <p class="text-gray-600 text-base mb-6 leading-relaxed">Tem certeza que deseja excluir o perfil <span id="deletePerfilName" class="font-semibold text-dark"></span>?</p>
+                <form id="deletePerfilForm" action="../controllers/controller_usuario.php" method="POST">
+                    <input type="hidden" name="form" value="perfil">
+                    <input type="hidden" id="deletePerfilId" name="id_perfil" value="">
+                    <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                        <button type="button" class="px-6 py-3 rounded-xl border-2 border-primary font-semibold text-primary hover:bg-primary/10 transition-all text-base focus-ring" onclick="closeModal('modalDeletePerfil')">Cancelar</button>
+                        <button type="submit" name="excluir" value="1" class="px-6 py-3 bg-gradient-to-r from-secondary to-orange-600 text-white font-semibold rounded-xl hover:from-secondary/90 hover:to-orange-700 transition-all text-base shadow-lg">Excluir</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
 
     <!-- Feedback Modal -->
     <div id="modalFeedback" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-2 sm:p-4 z-50">
@@ -886,6 +700,38 @@ if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) 
                 <h3 id="modalFeedbackTitle" class="text-xl sm:text-2xl font-bold text-dark font-heading mb-2"></h3>
                 <p id="modalFeedbackMsg" class="text-gray-600 text-base mb-6 leading-relaxed"></p>
                 <button type="button" class="px-6 py-3 rounded-xl border-2 border-primary font-semibold text-primary hover:bg-primary/10 hover:border-primary transition-all text-base focus-ring" onclick="closeModal('modalFeedback')">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal de Confirmação de Exclusão -->
+    <div id="modalDeleteUser" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-2 sm:p-4 z-50">
+        <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl transform transition-all duration-300 scale-95 opacity-0" id="modalDeleteUserContent">
+            <div class="p-6 sm:p-8 text-center">
+                <div class="w-20 h-20 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-6">
+                    <i class="fa-solid fa-exclamation-triangle text-3xl text-red-500"></i>
+                </div>
+                <h3 class="text-xl sm:text-2xl font-bold text-dark font-heading mb-4">Confirmar Exclusão</h3>
+                <p class="text-gray-600 text-base mb-6 leading-relaxed">
+                    Tem certeza que deseja excluir o usuário <span class="font-semibold text-dark" id="deleteUserName"></span>?
+                </p>
+                <p class="text-sm text-red-600 bg-red-50 px-4 py-3 rounded-lg border border-red-200 mb-6">
+                    <i class="fa-solid fa-info-circle mr-2"></i>
+                    Esta ação não pode be desfeita.
+                </p>
+                <form id="deleteForm" action="../controllers/controller_usuario.php" method="POST">
+                    <input type="hidden" name="form" value="usuario">
+                    <input type="hidden" id="deleteUserId" name="id_usuario" value="">
+                    <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                        <button type="button" class="px-6 py-3 rounded-xl border-2 border-primary font-semibold text-primary hover:bg-primary/10 hover:border-primary transition-all text-base focus-ring" onclick="closeModal('modalDeleteUser')">
+                            <i class="fa-solid fa-times mr-2"></i>Cancelar
+                        </button>
+                        <button type="submit" class="px-6 py-3 bg-gradient-to-r from-secondary to-orange-600 text-white font-semibold rounded-xl hover:from-secondary/90 hover:to-orange-700 transition-all text-base shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 focus-ring">
+                            <i class="fa-solid fa-trash mr-2"></i>Excluir Usuário
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -933,7 +779,9 @@ if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) 
                         <label class="block text-sm font-semibold text-gray-700 mb-3">Curso (Opcional)</label>
                         <select name="curso_id" class="w-full px-4 py-3.5 border border-gray-300 rounded-xl input-modern focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-base">
                             <option value="">Todos os cursos</option>
-                            <?php foreach ($cursos as $curso) { ?>
+                            <?php 
+                            $cursos = $select->select_cursos();
+                            foreach ($cursos as $curso) { ?>
                                 <option value="<?= htmlspecialchars($curso['id']) ?>"><?= htmlspecialchars($curso['nome_curso']) ?></option>
                             <?php } ?>
                         </select>
@@ -994,7 +842,9 @@ if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) 
                         <label class="block text-sm font-semibold text-gray-700 mb-3">Curso (Opcional)</label>
                         <select name="curso_id" class="w-full px-4 py-3.5 border border-gray-300 rounded-xl input-modern focus:border-secondary focus:ring-4 focus:ring-secondary/10 transition-all text-base">
                             <option value="">Todos os cursos</option>
-                            <?php foreach ($cursos as $curso) { ?>
+                            <?php 
+                            $cursos = $select->select_cursos();
+                            foreach ($cursos as $curso) { ?>
                                 <option value="<?= htmlspecialchars($curso['id']) ?>"><?= htmlspecialchars($curso['nome_curso']) ?></option>
                             <?php } ?>
                         </select>
@@ -1019,7 +869,9 @@ if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) 
         const overlay = document.getElementById('overlay');
         const openSidebar = document.getElementById('openSidebar');
         const closeSidebar = document.getElementById('closeSidebar');
+        const usuarios = <?php echo json_encode($dados ?? []); ?>;
 
+        // Sidebar toggle functionality
         openSidebar.addEventListener('click', () => {
             sidebar.classList.add('open');
             overlay.classList.add('show');
@@ -1036,64 +888,232 @@ if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) 
         });
 
 
-
-        function openCreateModal() {
-            document.getElementById('modalTitle').textContent = 'Adicionar Curso';
-            document.getElementById('saveButtonText').textContent = 'Salvar';
-            document.getElementById('cursoForm').reset();
-            document.getElementById('cursoId').value = '';
-            document.getElementById('corCurso').value = '#005A24';
-            document.getElementById('corCursoText').value = '#005A24';
-            document.getElementById('cursoModal').classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
+        function openUserForm() {
+            document.getElementById('modalTitle').textContent = 'Cadastrar Usuário';
+            document.getElementById('inpUserId').value = '';
+            document.getElementById('inpNome').value = '';
+            document.getElementById('inpEmail').value = '';
+            document.getElementById('inpCpf').value = '';
+            document.getElementById('inpSetor').value = '';
+            document.getElementById('userForm').action = '../controllers/controller_usuario.php';
+            openModal('modalUser');
         }
 
-        function editCurso(id, nome, cor) {
-            document.getElementById('modalTitle').textContent = 'Editar Curso';
-            document.getElementById('saveButtonText').textContent = 'Atualizar';
-            document.getElementById('cursoId').value = id;
-            document.getElementById('nomeCurso').value = nome;
-            document.getElementById('corCurso').value = cor;
-            document.getElementById('corCursoText').value = cor;
-            document.getElementById('cursoModal').classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
+        // Perfis: abrir modal criar
+        function openPerfilForm() {
+            document.getElementById('modalPerfilTitle').textContent = 'Cadastrar';
+            document.getElementById('inpPerfilId').value = '';
+            document.getElementById('inpPerfilNome').value = '';
+            document.getElementById('perfilForm').action = '../controllers/controller_usuario.php';
+            openModal('modalPerfil');
         }
 
-        function saveCurso() {
-            const form = document.getElementById('cursoForm');
-            const formData = new FormData(form);
-
-            const action = document.getElementById('cursoId').value ? 'update' : 'create';
-            formData.append('action', action);
-
-            fetch('processar_curso.php', {
-                    method: 'POST',
-                    body: formData
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert(action === 'create' ? 'Curso criado com sucesso!' : 'Curso atualizado com sucesso!');
-                        closeModal();
-                        location.reload();
-                    } else {
-                        alert('Erro: ' + data.message);
-                    }
-                })
-                .catch(error => {
-                    console.error('Erro:', error);
-                    alert('Ocorreu um erro ao processar o curso.');
-                });
+        // Perfis: abrir modal editar
+        function openEditPerfil(id, nome) {
+            document.getElementById('modalPerfilTitle').textContent = 'Editar Perfil';
+            document.getElementById('inpPerfilId').value = id || '';
+            document.getElementById('inpPerfilNome').value = nome || '';
+            document.getElementById('perfilForm').action = '../controllers/controller_usuario.php';
+            openModal('modalPerfil');
         }
 
-        document.getElementById('corCurso').addEventListener('input', function() {
-            document.getElementById('corCursoText').value = this.value;
-        });
+        // Perfis: excluir modal
+        function openDeletePerfil(id, nome) {
+            document.getElementById('deletePerfilId').value = id || '';
+            document.getElementById('deletePerfilName').textContent = nome || '';
+            openModal('modalDeletePerfil');
+        }
 
-        document.getElementById('corCursoText').addEventListener('input', function() {
-            if (this.value.match(/^#[0-9A-F]{6}$/i)) {
-                document.getElementById('corCurso').value = this.value;
+        function openUserTypeForm() {
+            document.getElementById('inpNomeTipo').value = '';
+            openModal('modalTipoUsuario');
+        }
+
+        function openEditUser(userId) {
+            const user = usuarios.find(u => parseInt(u.id, 10) === parseInt(userId, 10));
+            if (user) {
+                document.getElementById('modalTitle').textContent = 'Editar Usuário';
+                document.getElementById('inpUserId').value = user.id || '';
+                document.getElementById('inpNome').value = user.nome_user || '';
+                document.getElementById('inpEmail').value = user.email || '';
+                document.getElementById('inpCpf').value = formatarCPF(user.cpf || '');
+                const selectTipo = document.getElementById('inpSetor');
+                const tipoValor = user.tipo_usuario || '';
+                let hasOption = false;
+                Array.from(selectTipo.options).forEach(opt => { if (opt.value === tipoValor) hasOption = true; });
+                if (!hasOption && tipoValor !== '') {
+                    const opt = new Option(tipoValor, tipoValor, true, true);
+                    selectTipo.add(opt);
+                }
+                selectTipo.value = tipoValor;
+                document.getElementById('userForm').action = '../controllers/controller_usuario.php';
+                openModal('modalUser');
             }
+        }
+
+        function openDeleteUser(userId, userName) {
+            document.getElementById('deleteUserName').textContent = userName;
+            document.getElementById('deleteUserId').value = userId;
+            openModal('modalDeleteUser');
+        }
+
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            setTimeout(() => {
+                const content = modal.querySelector('[id$="Content"]');
+                if (content) {
+                    content.style.transform = 'scale(1)';
+                    content.style.opacity = '1';
+                }
+            }, 10);
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            const content = modal.querySelector('[id$="Content"]');
+            if (content) {
+                content.style.transform = 'scale(0.95)';
+                content.style.opacity = '0';
+            }
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 300);
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 p-4 rounded-xl shadow-lg transform transition-all duration-300 translate-x-full ${
+                type === 'success' ? 'bg-green-500 text-white' : 
+                type === 'error' ? 'bg-red-500 text-white' : 
+                'bg-blue-500 text-white'
+            }`;
+            notification.innerHTML = `
+                <div class="flex items-center gap-3">
+                    <i class="fa-solid ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i>
+                    <span class="font-medium">${message}</span>
+                </div>
+            `;
+            document.body.appendChild(notification);
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 10);
+            setTimeout(() => {
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // Função para formatar CPF
+        function formatarCPF(cpf) {
+            let value = cpf.replace(/\D/g, '');
+            if (value.length > 11) value = value.slice(0, 11);
+            if (value.length > 0) {
+                if (value.length <= 3) {
+                    value = value;
+                } else if (value.length <= 6) {
+                    value = value.replace(/(\d{3})(\d)/, '$1.$2');
+                } else if (value.length <= 9) {
+                    value = value.replace(/(\d{3})(\d{3})(\d)/, '$1.$2.$3');
+                } else {
+                    value = value.replace(/(\d{3})(\d{3})(\d{3})(\d{1,2})/, '$1.$2.$3-$4');
+                }
+            }
+            return value;
+        }
+
+        // Função para remover máscara do CPF
+        function removerMascaraCPF(cpf) {
+            return cpf.replace(/\D/g, '');
+        }
+
+        
+
+        // Aplicar máscara de CPF
+        function aplicarMascaraCPF(input) {
+            input.value = formatarCPF(input.value);
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            const cpfInput = document.getElementById('inpCpf');
+            if (cpfInput) {
+                // Aplicar máscara em tempo real
+                cpfInput.addEventListener('input', function() {
+                    aplicarMascaraCPF(this);
+                });
+
+                // Bloquear caracteres não numéricos
+                cpfInput.addEventListener('keypress', function(e) {
+                    if (!/[0-9]/.test(e.key)) {
+                        e.preventDefault();
+                    }
+                    if (removerMascaraCPF(this.value).length >= 11 && e.key !== 'Backspace' && e.key !== 'Delete') {
+                        e.preventDefault();
+                    }
+                });
+
+                // Tratar colagem
+                cpfInput.addEventListener('paste', function(e) {
+                    e.preventDefault();
+                    const text = (e.clipboardData || window.clipboardData).getData('text');
+                    const digits = text.replace(/\D/g, '').slice(0, 11);
+                    this.value = formatarCPF(digits);
+                });
+
+                // Aplicar máscara ao ganhar/perder foco
+                cpfInput.addEventListener('focus', function() {
+                    aplicarMascaraCPF(this);
+                });
+                cpfInput.addEventListener('blur', function() {
+                    if (this.value) {
+                        aplicarMascaraCPF(this);
+                    }
+                });
+            }
+
+            // Envio do formulário de usuário (somente com máscara e preenchimento obrigatório)
+            document.getElementById('userForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const nomeEl = document.getElementById('inpNome');
+                const emailEl = document.getElementById('inpEmail');
+                const cpfEl = document.getElementById('inpCpf');
+                const tipoEl = document.getElementById('inpSetor');
+
+                if (!nomeEl.value.trim() || !emailEl.value.trim() || !cpfEl.value.trim() || !tipoEl.value) {
+                    showNotification('Preencha todos os campos obrigatórios.', 'error');
+                    return;
+                }
+                // Mantém a máscara; envio do valor exatamente como digitado
+                this.submit();
+            });
+
+            // Validação do formulário de tipo de usuário
+            document.getElementById('userTypeForm').addEventListener('submit', function(e) {
+                if (!this.inpNomeTipo.value.trim()) {
+                    e.preventDefault();
+                    showNotification('Digite o nome do tipo de usuário.', 'error');
+                }
+            });
+
+            // Smooth scroll
+            document.documentElement.style.scrollBehavior = 'smooth';
+
+            // Fechar modais com tecla Escape
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    const openModals = document.querySelectorAll('[id^="modal"]:not(.hidden)');
+                    openModals.forEach(modal => {
+                        if (!modal.classList.contains('hidden')) {
+                            closeModal(modal.id);
+                        }
+                    });
+                }
+            });
         });
 
         function openModal(modalId) {
@@ -1127,12 +1147,14 @@ if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) 
                 }, 300);
             }
         }
+    </script>
 
+    <script>
         // Feedback by GET flags
         (function() {
             const params = new URLSearchParams(window.location.search);
             if (!params.toString()) return;
-            const entidade = 'Curso';
+            const entidade = 'Usuário';
             let title = '';
             let message = '';
             let type = 'info';
@@ -1156,10 +1178,6 @@ if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) 
                 title = `${entidade} não encontrado`;
                 message = '';
                 type = 'warning';
-            } else if (params.has('erro_codigo')) {
-                title = 'Código de verificação inválido';
-                message = 'O código informado não confere. Tente novamente.';
-                type = 'error';
             } else if (params.has('erro') || params.has('falha')) {
                 title = `Erro ao processar ${entidade.toLowerCase()}`;
                 message = '';
@@ -1171,11 +1189,11 @@ if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) 
             const titleEl = document.getElementById('modalFeedbackTitle');
             const msgEl = document.getElementById('modalFeedbackMsg');
             icon.className = 'w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 ' + (type === 'success' ? 'bg-green-100' : type === 'error' ? 'bg-red-100' : 'bg-yellow-100');
-            icon.innerHTML = type === 'success' ?
-                '<svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>' :
-                type === 'error' ?
-                '<svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M4.93 4.93l14.14 14.14"></path></svg>' :
-                '<svg class="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M9.93 4.93l-7 12.12A2 2 0 004.76 21h14.48a2 2 0 001.83-2.95l-7-12.12a2 2 0 00-3.54 0z"></path></svg>';
+            icon.innerHTML = type === 'success'
+                ? '<svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>'
+                : type === 'error'
+                ? '<svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M4.93 4.93l14.14 14.14"></path></svg>'
+                : '<svg class="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M9.93 4.93l-7 12.12A2 2 0 004.76 21h14.48a2 2 0 001.83-2.95l-7-12.12a2 2 0 00-3.54 0z"></path></svg>';
             titleEl.textContent = title;
             msgEl.textContent = message;
             openModal('modalFeedback');

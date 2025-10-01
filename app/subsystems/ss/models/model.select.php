@@ -16,6 +16,7 @@ class select extends connect
     protected string $table12;
     protected string $table13;
     protected string $table14;
+    protected string $table15;
 
     function __construct($escola)
     {
@@ -34,9 +35,32 @@ class select extends connect
         $this->table11 = $table["ss_$escola"][11];
         $this->table12 = $table["ss_$escola"][12];
         $this->table13 = $table["ss_$escola"][13];
-        $this->table13 = $table["ss_$escola"][14];
+        $this->table14 = $table["ss_$escola"][14];
+        $this->table15 = $table["ss_$escola"][15];
     }
 
+    public function select_perfis_usuarios($id_perfil): array
+    {
+        $stmt = $this->connect->query("SELECT * FROM $this->table15 WHERE id = $id_perfil");
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+    public function select_perfis(): array
+    {
+        $stmt = $this->connect->query("SELECT * FROM $this->table15");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function select_requisicoes_pendentes(){
+        $stmt = $this->connect->query("SELECT *, r.id as id_requisicao FROM $this->table14 r INNER JOIN $this->table5 u ON r.id_usuario = u.id INNER JOIN $this->table1 c ON r.id_candidato = c.id WHERE r.status = 'Pendente'");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function select_requisicoes_realizadas(){
+        $stmt = $this->connect->query("SELECT *, r.id as id_requisicao FROM $this->table14 r INNER JOIN $this->table5 u ON r.id_usuario = u.id INNER JOIN $this->table1 c ON r.id_candidato = c.id WHERE r.status = 'Concluido'");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function select_requisicoes_rejeitadas(){
+        $stmt = $this->connect->query("SELECT *, r.id as id_requisicao FROM $this->table14 r INNER JOIN $this->table5 u ON r.id_usuario = u.id INNER JOIN $this->table1 c ON r.id_candidato = c.id WHERE r.status = 'Recusado'");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
     public function select_cursos(): array
     {
 

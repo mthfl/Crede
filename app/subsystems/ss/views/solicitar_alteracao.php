@@ -11,7 +11,7 @@ new connect($escola);
 require_once(__DIR__ . '/../models/model.select.php');
 $select = new select($escola);
 
-$cursos = $select->select_cursos(); // Para modais, se necessário
+$cursos = $select->select_cursos();
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -21,6 +21,10 @@ $cursos = $select->select_cursos(); // Para modais, se necessário
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema Escolar - Solicitação de Alteração</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/i18n/pt-BR.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -121,7 +125,6 @@ $cursos = $select->select_cursos(); // Para modais, se necessário
         }
 
         @keyframes pulseSoft {
-
             0%,
             100% {
                 opacity: 1;
@@ -291,9 +294,9 @@ $cursos = $select->select_cursos(); // Para modais, se necessário
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            padding: 0.5rem 1rem;
+            padding: 0.75rem 1.25rem;
             border-radius: 9999px;
-            font-size: 0.875rem;
+            font-size: 1rem;
             font-weight: 500;
         }
 
@@ -302,12 +305,12 @@ $cursos = $select->select_cursos(); // Para modais, se necessário
             color: #92400e;
         }
 
-        .status-aprovada {
+        .status-concluido {
             background-color: #d1fae5;
             color: #065f46;
         }
 
-        .status-rejeitada {
+        .status-recusado {
             background-color: #fee2e2;
             color: #991b1b;
         }
@@ -330,6 +333,28 @@ $cursos = $select->select_cursos(); // Para modais, se necessário
                 transform: none;
                 box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             }
+        }
+        /* Harmonizar Select2 com Tailwind */
+        .select2-container .select2-selection--single {
+            height: 3rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 3rem;
+            padding-left: 1rem;
+            color: #111827;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 3rem;
+            right: 0.75rem;
+        }
+        .select2-dropdown {
+            border: 2px solid #e5e7eb;
+            border-radius: 0.75rem;
+            overflow: hidden;
         }
     </style>
 </head>
@@ -390,7 +415,7 @@ $cursos = $select->select_cursos(); // Para modais, se necessário
                     <?php if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'admin' || $_SESSION['tipo_usuario'] === 'cadastrador')) { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.3s;">
                             <a href="candidatos.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring bg-white/10">
-                                <div class="w-12 h-12  bg-secondary rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
+                                <div class="w-12 h-12 bg-secondary rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
                                     </svg>
@@ -403,9 +428,6 @@ $cursos = $select->select_cursos(); // Para modais, se necessário
                         </div>
                     <?php } ?>
 
-
-
-                    <!-- Cotas -->
                     <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.4s;">
                             <a href="cotas.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
@@ -422,7 +444,22 @@ $cursos = $select->select_cursos(); // Para modais, se necessário
                         </div>
                     <?php } ?>
 
-                    <!-- Usuários -->
+                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
+                        <div class="animate-slide-in-left" style="animation-delay: 0.425s;">
+                            <a href="perfis.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
+                                <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A4 4 0 018 17h8a4 4 0 012.879 1.196M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <span class="font-semibold text-base">Perfis</span>
+                                    <p class="text-green-200 text-xs mt-1">Gerenciar perfis</p>
+                                </div>
+                            </a>
+                        </div>
+                    <?php } ?>
+
                     <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.45s;">
                             <a href="usuario.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
@@ -439,7 +476,6 @@ $cursos = $select->select_cursos(); // Para modais, se necessário
                         </div>
                     <?php } ?>
 
-                    <!-- Relatórios -->
                     <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.5s;">
                             <a href="#" onclick="openModal('modalRelatorios')" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
@@ -456,7 +492,6 @@ $cursos = $select->select_cursos(); // Para modais, se necessário
                         </div>
                     <?php } ?>
 
-                    <!-- Resultados -->
                     <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.55s;">
                             <a href="#" onclick="openModal('modalResultados')" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
@@ -472,7 +507,6 @@ $cursos = $select->select_cursos(); // Para modais, se necessário
                             </a>
                         </div>
                     <?php } ?>
-                    <!-- Requisição de cadastro -->
                     <?php if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'admin' || $_SESSION['tipo_usuario'] === 'cadastrador')) { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.6s;">
                             <a href="solicitar_alteracao.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
@@ -489,8 +523,6 @@ $cursos = $select->select_cursos(); // Para modais, se necessário
                         </div>
                     <?php } ?>
 
-
-                    <!-- Limpar Banco -->
                     <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.6s;">
                             <a href="limpar_banco.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
@@ -538,57 +570,56 @@ $cursos = $select->select_cursos(); // Para modais, se necessário
                 </div>
             </header>
 
-            <main class="p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <main class="p-4 sm:p-6 lg:p-8 max-w-none mx-auto">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12">
                     <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'cadastrador') { ?>
                         <!-- Formulário de Solicitação -->
-                        <div class="grid-item">
-                            <div class="bg-white rounded-2xl shadow-xl border-0 overflow-hidden card-hover">
+                        <div class="grid-item lg:col-span-2">
+                            <div class="bg-white rounded-2xl shadow-xl border-0 overflow-hidden card-hover mx-6 sm:mx-10 lg:mx-16">
                                 <div class="h-2 w-full bg-gradient-to-r from-primary to-secondary"></div>
-                                <div class="p-8">
+                                <div class="p-12">
                                     <div class="flex items-center gap-4 mb-8">
-                                        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary to-dark text-white flex items-center justify-center">
-                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary to-dark text-white flex items-center justify-center">
+                                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                             </svg>
                                         </div>
                                         <div>
-                                            <h2 class="text-xl font-bold text-primary font-display">Nova Solicitação</h2>
-                                            <p class="text-gray-600 text-sm">Solicite alterações nos dados dos alunos</p>
+                                            <h2 class="text-2xl font-bold text-primary font-display">Nova Solicitação</h2>
+                                            <p class="text-gray-600 text-base">Solicite alterações nos dados dos alunos</p>
                                         </div>
                                     </div>
 
-                                    <form action="../controllers/controller_candidato.php" method="post"  class="space-y-6">
-                                    <input type="hidden" name="id_usuario" value="<?=$_SESSION['id']?>">    
-                                    <div>
-                                            <label class="block text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
-                                                <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <form action="../controllers/controller_usuario.php" method="post" class="space-y-8">
+                                        <input type="hidden" name="id_usuario" value="<?= $_SESSION['id'] ?>">
+                                        <div>
+                                            <label class="block text-base font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                                                <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                                                 </svg>
                                                 Selecionar Aluno *
                                             </label>
-                                            <select id="selectAluno" name="id_aluno" class="w-full px-4 py-4 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-base" required>
+                                            <select id="selectAluno" name="id_candidato" class="w-full px-4 py-4 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-base" required>
                                                 <option value="" selected disabled>Selecionar aluno</option>
                                                 <?php
                                                 $dados = $select->select_candidatos();
                                                 foreach ($dados as $dado) { ?>
-
-                                                    <option value="<?= $dado['id'] ?>"><?= $dado['nome'] ?> | <?= $dado['nome_curso'] ?></option>
+                                                    <option value="<?= $dado['id'] ?>"><?= htmlspecialchars($dado['nome']) ?> | <?= htmlspecialchars($dado['nome_curso']) ?></option>
                                                 <?php } ?>
                                             </select>
                                         </div>
 
                                         <div>
-                                            <label class="block text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
-                                                <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <label class="block text-base font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                                                <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                                                 </svg>
                                                 Descrição da Alteração *
                                             </label>
-                                            <textarea id="descricaoAlteracao" name="descricao" class="w-full px-4 py-4 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-base resize-none" rows="4" placeholder="Descreva detalhadamente a alteração necessária nos dados do aluno (ex: correção de nome, CPF, endereço, etc.)" required></textarea>
+                                            <textarea id="descricaoAlteracao" name="descricao" class="w-full px-4 py-4 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-base resize-none" rows="8" placeholder="Descreva detalhadamente a alteração necessária nos dados do aluno (ex: correção de nome, CPF, endereço, etc.)" required></textarea>
                                             <div class="flex justify-between items-center mt-2">
-                                                <span class="text-xs text-gray-500">Máximo 500 caracteres</span>
-                                                <span id="contadorCaracteres" class="text-xs text-gray-500">0/500</span>
+                                                <span class="text-sm text-gray-500">Máximo 500 caracteres</span>
+                                                <span id="contadorCaracteres" class="text-sm text-gray-500">0/500</span>
                                             </div>
                                         </div>
 
@@ -607,131 +638,186 @@ $cursos = $select->select_cursos(); // Para modais, se necessário
                             </div>
                         </div>
                     <?php } else if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
-                        <!-- Lista de Solicitações -->
-                        <div class="grid-item">
-                            <div class="bg-white rounded-2xl shadow-xl border-0 overflow-hidden">
-                                <div class="h-2 w-full bg-gradient-to-r from-secondary to-primary"></div>
-                                <div class="p-8">
-                                    <div class="flex items-center gap-4 mb-8">
-                                        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-secondary to-orange-500 text-white flex items-center justify-center">
-                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
-                                            </svg>
+                        <!-- Lista de Solicitações em Três Colunas -->
+                        <div class="grid-item lg:col-span-2">
+
+                                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+                                        <!-- Coluna Pendente -->
+                                        <div class="bg-white rounded-2xl shadow-xl border-0 overflow-hidden card-hover">
+                                            <div class="h-2 w-full bg-gradient-to-r from-yellow-400 to-yellow-600"></div>
+                                            <div class="p-8 max-h-[70vh] overflow-y-auto custom-scrollbar">
+                                                <h3 class="text-xl font-semibold text-gray-800 mb-6">Pendente</h3>
+                                                <div class="space-y-6">
+                                                    <?php
+                                                    $requisicoes_pendentes = $select->select_requisicoes_pendentes();
+                                                    if (empty($requisicoes_pendentes)) {
+                                                        echo '<p class="text-base text-gray-500">Nenhuma solicitação pendente.</p>';
+                                                    } else {
+                                                        foreach ($requisicoes_pendentes as $requisicao) { ?>
+                                                            <div class="border border-gray-200 rounded-xl p-8 hover:border-primary/30 transition-all card-hover">
+                                                                <div class="flex flex-col md:flex-row justify-between items-start mb-6">
+                                                                    <div class="mb-4 md:mb-0">
+                                                                        <h4 class="font-semibold text-lg text-gray-900">Requisição de <?= htmlspecialchars($requisicao['nome_user'] ?? 'Usuário Desconhecido') ?></h4>
+                                                                    </div>
+                                                                    <p class="text-base text-gray-500">Candidato: <?= htmlspecialchars($requisicao['nome'] ?? 'Aluno Desconhecido') ?></p>
+                                                                </div>
+                                                                <p>Requisição:</p>
+                                                                <p class="text-base text-gray-600 mb-6 break-words"><?= htmlspecialchars($requisicao['texto']) ?></p>
+                                                                
+                                                                <div class="flex flex-col sm:flex-row gap-4">
+                                                                    <form action="../controllers/controller_usuario.php" method="post" class="update-status-form">
+                                                                        <input type="hidden" name="id_requisicao" value="<?= $requisicao['id_requisicao'] ?>">
+                                                                        <input type="hidden" name="novo_status" value="Recusado">
+                                                                        <button type="submit" class="w-full bg-red-500 text-white px-6 py-3 rounded-xl hover:bg-red-600 btn-animate font-semibold focus-ring text-base">
+                                                                            <span class="flex items-center justify-center">
+                                                                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                                                </svg>
+                                                                                Recusar
+                                                                            </span>
+                                                                        </button>
+                                                                    </form>
+                                                                    <form action="../controllers/controller_usuario.php" method="post" class="update-status-form">
+                                                                        <input type="hidden" name="id_requisicao" value="<?= $requisicao['id_requisicao'] ?>">
+                                                                        <input type="hidden" name="novo_status" value="Concluido">
+                                                                        <button type="submit" class="w-full bg-green-500 text-white px-6 py-3 rounded-xl hover:bg-green-600 btn-animate font-semibold focus-ring text-base">
+                                                                            <span class="flex items-center justify-center">
+                                                                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                                                </svg>
+                                                                                Realizada
+                                                                            </span>
+                                                                        </button>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                    <?php }
+                                                    } ?>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <h2 class="text-xl font-bold text-primary font-display">Minhas Solicitações</h2>
-                                            <p class="text-gray-600 text-sm">Acompanhe o status das suas solicitações</p>
+
+                                        <!-- Coluna Recusada -->
+                                        <div class="bg-white rounded-2xl shadow-xl border-0 overflow-hidden card-hover">
+                                            <div class="h-2 w-full bg-gradient-to-r from-red-400 to-red-600"></div>
+                                            <div class="p-8 max-h-[70vh] overflow-y-auto custom-scrollbar">
+                                                <h3 class="text-xl font-semibold text-gray-800 mb-6">Recusada</h3>
+                                                <div class="space-y-6">
+                                                    <?php
+                                                    $requisicoes_recusadas = $select->select_requisicoes_rejeitadas();
+                                                    if (empty($requisicoes_recusadas)) {
+                                                        echo '<p class="text-base text-gray-500">Nenhuma solicitação recusada.</p>';
+                                                    } else {
+                                                        foreach ($requisicoes_recusadas as $requisicao) { ?>
+                                                            <div class="border border-gray-200 rounded-xl p-8 hover:border-primary/30 transition-all card-hover">
+                                                                <div class="flex flex-col md:flex-row justify-between items-start mb-6">
+                                                                    <div class="mb-4 md:mb-0">
+                                                                        <h4 class="font-semibold text-lg text-gray-900"><?= htmlspecialchars($requisicao['nome'] ?? 'Usuário Desconhecido') ?></h4>
+                                                                        <p class="text-base text-gray-500">Enviado em <?= htmlspecialchars($requisicao['data_requisicao'] ?? 'Data não disponível') ?></p>
+                                                                    </div>
+                                                                    <span class="status-badge status-recusado">
+                                                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                                        </svg>
+                                                                        Recusada
+                                                                    </span>
+                                                                </div>
+                                                                <p class="text-base text-gray-600 mb-6 break-words"><?= htmlspecialchars($requisicao['texto']) ?></p>
+                                                <div class="flex flex-col sm:flex-row gap-4 mt-6">
+                                                    <form action="../controllers/controller_usuario.php" method="post" class="update-status-form">
+                                                        <input type="hidden" name="id_requisicao" value="<?= $requisicao['id_requisicao'] ?>">
+                                                        <input type="hidden" name="novo_status" value="Concluido">
+                                                        <button type="submit" class="w-full bg-green-500 text-white px-6 py-3 rounded-xl hover:bg-green-600 btn-animate font-semibold focus-ring text-base">
+                                                            <span class="flex items-center justify-center">
+                                                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                                </svg>
+                                                                Concluir
+                                                            </span>
+                                                        </button>
+                                                    </form>
+                                                    <form action="../controllers/controller_usuario.php" method="post" class="update-status-form">
+                                                        <input type="hidden" name="id_requisicao" value="<?= $requisicao['id_requisicao'] ?>">
+                                                        <input type="hidden" name="novo_status" value="Pendente">
+                                                        <button type="submit" class="w-full bg-yellow-500 text-white px-6 py-3 rounded-xl hover:bg-yellow-600 btn-animate font-semibold focus-ring text-base">
+                                                            <span class="flex items-center justify-center">
+                                                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01"></path>
+                                                                </svg>
+                                                                Pendente
+                                                            </span>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                                            </div>
+                                                    <?php }
+                                                    } ?>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Coluna Concluída -->
+                                        <div class="bg-white rounded-2xl shadow-xl border-0 overflow-hidden card-hover">
+                                            <div class="h-2 w-full bg-gradient-to-r from-green-400 to-green-600"></div>
+                                            <div class="p-8 max-h-[70vh] overflow-y-auto custom-scrollbar">
+                                                <h3 class="text-xl font-semibold text-gray-800 mb-6">Concluída</h3>
+                                                <div class="space-y-6">
+                                                    <?php
+                                                    $requisicoes_concluidas = $select->select_requisicoes_realizadas();
+                                                    if (empty($requisicoes_concluidas)) {
+                                                        echo '<p class="text-base text-gray-500">Nenhuma solicitação concluída.</p>';
+                                                    } else {
+                                                        foreach ($requisicoes_concluidas as $requisicao) { ?>
+                                                            <div class="border border-gray-200 rounded-xl p-8 hover:border-primary/30 transition-all card-hover">
+                                                                <div class="flex flex-col md:flex-row justify-between items-start mb-6">
+                                                                    <div class="mb-4 md:mb-0">
+                                                                        <h4 class="font-semibold text-lg text-gray-900"><?= htmlspecialchars($requisicao['nome_usuario'] ?? 'Usuário Desconhecido') ?></h4>
+                                                                        <p class="text-base text-gray-500">Enviado em <?= htmlspecialchars($requisicao['data_requisicao'] ?? 'Data não disponível') ?></p>
+                                                                    </div>
+                                                                    <span class="status-badge status-concluido">
+                                                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                                        </svg>
+                                                                        Concluída
+                                                                    </span>
+                                                                </div>
+                                                                <p class="text-base text-gray-600 mb-6 break-words"><?= htmlspecialchars($requisicao['texto']) ?></p>
+                                                                <div class="flex flex-col sm:flex-row gap-4 mt-6">
+                                                                    <form action="../controllers/controller_usuario.php" method="post" class="update-status-form">
+                                                                        <input type="hidden" name="id_requisicao" value="<?= $requisicao['id_requisicao'] ?>">
+                                                                        <input type="hidden" name="novo_status" value="Recusado">
+                                                                        <button type="submit" class="w-full bg-red-500 text-white px-6 py-3 rounded-xl hover:bg-red-600 btn-animate font-semibold focus-ring text-base">
+                                                                            <span class="flex items-center justify-center">
+                                                                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                                                </svg>
+                                                                                Recusar
+                                                                            </span>
+                                                                        </button>
+                                                                    </form>
+                                                                    <form action="../controllers/controller_usuario.php" method="post" class="update-status-form">
+                                                                        <input type="hidden" name="id_requisicao" value="<?= $requisicao['id_requisicao'] ?>">
+                                                                        <input type="hidden" name="novo_status" value="Pendente">
+                                                                        <button type="submit" class="w-full bg-yellow-500 text-white px-6 py-3 rounded-xl hover:bg-yellow-600 btn-animate font-semibold focus-ring text-base">
+                                                                            <span class="flex items-center justify-center">
+                                                                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01"></path>
+                                                                                </svg>
+                                                                                Pendente
+                                                                            </span>
+                                                                        </button>
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                    <?php }
+                                                    } ?>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-
-                                    <div class="space-y-4 max-h-[calc(100vh-300px)] overflow-y-auto">
-                                        <!-- Solicitação Exemplo 1 -->
-                                        <div class="border border-gray-200 rounded-xl p-6 hover:border-primary/30 transition-all">
-                                            <div class="flex flex-col md:flex-row justify-between items-start mb-4">
-                                                <div class="mb-2 md:mb-0">
-                                                    <h4 class="font-semibold text-gray-900 text-base">João Silva</h4>
-                                                    <p class="text-sm text-gray-500">Enviado em 20/09/2025</p>
-                                                </div>
-                                                <span class="status-badge status-pendente">
-                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                                    </svg>
-                                                    Pendente
-                                                </span>
-                                            </div>
-                                            <p class="text-sm text-gray-600 mb-4">Correção do nome completo no cadastro - falta sobrenome materno</p>
-                                            <div class="text-sm text-gray-500 bg-gray-50 p-3 rounded-lg">
-                                                <strong>Status:</strong> Aguardando análise do administrador
-                                            </div>
-                                        </div>
-
-                                        <!-- Solicitação Exemplo 2 -->
-                                        <div class="border border-gray-200 rounded-xl p-6 hover:border-primary/30 transition-all">
-                                            <div class="flex flex-col md:flex-row justify-between items-start mb-4">
-                                                <div class="mb-2 md:mb-0">
-                                                    <h4 class="font-semibold text-gray-900 text-base">Maria Santos</h4>
-                                                    <p class="text-sm text-gray-500">Enviado em 18/09/2025</p>
-                                                </div>
-                                                <span class="status-badge status-aprovada">
-                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                                    </svg>
-                                                    Aprovada
-                                                </span>
-                                            </div>
-                                            <p class="text-sm text-gray-600 mb-4">Atualização do endereço residencial conforme comprovante</p>
-                                            <div class="text-sm text-gray-700 bg-green-50 p-3 rounded-lg border border-green-200">
-                                                <strong>Resposta do Administrador:</strong><br>
-                                                Alteração aprovada e realizada. O endereço foi atualizado conforme solicitado. Data da alteração: 19/09/2025.
-                                            </div>
-                                        </div>
-
-                                        <!-- Solicitação Exemplo 3 -->
-                                        <div class="border border-gray-200 rounded-xl p-6 hover:border-primary/30 transition-all">
-                                            <div class="flex flex-col md:flex-row justify-between items-start mb-4">
-                                                <div class="mb-2 md:mb-0">
-                                                    <h4 class="font-semibold text-gray-900 text-base">Pedro Oliveira</h4>
-                                                    <p class="text-sm text-gray-500">Enviado em 15/09/2025</p>
-                                                </div>
-                                                <span class="status-badge status-rejeitada">
-                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                                    </svg>
-                                                    Rejeitada
-                                                </span>
-                                            </div>
-                                            <p class="text-sm text-gray-600 mb-4">Correção da data de nascimento</p>
-                                            <div class="text-sm text-gray-700 bg-red-50 p-3 rounded-lg border border-red-200">
-                                                <strong>Resposta do Administrador:</strong><br>
-                                                Solicitação rejeitada. A documentação enviada não é suficiente para comprovar a correção solicitada. Favor enviar certidão de nascimento atualizada.
-                                            </div>
-                                        </div>
-
-                                        <!-- Mais exemplos para preencher o espaço -->
-                                        <div class="border border-gray-200 rounded-xl p-6 hover:border-primary/30 transition-all">
-                                            <div class="flex flex-col md:flex-row justify-between items-start mb-4">
-                                                <div class="mb-2 md:mb-0">
-                                                    <h4 class="font-semibold text-gray-900 text-base">Ana Costa</h4>
-                                                    <p class="text-sm text-gray-500">Enviado em 12/09/2025</p>
-                                                </div>
-                                                <span class="status-badge status-aprovada">
-                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                                    </svg>
-                                                    Aprovada
-                                                </span>
-                                            </div>
-                                            <p class="text-sm text-gray-600 mb-4">Correção de CPF</p>
-                                            <div class="text-sm text-gray-700 bg-green-50 p-3 rounded-lg border border-green-200">
-                                                <strong>Resposta do Administrador:</strong><br>
-                                                CPF corrigido com sucesso. Obrigado pelo reporte.
-                                            </div>
-                                        </div>
-
-                                        <div class="border border-gray-200 rounded-xl p-6 hover:border-primary/30 transition-all">
-                                            <div class="flex flex-col md:flex-row justify-between items-start mb-4">
-                                                <div class="mb-2 md:mb-0">
-                                                    <h4 class="font-semibold text-gray-900 text-base">Carlos Lima</h4>
-                                                    <p class="text-sm text-gray-500">Enviado em 10/09/2025</p>
-                                                </div>
-                                                <span class="status-badge status-pendente">
-                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                                    </svg>
-                                                    Pendente
-                                                </span>
-                                            </div>
-                                            <p class="text-sm text-gray-600 mb-4">Atualização de telefone de contato</p>
-                                            <div class="text-sm text-gray-500 bg-gray-50 p-3 rounded-lg">
-                                                <strong>Status:</strong> Aguardando análise do administrador
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
-                </div>
-            <?php } ?>
+                    </div>
+                <?php } ?>
             </main>
         </div>
     </div>
@@ -791,6 +877,7 @@ $cursos = $select->select_cursos(); // Para modais, se necessário
                             <option value="publica_ac">Pública AC</option>
                             <option value="publica_cotas">Publica Cotas</option>
                             <option value="publica_geral">Pública Geral</option>
+                            <option value="comissao_selecao">Comissão de Seleção</option>
                         </select>
                     </div>
 
@@ -930,54 +1017,44 @@ $cursos = $select->select_cursos(); // Para modais, se necessário
             }, 300);
         }
 
+        // Inicializa Select2 no campo de aluno
+        $(document).ready(function() {
+            const $selectAluno = $('#selectAluno');
+            if ($selectAluno.length) {
+                $selectAluno.select2({
+                    width: '100%',
+                    placeholder: 'Selecionar aluno',
+                    allowClear: true,
+                    language: 'pt-BR'
+                });
+            }
+        });
+
         // Contador de caracteres
         const textarea = document.getElementById('descricaoAlteracao');
         const contador = document.getElementById('contadorCaracteres');
 
-        textarea.addEventListener('input', function() {
-            const caracteresDigitados = this.value.length;
-            const limite = 500;
+        if (textarea && contador) {
+            textarea.addEventListener('input', function() {
+                const caracteresDigitados = this.value.length;
+                const limite = 500;
 
-            if (caracteresDigitados > limite) {
-                this.value = this.value.substring(0, limite);
-                return;
-            }
+                if (caracteresDigitados > limite) {
+                    this.value = this.value.substring(0, limite);
+                    return;
+                }
 
-            contador.textContent = `${caracteresDigitados}/500`;
+                contador.textContent = `${caracteresDigitados}/500`;
 
-            if (caracteresDigitados > 450) {
-                contador.classList.add('text-red-500');
-                contador.classList.remove('text-gray-500');
-            } else {
-                contador.classList.add('text-gray-500');
-                contador.classList.remove('text-red-500');
-            }
-        });
-
-        // Envio do formulário
-        document.getElementById('solicitacaoForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            const aluno = document.getElementById('selectAluno').value;
-            const descricao = document.getElementById('descricaoAlteracao').value.trim();
-
-            if (!aluno || !descricao) {
-                showNotification('Por favor, preencha todos os campos obrigatórios.', 'error');
-                return;
-            }
-
-            if (descricao.length < 20) {
-                showNotification('A descrição deve ter pelo menos 20 caracteres.', 'error');
-                return;
-            }
-
-            // Simular envio
-            setTimeout(() => {
-                openModal('modalConfirmacao');
-                this.reset();
-                contador.textContent = '0/500';
-            }, 500);
-        });
+                if (caracteresDigitados > 450) {
+                    contador.classList.add('text-red-500');
+                    contador.classList.remove('text-gray-500');
+                } else {
+                    contador.classList.add('text-gray-500');
+                    contador.classList.remove('text-red-500');
+                }
+            });
+        }
 
         // Função de notificação
         function showNotification(message, type = 'info') {
@@ -1002,12 +1079,10 @@ $cursos = $select->select_cursos(); // Para modais, se necessário
             `;
             document.body.appendChild(notification);
 
-            // Animação de entrada
             setTimeout(() => {
                 notification.style.transform = 'translateX(0)';
             }, 10);
 
-            // Remover notificação após 3 segundos
             setTimeout(() => {
                 notification.style.transform = 'translateX(full)';
                 setTimeout(() => {
