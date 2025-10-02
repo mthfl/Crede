@@ -8,7 +8,6 @@ require_once(__DIR__ . "/../models/model.cadastrador.php");
 require_once(__DIR__ . "/../models/model.select.php");
 print_r($_POST);
 
-// Atualizar candidato
 if (
     isset($_POST['form']) && $_POST['form'] === 'candidato' &&
     isset($_POST['acao']) && $_POST['acao'] === 'update' &&
@@ -19,12 +18,19 @@ if (
     $data_nascimento = trim($_POST['data_nascimento'] ?? '');
     $tipo_escola = $_POST['tipo_escola'] ?? 'publica';
     $publica = $tipo_escola === 'publica' ? 1 : 0;
-    // Processar campo cota do formulário
-    $cota = $_POST['cota'] ?? 'ampla';
-    $pcd = ($cota === 'pcd') ? 1 : 0;
-    $bairro = ($cota === 'bairro') ? 1 : 0;
 
-    // helper para converter nota
+    $tipo_cota = $_POST['status_candidato'];
+    if ($tipo_cota === 'pcd') {
+        $pcd = 1;
+        $bairro = 0;
+    } else if ($tipo_cota === 'cotas') {
+        $bairro = 1;
+        $pcd = 0;
+    } else {
+        $pcd = 0;
+        $bairro = 0;
+    }
+
     $f = function ($key) {
         $v = $_POST[$key] ?? 0;
         if ($v === '' || $v === null) return 0;
@@ -220,9 +226,9 @@ if (
     $nome = $_POST["nome"];
     $data_nascimento = $_POST["data_nascimento"];
     // Processar campo cota do formulário
-    $cota = $_POST['cota'] ?? 'ampla';
-    $pcd = ($cota === 'pcd') ? 1 : 0;
-    $bairro = ($cota === 'bairro') ? 1 : 0;
+    echo $cota = $_POST['cota'] ?? 'ampla';
+    echo $pcd = ($cota === 'pcd') ? 1 : 0;
+    echo $bairro = ($cota === 'bairro') ? 1 : 0;
     $id_curso1 = (int)$_POST["curso_id"];
     $publica = $_POST["tipo_escola"] == 'publica' ? 1 : 0;
     $id_cadastrador = $_SESSION['id'];
@@ -379,12 +385,12 @@ if (
             header('Location: ../views/cadastro.php?falha');
             exit();
     }
-} else if (isset($_POST['id_candidato']) && !empty($_POST['id_candidato'])) {
+} else if (isset($_POST['id_candidato']) && !empty($_POST['id_candidato']) && !isset($_POST['form']) && !isset($_POST['acao'])) {
     $escola = $_SESSION['escola'];
     $admin_model = new admin($escola);
 
     $id_candidato = $_POST['id_candidato'];
-    echo $result = $admin_model->excluir_candidato($id_candidato);
+    $result = $admin_model->excluir_candidato($id_candidato);
     switch ($result) {
         case 1:
             header('Location: ../views/candidatos.php?deletado');

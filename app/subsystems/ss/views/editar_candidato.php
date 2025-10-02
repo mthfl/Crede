@@ -394,12 +394,18 @@ function simnao($v) {
                                 </select>
                             </div>
                             <div class="flex items-center gap-3">
-                                <input type="checkbox" id="pcd" name="pcd" class="w-5 h-5 text-primary border-gray-300 rounded input-checkbox input-disabled" style="--tw-ring-color: <?= $cursoCor ?>;" <?= ((int)($candidato['pcd'] ?? 0) === 1) ? 'checked' : '' ?> disabled>
+                                <input type="radio" id="pcd" name="status_candidato" value="pcd" class="w-5 h-5 text-primary border-gray-300 rounded input-checkbox input-disabled" style="--tw-ring-color: <?= $cursoCor ?>;" <?= $candidato['pcd'] == 1 ? 'checked' : '' ?> disabled>
                                 <label for="pcd" class="text-sm font-medium text-gray-700">PCD</label>
+                                
                             </div>
                             <div class="flex items-center gap-3">
-                                <input type="checkbox" id="cotas" name="cotas" class="w-5 h-5 text-primary border-gray-300 rounded input-checkbox input-disabled" style="--tw-ring-color: <?= $cursoCor ?>;" <?= ((int)($candidato['bairro'] ?? 0) === 1) ? 'checked' : '' ?> disabled>
+                                <input type="radio" id="cotas" name="status_candidato" value="cotas" class="w-5 h-5 text-primary border-gray-300 rounded input-checkbox input-disabled" style="--tw-ring-color: <?= $cursoCor ?>;" <?= $candidato['bairro'] == 1 ? 'checked' : '' ?> disabled>
                                 <label for="cotas" class="text-sm font-medium text-gray-700">Cotas</label>
+                                
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <input type="radio" id="ampla" name="status_candidato" value="ampla" class="w-5 h-5 text-primary border-gray-300 rounded input-checkbox input-disabled" style="--tw-ring-color: <?= $cursoCor ?>;" <?= ($candidato['pcd'] == 0 && $candidato['bairro'] == 0) ? 'checked' : '' ?> disabled>
+                                <label for="ampla" class="text-sm font-medium text-gray-700">Ampla Concorrência</label>
                             </div>
                         </div>
                     </div>
@@ -500,19 +506,14 @@ function simnao($v) {
                                                 echo '<input type="text" name="' . $n3 . '" value="' . fmt($candidato[$b3] ?? '') . '" class="w-full px-2 py-1.5 border border-gray-300 rounded-lg input-modern input-focus input-disabled text-center text-sm" style="--tw-ring-color: ' . $cursoCor . '; --tw-border-opacity: 0.5;" oninput="applyGradeMask(this)" disabled>';
                                                 echo '</td>';
                                                 echo '<td class="border border-gray-300 px-2 py-2 text-center">';
-                                                
-                                                // Verifica se os 3 bimestres estão preenchidos
                                                 $bim1 = isset($candidato[$b1]) && !empty($candidato[$b1]);
                                                 $bim2 = isset($candidato[$b2]) && !empty($candidato[$b2]);
                                                 $bim3 = isset($candidato[$b3]) && !empty($candidato[$b3]);
-                                                
-                                                // Se todos os 3 bimestres estiverem preenchidos, não mostra a média
                                                 if ($bim1 && $bim2 && $bim3) {
                                                     echo '<span class="text-sm text-gray-500">Completo</span>';
                                                 } else {
                                                     echo '<input type="text" name="' . $nMed . '" value="' . fmt($candidato[$med] ?? '') . '" class="w-full px-2 py-1.5 border border-gray-300 rounded-lg input-modern input-focus input-disabled text-center text-sm bg-yellow-50" style="--tw-ring-color: ' . $cursoCor . '; --tw-border-opacity: 0.5;" oninput="applyGradeMask(this)" disabled>';
                                                 }
-                                                
                                                 echo '</td>';
                                                 echo '</tr>';
                                             }
@@ -560,82 +561,53 @@ function simnao($v) {
             }
         }
 
-    function applyGradeMask(input) {
-    if (!input.disabled) {
-        // Armazena a posição do cursor
-        let cursorPosition = input.selectionStart;
-        let value = input.value;
-
-        // Remove tudo exceto dígitos e ponto
-        let cleanValue = value.replace(/[^\d.]/g, '');
-
-        // Se o campo está vazio ou sendo limpo, permite
-        if (cleanValue === '' || cleanValue === '.') {
-            input.value = cleanValue === '.' ? '' : cleanValue;
-            return;
-        }
-
-        // Garante apenas um ponto
-        cleanValue = cleanValue.replace(/\.+/g, '.');
-
-        // Se começar com ponto, adiciona 0
-        if (cleanValue.startsWith('.')) {
-            cleanValue = '0' + cleanValue;
-        }
-
-        // Separa partes
-        let parts = cleanValue.split('.');
-        let integerPart = parts[0];
-        let decimalPart = parts[1] || '';
-
-        // Se digitou 3+ dígitos sem ponto, converte para 10.00
-        if (parts.length === 1 && integerPart.length >= 3) {
-            input.value = '10.00';
-            return;
-        }
-
-        // Processa parte inteira
-        if (integerPart.length > 2) {
-            integerPart = integerPart.slice(0, 2);
-        }
-
-        // Se tem 2 dígitos na parte inteira e não é "10"
-        if (integerPart.length === 2 && integerPart !== '10' && parts.length === 1) {
-            // Move o segundo dígito para decimal
-            decimalPart = integerPart[1] + decimalPart;
-            integerPart = integerPart[0];
-        }
-
-        // Limita parte decimal a 2 dígitos
-        if (decimalPart.length > 2) {
-            decimalPart = decimalPart.slice(0, 2);
-        }
-
-        // Monta o resultado
-        let result = integerPart;
-        if (parts.length > 1 || decimalPart.length > 0) {
-            result += '.' + decimalPart;
-        }
-
-        // Verifica se excede 10
-        if (result.includes('.')) {
-            let numValue = parseFloat(result);
-            if (numValue > 10) {
-                result = '10.00';
+        function applyGradeMask(input) {
+            if (!input.disabled) {
+                let cursorPosition = input.selectionStart;
+                let value = input.value;
+                let cleanValue = value.replace(/[^\d.]/g, '');
+                if (cleanValue === '' || cleanValue === '.') {
+                    input.value = cleanValue === '.' ? '' : cleanValue;
+                    return;
+                }
+                cleanValue = cleanValue.replace(/\.+/g, '.');
+                if (cleanValue.startsWith('.')) {
+                    cleanValue = '0' + cleanValue;
+                }
+                let parts = cleanValue.split('.');
+                let integerPart = parts[0];
+                let decimalPart = parts[1] || '';
+                if (parts.length === 1 && integerPart.length >= 3) {
+                    input.value = '10.00';
+                    return;
+                }
+                if (integerPart.length > 2) {
+                    integerPart = integerPart.slice(0, 2);
+                }
+                if (integerPart.length === 2 && integerPart !== '10' && parts.length === 1) {
+                    decimalPart = integerPart[1] + decimalPart;
+                    integerPart = integerPart[0];
+                }
+                if (decimalPart.length > 2) {
+                    decimalPart = decimalPart.slice(0, 2);
+                }
+                let result = integerPart;
+                if (parts.length > 1 || decimalPart.length > 0) {
+                    result += '.' + decimalPart;
+                }
+                if (result.includes('.')) {
+                    let numValue = parseFloat(result);
+                    if (numValue > 10) {
+                        result = '10.00';
+                    }
+                }
+                input.value = result;
+                let newCursorPos = result.length;
+                setTimeout(() => {
+                    input.setSelectionRange(newCursorPos, newCursorPos);
+                }, 0);
             }
         }
-
-        // Aplica o resultado
-        input.value = result;
-
-        // Posiciona o cursor sempre no final do número
-        let newCursorPos = result.length;
-        setTimeout(() => {
-            input.setSelectionRange(newCursorPos, newCursorPos);
-        }, 0);
-    }
-
-}
 
         function validateForm() {
             const requiredInputs = document.querySelectorAll('#editarForm input[required]:not(:disabled)');
@@ -707,6 +679,10 @@ function simnao($v) {
         document.getElementById('editarForm').addEventListener('submit', function(e) {
             if (!validateForm()) {
                 e.preventDefault();
+            } else {
+                const status = document.querySelector('input[name="status_candidato"]:checked').value;
+                document.querySelector('input[name="pcd"]').value = status === 'pcd' ? '1' : '0';
+                document.querySelector('input[name="bairro"]').value = status === 'cotas' ? '1' : '0';
             }
         });
 
@@ -718,7 +694,7 @@ function simnao($v) {
                 input.style.setProperty('--tw-border-opacity', '0.5');
             });
 
-            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            const checkboxes = document.querySelectorAll('input[type="checkbox"], input[type="radio"]');
             checkboxes.forEach(checkbox => {
                 checkbox.classList.add('input-checkbox', 'input-disabled');
             });

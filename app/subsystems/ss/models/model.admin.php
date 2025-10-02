@@ -807,7 +807,7 @@ class admin extends cadastrador
     public function desabilitar_usuario(int $id_usuario): int
     {
         try {
-            $stmt = $this->connect->prepare("UPDATE $this->table5 SET status = 0 WHERE id = :id");
+            $stmt = $this->connect->prepare("UPDATE $this->table5 SET status = 0, data_fim = NOW() WHERE id = :id");
             $stmt->bindValue(":id", $id_usuario);
             if ($stmt->execute()) {
                 return 1;
@@ -821,7 +821,7 @@ class admin extends cadastrador
     public function habilitar_usuario(int $id_usuario): int
     {
         try {
-            $stmt = $this->connect->prepare("UPDATE $this->table5 SET status = 1 WHERE id = :id");
+            $stmt = $this->connect->prepare("UPDATE $this->table5 SET status = 1, data_fim = NULL WHERE id = :id");
             $stmt->bindValue(":id", $id_usuario);
             if ($stmt->execute()) {
                 return 1;
