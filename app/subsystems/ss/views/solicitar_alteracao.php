@@ -641,34 +641,21 @@ $cursos = $select->select_cursos();
                             </div>
                         </div>
                     <?php } else if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
-                        <!-- Lista de Solicitações em Três Colunas -->
                         <div class="grid-item lg:col-span-2">
-                            <div class="mb-8">
-                                <div class="flex items-center gap-4 mb-6">
-                                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary to-dark text-white flex items-center justify-center">
-                                        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <h2 class="text-2xl font-bold text-primary font-display">Painel de Requisições</h2>
-                                        <p class="text-gray-600 text-base">Gerencie as solicitações de alteração de dados</p>
-                                    </div>
-                                </div>
-                            </div>
+                           
 
                             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
                                 <!-- Coluna Pendente -->
                                 <div class="bg-white rounded-2xl shadow-xl border-0 overflow-hidden card-hover transform transition-all duration-300 hover:translate-y-[-5px]">
-                                    <div class="h-2 w-full bg-gradient-to-r from-yellow-400 to-yellow-600"></div>
+                                    <div class="h-2 w-full bg-gradient-to-r from-primary to-primary/80"></div>
                                     <div class="p-6">
                                         <div class="flex items-center gap-3 mb-4">
-                                            <div class="w-10 h-10 rounded-xl bg-yellow-100 text-yellow-600 flex items-center justify-center">
+                                            <div class="w-10 h-10 rounded-xl bg-primary/20 text-primary flex items-center justify-center">
                                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                                 </svg>
                                             </div>
-                                            <h3 class="text-xl font-semibold text-gray-800">Pendente</h3>
+                                            <h3 class="text-xl font-semibold text-dark">Pendente</h3>
                                         </div>
                                         <div class="max-h-[65vh] overflow-y-auto custom-scrollbar pr-2">
                                             <div class="space-y-4">
@@ -691,9 +678,9 @@ $cursos = $select->select_cursos();
                                                                     <h4 class="font-semibold text-gray-900 text-sm"><?= htmlspecialchars($requisicao['nome_user'] ?? 'Usuário Desconhecido') ?></h4>
                                                                     <p class="text-xs text-gray-500 mt-1">Candidato: <?= htmlspecialchars($requisicao['nome'] ?? 'Aluno Desconhecido') ?></p>
                                                                 </div>
-                                                                <span class="px-2 py-1 bg-yellow-100 text-yellow-700 text-xs rounded-lg font-medium">Pendente</span>
+                                                                <span class="px-2 py-1 bg-secondary/20 text-secondary text-xs rounded-lg font-medium">Pendente</span>
                                                             </div>
-                                                            <div class="bg-gray-50 p-3 rounded-lg mb-3">
+                                                            <div class="bg-accent p-3 rounded-lg mb-3">
                                                                 <p class="text-sm text-gray-600 break-words"><?= htmlspecialchars($requisicao['texto']) ?></p>
                                                             </div>
                                                             
@@ -701,7 +688,7 @@ $cursos = $select->select_cursos();
                                                                 <form action="../controllers/controller_usuario.php" method="post" class="update-status-form flex-1">
                                                                     <input type="hidden" name="id_requisicao" value="<?= $requisicao['id_requisicao'] ?>">
                                                                     <input type="hidden" name="novo_status" value="Recusado">
-                                                                    <button type="submit" class="w-full bg-red-500 text-white px-3 py-2.5 rounded-lg hover:bg-red-600 transition-all font-medium text-sm flex items-center justify-center shadow-sm">
+                                                                    <button type="submit" class="w-full bg-red-600 text-white px-3 py-2.5 rounded-lg hover:bg-red-700 transition-all font-medium text-sm flex items-center justify-center shadow-sm">
                                                                         <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                                                         </svg>
@@ -711,7 +698,7 @@ $cursos = $select->select_cursos();
                                                                 <form action="../controllers/controller_usuario.php" method="post" class="update-status-form flex-1">
                                                                     <input type="hidden" name="id_requisicao" value="<?= $requisicao['id_requisicao'] ?>">
                                                                     <input type="hidden" name="novo_status" value="Concluido">
-                                                                    <button type="submit" class="w-full bg-green-500 text-white px-3 py-2.5 rounded-lg hover:bg-green-600 transition-all font-medium text-sm flex items-center justify-center shadow-sm">
+                                                                    <button type="submit" class="w-full bg-primary text-white px-3 py-2.5 rounded-lg hover:bg-primary/80 transition-all font-medium text-sm flex items-center justify-center shadow-sm">
                                                                         <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                                                         </svg>
@@ -729,15 +716,15 @@ $cursos = $select->select_cursos();
 
                                         <!-- Coluna Recusada -->
                                         <div class="bg-white rounded-2xl shadow-xl border-0 overflow-hidden card-hover transform transition-all duration-300 hover:translate-y-[-5px]">
-                                            <div class="h-2 w-full bg-gradient-to-r from-red-400 to-red-600"></div>
+                                            <div class="h-2 w-full bg-gradient-to-r from-primary to-primary/80"></div>
                                             <div class="p-6">
                                                 <div class="flex items-center gap-3 mb-4">
-                                                    <div class="w-10 h-10 rounded-xl bg-red-100 text-red-600 flex items-center justify-center">
+                                                    <div class="w-10 h-10 rounded-xl bg-primary/20 text-primary flex items-center justify-center">
                                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                                         </svg>
                                                     </div>
-                                                    <h3 class="text-xl font-semibold text-gray-800">Recusada</h3>
+                                                    <h3 class="text-xl font-semibold text-dark">Recusada</h3>
                                                 </div>
                                                 <div class="max-h-[65vh] overflow-y-auto custom-scrollbar pr-2">
                                                     <div class="space-y-4">
@@ -760,30 +747,31 @@ $cursos = $select->select_cursos();
                                                                             <h4 class="font-semibold text-gray-900 text-sm"><?= htmlspecialchars($requisicao['nome'] ?? 'Usuário Desconhecido') ?></h4>
                                                                             <p class="text-xs text-gray-500 mt-1">Enviado em <?= htmlspecialchars($requisicao['data_requisicao'] ?? 'Data não disponível') ?></p>
                                                                         </div>
-                                                                        <span class="px-2 py-1 bg-red-100 text-red-700 text-xs rounded-lg font-medium">Recusada</span>
+                                                                        <span class="px-2 py-1 bg-dark/20 text-dark text-xs rounded-lg font-medium">Recusada</span>
                                                                     </div>
-                                                                    <div class="bg-gray-50 p-3 rounded-lg mb-3">
+                                                                    <div class="bg-accent p-3 rounded-lg mb-3">
                                                                         <p class="text-sm text-gray-600 break-words"><?= htmlspecialchars($requisicao['texto']) ?></p>
                                                                     </div>
                                                                     <div class="flex gap-2 mt-3">
+                                                                       
                                                                         <form action="../controllers/controller_usuario.php" method="post" class="update-status-form flex-1">
                                                                             <input type="hidden" name="id_requisicao" value="<?= $requisicao['id_requisicao'] ?>">
+                                                                            <input type="hidden" name="novo_status" value="Pendente">
+                                                                            <button type="submit" class="w-full bg-secondary text-white px-3 py-2.5 rounded-lg hover:bg-secondary/80 transition-all font-medium text-sm flex items-center justify-center shadow-sm">
+                                                                                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                                                                </svg>
+                                                                                Pendente
+                                                                            </button>
+                                                                        </form>
+                                                                         <form action="../controllers/controller_usuario.php" method="post" class="update-status-form flex-1">
+                                                                            <input type="hidden" name="id_requisicao" value="<?= $requisicao['id_requisicao'] ?>">
                                                                             <input type="hidden" name="novo_status" value="Concluido">
-                                                                            <button type="submit" class="w-full bg-green-500 text-white px-3 py-2.5 rounded-lg hover:bg-green-600 transition-all font-medium text-sm flex items-center justify-center shadow-sm">
+                                                                            <button type="submit" class="w-full bg-primary text-white px-3 py-2.5 rounded-lg hover:bg-primary/80 transition-all font-medium text-sm flex items-center justify-center shadow-sm">
                                                                                 <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                                                                 </svg>
                                                                                 Concluir
-                                                                            </button>
-                                                                        </form>
-                                                                        <form action="../controllers/controller_usuario.php" method="post" class="update-status-form flex-1">
-                                                                            <input type="hidden" name="id_requisicao" value="<?= $requisicao['id_requisicao'] ?>">
-                                                                            <input type="hidden" name="novo_status" value="Pendente">
-                                                                            <button type="submit" class="w-full bg-yellow-500 text-white px-3 py-2.5 rounded-lg hover:bg-yellow-600 transition-all font-medium text-sm flex items-center justify-center shadow-sm">
-                                                                                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01"></path>
-                                                                                </svg>
-                                                                                Pendente
                                                                             </button>
                                                                         </form>
                                                                     </div>
@@ -797,15 +785,15 @@ $cursos = $select->select_cursos();
 
                                         <!-- Coluna Concluída -->
                                         <div class="bg-white rounded-2xl shadow-xl border-0 overflow-hidden card-hover transform transition-all duration-300 hover:translate-y-[-5px]">
-                                            <div class="h-2 w-full bg-gradient-to-r from-green-400 to-green-600"></div>
+                                            <div class="h-2 w-full bg-gradient-to-r from-primary to-primary/80"></div>
                                             <div class="p-6">
                                                 <div class="flex items-center gap-3 mb-4">
-                                                    <div class="w-10 h-10 rounded-xl bg-green-100 text-green-600 flex items-center justify-center">
+                                                    <div class="w-10 h-10 rounded-xl bg-primary/20 text-primary flex items-center justify-center">
                                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                                         </svg>
                                                     </div>
-                                                    <h3 class="text-xl font-semibold text-gray-800">Concluída</h3>
+                                                    <h3 class="text-xl font-semibold text-dark">Concluída</h3>
                                                 </div>
                                                 <div class="max-h-[65vh] overflow-y-auto custom-scrollbar pr-2">
                                                     <div class="space-y-4">
@@ -828,16 +816,16 @@ $cursos = $select->select_cursos();
                                                                             <h4 class="font-semibold text-gray-900 text-sm"><?= htmlspecialchars($requisicao['nome_usuario'] ?? 'Usuário Desconhecido') ?></h4>
                                                                             <p class="text-xs text-gray-500 mt-1">Enviado em <?= htmlspecialchars($requisicao['data_requisicao'] ?? 'Data não disponível') ?></p>
                                                                         </div>
-                                                                        <span class="px-2 py-1 bg-green-100 text-green-700 text-xs rounded-lg font-medium">Concluída</span>
+                                                                        <span class="px-2 py-1 bg-primary/20 text-primary text-xs rounded-lg font-medium">Concluída</span>
                                                                     </div>
-                                                                    <div class="bg-gray-50 p-3 rounded-lg mb-3">
+                                                                    <div class="bg-accent p-3 rounded-lg mb-3">
                                                                         <p class="text-sm text-gray-600 break-words"><?= htmlspecialchars($requisicao['texto']) ?></p>
                                                                     </div>
                                                                     <div class="flex gap-2 mt-3">
                                                                         <form action="../controllers/controller_usuario.php" method="post" class="update-status-form flex-1">
                                                                             <input type="hidden" name="id_requisicao" value="<?= $requisicao['id_requisicao'] ?>">
                                                                             <input type="hidden" name="novo_status" value="Recusado">
-                                                                            <button type="submit" class="w-full bg-red-500 text-white px-3 py-2.5 rounded-lg hover:bg-red-600 transition-all font-medium text-sm flex items-center justify-center shadow-sm">
+                                                                            <button type="submit" class="w-full bg-red-600 text-white px-3 py-2.5 rounded-lg hover:bg-red-700 transition-all font-medium text-sm flex items-center justify-center shadow-sm">
                                                                                 <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                                                                 </svg>
@@ -847,9 +835,9 @@ $cursos = $select->select_cursos();
                                                                         <form action="../controllers/controller_usuario.php" method="post" class="update-status-form flex-1">
                                                                             <input type="hidden" name="id_requisicao" value="<?= $requisicao['id_requisicao'] ?>">
                                                                             <input type="hidden" name="novo_status" value="Pendente">
-                                                                            <button type="submit" class="w-full bg-yellow-500 text-white px-3 py-2.5 rounded-lg hover:bg-yellow-600 transition-all font-medium text-sm flex items-center justify-center shadow-sm">
+                                                                            <button type="submit" class="w-full bg-secondary text-white px-3 py-2.5 rounded-lg hover:bg-secondary/80 transition-all font-medium text-sm flex items-center justify-center shadow-sm">
                                                                                 <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01"></path>
+                                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
                                                                                 </svg>
                                                                                 Pendente
                                                                             </button>
