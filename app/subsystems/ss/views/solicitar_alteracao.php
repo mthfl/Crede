@@ -642,215 +642,313 @@ $cursos = $select->select_cursos();
                         </div>
                     <?php } else if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
                         <div class="grid-item lg:col-span-2">
-                           
+                            <!-- Cabeçalho da seção de solicitações -->
+                            <div class="mb-6">
+                                <h2 class="text-2xl font-bold text-primary font-display mb-2">Gerenciamento de Solicitações</h2>
+                                <p class="text-gray-600">Visualize e gerencie todas as solicitações de alteração de dados dos alunos</p>
+                            </div>
 
-                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-                                <!-- Coluna Pendente -->
-                                <div class="bg-white rounded-2xl shadow-xl border-0 overflow-hidden card-hover transform transition-all duration-300 hover:translate-y-[-5px]">
-                                    <div class="h-2 w-full bg-gradient-to-r from-secondary to-secondary/80"></div>
-                                    <div class="p-6">
-                                        <div class="flex items-center gap-3 mb-4">
-                                            <div class="w-10 h-10 rounded-xl bg-secondary/20 text-secondary flex items-center justify-center">
-                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                                </svg>
-                                            </div>
-                                            <h3 class="text-xl font-semibold text-dark">Pendente</h3>
+                            <!-- Filtros e estatísticas -->
+                            <div class="bg-white rounded-xl shadow-md p-4 mb-6">
+                                <div class="flex flex-wrap items-center justify-between gap-4">
+                                    <!-- Estatísticas rápidas -->
+                                    <div class="flex flex-wrap gap-4">
+                                        <?php
+                                        $requisicoes_pendentes = $select->select_requisicoes_pendentes();
+                                        $requisicoes_recusadas = $select->select_requisicoes_rejeitadas();
+                                        $requisicoes_concluidas = $select->select_requisicoes_realizadas();
+                                        $total_pendentes = count($requisicoes_pendentes);
+                                        $total_recusadas = count($requisicoes_recusadas);
+                                        $total_concluidas = count($requisicoes_concluidas);
+                                        $total_geral = $total_pendentes + $total_recusadas + $total_concluidas;
+                                        ?>
+                                        <div class="flex items-center gap-2 bg-yellow-50 text-yellow-700 px-3 py-2 rounded-lg">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                            </svg>
+                                            <span class="font-medium"><?= $total_pendentes ?> Pendentes</span>
                                         </div>
-                                        <div class="max-h-[65vh] overflow-y-auto custom-scrollbar pr-2">
-                                            <div class="space-y-4">
-                                                <?php
-                                                $requisicoes_pendentes = $select->select_requisicoes_pendentes();
-                                                if (empty($requisicoes_pendentes)) {
-                                                    echo '<div class="flex items-center justify-center p-6 bg-gray-50 rounded-xl">
-                                                            <p class="text-base text-gray-500 flex items-center">
-                                                                <svg class="w-5 h-5 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                                                </svg>
-                                                                Nenhuma solicitação pendente
-                                                            </p>
-                                                          </div>';
-                                                } else {
-                                                    foreach ($requisicoes_pendentes as $requisicao) { ?>
-                                                        <div class="border border-gray-200 rounded-xl p-4 hover:border-yellow-400/50 hover:shadow-md transition-all">
-                                                            <div class="flex justify-between items-start mb-3">
-                                                                <div>
-                                                                    <h4 class="font-semibold text-gray-900 text-sm"><?= htmlspecialchars($requisicao['nome_user'] ?? 'Usuário Desconhecido') ?></h4>
-                                                                    <p class="text-xs text-gray-500 mt-1">Candidato: <?= htmlspecialchars($requisicao['nome'] ?? 'Aluno Desconhecido') ?></p>
-                                                                </div>
-                                                               
-                                                            </div>
-                                                            <div class="bg-accent p-3 rounded-lg mb-3">
-                                                                <p class="text-sm text-gray-600 break-words"><?= htmlspecialchars($requisicao['texto']) ?></p>
-                                                            </div>
-                                                            
-                                                            <div class="flex gap-2 mt-3">
-                                                                <form action="../controllers/controller_usuario.php" method="post" class="update-status-form flex-1">
-                                                                    <input type="hidden" name="id_requisicao" value="<?= $requisicao['id_requisicao'] ?>">
-                                                                    <input type="hidden" name="novo_status" value="Recusado">
-                                                                    <button type="submit" class="w-full bg-secondary text-white px-3 py-2.5 rounded-lg hover:bg-secondary/80 transition-all font-medium text-sm flex items-center justify-center shadow-sm">
-                                                                        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                                                        </svg>
-                                                                        Recusar
-                                                                    </button>
-                                                                </form>
-                                                                <form action="../controllers/controller_usuario.php" method="post" class="update-status-form flex-1">
-                                                                    <input type="hidden" name="id_requisicao" value="<?= $requisicao['id_requisicao'] ?>">
-                                                                    <input type="hidden" name="novo_status" value="Concluido">
-                                                                    <button type="submit" class="w-full bg-secondary text-white px-3 py-2.5 rounded-lg hover:bg-secondary/80 transition-all font-medium text-sm flex items-center justify-center shadow-sm">
-                                                                        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                                                        </svg>
-                                                                        Concluir
-                                                                    </button>
-                                                                </form>
-                                                            </div>
-                                                        </div>
-                                                <?php }
-                                                } ?>
-                                            </div>
+                                        <div class="flex items-center gap-2 bg-red-50 text-red-700 px-3 py-2 rounded-lg">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                            </svg>
+                                            <span class="font-medium"><?= $total_recusadas ?> Recusadas</span>
                                         </div>
+                                        <div class="flex items-center gap-2 bg-green-50 text-green-700 px-3 py-2 rounded-lg">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                            </svg>
+                                            <span class="font-medium"><?= $total_concluidas ?> Concluídas</span>
+                                        </div>
+                                        <div class="flex items-center gap-2 bg-blue-50 text-blue-700 px-3 py-2 rounded-lg">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                                            </svg>
+                                            <span class="font-medium"><?= $total_geral ?> Total</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Filtro de busca -->
+                                    <div class="relative">
+                                        <input type="text" id="searchSolicitacoes" placeholder="Buscar solicitações..." class="pl-10 pr-4 py-2 border-2 border-gray-200 rounded-lg focus:border-primary focus:ring-4 focus:ring-primary/10 w-full sm:w-64">
+                                        <svg class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                                        </svg>
                                     </div>
                                 </div>
+                            </div>
 
-                                        <!-- Coluna Recusada -->
-                                        <div class="bg-white rounded-2xl shadow-xl border-0 overflow-hidden card-hover transform transition-all duration-300 hover:translate-y-[-5px]">
-                                            <div class="h-2 w-full bg-gradient-to-r from-red-600 to-red-500"></div>
-                                            <div class="p-6">
-                                                <div class="flex items-center gap-3 mb-4">
-                                                    <div class="w-10 h-10 rounded-xl bg-red-100 text-red-600 flex items-center justify-center">
-                                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                                        </svg>
-                                                    </div>
-                                                    <h3 class="text-xl font-semibold text-dark">Recusada</h3>
-                                                </div>
-                                                <div class="max-h-[65vh] overflow-y-auto custom-scrollbar pr-2">
-                                                    <div class="space-y-4">
-                                                        <?php
-                                                        $requisicoes_recusadas = $select->select_requisicoes_rejeitadas();
-                                                        if (empty($requisicoes_recusadas)) {
-                                                            echo '<div class="flex items-center justify-center p-6 bg-gray-50 rounded-xl">
-                                                                    <p class="text-base text-gray-500 flex items-center">
-                                                                        <svg class="w-5 h-5 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                                                        </svg>
-                                                                        Nenhuma solicitação recusada
-                                                                    </p>
-                                                                  </div>';
-                                                        } else {
-                                                            foreach ($requisicoes_recusadas as $requisicao) { ?>
-                                                                <div class="border border-gray-200 rounded-xl p-4 hover:border-red-400/50 hover:shadow-md transition-all">
-                                                                    <div class="flex justify-between items-start mb-3">
-                                                                        <div>
-                                                                            <h4 class="font-semibold text-gray-900 text-sm"><?= htmlspecialchars($requisicao['nome'] ?? 'Usuário Desconhecido') ?></h4>
-                                                                            <p class="text-xs text-gray-500 mt-1">Enviado em <?= htmlspecialchars($requisicao['data_requisicao'] ?? 'Data não disponível') ?></p>
-                                                                        </div>
-                                                                   
-                                                                    </div>
-                                                                    <div class="bg-accent p-3 rounded-lg mb-3">
-                                                                        <p class="text-sm text-gray-600 break-words"><?= htmlspecialchars($requisicao['texto']) ?></p>
-                                                                    </div>
-                                                                    <div class="flex gap-2 mt-3">
-                                                                       
-                                                                        <form action="../controllers/controller_usuario.php" method="post" class="update-status-form flex-1">
-                                                                            <input type="hidden" name="id_requisicao" value="<?= $requisicao['id_requisicao'] ?>">
-                                                                            <input type="hidden" name="novo_status" value="Pendente">
-                                                                            <button type="submit" class="w-full bg-red-600 text-white px-3 py-2.5 rounded-lg hover:bg-red-700 transition-all font-medium text-sm flex items-center justify-center shadow-sm">
-                                                                                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                                                                                </svg>
-                                                                                Pendente
-                                                                            </button>
-                                                                        </form>
-                                                                         <form action="../controllers/controller_usuario.php" method="post" class="update-status-form flex-1">
-                                                                            <input type="hidden" name="id_requisicao" value="<?= $requisicao['id_requisicao'] ?>">
-                                                                            <input type="hidden" name="novo_status" value="Concluido">
-                                                                            <button type="submit" class="w-full bg-red-600 text-white px-3 py-2.5 rounded-lg hover:bg-red-700 transition-all font-medium text-sm flex items-center justify-center shadow-sm">
-                                                                                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                                                                </svg>
-                                                                                Concluir
-                                                                            </button>
-                                                                        </form>
-                                                                    </div>
-                                                                </div>
-                                                        <?php }
-                                                        } ?>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                            <!-- Abas de navegação -->
+                            <div class="mb-6">
+                                <div class="flex border-b border-gray-200">
+                                    <button data-tab="tab-pendentes" class="tab-button py-3 px-6 border-b-2 border-secondary text-secondary font-semibold outline-none">Pendentes</button>
+                                <button data-tab="tab-recusadas" class="tab-button py-3 px-6 border-b-2 border-transparent text-gray-500 hover:text-gray-700 outline-none">Recusadas</button>
+                                <button data-tab="tab-concluidas" class="tab-button py-3 px-6 border-b-2 border-transparent text-gray-500 hover:text-gray-700 outline-none">Concluídas</button>
+                                </div>
+                            </div>
 
-                                        <!-- Coluna Concluída -->
-                                        <div class="bg-white rounded-2xl shadow-xl border-0 overflow-hidden card-hover transform transition-all duration-300 hover:translate-y-[-5px]">
-                                            <div class="h-2 w-full bg-gradient-to-r from-primary to-primary/80"></div>
-                                            <div class="p-6">
-                                                <div class="flex items-center gap-3 mb-4">
-                                                    <div class="w-10 h-10 rounded-xl bg-primary/20 text-primary flex items-center justify-center">
-                                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            <!-- Conteúdo das abas -->
+                            <div class="grid grid-cols-1 gap-6">
+                                <!-- Aba Pendente -->
+                                <div id="tab-pendentes" class="tab-content">
+                                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                        <?php
+                                        if (empty($requisicoes_pendentes)) {
+                                            echo '<div class="col-span-full flex items-center justify-center p-12 bg-gray-50 rounded-xl">
+                                                    <div class="text-center">
+                                                        <svg class="w-12 h-12 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                                                         </svg>
+                                                        <p class="text-lg text-gray-500 font-medium">Nenhuma solicitação pendente</p>
+                                                        <p class="text-gray-400 mt-1">Todas as solicitações foram processadas</p>
                                                     </div>
-                                                    <h3 class="text-xl font-semibold text-dark">Concluída</h3>
-                                                </div>
-                                                <div class="max-h-[65vh] overflow-y-auto custom-scrollbar pr-2">
-                                                    <div class="space-y-4">
-                                                        <?php
-                                                        $requisicoes_concluidas = $select->select_requisicoes_realizadas();
-                                                        if (empty($requisicoes_concluidas)) {
-                                                            echo '<div class="flex items-center justify-center p-6 bg-gray-50 rounded-xl">
-                                                                    <p class="text-base text-gray-500 flex items-center">
-                                                                        <svg class="w-5 h-5 mr-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                                                        </svg>
-                                                                        Nenhuma solicitação concluída
-                                                                    </p>
-                                                                  </div>';
-                                                        } else {
-                                                            foreach ($requisicoes_concluidas as $requisicao) { ?>
-                                                                <div class="border border-gray-200 rounded-xl p-4 hover:border-green-400/50 hover:shadow-md transition-all">
-                                                                    <div class="flex justify-between items-start mb-3">
-                                                                        <div>
-                                                                            <h4 class="font-semibold text-gray-900 text-sm"><?= htmlspecialchars($requisicao['nome_usuario'] ?? 'Usuário Desconhecido') ?></h4>
-                                                                            <p class="text-xs text-gray-500 mt-1">Enviado em <?= htmlspecialchars($requisicao['data_requisicao'] ?? 'Data não disponível') ?></p>
-                                                                        </div>
-                                                                       
-                                                                    </div>
-                                                                    <div class="bg-accent p-3 rounded-lg mb-3">
-                                                                        <p class="text-sm text-gray-600 break-words"><?= htmlspecialchars($requisicao['texto']) ?></p>
-                                                                    </div>
-                                                                    <div class="flex gap-2 mt-3">
-                                                                        <form action="../controllers/controller_usuario.php" method="post" class="update-status-form flex-1">
-                                                                            <input type="hidden" name="id_requisicao" value="<?= $requisicao['id_requisicao'] ?>">
-                                                                            <input type="hidden" name="novo_status" value="Recusado">
-                                                                            <button type="submit" class="w-full bg-primary text-white px-3 py-2.5 rounded-lg hover:bg-primary/80 transition-all font-medium text-sm flex items-center justify-center shadow-sm">
-                                                                                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                                                                </svg>
-                                                                                Recusar
-                                                                            </button>
-                                                                        </form>
-                                                                        <form action="../controllers/controller_usuario.php" method="post" class="update-status-form flex-1">
-                                                                            <input type="hidden" name="id_requisicao" value="<?= $requisicao['id_requisicao'] ?>">
-                                                                            <input type="hidden" name="novo_status" value="Pendente">
-                                                                            <button type="submit" class="w-full bg-primary text-white px-3 py-2.5 rounded-lg hover:bg-primary/80 transition-all font-medium text-sm flex items-center justify-center shadow-sm">
-                                                                                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                                                                                </svg>
-                                                                                Pendente
-                                                                            </button>
-                                                                        </form>
-                                                                    </div>
+                                                  </div>';
+                                        } else {
+                                            foreach ($requisicoes_pendentes as $requisicao) { ?>
+                                                <div class="bg-white rounded-xl shadow-md overflow-hidden border-l-4 border-yellow-400 hover:shadow-lg transition-all duration-300 solicitacao-card">
+                                                    <div class="p-5">
+                                                        <div class="flex justify-between items-start mb-4">
+                                                            <div>
+                                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 mb-2">
+                                                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                                    </svg>
+                                                                    Pendente
+                                                                </span>
+                                                                <h4 class="font-semibold text-gray-900"><?= htmlspecialchars($requisicao['nome_user'] ?? 'Usuário Desconhecido') ?></h4>
+                                                                <div class="flex items-center gap-2 mt-1">
+                                                                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                                                    </svg>
+                                                                    <p class="text-sm text-gray-500">Candidato: <span class="font-medium text-gray-700"><?= htmlspecialchars($requisicao['nome'] ?? 'Aluno Desconhecido') ?></span></p>
                                                                 </div>
-                                                        <?php }
-                                                        } ?>
+                                                                <div class="flex items-center gap-2 mt-1">
+                                                                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                                                    </svg>
+                                                                    <p class="text-sm text-gray-500"><?= htmlspecialchars(date('d/m/Y H:i', strtotime($requisicao['data_requisicao'] ?? 'now'))) ?></p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="flex">
+                                                                <button type="button" class="text-gray-400 hover:text-gray-600 p-1" onclick="toggleDetails(this)">
+                                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                                                    </svg>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div class="bg-gray-50 p-4 rounded-lg mb-4 solicitacao-details">
+                                                            <h5 class="font-medium text-gray-700 mb-2">Descrição da solicitação:</h5>
+                                                            <p class="text-gray-600 whitespace-pre-line"><?= htmlspecialchars($requisicao['texto']) ?></p>
+                                                        </div>
+                                                        
+                                                        <div class="flex gap-2">
+                                                            <form action="../controllers/controller_usuario.php" method="post" class="update-status-form flex-1">
+                                                                <input type="hidden" name="id_requisicao" value="<?= $requisicao['id_requisicao'] ?>">
+                                                                <input type="hidden" name="novo_status" value="Recusado">
+                                                                <button type="submit" class="w-full bg-white border border-red-500 text-red-500 px-3 py-2 rounded-lg hover:bg-red-50 transition-all font-medium text-sm flex items-center justify-center">
+                                                                    <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                                    </svg>
+                                                                    Recusar
+                                                                </button>
+                                                            </form>
+                                                            <form action="../controllers/controller_usuario.php" method="post" class="update-status-form flex-1">
+                                                                <input type="hidden" name="id_requisicao" value="<?= $requisicao['id_requisicao'] ?>">
+                                                                <input type="hidden" name="novo_status" value="Concluido">
+                                                                <button type="submit" class="w-full bg-primary text-white px-3 py-2 rounded-lg hover:bg-primary/90 transition-all font-medium text-sm flex items-center justify-center">
+                                                                    <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                                    </svg>
+                                                                    Concluir
+                                                                </button>
+                                                            </form>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </div>
+                                            <?php }
+                                        } ?>
                                     </div>
+                                </div>
+                                
+                                <!-- Aba Recusada -->
+                                <div id="tab-recusadas" class="tab-content hidden">
+                                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                        <?php
+                                        if (empty($requisicoes_recusadas)) {
+                                            echo '<div class="col-span-full flex items-center justify-center p-12 bg-gray-50 rounded-xl">
+                                                    <div class="text-center">
+                                                        <svg class="w-12 h-12 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                                        </svg>
+                                                        <p class="text-lg text-gray-500 font-medium">Nenhuma solicitação recusada</p>
+                                                        <p class="text-gray-400 mt-1">Não há solicitações recusadas no momento</p>
+                                                    </div>
+                                                  </div>';
+                                        } else {
+                                            foreach ($requisicoes_recusadas as $requisicao) { ?>
+                                                <div class="bg-white rounded-xl shadow-md overflow-hidden border-l-4 border-red-500 hover:shadow-lg transition-all duration-300 solicitacao-card">
+                                                    <div class="p-5">
+                                                        <div class="flex justify-between items-start mb-4">
+                                                            <div>
+                                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 mb-2">
+                                                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                                    </svg>
+                                                                    Recusada
+                                                                </span>
+                                                                <h4 class="font-semibold text-gray-900"><?= htmlspecialchars($requisicao['nome_user'] ?? 'Usuário Desconhecido') ?></h4>
+                                                                <div class="flex items-center gap-2 mt-1">
+                                                                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                                                    </svg>
+                                                                    <p class="text-sm text-gray-500">Candidato: <span class="font-medium text-gray-700"><?= htmlspecialchars($requisicao['nome'] ?? 'Aluno Desconhecido') ?></span></p>
+                                                                </div>
+                                                                <div class="flex items-center gap-2 mt-1">
+                                                                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                                                    </svg>
+                                                                    <p class="text-sm text-gray-500"><?= htmlspecialchars(date('d/m/Y H:i', strtotime($requisicao['data_requisicao'] ?? 'now'))) ?></p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="flex">
+                                                                <button type="button" class="text-gray-400 hover:text-gray-600 p-1" onclick="toggleDetails(this)">
+                                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                                                    </svg>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div class="bg-gray-50 p-4 rounded-lg mb-4 solicitacao-details">
+                                                            <h5 class="font-medium text-gray-700 mb-2">Descrição da solicitação:</h5>
+                                                            <p class="text-gray-600 whitespace-pre-line"><?= htmlspecialchars($requisicao['texto']) ?></p>
+                                                        </div>
+                                                        
+                                                        <div class="flex gap-2">
+                                                            <form action="../controllers/controller_usuario.php" method="post" class="update-status-form flex-1">
+                                                                <input type="hidden" name="id_requisicao" value="<?= $requisicao['id_requisicao'] ?>">
+                                                                <input type="hidden" name="novo_status" value="Pendente">
+                                                                <button type="submit" class="w-full bg-white border border-yellow-500 text-yellow-500 px-3 py-2 rounded-lg hover:bg-yellow-50 transition-all font-medium text-sm flex items-center justify-center">
+                                                                    <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                                                    </svg>
+                                                                    Marcar como Pendente
+                                                                </button>
+                                                            </form>
+                                                            <form action="../controllers/controller_usuario.php" method="post" class="update-status-form flex-1">
+                                                                <input type="hidden" name="id_requisicao" value="<?= $requisicao['id_requisicao'] ?>">
+                                                                <input type="hidden" name="novo_status" value="Concluido">
+                                                                <button type="submit" class="w-full bg-primary text-white px-3 py-2 rounded-lg hover:bg-primary/90 transition-all font-medium text-sm flex items-center justify-center">
+                                                                    <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                                    </svg>
+                                                                    Concluir
+                                                                </button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            <?php }
+                                        } ?>
+                                    </div>
+                                </div>
+                                
+                                <!-- Aba Concluída -->
+                                <div id="tab-concluidas" class="tab-content hidden">
+                                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                        <?php
+                                        $requisicoes_concluidas = $select->select_requisicoes_realizadas();
+                                        if (empty($requisicoes_concluidas)) {
+                                            echo '<div class="col-span-full flex items-center justify-center p-12 bg-gray-50 rounded-xl">
+                                                    <div class="text-center">
+                                                        <svg class="w-12 h-12 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                                        </svg>
+                                                        <p class="text-lg text-gray-500 font-medium">Nenhuma solicitação concluída</p>
+                                                        <p class="text-gray-400 mt-1">Não há solicitações concluídas no momento</p>
+                                                    </div>
+                                                  </div>';
+                                        } else {
+                                            foreach ($requisicoes_concluidas as $requisicao) { ?>
+                                                <div class="bg-white rounded-xl shadow-md overflow-hidden border-l-4 border-green-500 hover:shadow-lg transition-all duration-300 solicitacao-card">
+                                                    <div class="p-5">
+                                                        <div class="flex justify-between items-start mb-4">
+                                                            <div>
+                                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 mb-2">
+                                                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                                    </svg>
+                                                                    Concluída
+                                                                </span>
+                                                                <h4 class="font-semibold text-gray-900"><?= htmlspecialchars($requisicao['nome_user'] ?? 'Usuário Desconhecido') ?></h4>
+                                                                <div class="flex items-center gap-2 mt-1">
+                                                                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                                                    </svg>
+                                                                    <p class="text-sm text-gray-500">Candidato: <span class="font-medium text-gray-700"><?= htmlspecialchars($requisicao['nome'] ?? 'Aluno Desconhecido') ?></span></p>
+                                                                </div>
+                                                                <div class="flex items-center gap-2 mt-1">
+                                                                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                                                    </svg>
+                                                                    <p class="text-sm text-gray-500"><?= htmlspecialchars(date('d/m/Y H:i', strtotime($requisicao['data_requisicao'] ?? 'now'))) ?></p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="flex">
+                                                                <button type="button" class="text-gray-400 hover:text-gray-600 p-1" onclick="toggleDetails(this)">
+                                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                                                    </svg>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        <div class="bg-gray-50 p-4 rounded-lg mb-4 solicitacao-details">
+                                                            <h5 class="font-medium text-gray-700 mb-2">Descrição da solicitação:</h5>
+                                                            <p class="text-gray-600 whitespace-pre-line"><?= htmlspecialchars($requisicao['texto']) ?></p>
+                                                        </div>
+                                                        
+                                                        <div class="flex gap-2">
+                                                            <form action="../controllers/controller_usuario.php" method="post" class="update-status-form flex-1">
+                                                                <input type="hidden" name="id_requisicao" value="<?= $requisicao['id_requisicao'] ?>">
+                                                                <input type="hidden" name="novo_status" value="Pendente">
+                                                                <button type="submit" class="w-full bg-white border border-yellow-500 text-yellow-500 px-3 py-2 rounded-lg hover:bg-yellow-50 transition-all font-medium text-sm flex items-center justify-center">
+                                                                    <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                                                                    </svg>
+                                                                    Reabrir como Pendente
+                                                                </button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            <?php }
+                                        } ?>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 <?php } ?>
@@ -1091,6 +1189,61 @@ $cursos = $select->select_cursos();
                 }
             });
         }
+
+        // Sistema de abas
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            // Verificar se há uma âncora na URL
+            const hash = window.location.hash;
+            if (hash) {
+                const targetTabId = hash.substring(1); // Remove o # do início
+                const targetButton = document.querySelector(`[data-tab="${targetTabId}"]`);
+                
+                if (targetButton) {
+                    // Simular clique no botão da aba correspondente
+                    setTimeout(() => {
+                        targetButton.click();
+                    }, 100);
+                }
+            }
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const tabId = button.getAttribute('data-tab');
+                    
+                    // Remover classes ativas de todos os botões
+                    tabButtons.forEach(btn => {
+                        btn.classList.remove('border-secondary', 'text-secondary', 'border-red-500', 'text-red-700', 'border-green-500', 'text-green-700', 'font-semibold');
+                        btn.classList.add('border-transparent', 'text-gray-500', 'hover:text-gray-700');
+                    });
+                    
+                    // Adicionar classes ativas ao botão clicado com base no tipo de aba
+                    button.classList.add('font-semibold');
+                    button.classList.remove('border-transparent', 'text-gray-500', 'hover:text-gray-700');
+                    
+                    if (tabId === 'tab-pendentes') {
+                        button.classList.add('border-secondary', 'text-secondary');
+                    } else if (tabId === 'tab-recusadas') {
+                        button.classList.add('border-red-500', 'text-red-700');
+                    } else if (tabId === 'tab-concluidas') {
+                        button.classList.add('border-green-500', 'text-green-700');
+                    }
+                    
+                    // Esconder todos os conteúdos
+                    tabContents.forEach(content => {
+                        content.classList.add('hidden');
+                    });
+                    
+                    // Mostrar o conteúdo correspondente
+                    const activeContent = document.getElementById(tabId);
+                    if (activeContent) {
+                        activeContent.classList.remove('hidden');
+                    }
+                });
+            });
+        });
 
         // Função de notificação
         function showNotification(message, type = 'info') {

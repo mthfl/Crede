@@ -174,7 +174,7 @@ if (
     }
     switch ($result) {
         case 1:
-            header('Location: ../views/solicitar_alteracao.php?realizado');
+            header('Location: ../views/solicitar_alteracao.php?realizado#tab-concluidas');
             exit();
         case 2:
             header('Location: ../views/solicitar_alteracao.php?erro');
