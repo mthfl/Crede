@@ -286,7 +286,7 @@ $cursos = $select->select_cursos();
         }
 
         .card-hover:hover {
-            transform: translateY(-4px) scale(1.01);
+     
             box-shadow: 0 20px 40px -12px rgba(0, 90, 36, 0.15);
         }
 
@@ -414,8 +414,8 @@ $cursos = $select->select_cursos();
                     <!-- Candidatos -->
                     <?php if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'admin' || $_SESSION['tipo_usuario'] === 'cadastrador')) { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.3s;">
-                            <a href="candidatos.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring bg-white/10">
-                                <div class="w-12 h-12 bg-secondary rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
+                            <a href="candidatos.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring ">
+                                <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
                                     </svg>
@@ -444,21 +444,7 @@ $cursos = $select->select_cursos();
                         </div>
                     <?php } ?>
 
-                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
-                        <div class="animate-slide-in-left" style="animation-delay: 0.425s;">
-                            <a href="perfis.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
-                                <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
-                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A4 4 0 018 17h8a4 4 0 012.879 1.196M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <span class="font-semibold text-base">Perfis</span>
-                                    <p class="text-green-200 text-xs mt-1">Gerenciar perfis</p>
-                                </div>
-                            </a>
-                        </div>
-                    <?php } ?>
+                    
 
                     <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.45s;">
@@ -509,8 +495,8 @@ $cursos = $select->select_cursos();
                     <?php } ?>
                     <?php if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'admin' || $_SESSION['tipo_usuario'] === 'cadastrador')) { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.6s;">
-                            <a href="solicitar_alteracao.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
-                                <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
+                            <a href="solicitar_alteracao.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring bg-white/10">
+                                <div class="w-12 h-12 bg-secondary rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                     </svg>
@@ -616,11 +602,28 @@ $cursos = $select->select_cursos();
                                                 </svg>
                                                 Descrição da Alteração *
                                             </label>
-                                            <textarea id="descricaoAlteracao" name="descricao" class="w-full px-4 py-4 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-base resize-none" rows="8" placeholder="Descreva detalhadamente a alteração necessária nos dados do aluno (ex: correção de nome, CPF, endereço, etc.)" required></textarea>
+                                            <textarea id="descricaoAlteracao" name="descricao" class="w-full px-4 py-4 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-base resize-none" rows="8" placeholder="Descreva detalhadamente a alteração necessária nos dados do aluno (ex: correção de nome, CPF, endereço, etc.)" required maxlength="500"></textarea>
                                             <div class="flex justify-between items-center mt-2">
                                                 <span class="text-sm text-gray-500">Máximo 500 caracteres</span>
-                                                <span id="contadorCaracteres" class="text-sm text-gray-500">0/500</span>
+                                                <span id="contadorCaracteres" class="text-sm text-gray-500 font-semibold">0/500</span>
                                             </div>
+                                            <script>
+                                                $(document).ready(function() {
+                                                    $('#descricaoAlteracao').on('input', function() {
+                                                        var currentLength = $(this).val().length;
+                                                        var maxLength = 500;
+                                                        $('#contadorCaracteres').text(currentLength + '/' + maxLength);
+                                                        
+                                                        if(currentLength >= maxLength) {
+                                                            $('#contadorCaracteres').addClass('text-red-500');
+                                                        } else if(currentLength >= maxLength * 0.8) {
+                                                            $('#contadorCaracteres').addClass('text-yellow-500').removeClass('text-red-500');
+                                                        } else {
+                                                            $('#contadorCaracteres').removeClass('text-yellow-500 text-red-500');
+                                                        }
+                                                    });
+                                                });
+                                            </script>
                                         </div>
 
                                         <div class="pt-4">
