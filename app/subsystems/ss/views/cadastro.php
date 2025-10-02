@@ -141,6 +141,75 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
             transform: translateY(0);
         }
 
+        .calculator-icon-btn {
+            position: relative;
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background: white;
+            border: 2px solid <?= $curso_cor ?>30;
+        }
+
+        .calculator-icon-btn:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 8px 20px <?= $curso_cor ?>30;
+            border-color: <?= $curso_cor ?>;
+        }
+
+        .calculator-icon-btn:active {
+            transform: translateY(0) scale(0.98);
+        }
+
+        .calculator-icon-btn svg {
+            transition: all 0.3s ease;
+        }
+
+        .calculator-icon-btn:hover svg {
+            transform: scale(1.1);
+        }
+
+        .tooltip {
+            position: absolute;
+            bottom: -35px;
+            left: 50%;
+            transform: translateX(-50%) scale(0.8);
+            background: #1f2937;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .tooltip::before {
+            content: '';
+            position: absolute;
+            top: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-bottom: 5px solid #1f2937;
+        }
+
+        .calculator-icon-btn:hover .tooltip {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) scale(1);
+        }
+
         .focus-ring:focus {
             outline: 2px solid var(--secondary);
             outline-offset: 2px;
@@ -182,7 +251,6 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
             width: 1rem;
             height: 1rem;
             border: 2px solid #cbd5e1;
-            /* gray-300 */
             border-radius: 9999px;
             background-color: #fff;
             position: relative;
@@ -220,7 +288,6 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
             width: 1rem;
             height: 1rem;
             border: 2px solid #cbd5e1;
-            /* gray-300 */
             border-radius: 0.25rem;
             background-color: #fff;
             position: relative;
@@ -399,6 +466,48 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
             transform: translateY(-1px);
             box-shadow: 0 10px 25px rgba(239, 68, 68, 0.3);
         }
+
+        #calculatorForm select,
+        #calculatorForm input {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        #calculatorForm input[readonly] {
+            background-color: #fefcbf;
+            cursor: default;
+        }
+
+        .subject-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .subject-row select,
+        .subject-row input {
+            flex: 1;
+        }
+
+        .subject-row button {
+            padding: 0.5rem;
+            background: #ef4444;
+            color: white;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .subject-row button:hover {
+            background: #dc2626;
+            transform: translateY(-1px);
+        }
+
+        .add-subject-btn {
+            background: #10b981;
+        }
+
+        .add-subject-btn:hover {
+            background: #059669;
+        }
     </style>
 </head>
 
@@ -418,25 +527,37 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
 
             <div class="bg-white rounded-2xl shadow-xl border border-gray-200/50 overflow-hidden">
                 <div class="text-white p-6" style="background: linear-gradient(135deg, <?= $curso_cor ?>, #1A3C34);">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm border border-white/30 shadow-lg">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                            </svg>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm border border-white/30 shadow-lg">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h2 class="text-2xl font-bold font-display tracking-tight">Formulário de Inscrição</h2>
+                                <p class="text-white/90 text-sm mt-1 font-medium">
+                                    <?php if ($curso_nome && $tipo_escola): ?>
+                                        Curso: <?= htmlspecialchars($curso_nome) ?> -
+                                        <?= $tipo_escola === 'publica' ? 'Escola Pública' : 'Escola Privada' ?>
+                                    <?php else: ?>
+                                        Sistema de Seleção Escolar
+                                    <?php endif; ?>
+                                </p>
+                            </div>
                         </div>
-                        <div>
-                            <h2 class="text-2xl font-bold font-display tracking-tight">Formulário de Inscrição</h2>
-                            <p class="text-white/90 text-sm mt-1 font-medium">
-                                <?php if ($curso_nome && $tipo_escola): ?>
-                                    Curso: <?= htmlspecialchars($curso_nome) ?> -
-                                    <?= $tipo_escola === 'publica' ? 'Escola Pública' : 'Escola Privada' ?>
-                                <?php else: ?>
-                                    Sistema de Seleção Escolar
-                                <?php endif; ?>
-                            </p>
+
+                        <!-- Ícone da Calculadora -->
+                        <div class="calculator-icon-btn" id="openCalculatorBtn">
+                            <svg class="w-6 h-6" style="color: <?= $curso_cor ?>;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                            </svg>
+                            <span class="tooltip">Calcular Média</span>
                         </div>
                     </div>
                 </div>
+
+
 
                 <div class="p-6 pb-2">
                     <div class="progress-bar">
@@ -791,6 +912,8 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
                                     </tbody>
                                 </table>
                             </div>
+
+                            <!-- Informação Importante Dinâmica -->
                             <div class="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
                                 <div class="flex items-start">
                                     <svg class="w-5 h-5 text-blue-500 mt-0.5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -854,13 +977,58 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
         </div>
     </div>
 
+    <!-- Modal da Calculadora -->
+<div id="calculatorModal" class="modal-overlay">
+    <div class="modal-content bg-white rounded-xl p-6 max-w-md w-full mx-auto shadow-2xl transform transition-all duration-300">
+        <!-- Header -->
+        <div class="flex items-center justify-between mb-6 pb-4 border-b border-gray-200">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background: linear-gradient(135deg, <?= $curso_cor ?>, #1A3C34);">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-800">Calculadora de Médias</h3>
+            </div>
+            <button type="button" onclick="closeCalculator()" class="text-gray-400 hover:text-gray-600 transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Campos de Notas -->
+        <div id="subjectsList" class="space-y-3 mb-6 max-h-60 overflow-y-auto pr-2">
+            <!-- As linhas serão adicionadas dinamicamente -->
+        </div>
+
+        <!-- Resultado da Média -->
+        <div class="mb-6 p-5 rounded-lg" style="background: linear-gradient(135deg, <?= $curso_cor ?>15, <?= $curso_cor ?>05);">
+            <div class="text-center">
+                <label class="block text-sm font-medium text-gray-600 mb-2">Média Calculada</label>
+                <input type="text" id="calculatedAverage" placeholder="0,00" class="w-full text-center text-2xl font-bold border-2 rounded-lg px-4 py-3 bg-white focus:outline-none focus:ring-2 transition-all duration-200" style="color: <?= $curso_cor ?>; border-color: <?= $curso_cor ?>30; --tw-ring-color: <?= $curso_cor ?>;" readonly>
+            </div>
+        </div>
+
+        <!-- Botões -->
+        <div class="flex gap-3">
+            <button type="button" id="closeCalculatorBtn" class="flex-1 px-5 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-all duration-200 font-medium text-base">
+                Fechar
+            </button>
+            <button type="button" onclick="copyAverage()" class="flex-1 px-5 py-3 text-white rounded-lg transition-all duration-200 font-medium text-base flex items-center justify-center gap-2" style="background: linear-gradient(135deg, <?= $curso_cor ?>, #1A3C34);">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                </svg>
+                Copiar
+            </button>
+        </div>
+    </div>
+</div>
+
     <script>
-
-
-  function applyUppercase(input) {
+        function applyUppercase(input) {
             input.value = input.value.toUpperCase();
         }
-
 
         function applyDateMask(input) {
             let value = input.value.replace(/\D/g, '');
@@ -875,67 +1043,48 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
 
         function applyGradeMask(input) {
             let value = input.value;
-
-            // Remove tudo exceto dígitos e ponto
             let cleanValue = value.replace(/[^\d.]/g, '');
 
-            // Se o campo está vazio ou sendo limpo, permite
             if (cleanValue === '' || cleanValue === '.') {
                 input.value = cleanValue === '.' ? '' : cleanValue;
-                // Posiciona cursor no final
-                setTimeout(() => {
-                    input.setSelectionRange(input.value.length, input.value.length);
-                }, 0);
+                setTimeout(() => input.setSelectionRange(input.value.length, input.value.length), 0);
                 return;
             }
 
-            // Garante apenas um ponto
             cleanValue = cleanValue.replace(/\.+/g, '.');
 
-            // Se começar com ponto, adiciona 0
             if (cleanValue.startsWith('.')) {
                 cleanValue = '0' + cleanValue;
             }
 
-            // Separa partes
             let parts = cleanValue.split('.');
             let integerPart = parts[0];
             let decimalPart = parts[1] || '';
 
-            // Se digitou 3+ dígitos sem ponto, converte para 10.00
             if (parts.length === 1 && integerPart.length >= 3) {
                 input.value = '10.00';
-                // Posiciona cursor no final
-                setTimeout(() => {
-                    input.setSelectionRange(input.value.length, input.value.length);
-                }, 0);
+                setTimeout(() => input.setSelectionRange(input.value.length, input.value.length), 0);
                 return;
             }
 
-            // Processa parte inteira
             if (integerPart.length > 2) {
                 integerPart = integerPart.slice(0, 2);
             }
 
-            // Se tem 2 dígitos na parte inteira e não é "10"
             if (integerPart.length === 2 && integerPart !== '10' && parts.length === 1) {
-                // Move o segundo dígito para decimal
                 decimalPart = integerPart[1] + decimalPart;
                 integerPart = integerPart[0];
             }
 
-            // Limita parte decimal a 2 dígitos
             if (decimalPart.length > 2) {
                 decimalPart = decimalPart.slice(0, 2);
             }
 
-            // Monta o resultado
             let result = integerPart;
             if (parts.length > 1 || decimalPart.length > 0) {
                 result += '.' + decimalPart;
             }
 
-            // Verifica se excede 10
             if (result.includes('.')) {
                 let numValue = parseFloat(result);
                 if (numValue > 10) {
@@ -943,13 +1092,8 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
                 }
             }
 
-            // Aplica o resultado
             input.value = result;
-
-            // Posiciona cursor sempre no final
-            setTimeout(() => {
-                input.setSelectionRange(input.value.length, input.value.length);
-            }, 0);
+            setTimeout(() => input.setSelectionRange(input.value.length, input.value.length), 0);
         }
 
         let currentStep = 1;
@@ -1075,85 +1219,171 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
 
             bimestreInputs.forEach(input => {
                 input.addEventListener('input', function() {
+                    const allBimestresEmpty = Array.from(bimestreInputs).every(input => input.value.trim() === '');
                     if (this.value.trim() !== '') {
                         disableMediaFields();
-                    } else {
-                        const allBimestreEmpty = Array.from(bimestreInputs).every(inp => inp.value.trim() === '');
-                        if (allBimestreEmpty) {
-                            enableAllFields();
-                        }
+                    } else if (allBimestresEmpty) {
+                        enableAllFields();
                     }
                 });
             });
 
             mediaInputs.forEach(input => {
                 input.addEventListener('input', function() {
+                    const allMediasEmpty = Array.from(mediaInputs).every(input => input.value.trim() === '');
                     if (this.value.trim() !== '') {
                         disableBimestreFields();
-                    } else {
-                        const allMediaEmpty = Array.from(mediaInputs).every(inp => inp.value.trim() === '');
-                        if (allMediaEmpty) {
-                            enableAllFields();
-                        }
+                    } else if (allMediasEmpty) {
+                        enableAllFields();
                     }
                 });
             });
+
+            const allBimestresEmpty = Array.from(bimestreInputs).every(input => input.value.trim() === '');
+            const allMediasEmpty = Array.from(mediaInputs).every(input => input.value.trim() === '');
+            if (!allBimestresEmpty) {
+                disableMediaFields();
+            } else if (!allMediasEmpty) {
+                disableBimestreFields();
+            }
         }
 
-        function applyModernStyles() {
-            const cursoCor = '<?= $curso_cor ?>';
-            const inputs = document.querySelectorAll('input:not([disabled]):not([type="checkbox"]):not([type="radio"]), select:not([disabled])');
+        // Configuração da Calculadora de Médias
+        const calculatorModal = document.getElementById('calculatorModal');
+        const openCalculatorBtn = document.getElementById('openCalculatorBtn');
+        const closeCalculatorBtn = document.getElementById('closeCalculatorBtn');
+        const subjectsList = document.getElementById('subjectsList');
+        const calculatedAverage = document.getElementById('calculatedAverage');
+        const primaryColor = '<?= $curso_cor ?>';
+
+   function addSingleField() {
+    const fieldNumber = subjectsList.children.length + 1;
+    const isFirstField = fieldNumber === 1;
+    const row = document.createElement('div');
+    row.className = 'subject-row flex items-center gap-3';
+    
+    if (isFirstField) {
+        row.innerHTML = `
+            <span class="text-sm font-medium text-gray-600 w-16">Nota ${fieldNumber}</span>
+            <input type="text" placeholder="0,00" class="flex-1 border border-gray-300 rounded-lg px-3 py-2.5 text-base text-center  transition-all duration-200 focus:border-transparent" style="--tw-ring-color: ${primaryColor};" oninput="applyGradeMask(this); calculateAverage()">
+            <button type="button" class="add-subject-btn p-2.5 rounded-lg text-white transition-all duration-200 hover:opacity-80" style="background-color: ${primaryColor};" onclick="addSingleField()">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                </svg>
+            </button>
+        `;
+    } else {
+        row.innerHTML = `
+            <span class="text-sm font-medium text-gray-600 w-16">Nota ${fieldNumber}</span>
+            <input type="text" placeholder="0,00" class="flex-1 border border-gray-300 rounded-lg px-3 py-2.5 text-base text-center  transition-all duration-200 focus:border-transparent" style="--tw-ring-color: ${primaryColor};" oninput="applyGradeMask(this); calculateAverage()">
+            <button type="button" class="remove-subject-btn p-2.5 rounded-lg bg-red-500 text-white hover:bg-red-600 transition-all duration-200" onclick="removeSubjectRow(this)">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        `;
+    }
+    
+    subjectsList.appendChild(row);
+    updateFieldNumbers();
+    subjectsList.scrollTop = 0;
+}
+
+        function updateFieldNumbers() {
+            const rows = subjectsList.querySelectorAll('.subject-row');
+            rows.forEach((row, index) => {
+                const label = row.querySelector('span');
+                if (label) {
+                    label.textContent = `Nota ${index + 1}`;
+                }
+            });
+        }
+
+        function removeSubjectRow(button) {
+            if (subjectsList.children.length > 1) {
+                button.parentElement.remove();
+                updateFieldNumbers();
+                calculateAverage();
+            }
+        }
+
+        function calculateAverage() {
+            const inputs = subjectsList.querySelectorAll('input');
+            let totalSum = 0;
+            let totalGrades = 0;
 
             inputs.forEach(input => {
-                input.classList.add('input-modern', 'input-focus');
-                if (!input.classList.contains('rounded-xl')) {
-                    input.classList.add('rounded-lg');
+                const value = parseFloat(input.value.replace(',', '.'));
+                if (!isNaN(value) && value > 0) {
+                    totalSum += value;
+                    totalGrades++;
                 }
-                input.style.setProperty('--tw-ring-color', cursoCor);
-                input.style.setProperty('--tw-border-opacity', '0.5');
             });
 
-            const radios = document.querySelectorAll('input[type="radio"]');
-            radios.forEach(radio => {
-                radio.classList.add('input-radio');
-            });
-
-            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-            checkboxes.forEach(checkbox => {
-                checkbox.classList.add('input-checkbox');
-            });
+            const average = totalGrades > 0 ? (totalSum / totalGrades).toFixed(2).replace('.', ',') : '0,00';
+            calculatedAverage.value = average;
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            setupExclusiveFields();
-            updateStep();
-            applyModernStyles();
-            const radioCards = document.querySelectorAll('.radio-card');
-            const radioInputs = document.querySelectorAll('input[name="cota"]');
-
-            function syncSelected() {
-                radioCards.forEach(card => card.classList.remove('selected'));
-                const checked = document.querySelector('input[name="cota"]:checked');
-                if (checked) {
-                    const card = checked.closest('.radio-card');
-                    if (card) card.classList.add('selected');
-                }
-            }
-
-            radioCards.forEach(card => {
-                card.addEventListener('click', () => {
-                    const input = card.querySelector('input[name="cota"]');
-                    if (input) {
-                        input.checked = true;
-                        syncSelected();
-                    }
+        function copyAverage() {
+            const average = calculatedAverage.value;
+            if (average !== '0,00') {
+                navigator.clipboard.writeText(average).then(() => {
+                    const btn = event.target.closest('button');
+                    const originalHTML = btn.innerHTML;
+                    btn.innerHTML = `
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        Copiado!
+                    `;
+                    setTimeout(() => {
+                        btn.innerHTML = originalHTML;
+                        closeCalculator();
+                    }, 2000);
                 });
-            });
+            }
+        }
 
-            radioInputs.forEach(input => input.addEventListener('change', syncSelected));
-            syncSelected();
+        function closeCalculator() {
+            calculatorModal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        openCalculatorBtn.addEventListener('click', () => {
+            subjectsList.innerHTML = '';
+            addSingleField();
+            addSingleField();
+            calculateAverage();
+            calculatorModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
         });
+
+        closeCalculatorBtn.addEventListener('click', closeCalculator);
+
+        calculatorModal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeCalculator();
+            }
+        });
+
+        // Radio card selection
+        document.querySelectorAll('.radio-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const input = this.querySelector('input[type="radio"]');
+                if (input) {
+                    document.querySelectorAll('.radio-card').forEach(c => c.classList.remove('selected'));
+                    this.classList.add('selected');
+                    input.checked = true;
+                }
+            });
+        });
+
+        setupExclusiveFields();
+        updateStep();
     </script>
 </body>
 
 </html>
+
+
+
