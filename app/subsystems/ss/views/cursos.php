@@ -546,7 +546,7 @@ if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) 
                                     </svg>
                                 </div>
                                 <div>
-                                    <span class="font-semibold text-base">Requisição de cadastro</span>
+                                    <span class="font-semibold text-base">Requisições</span>
                                     <p class="text-green-200 text-xs mt-1">Alteração de candidato</p>
                                 </div>
                             </a>
