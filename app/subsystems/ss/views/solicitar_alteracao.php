@@ -25,6 +25,16 @@ $cursos = $select->select_cursos();
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/i18n/pt-BR.js"></script>
+    <style>
+        /* Remover foco preto de todos os elementos */
+        *:focus {
+            outline: none !important;
+        }
+        .tab-button:focus, .border-b:focus {
+            outline: none !important;
+            box-shadow: none !important;
+        }
+    </style>
     <script>
         tailwind.config = {
             theme: {
@@ -642,114 +652,97 @@ $cursos = $select->select_cursos();
                         </div>
                     <?php } else if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
                         <div class="grid-item lg:col-span-2">
-                            <!-- Cabeçalho da seção de solicitações -->
-                            <div class="mb-6">
-                                <h2 class="text-2xl font-bold text-primary font-display mb-2">Gerenciamento de Solicitações</h2>
-                                <p class="text-gray-600">Visualize e gerencie todas as solicitações de alteração de dados dos alunos</p>
-                            </div>
-
+                         
                             <!-- Filtros e estatísticas -->
-                            <div class="bg-white rounded-xl shadow-md p-4 mb-6">
-                                <div class="flex flex-wrap items-center justify-between gap-4">
-                                    <!-- Estatísticas rápidas -->
-                                    <div class="flex flex-wrap gap-4">
-                                        <?php
-                                        $requisicoes_pendentes = $select->select_requisicoes_pendentes();
-                                        $requisicoes_recusadas = $select->select_requisicoes_rejeitadas();
-                                        $requisicoes_concluidas = $select->select_requisicoes_realizadas();
-                                        $total_pendentes = count($requisicoes_pendentes);
-                                        $total_recusadas = count($requisicoes_recusadas);
-                                        $total_concluidas = count($requisicoes_concluidas);
-                                        $total_geral = $total_pendentes + $total_recusadas + $total_concluidas;
-                                        ?>
-                                        <div class="flex items-center gap-2 bg-yellow-50 text-yellow-700 px-3 py-2 rounded-lg">
-                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                            </svg>
-                                            <span class="font-medium"><?= $total_pendentes ?> Pendentes</span>
-                                        </div>
-                                        <div class="flex items-center gap-2 bg-red-50 text-red-700 px-3 py-2 rounded-lg">
-                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                            </svg>
-                                            <span class="font-medium"><?= $total_recusadas ?> Recusadas</span>
-                                        </div>
-                                        <div class="flex items-center gap-2 bg-green-50 text-green-700 px-3 py-2 rounded-lg">
-                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                            </svg>
-                                            <span class="font-medium"><?= $total_concluidas ?> Concluídas</span>
-                                        </div>
-                                        <div class="flex items-center gap-2 bg-blue-50 text-blue-700 px-3 py-2 rounded-lg">
-                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
-                                            </svg>
-                                            <span class="font-medium"><?= $total_geral ?> Total</span>
-                                        </div>
-                                    </div>
-                                    
-                                    <!-- Filtro de busca -->
+                            <div class="mb-6">
+                                <!-- Filtro de busca -->
+                                <div class=" rounded-xl p-4 inline-block">
                                     <div class="relative">
-                                        <input type="text" id="searchSolicitacoes" placeholder="Buscar solicitações..." class="pl-10 pr-4 py-2 border-2 border-gray-200 rounded-lg focus:border-primary focus:ring-4 focus:ring-primary/10 w-full sm:w-64">
+                                        <input type="text" id="searchSolicitacoes" placeholder="Buscar solicitações..." class="pl-10 pr-4 py-3 border-2 border-gray-200 rounded-lg focus:border-primary focus:outline-none focus:ring-0 w-full min-w-[200px] sm:w-64 md:w-80">
                                         <svg class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                                         </svg>
                                     </div>
                                 </div>
+                                
+                                <?php
+                                $requisicoes_pendentes = $select->select_requisicoes_pendentes();
+                                $requisicoes_recusadas = $select->select_requisicoes_rejeitadas();
+                                $requisicoes_concluidas = $select->select_requisicoes_realizadas();
+                                $total_pendentes = count($requisicoes_pendentes);
+                                $total_recusadas = count($requisicoes_recusadas);
+                                $total_concluidas = count($requisicoes_concluidas);
+                                $total_geral = $total_pendentes + $total_recusadas + $total_concluidas;
+                                ?>
                             </div>
 
                             <!-- Abas de navegação -->
                             <div class="mb-6">
-                                <div class="flex border-b border-gray-200">
-                                    <button data-tab="tab-pendentes" class="tab-button py-3 px-6 border-b-2 border-secondary text-secondary font-semibold outline-none">Pendentes</button>
-                                <button data-tab="tab-recusadas" class="tab-button py-3 px-6 border-b-2 border-transparent text-gray-500 hover:text-gray-700 outline-none">Recusadas</button>
-                                <button data-tab="tab-concluidas" class="tab-button py-3 px-6 border-b-2 border-transparent text-gray-500 hover:text-gray-700 outline-none">Concluídas</button>
+                                <div class="flex border-b border-gray-200 focus:outline-none">
+                                    <button data-tab="tab-pendentes" class="tab-button py-3 px-6 border-b-2 border-secondary text-secondary font-semibold focus:outline-none flex items-center">
+                                        Pendentes
+                                        <?php if ($total_pendentes > 0) { ?>
+                                            <span class="ml-2 inline-flex items-center justify-center w-5 h-5 text-xs font-semibold text-white bg-yellow-500 rounded-full"><?= $total_pendentes ?></span>
+                                        <?php } ?>
+                                    </button>
+                                    <button data-tab="tab-recusadas" class="tab-button py-3 px-6 border-b-2 border-transparent text-gray-500 hover:text-gray-700 focus:outline-none flex items-center">
+                                        Recusadas
+                                        <?php if ($total_recusadas > 0) { ?>
+                                            <span class="ml-2 inline-flex items-center justify-center w-5 h-5 text-xs font-semibold text-white bg-red-500 rounded-full"><?= $total_recusadas ?></span>
+                                        <?php } ?>
+                                    </button>
+                                    <button data-tab="tab-concluidas" class="tab-button py-3 px-6 border-b-2 border-transparent text-gray-500 hover:text-gray-700 focus:outline-none flex items-center">
+                                        Concluídas
+                                        <?php if ($total_concluidas > 0) { ?>
+                                            <span class="ml-2 inline-flex items-center justify-center w-5 h-5 text-xs font-semibold text-white bg-green-500 rounded-full"><?= $total_concluidas ?></span>
+                                        <?php } ?>
+                                    </button>
                                 </div>
                             </div>
 
                             <!-- Conteúdo das abas -->
-                            <div class="grid grid-cols-1 gap-6">
+                            <div class="grid grid-cols-1 gap-6 w-full px-2 sm:px-0">
                                 <!-- Aba Pendente -->
                                 <div id="tab-pendentes" class="tab-content">
-                                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                                         <?php
                                         if (empty($requisicoes_pendentes)) {
-                                            echo '<div class="col-span-full flex items-center justify-center p-12 bg-gray-50 rounded-xl">
+                                            echo '<div class="col-span-full flex items-center justify-center p-4 sm:p-12 bg-gray-50 rounded-xl">
                                                     <div class="text-center">
-                                                        <svg class="w-12 h-12 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <svg class="w-10 h-10 sm:w-12 sm:h-12 mx-auto text-gray-400 mb-3 sm:mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                                                         </svg>
-                                                        <p class="text-lg text-gray-500 font-medium">Nenhuma solicitação pendente</p>
-                                                        <p class="text-gray-400 mt-1">Todas as solicitações foram processadas</p>
+                                                        <p class="text-base sm:text-lg text-gray-500 font-medium">Nenhuma solicitação pendente</p>
+                                                        <p class="text-sm sm:text-base text-gray-400 mt-1">Todas as solicitações foram processadas</p>
                                                     </div>
                                                   </div>';
                                         } else {
                                             foreach ($requisicoes_pendentes as $requisicao) { ?>
-                                                <div class="bg-white rounded-xl shadow-md overflow-hidden border-l-4 border-yellow-400 hover:shadow-lg transition-all duration-300 solicitacao-card">
-                                                    <div class="p-5">
-                                                        <div class="flex justify-between items-start mb-4">
-                                                            <div>
+                                                <div class="bg-white rounded-xl shadow-md overflow-hidden border-l-4 border-yellow-400 hover:shadow-lg transition-all duration-300 solicitacao-card w-full">
+                                                    <div class="p-3 sm:p-5">
+                                                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-3 sm:mb-4">
+                                                            <div class="w-full sm:w-auto">
                                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 mb-2">
                                                                     <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                                                     </svg>
                                                                     Pendente
                                                                 </span>
-                                                                <h4 class="font-semibold text-gray-900"><?= htmlspecialchars($requisicao['nome_user'] ?? 'Usuário Desconhecido') ?></h4>
+                                                                <h4 class="font-semibold text-gray-900 text-sm sm:text-base"><?= htmlspecialchars($requisicao['nome_user'] ?? 'Usuário Desconhecido') ?></h4>
                                                                 <div class="flex items-center gap-2 mt-1">
                                                                     <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                                                                     </svg>
-                                                                    <p class="text-sm text-gray-500">Candidato: <span class="font-medium text-gray-700"><?= htmlspecialchars($requisicao['nome'] ?? 'Aluno Desconhecido') ?></span></p>
+                                                                    <p class="text-xs sm:text-sm text-gray-500">Candidato: <span class="font-medium text-gray-700"><?= htmlspecialchars($requisicao['nome'] ?? 'Aluno Desconhecido') ?></span></p>
                                                                 </div>
                                                                 <div class="flex items-center gap-2 mt-1">
                                                                     <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                                                                     </svg>
-                                                                    <p class="text-sm text-gray-500"><?= htmlspecialchars(date('d/m/Y H:i', strtotime($requisicao['data_requisicao'] ?? 'now'))) ?></p>
+                                                                    <p class="text-xs sm:text-sm text-gray-500"><?= htmlspecialchars(date('d/m/Y H:i', strtotime($requisicao['data_requisicao'] ?? 'now'))) ?></p>
                                                                 </div>
                                                             </div>
-                                                            <div class="flex">
+                                                            <div class="flex mt-2 sm:mt-0">
                                                                 <button type="button" class="text-gray-400 hover:text-gray-600 p-1" onclick="toggleDetails(this)">
                                                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
@@ -758,17 +751,17 @@ $cursos = $select->select_cursos();
                                                             </div>
                                                         </div>
                                                         
-                                                        <div class="bg-gray-50 p-4 rounded-lg mb-4 solicitacao-details">
-                                                            <h5 class="font-medium text-gray-700 mb-2">Descrição da solicitação:</h5>
-                                                            <p class="text-gray-600 whitespace-pre-line"><?= htmlspecialchars($requisicao['texto']) ?></p>
+                                                        <div class="bg-gray-50 p-3 sm:p-4 rounded-lg mb-3 sm:mb-4 solicitacao-details">
+                                                            <h5 class="font-medium text-gray-700 mb-2 text-sm sm:text-base">Descrição da solicitação:</h5>
+                                                            <p class="text-xs sm:text-sm text-gray-600 whitespace-pre-line"><?= htmlspecialchars($requisicao['texto']) ?></p>
                                                         </div>
                                                         
-                                                        <div class="flex gap-2">
+                                                        <div class="flex flex-col sm:flex-row gap-2">
                                                             <form action="../controllers/controller_usuario.php" method="post" class="update-status-form flex-1">
                                                                 <input type="hidden" name="id_requisicao" value="<?= $requisicao['id_requisicao'] ?>">
                                                                 <input type="hidden" name="novo_status" value="Recusado">
-                                                                <button type="submit" class="w-full bg-white border border-red-500 text-red-500 px-3 py-2 rounded-lg hover:bg-red-50 transition-all font-medium text-sm flex items-center justify-center">
-                                                                    <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <button type="submit" class="w-full bg-white border border-red-500 text-red-500 px-3 py-2 rounded-lg hover:bg-red-50 transition-all font-medium text-xs sm:text-sm flex items-center justify-center">
+                                                                    <svg class="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                                                     </svg>
                                                                     Recusar
@@ -777,8 +770,8 @@ $cursos = $select->select_cursos();
                                                             <form action="../controllers/controller_usuario.php" method="post" class="update-status-form flex-1">
                                                                 <input type="hidden" name="id_requisicao" value="<?= $requisicao['id_requisicao'] ?>">
                                                                 <input type="hidden" name="novo_status" value="Concluido">
-                                                                <button type="submit" class="w-full bg-primary text-white px-3 py-2 rounded-lg hover:bg-primary/90 transition-all font-medium text-sm flex items-center justify-center">
-                                                                    <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <button type="submit" class="w-full bg-primary text-white px-3 py-2 rounded-lg hover:bg-primary/90 transition-all font-medium text-xs sm:text-sm flex items-center justify-center">
+                                                                    <svg class="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                                                     </svg>
                                                                     Concluir
@@ -794,31 +787,31 @@ $cursos = $select->select_cursos();
                                 
                                 <!-- Aba Recusada -->
                                 <div id="tab-recusadas" class="tab-content hidden">
-                                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                                         <?php
                                         if (empty($requisicoes_recusadas)) {
-                                            echo '<div class="col-span-full flex items-center justify-center p-12 bg-gray-50 rounded-xl">
+                                            echo '<div class="col-span-full flex items-center justify-center p-4 sm:p-12 bg-gray-50 rounded-xl">
                                                     <div class="text-center">
-                                                        <svg class="w-12 h-12 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <svg class="w-10 h-10 sm:w-12 sm:h-12 mx-auto text-gray-400 mb-3 sm:mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                                                         </svg>
-                                                        <p class="text-lg text-gray-500 font-medium">Nenhuma solicitação recusada</p>
-                                                        <p class="text-gray-400 mt-1">Não há solicitações recusadas no momento</p>
+                                                        <p class="text-base sm:text-lg text-gray-500 font-medium">Nenhuma solicitação recusada</p>
+                                                        <p class="text-sm sm:text-base text-gray-400 mt-1">Não há solicitações recusadas no momento</p>
                                                     </div>
                                                   </div>';
                                         } else {
                                             foreach ($requisicoes_recusadas as $requisicao) { ?>
-                                                <div class="bg-white rounded-xl shadow-md overflow-hidden border-l-4 border-red-500 hover:shadow-lg transition-all duration-300 solicitacao-card">
-                                                    <div class="p-5">
-                                                        <div class="flex justify-between items-start mb-4">
-                                                            <div>
+                                                <div class="bg-white rounded-xl shadow-md overflow-hidden border-l-4 border-red-500 hover:shadow-lg transition-all duration-300 solicitacao-card w-full">
+                                                    <div class="p-3 sm:p-5">
+                                                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-3 sm:mb-4">
+                                                            <div class="w-full sm:w-auto">
                                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 mb-2">
                                                                     <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                                                     </svg>
                                                                     Recusada
                                                                 </span>
-                                                                <h4 class="font-semibold text-gray-900"><?= htmlspecialchars($requisicao['nome_user'] ?? 'Usuário Desconhecido') ?></h4>
+                                                                <h4 class="font-semibold text-gray-900 text-sm sm:text-base"><?= htmlspecialchars($requisicao['nome_user'] ?? 'Usuário Desconhecido') ?></h4>
                                                                 <div class="flex items-center gap-2 mt-1">
                                                                     <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
