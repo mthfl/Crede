@@ -7,6 +7,40 @@ $escola = $_GET['escola'];
 require_once(__DIR__ . '/../models/model.select.php');
 $select = new model_select();
 $nome_escola_banco = $select->select_escolas_nome($escola);
+// Prepara mensagens de modal com base nos GETs enviados pelo controller
+$showModal = false;
+$modalTitle = 'Aviso';
+$modalMessage = '';
+if (isset($_GET['erro'])) {
+    $showModal = true;
+    $modalTitle = 'Falha no login';
+    $modalMessage = 'Não foi possível realizar o login. Verifique os dados e tente novamente.';
+}
+if (isset($_GET['erro_email_senha'])) {
+    $showModal = true;
+    $modalTitle = 'E-mail ou senha inválidos';
+    $modalMessage = 'Os dados informados não conferem. Confira seu e-mail e senha.';
+}
+if (isset($_GET['usuario_desativado'])) {
+    $showModal = true;
+    $modalTitle = 'Usuário desativado';
+    $modalMessage = 'Seu usuário está desativado. Entre em contato com o suporte ou administração.';
+}
+if (isset($_GET['ja_tem_primeiro_acesso_ou_erro_senha_email'])) {
+    $showModal = true;
+    $modalTitle = 'Primeiro acesso não disponível';
+    $modalMessage = 'Já existe um primeiro acesso cadastrado ou os dados de e-mail/CPF não conferem.';
+}
+if (isset($_GET['nao_existe'])) {
+    $showModal = true;
+    $modalTitle = 'Usuário não encontrado';
+    $modalMessage = 'Não encontramos um cadastro com os dados informados.';
+}
+if (isset($_GET['falha'])) {
+    $showModal = true;
+    $modalTitle = 'Erro inesperado';
+    $modalMessage = 'Ocorreu uma falha ao processar sua solicitação. Tente novamente em instantes.';
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -473,6 +507,32 @@ $nome_escola_banco = $select->select_escolas_nome($escola);
 
 <body class="font-sans bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200 min-h-screen flex items-center justify-center p-0 sm:p-4">
     
+    <!-- Modal de feedback baseado nos GETs -->
+    <div id="feedbackModal" class="fixed inset-0 z-50 flex items-start justify-center pt-6 sm:pt-10 <?= $showModal ? '' : 'hidden' ?>">
+        <div class="absolute inset-0 bg-black/50" aria-hidden="true"></div>
+        <div role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="modalDescription"
+             class="relative z-10 w-11/12 max-w-lg bg-white rounded-2xl shadow-strong overflow-hidden animate-fade-in-up">
+            <div class="px-6 py-4 bg-gradient-to-r from-primary to-dark text-white flex items-center justify-between">
+                <h3 id="modalTitle" class="text-lg font-semibold">
+                    <?= htmlspecialchars($modalTitle, ENT_QUOTES, 'UTF-8'); ?>
+                </h3>
+                <button type="button" class="modal-close text-white/90 hover:text-secondary transition-colors" aria-label="Fechar">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="p-6">
+                <p id="modalDescription" class="text-gray-700 leading-relaxed">
+                    <?= htmlspecialchars($modalMessage, ENT_QUOTES, 'UTF-8'); ?>
+                </p>
+            </div>
+            <div class="px-6 pb-6">
+                <button type="button" class="modal-close btn-enhanced w-full px-5 py-3 text-white rounded-xl">
+                    Entendi
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Elementos flutuantes -->
     <div class="floating-elements">
         <!-- Nuvens flutuantes -->
@@ -698,6 +758,19 @@ $nome_escola_banco = $select->select_escolas_nome($escola);
     <!-- Enhanced JavaScript -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Modal controls
+            const modal = document.getElementById('feedbackModal');
+            const modalCloses = document.querySelectorAll('.modal-close');
+            const modalBackdrop = modal ? modal.querySelector('.absolute.inset-0') : null;
+            function closeModal() {
+                if (modal) modal.classList.add('hidden');
+            }
+            modalCloses.forEach(btn => btn.addEventListener('click', closeModal));
+            if (modalBackdrop) modalBackdrop.addEventListener('click', closeModal);
+            document.addEventListener('keydown', function(e){
+                if (e.key === 'Escape') closeModal();
+            });
+
             // Elementos dos formulários
             const loginForm = document.getElementById('loginForm');
             const primeiroAcessoForm = document.getElementById('primeiroAcessoForm');
