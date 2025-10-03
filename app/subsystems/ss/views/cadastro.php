@@ -791,22 +791,22 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
                                         <tr class="hover:bg-gray-50">
                                             <td class="border border-gray-300 px-4 py-3 text-sm font-medium text-gray-700">Português</td>
                                             <td class="border border-gray-300 px-4 py-3">
-                                                <input type="text" name="portugues_9_1" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg input-modern text-center text-sm input-focus" style="--tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;">
+                                                <input type="text" name="portugues_9_1" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg input-modern text-center text-sm input-focus" style="--tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;" required>
                                             </td>
                                             <td class="border border-gray-300 px-4 py-3">
-                                                <input type="text" name="portugues_9_2" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg input-modern text-center text-sm input-focus" style="--tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;">
+                                                <input type="text" name="portugues_9_2" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg input-modern text-center text-sm input-focus" style="--tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;" required>
                                             </td>
                                             <td class="border border-gray-300 px-4 py-3">
-                                                <input type="text" name="portugues_9_3" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg input-modern text-center text-sm input-focus" style="--tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;">
+                                                <input type="text" name="portugues_9_3" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg input-modern text-center text-sm input-focus" style="--tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;" required>
                                             </td>
                                             <td class="border border-gray-300 px-4 py-3">
-                                                <input type="text" name="portugues_9_media" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg input-modern text-center text-sm input-focus bg-yellow-50" style="--tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;">
+                                                <input type="text" name="portugues_9_media" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg input-modern text-center text-sm input-focus bg-yellow-50" style="--tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;" required> 
                                             </td>
                                         </tr>
                                         <tr class="hover:bg-gray-50">
                                             <td class="border border-gray-300 px-4 py-3 text-sm font-medium text-gray-700">Matemática</td>
                                             <td class="border border-gray-300 px-4 py-3">
-                                                <input type="text" name="matematica_9_1" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg input-modern text-center text-sm input-focus" style="--tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;">
+                                                <input type="text" name="matematica_9_1" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg input-modern text-center text-sm input-focus" style="--tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;" required>
                                             </td>
                                             <td class="border border-gray-300 px-4 py-3">
                                                 <input type="text" name="matematica_9_2" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg input-modern text-center text-sm input-focus" style="--tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;" required>
@@ -815,7 +815,7 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
                                                 <input type="text" name="matematica_9_3" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg input-modern text-center text-sm input-focus" style="--tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;" required>
                                             </td>
                                             <td class="border border-gray-300 px-4 py-3">
-                                                <input type="text" name="matematica_9_media" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg input-modern text-center text-sm input-focus bg-yellow-50" style="--tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;">
+                                                <input type="text" name="matematica_9_media" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg input-modern text-center text-sm input-focus bg-yellow-50" style="--tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;" required>
                                             </td>
                                         </tr>
                                         <tr class="hover:bg-gray-50">
@@ -830,7 +830,7 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
                                                 <input type="text" name="historia_9_3" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg input-modern text-center text-sm input-focus" style="--tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;" required>
                                             </td>
                                             <td class="border border-gray-300 px-4 py-3">
-                                                <input type="text" name="historia_9_media" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg input-modern text-center text-sm input-focus bg-yellow-50" style="--tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;">
+                                                <input type="text" name="historia_9_media" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg input-modern text-center text-sm input-focus bg-yellow-50" style="--tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;" required>
                                             </td>
                                         </tr>
                                         <tr class="hover:bg-gray-50">
@@ -845,7 +845,7 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
                                                 <input type="text" name="geografia_9_3" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg input-modern text-center text-sm input-focus" style="--tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;" required>
                                             </td>
                                             <td class="border border-gray-300 px-4 py-3">
-                                                <input type="text" name="geografia_9_media" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg input-modern text-center text-sm input-focus bg-yellow-50" style="--tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;">
+                                                <input type="text" name="geografia_9_media" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg input-modern text-center text-sm input-focus bg-yellow-50" style="--tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;" required>
                                             </td>
                                         </tr>
                                         <tr class="hover:bg-gray-50">
@@ -860,7 +860,7 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
                                                 <input type="text" name="ciencias_9_3" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg input-modern text-center text-sm input-focus" style="--tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;" required>
                                             </td>
                                             <td class="border border-gray-300 px-4 py-3">
-                                                <input type="text" name="ciencias_9_media" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg input-modern text-center text-sm input-focus bg-yellow-50" style="--tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;">
+                                                <input type="text" name="ciencias_9_media" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg input-modern text-center text-sm input-focus bg-yellow-50" style="--tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;" required>
                                             </td>
                                         </tr>
                                         <tr class="hover:bg-gray-50">
@@ -875,7 +875,7 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
                                                 <input type="text" name="ingles_9_3" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg input-modern text-center text-sm input-focus" style="--tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;" required>
                                             </td>
                                             <td class="border border-gray-300 px-4 py-3">
-                                                <input type="text" name="ingles_9_media" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg input-modern text-center text-sm input-focus bg-yellow-50" style="--tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;">
+                                                <input type="text" name="ingles_9_media" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg input-modern text-center text-sm input-focus bg-yellow-50" style="--tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;" required> 
                                             </td>
                                         </tr>
                                         <tr class="hover:bg-gray-50">
@@ -1230,11 +1230,20 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
             const bimestreInputs = document.querySelectorAll('input[name*="_9_1"], input[name*="_9_2"], input[name*="_9_3"]');
             const mediaInputs = document.querySelectorAll('input[name*="_9_media"]');
 
+            // Registrar quais campos eram required originalmente para restaurar corretamente
+            [...bimestreInputs, ...mediaInputs].forEach(input => {
+                if (input.dataset.wasRequired === undefined) {
+                    input.dataset.wasRequired = input.hasAttribute('required') ? 'true' : 'false';
+                }
+            });
+
             function disableMediaFields() {
                 mediaInputs.forEach(input => {
                     input.disabled = true;
                     input.classList.add('opacity-50', 'cursor-not-allowed');
                     input.classList.remove('input-focus');
+                    // Remover required quando desabilitar
+                    input.removeAttribute('required');
                 });
             }
 
@@ -1243,6 +1252,8 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
                     input.disabled = true;
                     input.classList.add('opacity-50', 'cursor-not-allowed');
                     input.classList.remove('input-focus');
+                    // Remover required quando desabilitar
+                    input.removeAttribute('required');
                 });
             }
 
@@ -1251,6 +1262,12 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
                     input.disabled = false;
                     input.classList.remove('opacity-50', 'cursor-not-allowed');
                     input.classList.add('input-focus');
+                    // Restaurar required apenas para quem era originalmente required
+                    if (input.dataset.wasRequired === 'true') {
+                        input.setAttribute('required', '');
+                    } else {
+                        input.removeAttribute('required');
+                    }
                 });
             }
 
