@@ -395,7 +395,7 @@ if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) 
 
 <body class="bg-white min-h-screen font-body">
     <div id="overlay" class="overlay fixed inset-0 bg-black/30 z-40 lg:hidden"></div>
-    <div class="flex min-h-screen bg-gray-50 overflow-y-auto lg:overflow-hidden">
+    <div class="flex h-screen bg-gray-50 overflow-hidden">
         <aside id="sidebar" class="sidebar fixed left-0 top-0 h-screen w-80 shadow-2xl z-50 lg:translate-x-0 lg:static lg:z-auto custom-scrollbar overflow-y-auto">
             <div class="p-6">
                 <div class="flex items-center justify-between mb-8 pb-6 border-b border-white/20">
@@ -572,7 +572,7 @@ if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) 
                 </nav>
             </div>
         </aside>
-        <div class="main-content flex-1 bg-white">
+        <div class="main-content flex-1 h-screen overflow-y-auto custom-scrollbar bg-white">
             <header class="bg-white shadow-sm border-b border-gray-200 z-30 sticky top-0">
                 <div class="px-3 sm:px-4 md:px-6 lg:px-8 py-3 sm:py-4">
                     <div class="flex items-center justify-between">

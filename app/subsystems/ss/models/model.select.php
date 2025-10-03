@@ -61,6 +61,32 @@ class select extends connect
         $stmt = $this->connect->query("SELECT *, r.id as id_requisicao FROM $this->table14 r INNER JOIN $this->table5 u ON r.id_usuario = u.id INNER JOIN $this->table1 c ON r.id_candidato = c.id WHERE r.status = 'Recusado'");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+    public function select_requisicoes_usuario(int $id_usuario): array
+    {
+        try {
+            $sql = "SELECT r.id AS id_requisicao,
+                           r.id_candidato,
+                           r.id_usuario,
+                           r.texto,
+                           r.status AS status_requisicao,
+                           u.nome_user,
+                           u.email,
+                           u.tipo_usuario,
+                           c.nome AS nome,
+                           c.id_curso1
+                    FROM $this->table14 r
+                    INNER JOIN $this->table5 u ON r.id_usuario = u.id
+                    INNER JOIN $this->table1 c ON r.id_candidato = c.id
+                    WHERE r.id_usuario = :id_usuario
+                    ORDER BY r.id DESC";
+            $stmt = $this->connect->prepare($sql);
+            $stmt->bindValue(':id_usuario', $id_usuario, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return [];
+        }
+    }
     public function select_cursos(): array
     {
 

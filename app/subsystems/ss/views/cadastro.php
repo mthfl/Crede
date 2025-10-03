@@ -527,7 +527,7 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
 
             <div class="bg-white rounded-2xl shadow-xl border border-gray-200/50 overflow-hidden">
                 <div class="text-white p-6" style="background: linear-gradient(135deg, <?= $curso_cor ?>, #1A3C34);">
-                    <div class="flex items-center justify-between">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                         <div class="flex items-center space-x-3">
                             <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm border border-white/30 shadow-lg">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -547,12 +547,20 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
                             </div>
                         </div>
 
-                        <!-- Ícone da Calculadora -->
-                        <div class="calculator-icon-btn" id="openCalculatorBtn">
-                            <svg class="w-6 h-6" style="color: <?= $curso_cor ?>;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                        <!-- Calculadora de Médias -->
+                        <div class="w-full sm:w-auto flex items-center gap-4 bg-white/10 backdrop-blur-sm rounded-xl px-4 py-3 border border-white/20 shadow-lg hover:bg-white/15 transition-all duration-300 group cursor-pointer hidden" id="openCalculatorBtn">
+                            <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center group-hover:bg-white/30 transition-all duration-300">
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                                </svg>
+                            </div>
+                            <div class="flex flex-col">
+                                <span class="text-sm font-semibold text-white">Calculadora de Médias</span>
+                                <span class="text-xs text-white/70">Calcule suas médias facilmente</span>
+                            </div>
+                            <svg class="w-4 h-4 text-white/60 group-hover:text-white group-hover:translate-x-1 transition-all duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                             </svg>
-                            <span class="tooltip">Calcular Média</span>
                         </div>
                     </div>
                 </div>
@@ -589,20 +597,20 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
                             </div>
 
                             <div class="grid grid-cols-1 gap-6 mb-6">
-                                <div class="flex space-x-4">
-                                    <div class="flex-1">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                                    <div class="w-full">
                                         <div class="flex items-center px-4 py-3.5 border border-gray-300 rounded-xl input-modern radio-card">
                                             <input type="radio" name="cota" value="ampla" id="ampla" class="w-5 h-5 text-primary border-gray-300 rounded input-radio focus:ring-2 focus:ring-primary focus:ring-opacity-50" checked>
                                             <label for="ampla" class="ml-3 text-sm font-medium text-gray-700 cursor-pointer">Ampla</label>
                                         </div>
                                     </div>
-                                    <div class="flex-1">
+                                    <div class="w-full">
                                         <div class="flex items-center px-4 py-3.5 border border-gray-300 rounded-xl input-modern radio-card">
                                             <input type="radio" name="cota" value="pcd" id="pcd" class="w-5 h-5 text-primary border-gray-300 rounded input-radio focus:ring-2 focus:ring-primary focus:ring-opacity-50">
                                             <label for="pcd" class="ml-3 text-sm font-medium text-gray-700 cursor-pointer">Pessoa com Deficiência (PCD)</label>
                                         </div>
                                     </div>
-                                    <div class="flex-1">
+                                    <div class="w-full">
                                         <div class="flex items-center px-4 py-3.5 border border-gray-300 rounded-xl input-modern radio-card">
                                             <input type="radio" name="cota" value="bairro" id="bairro" class="w-5 h-5 text-primary border-gray-300 rounded input-radio focus:ring-2 focus:ring-primary focus:ring-opacity-50">
                                             <label for="bairro" class="ml-3 text-sm font-medium text-gray-700 cursor-pointer">Cota bairro</label>
@@ -762,6 +770,12 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
                         </div>
 
                         <div class="step" id="step-3">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-6 flex items-center">
+                                <svg class="w-6 h-6 mr-3 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                                </svg>
+                                Notas 9º Ano
+                            </h3>
                             <div class="overflow-x-auto">
                                 <table class="w-full border-collapse compact-table text-sm">
                                     <thead>
@@ -914,14 +928,14 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
                             </div>
 
                             <!-- Informação Importante Dinâmica -->
-                            <div class="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                            <div class="mt-4 p-4 rounded-lg" style="background: <?= $primary_rgba_01 ?>; border: 1px solid <?= $primary_rgba_02 ?>;">
                                 <div class="flex items-start">
-                                    <svg class="w-5 h-5 text-blue-500 mt-0.5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg class="w-5 h-5 mt-0.5 mr-3 flex-shrink-0" style="color: <?= $curso_cor ?>;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                     </svg>
                                     <div>
-                                        <h4 class="text-sm font-medium text-blue-800">Informação Importante</h4>
-                                        <p class="text-sm text-blue-700 mt-1">Você pode preencher as notas por bimestre (1º, 2º, 3º) OU a média geral. <strong>A média geral não é obrigatória</strong> - se preencher os bimestres, a média será calculada automaticamente.</p>
+                                        <h4 class="text-sm font-medium" style="color: <?= $curso_cor ?>;">Informação Importante</h4>
+                                        <p class="text-sm mt-1" style="color: <?= $curso_cor ?>dd;">Você pode preencher as notas por bimestre (1º, 2º, 3º) OU a média geral. <strong>A média geral não é obrigatória</strong> - se preencher os bimestres, a média será calculada automaticamente.</p>
                                     </div>
                                 </div>
                             </div>
@@ -979,48 +993,67 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
 
     <!-- Modal da Calculadora -->
 <div id="calculatorModal" class="modal-overlay">
-    <div class="modal-content bg-white rounded-xl p-6 max-w-md w-full mx-auto shadow-2xl transform transition-all duration-300">
+    <div class="modal-content bg-white rounded-xl p-0 max-w-md w-full mx-auto shadow-2xl transform transition-all duration-300 overflow-hidden">
         <!-- Header -->
-        <div class="flex items-center justify-between mb-6 pb-4 border-b border-gray-200">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background: linear-gradient(135deg, <?= $curso_cor ?>, #1A3C34);">
-                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
-                    </svg>
+        <div class="px-4 py-3 text-white" style="background: linear-gradient(135deg, <?= $curso_cor ?>, #1A3C34);">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center backdrop-blur-sm border border-white/30">
+                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold text-white">Calculadora de Médias</h3>
+                        <p class="text-white/80 text-xs">Adicione suas notas</p>
+                    </div>
                 </div>
-                <h3 class="text-lg font-semibold text-gray-800">Calculadora de Médias</h3>
-            </div>
-            <button type="button" onclick="closeCalculator()" class="text-gray-400 hover:text-gray-600 transition-colors">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                </svg>
-            </button>
-        </div>
-
-        <!-- Campos de Notas -->
-        <div id="subjectsList" class="space-y-3 mb-6 max-h-60 overflow-y-auto pr-2">
-            <!-- As linhas serão adicionadas dinamicamente -->
-        </div>
-
-        <!-- Resultado da Média -->
-        <div class="mb-6 p-5 rounded-lg" style="background: linear-gradient(135deg, <?= $curso_cor ?>15, <?= $curso_cor ?>05);">
-            <div class="text-center">
-                <label class="block text-sm font-medium text-gray-600 mb-2">Média Calculada</label>
-                <input type="text" id="calculatedAverage" placeholder="0,00" class="w-full text-center text-2xl font-bold border-2 rounded-lg px-4 py-3 bg-white focus:outline-none focus:ring-2 transition-all duration-200" style="color: <?= $curso_cor ?>; border-color: <?= $curso_cor ?>30; --tw-ring-color: <?= $curso_cor ?>;" readonly>
+                <button type="button" onclick="closeCalculator()" class="w-6 h-6 bg-white/20 hover:bg-white/30 rounded flex items-center justify-center transition-all duration-200">
+                    <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
             </div>
         </div>
 
-        <!-- Botões -->
-        <div class="flex gap-3">
-            <button type="button" id="closeCalculatorBtn" class="flex-1 px-5 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-all duration-200 font-medium text-base">
-                Fechar
-            </button>
-            <button type="button" onclick="copyAverage()" class="flex-1 px-5 py-3 text-white rounded-lg transition-all duration-200 font-medium text-base flex items-center justify-center gap-2" style="background: linear-gradient(135deg, <?= $curso_cor ?>, #1A3C34);">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
-                </svg>
-                Copiar
-            </button>
+        <!-- Conteúdo -->
+        <div class="p-4">
+            <!-- Campos de Notas -->
+            <div class="mb-4">
+                <h4 class="text-sm font-semibold text-gray-700 mb-2">Suas Notas</h4>
+                <div id="subjectsList" class="space-y-2 max-h-32 overflow-y-auto pr-1">
+                    <!-- As linhas serão adicionadas dinamicamente -->
+                </div>
+            </div>
+
+            <!-- Resultado da Média -->
+            <div class="mb-4 p-3 rounded-lg border-2 border-dashed" style="background: linear-gradient(135deg, <?= $primary_rgba_01 ?>, <?= $primary_rgba_015 ?>); border-color: <?= $primary_rgba_02 ?>;">
+                <div class="text-center">
+                    <div class="flex items-center justify-center gap-2 mb-2">
+                        <svg class="w-4 h-4" style="color: <?= $curso_cor ?>;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                        <label class="text-xs font-semibold" style="color: <?= $curso_cor ?>;">Média Calculada</label>
+                    </div>
+                    <input type="text" id="calculatedAverage" placeholder="0,00" class="w-full text-center text-2xl font-bold border-0 rounded-lg px-3 py-2 bg-white shadow-inner focus:outline-none focus:ring-2 transition-all duration-200" style="color: <?= $curso_cor ?>; --tw-ring-color: <?= $curso_cor ?>;" readonly>
+                </div>
+            </div>
+
+            <!-- Botões -->
+            <div class="flex gap-2">
+                <button type="button" id="closeCalculatorBtn" class="flex-1 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-all duration-200 font-medium text-sm flex items-center justify-center gap-1">
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                    Fechar
+                </button>
+                <button type="button" onclick="copyAverage()" class="flex-1 px-4 py-2 text-white rounded-lg transition-all duration-200 font-medium text-sm flex items-center justify-center gap-1 hover:opacity-90" style="background: linear-gradient(135deg, <?= $curso_cor ?>, #1A3C34);">
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                    </svg>
+                    Copiar
+                </button>
+            </div>
         </div>
     </div>
 </div>
@@ -1112,6 +1145,10 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
             nextBtn.classList.toggle('hidden', currentStep === totalSteps);
             submitBtn.classList.toggle('hidden', currentStep !== totalSteps);
             progressBarFill.style.width = `${(currentStep / totalSteps) * 100}%`;
+            const calcBtn = document.getElementById('openCalculatorBtn');
+            if (calcBtn) {
+                calcBtn.classList.toggle('hidden', currentStep !== 3);
+            }
         }
 
         function validateStep(step) {
@@ -1260,24 +1297,28 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
     const fieldNumber = subjectsList.children.length + 1;
     const isFirstField = fieldNumber === 1;
     const row = document.createElement('div');
-    row.className = 'subject-row flex items-center gap-3';
+    row.className = 'subject-row flex items-center gap-2 p-2 bg-gray-50 rounded-lg border border-gray-200 hover:bg-gray-100 transition-all duration-200';
     
     if (isFirstField) {
         row.innerHTML = `
-            <span class="text-sm font-medium text-gray-600 w-16">Nota ${fieldNumber}</span>
-            <input type="text" placeholder="0,00" class="flex-1 border border-gray-300 rounded-lg px-3 py-2.5 text-base text-center  transition-all duration-200 focus:border-transparent" style="--tw-ring-color: ${primaryColor};" oninput="applyGradeMask(this); calculateAverage()">
-            <button type="button" class="add-subject-btn p-2.5 rounded-lg text-white transition-all duration-200 hover:opacity-80" style="background-color: ${primaryColor};" onclick="addSingleField()">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="flex items-center justify-center w-6 h-6 bg-white rounded border border-gray-300 text-xs font-semibold text-gray-600">
+                ${fieldNumber}
+            </div>
+            <input type="text" placeholder="0,00" class="flex-1 border border-gray-300 rounded px-3 py-2 text-sm text-center transition-all duration-200 focus:border-transparent focus:ring-2 focus:ring-opacity-50" style="--tw-ring-color: ${primaryColor};" oninput="applyGradeMask(this); calculateAverage()">
+            <button type="button" class="p-2 rounded text-white transition-all duration-200 hover:opacity-80 hover:scale-105" style="background: linear-gradient(135deg, ${primaryColor}, #1A3C34);" onclick="addSingleField()">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                 </svg>
             </button>
         `;
     } else {
         row.innerHTML = `
-            <span class="text-sm font-medium text-gray-600 w-16">Nota ${fieldNumber}</span>
-            <input type="text" placeholder="0,00" class="flex-1 border border-gray-300 rounded-lg px-3 py-2.5 text-base text-center  transition-all duration-200 focus:border-transparent" style="--tw-ring-color: ${primaryColor};" oninput="applyGradeMask(this); calculateAverage()">
-            <button type="button" class="remove-subject-btn p-2.5 rounded-lg bg-red-500 text-white hover:bg-red-600 transition-all duration-200" onclick="removeSubjectRow(this)">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="flex items-center justify-center w-6 h-6 bg-white rounded border border-gray-300 text-xs font-semibold text-gray-600">
+                ${fieldNumber}
+            </div>
+            <input type="text" placeholder="0,00" class="flex-1 border border-gray-300 rounded px-3 py-2 text-sm text-center transition-all duration-200 focus:border-transparent focus:ring-2 focus:ring-opacity-50" style="--tw-ring-color: ${primaryColor};" oninput="applyGradeMask(this); calculateAverage()">
+            <button type="button" class="p-2 rounded bg-red-500 text-white hover:bg-red-600 transition-all duration-200 hover:scale-105" onclick="removeSubjectRow(this)">
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                 </svg>
             </button>
@@ -1286,15 +1327,16 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
     
     subjectsList.appendChild(row);
     updateFieldNumbers();
+    // Manter scroll no topo para mostrar as primeiras notas
     subjectsList.scrollTop = 0;
 }
 
         function updateFieldNumbers() {
             const rows = subjectsList.querySelectorAll('.subject-row');
             rows.forEach((row, index) => {
-                const label = row.querySelector('span');
-                if (label) {
-                    label.textContent = `Nota ${index + 1}`;
+                const numberDiv = row.querySelector('div:first-child');
+                if (numberDiv) {
+                    numberDiv.textContent = index + 1;
                 }
             });
         }

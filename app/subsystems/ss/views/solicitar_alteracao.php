@@ -344,34 +344,63 @@ $cursos = $select->select_cursos();
                 box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             }
         }
-        /* Harmonizar Select2 com Tailwind */
+        /* Harmonizar e aprimorar Select2 com Tailwind e paleta do tema */
         .select2-container .select2-selection--single {
             height: 3rem;
             border: 2px solid #e5e7eb;
             border-radius: 0.75rem;
             display: flex;
             align-items: center;
+            background-color: #ffffff;
+            transition: box-shadow 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
         }
         .select2-container--default .select2-selection--single .select2-selection__rendered {
             line-height: 3rem;
             padding-left: 1rem;
             color: #111827;
+            font-size: 1rem;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__placeholder {
+            color: #6b7280; /* gray-500 */
         }
         .select2-container--default .select2-selection--single .select2-selection__arrow {
             height: 3rem;
             right: 0.75rem;
         }
+        .select2-container--default.select2-container--open .select2-selection--single {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(0, 90, 36, 0.1);
+        }
         .select2-dropdown {
             border: 2px solid #e5e7eb;
             border-radius: 0.75rem;
             overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        }
+        .select2-container--default .select2-search--dropdown .select2-search__field {
+            border: 2px solid #e5e7eb;
+            border-radius: 0.75rem;
+            padding: 0.5rem 0.75rem;
+            outline: none;
+        }
+        .select2-results__option {
+            padding: 0.625rem 0.75rem;
+            font-size: 0.95rem;
+        }
+        .select2-container--default .select2-results__option--highlighted.select2-results__option--selectable {
+            background-color: var(--accent);
+            color: #0b3b2f; /* tom escuro do verde */
+        }
+        .select2-container--default .select2-results__option--selected {
+            background-color: #e5f3eb; /* tom claro do primário */
+            color: #0b3b2f;
         }
     </style>
 </head>
 
 <body class="bg-gray-50 min-h-screen font-body">
     <div id="overlay" class="overlay fixed inset-0 bg-black/30 z-40 lg:hidden"></div>
-    <div class="flex min-h-screen bg-gray-50 overflow-y-auto lg:overflow-hidden">
+    <div class="flex h-screen bg-gray-50 overflow-hidden">
         <aside id="sidebar" class="sidebar fixed left-0 top-0 h-screen w-80 shadow-2xl z-50 lg:translate-x-0 lg:static lg:z-auto custom-scrollbar overflow-y-auto">
             <div class="p-6">
                 <div class="flex items-center justify-between mb-8 pb-6 border-b border-white/20">
@@ -538,7 +567,7 @@ $cursos = $select->select_cursos();
             </div>
         </aside>
 
-        <div class="main-content flex-1">
+        <div class="main-content flex-1 h-screen overflow-y-auto custom-scrollbar">
             <header class="bg-white shadow-sm border-b border-gray-200 z-30 sticky top-0">
                 <div class="px-3 sm:px-4 md:px-6 lg:px-8 py-3 sm:py-4">
                     <div class="flex items-center justify-between">
@@ -612,28 +641,7 @@ $cursos = $select->select_cursos();
                                                 </svg>
                                                 Descrição da Alteração *
                                             </label>
-                                            <textarea id="descricaoAlteracao" name="descricao" class="w-full px-4 py-4 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-base resize-none" rows="8" placeholder="Descreva detalhadamente a alteração necessária nos dados do aluno (ex: correção de nome, CPF, endereço, etc.)" required maxlength="500"></textarea>
-                                            <div class="flex justify-between items-center mt-2">
-                                                <span class="text-sm text-gray-500">Máximo 500 caracteres</span>
-                                                <span id="contadorCaracteres" class="text-sm text-gray-500 font-semibold">0/500</span>
-                                            </div>
-                                            <script>
-                                                $(document).ready(function() {
-                                                    $('#descricaoAlteracao').on('input', function() {
-                                                        var currentLength = $(this).val().length;
-                                                        var maxLength = 500;
-                                                        $('#contadorCaracteres').text(currentLength + '/' + maxLength);
-                                                        
-                                                        if(currentLength >= maxLength) {
-                                                            $('#contadorCaracteres').addClass('text-red-500');
-                                                        } else if(currentLength >= maxLength * 0.8) {
-                                                            $('#contadorCaracteres').addClass('text-yellow-500').removeClass('text-red-500');
-                                                        } else {
-                                                            $('#contadorCaracteres').removeClass('text-yellow-500 text-red-500');
-                                                        }
-                                                    });
-                                                });
-                                            </script>
+                                            <textarea id="descricaoAlteracao" name="descricao" class="w-full px-4 py-4 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-base resize-none" rows="8" placeholder="Descreva detalhadamente a alteração necessária nos dados do aluno (ex: correção de nome, CPF, endereço, etc.)" required></textarea>
                                         </div>
 
                                         <div class="pt-4">
@@ -651,6 +659,79 @@ $cursos = $select->select_cursos();
                             </div>
                         </div>
                     <?php } else if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
+                        <?php } ?>
+                        <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'cadastrador') { ?>
+                        <div class="grid-item lg:col-span-2">
+                            <div class="bg-white rounded-2xl shadow-xl border-0 overflow-hidden card-hover mx-6 sm:mx-10 lg:mx-16 mt-8">
+                                <div class="h-2 w-full bg-gradient-to-r from-primary to-secondary"></div>
+                                <div class="p-12">
+                                    <div class="flex items-center gap-4 mb-6">
+                                        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary to-dark text-white flex items-center justify-center">
+                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <h3 class="text-xl font-bold text-primary font-display">Minhas Solicitações</h3>
+                                            <p class="text-gray-600">Veja o status das alterações solicitadas</p>
+                                        </div>
+                                    </div>
+
+                                    <?php
+                                    $minhas_solicitacoes = $select->select_requisicoes_usuario((int)($_SESSION['id'] ?? 0));
+                                    ?>
+
+                                    <?php if (empty($minhas_solicitacoes)) { ?>
+                                        <div class="flex items-center justify-center p-8 bg-gray-50 rounded-xl">
+                                            <div class="text-center">
+                                                <svg class="w-10 h-10 mx-auto text-gray-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                                </svg>
+                                                <p class="text-base text-gray-500 font-medium">Você ainda não realizou solicitações</p>
+                                            </div>
+                                        </div>
+                                    <?php } else { ?>
+                                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                                            <?php foreach ($minhas_solicitacoes as $req) { 
+                                                $status = $req['status_requisicao'] ?? $req['status'] ?? 'Pendente';
+                                                $isPend = $status === 'Pendente';
+                                                $isRec = $status === 'Recusado';
+                                                $isConc = $status === 'Concluido';
+                                            ?>
+                                            <div class="bg-white rounded-xl shadow-md overflow-hidden border-l-4 <?php echo $isPend ? 'border-yellow-400' : ($isRec ? 'border-red-500' : 'border-green-500'); ?> hover:shadow-lg transition-all duration-300">
+                                                <div class="p-4">
+                                                    <div class="flex items-start justify-between mb-3">
+                                                        <div>
+                                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <?php echo $isPend ? 'bg-yellow-100 text-yellow-800' : ($isRec ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'); ?>">
+                                                                <?php if ($isPend) { ?>
+                                                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                                                    Pendente
+                                                                <?php } elseif ($isRec) { ?>
+                                                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                                                                    Recusada
+                                                                <?php } else { ?>
+                                                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                                                                    Concluída
+                                                                <?php } ?>
+                                                            </span>
+                                                            <h4 class="font-semibold text-gray-900 text-sm mt-2">Candidato: <span class="text-gray-700"><?php echo htmlspecialchars($req['nome'] ?? 'Aluno'); ?></span></h4>
+                                                            <p class="text-xs text-gray-500 mt-1"><?php echo htmlspecialchars(date('d/m/Y H:i', strtotime($req['data_requisicao'] ?? 'now'))); ?></p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="bg-gray-50 p-3 rounded-lg">
+                                                        <h5 class="font-medium text-gray-700 mb-2 text-sm">Descrição:</h5>
+                                                        <p class="text-xs text-gray-600 whitespace-pre-line"><?php echo htmlspecialchars($req['texto'] ?? ''); ?></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <?php } ?>
+                                        </div>
+                                    <?php } ?>
+                                </div>
+                            </div>
+                        </div>
+                        <?php } ?>
+                        <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
                         <div class="grid-item lg:col-span-2">
                          
                             <!-- Filtros e estatísticas -->
@@ -1157,31 +1238,7 @@ $cursos = $select->select_cursos();
             }
         });
 
-        // Contador de caracteres
-        const textarea = document.getElementById('descricaoAlteracao');
-        const contador = document.getElementById('contadorCaracteres');
-
-        if (textarea && contador) {
-            textarea.addEventListener('input', function() {
-                const caracteresDigitados = this.value.length;
-                const limite = 500;
-
-                if (caracteresDigitados > limite) {
-                    this.value = this.value.substring(0, limite);
-                    return;
-                }
-
-                contador.textContent = `${caracteresDigitados}/500`;
-
-                if (caracteresDigitados > 450) {
-                    contador.classList.add('text-red-500');
-                    contador.classList.remove('text-gray-500');
-                } else {
-                    contador.classList.add('text-gray-500');
-                    contador.classList.remove('text-red-500');
-                }
-            });
-        }
+        // Removido limite e contador de caracteres do textarea por solicitação
 
         // Sistema de abas
         document.addEventListener('DOMContentLoaded', function() {
