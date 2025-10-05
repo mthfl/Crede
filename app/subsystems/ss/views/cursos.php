@@ -711,7 +711,7 @@ if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) 
                                                     </div>
                                                     <div>
                                                         <h2 class="text-lg sm:text-xl font-bold font-display tracking-tight">Verificar senha</h2>
-                                                        <p class="text-white/90 text-sm mt-1 font-medium">Digite a senha enviada por e-mail</p>
+                                                      
                                                     </div>
                                                 </div>
                                                 <button type="button" onclick="window.location.href='cursos.php'" class="text-white/80 hover:text-white transition-colors duration-300">
