@@ -18,6 +18,7 @@ $escolas = $select->select_escolas();
     <title>Gerenciador de Escolas - CREDE 1</title>
     <meta name="description" content="Gerenciador de Escolas do Sistema CREDE 1 - Coordenadoria Regional de Desenvolvimento da Educação">
     <meta name="author" content="CREDE 1">
+    <link rel="icon" type="image/png" href="https://i.postimg.cc/0N0dsxrM/Bras-o-do-Cear-svg-removebg-preview.png">
     <meta name="keywords" content="escolas, CREDE 1, sistema, educação, gestão escolar">
     <link rel="icon" type="image/png" href="https://i.postimg.cc/0N0dsxrM/Bras-o-do-Cear-svg-removebg-preview.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
