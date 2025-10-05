@@ -8,6 +8,28 @@ $session->tempo_session();*/
 
 require_once(__DIR__ . '/models/model.select.php');
 $select = new select();
+
+// Handle CRUD
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $action = isset($_POST['action']) ? $_POST['action'] : 'create';
+    $nome = trim($_POST['nome']);
+    $email = trim($_POST['email']);
+    $cpf = preg_replace('/\D/', '', $_POST['cpf']);
+    $escola = $_POST['escola'];
+    $id = isset($_POST['user_id']) ? (int)$_POST['user_id'] : 0;
+    if ($nome !== '' && filter_var($email, FILTER_VALIDATE_EMAIL) && strlen($cpf) === 11 && $escola !== '') {
+        try {
+            if ($action === 'update' && $id > 0) {
+                $select->update_user($escola, $id, $nome, $email, $cpf);
+            } else if ($action === 'delete' && $id > 0) {
+                $select->delete_user($escola, $id);
+            } else {
+                $select->insert_user($escola, $nome, $email, $cpf);
+            }
+            echo "<script>window.addEventListener('DOMContentLoaded',()=>{document.getElementById('modalUser')&&closeModal('modalUser');document.getElementById('modalDeleteUser')&&closeModal('modalDeleteUser');});</script>";
+        } catch (Throwable $e) {}
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -433,15 +455,14 @@ $select = new select();
                     </div>
 
                     <!-- Cards Container -->
-                    <div class="p-4 sm:p-6">
+                    <div id="usersCards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-5 sm:gap-6 w-full p-4 sm:p-6">
                         <?php 
                         
                         $dados = $select->select_estgdm();
-
-                        foreach($dados as $dado){ ?>
-                        <div id="usersCards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-5 sm:gap-6 w-full">
-                            <!-- Exemplo de card estático -->
-                            <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl user-card group hover:shadow-2xl transition-all duration-500" data-nome="joao silva" data-email="joao.silva@example.com" data-escola="1">
+                        ?>
+                        <div class="contents">
+                            <?php foreach($dados as $dado){ ?>
+                            <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl user-card group hover:shadow-2xl transition-all duration-500" data-nome="<?= strtolower($dado['nome_user']) ?>" data-email="<?= strtolower($dado['email']) ?>" data-escola="1">
                                 <!-- Header do Card com Avatar e Nome -->
                                 <div class="flex items-start gap-3 mb-4">
                                     <div class="relative">
@@ -490,30 +511,26 @@ $select = new select();
                                         <?= $dado['id']?>
                                     </div>
                                     <div class="flex items-center gap-2">
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(1)" title="Editar usuário">
+                                        <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(<?= $dado['id']?>,'estgdm','<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['email'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['cpf'],ENT_QUOTES)?>')" title="Editar usuário">
                                             <i class='fa-solid fa-pen text-sm'></i>
                                         </button>
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeleteUser(1, 'João Silva')" title="Remover usuário">
+                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeleteUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','estgdm')" title="Remover usuário">
                                             <i class='fa-solid fa-trash text-sm'></i>
                                         </button>
                                     </div>
                                 </div>
                             </div>
-                            <!-- Fim do exemplo de card estático -->
-                        </div>
-                        <?php } ?>
-                    </div>
+                            <?php } ?>
 
                      <!-- Cards Container -->
-                    <div class="p-4 sm:p-6">
+                    <div class="contents">
                         <?php 
                         
                         $dados = $select->select_epaf();
-
-                        foreach($dados as $dado){ ?>
-                        <div id="usersCards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-5 sm:gap-6 w-full">
-                            <!-- Exemplo de card estático -->
-                            <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl user-card group hover:shadow-2xl transition-all duration-500" data-nome="joao silva" data-email="joao.silva@example.com" data-escola="1">
+                        ?>
+                        <div class="contents">
+                            <?php foreach($dados as $dado){ ?>
+                            <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl user-card group hover:shadow-2xl transition-all duration-500" data-nome="<?= strtolower($dado['nome_user']) ?>" data-email="<?= strtolower($dado['email']) ?>" data-escola="1">
                                 <!-- Header do Card com Avatar e Nome -->
                                 <div class="flex items-start gap-3 mb-4">
                                     <div class="relative">
@@ -562,30 +579,28 @@ $select = new select();
                                         <?= $dado['id']?>
                                     </div>
                                     <div class="flex items-center gap-2">
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(1)" title="Editar usuário">
+                                        <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(<?= $dado['id']?>,'epaf','<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['email'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['cpf'],ENT_QUOTES)?>')" title="Editar usuário">
                                             <i class='fa-solid fa-pen text-sm'></i>
                                         </button>
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeleteUser(1, 'João Silva')" title="Remover usuário">
+                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeleteUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','epaf')" title="Remover usuário">
                                             <i class='fa-solid fa-trash text-sm'></i>
                                         </button>
                                     </div>
                                 </div>
                             </div>
-                            <!-- Fim do exemplo de card estático -->
+                            <?php } ?>
                         </div>
-                        <?php } ?>
                     </div>
 
                      <!-- Cards Container -->
-                    <div class="p-4 sm:p-6">
+                    <div class="contents">
                         <?php 
                         
                         $dados = $select->select_epmfm();
-
-                        foreach($dados as $dado){ ?>
-                        <div id="usersCards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-5 sm:gap-6 w-full">
-                            <!-- Exemplo de card estático -->
-                            <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl user-card group hover:shadow-2xl transition-all duration-500" data-nome="joao silva" data-email="joao.silva@example.com" data-escola="1">
+                        ?>
+                        <div class="contents">
+                            <?php foreach($dados as $dado){ ?>
+                            <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl user-card group hover:shadow-2xl transition-all duration-500" data-nome="<?= strtolower($dado['nome_user']) ?>" data-email="<?= strtolower($dado['email']) ?>" data-escola="1">
                                 <!-- Header do Card com Avatar e Nome -->
                                 <div class="flex items-start gap-3 mb-4">
                                     <div class="relative">
@@ -634,30 +649,28 @@ $select = new select();
                                         <?= $dado['id']?>
                                     </div>
                                     <div class="flex items-center gap-2">
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(1)" title="Editar usuário">
+                                        <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(<?= $dado['id']?>,'epmfm','<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['email'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['cpf'],ENT_QUOTES)?>')" title="Editar usuário">
                                             <i class='fa-solid fa-pen text-sm'></i>
                                         </button>
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeleteUser(1, 'João Silva')" title="Remover usuário">
+                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeleteUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','epmfm')" title="Remover usuário">
                                             <i class='fa-solid fa-trash text-sm'></i>
                                         </button>
                                     </div>
                                 </div>
                             </div>
-                            <!-- Fim do exemplo de card estático -->
+                            <?php } ?>
                         </div>
-                        <?php } ?>
                     </div>
 
                      <!-- Cards Container -->
-                    <div class="p-4 sm:p-6">
+                    <div class="contents">
                         <?php 
                         
                         $dados = $select->select_epav();
-
-                        foreach($dados as $dado){ ?>
-                        <div id="usersCards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-5 sm:gap-6 w-full">
-                            <!-- Exemplo de card estático -->
-                            <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl user-card group hover:shadow-2xl transition-all duration-500" data-nome="joao silva" data-email="joao.silva@example.com" data-escola="1">
+                        ?>
+                        <div class="contents">
+                            <?php foreach($dados as $dado){ ?>
+                            <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl user-card group hover:shadow-2xl transition-all duration-500" data-nome="<?= strtolower($dado['nome_user']) ?>" data-email="<?= strtolower($dado['email']) ?>" data-escola="1">
                                 <!-- Header do Card com Avatar e Nome -->
                                 <div class="flex items-start gap-3 mb-4">
                                     <div class="relative">
@@ -706,30 +719,28 @@ $select = new select();
                                         <?= $dado['id']?>
                                     </div>
                                     <div class="flex items-center gap-2">
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(1)" title="Editar usuário">
+                                        <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(<?= $dado['id']?>,'epav','<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['email'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['cpf'],ENT_QUOTES)?>')" title="Editar usuário">
                                             <i class='fa-solid fa-pen text-sm'></i>
                                         </button>
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeleteUser(1, 'João Silva')" title="Remover usuário">
+                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeleteUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','epav')" title="Remover usuário">
                                             <i class='fa-solid fa-trash text-sm'></i>
                                         </button>
                                     </div>
                                 </div>
                             </div>
-                            <!-- Fim do exemplo de card estático -->
+                            <?php } ?>
                         </div>
-                        <?php } ?>
                     </div>
 
                      <!-- Cards Container -->
-                    <div class="p-4 sm:p-6">
+                    <div class="contents">
                         <?php 
                         
                         $dados = $select->select_eedq();
-
-                        foreach($dados as $dado){ ?>
-                        <div id="usersCards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-5 sm:gap-6 w-full">
-                            <!-- Exemplo de card estático -->
-                            <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl user-card group hover:shadow-2xl transition-all duration-500" data-nome="joao silva" data-email="joao.silva@example.com" data-escola="1">
+                        ?>
+                        <div class="contents">
+                            <?php foreach($dados as $dado){ ?>
+                            <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl user-card group hover:shadow-2xl transition-all duration-500" data-nome="<?= strtolower($dado['nome_user']) ?>" data-email="<?= strtolower($dado['email']) ?>" data-escola="1">
                                 <!-- Header do Card com Avatar e Nome -->
                                 <div class="flex items-start gap-3 mb-4">
                                     <div class="relative">
@@ -778,30 +789,28 @@ $select = new select();
                                         <?= $dado['id']?>
                                     </div>
                                     <div class="flex items-center gap-2">
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(1)" title="Editar usuário">
+                                        <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(<?= $dado['id']?>,'eedq','<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['email'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['cpf'],ENT_QUOTES)?>')" title="Editar usuário">
                                             <i class='fa-solid fa-pen text-sm'></i>
                                         </button>
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeleteUser(1, 'João Silva')" title="Remover usuário">
+                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeleteUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','eedq')" title="Remover usuário">
                                             <i class='fa-solid fa-trash text-sm'></i>
                                         </button>
                                     </div>
                                 </div>
                             </div>
-                            <!-- Fim do exemplo de card estático -->
+                            <?php } ?>
                         </div>
-                        <?php } ?>
                     </div>
 
                      <!-- Cards Container -->
-                    <div class="p-4 sm:p-6">
+                    <div class="contents">
                         <?php 
                         
                         $dados = $select->select_ejin();
-
-                        foreach($dados as $dado){ ?>
-                        <div id="usersCards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-5 sm:gap-6 w-full">
-                            <!-- Exemplo de card estático -->
-                            <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl user-card group hover:shadow-2xl transition-all duration-500" data-nome="joao silva" data-email="joao.silva@example.com" data-escola="1">
+                        ?>
+                        <div class="contents">
+                            <?php foreach($dados as $dado){ ?>
+                            <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl user-card group hover:shadow-2xl transition-all duration-500" data-nome="<?= strtolower($dado['nome_user']) ?>" data-email="<?= strtolower($dado['email']) ?>" data-escola="1">
                                 <!-- Header do Card com Avatar e Nome -->
                                 <div class="flex items-start gap-3 mb-4">
                                     <div class="relative">
@@ -850,30 +859,28 @@ $select = new select();
                                         <?= $dado['id']?>
                                     </div>
                                     <div class="flex items-center gap-2">
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(1)" title="Editar usuário">
+                                        <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(<?= $dado['id']?>,'ejin','<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['email'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['cpf'],ENT_QUOTES)?>')" title="Editar usuário">
                                             <i class='fa-solid fa-pen text-sm'></i>
                                         </button>
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeleteUser(1, 'João Silva')" title="Remover usuário">
+                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeleteUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','ejin')" title="Remover usuário">
                                             <i class='fa-solid fa-trash text-sm'></i>
                                         </button>
                                     </div>
                                 </div>
                             </div>
-                            <!-- Fim do exemplo de card estático -->
+                            <?php } ?>
                         </div>
-                        <?php } ?>
                     </div>
 
                      <!-- Cards Container -->
-                    <div class="p-4 sm:p-6">
+                    <div class="contents">
                         <?php 
                         
                         $dados = $select->select_epfads();
-
-                        foreach($dados as $dado){ ?>
-                        <div id="usersCards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-5 sm:gap-6 w-full">
-                            <!-- Exemplo de card estático -->
-                            <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl user-card group hover:shadow-2xl transition-all duration-500" data-nome="joao silva" data-email="joao.silva@example.com" data-escola="1">
+                        ?>
+                        <div class="contents">
+                            <?php foreach($dados as $dado){ ?>
+                            <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl user-card group hover:shadow-2xl transition-all duration-500" data-nome="<?= strtolower($dado['nome_user']) ?>" data-email="<?= strtolower($dado['email']) ?>" data-escola="1">
                                 <!-- Header do Card com Avatar e Nome -->
                                 <div class="flex items-start gap-3 mb-4">
                                     <div class="relative">
@@ -922,30 +929,28 @@ $select = new select();
                                         <?= $dado['id']?>
                                     </div>
                                     <div class="flex items-center gap-2">
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(1)" title="Editar usuário">
+                                        <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(<?= $dado['id']?>,'epfads','<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['email'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['cpf'],ENT_QUOTES)?>')" title="Editar usuário">
                                             <i class='fa-solid fa-pen text-sm'></i>
                                         </button>
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeleteUser(1, 'João Silva')" title="Remover usuário">
+                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeleteUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','epfads')" title="Remover usuário">
                                             <i class='fa-solid fa-trash text-sm'></i>
                                         </button>
                                     </div>
                                 </div>
                             </div>
-                            <!-- Fim do exemplo de card estático -->
+                            <?php } ?>
                         </div>
-                        <?php } ?>
                     </div>
 
                      <!-- Cards Container -->
-                    <div class="p-4 sm:p-6">
+                    <div class="contents">
                         <?php 
                         
                         $dados = $select->select_emcvm();
-
-                        foreach($dados as $dado){ ?>
-                        <div id="usersCards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-5 sm:gap-6 w-full">
-                            <!-- Exemplo de card estático -->
-                            <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl user-card group hover:shadow-2xl transition-all duration-500" data-nome="joao silva" data-email="joao.silva@example.com" data-escola="1">
+                        ?>
+                        <div class="contents">
+                            <?php foreach($dados as $dado){ ?>
+                            <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl user-card group hover:shadow-2xl transition-all duration-500" data-nome="<?= strtolower($dado['nome_user']) ?>" data-email="<?= strtolower($dado['email']) ?>" data-escola="1">
                                 <!-- Header do Card com Avatar e Nome -->
                                 <div class="flex items-start gap-3 mb-4">
                                     <div class="relative">
@@ -994,30 +999,28 @@ $select = new select();
                                         <?= $dado['id']?>
                                     </div>
                                     <div class="flex items-center gap-2">
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(1)" title="Editar usuário">
+                                        <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(<?= $dado['id']?>,'emcvm','<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['email'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['cpf'],ENT_QUOTES)?>')" title="Editar usuário">
                                             <i class='fa-solid fa-pen text-sm'></i>
                                         </button>
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeleteUser(1, 'João Silva')" title="Remover usuário">
+                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeleteUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','emcvm')" title="Remover usuário">
                                             <i class='fa-solid fa-trash text-sm'></i>
                                         </button>
                                     </div>
                                 </div>
                             </div>
-                            <!-- Fim do exemplo de card estático -->
+                            <?php } ?>
                         </div>
-                        <?php } ?>
                     </div>
 
-                     <!-- Cards Container -->
-                    <div class="p-4 sm:p-6">
+                    <!-- Cards Container -->
+                    <div class="contents">
                         <?php 
                         
                         $dados = $select->select_eglgfm();
-
-                        foreach($dados as $dado){ ?>
-                        <div id="usersCards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-5 sm:gap-6 w-full">
-                            <!-- Exemplo de card estático -->
-                            <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl user-card group hover:shadow-2xl transition-all duration-500" data-nome="joao silva" data-email="joao.silva@example.com" data-escola="1">
+                        ?>
+                        <div class="contents">
+                            <?php foreach($dados as $dado){ ?>
+                            <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl user-card group hover:shadow-2xl transition-all duration-500" data-nome="<?= strtolower($dado['nome_user']) ?>" data-email="<?= strtolower($dado['email']) ?>" data-escola="1">
                                 <!-- Header do Card com Avatar e Nome -->
                                 <div class="flex items-start gap-3 mb-4">
                                     <div class="relative">
@@ -1066,30 +1069,28 @@ $select = new select();
                                         <?= $dado['id']?>
                                     </div>
                                     <div class="flex items-center gap-2">
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(1)" title="Editar usuário">
+                                        <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(<?= $dado['id']?>,'eglgfm','<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['email'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['cpf'],ENT_QUOTES)?>')" title="Editar usuário">
                                             <i class='fa-solid fa-pen text-sm'></i>
                                         </button>
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeleteUser(1, 'João Silva')" title="Remover usuário">
+                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeleteUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','eglgfm')" title="Remover usuário">
                                             <i class='fa-solid fa-trash text-sm'></i>
                                         </button>
                                     </div>
                                 </div>
                             </div>
-                            <!-- Fim do exemplo de card estático -->
+                            <?php } ?>
                         </div>
-                        <?php } ?>
                     </div>
 
-                     <!-- Cards Container -->
-                    <div class="p-4 sm:p-6">
+                    <!-- Cards Container -->
+                    <div class="contents">
                         <?php 
                         
                         $dados = $select->select_epldtv();
-
-                        foreach($dados as $dado){ ?>
-                        <div id="usersCards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-5 sm:gap-6 w-full">
-                            <!-- Exemplo de card estático -->
-                            <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl user-card group hover:shadow-2xl transition-all duration-500" data-nome="joao silva" data-email="joao.silva@example.com" data-escola="1">
+                        ?>
+                        <div class="contents">
+                            <?php foreach($dados as $dado){ ?>
+                            <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl user-card group hover:shadow-2xl transition-all duration-500" data-nome="<?= strtolower($dado['nome_user']) ?>" data-email="<?= strtolower($dado['email']) ?>" data-escola="1">
                                 <!-- Header do Card com Avatar e Nome -->
                                 <div class="flex items-start gap-3 mb-4">
                                     <div class="relative">
@@ -1138,30 +1139,26 @@ $select = new select();
                                         <?= $dado['id']?>
                                     </div>
                                     <div class="flex items-center gap-2">
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(1)" title="Editar usuário">
+                                        <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(<?= $dado['id']?>,'epldtv','<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['email'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['cpf'],ENT_QUOTES)?>')" title="Editar usuário">
                                             <i class='fa-solid fa-pen text-sm'></i>
                                         </button>
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeleteUser(1, 'João Silva')" title="Remover usuário">
+                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeleteUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','epldtv')" title="Remover usuário">
                                             <i class='fa-solid fa-trash text-sm'></i>
                                         </button>
                                     </div>
                                 </div>
                             </div>
-                            <!-- Fim do exemplo de card estático -->
+                            <?php } ?>
                         </div>
-                        <?php } ?>
                     </div>
 
-                     <!-- Cards Container -->
-                    <div class="p-4 sm:p-6">
+                    <!-- Cards Container -->
+                    <div class="contents">
                         <?php 
                         
                         $dados = $select->select_ercr();
-
                         foreach($dados as $dado){ ?>
-                        <div id="usersCards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-5 sm:gap-6 w-full">
-                            <!-- Exemplo de card estático -->
-                            <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl user-card group hover:shadow-2xl transition-all duration-500" data-nome="joao silva" data-email="joao.silva@example.com" data-escola="1">
+                            <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl user-card group hover:shadow-2xl transition-all duration-500" data-nome="<?= strtolower($dado['nome_user']) ?>" data-email="<?= strtolower($dado['email']) ?>" data-escola="1">
                                 <!-- Header do Card com Avatar e Nome -->
                                 <div class="flex items-start gap-3 mb-4">
                                     <div class="relative">
@@ -1210,19 +1207,17 @@ $select = new select();
                                         <?= $dado['id']?>
                                     </div>
                                     <div class="flex items-center gap-2">
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(1)" title="Editar usuário">
+                                        <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(<?= $dado['id']?>,'ercr','<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['email'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['cpf'],ENT_QUOTES)?>')" title="Editar usuário">
                                             <i class='fa-solid fa-pen text-sm'></i>
                                         </button>
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeleteUser(1, 'João Silva')" title="Remover usuário">
+                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeleteUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','ercr')" title="Remover usuário">
                                             <i class='fa-solid fa-trash text-sm'></i>
                                         </button>
                                     </div>
                                 </div>
                             </div>
-                            <!-- Fim do exemplo de card estático -->
-                        </div>
                         <?php } ?>
-                        </div>
+                    </div>
                 </div>
             </div>
         </main>
@@ -1246,8 +1241,9 @@ $select = new select();
                 </button>
             </div>
             <div class="p-6 sm:p-8">
-                <form id="userForm" action="#" method="POST" enctype="multipart/form-data">
+                <form id="userForm" action="" method="POST" enctype="multipart/form-data">
                     <input type="hidden" id="inpUserId" name="user_id" value="">
+                    <input type="hidden" id="inpAction" name="action" value="create">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label class="block text-sm font-semibold text-dark mb-3 flex items-center gap-2">
@@ -1276,10 +1272,18 @@ $select = new select();
                                 Escola *
                             </label>
                             <select id="inpEscola" name="escola" class="input-enhanced w-full px-4 py-4 rounded-xl transition-all text-base border-2 focus:border-primary focus:ring-4 focus:ring-primary/10" required>
-                                <option value="">Selecione uma escola</option>
-                                <option value="1">Escola Municipal Exemplo</option>
-                                <option value="2">Escola Estadual Modelo</option>
-                                <option value="3">Escola Técnica Avançada</option>
+                                <option value="">Selecione uma escola (EP)</option>
+                                <option value="estgdm">EEEP Salaberga</option>
+                                <option value="epaf">EEEP Prof Alda Facanha</option>
+                                <option value="epmfm">EEEP Prof Marly Ferreira</option>
+                                <option value="epav">EEEP Prof Antonio Valmir</option>
+                                <option value="eedq">EEEP Eusébio Queiroz</option>
+                                <option value="ejin">EEEP José Ivanilton</option>
+                                <option value="epfads">EEEP Prof Fc Aristótles</option>
+                                <option value="emcvm">EEEP Maria Carmem</option>
+                                <option value="eglgfm">EEEP Gonzaga Mota</option>
+                                <option value="epldtv">EEEP Prof Luiza Teodoro</option>
+                                <option value="ercr">EEEP Raimundo Celio</option>
                             </select>
                         </div>
                     </div>
@@ -1311,8 +1315,10 @@ $select = new select();
                     <i class="fa-solid fa-info-circle mr-2"></i>
                     Esta ação não pode ser desfeita.
                 </p>
-                <form id="deleteForm" action="#" method="POST">
+                <form id="deleteForm" action="" method="POST">
                     <input type="hidden" id="deleteUserId" name="user_id" value="">
+                    <input type="hidden" id="deleteEscola" name="escola" value="">
+                    <input type="hidden" name="action" value="delete">
                     <div class="flex flex-col sm:flex-row gap-3 justify-center">
                         <button type="button" class="px-6 py-3 rounded-xl border-2 border-gray-300 font-semibold text-gray-700 hover:bg-gray-100 hover:border-gray-400 transition-all text-base" onclick="closeModal('modalDeleteUser')">
                             <i class="fa-solid fa-times mr-2"></i>Cancelar
@@ -1346,27 +1352,25 @@ $select = new select();
             document.getElementById('inpEmail').value = '';
             document.getElementById('inpCpf').value = '';
             document.getElementById('inpEscola').value = '';
-            document.getElementById('userForm').action = '#';
+            document.getElementById('inpAction').value = 'create';
             openModal('modalUser');
         }
 
-        function openEditUser(userId) {
-            const user = usuarios.find(u => u.id === userId);
-            if (user) {
-                document.getElementById('modalTitle').textContent = 'Editar Usuário';
-                document.getElementById('inpUserId').value = user.id || '';
-                document.getElementById('inpNome').value = user.nome || '';
-                document.getElementById('inpEmail').value = user.email || '';
-                document.getElementById('inpCpf').value = user.cpf || '';
-                document.getElementById('inpEscola').value = user.id_escola || '';
-                document.getElementById('userForm').action = '#';
-                openModal('modalUser');
-            }
+        function openEditUser(userId, escolaKey, nome, email, cpf) {
+            document.getElementById('modalTitle').textContent = 'Editar Usuário';
+            document.getElementById('inpUserId').value = userId || '';
+            document.getElementById('inpNome').value = nome || '';
+            document.getElementById('inpEmail').value = email || '';
+            document.getElementById('inpCpf').value = cpf || '';
+            document.getElementById('inpEscola').value = escolaKey || '';
+            document.getElementById('inpAction').value = 'update';
+            openModal('modalUser');
         }
 
-        function openDeleteUser(userId, userName) {
+        function openDeleteUser(userId, userName, escolaKey) {
             document.getElementById('deleteUserName').textContent = userName;
             document.getElementById('deleteUserId').value = userId;
+            document.getElementById('deleteEscola').value = escolaKey || '';
             openModal('modalDeleteUser');
         }
 
@@ -1517,10 +1521,9 @@ $select = new select();
                     showNotification('CPF deve estar no formato 000.000.000-00.', 'error');
                     return;
                 }
-                
-                const cpfMascarado = this.inpCpf.value;
+
+                // Submit via POST (server handles insert)
                 this.submit();
-                this.inpCpf.value = cpfMascarado;
             });
 
             document.documentElement.style.scrollBehavior = 'smooth';

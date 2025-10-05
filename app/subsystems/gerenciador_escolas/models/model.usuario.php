@@ -32,7 +32,7 @@ class model_usuario extends connect_escolas
         $this->table11 = $table["ss_$escola_banco"][11];
         $this->table12 = $table["ss_$escola_banco"][12];
     }
-    
+
     public function pre_cadastro(string $cpf, string $email): int
     {
         try {
@@ -72,13 +72,13 @@ class model_usuario extends connect_escolas
             $stmt_check->bindValue(":cpf", $cpf);
             $stmt_check->bindValue(":email", $email);
             $stmt_check->execute();
-
             $user = $stmt_check->fetch(PDO::FETCH_ASSOC);
-            if ($user['status'] == 0) {
-                return 4;
-            }
+
             if ($stmt_check->rowCount() > 0) {
 
+                if ($user['status'] == 0) {
+                    return 4;
+                }
                 $hash = password_hash($senha, PASSWORD_DEFAULT);
                 $stmt_check = $this->connect->prepare("UPDATE $this->table5 SET senha = :senha WHERE email = :email AND cpf = :cpf");
                 $stmt_check->bindValue(":cpf", $cpf);
@@ -109,10 +109,11 @@ class model_usuario extends connect_escolas
             $stmt_check->execute();
 
             $user = $stmt_check->fetch(PDO::FETCH_ASSOC);
-            if ($user['status'] == 0) {
-                return 4;
-            }
+
             if ($user) {
+                if ($user['status'] == 0) {
+                    return 4;
+                }
                 if (password_verify($senha, $user['senha'])) {
 
                     if (session_status() === PHP_SESSION_NONE) {
