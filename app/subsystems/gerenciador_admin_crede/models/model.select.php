@@ -32,7 +32,6 @@ class select extends connect
         $this->table9 = $table["ss_eglgfm"][5];
         $this->table10 = $table["ss_epldtv"][5];
         $this->table11 = $table["ss_ercr"][5];
-        $this->table12 = $table["crede_users"][6];
 
     }
 
@@ -80,12 +79,6 @@ class select extends connect
         $stmt_eglgfm = $this->connect_eglgfm->query("SELECT * FROM $this->table9 WHERE tipo_usuario = 'admin'");
         $eglgfm = $stmt_eglgfm->fetchAll(PDO::FETCH_ASSOC);
         return $eglgfm;
-
-
-
-
-
-        
     }
     public function select_epldtv() {
         $stmt_epldtv = $this->connect_epldtv->query("SELECT * FROM $this->table10 WHERE tipo_usuario = 'admin'");
@@ -98,13 +91,105 @@ class select extends connect
         return $ercr;
     }
 
-    public function select_escola(){
+    public function insert_user(string $epKey, string $nome, string $email, string $cpf): bool {
+        $map = [
+            'estgdm' => [$this->connect_estgdm, $this->table1],
+            'epaf'   => [$this->connect_epaf, $this->table2],
+            'epmfm'  => [$this->connect_epmfm, $this->table3],
+            'epav'   => [$this->connect_epav, $this->table4],
+            'eedq'   => [$this->connect_eedq, $this->table5],
+            'ejin'   => [$this->connect_ejin, $this->table6],
+            'epfads' => [$this->connect_epfads, $this->table7],
+            'emcvm'  => [$this->connect_emcvm, $this->table8],
+            'eglgfm' => [$this->connect_eglgfm, $this->table9],
+            'epldtv' => [$this->connect_epldtv, $this->table10],
+            'ercr'   => [$this->connect_ercr, $this->table11],
+        ];
 
-        $stmt_escolas = $this->connect->query("SELECT * FROM $this->table12");
-        $escolas = $stmt_escolas->fetchAll(PDO::FETCH_ASSOC);
-        return $escolas;
+        if (!isset($map[$epKey])) {
+            throw new InvalidArgumentException('Escola inválida');
+        }
+
+        [$pdo, $table] = $map[$epKey];
+        $stmt = $pdo->prepare("INSERT INTO $table (nome_user, email, cpf, tipo_usuario) VALUES (:nome, :email, :cpf, 'admin')");
+        $stmt->bindValue(':nome', $nome);
+        $stmt->bindValue(':email', $email);
+        $stmt->bindValue(':cpf', $cpf);
+        return $stmt->execute();
     }
 
+    public function update_user(string $epKey, int $id, string $nome, string $email, string $cpf): bool {
+        $map = [
+            'estgdm' => [$this->connect_estgdm, $this->table1],
+            'epaf'   => [$this->connect_epaf, $this->table2],
+            'epmfm'  => [$this->connect_epmfm, $this->table3],
+            'epav'   => [$this->connect_epav, $this->table4],
+            'eedq'   => [$this->connect_eedq, $this->table5],
+            'ejin'   => [$this->connect_ejin, $this->table6],
+            'epfads' => [$this->connect_epfads, $this->table7],
+            'emcvm'  => [$this->connect_emcvm, $this->table8],
+            'eglgfm' => [$this->connect_eglgfm, $this->table9],
+            'epldtv' => [$this->connect_epldtv, $this->table10],
+            'ercr'   => [$this->connect_ercr, $this->table11],
+        ];
+        if (!isset($map[$epKey])) {
+            throw new InvalidArgumentException('Escola inválida');
+        }
+        [$pdo, $table] = $map[$epKey];
+        $stmt = $pdo->prepare("UPDATE $table SET nome_user = :nome, email = :email, cpf = :cpf WHERE id = :id");
+        $stmt->bindValue(':nome', $nome);
+        $stmt->bindValue(':email', $email);
+        $stmt->bindValue(':cpf', $cpf);
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        return $stmt->execute();
+    }
+
+    public function delete_user(string $epKey, int $id): bool {
+        $map = [
+            'estgdm' => [$this->connect_estgdm, $this->table1],
+            'epaf'   => [$this->connect_epaf, $this->table2],
+            'epmfm'  => [$this->connect_epmfm, $this->table3],
+            'epav'   => [$this->connect_epav, $this->table4],
+            'eedq'   => [$this->connect_eedq, $this->table5],
+            'ejin'   => [$this->connect_ejin, $this->table6],
+            'epfads' => [$this->connect_epfads, $this->table7],
+            'emcvm'  => [$this->connect_emcvm, $this->table8],
+            'eglgfm' => [$this->connect_eglgfm, $this->table9],
+            'epldtv' => [$this->connect_epldtv, $this->table10],
+            'ercr'   => [$this->connect_ercr, $this->table11],
+        ];
+        if (!isset($map[$epKey])) {
+            throw new InvalidArgumentException('Escola inválida');
+        }
+        [$pdo, $table] = $map[$epKey];
+        // Em vez de excluir, apenas desativa o usuário (status = 0)
+        $stmt = $pdo->prepare("UPDATE $table SET status = 0 WHERE id = :id");
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        return $stmt->execute();
+    }
     
+    // Função para reativar um usuário
+    public function activate_user(string $epKey, int $id): bool {
+        $map = [
+            'estgdm' => [$this->connect_estgdm, $this->table1],
+            'epaf'   => [$this->connect_epaf, $this->table2],
+            'epmfm'  => [$this->connect_epmfm, $this->table3],
+            'epav'   => [$this->connect_epav, $this->table4],
+            'eedq'   => [$this->connect_eedq, $this->table5],
+            'ejin'   => [$this->connect_ejin, $this->table6],
+            'epfads' => [$this->connect_epfads, $this->table7],
+            'emcvm'  => [$this->connect_emcvm, $this->table8],
+            'eglgfm' => [$this->connect_eglgfm, $this->table9],
+            'epldtv' => [$this->connect_epldtv, $this->table10],
+            'ercr'   => [$this->connect_ercr, $this->table11],
+        ];
+        if (!isset($map[$epKey])) {
+            throw new InvalidArgumentException('Escola inválida');
+        }
+        [$pdo, $table] = $map[$epKey];
+        $stmt = $pdo->prepare("UPDATE $table SET status = 1 WHERE id = :id");
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        return $stmt->execute();
+    }
 
 }
