@@ -421,7 +421,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <header class="header-glass sticky top-0 z-40 px-3 sm:px-6 py-3 sm:py-4 animate-slide-in">
             <div class="flex items-center justify-between max-w-7xl mx-auto">
                 <div class="flex items-center gap-2 sm:gap-4">
-                    <a href="../index.html" class="p-2 sm:p-3 rounded-xl hover:bg-gray-100 text-gray-600 transition-all group">
+                    <a href="../../main/views/subsystems.php" class="p-2 sm:p-3 rounded-xl hover:bg-gray-100 text-gray-600 transition-all group">
                         <i class="fa-solid fa-arrow-left text-base sm:text-lg group-hover:scale-110 transition-transform"></i>
                     </a>
                     <div class="w-8 h-8 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center">
@@ -444,7 +444,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div class="w-6 h-6 rounded-lg bg-white/20 flex items-center justify-center">
                             <i class="fa-solid fa-user-plus text-white text-sm"></i>
                         </div>
-                        <span class="text-sm sm:text-base">Cadastrar Usuário</span>
+                        <span class="text-sm sm:text-base">Cadastrar Admin</span>
                     </button>
                 </div>
 
@@ -473,15 +473,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $dados = $select->select_estgdm();
                         ?>
                         <div class="contents">
-                            <?php foreach($dados as $dado){ ?>
-                            <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl user-card group hover:shadow-2xl transition-all duration-500" data-nome="<?= strtolower($dado['nome_user']) ?>" data-email="<?= strtolower($dado['email']) ?>" data-escola="1">
+                            <?php foreach($dados as $dado){ 
+                                $isActive = !isset($dado['status']) || $dado['status'] == 1;
+                                $cardClass = $isActive ? "" : "opacity-70 grayscale";
+                            ?>
+                            <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl user-card group hover:shadow-2xl transition-all duration-500 <?= $cardClass ?>" data-nome="<?= strtolower($dado['nome_user']) ?>" data-email="<?= strtolower($dado['email']) ?>" data-escola="1" data-status="<?= $isActive ? 'active' : 'inactive' ?>">
                                 <!-- Header do Card com Avatar e Nome -->
                                 <div class="flex items-start gap-3 mb-4">
                                     <div class="relative">
                                         <div class="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-2xl bg-gradient-to-br from-primary via-primary to-dark text-white flex items-center justify-center font-bold text-base sm:text-lg lg:text-xl flex-shrink-0 shadow-lg">
                                             J
                                         </div>
-                                        <div class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
+                                        <div class="absolute -bottom-1 -right-1 w-3 h-3 <?= $isActive ? 'bg-green-500' : 'bg-red-500' ?> rounded-full border-2 border-white"></div>
                                     </div>
                                     <div class="min-w-0 flex-1 pt-1">
                                         <h3 class="font-bold text-dark text-base sm:text-lg lg:text-xl truncate mb-1 group-hover:text-primary transition-colors duration-300">
@@ -526,9 +529,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(<?= $dado['id']?>,'estgdm','<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['email'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['cpf'],ENT_QUOTES)?>')" title="Editar usuário">
                                             <i class='fa-solid fa-pen text-sm'></i>
                                         </button>
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeleteUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','estgdm')" title="Remover usuário">
-                                            <i class='fa-solid fa-trash text-sm'></i>
+                                        <?php if (!isset($dado['status']) || $dado['status'] == 1): ?>
+                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeactivateUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','estgdm')" title="Desativar usuário">
+                                            <i class='fa-solid fa-user-slash text-sm mr-1'></i>
+                                            <span>Desativar</span>
                                         </button>
+                                        <?php else: ?>
+                                        <button class="action-btn p-2.5 rounded-xl border-2 border-green-200 hover:bg-green-500 hover:text-white hover:border-green-500 text-green-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openActivateUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','estgdm')" title="Reativar usuário">
+                                            <i class='fa-solid fa-user-check text-sm mr-1'></i>
+                                            <span>Ativar</span>
+                                        </button>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                             </div>
@@ -594,9 +605,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(<?= $dado['id']?>,'epaf','<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['email'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['cpf'],ENT_QUOTES)?>')" title="Editar usuário">
                                             <i class='fa-solid fa-pen text-sm'></i>
                                         </button>
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeleteUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','epaf')" title="Remover usuário">
-                                            <i class='fa-solid fa-trash text-sm'></i>
+                                        <?php if (!isset($dado['status']) || $dado['status'] == 1): ?>
+                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeactivateUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','epaf')" title="Desativar usuário">
+                                            <i class='fa-solid fa-user-slash text-sm mr-1'></i>
+                                            <span>Desativar</span>
                                         </button>
+                                        <?php else: ?>
+                                        <button class="action-btn p-2.5 rounded-xl border-2 border-green-200 hover:bg-green-500 hover:text-white hover:border-green-500 text-green-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openActivateUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','epaf')" title="Reativar usuário">
+                                            <i class='fa-solid fa-user-check text-sm mr-1'></i>
+                                            <span>Ativar</span>
+                                        </button>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                             </div>
@@ -664,9 +683,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(<?= $dado['id']?>,'epmfm','<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['email'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['cpf'],ENT_QUOTES)?>')" title="Editar usuário">
                                             <i class='fa-solid fa-pen text-sm'></i>
                                         </button>
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeleteUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','epmfm')" title="Remover usuário">
-                                            <i class='fa-solid fa-trash text-sm'></i>
+                                        <?php if (!isset($dado['status']) || $dado['status'] == 1): ?>
+                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeactivateUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','epmfm')" title="Desativar usuário">
+                                            <i class='fa-solid fa-user-slash text-sm mr-1'></i>
+                                            <span>Desativar</span>
                                         </button>
+                                        <?php else: ?>
+                                        <button class="action-btn p-2.5 rounded-xl border-2 border-green-200 hover:bg-green-500 hover:text-white hover:border-green-500 text-green-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openActivateUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','epmfm')" title="Reativar usuário">
+                                            <i class='fa-solid fa-user-check text-sm mr-1'></i>
+                                            <span>Ativar</span>
+                                        </button>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                             </div>
@@ -734,9 +761,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(<?= $dado['id']?>,'epav','<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['email'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['cpf'],ENT_QUOTES)?>')" title="Editar usuário">
                                             <i class='fa-solid fa-pen text-sm'></i>
                                         </button>
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeleteUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','epav')" title="Remover usuário">
-                                            <i class='fa-solid fa-trash text-sm'></i>
+                                        <?php if (!isset($dado['status']) || $dado['status'] == 1): ?>
+                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeactivateUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','epav')" title="Desativar usuário">
+                                            <i class='fa-solid fa-user-slash text-sm mr-1'></i>
+                                            <span>Desativar</span>
                                         </button>
+                                        <?php else: ?>
+                                        <button class="action-btn p-2.5 rounded-xl border-2 border-green-200 hover:bg-green-500 hover:text-white hover:border-green-500 text-green-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openActivateUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','epav')" title="Reativar usuário">
+                                            <i class='fa-solid fa-user-check text-sm mr-1'></i>
+                                            <span>Ativar</span>
+                                        </button>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                             </div>
@@ -804,9 +839,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(<?= $dado['id']?>,'eedq','<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['email'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['cpf'],ENT_QUOTES)?>')" title="Editar usuário">
                                             <i class='fa-solid fa-pen text-sm'></i>
                                         </button>
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeleteUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','eedq')" title="Remover usuário">
-                                            <i class='fa-solid fa-trash text-sm'></i>
+                                        <?php if (!isset($dado['status']) || $dado['status'] == 1): ?>
+                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeactivateUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','eedq')" title="Desativar usuário">
+                                            <i class='fa-solid fa-user-slash text-sm'></i>
                                         </button>
+                                        <?php else: ?>
+                                        <button class="action-btn p-2.5 rounded-xl border-2 border-green-200 hover:bg-green-500 hover:text-white hover:border-green-500 text-green-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openActivateUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','eedq')" title="Reativar usuário">
+                                            <i class='fa-solid fa-user-check text-sm'></i>
+                                        </button>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                             </div>
@@ -874,9 +915,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(<?= $dado['id']?>,'ejin','<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['email'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['cpf'],ENT_QUOTES)?>')" title="Editar usuário">
                                             <i class='fa-solid fa-pen text-sm'></i>
                                         </button>
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeleteUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','ejin')" title="Remover usuário">
-                                            <i class='fa-solid fa-trash text-sm'></i>
+                                        <?php if (!isset($dado['status']) || $dado['status'] == 1): ?>
+                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeactivateUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','ejin')" title="Desativar usuário">
+                                            <i class='fa-solid fa-user-slash text-sm mr-1'></i>
+                                            <span>Desativar</span>
                                         </button>
+                                        <?php else: ?>
+                                        <button class="action-btn p-2.5 rounded-xl border-2 border-green-200 hover:bg-green-500 hover:text-white hover:border-green-500 text-green-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openActivateUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','ejin')" title="Reativar usuário">
+                                            <i class='fa-solid fa-user-check text-sm mr-1'></i>
+                                            <span>Ativar</span>
+                                        </button>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                             </div>
@@ -944,9 +993,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(<?= $dado['id']?>,'epfads','<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['email'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['cpf'],ENT_QUOTES)?>')" title="Editar usuário">
                                             <i class='fa-solid fa-pen text-sm'></i>
                                         </button>
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeleteUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','epfads')" title="Remover usuário">
-                                            <i class='fa-solid fa-trash text-sm'></i>
+                                        <?php if (!isset($dado['status']) || $dado['status'] == 1): ?>
+                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeactivateUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','epfads')" title="Desativar usuário">
+                                            <i class='fa-solid fa-user-slash text-sm mr-1'></i>
+                                            <span>Desativar</span>
                                         </button>
+                                        <?php else: ?>
+                                        <button class="action-btn p-2.5 rounded-xl border-2 border-green-200 hover:bg-green-500 hover:text-white hover:border-green-500 text-green-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openActivateUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','epfads')" title="Reativar usuário">
+                                            <i class='fa-solid fa-user-check text-sm mr-1'></i>
+                                            <span>Ativar</span>
+                                        </button>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                             </div>
@@ -1014,9 +1071,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(<?= $dado['id']?>,'emcvm','<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['email'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['cpf'],ENT_QUOTES)?>')" title="Editar usuário">
                                             <i class='fa-solid fa-pen text-sm'></i>
                                         </button>
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeleteUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','emcvm')" title="Remover usuário">
-                                            <i class='fa-solid fa-trash text-sm'></i>
+                                        <?php if (!isset($dado['status']) || $dado['status'] == 1): ?>
+                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeactivateUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','emcvm')" title="Desativar usuário">
+                                            <i class='fa-solid fa-user-slash text-sm mr-1'></i>
+                                            <span>Desativar</span>
                                         </button>
+                                        <?php else: ?>
+                                        <button class="action-btn p-2.5 rounded-xl border-2 border-green-200 hover:bg-green-500 hover:text-white hover:border-green-500 text-green-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openActivateUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','emcvm')" title="Reativar usuário">
+                                            <i class='fa-solid fa-user-check text-sm mr-1'></i>
+                                            <span>Ativar</span>
+                                        </button>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                             </div>
@@ -1084,9 +1149,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(<?= $dado['id']?>,'eglgfm','<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['email'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['cpf'],ENT_QUOTES)?>')" title="Editar usuário">
                                             <i class='fa-solid fa-pen text-sm'></i>
                                         </button>
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeleteUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','eglgfm')" title="Remover usuário">
-                                            <i class='fa-solid fa-trash text-sm'></i>
+                                        <?php if (!isset($dado['status']) || $dado['status'] == 1): ?>
+                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeactivateUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','eglgfm')" title="Desativar usuário">
+                                            <i class='fa-solid fa-user-slash text-sm mr-1'></i>
+                                            <span>Desativar</span>
                                         </button>
+                                        <?php else: ?>
+                                        <button class="action-btn p-2.5 rounded-xl border-2 border-green-200 hover:bg-green-500 hover:text-white hover:border-green-500 text-green-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openActivateUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','eglgfm')" title="Reativar usuário">
+                                            <i class='fa-solid fa-user-check text-sm mr-1'></i>
+                                            <span>Ativar</span>
+                                        </button>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                             </div>
@@ -1154,9 +1227,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(<?= $dado['id']?>,'epldtv','<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['email'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['cpf'],ENT_QUOTES)?>')" title="Editar usuário">
                                             <i class='fa-solid fa-pen text-sm'></i>
                                         </button>
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeleteUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','epldtv')" title="Remover usuário">
-                                            <i class='fa-solid fa-trash text-sm'></i>
+                                        <?php if (!isset($dado['status']) || $dado['status'] == 1): ?>
+                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeactivateUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','epldtv')" title="Desativar usuário">
+                                            <i class='fa-solid fa-user-slash text-sm mr-1'></i>
+                                            <span>Desativar</span>
                                         </button>
+                                        <?php else: ?>
+                                        <button class="action-btn p-2.5 rounded-xl border-2 border-green-200 hover:bg-green-500 hover:text-white hover:border-green-500 text-green-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openActivateUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','epldtv')" title="Reativar usuário">
+                                            <i class='fa-solid fa-user-check text-sm mr-1'></i>
+                                            <span>Ativar</span>
+                                        </button>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                             </div>
@@ -1222,9 +1303,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(<?= $dado['id']?>,'ercr','<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['email'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['cpf'],ENT_QUOTES)?>')" title="Editar usuário">
                                             <i class='fa-solid fa-pen text-sm'></i>
                                         </button>
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeleteUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','ercr')" title="Remover usuário">
-                                            <i class='fa-solid fa-trash text-sm'></i>
+                                        <?php if (!isset($dado['status']) || $dado['status'] == 1): ?>
+                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeactivateUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','ercr')" title="Desativar usuário">
+                                            <i class='fa-solid fa-user-slash text-sm mr-1'></i>
+                                            <span>Desativar</span>
                                         </button>
+                                        <?php else: ?>
+                                        <button class="action-btn p-2.5 rounded-xl border-2 border-green-200 hover:bg-green-500 hover:text-white hover:border-green-500 text-green-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openActivateUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','ercr')" title="Reativar usuário">
+                                            <i class='fa-solid fa-user-check text-sm mr-1'></i>
+                                            <span>Ativar</span>
+                                        </button>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
                             </div>
@@ -1244,8 +1333,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <i class="fa-solid fa-user text-xl"></i>
                     </div>
                     <div>
-                        <h3 id="modalTitle" class="text-xl sm:text-2xl font-bold text-dark font-heading">Cadastrar Usuário</h3>
-                        <p class="text-gray-600 text-sm">Preencha as informações do usuário</p>
+                        <h3 id="modalTitle" class="text-xl sm:text-2xl font-bold text-dark font-heading">Cadastrar Admin</h3>
+                        <p class="text-gray-600 text-sm">Preencha as informações do administrador</p>
                     </div>
                 </div>
                 <button class="absolute top-6 right-6 p-2 rounded-xl hover:bg-gray-100 transition-all group" onclick="closeModal('modalUser')">
@@ -1311,32 +1400,64 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </div>
     </div>
-
-    <!-- Modal de Confirmação de Exclusão -->
-    <div id="modalDeleteUser" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-2 sm:p-4 z-50">
-        <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl transform transition-all duration-300 scale-95 opacity-0" id="modalDeleteUserContent">
+    
+    <!-- Modal de Reativação de Usuário -->
+    <div id="modalActivateUser" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-2 sm:p-4 z-50">
+        <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl transform transition-all duration-300 scale-95 opacity-0" id="modalActivateUserContent">
             <div class="p-6 sm:p-8 text-center">
-                <div class="w-20 h-20 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-6">
-                    <i class="fa-solid fa-exclamation-triangle text-3xl text-red-500"></i>
+                <div class="w-20 h-20 rounded-full bg-accent flex items-center justify-center mx-auto mb-6">
+                    <i class="fa-solid fa-user-check text-3xl text-primary"></i>
                 </div>
-                <h3 class="text-xl sm:text-2xl font-bold text-dark font-heading mb-4">Confirmar Exclusão</h3>
+                <h3 class="text-xl sm:text-2xl font-bold text-dark font-heading mb-4">Confirmar Reativação</h3>
                 <p class="text-gray-600 text-base mb-6 leading-relaxed">
-                    Tem certeza que deseja excluir o usuário <span class="font-semibold text-dark" id="deleteUserName"></span>?
+                    Tem certeza que deseja reativar o usuário <span class="font-semibold text-dark" id="activateUserName"></span>?
                 </p>
-                <p class="text-sm text-red-600 bg-red-50 px-4 py-3 rounded-lg border border-red-200 mb-6">
+                <p class="text-sm text-primary bg-accent px-4 py-3 rounded-lg border border-primary/20 mb-6">
                     <i class="fa-solid fa-info-circle mr-2"></i>
-                    Esta ação não pode ser desfeita.
+                    O usuário será reativado e terá acesso ao sistema novamente.
                 </p>
-                <form id="deleteForm" action="" method="POST">
-                    <input type="hidden" id="deleteUserId" name="user_id" value="">
-                    <input type="hidden" id="deleteEscola" name="escola" value="">
-                    <input type="hidden" name="action" value="delete">
+                <form id="activateForm" action="" method="POST">
+                    <input type="hidden" id="activateUserId" name="user_id" value="">
+                    <input type="hidden" id="activateEscola" name="escola" value="">
+                    <input type="hidden" name="action" value="activate">
                     <div class="flex flex-col sm:flex-row gap-3 justify-center">
-                        <button type="button" class="px-6 py-3 rounded-xl border-2 border-gray-300 font-semibold text-gray-700 hover:bg-gray-100 hover:border-gray-400 transition-all text-base" onclick="closeModal('modalDeleteUser')">
+                        <button type="button" class="px-6 py-3 rounded-xl border-2 border-gray-300 font-semibold text-gray-700 hover:bg-gray-100 hover:border-gray-400 transition-all text-base" onclick="closeModal('modalActivateUser')">
                             <i class="fa-solid fa-times mr-2"></i>Cancelar
                         </button>
-                        <button type="submit" class="px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold rounded-xl hover:from-red-600 hover:to-red-700 transition-all text-base shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
-                            <i class="fa-solid fa-trash mr-2"></i>Excluir Usuário
+                        <button type="submit" class="px-6 py-3 bg-gradient-to-r from-primary to-dark text-white font-semibold rounded-xl hover:from-primary/90 hover:to-dark/90 transition-all text-base shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                            <i class="fa-solid fa-user-check mr-2"></i>Reativar Usuário
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmação de Exclusão -->
+    <div id="modalDeactivateUser" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-2 sm:p-4 z-50">
+        <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl transform transition-all duration-300 scale-95 opacity-0" id="modalDeactivateUserContent">
+            <div class="p-6 sm:p-8 text-center">
+                <div class="w-20 h-20 rounded-full bg-accent flex items-center justify-center mx-auto mb-6">
+                    <i class="fa-solid fa-user-slash text-3xl text-primary"></i>
+                </div>
+                <h3 class="text-xl sm:text-2xl font-bold text-dark font-heading mb-4">Confirmar Desativação</h3>
+                <p class="text-gray-600 text-base mb-6 leading-relaxed">
+                    Tem certeza que deseja desativar o usuário <span class="font-semibold text-dark" id="deactivateUserName"></span>?
+                </p>
+                <p class="text-sm text-primary bg-accent px-4 py-3 rounded-lg border border-primary/20 mb-6">
+                    <i class="fa-solid fa-info-circle mr-2"></i>
+                    O usuário será desativado, mas poderá ser reativado posteriormente.
+                </p>
+                <form id="deactivateForm" action="" method="POST">
+                    <input type="hidden" id="deactivateUserId" name="user_id" value="">
+                    <input type="hidden" id="deactivateEscola" name="escola" value="">
+                    <input type="hidden" name="action" value="deactivate">
+                    <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                        <button type="button" class="px-6 py-3 rounded-xl border-2 border-gray-300 font-semibold text-gray-700 hover:bg-gray-100 hover:border-gray-400 transition-all text-base" onclick="closeModal('modalDeactivateUser')">
+                            <i class="fa-solid fa-times mr-2"></i>Cancelar
+                        </button>
+                        <button type="submit" class="px-6 py-3 bg-gradient-to-r from-primary to-dark text-white font-semibold rounded-xl hover:from-primary/90 hover:to-dark/90 transition-all text-base shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                            <i class="fa-solid fa-user-slash mr-2"></i>Desativar Usuário
                         </button>
                     </div>
                 </form>
@@ -1358,7 +1479,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ];
 
         function openUserForm() {
-            document.getElementById('modalTitle').textContent = 'Cadastrar Usuário';
+            document.getElementById('modalTitle').textContent = 'Cadastrar Admin';
             document.getElementById('inpUserId').value = '';
             document.getElementById('inpNome').value = '';
             document.getElementById('inpEmail').value = '';
@@ -1369,7 +1490,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         function openEditUser(userId, escolaKey, nome, email, cpf) {
-            document.getElementById('modalTitle').textContent = 'Editar Usuário';
+            document.getElementById('modalTitle').textContent = 'Editar Admin';
             document.getElementById('inpUserId').value = userId || '';
             document.getElementById('inpNome').value = nome || '';
             document.getElementById('inpEmail').value = email || '';
@@ -1379,11 +1500,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             openModal('modalUser');
         }
 
+        function openDeactivateUser(userId, userName, escolaKey) {
+            document.getElementById('deactivateUserName').textContent = userName;
+            document.getElementById('deactivateUserId').value = userId;
+            document.getElementById('deactivateEscola').value = escolaKey || '';
+            openModal('modalDeactivateUser');
+        }
+        
+        function openActivateUser(userId, userName, escolaKey) {
+            document.getElementById('activateUserName').textContent = userName;
+            document.getElementById('activateUserId').value = userId;
+            document.getElementById('activateEscola').value = escolaKey || '';
+            openModal('modalActivateUser');
+        }
+        
+        // Função de compatibilidade para manter os botões existentes funcionando
         function openDeleteUser(userId, userName, escolaKey) {
-            document.getElementById('deleteUserName').textContent = userName;
-            document.getElementById('deleteUserId').value = userId;
-            document.getElementById('deleteEscola').value = escolaKey || '';
-            openModal('modalDeleteUser');
+            // Redireciona para a nova função de desativação
+            openDeactivateUser(userId, userName, escolaKey);
         }
 
         function openModal(modalId) {
