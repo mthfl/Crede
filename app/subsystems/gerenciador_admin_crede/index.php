@@ -1,4 +1,4 @@
-<?php 
+<?php
 /*require_once(__DIR__ . '/../models/sessions.php');
 $session = new sessions();
 $session->autenticar_session();
@@ -8,52 +8,6 @@ $session->tempo_session();*/
 
 require_once(__DIR__ . '/models/model.select.php');
 $select = new select();
-
-// Handle CRUD
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $action = isset($_POST['action']) ? $_POST['action'] : 'create';
-    
-    // Para ações de desativação/reativação, precisamos apenas do ID e escola
-    if ($action === 'deactivate' && isset($_POST['user_id']) && isset($_POST['escola'])) {
-        $id = (int)$_POST['user_id'];
-        $escola = $_POST['escola'];
-        if ($id > 0 && $escola !== '') {
-            try {
-                $select->delete_user($escola, $id); // Agora esta função desativa em vez de excluir
-                echo "<script>window.addEventListener('DOMContentLoaded',()=>{document.getElementById('modalDeactivateUser')&&closeModal('modalDeactivateUser');});</script>";
-            } catch (Throwable $e) {}
-        }
-    } 
-    // Para ação de reativação
-    else if ($action === 'activate' && isset($_POST['user_id']) && isset($_POST['escola'])) {
-        $id = (int)$_POST['user_id'];
-        $escola = $_POST['escola'];
-        if ($id > 0 && $escola !== '') {
-            try {
-                $select->activate_user($escola, $id);
-                echo "<script>window.addEventListener('DOMContentLoaded',()=>{document.getElementById('modalActivateUser')&&closeModal('modalActivateUser');});</script>";
-            } catch (Throwable $e) {}
-        }
-    }
-    // Para outras ações que precisam de todos os campos
-    else {
-        $nome = trim($_POST['nome']);
-        $email = trim($_POST['email']);
-        $cpf = preg_replace('/\D/', '', $_POST['cpf']);
-        $escola = $_POST['escola'];
-        $id = isset($_POST['user_id']) ? (int)$_POST['user_id'] : 0;
-        if ($nome !== '' && filter_var($email, FILTER_VALIDATE_EMAIL) && strlen($cpf) === 11 && $escola !== '') {
-            try {
-                if ($action === 'update' && $id > 0) {
-                    $select->update_user($escola, $id, $nome, $email, $cpf);
-                } else {
-                    $select->insert_user($escola, $nome, $email, $cpf);
-                }
-                echo "<script>window.addEventListener('DOMContentLoaded',()=>{document.getElementById('modalUser')&&closeModal('modalUser');});</script>";
-            } catch (Throwable $e) {}
-        }
-    }
-}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -125,40 +79,84 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     },
                     keyframes: {
                         fadeIn: {
-                            '0%': { opacity: '0', transform: 'translateY(10px)' },
-                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                            '0%': {
+                                opacity: '0',
+                                transform: 'translateY(10px)'
+                            },
+                            '100%': {
+                                opacity: '1',
+                                transform: 'translateY(0)'
+                            }
                         },
                         slideUp: {
-                            '0%': { opacity: '0', transform: 'translateY(30px)' },
-                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                            '0%': {
+                                opacity: '0',
+                                transform: 'translateY(30px)'
+                            },
+                            '100%': {
+                                opacity: '1',
+                                transform: 'translateY(0)'
+                            }
                         },
                         slideIn: {
-                            '0%': { transform: 'translateX(-100%)', opacity: '0' },
-                            '100%': { transform: 'translateX(0)', opacity: '1' }
+                            '0%': {
+                                transform: 'translateX(-100%)',
+                                opacity: '0'
+                            },
+                            '100%': {
+                                transform: 'translateX(0)',
+                                opacity: '1'
+                            }
                         },
                         bounceSubtle: {
-                            '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-8px)' }
+                            '0%, 100%': {
+                                transform: 'translateY(0)'
+                            },
+                            '50%': {
+                                transform: 'translateY(-8px)'
+                            }
                         },
                         float: {
-                            '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
-                            '50%': { transform: 'translateY(-20px) rotate(3deg)' }
+                            '0%, 100%': {
+                                transform: 'translateY(0px) rotate(0deg)'
+                            },
+                            '50%': {
+                                transform: 'translateY(-20px) rotate(3deg)'
+                            }
                         },
                         sway: {
-                            '0%, 100%': { transform: 'translateX(0px) rotate(0deg)' },
-                            '50%': { transform: 'translateX(10px) rotate(1deg)' }
+                            '0%, 100%': {
+                                transform: 'translateX(0px) rotate(0deg)'
+                            },
+                            '50%': {
+                                transform: 'translateX(10px) rotate(1deg)'
+                            }
                         },
                         pulseGlow: {
-                            '0%, 100%': { boxShadow: '0 0 20px rgba(0, 90, 36, 0.3)' },
-                            '50%': { boxShadow: '0 0 30px rgba(0, 90, 36, 0.5)' }
+                            '0%, 100%': {
+                                boxShadow: '0 0 20px rgba(0, 90, 36, 0.3)'
+                            },
+                            '50%': {
+                                boxShadow: '0 0 30px rgba(0, 90, 36, 0.5)'
+                            }
                         },
                         scaleIn: {
-                            '0%': { transform: 'scale(0.9)', opacity: '0' },
-                            '100%': { transform: 'scale(1)', opacity: '1' }
+                            '0%': {
+                                transform: 'scale(0.9)',
+                                opacity: '0'
+                            },
+                            '100%': {
+                                transform: 'scale(1)',
+                                opacity: '1'
+                            }
                         },
                         shimmer: {
-                            '0%': { transform: 'translateX(-100%)' },
-                            '100%': { transform: 'translateX(100%)' }
+                            '0%': {
+                                transform: 'translateX(-100%)'
+                            },
+                            '100%': {
+                                transform: 'translateX(100%)'
+                            }
                         }
                     }
                 }
@@ -266,8 +264,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         .bg-decoration {
@@ -321,9 +324,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
-        .card-1 { animation-delay: 0.1s; }
-        .card-2 { animation-delay: 0.2s; }
-        .card-3 { animation-delay: 0.3s; }
+        .card-1 {
+            animation-delay: 0.1s;
+        }
+
+        .card-2 {
+            animation-delay: 0.2s;
+        }
+
+        .card-3 {
+            animation-delay: 0.3s;
+        }
 
         .input-enhanced {
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -480,859 +491,859 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <!-- Cards Container -->
                     <div id="usersCards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-5 sm:gap-6 w-full p-4 sm:p-6">
-                        <?php 
-                        
+                        <?php
+
                         $dados = $select->select_estgdm();
                         ?>
                         <div class="contents">
-                            <?php foreach($dados as $dado){ 
+                            <?php foreach ($dados as $dado) {
                                 $isActive = !isset($dado['status']) || $dado['status'] == 1;
                                 $cardClass = $isActive ? "" : "opacity-70 grayscale";
                             ?>
-                            <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl user-card group hover:shadow-2xl transition-all duration-500 <?= $cardClass ?>" data-nome="<?= strtolower($dado['nome_user']) ?>" data-email="<?= strtolower($dado['email']) ?>" data-escola="1" data-status="<?= $isActive ? 'active' : 'inactive' ?>">
-                                <!-- Header do Card com Avatar e Nome -->
-                                <div class="flex items-start gap-3 mb-4">
-                                    <div class="relative">
-                                        <div class="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-2xl bg-gradient-to-br from-primary via-primary to-dark text-white flex items-center justify-center font-bold text-base sm:text-lg lg:text-xl flex-shrink-0 shadow-lg">
-                                            J
+                                <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl user-card group hover:shadow-2xl transition-all duration-500 <?= $cardClass ?>" data-nome="<?= strtolower($dado['nome_user']) ?>" data-email="<?= strtolower($dado['email']) ?>" data-escola="1" data-status="<?= $isActive ? 'active' : 'inactive' ?>">
+                                    <!-- Header do Card com Avatar e Nome -->
+                                    <div class="flex items-start gap-3 mb-4">
+                                        <div class="relative">
+                                            <div class="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-2xl bg-gradient-to-br from-primary via-primary to-dark text-white flex items-center justify-center font-bold text-base sm:text-lg lg:text-xl flex-shrink-0 shadow-lg">
+                                                J
+                                            </div>
+                                            <div class="absolute -bottom-1 -right-1 w-3 h-3 <?= $isActive ? 'bg-green-500' : 'bg-red-500' ?> rounded-full border-2 border-white"></div>
                                         </div>
-                                        <div class="absolute -bottom-1 -right-1 w-3 h-3 <?= $isActive ? 'bg-green-500' : 'bg-red-500' ?> rounded-full border-2 border-white"></div>
+                                        <div class="min-w-0 flex-1 pt-1">
+                                            <h3 class="font-bold text-dark text-base sm:text-lg lg:text-xl truncate mb-1 group-hover:text-primary transition-colors duration-300">
+                                                <?= $dado['nome_user'] ?>
+                                            </h3>
+                                            <p class="text-gray-500 text-sm sm:text-base truncate flex items-center gap-2">
+                                                <i class="fa-solid fa-envelope text-xs text-gray-400"></i>
+                                                <?= $dado['email'] ?>
+                                            </p>
+                                        </div>
                                     </div>
-                                    <div class="min-w-0 flex-1 pt-1">
-                                        <h3 class="font-bold text-dark text-base sm:text-lg lg:text-xl truncate mb-1 group-hover:text-primary transition-colors duration-300">
-                                            <?=$dado['nome_user']?>
-                                        </h3>
-                                        <p class="text-gray-500 text-sm sm:text-base truncate flex items-center gap-2">
-                                            <i class="fa-solid fa-envelope text-xs text-gray-400"></i>
-                                            <?= $dado['email']?>
-                                        </p>
-                                    </div>
-                                </div>
 
-                                <!-- Informações do Usuário -->
-                                <div class="space-y-3 mb-4">
-                                    <!-- CPF -->
-                                    <div class="bg-gradient-to-r from-gray-50 to-gray-100/50 p-2.5 rounded-xl border border-gray-200/50">
-                                        <label class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
-                                            <i class="fa-solid fa-id-card text-primary mr-2"></i>CPF
-                                        </label>
-                                        <span class="text-sm font-mono text-gray-800 bg-white px-2.5 py-1.5 rounded-lg border border-gray-200/50 block">
-                                            <?= $dado['cpf']?>
-                                        </span>
+                                    <!-- Informações do Usuário -->
+                                    <div class="space-y-3 mb-4">
+                                        <!-- CPF -->
+                                        <div class="bg-gradient-to-r from-gray-50 to-gray-100/50 p-2.5 rounded-xl border border-gray-200/50">
+                                            <label class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
+                                                <i class="fa-solid fa-id-card text-primary mr-2"></i>CPF
+                                            </label>
+                                            <span class="text-sm font-mono text-gray-800 bg-white px-2.5 py-1.5 rounded-lg border border-gray-200/50 block">
+                                                <?= $dado['cpf'] ?>
+                                            </span>
+                                        </div>
+                                        <!-- Escola -->
+                                        <div class="bg-gradient-to-r from-accent/20 to-accent/10 p-2.5 rounded-xl border border-accent/30">
+                                            <label class="block text-xs font-semibold text-primary mb-1.5 uppercase tracking-wide">
+                                                <i class="fa-solid fa-school text-primary mr-2"></i>Escola
+                                            </label>
+                                            <span class="status-badge px-3 py-1.5 text-sm font-semibold rounded-xl bg-white text-primary border-2 border-accent/50 shadow-sm">
+                                                EEEP Salaberga
+                                            </span>
+                                        </div>
                                     </div>
-                                    <!-- Escola -->
-                                    <div class="bg-gradient-to-r from-accent/20 to-accent/10 p-2.5 rounded-xl border border-accent/30">
-                                        <label class="block text-xs font-semibold text-primary mb-1.5 uppercase tracking-wide">
-                                            <i class="fa-solid fa-school text-primary mr-2"></i>Escola
-                                        </label>
-                                        <span class="status-badge px-3 py-1.5 text-sm font-semibold rounded-xl bg-white text-primary border-2 border-accent/50 shadow-sm">
-                                            EEEP Salaberga
-                                        </span>
-                                    </div>
-                                </div>
 
-                                <!-- Barra de Ações -->
-                                <div class="flex items-center justify-between pt-4 border-t border-gray-200/50">
-                                    <div class="text-xs text-gray-400 font-medium">
-                                        <i class="fa-solid fa-clock mr-1"></i>
-                                        <?= $dado['id']?>
-                                    </div>
-                                    <div class="flex items-center gap-2">
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(<?= $dado['id']?>,'estgdm','<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['email'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['cpf'],ENT_QUOTES)?>')" title="Editar usuário">
-                                            <i class='fa-solid fa-pen text-sm'></i>
-                                        </button>
-                                        <?php if (!isset($dado['status']) || $dado['status'] == 1): ?>
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeactivateUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','estgdm')" title="Desativar usuário">
-                                            <i class='fa-solid fa-user-slash text-sm mr-1'></i>
-                                            <span>Desativar</span>
-                                        </button>
-                                        <?php else: ?>
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-green-200 hover:bg-green-500 hover:text-white hover:border-green-500 text-green-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openActivateUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','estgdm')" title="Reativar usuário">
-                                            <i class='fa-solid fa-user-check text-sm mr-1'></i>
-                                            <span>Ativar</span>
-                                        </button>
-                                        <?php endif; ?>
+                                    <!-- Barra de Ações -->
+                                    <div class="flex items-center justify-between pt-4 border-t border-gray-200/50">
+                                        <div class="text-xs text-gray-400 font-medium">
+                                            <i class="fa-solid fa-clock mr-1"></i>
+                                            <?= $dado['id'] ?>
+                                        </div>
+                                        <div class="flex items-center gap-2">
+                                            <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(<?= $dado['id'] ?>,'estgdm','<?= htmlspecialchars($dado['nome_user'], ENT_QUOTES) ?>','<?= htmlspecialchars($dado['email'], ENT_QUOTES) ?>','<?= htmlspecialchars($dado['cpf'], ENT_QUOTES) ?>')" title="Editar usuário">
+                                                <i class='fa-solid fa-pen text-sm'></i>
+                                            </button>
+                                            <?php if (!isset($dado['status']) || $dado['status'] == 1): ?>
+                                                <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeactivateUser(<?= $dado['id'] ?>, '<?= htmlspecialchars($dado['nome_user'], ENT_QUOTES) ?>','estgdm')" title="Desativar usuário">
+                                                    <i class='fa-solid fa-user-slash text-sm mr-1'></i>
+                                                    <span>Desativar</span>
+                                                </button>
+                                            <?php else: ?>
+                                                <button class="action-btn p-2.5 rounded-xl border-2 border-green-200 hover:bg-green-500 hover:text-white hover:border-green-500 text-green-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openActivateUser(<?= $dado['id'] ?>, '<?= htmlspecialchars($dado['nome_user'], ENT_QUOTES) ?>','estgdm')" title="Reativar usuário">
+                                                    <i class='fa-solid fa-user-check text-sm mr-1'></i>
+                                                    <span>Ativar</span>
+                                                </button>
+                                            <?php endif; ?>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
                             <?php } ?>
 
-                     <!-- Cards Container -->
-                    <div class="contents">
-                        <?php 
-                        
-                        $dados = $select->select_epaf();
-                        ?>
-                        <div class="contents">
-                            <?php foreach($dados as $dado){ ?>
-                            <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl user-card group hover:shadow-2xl transition-all duration-500" data-nome="<?= strtolower($dado['nome_user']) ?>" data-email="<?= strtolower($dado['email']) ?>" data-escola="1">
-                                <!-- Header do Card com Avatar e Nome -->
-                                <div class="flex items-start gap-3 mb-4">
-                                    <div class="relative">
-                                        <div class="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-2xl bg-gradient-to-br from-primary via-primary to-dark text-white flex items-center justify-center font-bold text-base sm:text-lg lg:text-xl flex-shrink-0 shadow-lg">
-                                            J
+                            <!-- Cards Container -->
+                            <div class="contents">
+                                <?php
+
+                                $dados = $select->select_epaf();
+                                ?>
+                                <div class="contents">
+                                    <?php foreach ($dados as $dado) { ?>
+                                        <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl user-card group hover:shadow-2xl transition-all duration-500" data-nome="<?= strtolower($dado['nome_user']) ?>" data-email="<?= strtolower($dado['email']) ?>" data-escola="1">
+                                            <!-- Header do Card com Avatar e Nome -->
+                                            <div class="flex items-start gap-3 mb-4">
+                                                <div class="relative">
+                                                    <div class="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-2xl bg-gradient-to-br from-primary via-primary to-dark text-white flex items-center justify-center font-bold text-base sm:text-lg lg:text-xl flex-shrink-0 shadow-lg">
+                                                        J
+                                                    </div>
+                                                    <div class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
+                                                </div>
+                                                <div class="min-w-0 flex-1 pt-1">
+                                                    <h3 class="font-bold text-dark text-base sm:text-lg lg:text-xl truncate mb-1 group-hover:text-primary transition-colors duration-300">
+                                                        <?= $dado['nome_user'] ?>
+                                                    </h3>
+                                                    <p class="text-gray-500 text-sm sm:text-base truncate flex items-center gap-2">
+                                                        <i class="fa-solid fa-envelope text-xs text-gray-400"></i>
+                                                        <?= $dado['email'] ?>
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                            <!-- Informações do Usuário -->
+                                            <div class="space-y-3 mb-4">
+                                                <!-- CPF -->
+                                                <div class="bg-gradient-to-r from-gray-50 to-gray-100/50 p-2.5 rounded-xl border border-gray-200/50">
+                                                    <label class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
+                                                        <i class="fa-solid fa-id-card text-primary mr-2"></i>CPF
+                                                    </label>
+                                                    <span class="text-sm font-mono text-gray-800 bg-white px-2.5 py-1.5 rounded-lg border border-gray-200/50 block">
+                                                        <?= $dado['cpf'] ?>
+                                                    </span>
+                                                </div>
+                                                <!-- Escola -->
+                                                <div class="bg-gradient-to-r from-accent/20 to-accent/10 p-2.5 rounded-xl border border-accent/30">
+                                                    <label class="block text-xs font-semibold text-primary mb-1.5 uppercase tracking-wide">
+                                                        <i class="fa-solid fa-school text-primary mr-2"></i>Escola
+                                                    </label>
+                                                    <span class="status-badge px-3 py-1.5 text-sm font-semibold rounded-xl bg-white text-primary border-2 border-accent/50 shadow-sm">
+                                                        EEEP Prof Alda Facanha
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <!-- Barra de Ações -->
+                                            <div class="flex items-center justify-between pt-4 border-t border-gray-200/50">
+                                                <div class="text-xs text-gray-400 font-medium">
+                                                    <i class="fa-solid fa-clock mr-1"></i>
+                                                    <?= $dado['id'] ?>
+                                                </div>
+                                                <div class="flex items-center gap-2">
+                                                    <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(<?= $dado['id'] ?>,'epaf','<?= htmlspecialchars($dado['nome_user'], ENT_QUOTES) ?>','<?= htmlspecialchars($dado['email'], ENT_QUOTES) ?>','<?= htmlspecialchars($dado['cpf'], ENT_QUOTES) ?>')" title="Editar usuário">
+                                                        <i class='fa-solid fa-pen text-sm'></i>
+                                                    </button>
+                                                    <?php if (!isset($dado['status']) || $dado['status'] == 1): ?>
+                                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeactivateUser(<?= $dado['id'] ?>, '<?= htmlspecialchars($dado['nome_user'], ENT_QUOTES) ?>','epaf')" title="Desativar usuário">
+                                                            <i class='fa-solid fa-user-slash text-sm mr-1'></i>
+                                                            <span>Desativar</span>
+                                                        </button>
+                                                    <?php else: ?>
+                                                        <button class="action-btn p-2.5 rounded-xl border-2 border-green-200 hover:bg-green-500 hover:text-white hover:border-green-500 text-green-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openActivateUser(<?= $dado['id'] ?>, '<?= htmlspecialchars($dado['nome_user'], ENT_QUOTES) ?>','epaf')" title="Reativar usuário">
+                                                            <i class='fa-solid fa-user-check text-sm mr-1'></i>
+                                                            <span>Ativar</span>
+                                                        </button>
+                                                    <?php endif; ?>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
-                                    </div>
-                                    <div class="min-w-0 flex-1 pt-1">
-                                        <h3 class="font-bold text-dark text-base sm:text-lg lg:text-xl truncate mb-1 group-hover:text-primary transition-colors duration-300">
-                                            <?=$dado['nome_user']?>
-                                        </h3>
-                                        <p class="text-gray-500 text-sm sm:text-base truncate flex items-center gap-2">
-                                            <i class="fa-solid fa-envelope text-xs text-gray-400"></i>
-                                            <?= $dado['email']?>
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <!-- Informações do Usuário -->
-                                <div class="space-y-3 mb-4">
-                                    <!-- CPF -->
-                                    <div class="bg-gradient-to-r from-gray-50 to-gray-100/50 p-2.5 rounded-xl border border-gray-200/50">
-                                        <label class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
-                                            <i class="fa-solid fa-id-card text-primary mr-2"></i>CPF
-                                        </label>
-                                        <span class="text-sm font-mono text-gray-800 bg-white px-2.5 py-1.5 rounded-lg border border-gray-200/50 block">
-                                            <?= $dado['cpf']?>
-                                        </span>
-                                    </div>
-                                    <!-- Escola -->
-                                    <div class="bg-gradient-to-r from-accent/20 to-accent/10 p-2.5 rounded-xl border border-accent/30">
-                                        <label class="block text-xs font-semibold text-primary mb-1.5 uppercase tracking-wide">
-                                            <i class="fa-solid fa-school text-primary mr-2"></i>Escola
-                                        </label>
-                                        <span class="status-badge px-3 py-1.5 text-sm font-semibold rounded-xl bg-white text-primary border-2 border-accent/50 shadow-sm">
-                                            EEEP Prof Alda Facanha
-                                        </span>
-                                    </div>
-                                </div>
-
-                                <!-- Barra de Ações -->
-                                <div class="flex items-center justify-between pt-4 border-t border-gray-200/50">
-                                    <div class="text-xs text-gray-400 font-medium">
-                                        <i class="fa-solid fa-clock mr-1"></i>
-                                        <?= $dado['id']?>
-                                    </div>
-                                    <div class="flex items-center gap-2">
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(<?= $dado['id']?>,'epaf','<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['email'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['cpf'],ENT_QUOTES)?>')" title="Editar usuário">
-                                            <i class='fa-solid fa-pen text-sm'></i>
-                                        </button>
-                                        <?php if (!isset($dado['status']) || $dado['status'] == 1): ?>
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeactivateUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','epaf')" title="Desativar usuário">
-                                            <i class='fa-solid fa-user-slash text-sm mr-1'></i>
-                                            <span>Desativar</span>
-                                        </button>
-                                        <?php else: ?>
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-green-200 hover:bg-green-500 hover:text-white hover:border-green-500 text-green-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openActivateUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','epaf')" title="Reativar usuário">
-                                            <i class='fa-solid fa-user-check text-sm mr-1'></i>
-                                            <span>Ativar</span>
-                                        </button>
-                                        <?php endif; ?>
-                                    </div>
+                                    <?php } ?>
                                 </div>
                             </div>
-                            <?php } ?>
+
+                            <!-- Cards Container -->
+                            <div class="contents">
+                                <?php
+
+                                $dados = $select->select_epmfm();
+                                ?>
+                                <div class="contents">
+                                    <?php foreach ($dados as $dado) { ?>
+                                        <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl user-card group hover:shadow-2xl transition-all duration-500" data-nome="<?= strtolower($dado['nome_user']) ?>" data-email="<?= strtolower($dado['email']) ?>" data-escola="1">
+                                            <!-- Header do Card com Avatar e Nome -->
+                                            <div class="flex items-start gap-3 mb-4">
+                                                <div class="relative">
+                                                    <div class="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-2xl bg-gradient-to-br from-primary via-primary to-dark text-white flex items-center justify-center font-bold text-base sm:text-lg lg:text-xl flex-shrink-0 shadow-lg">
+                                                        J
+                                                    </div>
+                                                    <div class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
+                                                </div>
+                                                <div class="min-w-0 flex-1 pt-1">
+                                                    <h3 class="font-bold text-dark text-base sm:text-lg lg:text-xl truncate mb-1 group-hover:text-primary transition-colors duration-300">
+                                                        <?= $dado['nome_user'] ?>
+                                                    </h3>
+                                                    <p class="text-gray-500 text-sm sm:text-base truncate flex items-center gap-2">
+                                                        <i class="fa-solid fa-envelope text-xs text-gray-400"></i>
+                                                        <?= $dado['email'] ?>
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                            <!-- Informações do Usuário -->
+                                            <div class="space-y-3 mb-4">
+                                                <!-- CPF -->
+                                                <div class="bg-gradient-to-r from-gray-50 to-gray-100/50 p-2.5 rounded-xl border border-gray-200/50">
+                                                    <label class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
+                                                        <i class="fa-solid fa-id-card text-primary mr-2"></i>CPF
+                                                    </label>
+                                                    <span class="text-sm font-mono text-gray-800 bg-white px-2.5 py-1.5 rounded-lg border border-gray-200/50 block">
+                                                        <?= $dado['cpf'] ?>
+                                                    </span>
+                                                </div>
+                                                <!-- Escola -->
+                                                <div class="bg-gradient-to-r from-accent/20 to-accent/10 p-2.5 rounded-xl border border-accent/30">
+                                                    <label class="block text-xs font-semibold text-primary mb-1.5 uppercase tracking-wide">
+                                                        <i class="fa-solid fa-school text-primary mr-2"></i>Escola
+                                                    </label>
+                                                    <span class="status-badge px-3 py-1.5 text-sm font-semibold rounded-xl bg-white text-primary border-2 border-accent/50 shadow-sm">
+                                                        EEEP Prof Marly Ferreira
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <!-- Barra de Ações -->
+                                            <div class="flex items-center justify-between pt-4 border-t border-gray-200/50">
+                                                <div class="text-xs text-gray-400 font-medium">
+                                                    <i class="fa-solid fa-clock mr-1"></i>
+                                                    <?= $dado['id'] ?>
+                                                </div>
+                                                <div class="flex items-center gap-2">
+                                                    <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(<?= $dado['id'] ?>,'epmfm','<?= htmlspecialchars($dado['nome_user'], ENT_QUOTES) ?>','<?= htmlspecialchars($dado['email'], ENT_QUOTES) ?>','<?= htmlspecialchars($dado['cpf'], ENT_QUOTES) ?>')" title="Editar usuário">
+                                                        <i class='fa-solid fa-pen text-sm'></i>
+                                                    </button>
+                                                    <?php if (!isset($dado['status']) || $dado['status'] == 1): ?>
+                                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeactivateUser(<?= $dado['id'] ?>, '<?= htmlspecialchars($dado['nome_user'], ENT_QUOTES) ?>','epmfm')" title="Desativar usuário">
+                                                            <i class='fa-solid fa-user-slash text-sm mr-1'></i>
+                                                            <span>Desativar</span>
+                                                        </button>
+                                                    <?php else: ?>
+                                                        <button class="action-btn p-2.5 rounded-xl border-2 border-green-200 hover:bg-green-500 hover:text-white hover:border-green-500 text-green-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openActivateUser(<?= $dado['id'] ?>, '<?= htmlspecialchars($dado['nome_user'], ENT_QUOTES) ?>','epmfm')" title="Reativar usuário">
+                                                            <i class='fa-solid fa-user-check text-sm mr-1'></i>
+                                                            <span>Ativar</span>
+                                                        </button>
+                                                    <?php endif; ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php } ?>
+                                </div>
+                            </div>
+
+                            <!-- Cards Container -->
+                            <div class="contents">
+                                <?php
+
+                                $dados = $select->select_epav();
+                                ?>
+                                <div class="contents">
+                                    <?php foreach ($dados as $dado) { ?>
+                                        <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl user-card group hover:shadow-2xl transition-all duration-500" data-nome="<?= strtolower($dado['nome_user']) ?>" data-email="<?= strtolower($dado['email']) ?>" data-escola="1">
+                                            <!-- Header do Card com Avatar e Nome -->
+                                            <div class="flex items-start gap-3 mb-4">
+                                                <div class="relative">
+                                                    <div class="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-2xl bg-gradient-to-br from-primary via-primary to-dark text-white flex items-center justify-center font-bold text-base sm:text-lg lg:text-xl flex-shrink-0 shadow-lg">
+                                                        J
+                                                    </div>
+                                                    <div class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
+                                                </div>
+                                                <div class="min-w-0 flex-1 pt-1">
+                                                    <h3 class="font-bold text-dark text-base sm:text-lg lg:text-xl truncate mb-1 group-hover:text-primary transition-colors duration-300">
+                                                        <?= $dado['nome_user'] ?>
+                                                    </h3>
+                                                    <p class="text-gray-500 text-sm sm:text-base truncate flex items-center gap-2">
+                                                        <i class="fa-solid fa-envelope text-xs text-gray-400"></i>
+                                                        <?= $dado['email'] ?>
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                            <!-- Informações do Usuário -->
+                                            <div class="space-y-3 mb-4">
+                                                <!-- CPF -->
+                                                <div class="bg-gradient-to-r from-gray-50 to-gray-100/50 p-2.5 rounded-xl border border-gray-200/50">
+                                                    <label class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
+                                                        <i class="fa-solid fa-id-card text-primary mr-2"></i>CPF
+                                                    </label>
+                                                    <span class="text-sm font-mono text-gray-800 bg-white px-2.5 py-1.5 rounded-lg border border-gray-200/50 block">
+                                                        <?= $dado['cpf'] ?>
+                                                    </span>
+                                                </div>
+                                                <!-- Escola -->
+                                                <div class="bg-gradient-to-r from-accent/20 to-accent/10 p-2.5 rounded-xl border border-accent/30">
+                                                    <label class="block text-xs font-semibold text-primary mb-1.5 uppercase tracking-wide">
+                                                        <i class="fa-solid fa-school text-primary mr-2"></i>Escola
+                                                    </label>
+                                                    <span class="status-badge px-3 py-1.5 text-sm font-semibold rounded-xl bg-white text-primary border-2 border-accent/50 shadow-sm">
+                                                        EEEP Prof Antonio Valmir
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <!-- Barra de Ações -->
+                                            <div class="flex items-center justify-between pt-4 border-t border-gray-200/50">
+                                                <div class="text-xs text-gray-400 font-medium">
+                                                    <i class="fa-solid fa-clock mr-1"></i>
+                                                    <?= $dado['id'] ?>
+                                                </div>
+                                                <div class="flex items-center gap-2">
+                                                    <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(<?= $dado['id'] ?>,'epav','<?= htmlspecialchars($dado['nome_user'], ENT_QUOTES) ?>','<?= htmlspecialchars($dado['email'], ENT_QUOTES) ?>','<?= htmlspecialchars($dado['cpf'], ENT_QUOTES) ?>')" title="Editar usuário">
+                                                        <i class='fa-solid fa-pen text-sm'></i>
+                                                    </button>
+                                                    <?php if (!isset($dado['status']) || $dado['status'] == 1): ?>
+                                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeactivateUser(<?= $dado['id'] ?>, '<?= htmlspecialchars($dado['nome_user'], ENT_QUOTES) ?>','epav')" title="Desativar usuário">
+                                                            <i class='fa-solid fa-user-slash text-sm mr-1'></i>
+                                                            <span>Desativar</span>
+                                                        </button>
+                                                    <?php else: ?>
+                                                        <button class="action-btn p-2.5 rounded-xl border-2 border-green-200 hover:bg-green-500 hover:text-white hover:border-green-500 text-green-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openActivateUser(<?= $dado['id'] ?>, '<?= htmlspecialchars($dado['nome_user'], ENT_QUOTES) ?>','epav')" title="Reativar usuário">
+                                                            <i class='fa-solid fa-user-check text-sm mr-1'></i>
+                                                            <span>Ativar</span>
+                                                        </button>
+                                                    <?php endif; ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php } ?>
+                                </div>
+                            </div>
+
+                            <!-- Cards Container -->
+                            <div class="contents">
+                                <?php
+
+                                $dados = $select->select_eedq();
+                                ?>
+                                <div class="contents">
+                                    <?php foreach ($dados as $dado) { ?>
+                                        <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl user-card group hover:shadow-2xl transition-all duration-500" data-nome="<?= strtolower($dado['nome_user']) ?>" data-email="<?= strtolower($dado['email']) ?>" data-escola="1">
+                                            <!-- Header do Card com Avatar e Nome -->
+                                            <div class="flex items-start gap-3 mb-4">
+                                                <div class="relative">
+                                                    <div class="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-2xl bg-gradient-to-br from-primary via-primary to-dark text-white flex items-center justify-center font-bold text-base sm:text-lg lg:text-xl flex-shrink-0 shadow-lg">
+                                                        J
+                                                    </div>
+                                                    <div class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
+                                                </div>
+                                                <div class="min-w-0 flex-1 pt-1">
+                                                    <h3 class="font-bold text-dark text-base sm:text-lg lg:text-xl truncate mb-1 group-hover:text-primary transition-colors duration-300">
+                                                        <?= $dado['nome_user'] ?>
+                                                    </h3>
+                                                    <p class="text-gray-500 text-sm sm:text-base truncate flex items-center gap-2">
+                                                        <i class="fa-solid fa-envelope text-xs text-gray-400"></i>
+                                                        <?= $dado['email'] ?>
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                            <!-- Informações do Usuário -->
+                                            <div class="space-y-3 mb-4">
+                                                <!-- CPF -->
+                                                <div class="bg-gradient-to-r from-gray-50 to-gray-100/50 p-2.5 rounded-xl border border-gray-200/50">
+                                                    <label class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
+                                                        <i class="fa-solid fa-id-card text-primary mr-2"></i>CPF
+                                                    </label>
+                                                    <span class="text-sm font-mono text-gray-800 bg-white px-2.5 py-1.5 rounded-lg border border-gray-200/50 block">
+                                                        <?= $dado['cpf'] ?>
+                                                    </span>
+                                                </div>
+                                                <!-- Escola -->
+                                                <div class="bg-gradient-to-r from-accent/20 to-accent/10 p-2.5 rounded-xl border border-accent/30">
+                                                    <label class="block text-xs font-semibold text-primary mb-1.5 uppercase tracking-wide">
+                                                        <i class="fa-solid fa-school text-primary mr-2"></i>Escola
+                                                    </label>
+                                                    <span class="status-badge px-3 py-1.5 text-sm font-semibold rounded-xl bg-white text-primary border-2 border-accent/50 shadow-sm">
+                                                        EEEP Eusébio Queiroz
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <!-- Barra de Ações -->
+                                            <div class="flex items-center justify-between pt-4 border-t border-gray-200/50">
+                                                <div class="text-xs text-gray-400 font-medium">
+                                                    <i class="fa-solid fa-clock mr-1"></i>
+                                                    <?= $dado['id'] ?>
+                                                </div>
+                                                <div class="flex items-center gap-2">
+                                                    <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(<?= $dado['id'] ?>,'eedq','<?= htmlspecialchars($dado['nome_user'], ENT_QUOTES) ?>','<?= htmlspecialchars($dado['email'], ENT_QUOTES) ?>','<?= htmlspecialchars($dado['cpf'], ENT_QUOTES) ?>')" title="Editar usuário">
+                                                        <i class='fa-solid fa-pen text-sm'></i>
+                                                    </button>
+                                                    <?php if (!isset($dado['status']) || $dado['status'] == 1): ?>
+                                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeactivateUser(<?= $dado['id'] ?>, '<?= htmlspecialchars($dado['nome_user'], ENT_QUOTES) ?>','eedq')" title="Desativar usuário">
+                                                            <i class='fa-solid fa-user-slash text-sm'></i>
+                                                        </button>
+                                                    <?php else: ?>
+                                                        <button class="action-btn p-2.5 rounded-xl border-2 border-green-200 hover:bg-green-500 hover:text-white hover:border-green-500 text-green-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openActivateUser(<?= $dado['id'] ?>, '<?= htmlspecialchars($dado['nome_user'], ENT_QUOTES) ?>','eedq')" title="Reativar usuário">
+                                                            <i class='fa-solid fa-user-check text-sm'></i>
+                                                        </button>
+                                                    <?php endif; ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php } ?>
+                                </div>
+                            </div>
+
+                            <!-- Cards Container -->
+                            <div class="contents">
+                                <?php
+
+                                $dados = $select->select_ejin();
+                                ?>
+                                <div class="contents">
+                                    <?php foreach ($dados as $dado) { ?>
+                                        <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl user-card group hover:shadow-2xl transition-all duration-500" data-nome="<?= strtolower($dado['nome_user']) ?>" data-email="<?= strtolower($dado['email']) ?>" data-escola="1">
+                                            <!-- Header do Card com Avatar e Nome -->
+                                            <div class="flex items-start gap-3 mb-4">
+                                                <div class="relative">
+                                                    <div class="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-2xl bg-gradient-to-br from-primary via-primary to-dark text-white flex items-center justify-center font-bold text-base sm:text-lg lg:text-xl flex-shrink-0 shadow-lg">
+                                                        J
+                                                    </div>
+                                                    <div class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
+                                                </div>
+                                                <div class="min-w-0 flex-1 pt-1">
+                                                    <h3 class="font-bold text-dark text-base sm:text-lg lg:text-xl truncate mb-1 group-hover:text-primary transition-colors duration-300">
+                                                        <?= $dado['nome_user'] ?>
+                                                    </h3>
+                                                    <p class="text-gray-500 text-sm sm:text-base truncate flex items-center gap-2">
+                                                        <i class="fa-solid fa-envelope text-xs text-gray-400"></i>
+                                                        <?= $dado['email'] ?>
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                            <!-- Informações do Usuário -->
+                                            <div class="space-y-3 mb-4">
+                                                <!-- CPF -->
+                                                <div class="bg-gradient-to-r from-gray-50 to-gray-100/50 p-2.5 rounded-xl border border-gray-200/50">
+                                                    <label class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
+                                                        <i class="fa-solid fa-id-card text-primary mr-2"></i>CPF
+                                                    </label>
+                                                    <span class="text-sm font-mono text-gray-800 bg-white px-2.5 py-1.5 rounded-lg border border-gray-200/50 block">
+                                                        <?= $dado['cpf'] ?>
+                                                    </span>
+                                                </div>
+                                                <!-- Escola -->
+                                                <div class="bg-gradient-to-r from-accent/20 to-accent/10 p-2.5 rounded-xl border border-accent/30">
+                                                    <label class="block text-xs font-semibold text-primary mb-1.5 uppercase tracking-wide">
+                                                        <i class="fa-solid fa-school text-primary mr-2"></i>Escola
+                                                    </label>
+                                                    <span class="status-badge px-3 py-1.5 text-sm font-semibold rounded-xl bg-white text-primary border-2 border-accent/50 shadow-sm">
+                                                        EEEP José Ivanilton
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <!-- Barra de Ações -->
+                                            <div class="flex items-center justify-between pt-4 border-t border-gray-200/50">
+                                                <div class="text-xs text-gray-400 font-medium">
+                                                    <i class="fa-solid fa-clock mr-1"></i>
+                                                    <?= $dado['id'] ?>
+                                                </div>
+                                                <div class="flex items-center gap-2">
+                                                    <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(<?= $dado['id'] ?>,'ejin','<?= htmlspecialchars($dado['nome_user'], ENT_QUOTES) ?>','<?= htmlspecialchars($dado['email'], ENT_QUOTES) ?>','<?= htmlspecialchars($dado['cpf'], ENT_QUOTES) ?>')" title="Editar usuário">
+                                                        <i class='fa-solid fa-pen text-sm'></i>
+                                                    </button>
+                                                    <?php if (!isset($dado['status']) || $dado['status'] == 1): ?>
+                                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeactivateUser(<?= $dado['id'] ?>, '<?= htmlspecialchars($dado['nome_user'], ENT_QUOTES) ?>','ejin')" title="Desativar usuário">
+                                                            <i class='fa-solid fa-user-slash text-sm mr-1'></i>
+                                                            <span>Desativar</span>
+                                                        </button>
+                                                    <?php else: ?>
+                                                        <button class="action-btn p-2.5 rounded-xl border-2 border-green-200 hover:bg-green-500 hover:text-white hover:border-green-500 text-green-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openActivateUser(<?= $dado['id'] ?>, '<?= htmlspecialchars($dado['nome_user'], ENT_QUOTES) ?>','ejin')" title="Reativar usuário">
+                                                            <i class='fa-solid fa-user-check text-sm mr-1'></i>
+                                                            <span>Ativar</span>
+                                                        </button>
+                                                    <?php endif; ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php } ?>
+                                </div>
+                            </div>
+
+                            <!-- Cards Container -->
+                            <div class="contents">
+                                <?php
+
+                                $dados = $select->select_epfads();
+                                ?>
+                                <div class="contents">
+                                    <?php foreach ($dados as $dado) { ?>
+                                        <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl user-card group hover:shadow-2xl transition-all duration-500" data-nome="<?= strtolower($dado['nome_user']) ?>" data-email="<?= strtolower($dado['email']) ?>" data-escola="1">
+                                            <!-- Header do Card com Avatar e Nome -->
+                                            <div class="flex items-start gap-3 mb-4">
+                                                <div class="relative">
+                                                    <div class="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-2xl bg-gradient-to-br from-primary via-primary to-dark text-white flex items-center justify-center font-bold text-base sm:text-lg lg:text-xl flex-shrink-0 shadow-lg">
+                                                        J
+                                                    </div>
+                                                    <div class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
+                                                </div>
+                                                <div class="min-w-0 flex-1 pt-1">
+                                                    <h3 class="font-bold text-dark text-base sm:text-lg lg:text-xl truncate mb-1 group-hover:text-primary transition-colors duration-300">
+                                                        <?= $dado['nome_user'] ?>
+                                                    </h3>
+                                                    <p class="text-gray-500 text-sm sm:text-base truncate flex items-center gap-2">
+                                                        <i class="fa-solid fa-envelope text-xs text-gray-400"></i>
+                                                        <?= $dado['email'] ?>
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                            <!-- Informações do Usuário -->
+                                            <div class="space-y-3 mb-4">
+                                                <!-- CPF -->
+                                                <div class="bg-gradient-to-r from-gray-50 to-gray-100/50 p-2.5 rounded-xl border border-gray-200/50">
+                                                    <label class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
+                                                        <i class="fa-solid fa-id-card text-primary mr-2"></i>CPF
+                                                    </label>
+                                                    <span class="text-sm font-mono text-gray-800 bg-white px-2.5 py-1.5 rounded-lg border border-gray-200/50 block">
+                                                        <?= $dado['cpf'] ?>
+                                                    </span>
+                                                </div>
+                                                <!-- Escola -->
+                                                <div class="bg-gradient-to-r from-accent/20 to-accent/10 p-2.5 rounded-xl border border-accent/30">
+                                                    <label class="block text-xs font-semibold text-primary mb-1.5 uppercase tracking-wide">
+                                                        <i class="fa-solid fa-school text-primary mr-2"></i>Escola
+                                                    </label>
+                                                    <span class="status-badge px-3 py-1.5 text-sm font-semibold rounded-xl bg-white text-primary border-2 border-accent/50 shadow-sm">
+                                                        EEEP Prof Fc Aristótles
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <!-- Barra de Ações -->
+                                            <div class="flex items-center justify-between pt-4 border-t border-gray-200/50">
+                                                <div class="text-xs text-gray-400 font-medium">
+                                                    <i class="fa-solid fa-clock mr-1"></i>
+                                                    <?= $dado['id'] ?>
+                                                </div>
+                                                <div class="flex items-center gap-2">
+                                                    <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(<?= $dado['id'] ?>,'epfads','<?= htmlspecialchars($dado['nome_user'], ENT_QUOTES) ?>','<?= htmlspecialchars($dado['email'], ENT_QUOTES) ?>','<?= htmlspecialchars($dado['cpf'], ENT_QUOTES) ?>')" title="Editar usuário">
+                                                        <i class='fa-solid fa-pen text-sm'></i>
+                                                    </button>
+                                                    <?php if (!isset($dado['status']) || $dado['status'] == 1): ?>
+                                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeactivateUser(<?= $dado['id'] ?>, '<?= htmlspecialchars($dado['nome_user'], ENT_QUOTES) ?>','epfads')" title="Desativar usuário">
+                                                            <i class='fa-solid fa-user-slash text-sm mr-1'></i>
+                                                            <span>Desativar</span>
+                                                        </button>
+                                                    <?php else: ?>
+                                                        <button class="action-btn p-2.5 rounded-xl border-2 border-green-200 hover:bg-green-500 hover:text-white hover:border-green-500 text-green-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openActivateUser(<?= $dado['id'] ?>, '<?= htmlspecialchars($dado['nome_user'], ENT_QUOTES) ?>','epfads')" title="Reativar usuário">
+                                                            <i class='fa-solid fa-user-check text-sm mr-1'></i>
+                                                            <span>Ativar</span>
+                                                        </button>
+                                                    <?php endif; ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php } ?>
+                                </div>
+                            </div>
+
+                            <!-- Cards Container -->
+                            <div class="contents">
+                                <?php
+
+                                $dados = $select->select_emcvm();
+                                ?>
+                                <div class="contents">
+                                    <?php foreach ($dados as $dado) { ?>
+                                        <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl user-card group hover:shadow-2xl transition-all duration-500" data-nome="<?= strtolower($dado['nome_user']) ?>" data-email="<?= strtolower($dado['email']) ?>" data-escola="1">
+                                            <!-- Header do Card com Avatar e Nome -->
+                                            <div class="flex items-start gap-3 mb-4">
+                                                <div class="relative">
+                                                    <div class="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-2xl bg-gradient-to-br from-primary via-primary to-dark text-white flex items-center justify-center font-bold text-base sm:text-lg lg:text-xl flex-shrink-0 shadow-lg">
+                                                        J
+                                                    </div>
+                                                    <div class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
+                                                </div>
+                                                <div class="min-w-0 flex-1 pt-1">
+                                                    <h3 class="font-bold text-dark text-base sm:text-lg lg:text-xl truncate mb-1 group-hover:text-primary transition-colors duration-300">
+                                                        <?= $dado['nome_user'] ?>
+                                                    </h3>
+                                                    <p class="text-gray-500 text-sm sm:text-base truncate flex items-center gap-2">
+                                                        <i class="fa-solid fa-envelope text-xs text-gray-400"></i>
+                                                        <?= $dado['email'] ?>
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                            <!-- Informações do Usuário -->
+                                            <div class="space-y-3 mb-4">
+                                                <!-- CPF -->
+                                                <div class="bg-gradient-to-r from-gray-50 to-gray-100/50 p-2.5 rounded-xl border border-gray-200/50">
+                                                    <label class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
+                                                        <i class="fa-solid fa-id-card text-primary mr-2"></i>CPF
+                                                    </label>
+                                                    <span class="text-sm font-mono text-gray-800 bg-white px-2.5 py-1.5 rounded-lg border border-gray-200/50 block">
+                                                        <?= $dado['cpf'] ?>
+                                                    </span>
+                                                </div>
+                                                <!-- Escola -->
+                                                <div class="bg-gradient-to-r from-accent/20 to-accent/10 p-2.5 rounded-xl border border-accent/30">
+                                                    <label class="block text-xs font-semibold text-primary mb-1.5 uppercase tracking-wide">
+                                                        <i class="fa-solid fa-school text-primary mr-2"></i>Escola
+                                                    </label>
+                                                    <span class="status-badge px-3 py-1.5 text-sm font-semibold rounded-xl bg-white text-primary border-2 border-accent/50 shadow-sm">
+                                                        EEEP Maria Carmem
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <!-- Barra de Ações -->
+                                            <div class="flex items-center justify-between pt-4 border-t border-gray-200/50">
+                                                <div class="text-xs text-gray-400 font-medium">
+                                                    <i class="fa-solid fa-clock mr-1"></i>
+                                                    <?= $dado['id'] ?>
+                                                </div>
+                                                <div class="flex items-center gap-2">
+                                                    <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(<?= $dado['id'] ?>,'emcvm','<?= htmlspecialchars($dado['nome_user'], ENT_QUOTES) ?>','<?= htmlspecialchars($dado['email'], ENT_QUOTES) ?>','<?= htmlspecialchars($dado['cpf'], ENT_QUOTES) ?>')" title="Editar usuário">
+                                                        <i class='fa-solid fa-pen text-sm'></i>
+                                                    </button>
+                                                    <?php if (!isset($dado['status']) || $dado['status'] == 1): ?>
+                                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeactivateUser(<?= $dado['id'] ?>, '<?= htmlspecialchars($dado['nome_user'], ENT_QUOTES) ?>','emcvm')" title="Desativar usuário">
+                                                            <i class='fa-solid fa-user-slash text-sm mr-1'></i>
+                                                            <span>Desativar</span>
+                                                        </button>
+                                                    <?php else: ?>
+                                                        <button class="action-btn p-2.5 rounded-xl border-2 border-green-200 hover:bg-green-500 hover:text-white hover:border-green-500 text-green-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openActivateUser(<?= $dado['id'] ?>, '<?= htmlspecialchars($dado['nome_user'], ENT_QUOTES) ?>','emcvm')" title="Reativar usuário">
+                                                            <i class='fa-solid fa-user-check text-sm mr-1'></i>
+                                                            <span>Ativar</span>
+                                                        </button>
+                                                    <?php endif; ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php } ?>
+                                </div>
+                            </div>
+
+                            <!-- Cards Container -->
+                            <div class="contents">
+                                <?php
+
+                                $dados = $select->select_eglgfm();
+                                ?>
+                                <div class="contents">
+                                    <?php foreach ($dados as $dado) { ?>
+                                        <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl user-card group hover:shadow-2xl transition-all duration-500" data-nome="<?= strtolower($dado['nome_user']) ?>" data-email="<?= strtolower($dado['email']) ?>" data-escola="1">
+                                            <!-- Header do Card com Avatar e Nome -->
+                                            <div class="flex items-start gap-3 mb-4">
+                                                <div class="relative">
+                                                    <div class="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-2xl bg-gradient-to-br from-primary via-primary to-dark text-white flex items-center justify-center font-bold text-base sm:text-lg lg:text-xl flex-shrink-0 shadow-lg">
+                                                        J
+                                                    </div>
+                                                    <div class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
+                                                </div>
+                                                <div class="min-w-0 flex-1 pt-1">
+                                                    <h3 class="font-bold text-dark text-base sm:text-lg lg:text-xl truncate mb-1 group-hover:text-primary transition-colors duration-300">
+                                                        <?= $dado['nome_user'] ?>
+                                                    </h3>
+                                                    <p class="text-gray-500 text-sm sm:text-base truncate flex items-center gap-2">
+                                                        <i class="fa-solid fa-envelope text-xs text-gray-400"></i>
+                                                        <?= $dado['email'] ?>
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                            <!-- Informações do Usuário -->
+                                            <div class="space-y-3 mb-4">
+                                                <!-- CPF -->
+                                                <div class="bg-gradient-to-r from-gray-50 to-gray-100/50 p-2.5 rounded-xl border border-gray-200/50">
+                                                    <label class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
+                                                        <i class="fa-solid fa-id-card text-primary mr-2"></i>CPF
+                                                    </label>
+                                                    <span class="text-sm font-mono text-gray-800 bg-white px-2.5 py-1.5 rounded-lg border border-gray-200/50 block">
+                                                        <?= $dado['cpf'] ?>
+                                                    </span>
+                                                </div>
+                                                <!-- Escola -->
+                                                <div class="bg-gradient-to-r from-accent/20 to-accent/10 p-2.5 rounded-xl border border-accent/30">
+                                                    <label class="block text-xs font-semibold text-primary mb-1.5 uppercase tracking-wide">
+                                                        <i class="fa-solid fa-school text-primary mr-2"></i>Escola
+                                                    </label>
+                                                    <span class="status-badge px-3 py-1.5 text-sm font-semibold rounded-xl bg-white text-primary border-2 border-accent/50 shadow-sm">
+                                                        EEEP Gonzaga Mota
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <!-- Barra de Ações -->
+                                            <div class="flex items-center justify-between pt-4 border-t border-gray-200/50">
+                                                <div class="text-xs text-gray-400 font-medium">
+                                                    <i class="fa-solid fa-clock mr-1"></i>
+                                                    <?= $dado['id'] ?>
+                                                </div>
+                                                <div class="flex items-center gap-2">
+                                                    <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(<?= $dado['id'] ?>,'eglgfm','<?= htmlspecialchars($dado['nome_user'], ENT_QUOTES) ?>','<?= htmlspecialchars($dado['email'], ENT_QUOTES) ?>','<?= htmlspecialchars($dado['cpf'], ENT_QUOTES) ?>')" title="Editar usuário">
+                                                        <i class='fa-solid fa-pen text-sm'></i>
+                                                    </button>
+                                                    <?php if (!isset($dado['status']) || $dado['status'] == 1): ?>
+                                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeactivateUser(<?= $dado['id'] ?>, '<?= htmlspecialchars($dado['nome_user'], ENT_QUOTES) ?>','eglgfm')" title="Desativar usuário">
+                                                            <i class='fa-solid fa-user-slash text-sm mr-1'></i>
+                                                            <span>Desativar</span>
+                                                        </button>
+                                                    <?php else: ?>
+                                                        <button class="action-btn p-2.5 rounded-xl border-2 border-green-200 hover:bg-green-500 hover:text-white hover:border-green-500 text-green-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openActivateUser(<?= $dado['id'] ?>, '<?= htmlspecialchars($dado['nome_user'], ENT_QUOTES) ?>','eglgfm')" title="Reativar usuário">
+                                                            <i class='fa-solid fa-user-check text-sm mr-1'></i>
+                                                            <span>Ativar</span>
+                                                        </button>
+                                                    <?php endif; ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php } ?>
+                                </div>
+                            </div>
+
+                            <!-- Cards Container -->
+                            <div class="contents">
+                                <?php
+
+                                $dados = $select->select_epldtv();
+                                ?>
+                                <div class="contents">
+                                    <?php foreach ($dados as $dado) { ?>
+                                        <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl user-card group hover:shadow-2xl transition-all duration-500" data-nome="<?= strtolower($dado['nome_user']) ?>" data-email="<?= strtolower($dado['email']) ?>" data-escola="1">
+                                            <!-- Header do Card com Avatar e Nome -->
+                                            <div class="flex items-start gap-3 mb-4">
+                                                <div class="relative">
+                                                    <div class="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-2xl bg-gradient-to-br from-primary via-primary to-dark text-white flex items-center justify-center font-bold text-base sm:text-lg lg:text-xl flex-shrink-0 shadow-lg">
+                                                        J
+                                                    </div>
+                                                    <div class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
+                                                </div>
+                                                <div class="min-w-0 flex-1 pt-1">
+                                                    <h3 class="font-bold text-dark text-base sm:text-lg lg:text-xl truncate mb-1 group-hover:text-primary transition-colors duration-300">
+                                                        <?= $dado['nome_user'] ?>
+                                                    </h3>
+                                                    <p class="text-gray-500 text-sm sm:text-base truncate flex items-center gap-2">
+                                                        <i class="fa-solid fa-envelope text-xs text-gray-400"></i>
+                                                        <?= $dado['email'] ?>
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                            <!-- Informações do Usuário -->
+                                            <div class="space-y-3 mb-4">
+                                                <!-- CPF -->
+                                                <div class="bg-gradient-to-r from-gray-50 to-gray-100/50 p-2.5 rounded-xl border border-gray-200/50">
+                                                    <label class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
+                                                        <i class="fa-solid fa-id-card text-primary mr-2"></i>CPF
+                                                    </label>
+                                                    <span class="text-sm font-mono text-gray-800 bg-white px-2.5 py-1.5 rounded-lg border border-gray-200/50 block">
+                                                        <?= $dado['cpf'] ?>
+                                                    </span>
+                                                </div>
+                                                <!-- Escola -->
+                                                <div class="bg-gradient-to-r from-accent/20 to-accent/10 p-2.5 rounded-xl border border-accent/30">
+                                                    <label class="block text-xs font-semibold text-primary mb-1.5 uppercase tracking-wide">
+                                                        <i class="fa-solid fa-school text-primary mr-2"></i>Escola
+                                                    </label>
+                                                    <span class="status-badge px-3 py-1.5 text-sm font-semibold rounded-xl bg-white text-primary border-2 border-accent/50 shadow-sm">
+                                                        EEEP Prof Luiza Teodoro
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <!-- Barra de Ações -->
+                                            <div class="flex items-center justify-between pt-4 border-t border-gray-200/50">
+                                                <div class="text-xs text-gray-400 font-medium">
+                                                    <i class="fa-solid fa-clock mr-1"></i>
+                                                    <?= $dado['id'] ?>
+                                                </div>
+                                                <div class="flex items-center gap-2">
+                                                    <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(<?= $dado['id'] ?>,'epldtv','<?= htmlspecialchars($dado['nome_user'], ENT_QUOTES) ?>','<?= htmlspecialchars($dado['email'], ENT_QUOTES) ?>','<?= htmlspecialchars($dado['cpf'], ENT_QUOTES) ?>')" title="Editar usuário">
+                                                        <i class='fa-solid fa-pen text-sm'></i>
+                                                    </button>
+                                                    <?php if (!isset($dado['status']) || $dado['status'] == 1): ?>
+                                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeactivateUser(<?= $dado['id'] ?>, '<?= htmlspecialchars($dado['nome_user'], ENT_QUOTES) ?>','epldtv')" title="Desativar usuário">
+                                                            <i class='fa-solid fa-user-slash text-sm mr-1'></i>
+                                                            <span>Desativar</span>
+                                                        </button>
+                                                    <?php else: ?>
+                                                        <button class="action-btn p-2.5 rounded-xl border-2 border-green-200 hover:bg-green-500 hover:text-white hover:border-green-500 text-green-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openActivateUser(<?= $dado['id'] ?>, '<?= htmlspecialchars($dado['nome_user'], ENT_QUOTES) ?>','epldtv')" title="Reativar usuário">
+                                                            <i class='fa-solid fa-user-check text-sm mr-1'></i>
+                                                            <span>Ativar</span>
+                                                        </button>
+                                                    <?php endif; ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php } ?>
+                                </div>
+                            </div>
+
+                            <!-- Cards Container -->
+                            <div class="contents">
+                                <?php
+
+                                $dados = $select->select_ercr();
+                                foreach ($dados as $dado) { ?>
+                                    <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl user-card group hover:shadow-2xl transition-all duration-500" data-nome="<?= strtolower($dado['nome_user']) ?>" data-email="<?= strtolower($dado['email']) ?>" data-escola="1">
+                                        <!-- Header do Card com Avatar e Nome -->
+                                        <div class="flex items-start gap-3 mb-4">
+                                            <div class="relative">
+                                                <div class="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-2xl bg-gradient-to-br from-primary via-primary to-dark text-white flex items-center justify-center font-bold text-base sm:text-lg lg:text-xl flex-shrink-0 shadow-lg">
+                                                    J
+                                                </div>
+                                                <div class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
+                                            </div>
+                                            <div class="min-w-0 flex-1 pt-1">
+                                                <h3 class="font-bold text-dark text-base sm:text-lg lg:text-xl truncate mb-1 group-hover:text-primary transition-colors duration-300">
+                                                    <?= $dado['nome_user'] ?>
+                                                </h3>
+                                                <p class="text-gray-500 text-sm sm:text-base truncate flex items-center gap-2">
+                                                    <i class="fa-solid fa-envelope text-xs text-gray-400"></i>
+                                                    <?= $dado['email'] ?>
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <!-- Informações do Usuário -->
+                                        <div class="space-y-3 mb-4">
+                                            <!-- CPF -->
+                                            <div class="bg-gradient-to-r from-gray-50 to-gray-100/50 p-2.5 rounded-xl border border-gray-200/50">
+                                                <label class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
+                                                    <i class="fa-solid fa-id-card text-primary mr-2"></i>CPF
+                                                </label>
+                                                <span class="text-sm font-mono text-gray-800 bg-white px-2.5 py-1.5 rounded-lg border border-gray-200/50 block">
+                                                    <?= $dado['cpf'] ?>
+                                                </span>
+                                            </div>
+                                            <!-- Escola -->
+                                            <div class="bg-gradient-to-r from-accent/20 to-accent/10 p-2.5 rounded-xl border border-accent/30">
+                                                <label class="block text-xs font-semibold text-primary mb-1.5 uppercase tracking-wide">
+                                                    <i class="fa-solid fa-school text-primary mr-2"></i>Escola
+                                                </label>
+                                                <span class="status-badge px-3 py-1.5 text-sm font-semibold rounded-xl bg-white text-primary border-2 border-accent/50 shadow-sm">
+                                                    EEEP Raimundo Celio
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Barra de Ações -->
+                                        <div class="flex items-center justify-between pt-4 border-t border-gray-200/50">
+                                            <div class="text-xs text-gray-400 font-medium">
+                                                <i class="fa-solid fa-clock mr-1"></i>
+                                                <?= $dado['id'] ?>
+                                            </div>
+                                            <div class="flex items-center gap-2">
+                                                <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(<?= $dado['id'] ?>,'ercr','<?= htmlspecialchars($dado['nome_user'], ENT_QUOTES) ?>','<?= htmlspecialchars($dado['email'], ENT_QUOTES) ?>','<?= htmlspecialchars($dado['cpf'], ENT_QUOTES) ?>')" title="Editar usuário">
+                                                    <i class='fa-solid fa-pen text-sm'></i>
+                                                </button>
+                                                <?php if (!isset($dado['status']) || $dado['status'] == 1): ?>
+                                                    <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeactivateUser(<?= $dado['id'] ?>, '<?= htmlspecialchars($dado['nome_user'], ENT_QUOTES) ?>','ercr')" title="Desativar usuário">
+                                                        <i class='fa-solid fa-user-slash text-sm mr-1'></i>
+                                                        <span>Desativar</span>
+                                                    </button>
+                                                <?php else: ?>
+                                                    <button class="action-btn p-2.5 rounded-xl border-2 border-green-200 hover:bg-green-500 hover:text-white hover:border-green-500 text-green-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openActivateUser(<?= $dado['id'] ?>, '<?= htmlspecialchars($dado['nome_user'], ENT_QUOTES) ?>','ercr')" title="Reativar usuário">
+                                                        <i class='fa-solid fa-user-check text-sm mr-1'></i>
+                                                        <span>Ativar</span>
+                                                    </button>
+                                                <?php endif; ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php } ?>
+                            </div>
                         </div>
                     </div>
-
-                     <!-- Cards Container -->
-                    <div class="contents">
-                        <?php 
-                        
-                        $dados = $select->select_epmfm();
-                        ?>
-                        <div class="contents">
-                            <?php foreach($dados as $dado){ ?>
-                            <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl user-card group hover:shadow-2xl transition-all duration-500" data-nome="<?= strtolower($dado['nome_user']) ?>" data-email="<?= strtolower($dado['email']) ?>" data-escola="1">
-                                <!-- Header do Card com Avatar e Nome -->
-                                <div class="flex items-start gap-3 mb-4">
-                                    <div class="relative">
-                                        <div class="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-2xl bg-gradient-to-br from-primary via-primary to-dark text-white flex items-center justify-center font-bold text-base sm:text-lg lg:text-xl flex-shrink-0 shadow-lg">
-                                            J
-                                        </div>
-                                        <div class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
-                                    </div>
-                                    <div class="min-w-0 flex-1 pt-1">
-                                        <h3 class="font-bold text-dark text-base sm:text-lg lg:text-xl truncate mb-1 group-hover:text-primary transition-colors duration-300">
-                                            <?=$dado['nome_user']?>
-                                        </h3>
-                                        <p class="text-gray-500 text-sm sm:text-base truncate flex items-center gap-2">
-                                            <i class="fa-solid fa-envelope text-xs text-gray-400"></i>
-                                            <?= $dado['email']?>
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <!-- Informações do Usuário -->
-                                <div class="space-y-3 mb-4">
-                                    <!-- CPF -->
-                                    <div class="bg-gradient-to-r from-gray-50 to-gray-100/50 p-2.5 rounded-xl border border-gray-200/50">
-                                        <label class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
-                                            <i class="fa-solid fa-id-card text-primary mr-2"></i>CPF
-                                        </label>
-                                        <span class="text-sm font-mono text-gray-800 bg-white px-2.5 py-1.5 rounded-lg border border-gray-200/50 block">
-                                            <?= $dado['cpf']?>
-                                        </span>
-                                    </div>
-                                    <!-- Escola -->
-                                    <div class="bg-gradient-to-r from-accent/20 to-accent/10 p-2.5 rounded-xl border border-accent/30">
-                                        <label class="block text-xs font-semibold text-primary mb-1.5 uppercase tracking-wide">
-                                            <i class="fa-solid fa-school text-primary mr-2"></i>Escola
-                                        </label>
-                                        <span class="status-badge px-3 py-1.5 text-sm font-semibold rounded-xl bg-white text-primary border-2 border-accent/50 shadow-sm">
-                                            EEEP Prof Marly Ferreira
-                                        </span>
-                                    </div>
-                                </div>
-
-                                <!-- Barra de Ações -->
-                                <div class="flex items-center justify-between pt-4 border-t border-gray-200/50">
-                                    <div class="text-xs text-gray-400 font-medium">
-                                        <i class="fa-solid fa-clock mr-1"></i>
-                                        <?= $dado['id']?>
-                                    </div>
-                                    <div class="flex items-center gap-2">
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(<?= $dado['id']?>,'epmfm','<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['email'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['cpf'],ENT_QUOTES)?>')" title="Editar usuário">
-                                            <i class='fa-solid fa-pen text-sm'></i>
-                                        </button>
-                                        <?php if (!isset($dado['status']) || $dado['status'] == 1): ?>
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeactivateUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','epmfm')" title="Desativar usuário">
-                                            <i class='fa-solid fa-user-slash text-sm mr-1'></i>
-                                            <span>Desativar</span>
-                                        </button>
-                                        <?php else: ?>
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-green-200 hover:bg-green-500 hover:text-white hover:border-green-500 text-green-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openActivateUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','epmfm')" title="Reativar usuário">
-                                            <i class='fa-solid fa-user-check text-sm mr-1'></i>
-                                            <span>Ativar</span>
-                                        </button>
-                                        <?php endif; ?>
-                                    </div>
-                                </div>
-                            </div>
-                            <?php } ?>
-                        </div>
-                    </div>
-
-                     <!-- Cards Container -->
-                    <div class="contents">
-                        <?php 
-                        
-                        $dados = $select->select_epav();
-                        ?>
-                        <div class="contents">
-                            <?php foreach($dados as $dado){ ?>
-                            <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl user-card group hover:shadow-2xl transition-all duration-500" data-nome="<?= strtolower($dado['nome_user']) ?>" data-email="<?= strtolower($dado['email']) ?>" data-escola="1">
-                                <!-- Header do Card com Avatar e Nome -->
-                                <div class="flex items-start gap-3 mb-4">
-                                    <div class="relative">
-                                        <div class="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-2xl bg-gradient-to-br from-primary via-primary to-dark text-white flex items-center justify-center font-bold text-base sm:text-lg lg:text-xl flex-shrink-0 shadow-lg">
-                                            J
-                                        </div>
-                                        <div class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
-                                    </div>
-                                    <div class="min-w-0 flex-1 pt-1">
-                                        <h3 class="font-bold text-dark text-base sm:text-lg lg:text-xl truncate mb-1 group-hover:text-primary transition-colors duration-300">
-                                            <?=$dado['nome_user']?>
-                                        </h3>
-                                        <p class="text-gray-500 text-sm sm:text-base truncate flex items-center gap-2">
-                                            <i class="fa-solid fa-envelope text-xs text-gray-400"></i>
-                                            <?= $dado['email']?>
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <!-- Informações do Usuário -->
-                                <div class="space-y-3 mb-4">
-                                    <!-- CPF -->
-                                    <div class="bg-gradient-to-r from-gray-50 to-gray-100/50 p-2.5 rounded-xl border border-gray-200/50">
-                                        <label class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
-                                            <i class="fa-solid fa-id-card text-primary mr-2"></i>CPF
-                                        </label>
-                                        <span class="text-sm font-mono text-gray-800 bg-white px-2.5 py-1.5 rounded-lg border border-gray-200/50 block">
-                                            <?= $dado['cpf']?>
-                                        </span>
-                                    </div>
-                                    <!-- Escola -->
-                                    <div class="bg-gradient-to-r from-accent/20 to-accent/10 p-2.5 rounded-xl border border-accent/30">
-                                        <label class="block text-xs font-semibold text-primary mb-1.5 uppercase tracking-wide">
-                                            <i class="fa-solid fa-school text-primary mr-2"></i>Escola
-                                        </label>
-                                        <span class="status-badge px-3 py-1.5 text-sm font-semibold rounded-xl bg-white text-primary border-2 border-accent/50 shadow-sm">
-                                            EEEP Prof Antonio Valmir
-                                        </span>
-                                    </div>
-                                </div>
-
-                                <!-- Barra de Ações -->
-                                <div class="flex items-center justify-between pt-4 border-t border-gray-200/50">
-                                    <div class="text-xs text-gray-400 font-medium">
-                                        <i class="fa-solid fa-clock mr-1"></i>
-                                        <?= $dado['id']?>
-                                    </div>
-                                    <div class="flex items-center gap-2">
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(<?= $dado['id']?>,'epav','<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['email'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['cpf'],ENT_QUOTES)?>')" title="Editar usuário">
-                                            <i class='fa-solid fa-pen text-sm'></i>
-                                        </button>
-                                        <?php if (!isset($dado['status']) || $dado['status'] == 1): ?>
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeactivateUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','epav')" title="Desativar usuário">
-                                            <i class='fa-solid fa-user-slash text-sm mr-1'></i>
-                                            <span>Desativar</span>
-                                        </button>
-                                        <?php else: ?>
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-green-200 hover:bg-green-500 hover:text-white hover:border-green-500 text-green-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openActivateUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','epav')" title="Reativar usuário">
-                                            <i class='fa-solid fa-user-check text-sm mr-1'></i>
-                                            <span>Ativar</span>
-                                        </button>
-                                        <?php endif; ?>
-                                    </div>
-                                </div>
-                            </div>
-                            <?php } ?>
-                        </div>
-                    </div>
-
-                     <!-- Cards Container -->
-                    <div class="contents">
-                        <?php 
-                        
-                        $dados = $select->select_eedq();
-                        ?>
-                        <div class="contents">
-                            <?php foreach($dados as $dado){ ?>
-                            <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl user-card group hover:shadow-2xl transition-all duration-500" data-nome="<?= strtolower($dado['nome_user']) ?>" data-email="<?= strtolower($dado['email']) ?>" data-escola="1">
-                                <!-- Header do Card com Avatar e Nome -->
-                                <div class="flex items-start gap-3 mb-4">
-                                    <div class="relative">
-                                        <div class="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-2xl bg-gradient-to-br from-primary via-primary to-dark text-white flex items-center justify-center font-bold text-base sm:text-lg lg:text-xl flex-shrink-0 shadow-lg">
-                                            J
-                                        </div>
-                                        <div class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
-                                    </div>
-                                    <div class="min-w-0 flex-1 pt-1">
-                                        <h3 class="font-bold text-dark text-base sm:text-lg lg:text-xl truncate mb-1 group-hover:text-primary transition-colors duration-300">
-                                            <?=$dado['nome_user']?>
-                                        </h3>
-                                        <p class="text-gray-500 text-sm sm:text-base truncate flex items-center gap-2">
-                                            <i class="fa-solid fa-envelope text-xs text-gray-400"></i>
-                                            <?= $dado['email']?>
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <!-- Informações do Usuário -->
-                                <div class="space-y-3 mb-4">
-                                    <!-- CPF -->
-                                    <div class="bg-gradient-to-r from-gray-50 to-gray-100/50 p-2.5 rounded-xl border border-gray-200/50">
-                                        <label class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
-                                            <i class="fa-solid fa-id-card text-primary mr-2"></i>CPF
-                                        </label>
-                                        <span class="text-sm font-mono text-gray-800 bg-white px-2.5 py-1.5 rounded-lg border border-gray-200/50 block">
-                                            <?= $dado['cpf']?>
-                                        </span>
-                                    </div>
-                                    <!-- Escola -->
-                                    <div class="bg-gradient-to-r from-accent/20 to-accent/10 p-2.5 rounded-xl border border-accent/30">
-                                        <label class="block text-xs font-semibold text-primary mb-1.5 uppercase tracking-wide">
-                                            <i class="fa-solid fa-school text-primary mr-2"></i>Escola
-                                        </label>
-                                        <span class="status-badge px-3 py-1.5 text-sm font-semibold rounded-xl bg-white text-primary border-2 border-accent/50 shadow-sm">
-                                            EEEP Eusébio Queiroz
-                                        </span>
-                                    </div>
-                                </div>
-
-                                <!-- Barra de Ações -->
-                                <div class="flex items-center justify-between pt-4 border-t border-gray-200/50">
-                                    <div class="text-xs text-gray-400 font-medium">
-                                        <i class="fa-solid fa-clock mr-1"></i>
-                                        <?= $dado['id']?>
-                                    </div>
-                                    <div class="flex items-center gap-2">
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(<?= $dado['id']?>,'eedq','<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['email'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['cpf'],ENT_QUOTES)?>')" title="Editar usuário">
-                                            <i class='fa-solid fa-pen text-sm'></i>
-                                        </button>
-                                        <?php if (!isset($dado['status']) || $dado['status'] == 1): ?>
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeactivateUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','eedq')" title="Desativar usuário">
-                                            <i class='fa-solid fa-user-slash text-sm'></i>
-                                        </button>
-                                        <?php else: ?>
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-green-200 hover:bg-green-500 hover:text-white hover:border-green-500 text-green-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openActivateUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','eedq')" title="Reativar usuário">
-                                            <i class='fa-solid fa-user-check text-sm'></i>
-                                        </button>
-                                        <?php endif; ?>
-                                    </div>
-                                </div>
-                            </div>
-                            <?php } ?>
-                        </div>
-                    </div>
-
-                     <!-- Cards Container -->
-                    <div class="contents">
-                        <?php 
-                        
-                        $dados = $select->select_ejin();
-                        ?>
-                        <div class="contents">
-                            <?php foreach($dados as $dado){ ?>
-                            <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl user-card group hover:shadow-2xl transition-all duration-500" data-nome="<?= strtolower($dado['nome_user']) ?>" data-email="<?= strtolower($dado['email']) ?>" data-escola="1">
-                                <!-- Header do Card com Avatar e Nome -->
-                                <div class="flex items-start gap-3 mb-4">
-                                    <div class="relative">
-                                        <div class="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-2xl bg-gradient-to-br from-primary via-primary to-dark text-white flex items-center justify-center font-bold text-base sm:text-lg lg:text-xl flex-shrink-0 shadow-lg">
-                                            J
-                                        </div>
-                                        <div class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
-                                    </div>
-                                    <div class="min-w-0 flex-1 pt-1">
-                                        <h3 class="font-bold text-dark text-base sm:text-lg lg:text-xl truncate mb-1 group-hover:text-primary transition-colors duration-300">
-                                            <?=$dado['nome_user']?>
-                                        </h3>
-                                        <p class="text-gray-500 text-sm sm:text-base truncate flex items-center gap-2">
-                                            <i class="fa-solid fa-envelope text-xs text-gray-400"></i>
-                                            <?= $dado['email']?>
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <!-- Informações do Usuário -->
-                                <div class="space-y-3 mb-4">
-                                    <!-- CPF -->
-                                    <div class="bg-gradient-to-r from-gray-50 to-gray-100/50 p-2.5 rounded-xl border border-gray-200/50">
-                                        <label class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
-                                            <i class="fa-solid fa-id-card text-primary mr-2"></i>CPF
-                                        </label>
-                                        <span class="text-sm font-mono text-gray-800 bg-white px-2.5 py-1.5 rounded-lg border border-gray-200/50 block">
-                                            <?= $dado['cpf']?>
-                                        </span>
-                                    </div>
-                                    <!-- Escola -->
-                                    <div class="bg-gradient-to-r from-accent/20 to-accent/10 p-2.5 rounded-xl border border-accent/30">
-                                        <label class="block text-xs font-semibold text-primary mb-1.5 uppercase tracking-wide">
-                                            <i class="fa-solid fa-school text-primary mr-2"></i>Escola
-                                        </label>
-                                        <span class="status-badge px-3 py-1.5 text-sm font-semibold rounded-xl bg-white text-primary border-2 border-accent/50 shadow-sm">
-                                            EEEP José Ivanilton 
-                                        </span>
-                                    </div>
-                                </div>
-
-                                <!-- Barra de Ações -->
-                                <div class="flex items-center justify-between pt-4 border-t border-gray-200/50">
-                                    <div class="text-xs text-gray-400 font-medium">
-                                        <i class="fa-solid fa-clock mr-1"></i>
-                                        <?= $dado['id']?>
-                                    </div>
-                                    <div class="flex items-center gap-2">
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(<?= $dado['id']?>,'ejin','<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['email'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['cpf'],ENT_QUOTES)?>')" title="Editar usuário">
-                                            <i class='fa-solid fa-pen text-sm'></i>
-                                        </button>
-                                        <?php if (!isset($dado['status']) || $dado['status'] == 1): ?>
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeactivateUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','ejin')" title="Desativar usuário">
-                                            <i class='fa-solid fa-user-slash text-sm mr-1'></i>
-                                            <span>Desativar</span>
-                                        </button>
-                                        <?php else: ?>
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-green-200 hover:bg-green-500 hover:text-white hover:border-green-500 text-green-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openActivateUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','ejin')" title="Reativar usuário">
-                                            <i class='fa-solid fa-user-check text-sm mr-1'></i>
-                                            <span>Ativar</span>
-                                        </button>
-                                        <?php endif; ?>
-                                    </div>
-                                </div>
-                            </div>
-                            <?php } ?>
-                        </div>
-                    </div>
-
-                     <!-- Cards Container -->
-                    <div class="contents">
-                        <?php 
-                        
-                        $dados = $select->select_epfads();
-                        ?>
-                        <div class="contents">
-                            <?php foreach($dados as $dado){ ?>
-                            <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl user-card group hover:shadow-2xl transition-all duration-500" data-nome="<?= strtolower($dado['nome_user']) ?>" data-email="<?= strtolower($dado['email']) ?>" data-escola="1">
-                                <!-- Header do Card com Avatar e Nome -->
-                                <div class="flex items-start gap-3 mb-4">
-                                    <div class="relative">
-                                        <div class="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-2xl bg-gradient-to-br from-primary via-primary to-dark text-white flex items-center justify-center font-bold text-base sm:text-lg lg:text-xl flex-shrink-0 shadow-lg">
-                                            J
-                                        </div>
-                                        <div class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
-                                    </div>
-                                    <div class="min-w-0 flex-1 pt-1">
-                                        <h3 class="font-bold text-dark text-base sm:text-lg lg:text-xl truncate mb-1 group-hover:text-primary transition-colors duration-300">
-                                            <?=$dado['nome_user']?>
-                                        </h3>
-                                        <p class="text-gray-500 text-sm sm:text-base truncate flex items-center gap-2">
-                                            <i class="fa-solid fa-envelope text-xs text-gray-400"></i>
-                                            <?= $dado['email']?>
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <!-- Informações do Usuário -->
-                                <div class="space-y-3 mb-4">
-                                    <!-- CPF -->
-                                    <div class="bg-gradient-to-r from-gray-50 to-gray-100/50 p-2.5 rounded-xl border border-gray-200/50">
-                                        <label class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
-                                            <i class="fa-solid fa-id-card text-primary mr-2"></i>CPF
-                                        </label>
-                                        <span class="text-sm font-mono text-gray-800 bg-white px-2.5 py-1.5 rounded-lg border border-gray-200/50 block">
-                                            <?= $dado['cpf']?>
-                                        </span>
-                                    </div>
-                                    <!-- Escola -->
-                                    <div class="bg-gradient-to-r from-accent/20 to-accent/10 p-2.5 rounded-xl border border-accent/30">
-                                        <label class="block text-xs font-semibold text-primary mb-1.5 uppercase tracking-wide">
-                                            <i class="fa-solid fa-school text-primary mr-2"></i>Escola
-                                        </label>
-                                        <span class="status-badge px-3 py-1.5 text-sm font-semibold rounded-xl bg-white text-primary border-2 border-accent/50 shadow-sm">
-                                            EEEP Prof Fc Aristótles
-                                        </span>
-                                    </div>
-                                </div>
-
-                                <!-- Barra de Ações -->
-                                <div class="flex items-center justify-between pt-4 border-t border-gray-200/50">
-                                    <div class="text-xs text-gray-400 font-medium">
-                                        <i class="fa-solid fa-clock mr-1"></i>
-                                        <?= $dado['id']?>
-                                    </div>
-                                    <div class="flex items-center gap-2">
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(<?= $dado['id']?>,'epfads','<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['email'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['cpf'],ENT_QUOTES)?>')" title="Editar usuário">
-                                            <i class='fa-solid fa-pen text-sm'></i>
-                                        </button>
-                                        <?php if (!isset($dado['status']) || $dado['status'] == 1): ?>
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeactivateUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','epfads')" title="Desativar usuário">
-                                            <i class='fa-solid fa-user-slash text-sm mr-1'></i>
-                                            <span>Desativar</span>
-                                        </button>
-                                        <?php else: ?>
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-green-200 hover:bg-green-500 hover:text-white hover:border-green-500 text-green-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openActivateUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','epfads')" title="Reativar usuário">
-                                            <i class='fa-solid fa-user-check text-sm mr-1'></i>
-                                            <span>Ativar</span>
-                                        </button>
-                                        <?php endif; ?>
-                                    </div>
-                                </div>
-                            </div>
-                            <?php } ?>
-                        </div>
-                    </div>
-
-                     <!-- Cards Container -->
-                    <div class="contents">
-                        <?php 
-                        
-                        $dados = $select->select_emcvm();
-                        ?>
-                        <div class="contents">
-                            <?php foreach($dados as $dado){ ?>
-                            <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl user-card group hover:shadow-2xl transition-all duration-500" data-nome="<?= strtolower($dado['nome_user']) ?>" data-email="<?= strtolower($dado['email']) ?>" data-escola="1">
-                                <!-- Header do Card com Avatar e Nome -->
-                                <div class="flex items-start gap-3 mb-4">
-                                    <div class="relative">
-                                        <div class="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-2xl bg-gradient-to-br from-primary via-primary to-dark text-white flex items-center justify-center font-bold text-base sm:text-lg lg:text-xl flex-shrink-0 shadow-lg">
-                                            J
-                                        </div>
-                                        <div class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
-                                    </div>
-                                    <div class="min-w-0 flex-1 pt-1">
-                                        <h3 class="font-bold text-dark text-base sm:text-lg lg:text-xl truncate mb-1 group-hover:text-primary transition-colors duration-300">
-                                            <?=$dado['nome_user']?>
-                                        </h3>
-                                        <p class="text-gray-500 text-sm sm:text-base truncate flex items-center gap-2">
-                                            <i class="fa-solid fa-envelope text-xs text-gray-400"></i>
-                                            <?= $dado['email']?>
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <!-- Informações do Usuário -->
-                                <div class="space-y-3 mb-4">
-                                    <!-- CPF -->
-                                    <div class="bg-gradient-to-r from-gray-50 to-gray-100/50 p-2.5 rounded-xl border border-gray-200/50">
-                                        <label class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
-                                            <i class="fa-solid fa-id-card text-primary mr-2"></i>CPF
-                                        </label>
-                                        <span class="text-sm font-mono text-gray-800 bg-white px-2.5 py-1.5 rounded-lg border border-gray-200/50 block">
-                                            <?= $dado['cpf']?>
-                                        </span>
-                                    </div>
-                                    <!-- Escola -->
-                                    <div class="bg-gradient-to-r from-accent/20 to-accent/10 p-2.5 rounded-xl border border-accent/30">
-                                        <label class="block text-xs font-semibold text-primary mb-1.5 uppercase tracking-wide">
-                                            <i class="fa-solid fa-school text-primary mr-2"></i>Escola
-                                        </label>
-                                        <span class="status-badge px-3 py-1.5 text-sm font-semibold rounded-xl bg-white text-primary border-2 border-accent/50 shadow-sm">
-                                            EEEP Maria Carmem
-                                        </span>
-                                    </div>
-                                </div>
-
-                                <!-- Barra de Ações -->
-                                <div class="flex items-center justify-between pt-4 border-t border-gray-200/50">
-                                    <div class="text-xs text-gray-400 font-medium">
-                                        <i class="fa-solid fa-clock mr-1"></i>
-                                        <?= $dado['id']?>
-                                    </div>
-                                    <div class="flex items-center gap-2">
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(<?= $dado['id']?>,'emcvm','<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['email'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['cpf'],ENT_QUOTES)?>')" title="Editar usuário">
-                                            <i class='fa-solid fa-pen text-sm'></i>
-                                        </button>
-                                        <?php if (!isset($dado['status']) || $dado['status'] == 1): ?>
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeactivateUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','emcvm')" title="Desativar usuário">
-                                            <i class='fa-solid fa-user-slash text-sm mr-1'></i>
-                                            <span>Desativar</span>
-                                        </button>
-                                        <?php else: ?>
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-green-200 hover:bg-green-500 hover:text-white hover:border-green-500 text-green-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openActivateUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','emcvm')" title="Reativar usuário">
-                                            <i class='fa-solid fa-user-check text-sm mr-1'></i>
-                                            <span>Ativar</span>
-                                        </button>
-                                        <?php endif; ?>
-                                    </div>
-                                </div>
-                            </div>
-                            <?php } ?>
-                        </div>
-                    </div>
-
-                    <!-- Cards Container -->
-                    <div class="contents">
-                        <?php 
-                        
-                        $dados = $select->select_eglgfm();
-                        ?>
-                        <div class="contents">
-                            <?php foreach($dados as $dado){ ?>
-                            <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl user-card group hover:shadow-2xl transition-all duration-500" data-nome="<?= strtolower($dado['nome_user']) ?>" data-email="<?= strtolower($dado['email']) ?>" data-escola="1">
-                                <!-- Header do Card com Avatar e Nome -->
-                                <div class="flex items-start gap-3 mb-4">
-                                    <div class="relative">
-                                        <div class="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-2xl bg-gradient-to-br from-primary via-primary to-dark text-white flex items-center justify-center font-bold text-base sm:text-lg lg:text-xl flex-shrink-0 shadow-lg">
-                                            J
-                                        </div>
-                                        <div class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
-                                    </div>
-                                    <div class="min-w-0 flex-1 pt-1">
-                                        <h3 class="font-bold text-dark text-base sm:text-lg lg:text-xl truncate mb-1 group-hover:text-primary transition-colors duration-300">
-                                            <?=$dado['nome_user']?>
-                                        </h3>
-                                        <p class="text-gray-500 text-sm sm:text-base truncate flex items-center gap-2">
-                                            <i class="fa-solid fa-envelope text-xs text-gray-400"></i>
-                                            <?= $dado['email']?>
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <!-- Informações do Usuário -->
-                                <div class="space-y-3 mb-4">
-                                    <!-- CPF -->
-                                    <div class="bg-gradient-to-r from-gray-50 to-gray-100/50 p-2.5 rounded-xl border border-gray-200/50">
-                                        <label class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
-                                            <i class="fa-solid fa-id-card text-primary mr-2"></i>CPF
-                                        </label>
-                                        <span class="text-sm font-mono text-gray-800 bg-white px-2.5 py-1.5 rounded-lg border border-gray-200/50 block">
-                                            <?= $dado['cpf']?>
-                                        </span>
-                                    </div>
-                                    <!-- Escola -->
-                                    <div class="bg-gradient-to-r from-accent/20 to-accent/10 p-2.5 rounded-xl border border-accent/30">
-                                        <label class="block text-xs font-semibold text-primary mb-1.5 uppercase tracking-wide">
-                                            <i class="fa-solid fa-school text-primary mr-2"></i>Escola
-                                        </label>
-                                        <span class="status-badge px-3 py-1.5 text-sm font-semibold rounded-xl bg-white text-primary border-2 border-accent/50 shadow-sm">
-                                            EEEP Gonzaga Mota
-                                        </span>
-                                    </div>
-                                </div>
-
-                                <!-- Barra de Ações -->
-                                <div class="flex items-center justify-between pt-4 border-t border-gray-200/50">
-                                    <div class="text-xs text-gray-400 font-medium">
-                                        <i class="fa-solid fa-clock mr-1"></i>
-                                        <?= $dado['id']?>
-                                    </div>
-                                    <div class="flex items-center gap-2">
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(<?= $dado['id']?>,'eglgfm','<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['email'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['cpf'],ENT_QUOTES)?>')" title="Editar usuário">
-                                            <i class='fa-solid fa-pen text-sm'></i>
-                                        </button>
-                                        <?php if (!isset($dado['status']) || $dado['status'] == 1): ?>
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeactivateUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','eglgfm')" title="Desativar usuário">
-                                            <i class='fa-solid fa-user-slash text-sm mr-1'></i>
-                                            <span>Desativar</span>
-                                        </button>
-                                        <?php else: ?>
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-green-200 hover:bg-green-500 hover:text-white hover:border-green-500 text-green-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openActivateUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','eglgfm')" title="Reativar usuário">
-                                            <i class='fa-solid fa-user-check text-sm mr-1'></i>
-                                            <span>Ativar</span>
-                                        </button>
-                                        <?php endif; ?>
-                                    </div>
-                                </div>
-                            </div>
-                            <?php } ?>
-                        </div>
-                    </div>
-
-                    <!-- Cards Container -->
-                    <div class="contents">
-                        <?php 
-                        
-                        $dados = $select->select_epldtv();
-                        ?>
-                        <div class="contents">
-                            <?php foreach($dados as $dado){ ?>
-                            <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl user-card group hover:shadow-2xl transition-all duration-500" data-nome="<?= strtolower($dado['nome_user']) ?>" data-email="<?= strtolower($dado['email']) ?>" data-escola="1">
-                                <!-- Header do Card com Avatar e Nome -->
-                                <div class="flex items-start gap-3 mb-4">
-                                    <div class="relative">
-                                        <div class="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-2xl bg-gradient-to-br from-primary via-primary to-dark text-white flex items-center justify-center font-bold text-base sm:text-lg lg:text-xl flex-shrink-0 shadow-lg">
-                                            J
-                                        </div>
-                                        <div class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
-                                    </div>
-                                    <div class="min-w-0 flex-1 pt-1">
-                                        <h3 class="font-bold text-dark text-base sm:text-lg lg:text-xl truncate mb-1 group-hover:text-primary transition-colors duration-300">
-                                            <?=$dado['nome_user']?>
-                                        </h3>
-                                        <p class="text-gray-500 text-sm sm:text-base truncate flex items-center gap-2">
-                                            <i class="fa-solid fa-envelope text-xs text-gray-400"></i>
-                                            <?= $dado['email']?>
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <!-- Informações do Usuário -->
-                                <div class="space-y-3 mb-4">
-                                    <!-- CPF -->
-                                    <div class="bg-gradient-to-r from-gray-50 to-gray-100/50 p-2.5 rounded-xl border border-gray-200/50">
-                                        <label class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
-                                            <i class="fa-solid fa-id-card text-primary mr-2"></i>CPF
-                                        </label>
-                                        <span class="text-sm font-mono text-gray-800 bg-white px-2.5 py-1.5 rounded-lg border border-gray-200/50 block">
-                                            <?= $dado['cpf']?>
-                                        </span>
-                                    </div>
-                                    <!-- Escola -->
-                                    <div class="bg-gradient-to-r from-accent/20 to-accent/10 p-2.5 rounded-xl border border-accent/30">
-                                        <label class="block text-xs font-semibold text-primary mb-1.5 uppercase tracking-wide">
-                                            <i class="fa-solid fa-school text-primary mr-2"></i>Escola
-                                        </label>
-                                        <span class="status-badge px-3 py-1.5 text-sm font-semibold rounded-xl bg-white text-primary border-2 border-accent/50 shadow-sm">
-                                            EEEP Prof Luiza Teodoro
-                                        </span>
-                                    </div>
-                                </div>
-
-                                <!-- Barra de Ações -->
-                                <div class="flex items-center justify-between pt-4 border-t border-gray-200/50">
-                                    <div class="text-xs text-gray-400 font-medium">
-                                        <i class="fa-solid fa-clock mr-1"></i>
-                                        <?= $dado['id']?>
-                                    </div>
-                                    <div class="flex items-center gap-2">
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(<?= $dado['id']?>,'epldtv','<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['email'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['cpf'],ENT_QUOTES)?>')" title="Editar usuário">
-                                            <i class='fa-solid fa-pen text-sm'></i>
-                                        </button>
-                                        <?php if (!isset($dado['status']) || $dado['status'] == 1): ?>
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeactivateUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','epldtv')" title="Desativar usuário">
-                                            <i class='fa-solid fa-user-slash text-sm mr-1'></i>
-                                            <span>Desativar</span>
-                                        </button>
-                                        <?php else: ?>
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-green-200 hover:bg-green-500 hover:text-white hover:border-green-500 text-green-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openActivateUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','epldtv')" title="Reativar usuário">
-                                            <i class='fa-solid fa-user-check text-sm mr-1'></i>
-                                            <span>Ativar</span>
-                                        </button>
-                                        <?php endif; ?>
-                                    </div>
-                                </div>
-                            </div>
-                            <?php } ?>
-                        </div>
-                    </div>
-
-                    <!-- Cards Container -->
-                    <div class="contents">
-                        <?php 
-                        
-                        $dados = $select->select_ercr();
-                        foreach($dados as $dado){ ?>
-                            <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl user-card group hover:shadow-2xl transition-all duration-500" data-nome="<?= strtolower($dado['nome_user']) ?>" data-email="<?= strtolower($dado['email']) ?>" data-escola="1">
-                                <!-- Header do Card com Avatar e Nome -->
-                                <div class="flex items-start gap-3 mb-4">
-                                    <div class="relative">
-                                        <div class="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-2xl bg-gradient-to-br from-primary via-primary to-dark text-white flex items-center justify-center font-bold text-base sm:text-lg lg:text-xl flex-shrink-0 shadow-lg">
-                                            J
-                                        </div>
-                                        <div class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
-                                    </div>
-                                    <div class="min-w-0 flex-1 pt-1">
-                                        <h3 class="font-bold text-dark text-base sm:text-lg lg:text-xl truncate mb-1 group-hover:text-primary transition-colors duration-300">
-                                            <?=$dado['nome_user']?>
-                                        </h3>
-                                        <p class="text-gray-500 text-sm sm:text-base truncate flex items-center gap-2">
-                                            <i class="fa-solid fa-envelope text-xs text-gray-400"></i>
-                                            <?= $dado['email']?>
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <!-- Informações do Usuário -->
-                                <div class="space-y-3 mb-4">
-                                    <!-- CPF -->
-                                    <div class="bg-gradient-to-r from-gray-50 to-gray-100/50 p-2.5 rounded-xl border border-gray-200/50">
-                                        <label class="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
-                                            <i class="fa-solid fa-id-card text-primary mr-2"></i>CPF
-                                        </label>
-                                        <span class="text-sm font-mono text-gray-800 bg-white px-2.5 py-1.5 rounded-lg border border-gray-200/50 block">
-                                            <?= $dado['cpf']?>
-                                        </span>
-                                    </div>
-                                    <!-- Escola -->
-                                    <div class="bg-gradient-to-r from-accent/20 to-accent/10 p-2.5 rounded-xl border border-accent/30">
-                                        <label class="block text-xs font-semibold text-primary mb-1.5 uppercase tracking-wide">
-                                            <i class="fa-solid fa-school text-primary mr-2"></i>Escola
-                                        </label>
-                                        <span class="status-badge px-3 py-1.5 text-sm font-semibold rounded-xl bg-white text-primary border-2 border-accent/50 shadow-sm">
-                                            EEEP Raimundo Celio
-                                        </span>
-                                    </div>
-                                </div>
-
-                                <!-- Barra de Ações -->
-                                <div class="flex items-center justify-between pt-4 border-t border-gray-200/50">
-                                    <div class="text-xs text-gray-400 font-medium">
-                                        <i class="fa-solid fa-clock mr-1"></i>
-                                        <?= $dado['id']?>
-                                    </div>
-                                    <div class="flex items-center gap-2">
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-gray-200 hover:bg-primary hover:text-white hover:border-primary text-gray-600 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openEditUser(<?= $dado['id']?>,'ercr','<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['email'],ENT_QUOTES)?>','<?= htmlspecialchars($dado['cpf'],ENT_QUOTES)?>')" title="Editar usuário">
-                                            <i class='fa-solid fa-pen text-sm'></i>
-                                        </button>
-                                        <?php if (!isset($dado['status']) || $dado['status'] == 1): ?>
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-red-200 hover:bg-red-500 hover:text-white hover:border-red-500 text-red-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openDeactivateUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','ercr')" title="Desativar usuário">
-                                            <i class='fa-solid fa-user-slash text-sm mr-1'></i>
-                                            <span>Desativar</span>
-                                        </button>
-                                        <?php else: ?>
-                                        <button class="action-btn p-2.5 rounded-xl border-2 border-green-200 hover:bg-green-500 hover:text-white hover:border-green-500 text-green-500 transition-all duration-300 transform hover:scale-110 hover:shadow-lg" onclick="openActivateUser(<?= $dado['id']?>, '<?= htmlspecialchars($dado['nome_user'],ENT_QUOTES)?>','ercr')" title="Reativar usuário">
-                                            <i class='fa-solid fa-user-check text-sm mr-1'></i>
-                                            <span>Ativar</span>
-                                        </button>
-                                        <?php endif; ?>
-                                    </div>
-                                </div>
-                            </div>
-                        <?php } ?>
-                    </div>
-                </div>
-            </div>
         </main>
     </div>
 
@@ -1354,7 +1365,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </button>
             </div>
             <div class="p-6 sm:p-8">
-                <form id="userForm" action="" method="POST" enctype="multipart/form-data">
+                <form id="userForm" action="controllers/controller_users.php" method="POST">
                     <input type="hidden" id="inpUserId" name="user_id" value="">
                     <input type="hidden" id="inpAction" name="action" value="create">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1386,17 +1397,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </label>
                             <select id="inpEscola" name="escola" class="input-enhanced w-full px-4 py-4 rounded-xl transition-all text-base border-2 focus:border-primary focus:ring-4 focus:ring-primary/10" required>
                                 <option value="">Selecione uma escola (EP)</option>
-                                <option value="estgdm">EEEP Salaberga</option>
-                                <option value="epaf">EEEP Prof Alda Facanha</option>
-                                <option value="epmfm">EEEP Prof Marly Ferreira</option>
-                                <option value="epav">EEEP Prof Antonio Valmir</option>
-                                <option value="eedq">EEEP Eusébio Queiroz</option>
-                                <option value="ejin">EEEP José Ivanilton</option>
-                                <option value="epfads">EEEP Prof Fc Aristótles</option>
-                                <option value="emcvm">EEEP Maria Carmem</option>
-                                <option value="eglgfm">EEEP Gonzaga Mota</option>
-                                <option value="epldtv">EEEP Prof Luiza Teodoro</option>
-                                <option value="ercr">EEEP Raimundo Celio</option>
+                                <?php
+                                $dados = $select->select_escola();
+                                foreach ($dados as $dado) { ?>
+
+                                <option value="<?=$dado['escola_banco']?>"><?=$dado['nome_escola']?></option>
+                                <?php } ?>
                             </select>
                         </div>
                     </div>
@@ -1412,7 +1418,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </div>
     </div>
-    
+
     <!-- Modal de Reativação de Usuário -->
     <div id="modalActivateUser" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-2 sm:p-4 z-50">
         <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl transform transition-all duration-300 scale-95 opacity-0" id="modalActivateUserContent">
@@ -1478,17 +1484,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
     <script>
-        const usuarios = [
-            {
-                id: 1,
-                nome: 'João Silva',
-                email: 'joao.silva@example.com',
-                cpf: '123.456.789-00',
-                id_escola: '1',
-                nome_escola: 'Escola Municipal Exemplo',
-                foto_perfil: ''
-            }
-        ];
+        const usuarios = [{
+            id: 1,
+            nome: 'João Silva',
+            email: 'joao.silva@example.com',
+            cpf: '123.456.789-00',
+            id_escola: '1',
+            nome_escola: 'Escola Municipal Exemplo',
+            foto_perfil: ''
+        }];
 
         function openUserForm() {
             document.getElementById('modalTitle').textContent = 'Cadastrar Admin';
@@ -1518,14 +1522,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             document.getElementById('deactivateEscola').value = escolaKey || '';
             openModal('modalDeactivateUser');
         }
-        
+
         function openActivateUser(userId, userName, escolaKey) {
             document.getElementById('activateUserName').textContent = userName;
             document.getElementById('activateUserId').value = userId;
             document.getElementById('activateEscola').value = escolaKey || '';
             openModal('modalActivateUser');
         }
-        
+
         // Função de compatibilidade para manter os botões existentes funcionando
         function openDeleteUser(userId, userName, escolaKey) {
             // Redireciona para a nova função de desativação
@@ -1647,7 +1651,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 cpfInput.addEventListener('input', function() {
                     aplicarMascaraCPF(this);
                 });
-                
+
                 cpfInput.addEventListener('keypress', function(e) {
                     if (removerMascaraCPF(this.value).length >= 11 && e.key !== 'Backspace' && e.key !== 'Delete') {
                         e.preventDefault();
@@ -1668,12 +1672,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Form submissions
             document.getElementById('userForm').addEventListener('submit', function(e) {
                 e.preventDefault();
-                
+
                 if (!this.inpNome.value.trim() || !this.inpEmail.value.trim() || !this.inpCpf.value.trim() || !this.inpEscola.value) {
                     showNotification('Preencha todos os campos obrigatórios.', 'error');
                     return;
                 }
-                
+
                 const cpf = this.inpCpf.value;
                 if (cpf.length !== 14 || !/^\d{3}\.\d{3}\.\d{3}-\d{2}$/.test(cpf)) {
                     showNotification('CPF deve estar no formato 000.000.000-00.', 'error');
