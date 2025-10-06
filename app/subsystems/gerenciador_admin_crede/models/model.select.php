@@ -162,7 +162,32 @@ class select extends connect
             throw new InvalidArgumentException('Escola inválida');
         }
         [$pdo, $table] = $map[$epKey];
-        $stmt = $pdo->prepare("DELETE FROM $table WHERE id = :id");
+        // Em vez de excluir, apenas desativa o usuário (status = 0)
+        $stmt = $pdo->prepare("UPDATE $table SET status = 0 WHERE id = :id");
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        return $stmt->execute();
+    }
+    
+    // Função para reativar um usuário
+    public function activate_user(string $epKey, int $id): bool {
+        $map = [
+            'estgdm' => [$this->connect_estgdm, $this->table1],
+            'epaf'   => [$this->connect_epaf, $this->table2],
+            'epmfm'  => [$this->connect_epmfm, $this->table3],
+            'epav'   => [$this->connect_epav, $this->table4],
+            'eedq'   => [$this->connect_eedq, $this->table5],
+            'ejin'   => [$this->connect_ejin, $this->table6],
+            'epfads' => [$this->connect_epfads, $this->table7],
+            'emcvm'  => [$this->connect_emcvm, $this->table8],
+            'eglgfm' => [$this->connect_eglgfm, $this->table9],
+            'epldtv' => [$this->connect_epldtv, $this->table10],
+            'ercr'   => [$this->connect_ercr, $this->table11],
+        ];
+        if (!isset($map[$epKey])) {
+            throw new InvalidArgumentException('Escola inválida');
+        }
+        [$pdo, $table] = $map[$epKey];
+        $stmt = $pdo->prepare("UPDATE $table SET status = 1 WHERE id = :id");
         $stmt->bindValue(':id', $id, PDO::PARAM_INT);
         return $stmt->execute();
     }
