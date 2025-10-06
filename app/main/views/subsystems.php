@@ -1082,7 +1082,7 @@ $session->tempo_session();
                         <div class="card-icon">
                             <img src="https://i.postimg.cc/ZqY5Z9TG/useradm.png" alt="Ícone Gerenciador Admin CREDE" class="w-24 h-24 object-contain">
                         </div>
-                        <h3 class="card-title">Gerenciador Admin CREDE</h3>
+                        <h3 class="card-title">Gerenciador Admin crede</h3>
                         <p class="card-description">Administração central do sistema CREDE</p>
                         <span class="card-badge">Acessar Sistema</span>
                     </div>

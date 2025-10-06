@@ -456,7 +456,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div class="w-6 h-6 rounded-lg bg-white/20 flex items-center justify-center">
                             <i class="fa-solid fa-user-plus text-white text-sm"></i>
                         </div>
-                        <span class="text-sm sm:text-base">Cadastrar Usuário</span>
+                        <span class="text-sm sm:text-base">Cadastrar Admin</span>
                     </button>
                 </div>
 
@@ -1345,8 +1345,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <i class="fa-solid fa-user text-xl"></i>
                     </div>
                     <div>
-                        <h3 id="modalTitle" class="text-xl sm:text-2xl font-bold text-dark font-heading">Cadastrar Usuário</h3>
-                        <p class="text-gray-600 text-sm">Preencha as informações do usuário</p>
+                        <h3 id="modalTitle" class="text-xl sm:text-2xl font-bold text-dark font-heading">Cadastrar Admin</h3>
+                        <p class="text-gray-600 text-sm">Preencha as informações do administrador</p>
                     </div>
                 </div>
                 <button class="absolute top-6 right-6 p-2 rounded-xl hover:bg-gray-100 transition-all group" onclick="closeModal('modalUser')">
@@ -1491,7 +1491,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ];
 
         function openUserForm() {
-            document.getElementById('modalTitle').textContent = 'Cadastrar Usuário';
+            document.getElementById('modalTitle').textContent = 'Cadastrar Admin';
             document.getElementById('inpUserId').value = '';
             document.getElementById('inpNome').value = '';
             document.getElementById('inpEmail').value = '';
@@ -1502,7 +1502,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         function openEditUser(userId, escolaKey, nome, email, cpf) {
-            document.getElementById('modalTitle').textContent = 'Editar Usuário';
+            document.getElementById('modalTitle').textContent = 'Editar Admin';
             document.getElementById('inpUserId').value = userId || '';
             document.getElementById('inpNome').value = nome || '';
             document.getElementById('inpEmail').value = email || '';
