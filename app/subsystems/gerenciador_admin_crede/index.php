@@ -12,10 +12,10 @@ $select = new select();
 // Handle CRUD
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = isset($_POST['action']) ? $_POST['action'] : 'create';
-    $nome = trim($_POST['nome']);
-    $email = trim($_POST['email']);
+    $nome = isset($_POST['nome']) ? trim($_POST['nome']) : '';
+    $email = isset($_POST['email']) ? trim($_POST['email']) : '';
     // Formatar CPF com máscara (000.000.000-00)
-    $cpf_sem_mascara = preg_replace('/\D/', '', $_POST['cpf']);
+    $cpf_sem_mascara = isset($_POST['cpf']) ? preg_replace('/\D/', '', $_POST['cpf']) : '';
     $cpf = '';
     if (strlen($cpf_sem_mascara) === 11) {
         $cpf = substr($cpf_sem_mascara, 0, 3) . '.' . 
@@ -23,23 +23,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                substr($cpf_sem_mascara, 6, 3) . '-' . 
                substr($cpf_sem_mascara, 9, 2);
     } else {
-        $cpf = $_POST['cpf']; // Mantém o valor original se já estiver formatado
+        $cpf = isset($_POST['cpf']) ? $_POST['cpf'] : ''; // Mantém o valor original se já estiver formatado
     }
-    $escola = $_POST['escola'];
+    $escola = isset($_POST['escola']) ? $_POST['escola'] : '';
     $id = isset($_POST['user_id']) ? (int)$_POST['user_id'] : 0;
-    if ($nome !== '' && filter_var($email, FILTER_VALIDATE_EMAIL) && $escola !== '') {
-        try {
-            if ($action === 'update' && $id > 0) {
-                $select->update_user($escola, $id, $nome, $email, $cpf);
-            } else if ($action === 'delete' && $id > 0) {
-                $select->delete_user($escola, $id);
-            } else {
-                $select->insert_user($escola, $nome, $email, $cpf);
-            }
-            // Redirecionar para a mesma página com um parâmetro para evitar reenvio do formulário
+    
+    try {
+        if ($action === 'update' && $id > 0 && $nome !== '' && filter_var($email, FILTER_VALIDATE_EMAIL) && $escola !== '') {
+            $select->update_user($escola, $id, $nome, $email, $cpf);
             header("Location: " . $_SERVER['PHP_SELF'] . "?success=true");
             exit();
-        } catch (Throwable $e) {}
+        } else if ($action === 'delete' && $id > 0 && $escola !== '') {
+            $select->delete_user($escola, $id);
+            header("Location: " . $_SERVER['PHP_SELF'] . "?success=true");
+            exit();
+        } else if ($action === 'create' && $nome !== '' && filter_var($email, FILTER_VALIDATE_EMAIL) && $escola !== '') {
+            $select->insert_user($escola, $nome, $email, $cpf);
+            header("Location: " . $_SERVER['PHP_SELF'] . "?success=true");
+            exit();
+        } else if ($action === 'activate' && $id > 0 && $escola !== '') {
+            // Ativar usuário (status = 1)
+            $select->activate_user($escola, $id);
+            header("Location: " . $_SERVER['PHP_SELF'] . "?success=true");
+            exit();
+        } else if ($action === 'deactivate' && $id > 0 && $escola !== '') {
+            // Desativar usuário (status = 0)
+            $select->deactivate_user($escola, $id);
+            header("Location: " . $_SERVER['PHP_SELF'] . "?success=true");
+            exit();
+        }
+    } catch (Throwable $e) {
+        // Log do erro
+        error_log("Erro ao processar ação: " . $e->getMessage());
     }
 }
 ?>
@@ -1342,7 +1357,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </button>
             </div>
             <div class="p-6 sm:p-8">
-                <form id="userForm" action="" method="POST" enctype="multipart/form-data">
+                <form id="userForm" action="<?= $_SERVER['PHP_SELF'] ?>" method="POST" enctype="multipart/form-data">
                     <input type="hidden" id="inpUserId" name="user_id" value="">
                     <input type="hidden" id="inpAction" name="action" value="create">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1497,6 +1512,17 @@ function openEditUser(userId, escolaKey, nome, email, cpf) {
     document.getElementById('inpCpf').value = cpf || '';
     document.getElementById('inpEscola').value = escolaKey || '';
     document.getElementById('inpAction').value = 'update';
+    
+    // Verificar se o formulário está sendo configurado corretamente
+    console.log("Editar usuário:", {
+        userId: userId,
+        escolaKey: escolaKey,
+        nome: nome,
+        email: email,
+        cpf: cpf,
+        action: 'update'
+    });
+    
     openModal('modalUser');
 }
 
