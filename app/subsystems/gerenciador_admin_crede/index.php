@@ -1478,256 +1478,253 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
     <script>
-        const usuarios = [
-            {
-                id: 1,
-                nome: 'João Silva',
-                email: 'joao.silva@example.com',
-                cpf: '123.456.789-00',
-                id_escola: '1',
-                nome_escola: 'Escola Municipal Exemplo',
-                foto_perfil: ''
+      const usuarios = [
+    {
+        id: 1,
+        nome: 'João Silva',
+        email: 'joao.silva@example.com',
+        cpf: '123.456.789-00',
+        id_escola: '1',
+        nome_escola: 'Escola Municipal Exemplo',
+        foto_perfil: ''
+    }
+];
+
+function openUserForm() {
+    document.getElementById('modalTitle').textContent = 'Cadastrar Admin';
+    document.getElementById('inpUserId').value = '';
+    document.getElementById('inpNome').value = '';
+    document.getElementById('inpEmail').value = '';
+    document.getElementById('inpCpf').value = '';
+    document.getElementById('inpEscola').value = '';
+    document.getElementById('inpAction').value = 'create';
+    openModal('modalUser');
+}
+
+function openEditUser(userId, escolaKey, nome, email, cpf) {
+    document.getElementById('modalTitle').textContent = 'Editar Admin';
+    document.getElementById('inpUserId').value = userId || '';
+    document.getElementById('inpNome').value = nome || '';
+    document.getElementById('inpEmail').value = email || '';
+    document.getElementById('inpCpf').value = cpf || '';
+    document.getElementById('inpEscola').value = escolaKey || '';
+    document.getElementById('inpAction').value = 'update';
+    openModal('modalUser');
+}
+
+function openDeactivateUser(userId, userName, escolaKey) {
+    document.getElementById('deactivateUserName').textContent = userName;
+    document.getElementById('deactivateUserId').value = userId;
+    document.getElementById('deactivateEscola').value = escolaKey || '';
+    openModal('modalDeactivateUser');
+}
+
+function openActivateUser(userId, userName, escolaKey) {
+    document.getElementById('activateUserName').textContent = userName;
+    document.getElementById('activateUserId').value = userId;
+    document.getElementById('activateEscola').value = escolaKey || '';
+    openModal('modalActivateUser');
+}
+
+function openDeleteUser(userId, userName, escolaKey) {
+    openDeactivateUser(userId, userName, escolaKey);
+}
+
+function openModal(modalId) {
+    const modal = document.getElementById(modalId);
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+
+    setTimeout(() => {
+        const content = modal.querySelector('[id$="Content"]');
+        if (content) {
+            content.style.transform = 'scale(1)';
+            content.style.opacity = '1';
+        }
+    }, 10);
+}
+
+function closeModal(modalId) {
+    const modal = document.getElementById(modalId);
+    const content = modal.querySelector('[id$="Content"]');
+
+    if (content) {
+        content.style.transform = 'scale(0.95)';
+        content.style.opacity = '0';
+    }
+
+    setTimeout(() => {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }, 300);
+}
+
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `fixed top-4 right-4 z-50 p-4 rounded-xl shadow-lg transform transition-all duration-300 translate-x-full ${
+        type === 'success' ? 'bg-green-500 text-white' : 
+        type === 'error' ? 'bg-red-500 text-white' : 
+        'bg-blue-500 text-white'
+    }`;
+    notification.innerHTML = `
+        <div class="flex items-center gap-3">
+            <i class="fa-solid ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i>
+            <span class="font-medium">${message}</span>
+        </div>
+    `;
+
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+        notification.style.transform = 'translateX(0)';
+    }, 10);
+
+    setTimeout(() => {
+        notification.style.transform = 'translateX(100%)';
+        setTimeout(() => {
+            document.body.removeChild(notification);
+        }, 300);
+    }, 3000);
+}
+
+function applyFilters() {
+    const q = document.getElementById('tableSearch').value.toLowerCase().trim();
+    const cards = document.querySelectorAll('.user-card');
+    let count = 0;
+
+    cards.forEach(card => {
+        const nome = card.dataset.nome || '';
+        const email = card.dataset.email || '';
+        const escola = card.dataset.escola || '';
+
+        if (q === '') {
+            card.style.display = '';
+            count++;
+        } else {
+            const matchesQuery = (nome.includes(q) || email.includes(q) || escola.includes(q));
+            card.style.display = matchesQuery ? '' : 'none';
+            if (matchesQuery) count++;
+        }
+    });
+
+    document.getElementById('resultCount').textContent = `${count} resultado${count !== 1 ? 's' : ''}`;
+}
+
+function aplicarMascaraCPF(input) {
+    let value = input.value.replace(/\D/g, '');
+    if (value.length > 11) value = value.slice(0, 11);
+    if (value.length > 0) {
+        value = value.replace(/(\d{3})(\d)/, '$1.$2');
+        value = value.replace(/(\d{3})(\d)/, '$1.$2');
+        value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+    }
+    input.value = value;
+}
+
+function removerMascaraCPF(cpf) {
+    return cpf.replace(/\D/g, '');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const cards = document.querySelectorAll('.user-card');
+    document.getElementById('resultCount').textContent = `${cards.length} resultado${cards.length !== 1 ? 's' : ''}`;
+
+    const searchInput = document.getElementById('tableSearch');
+    if (searchInput) {
+        searchInput.addEventListener('input', applyFilters);
+    }
+
+    const cpfInput = document.getElementById('inpCpf');
+    if (cpfInput) {
+        cpfInput.addEventListener('input', function() {
+            aplicarMascaraCPF(this);
+            const cpfLimpo = removerMascaraCPF(this.value);
+            if (cpfLimpo.length === 11 && /^\d{11}$/.test(cpfLimpo)) {
+                this.classList.remove('input-error');
+            } else {
+                this.classList.add('input-error');
             }
-        ];
-
-        function openUserForm() {
-            document.getElementById('modalTitle').textContent = 'Cadastrar Admin';
-            document.getElementById('inpUserId').value = '';
-            document.getElementById('inpNome').value = '';
-            document.getElementById('inpEmail').value = '';
-            document.getElementById('inpCpf').value = '';
-            document.getElementById('inpEscola').value = '';
-            document.getElementById('inpAction').value = 'create';
-            openModal('modalUser');
-        }
-
-        function openEditUser(userId, escolaKey, nome, email, cpf) {
-            document.getElementById('modalTitle').textContent = 'Editar Admin';
-            document.getElementById('inpUserId').value = userId || '';
-            document.getElementById('inpNome').value = nome || '';
-            document.getElementById('inpEmail').value = email || '';
-            document.getElementById('inpCpf').value = cpf || '';
-            document.getElementById('inpEscola').value = escolaKey || '';
-            document.getElementById('inpAction').value = 'update';
-            openModal('modalUser');
-        }
-
-        function openDeactivateUser(userId, userName, escolaKey) {
-            document.getElementById('deactivateUserName').textContent = userName;
-            document.getElementById('deactivateUserId').value = userId;
-            document.getElementById('deactivateEscola').value = escolaKey || '';
-            openModal('modalDeactivateUser');
-        }
-        
-        function openActivateUser(userId, userName, escolaKey) {
-            document.getElementById('activateUserName').textContent = userName;
-            document.getElementById('activateUserId').value = userId;
-            document.getElementById('activateEscola').value = escolaKey || '';
-            openModal('modalActivateUser');
-        }
-        
-        // Função de compatibilidade para manter os botões existentes funcionando
-        function openDeleteUser(userId, userName, escolaKey) {
-            // Redireciona para a nova função de desativação
-            openDeactivateUser(userId, userName, escolaKey);
-        }
-
-        function openModal(modalId) {
-            const modal = document.getElementById(modalId);
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-
-            setTimeout(() => {
-                const content = modal.querySelector('[id$="Content"]');
-                if (content) {
-                    content.style.transform = 'scale(1)';
-                    content.style.opacity = '1';
-                }
-            }, 10);
-        }
-
-        function closeModal(modalId) {
-            const modal = document.getElementById(modalId);
-            const content = modal.querySelector('[id$="Content"]');
-
-            if (content) {
-                content.style.transform = 'scale(0.95)';
-                content.style.opacity = '0';
-            }
-
-            setTimeout(() => {
-                modal.classList.add('hidden');
-                modal.classList.remove('flex');
-            }, 300);
-        }
-
-        function showNotification(message, type = 'info') {
-            const notification = document.createElement('div');
-            notification.className = `fixed top-4 right-4 z-50 p-4 rounded-xl shadow-lg transform transition-all duration-300 translate-x-full ${
-                type === 'success' ? 'bg-green-500 text-white' : 
-                type === 'error' ? 'bg-red-500 text-white' : 
-                'bg-blue-500 text-white'
-            }`;
-            notification.innerHTML = `
-                <div class="flex items-center gap-3">
-                    <i class="fa-solid ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i>
-                    <span class="font-medium">${message}</span>
-                </div>
-            `;
-
-            document.body.appendChild(notification);
-
-            setTimeout(() => {
-                notification.style.transform = 'translateX(0)';
-            }, 10);
-
-            setTimeout(() => {
-                notification.style.transform = 'translateX(100%)';
-                setTimeout(() => {
-                    document.body.removeChild(notification);
-                }, 300);
-            }, 3000);
-        }
-
-        function applyFilters() {
-            const q = document.getElementById('tableSearch').value.toLowerCase().trim();
-            const cards = document.querySelectorAll('.user-card');
-            let count = 0;
-
-            cards.forEach(card => {
-                const nome = card.dataset.nome || '';
-                const email = card.dataset.email || '';
-                const escola = card.dataset.escola || '';
-
-                if (q === '') {
-                    card.style.display = '';
-                    count++;
-                } else {
-                    const matchesQuery = (nome.includes(q) || email.includes(q) || escola.includes(q));
-                    card.style.display = matchesQuery ? '' : 'none';
-                    if (matchesQuery) count++;
-                }
-            });
-
-            document.getElementById('resultCount').textContent = `${count} resultado${count !== 1 ? 's' : ''}`;
-        }
-
-        // Função para aplicar máscara de CPF
-        function aplicarMascaraCPF(input) {
-            let value = input.value.replace(/\D/g, '');
-            if (value.length > 11) value = value.slice(0, 11);
-            if (value.length > 0) {
-                value = value.replace(/(\d{3})(\d)/, '$1.$2');
-                value = value.replace(/(\d{3})(\d)/, '$1.$2');
-                value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
-            }
-            input.value = value;
-        }
-
-        // Função para remover máscara do CPF (apenas números)
-        function removerMascaraCPF(cpf) {
-            return cpf.replace(/\D/g, '');
-        }
-
-        // Event listeners
-        document.addEventListener('DOMContentLoaded', function() {
-            // Inicializar contagem de resultados
-            const cards = document.querySelectorAll('.user-card');
-            document.getElementById('resultCount').textContent = `${cards.length} resultado${cards.length !== 1 ? 's' : ''}`;
-
-            // Adicionar listener para o campo de busca
-            const searchInput = document.getElementById('tableSearch');
-            if (searchInput) {
-                searchInput.addEventListener('input', applyFilters);
-            }
-
-            // Aplicar máscara de CPF
-            const cpfInput = document.getElementById('inpCpf');
-            if (cpfInput) {
-                cpfInput.addEventListener('input', function() {
-                    aplicarMascaraCPF(this);
-                });
-                
-                cpfInput.addEventListener('keypress', function(e) {
-                    if (removerMascaraCPF(this.value).length >= 11 && e.key !== 'Backspace' && e.key !== 'Delete') {
-                        e.preventDefault();
-                    }
-                });
-
-                cpfInput.addEventListener('focus', function() {
-                    aplicarMascaraCPF(this);
-                });
-
-                cpfInput.addEventListener('blur', function() {
-                    if (this.value) {
-                        aplicarMascaraCPF(this);
-                    }
-                });
-            }
-
-            // Form submissions
-            document.getElementById('userForm').addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                if (!this.inpNome.value.trim() || !this.inpEmail.value.trim() || !this.inpCpf.value.trim() || !this.inpEscola.value) {
-                    showNotification('Preencha todos os campos obrigatórios.', 'error');
-                    return;
-                }
-                
-                const cpf = this.inpCpf.value;
-                if (cpf.length !== 14 || !/^\d{3}\.\d{3}\.\d{3}-\d{2}$/.test(cpf)) {
-                    showNotification('CPF deve estar no formato 000.000.000-00.', 'error');
-                    return;
-                }
-
-                // Submit via POST (server handles insert)
-                this.submit();
-            });
-
-            document.documentElement.style.scrollBehavior = 'smooth';
-
-            // IntersectionObserver para animações suaves
-            const observerOptions = {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
-            };
-
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('animate-fade-in');
-                        entry.target.style.opacity = '1';
-                        entry.target.style.transform = 'translateY(0)';
-                        observer.unobserve(entry.target); // Parar de observar após a animação
-                    }
-                });
-            }, observerOptions);
-
-            document.querySelectorAll('.card-enhanced').forEach(el => {
-                observer.observe(el);
-            });
-
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape') {
-                    const openModals = document.querySelectorAll('[id^="modal"]:not(.hidden)');
-                    openModals.forEach(modal => {
-                        if (!modal.classList.contains('hidden')) {
-                            closeModal(modal.id);
-                        }
-                    });
-                }
-            });
-
-            document.querySelectorAll('.table-row').forEach(row => {
-                row.addEventListener('mouseenter', function() {
-                    this.style.transform = 'translateY(-1px)';
-                });
-
-                row.addEventListener('mouseleave', function() {
-                    this.style.transform = 'translateY(0)';
-                });
-            });
         });
+
+        cpfInput.addEventListener('keypress', function(e) {
+            if (removerMascaraCPF(this.value).length >= 11 && e.key !== 'Backspace' && e.key !== 'Delete') {
+                e.preventDefault();
+            }
+        });
+
+        cpfInput.addEventListener('focus', function() {
+            aplicarMascaraCPF(this);
+        });
+
+        cpfInput.addEventListener('blur', function() {
+            if (this.value) {
+                aplicarMascaraCPF(this);
+            }
+        });
+    }
+
+    document.getElementById('userForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        if (!this.inpNome.value.trim() || !this.inpEmail.value.trim() || !this.inpCpf.value.trim() || !this.inpEscola.value) {
+            showNotification('Preencha todos os campos obrigatórios.', 'error');
+            return;
+        }
+        
+        const cpf = this.inpCpf.value;
+        const cpfLimpo = removerMascaraCPF(cpf);
+        if (cpfLimpo.length !== 11 || !/^\d{11}$/.test(cpfLimpo)) {
+            showNotification('CPF deve conter exatamente 11 dígitos numéricos.', 'error');
+            return;
+        }
+
+        this.inpCpf.value = cpfLimpo;
+        this.submit();
+    });
+
+    document.documentElement.style.scrollBehavior = 'smooth';
+
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate-fade-in');
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.card-enhanced').forEach(el => {
+        observer.observe(el);
+    });
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            const openModals = document.querySelectorAll('[id^="modal"]:not(.hidden)');
+            openModals.forEach(modal => {
+                if (!modal.classList.contains('hidden')) {
+                    closeModal(modal.id);
+                }
+            });
+        }
+    });
+
+    document.querySelectorAll('.table-row').forEach(row => {
+        row.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-1px)';
+        });
+
+        row.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+        });
+    });
+});
     </script>
 </body>
 
