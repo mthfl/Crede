@@ -12,46 +12,34 @@ $select = new select();
 // Handle CRUD
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = isset($_POST['action']) ? $_POST['action'] : 'create';
-    
-    // Para ações de desativação/reativação, precisamos apenas do ID e escola
-    if ($action === 'deactivate' && isset($_POST['user_id']) && isset($_POST['escola'])) {
-        $id = (int)$_POST['user_id'];
-        $escola = $_POST['escola'];
-        if ($id > 0 && $escola !== '') {
-            try {
-                $select->delete_user($escola, $id); // Agora esta função desativa em vez de excluir
-                echo "<script>window.addEventListener('DOMContentLoaded',()=>{document.getElementById('modalDeactivateUser')&&closeModal('modalDeactivateUser');});</script>";
-            } catch (Throwable $e) {}
-        }
-    } 
-    // Para ação de reativação
-    else if ($action === 'activate' && isset($_POST['user_id']) && isset($_POST['escola'])) {
-        $id = (int)$_POST['user_id'];
-        $escola = $_POST['escola'];
-        if ($id > 0 && $escola !== '') {
-            try {
-                $select->activate_user($escola, $id);
-                echo "<script>window.addEventListener('DOMContentLoaded',()=>{document.getElementById('modalActivateUser')&&closeModal('modalActivateUser');});</script>";
-            } catch (Throwable $e) {}
-        }
+    $nome = trim($_POST['nome']);
+    $email = trim($_POST['email']);
+    // Formatar CPF com máscara (000.000.000-00)
+    $cpf_sem_mascara = preg_replace('/\D/', '', $_POST['cpf']);
+    $cpf = '';
+    if (strlen($cpf_sem_mascara) === 11) {
+        $cpf = substr($cpf_sem_mascara, 0, 3) . '.' . 
+               substr($cpf_sem_mascara, 3, 3) . '.' . 
+               substr($cpf_sem_mascara, 6, 3) . '-' . 
+               substr($cpf_sem_mascara, 9, 2);
+    } else {
+        $cpf = $_POST['cpf']; // Mantém o valor original se já estiver formatado
     }
-    // Para outras ações que precisam de todos os campos
-    else {
-        $nome = trim($_POST['nome']);
-        $email = trim($_POST['email']);
-        $cpf = preg_replace('/\D/', '', $_POST['cpf']);
-        $escola = $_POST['escola'];
-        $id = isset($_POST['user_id']) ? (int)$_POST['user_id'] : 0;
-        if ($nome !== '' && filter_var($email, FILTER_VALIDATE_EMAIL) && strlen($cpf) === 11 && $escola !== '') {
-            try {
-                if ($action === 'update' && $id > 0) {
-                    $select->update_user($escola, $id, $nome, $email, $cpf);
-                } else {
-                    $select->insert_user($escola, $nome, $email, $cpf);
-                }
-                echo "<script>window.addEventListener('DOMContentLoaded',()=>{document.getElementById('modalUser')&&closeModal('modalUser');});</script>";
-            } catch (Throwable $e) {}
-        }
+    $escola = $_POST['escola'];
+    $id = isset($_POST['user_id']) ? (int)$_POST['user_id'] : 0;
+    if ($nome !== '' && filter_var($email, FILTER_VALIDATE_EMAIL) && $escola !== '') {
+        try {
+            if ($action === 'update' && $id > 0) {
+                $select->update_user($escola, $id, $nome, $email, $cpf);
+            } else if ($action === 'delete' && $id > 0) {
+                $select->delete_user($escola, $id);
+            } else {
+                $select->insert_user($escola, $nome, $email, $cpf);
+            }
+            // Redirecionar para a mesma página com um parâmetro para evitar reenvio do formulário
+            header("Location: " . $_SERVER['PHP_SELF'] . "?success=true");
+            exit();
+        } catch (Throwable $e) {}
     }
 }
 ?>
