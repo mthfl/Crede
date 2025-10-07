@@ -41,7 +41,7 @@ if (
     }
 } else 
 
-//editar curso
+//editar usuairo
 if (
     isset($_POST["id_usuario"]) && !empty($_POST["id_usuario"]) &&
     isset($_POST["nome"]) && !empty($_POST["nome"]) &&

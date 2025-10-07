@@ -385,7 +385,7 @@ if (
             header('Location: ../views/cadastro.php?falha');
             exit();
     }
-} else if (isset($_POST['id_candidato']) && !empty($_POST['id_candidato']) && !isset($_POST['form']) && !isset($_POST['acao'])) {
+} else if (isset($_POST['id_candidato']) && !empty($_POST['id_candidato']) && isset($_POST['acao']) && $_POST['acao'] == 'delete') {
     $escola = $_SESSION['escola'];
     $admin_model = new admin($escola);
 

@@ -12,6 +12,48 @@ class admin extends cadastrador
         $this->table_user2 = $table["crede_users"][2];
     }
 
+    public function cadastrar_quantidade_vaga($quantidade)
+    {
+        try {
+            $stmt_check = $this->connect->query("SELECT * FROM $this->table2 WHERE quantidade_alunos == null");
+            if ($stmt_check->rowCount() == 0) {
+                return 3;
+            }
+
+            $stmt_cadastro = $this->connect->prepare("UPDATE $this->table2 SET quantidade_alunos = :quantidade");
+            $stmt_check->bindValue(':quantidade', $quantidade);
+            if(!$stmt_check->execute()){
+                return 2;
+            }
+            return 1;
+            
+        } catch (Exception $e) {
+
+            error_log("Erro no login: " . $e->getMessage());
+            return 0;
+        }
+    }
+    public function editar_candidato_quantidade_vaga($quantidade)
+    {
+        try {
+            $stmt_check = $this->connect->query("SELECT * FROM $this->table2 WHERE quantidade_alunos == null");
+            if ($stmt_check->rowCount() == 0) {
+                return 3;
+            }
+
+            $stmt_cadastro = $this->connect->prepare("UPDATE $this->table2 SET quantidade_alunos = :quantidade");
+            $stmt_check->bindValue(':quantidade', $quantidade);
+            if(!$stmt_check->execute()){
+                return 2;
+            }
+            return 1;
+            
+        } catch (Exception $e) {
+
+            error_log("Erro no login: " . $e->getMessage());
+            return 0;
+        }
+    }
     public function verificar_senha($email, $senha, $id_curso = null)
     {
         try {
@@ -58,7 +100,7 @@ class admin extends cadastrador
 
             if ($stmt_check->rowCount() == 0) {
 
-                $stmt_check = $this->connect->prepare("INSERT INTO $this->table2 VALUES (NULL, :curso, :cor)");
+                $stmt_check = $this->connect->prepare("INSERT INTO $this->table2 VALUES (NULL, :curso, :cor, NULL)");
                 $stmt_check->bindValue(":curso", $curso);
                 $stmt_check->bindValue(":cor", $cor);
 
@@ -207,7 +249,7 @@ class admin extends cadastrador
                 $stmt_usuario->bindValue(":cpf", $cpf);
                 $stmt_usuario->bindValue(":tipo", $tipo_usuario);
                 $stmt_usuario->bindValue(":perfil", $perfil);
-                if ($stmt_usuario->execute())  {
+                if ($stmt_usuario->execute()) {
 
                     return 1;
                 } else {
@@ -237,7 +279,7 @@ class admin extends cadastrador
                 $stmt_usuario->bindValue(":email", $email);
                 $stmt_usuario->bindValue(":cpf", $cpf);
                 $stmt_usuario->bindValue(":tipo", $tipo_usuario);
-                $stmt_usuario->bindValue(":perfil", $perfil);   
+                $stmt_usuario->bindValue(":perfil", $perfil);
                 if ($stmt_usuario->execute()) {
 
                     return 1;
@@ -350,6 +392,9 @@ class admin extends cadastrador
 
         if ($stmt_check->rowCount() == 1) {
 
+            $stmt_delete = $this->connect->prepare("DELETE FROM $this->table14 WHERE id_candidato = :id_candidato");
+            $stmt_delete->bindValue(":id_candidato", $id_candidato);
+            $stmt_delete->execute();
             $stmt_delete = $this->connect->prepare("DELETE FROM $this->table4 WHERE id_candidato = :id_candidato");
             $stmt_delete->bindValue(":id_candidato", $id_candidato);
             $stmt_delete->execute();
@@ -788,7 +833,6 @@ class admin extends cadastrador
         } catch (PDOException $e) {
             return 0;
         }
- 
     }
     public function requisicao_alteracao_pendente(int $id_requisicao): int
     {
@@ -886,7 +930,7 @@ class admin extends cadastrador
             $stmt = $this->connect->prepare("UPDATE $this->table5 SET id_perfil = NULL WHERE id_perfil = :id");
             $stmt->bindValue(":id", $id_perfil);
             $stmt->execute();
-            
+
             $stmt = $this->connect->prepare("DELETE FROM $this->table15 WHERE id = :id");
             $stmt->bindValue(":id", $id_perfil);
             if ($stmt->execute()) {
