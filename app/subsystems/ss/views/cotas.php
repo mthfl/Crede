@@ -1027,44 +1027,45 @@ $select = new select($escola);
         }
         
         function openReviewModal() {
-            try {
-                // Validar o formulário antes de prosseguir
-                const numAlunos = document.getElementById('inpBairroNome');
-                if (!numAlunos || !numAlunos.value.trim()) {
-                    alert('Informe o número de alunos por turma.');
-                    return;
+            // Validar o formulário antes de prosseguir
+            const numAlunos = document.getElementById('inpBairroNome');
+            if (!numAlunos || !numAlunos.value.trim()) {
+                alert('Informe o número de alunos por turma.');
+                return;
+            }
+            
+            // Verificar se pelo menos um bairro foi adicionado
+            const bairrosInputs = document.querySelectorAll('input[name="bairros[]"]');
+            let bairrosValidos = false;
+            
+            for (let input of bairrosInputs) {
+                if (input.value.trim()) {
+                    bairrosValidos = true;
+                    break;
                 }
-                
-                // Verificar se pelo menos um bairro foi adicionado
-                const bairrosInputs = document.querySelectorAll('input[name="bairros[]"]');
-                let bairrosValidos = false;
-                
-                for (let input of bairrosInputs) {
-                    if (input.value.trim()) {
-                        bairrosValidos = true;
-                        break;
-                    }
+            }
+            
+            if (!bairrosValidos) {
+                alert('Informe pelo menos um bairro para a cota.');
+                return;
+            }
+            
+            // Armazenar os valores que precisamos antes de fechar o modal
+            const alunosPorTurma = numAlunos.value;
+            const bairrosArray = [];
+            
+            bairrosInputs.forEach(input => {
+                if (input.value.trim()) {
+                    bairrosArray.push(input.value.trim());
                 }
-                
-                if (!bairrosValidos) {
-                    alert('Informe pelo menos um bairro para a cota.');
-                    return;
-                }
-                
-                // Armazenar os valores que precisamos antes de fechar o modal
-                const alunosPorTurma = numAlunos.value;
-                const bairrosArray = [];
-                
-                bairrosInputs.forEach(input => {
-                    if (input.value.trim()) {
-                        bairrosArray.push(input.value.trim());
-                    }
-                });
-                
-                // Fechar o modal atual
-                closeModal('modalBairro');
-                
-                // Abrir o modal de revisão manualmente
+            });
+            
+            // Fechar o modal atual
+            closeModal('modalBairro');
+            
+            // Abrir o modal de revisão após um pequeno delay
+            setTimeout(() => {
+                // Abrir o modal de revisão
                 const modalReview = document.getElementById('modalReview');
                 if (!modalReview) {
                     console.error("Modal de revisão não encontrado!");
@@ -1074,47 +1075,38 @@ $select = new select($escola);
                 modalReview.classList.remove('hidden');
                 modalReview.classList.add('flex');
                 
-                // Aguardar um pouco para garantir que o modal esteja visível
                 setTimeout(() => {
-                    try {
-                        // Acessar o conteúdo do modal diretamente
-                        const content = modalReview.querySelector('#modalReviewContent');
-                        if (content) {
-                            content.style.transform = 'scale(1)';
-                            content.style.opacity = '1';
-                            
-                            // Preencher o número de alunos por turma
-                            const reviewAlunos = content.querySelector('#review-alunos');
-                            if (reviewAlunos) {
-                                reviewAlunos.textContent = alunosPorTurma;
-                            } else {
-                                console.error("Elemento review-alunos não encontrado dentro do modalReviewContent");
-                            }
-                            
-                            // Preencher a lista de bairros
-                            const bairrosList = content.querySelector('#review-bairros');
-                            if (bairrosList) {
-                                bairrosList.innerHTML = ''; // Limpar lista atual
-                                
-                                bairrosArray.forEach(bairro => {
-                                    const li = document.createElement('li');
-                                    li.textContent = bairro;
-                                    li.className = 'text-gray-800';
-                                    bairrosList.appendChild(li);
-                                });
-                            } else {
-                                console.error("Elemento review-bairros não encontrado dentro do modalReviewContent");
-                            }
-                        } else {
-                            console.error("Elemento modalReviewContent não encontrado dentro do modalReview");
-                        }
-                    } catch (innerError) {
-                        console.error("Erro ao manipular o modal de revisão:", innerError);
+                    const content = modalReview.querySelector('#modalReviewContent');
+                    if (content) {
+                        content.style.transform = 'scale(1)';
+                        content.style.opacity = '1';
                     }
-                }, 100);
-            } catch (error) {
-                console.error("Erro geral na função openReviewModal:", error);
-            }
+                    
+                    // Agora que o modal está aberto, podemos acessar seus elementos
+                    try {
+                        // Preencher o número de alunos por turma
+                        const reviewAlunos = document.getElementById('review-alunos');
+                        if (reviewAlunos) {
+                            reviewAlunos.textContent = alunosPorTurma;
+                        }
+                        
+                        // Preencher a lista de bairros
+                        const bairrosList = document.getElementById('review-bairros');
+                        if (bairrosList) {
+                            bairrosList.innerHTML = ''; // Limpar lista atual
+                            
+                            bairrosArray.forEach(bairro => {
+                                const li = document.createElement('li');
+                                li.textContent = bairro;
+                                li.className = 'text-gray-800';
+                                bairrosList.appendChild(li);
+                            });
+                        }
+                    } catch (error) {
+                        console.error("Erro ao preencher o modal de revisão:", error);
+                    }
+                }, 10);
+            }, 300);
         }
 
         // Submissão simples com validação mínima
