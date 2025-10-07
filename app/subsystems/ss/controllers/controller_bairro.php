@@ -85,6 +85,20 @@ else if (
             header('Location: ../views/cotas.php?falha');
             exit();
     }
+}
+if (
+    empty($_POST["id_bairro"]) &&
+    isset($_POST["nome"]) && !empty($_POST["nome"])
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    ) {
 } else {
     header('Location: ../index.php');
     exit();
