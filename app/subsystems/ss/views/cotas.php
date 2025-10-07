@@ -488,25 +488,110 @@ $select = new select($escola);
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                             </svg>
                         </div>
-                        <h3 class="text-2xl font-bold text-primary mb-2 font-display">Nenhum bairro cadastrado</h3>
-                        <p class="text-gray-600 mb-6">Crie o primeiro bairro para configurar cotas por bairro.</p>
+                        <h3 class="text-2xl font-bold text-primary mb-2 font-display">Nenhuma cota ativa</h3>
+                        <p class="text-gray-600 mb-6">Aqui você definirá a distribuição de vagas para cotista.</p>
                         <button onclick="openBairroModal()" class="inline-flex items-center bg-gradient-to-r from-primary to-dark text-white px-6 py-3 rounded-xl hover:from-dark hover:to-primary btn-animate font-semibold shadow-xl focus-ring">
                             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                             </svg>
-                            Criar bairro
+                            Criar cotas
                         </button>
                     </div>
                 <?php } else { ?>
                     <div class="flex items-center justify-between mb-6">
-                        <div class="text-lg font-semibold text-gray-800">Bairros cadastrados</div>
+                        <div class="text-lg font-semibold text-gray-800">Cotas</div>
                         <button onclick="openBairroModal()" class="inline-flex items-center bg-gradient-to-r from-primary to-dark text-white px-6 py-3 rounded-xl hover:from-dark hover:to-primary btn-animate font-semibold shadow-xl focus-ring">
                             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                             </svg>
-                            Adicionar bairro
+                            Criar cotas
                         </button>
                     </div>
+                    
+                    <div class="bg-white rounded-2xl shadow-xl p-6 mb-8">
+                        <div class="flex items-center mb-6">
+                            <div class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center mr-3">
+                                <span class="font-bold">1</span>
+                            </div>
+                            <h3 class="text-xl font-bold text-primary">Distribuição de Vagas</h3>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div class="bg-gray-50 p-5 rounded-xl border border-gray-200 shadow-sm">
+                                <h4 class="font-semibold text-gray-700 mb-3 flex items-center">
+                                    <svg class="w-5 h-5 mr-2 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                    </svg>
+                                    PCD
+                                </h4>
+                                <div class="flex items-center">
+                                    <input type="text" class="w-full px-4 py-3 rounded-lg border border-gray-300 bg-gray-100 text-gray-500" value="5%" disabled>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-gray-50 p-5 rounded-xl border border-gray-200 shadow-sm">
+                                <h4 class="font-semibold text-gray-700 mb-3 flex items-center">
+                                    <svg class="w-5 h-5 mr-2 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                    </svg>
+                                    Total
+                                </h4>
+                                <div class="flex items-center">
+                                    <input type="text" class="w-full px-4 py-3 rounded-lg border border-gray-300" value="100">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                            <div class="bg-blue-50 p-5 rounded-xl border border-blue-200 shadow-sm">
+                                <h4 class="font-semibold text-blue-700 mb-3 flex items-center">
+                                    <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                                    </svg>
+                                    Escola Pública
+                                </h4>
+                                <div class="space-y-3">
+                                    <div class="flex items-center">
+                                        <span class="w-24 text-sm font-medium text-blue-700">AC:</span>
+                                        <input type="text" class="flex-1 px-4 py-3 rounded-lg border border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200" value="50%">
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span class="w-24 text-sm font-medium text-blue-700">Cota Bairro:</span>
+                                        <input type="text" class="flex-1 px-4 py-3 rounded-lg border border-blue-300 focus:border-blue-500 focus:ring focus:ring-blue-200" value="50%">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-green-50 p-5 rounded-xl border border-green-200 shadow-sm">
+                                <h4 class="font-semibold text-green-700 mb-3 flex items-center">
+                                    <svg class="w-5 h-5 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                                    </svg>
+                                    Escola Privada
+                                </h4>
+                                <div class="space-y-3">
+                                    <div class="flex items-center">
+                                        <span class="w-24 text-sm font-medium text-green-700">AC:</span>
+                                        <input type="text" class="flex-1 px-4 py-3 rounded-lg border border-green-300 focus:border-green-500 focus:ring focus:ring-green-200" value="50%">
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span class="w-24 text-sm font-medium text-green-700">Cota Bairro:</span>
+                                        <input type="text" class="flex-1 px-4 py-3 rounded-lg border border-green-300 focus:border-green-500 focus:ring focus:ring-green-200" value="50%">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex justify-end mt-6">
+                            <button type="button" onclick="openBairroModal()" class="bg-primary text-white px-8 py-3 rounded-xl hover:bg-dark transition-all btn-animate font-semibold shadow-lg focus-ring flex items-center">
+                                Avançar
+                                <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    
                     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
                         <?php foreach ($bairros as $bairro) { ?>
                             <article class="grid-item card-hover bg-white rounded-2xl shadow-xl border-0 overflow-hidden group relative" data-id="<?= htmlspecialchars($bairro['id']) ?>" data-nome="<?= htmlspecialchars($bairro['bairros']) ?>">
@@ -562,8 +647,8 @@ $select = new select($escola);
                         </svg>
                     </div>
                     <div>
-                        <h3 id="modalBairroTitle" class="text-xl sm:text-2xl font-bold text-dark font-heading">Cadastrar Bairro</h3>
-                        <p class="text-gray-600 text-sm">Defina o nome do bairro</p>
+                        <h3 id="modalBairroTitle" class="text-xl sm:text-2xl font-bold text-dark font-heading">Cadastrar Bairros da Cota</h3>
+                        <p class="text-gray-600 text-sm">Informe os bairros para esta cota</p>
                     </div>
                 </div>
                 <button class="absolute top-6 right-6 p-2 rounded-xl hover:bg-gray-100 transition-all group" onclick="closeModal('modalBairro')">
@@ -576,17 +661,136 @@ $select = new select($escola);
                 <form id="bairroForm" action="../controllers/controller_bairro.php" method="POST">
                     <input type="hidden" name="form" value="bairro">
                     <input type="hidden" id="inpBairroId" name="id_bairro" value="">
-                    <div>
-                        <label class="block text-sm font-semibold text-dark mb-3">Nome do Bairro *</label>
-                        <input id="inpBairroNome" name="nome" type="text" class="w-full px-4 py-3.5 rounded-xl transition-all text-base border-2 focus:border-primary focus:ring-4 focus:ring-primary/10" placeholder="Digite o nome do bairro" required>
+                    
+                    <div class="mb-6">
+                        <label class="block text-sm font-semibold text-dark mb-3">Informe o nº de alunos por turma *</label>
+                        <input id="inpBairroNome" name="nome" type="text" class="w-full px-4 py-3.5 rounded-xl transition-all text-base border-2 focus:border-primary focus:ring-4 focus:ring-primary/10" placeholder="Digite o número de alunos" required>
                     </div>
+                    
+                    <div class="mb-6">
+                        <label class="block text-sm font-semibold text-dark mb-3">Bairros da Cota *</label>
+                        <div id="bairros-container" class="space-y-3">
+                            <div class="flex items-center">
+                                <input type="text" name="bairros[]" class="flex-1 px-4 py-3.5 rounded-xl transition-all text-base border-2 focus:border-primary focus:ring-4 focus:ring-primary/10" placeholder="Digite o nome do bairro" required>
+                                <button type="button" class="ml-2 p-2 bg-primary text-white rounded-lg hover:bg-dark transition-all" onclick="addBairroField()">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <div class="p-6 sm:p-8 border-t border-gray-100 bg-gray-50/50 flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-3 mt-6 -mx-6 -mb-6 sm:-mx-8 sm:-mb-8">
                         <button type="button" class="px-6 py-3 rounded-xl border-2 border-primary font-semibold text-primary hover:bg-primary/10 hover:border-primary transition-all text-base focus-ring" onclick="closeModal('modalBairro')">Cancelar</button>
-                        <button type="submit" class="px-6 py-3 bg-gradient-to-r from-primary to-dark text-white font-semibold rounded-xl hover:from-primary/90 hover:to-dark/90 transition-all text-base shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 focus-ring">
-                            Salvar Bairro
+                        <button type="button" class="px-6 py-3 bg-gradient-to-r from-primary to-dark text-white font-semibold rounded-xl hover:from-primary/90 hover:to-dark/90 transition-all text-base shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 focus-ring flex items-center" onclick="openReviewModal()">
+                            Avançar
+                            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                            </svg>
                         </button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal Revisão de Cotas -->
+    <div id="modalReview" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-2 sm:p-4 z-50">
+        <div class="bg-white w-full max-w-2xl rounded-2xl shadow-2xl max-h-[90vh] overflow-y-auto transform transition-all duration-300 scale-95 opacity-0" id="modalReviewContent">
+            <div class="bg-gradient-to-r from-primary to-dark text-white p-6">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm border border-white/30 shadow-lg">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold font-display">Revisão das Cotas</h2>
+                        <p class="text-white/90 text-sm mt-1">Confirme as informações antes de finalizar</p>
+                    </div>
+                </div>
+                <button class="absolute top-6 right-6 p-2 rounded-xl hover:bg-white/10 transition-all group" onclick="closeModal('modalReview')">
+                    <svg class="w-5 h-5 text-white group-hover:scale-110 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="p-6">
+                <div class="mb-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-3">Distribuição de Vagas</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <p class="text-sm font-medium text-gray-600">PCD:</p>
+                            <p class="text-lg font-semibold text-gray-800" id="review-pcd">5%</p>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                            <p class="text-sm font-medium text-gray-600">Total:</p>
+                            <p class="text-lg font-semibold text-gray-800" id="review-total">100</p>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                            <p class="text-sm font-medium text-blue-700">Escola Pública:</p>
+                            <div class="mt-2">
+                                <div class="flex justify-between">
+                                    <span class="text-sm text-blue-600">AC:</span>
+                                    <span class="font-medium text-blue-800" id="review-publica-ac">50%</span>
+                                </div>
+                                <div class="flex justify-between mt-1">
+                                    <span class="text-sm text-blue-600">Cota Bairro:</span>
+                                    <span class="font-medium text-blue-800" id="review-publica-cota">50%</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-green-50 p-4 rounded-lg border border-green-200">
+                            <p class="text-sm font-medium text-green-700">Escola Privada:</p>
+                            <div class="mt-2">
+                                <div class="flex justify-between">
+                                    <span class="text-sm text-green-600">AC:</span>
+                                    <span class="font-medium text-green-800" id="review-privada-ac">50%</span>
+                                </div>
+                                <div class="flex justify-between mt-1">
+                                    <span class="text-sm text-green-600">Cota Bairro:</span>
+                                    <span class="font-medium text-green-800" id="review-privada-cota">50%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-3">Alunos por Turma</h3>
+                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <p class="text-lg font-semibold text-gray-800" id="review-alunos">40</p>
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-3">Bairros da Cota</h3>
+                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <ul class="list-disc pl-5 space-y-1" id="review-bairros">
+                            <!-- Bairros serão inseridos aqui via JavaScript -->
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="flex justify-between mt-6 pt-4 border-t border-gray-200">
+                    <button type="button" class="px-6 py-3 rounded-xl border-2 border-primary font-semibold text-primary hover:bg-primary/10 hover:border-primary transition-all text-base focus-ring flex items-center" onclick="closeModal('modalReview'); openBairroModal();">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                        </svg>
+                        Voltar
+                    </button>
+                    <button type="button" onclick="document.getElementById('bairroForm').submit();" class="px-6 py-3 bg-gradient-to-r from-primary to-dark text-white font-semibold rounded-xl hover:from-primary/90 hover:to-dark/90 transition-all text-base shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 focus-ring flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        Concluir
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -821,6 +1025,97 @@ $select = new select($escola);
             document.getElementById('deleteBairroId').value = id || '';
             openModal('modalDeleteBairro');
         }
+        
+        function openReviewModal() {
+            try {
+                // Validar o formulário antes de prosseguir
+                const numAlunos = document.getElementById('inpBairroNome');
+                if (!numAlunos || !numAlunos.value.trim()) {
+                    alert('Informe o número de alunos por turma.');
+                    return;
+                }
+                
+                // Verificar se pelo menos um bairro foi adicionado
+                const bairrosInputs = document.querySelectorAll('input[name="bairros[]"]');
+                let bairrosValidos = false;
+                
+                for (let input of bairrosInputs) {
+                    if (input.value.trim()) {
+                        bairrosValidos = true;
+                        break;
+                    }
+                }
+                
+                if (!bairrosValidos) {
+                    alert('Informe pelo menos um bairro para a cota.');
+                    return;
+                }
+                
+                // Armazenar os valores que precisamos antes de fechar o modal
+                const alunosPorTurma = numAlunos.value;
+                const bairrosArray = [];
+                
+                bairrosInputs.forEach(input => {
+                    if (input.value.trim()) {
+                        bairrosArray.push(input.value.trim());
+                    }
+                });
+                
+                // Fechar o modal atual
+                closeModal('modalBairro');
+                
+                // Abrir o modal de revisão manualmente
+                const modalReview = document.getElementById('modalReview');
+                if (!modalReview) {
+                    console.error("Modal de revisão não encontrado!");
+                    return;
+                }
+                
+                modalReview.classList.remove('hidden');
+                modalReview.classList.add('flex');
+                
+                // Aguardar um pouco para garantir que o modal esteja visível
+                setTimeout(() => {
+                    try {
+                        // Acessar o conteúdo do modal diretamente
+                        const content = modalReview.querySelector('#modalReviewContent');
+                        if (content) {
+                            content.style.transform = 'scale(1)';
+                            content.style.opacity = '1';
+                            
+                            // Preencher o número de alunos por turma
+                            const reviewAlunos = content.querySelector('#review-alunos');
+                            if (reviewAlunos) {
+                                reviewAlunos.textContent = alunosPorTurma;
+                            } else {
+                                console.error("Elemento review-alunos não encontrado dentro do modalReviewContent");
+                            }
+                            
+                            // Preencher a lista de bairros
+                            const bairrosList = content.querySelector('#review-bairros');
+                            if (bairrosList) {
+                                bairrosList.innerHTML = ''; // Limpar lista atual
+                                
+                                bairrosArray.forEach(bairro => {
+                                    const li = document.createElement('li');
+                                    li.textContent = bairro;
+                                    li.className = 'text-gray-800';
+                                    bairrosList.appendChild(li);
+                                });
+                            } else {
+                                console.error("Elemento review-bairros não encontrado dentro do modalReviewContent");
+                            }
+                        } else {
+                            console.error("Elemento modalReviewContent não encontrado dentro do modalReview");
+                        }
+                    } catch (innerError) {
+                        console.error("Erro ao manipular o modal de revisão:", innerError);
+                    }
+                }, 100);
+            } catch (error) {
+                console.error("Erro geral na função openReviewModal:", error);
+            }
+        }
 
         // Submissão simples com validação mínima
         document.addEventListener('DOMContentLoaded', function() {
@@ -864,6 +1159,73 @@ $select = new select($escola);
                     document.body.style.overflow = 'auto';
                 }, 300);
             }
+        }
+
+        function addBairroField() {
+            const container = document.getElementById('bairros-container');
+            const newField = document.createElement('div');
+            newField.className = 'flex items-center';
+            newField.innerHTML = `
+                <input type="text" name="bairros[]" class="flex-1 px-4 py-3.5 rounded-xl transition-all text-base border-2 focus:border-primary focus:ring-4 focus:ring-primary/10" placeholder="Digite o nome do bairro" required>
+                <button type="button" class="ml-2 p-2 bg-secondary text-white rounded-lg hover:bg-orange-600 transition-all" onclick="removeBairroField(this)">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            `;
+            container.appendChild(newField);
+        }
+
+        function removeBairroField(button) {
+            const fieldDiv = button.parentElement;
+            fieldDiv.remove();
+        }
+        
+        // Função para abrir o modal de revisão
+        function openReviewModal() {
+            // Validar o formulário antes de abrir o modal de revisão
+            const form = document.getElementById('bairroForm');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+            
+            // Obter valores dos campos de distribuição de vagas
+            const pcdValue = document.getElementById('pcd-value').textContent;
+            const totalValue = document.getElementById('total-value').textContent;
+            const publicaAcValue = document.getElementById('publica-ac-value').textContent;
+            const publicaCotaValue = document.getElementById('publica-cota-value').textContent;
+            const privadaAcValue = document.getElementById('privada-ac-value').textContent;
+            const privadaCotaValue = document.getElementById('privada-cota-value').textContent;
+            
+            // Obter valor do número de alunos por turma
+            const alunosValue = document.getElementById('inpBairroNome').value;
+            
+            // Atualizar os valores no modal de revisão
+            document.getElementById('review-pcd').textContent = pcdValue;
+            document.getElementById('review-total').textContent = totalValue;
+            document.getElementById('review-publica-ac').textContent = publicaAcValue;
+            document.getElementById('review-publica-cota').textContent = publicaCotaValue;
+            document.getElementById('review-privada-ac').textContent = privadaAcValue;
+            document.getElementById('review-privada-cota').textContent = privadaCotaValue;
+            document.getElementById('review-alunos').textContent = alunosValue;
+            
+            // Obter e exibir os bairros
+            const bairrosContainer = document.getElementById('review-bairros');
+            bairrosContainer.innerHTML = '';
+            
+            const bairrosInputs = document.querySelectorAll('input[name="bairros[]"]');
+            bairrosInputs.forEach(input => {
+                if (input.value.trim() !== '') {
+                    const li = document.createElement('li');
+                    li.textContent = input.value;
+                    bairrosContainer.appendChild(li);
+                }
+            });
+            
+            // Fechar o modal de bairro e abrir o modal de revisão
+            closeModal('modalBairro');
+            openModal('modalReview');
         }
 
         // Feedback by GET flags
