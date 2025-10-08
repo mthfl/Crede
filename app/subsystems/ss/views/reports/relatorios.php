@@ -139,15 +139,15 @@ require_once(__DIR__ . '/../../assets/libs/fpdf/fpdf.php');
         $dados_bairros = $stmt_bairros->fetchAll(PDO::FETCH_ASSOC);
         $bairros_para_mostrar = array_slice($dados_bairros, 0, 5);
        
-        $pdf->SetFont('Arial', 'B', 10);
-        $pdf->SetY(16);
-        $pdf->SetX(190);
+        $pdf->SetFont('Arial', '', 8);
+        $pdf->SetY(20);
+        $pdf->SetX(17);
         // Título e bairros alinhados na mesma linha, exceto para PRIVADA AC e PÚBLICA AC
         if ($tipo_relatorio !== 'PRIVADA AC' && $tipo_relatorio !== 'PÚBLICA AC') {
-            $pdf->Cell(50, 6, 'Bairros de Cotas:', 0, 0, 'C');
-            $pdf->SetFont('Arial', 'B', 8);
-            $x_pos = 183 + 45 + 2; // Inicia logo após o título
-            $item_width = 35; // Ajustado para caber 2 bairros com separador
+            $pdf->Cell(50, 6, 'BAIRROS DE COTA:', 0, 0, 'C');
+            $pdf->SetFont('Arial', '', 8);
+            $x_pos = 55; // Inicia logo após o título
+            $item_width = 25; // Ajustado para caber 2 bairros com separador
             foreach ($bairros_para_mostrar as $index => $dado) {
                 $pdf->SetX($x_pos);
                 $bairro = strtoupper(utf8_decode($dado['bairros']));
