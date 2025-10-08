@@ -1,62 +1,13 @@
 <?php 
-/*require_once(__DIR__ . '/../models/sessions.php');
+require_once(__DIR__ . '/models/sessions.php');
 $session = new sessions();
 $session->autenticar_session();
-$session->tempo_session();*/
+$session->tempo_session();
 
 
 
 require_once(__DIR__ . '/models/model.select.php');
 $select = new select();
-
-// Handle CRUD
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $action = isset($_POST['action']) ? $_POST['action'] : 'create';
-    $nome = isset($_POST['nome']) ? trim($_POST['nome']) : '';
-    $email = isset($_POST['email']) ? trim($_POST['email']) : '';
-    // Formatar CPF com máscara (000.000.000-00)
-    $cpf_sem_mascara = isset($_POST['cpf']) ? preg_replace('/\D/', '', $_POST['cpf']) : '';
-    $cpf = '';
-    if (strlen($cpf_sem_mascara) === 11) {
-        $cpf = substr($cpf_sem_mascara, 0, 3) . '.' . 
-               substr($cpf_sem_mascara, 3, 3) . '.' . 
-               substr($cpf_sem_mascara, 6, 3) . '-' . 
-               substr($cpf_sem_mascara, 9, 2);
-    } else {
-        $cpf = isset($_POST['cpf']) ? $_POST['cpf'] : ''; // Mantém o valor original se já estiver formatado
-    }
-    $escola = isset($_POST['escola']) ? $_POST['escola'] : '';
-    $id = isset($_POST['user_id']) ? (int)$_POST['user_id'] : 0;
-    
-    try {
-        if ($action === 'update' && $id > 0 && $nome !== '' && filter_var($email, FILTER_VALIDATE_EMAIL) && $escola !== '') {
-            $select->update_user($escola, $id, $nome, $email, $cpf);
-            header("Location: " . $_SERVER['PHP_SELF'] . "?success=true");
-            exit();
-        } else if ($action === 'delete' && $id > 0 && $escola !== '') {
-            $select->delete_user($escola, $id);
-            header("Location: " . $_SERVER['PHP_SELF'] . "?success=true");
-            exit();
-        } else if ($action === 'create' && $nome !== '' && filter_var($email, FILTER_VALIDATE_EMAIL) && $escola !== '') {
-            $select->insert_user($escola, $nome, $email, $cpf);
-            header("Location: " . $_SERVER['PHP_SELF'] . "?success=true");
-            exit();
-        } else if ($action === 'activate' && $id > 0 && $escola !== '') {
-            // Ativar usuário (status = 1)
-            $select->activate_user($escola, $id);
-            header("Location: " . $_SERVER['PHP_SELF'] . "?success=true");
-            exit();
-        } else if ($action === 'deactivate' && $id > 0 && $escola !== '') {
-            // Desativar usuário (status = 0)
-            $select->deactivate_user($escola, $id);
-            header("Location: " . $_SERVER['PHP_SELF'] . "?success=true");
-            exit();
-        }
-    } catch (Throwable $e) {
-        // Log do erro
-        error_log("Erro ao processar ação: " . $e->getMessage());
-    }
-}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -1357,9 +1308,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </button>
             </div>
             <div class="p-6 sm:p-8">
-                <form id="userForm" action="<?= $_SERVER['PHP_SELF'] ?>" method="POST" enctype="multipart/form-data">
-                    <input type="hidden" id="inpUserId" name="user_id" value="">
-                    <input type="hidden" id="inpAction" name="action" value="create">
+                <form id="userForm" action="controllers/controller_users.php" method="POST">
+                    <input type="hidden" id="inpUserId" name="id" value="">
+                    <input type="hidden" id="inpAction" name="action" value="">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label class="block text-sm font-semibold text-dark mb-3 flex items-center gap-2">
@@ -1389,17 +1340,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </label>
                             <select id="inpEscola" name="escola" class="input-enhanced w-full px-4 py-4 rounded-xl transition-all text-base border-2 focus:border-primary focus:ring-4 focus:ring-primary/10" required>
                                 <option value="">Selecione uma escola (EP)</option>
-                                <option value="estgdm">EEEP Salaberga</option>
-                                <option value="epaf">EEEP Prof Alda Facanha</option>
-                                <option value="epmfm">EEEP Prof Marly Ferreira</option>
-                                <option value="epav">EEEP Prof Antonio Valmir</option>
-                                <option value="eedq">EEEP Eusébio Queiroz</option>
-                                <option value="ejin">EEEP José Ivanilton</option>
-                                <option value="epfads">EEEP Prof Fc Aristótles</option>
-                                <option value="emcvm">EEEP Maria Carmem</option>
-                                <option value="eglgfm">EEEP Gonzaga Mota</option>
-                                <option value="epldtv">EEEP Prof Luiza Teodoro</option>
-                                <option value="ercr">EEEP Raimundo Celio</option>
+                                <?php
+                                $dados = $select->select_escola();
+                                foreach ($dados as $dado) { ?>
+
+                                <option value="<?=$dado['escola_banco']?>"><?=$dado['nome_escola']?></option>
+                                <?php } ?>
                             </select>
                         </div>
                     </div>
@@ -1431,8 +1377,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <i class="fa-solid fa-info-circle mr-2"></i>
                     O usuário será reativado e terá acesso ao sistema novamente.
                 </p>
-                <form id="activateForm" action="" method="POST">
-                    <input type="hidden" id="activateUserId" name="user_id" value="">
+                <form id="activateForm" action="controllers/controller_users.php" method="POST">
+                    <input type="hidden" id="activateUserId" name="id" value="">
                     <input type="hidden" id="activateEscola" name="escola" value="">
                     <input type="hidden" name="action" value="activate">
                     <div class="flex flex-col sm:flex-row gap-3 justify-center">
@@ -1463,8 +1409,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <i class="fa-solid fa-info-circle mr-2"></i>
                     O usuário será desativado, mas poderá ser reativado posteriormente.
                 </p>
-                <form id="deactivateForm" action="" method="POST">
-                    <input type="hidden" id="deactivateUserId" name="user_id" value="">
+                <form id="deactivateForm" action="controllers/controller_users.php" method="POST">
+                    <input type="hidden" id="deactivateUserId" name="id" value="">
                     <input type="hidden" id="deactivateEscola" name="escola" value="">
                     <input type="hidden" name="action" value="deactivate">
                     <div class="flex flex-col sm:flex-row gap-3 justify-center">
