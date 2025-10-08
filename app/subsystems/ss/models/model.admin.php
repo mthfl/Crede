@@ -15,18 +15,12 @@ class admin extends cadastrador
     public function cadastrar_quantidade_vaga($quantidade)
     {
         try {
-            $stmt_check = $this->connect->query("SELECT * FROM $this->table2 WHERE quantidade_alunos == null");
-            if ($stmt_check->rowCount() == 0) {
-                return 3;
-            }
-
             $stmt_cadastro = $this->connect->prepare("UPDATE $this->table2 SET quantidade_alunos = :quantidade");
-            $stmt_check->bindValue(':quantidade', $quantidade);
-            if(!$stmt_check->execute()){
+            $stmt_cadastro->bindValue(':quantidade', $quantidade);
+            if (!$stmt_cadastro->execute()) {
                 return 2;
             }
             return 1;
-            
         } catch (Exception $e) {
 
             error_log("Erro no login: " . $e->getMessage());
@@ -43,11 +37,10 @@ class admin extends cadastrador
 
             $stmt_cadastro = $this->connect->prepare("UPDATE $this->table2 SET quantidade_alunos = :quantidade");
             $stmt_check->bindValue(':quantidade', $quantidade);
-            if(!$stmt_check->execute()){
+            if (!$stmt_check->execute()) {
                 return 2;
             }
             return 1;
-            
         } catch (Exception $e) {
 
             error_log("Erro no login: " . $e->getMessage());
@@ -299,29 +292,20 @@ class admin extends cadastrador
     /*
      *CRUD bairros de cota
      */
-    public function cadastrar_bairro(string $nome): int
+    public function cadastrar_bairro(array $nomes): int
     {
         try {
-            $stmt_check = $this->connect->prepare("SELECT * FROM $this->table13 WHERE bairros = :nome");
-            $stmt_check->bindValue(":nome", $nome);
-            $stmt_check->execute();
-
-            if ($stmt_check->rowCount() == 0) {
+            foreach ($nomes as $nome) {
 
                 $stmt_usuario = $this->connect->prepare("INSERT INTO $this->table13(`bairros`) VALUES (:nome)");
                 $stmt_usuario->bindValue(":nome", $nome);
 
-                if ($stmt_usuario->execute()) {
-
-                    return 1;
-                } else {
+                if (!$stmt_usuario->execute()) {
 
                     return 2;
                 }
-            } else {
-
-                return 3;
             }
+            return 1;
         } catch (PDOException $e) {
             return 0;
         }

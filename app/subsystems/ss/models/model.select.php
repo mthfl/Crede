@@ -39,6 +39,10 @@ class select extends connect
         $this->table15 = $table["ss_$escola"][15];
     }
 
+    public function select_vagas(){
+        $stmt = $this->connect->query("SELECT quantidade_alunos FROM $this->table2 LIMIT 1");
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
     public function select_perfis_usuarios($id_perfil): array
     {
         $stmt = $this->connect->query("SELECT * FROM $this->table15 WHERE id = $id_perfil");

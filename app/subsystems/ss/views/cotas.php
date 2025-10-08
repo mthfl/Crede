@@ -269,17 +269,31 @@ $select = new select($escola);
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
             background: var(--dark);
         }
+
         /* Remove default blue focus and align with system palette */
-        input, select, textarea, button { outline: none; }
-        input:focus, select:focus, textarea:focus, button:focus {
+        input,
+        select,
+        textarea,
+        button {
+            outline: none;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus,
+        button:focus {
             outline: none !important;
-            box-shadow: 0 0 0 3px rgba(0, 90, 36, 0.15) !important; /* primary glow */
+            box-shadow: 0 0 0 3px rgba(0, 90, 36, 0.15) !important;
+            /* primary glow */
             border-color: var(--primary) !important;
         }
+
         /* Disabled input visual standard */
         .input-disabled[disabled] {
-            background: #F1F5F9 !important; /* slate-100 */
-            color: #334155 !important;      /* slate-700 */
+            background: #F1F5F9 !important;
+            /* slate-100 */
+            color: #334155 !important;
+            /* slate-700 */
             border-color: rgba(0, 90, 36, 0.15) !important;
             cursor: not-allowed;
         }
@@ -308,7 +322,7 @@ $select = new select($escola);
                     <!-- Dashboard -->
                     <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin' || $_SESSION['tipo_usuario'] === 'cadastrador') { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.1s;">
-                        <a href="../index.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring ">
+                            <a href="../index.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring ">
                                 <div class="w-12 h-12 bg-white/10  rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path>
@@ -340,7 +354,7 @@ $select = new select($escola);
                         </div>
                     <?php } ?>
 
-                    
+
 
                     <!-- Candidatos -->
                     <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin' || $_SESSION['tipo_usuario'] === 'cadastrador') { ?>
@@ -376,7 +390,7 @@ $select = new select($escola);
                         </div>
                     <?php } ?>
 
-                  
+
 
                     <!-- Usuários -->
                     <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
@@ -395,7 +409,7 @@ $select = new select($escola);
                         </div>
                     <?php } ?>
 
-                    <!-- Relatórios --> 
+                    <!-- Relatórios -->
                     <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.5s;">
                             <a href="#" onclick="openModal('modalRelatorios')" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
@@ -511,7 +525,17 @@ $select = new select($escola);
                             Criar cotas
                         </button>
                     </div>
-                <?php } else { ?>
+                <?php } else {
+
+                    $vagas = $select->select_vagas();
+                    $pcd = $vagas['quantidade_alunos'] - 2;
+                    $total_publica = $pcd * (80 / 100);
+                    $total_privada = $pcd * (20 / 100);
+                    $publica_cotas = $total_publica * (30 / 100);
+                    $privada_cotas = $total_privada * (30 / 100);
+                    $publica_ac = $total_publica * (70 / 100);
+                    $privada_ac = $total_privada * (70 / 100);
+                ?>
                     <div class="mb-8">
                         <div class="flex items-center justify-between mb-6">
                             <div class="flex items-center gap-4">
@@ -533,13 +557,13 @@ $select = new select($escola);
                                         </svg>
                                         <?= count($bairros) ?> bairros ativos
                                     </span>
-                                  
+
                                 </div>
                             </div>
                         </div>
                         <div class="h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent"></div>
                     </div>
-                    
+
                     <div class="bg-white rounded-2xl shadow-xl p-6 mb-8">
                         <div class="flex items-center mb-6">
                             <div class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center mr-3">
@@ -547,7 +571,7 @@ $select = new select($escola);
                             </div>
                             <h3 class="text-xl font-bold text-primary">Distribuição de Vagas</h3>
                         </div>
-                        
+
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                             <div class="bg-accent/30 p-5 rounded-xl border border-primary/20 shadow-sm">
                                 <h4 class="font-semibold text-gray-700 mb-3 flex items-center">
@@ -557,10 +581,13 @@ $select = new select($escola);
                                     PCD
                                 </h4>
                                 <div class="flex items-center">
-                                    <input type="text" class="w-full px-4 py-3 rounded-lg border input-disabled" value="5%" disabled>
+                                    <?php
+
+                                    ?>
+                                    <input type="text" class="w-full px-4 py-3 rounded-lg border input-disabled" value="2" disabled>
                                 </div>
                             </div>
-                            
+
                             <div class="bg-accent/30 p-5 rounded-xl border border-primary/20 shadow-sm">
                                 <h4 class="font-semibold text-gray-700 mb-3 flex items-center">
                                     <svg class="w-5 h-5 mr-2 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -569,11 +596,11 @@ $select = new select($escola);
                                     Total
                                 </h4>
                                 <div class="flex items-center">
-                                    <input type="text" class="w-full px-4 py-3 rounded-lg border input-disabled" value="100" disabled>
+                                    <input type="text" class="w-full px-4 py-3 rounded-lg border input-disabled" value="<?= $vagas['quantidade_alunos'] ?>" disabled>
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                             <div class="bg-accent/30 p-5 rounded-xl border border-primary/20 shadow-sm">
                                 <h4 class="font-semibold text-primary mb-3 flex items-center">
@@ -585,15 +612,15 @@ $select = new select($escola);
                                 <div class="space-y-3">
                                     <div class="flex items-center">
                                         <span class="w-24 text-sm font-medium text-primary">AC:</span>
-                                        <input type="text" class="flex-1 px-4 py-3 rounded-lg border input-disabled" value="50%" disabled>
+                                        <input type="text" class="flex-1 px-4 py-3 rounded-lg border input-disabled" value="<?= round($publica_ac) ?>" disabled>
                                     </div>
                                     <div class="flex items-center">
                                         <span class="w-24 text-sm font-medium text-primary">Cota Bairro:</span>
-                                        <input type="text" class="flex-1 px-4 py-3 rounded-lg border input-disabled" value="50%" disabled>
+                                        <input type="text" class="flex-1 px-4 py-3 rounded-lg border input-disabled" value="<?= round($publica_cotas) ?>" disabled>
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="bg-green-50 p-5 rounded-xl border border-green-200 shadow-sm">
                                 <h4 class="font-semibold text-green-700 mb-3 flex items-center">
                                     <svg class="w-5 h-5 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -604,21 +631,21 @@ $select = new select($escola);
                                 <div class="space-y-3">
                                     <div class="flex items-center">
                                         <span class="w-24 text-sm font-medium text-green-700">AC:</span>
-                                        <input type="text" class="flex-1 px-4 py-3 rounded-lg border input-disabled" value="50%" disabled>
+                                        <input type="text" class="flex-1 px-4 py-3 rounded-lg border input-disabled" value="<?= round($privada_ac) ?>" disabled>
                                     </div>
                                     <div class="flex items-center">
                                         <span class="w-24 text-sm font-medium text-green-700">Cota Bairro:</span>
-                                        <input type="text" class="flex-1 px-4 py-3 rounded-lg border input-disabled" value="50%" disabled>
+                                        <input type="text" class="flex-1 px-4 py-3 rounded-lg border input-disabled" value="<?= round($privada_cotas) ?>" disabled>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="flex justify-end mt-6">
-                            
+
                         </div>
                     </div>
-                    
+
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
                         <?php foreach ($bairros as $bairro) { ?>
                             <article class="grid-item card-hover bg-white rounded-2xl shadow-xl border-0 overflow-hidden group relative" data-id="<?= htmlspecialchars($bairro['id']) ?>" data-nome="<?= htmlspecialchars($bairro['bairros']) ?>">
@@ -667,7 +694,7 @@ $select = new select($escola);
                     </div>
                     <div>
                         <h3 id="modalBairroTitle" class="text-xl sm:text-2xl font-bold text-dark font-heading">Cadastrar Cota</h3>
-                       
+
                     </div>
                 </div>
                 <button class="absolute top-6 right-6 p-2 rounded-xl hover:bg-gray-100 transition-all group border border-gray-200" onclick="closeModal('modalBairro')">
@@ -680,12 +707,12 @@ $select = new select($escola);
                 <form id="bairroForm" action="../controllers/controller_bairro.php" method="POST">
                     <input type="hidden" name="form" value="bairro">
                     <input type="hidden" id="inpBairroId" name="id_bairro" value="">
-                    
+
                     <div class="mb-6">
                         <label class="block text-sm font-semibold text-dark mb-3">Informe o nº de alunos por turma *</label>
-                        <input id="inpBairroNome" name="nome" type="number" min="1" max="999" step="1" class="w-full px-4 py-3.5 rounded-xl transition-all text-base border-2 focus:border-primary focus:ring-4 focus:ring-primary/10" placeholder="Digite o número de alunos" required oninput="this.value = this.value.replace(/[^0-9]/g, '')" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                        <input id="inpBairroNome" name="quantidades" type="number" min="1" max="999" step="1" class="w-full px-4 py-3.5 rounded-xl transition-all text-base border-2 focus:border-primary focus:ring-4 focus:ring-primary/10" placeholder="Digite o número de alunos" required oninput="this.value = this.value.replace(/[^0-9]/g, '')" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
                     </div>
-                    
+
                     <div class="mb-6">
                         <label class="block text-sm font-semibold text-dark mb-3">Bairros da Cota *</label>
                         <div id="bairros-container" class="space-y-3">
@@ -699,10 +726,10 @@ $select = new select($escola);
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="p-6 sm:p-8 border-t border-primary/10 bg-accent/20 flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-3 mt-6 -mx-6 -mb-6 sm:-mx-8 sm:-mb-8">
-                <button type="button" class="px-6 py-3 rounded-xl border-2 border-primary font-semibold text-primary hover:bg-primary/10 hover:border-primary transition-all text-base focus-ring" onclick="closeModal('modalBairro'); window.history.replaceState({}, document.title, window.location.pathname);">Cancelar</button>
-                    <button type="button" class="px-6 py-3 bg-gradient-to-r from-primary to-dark text-white font-semibold rounded-xl hover:from-primary/90 hover:to-dark/90 transition-all text-base shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 focus-ring flex items-center" onclick="openReviewModal(); window.history.replaceState({}, document.title, window.location.pathname);">
+                        <button type="button" class="px-6 py-3 rounded-xl border-2 border-primary font-semibold text-primary hover:bg-primary/10 hover:border-primary transition-all text-base focus-ring" onclick="closeModal('modalBairro'); window.history.replaceState({}, document.title, window.location.pathname);">Cancelar</button>
+                        <button type="button" class="px-6 py-3 bg-gradient-to-r from-primary to-dark text-white font-semibold rounded-xl hover:from-primary/90 hover:to-dark/90 transition-all text-base shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 focus-ring flex items-center" onclick="openReviewModal(); window.history.replaceState({}, document.title, window.location.pathname);">
                             Avançar
                             <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
@@ -713,7 +740,7 @@ $select = new select($escola);
             </div>
         </div>
     </div>
-    
+
     <!-- Modal Revisão de Cotas -->
     <div id="modalReview" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-2 sm:p-4 z-50">
         <div class="bg-white w-full max-w-2xl rounded-2xl shadow-2xl max-h-[90vh] overflow-y-auto transform transition-all duration-300 scale-95 opacity-0" id="modalReviewContent">
@@ -736,57 +763,67 @@ $select = new select($escola);
                 </button>
             </div>
             <div class="p-6">
+                <?php
+                $vagas = $select->select_vagas();
+                $pcd = $vagas['quantidade_alunos'] - 2;
+                $total_publica = $pcd * (80 / 100);
+                $total_privada = $pcd * (20 / 100);
+                $publica_cotas = $total_publica * (30 / 100);
+                $privada_cotas = $total_privada * (30 / 100);
+                $publica_ac = $total_publica * (70 / 100);
+                $privada_ac = $total_privada * (70 / 100);
+                ?>
                 <div class="mb-6">
                     <h3 class="text-lg font-semibold text-gray-800 mb-3">Distribuição de Vagas</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                         <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
                             <p class="text-sm font-medium text-gray-600">PCD:</p>
-                            <p class="text-lg font-semibold text-gray-800" id="review-pcd">5%</p>
+                            <p class="text-lg font-semibold text-gray-800" id="review-pcd">2</p>
                         </div>
                         <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
                             <p class="text-sm font-medium text-gray-600">Total:</p>
-                            <p class="text-lg font-semibold text-gray-800" id="review-total">100</p>
+                            <p class="text-lg font-semibold text-gray-800" id="review-total"><?= $vagas['quantidade_alunos'] ?></p>
                         </div>
                     </div>
-                    
+
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                         <div class="bg-green-50 p-4 rounded-lg border border-green-200">
                             <p class="text-sm font-medium text-green-700">Escola Pública:</p>
                             <div class="mt-2">
                                 <div class="flex justify-between">
                                     <span class="text-sm text-green-600">AC:</span>
-                                    <span class="font-medium text-green-800" id="review-publica-ac">50%</span>
+                                    <span class="font-medium text-green-800" id="review-publica-ac"><?= round($publica_ac) ?></span>
                                 </div>
                                 <div class="flex justify-between mt-1">
                                     <span class="text-sm text-green-600">Cota Bairro:</span>
-                                    <span class="font-medium text-green-800" id="review-publica-cota">50%</span>
+                                    <span class="font-medium text-green-800" id="review-publica-cota"><?= round($publica_cotas) ?></span>
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="bg-green-50 p-4 rounded-lg border border-green-200">
                             <p class="text-sm font-medium text-green-700">Escola Privada:</p>
                             <div class="mt-2">
                                 <div class="flex justify-between">
                                     <span class="text-sm text-green-600">AC:</span>
-                                    <span class="font-medium text-green-800" id="review-privada-ac">50%</span>
+                                    <span class="font-medium text-green-800" id="review-privada-ac"><?= round($privada_ac) ?></span>
                                 </div>
                                 <div class="flex justify-between mt-1">
                                     <span class="text-sm text-green-600">Cota Bairro:</span>
-                                    <span class="font-medium text-green-800" id="review-privada-cota">50%</span>
+                                    <span class="font-medium text-green-800" id="review-privada-cota"><?= round($privada_cotas) ?></span>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="mb-6">
                     <h3 class="text-lg font-semibold text-gray-800 mb-3">Alunos por Turma</h3>
                     <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
                         <p class="text-lg font-semibold text-gray-800" id="review-alunos">40</p>
                     </div>
                 </div>
-                
+
                 <div class="mb-6">
                     <h3 class="text-lg font-semibold text-gray-800 mb-3">Bairros da Cota</h3>
                     <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
@@ -795,9 +832,9 @@ $select = new select($escola);
                         </ul>
                     </div>
                 </div>
-                
+
                 <div class="flex justify-between mt-6 pt-4 border-t border-gray-200">
-                <button type="button" class="px-6 py-3 rounded-xl border-2 border-primary font-semibold text-primary hover:bg-primary/10 hover:border-primary transition-all text-base focus-ring flex items-center" onclick="closeModal('modalReview'); openBairroModal(); window.history.replaceState({}, document.title, window.location.pathname);">
+                    <button type="button" class="px-6 py-3 rounded-xl border-2 border-primary font-semibold text-primary hover:bg-primary/10 hover:border-primary transition-all text-base focus-ring flex items-center" onclick="closeModal('modalReview'); openBairroModal(); window.history.replaceState({}, document.title, window.location.pathname);">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                         </svg>
@@ -902,7 +939,7 @@ $select = new select($escola);
                         <label class="block text-sm font-semibold text-gray-700 mb-3">Curso (Opcional)</label>
                         <select name="curso_id" class="w-full px-4 py-3.5 border border-gray-300 rounded-xl input-modern focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-base">
                             <option value="">Todos os cursos</option>
-                            <?php 
+                            <?php
                             $cursos = $select->select_cursos();
                             foreach ($cursos as $curso) { ?>
                                 <option value="<?= htmlspecialchars($curso['id']) ?>"><?= htmlspecialchars($curso['nome_curso']) ?></option>
@@ -965,7 +1002,7 @@ $select = new select($escola);
                         <label class="block text-sm font-semibold text-gray-700 mb-3">Curso (Opcional)</label>
                         <select name="curso_id" class="w-full px-4 py-3.5 border border-gray-300 rounded-xl input-modern focus:border-secondary focus:ring-4 focus:ring-secondary/10 transition-all text-base">
                             <option value="">Todos os cursos</option>
-                            <?php 
+                            <?php
                             $cursos = $select->select_cursos();
                             foreach ($cursos as $curso) { ?>
                                 <option value="<?= htmlspecialchars($curso['id']) ?>"><?= htmlspecialchars($curso['nome_curso']) ?></option>
@@ -1061,7 +1098,7 @@ $select = new select($escola);
             document.getElementById('deleteBairroId').value = id || '';
             openModal('modalDeleteBairro');
         }
-        
+
         function openReviewModal() {
             // Validar o formulário antes de prosseguir
             const numAlunos = document.getElementById('inpBairroNome');
@@ -1069,36 +1106,36 @@ $select = new select($escola);
                 alert('Informe o número de alunos por turma.');
                 return;
             }
-            
+
             // Verificar se pelo menos um bairro foi adicionado
             const bairrosInputs = document.querySelectorAll('input[name="bairros[]"]');
             let bairrosValidos = false;
-            
+
             for (let input of bairrosInputs) {
                 if (input.value.trim()) {
                     bairrosValidos = true;
                     break;
                 }
             }
-            
+
             if (!bairrosValidos) {
                 alert('Informe pelo menos um bairro para a cota.');
                 return;
             }
-            
+
             // Armazenar os valores que precisamos antes de fechar o modal
             const alunosPorTurma = numAlunos.value;
             const bairrosArray = [];
-            
+
             bairrosInputs.forEach(input => {
                 if (input.value.trim()) {
                     bairrosArray.push(input.value.trim());
                 }
             });
-            
+
             // Fechar o modal atual
             closeModal('modalBairro');
-            
+
             // Abrir o modal de revisão após um pequeno delay
             setTimeout(() => {
                 // Abrir o modal de revisão
@@ -1107,17 +1144,17 @@ $select = new select($escola);
                     console.error("Modal de revisão não encontrado!");
                     return;
                 }
-                
+
                 modalReview.classList.remove('hidden');
                 modalReview.classList.add('flex');
-                
+
                 setTimeout(() => {
                     const content = modalReview.querySelector('#modalReviewContent');
                     if (content) {
                         content.style.transform = 'scale(1)';
                         content.style.opacity = '1';
                     }
-                    
+
                     // Agora que o modal está aberto, podemos acessar seus elementos
                     try {
                         // Preencher o número de alunos por turma
@@ -1125,12 +1162,12 @@ $select = new select($escola);
                         if (reviewAlunos) {
                             reviewAlunos.textContent = alunosPorTurma;
                         }
-                        
+
                         // Preencher a lista de bairros
                         const bairrosList = document.getElementById('review-bairros');
                         if (bairrosList) {
                             bairrosList.innerHTML = ''; // Limpar lista atual
-                            
+
                             bairrosArray.forEach(bairro => {
                                 const li = document.createElement('li');
                                 li.textContent = bairro;
@@ -1208,7 +1245,7 @@ $select = new select($escola);
             const fieldDiv = button.parentElement;
             fieldDiv.remove();
         }
-        
+
         // Função para abrir o modal de revisão
         function openReviewModal() {
             // Validar o formulário antes de abrir o modal de revisão
@@ -1285,11 +1322,11 @@ $select = new select($escola);
             const titleEl = document.getElementById('modalFeedbackTitle');
             const msgEl = document.getElementById('modalFeedbackMsg');
             icon.className = 'w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 ' + (type === 'success' ? 'bg-green-100' : type === 'error' ? 'bg-red-100' : 'bg-yellow-100');
-            icon.innerHTML = type === 'success'
-                ? '<svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>'
-                : type === 'error'
-                ? '<svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M4.93 4.93l14.14 14.14"></path></svg>'
-                : '<svg class="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M9.93 4.93l-7 12.12A2 2 0 004.76 21h14.48a2 2 0 001.83-2.95l-7-12.12a2 2 0 00-3.54 0z"></path></svg>';
+            icon.innerHTML = type === 'success' ?
+                '<svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>' :
+                type === 'error' ?
+                '<svg class="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M4.93 4.93l14.14 14.14"></path></svg>' :
+                '<svg class="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M9.93 4.93l-7 12.12A2 2 0 004.76 21h14.48a2 2 0 001.83-2.95l-7-12.12a2 2 0 00-3.54 0z"></path></svg>';
             titleEl.textContent = title;
             msgEl.textContent = message;
             openModal('modalFeedback');

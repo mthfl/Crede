@@ -5,23 +5,43 @@ $session->autenticar_session();
 $session->tempo_session();
 
 require_once(__DIR__ . "/../models/model.admin.php");
-// print_r($_POST);
+echo "<pre>";
+print_r($_POST);
+echo "</pre>";
 
 //cadastrar bairro
 if (
     empty($_POST["id_bairro"]) &&
-    isset($_POST["nome"]) && !empty($_POST["nome"])
+    isset($_POST["bairros"]) && !empty($_POST["bairros"]) &&
+    isset($_POST["quantidades"]) && !empty($_POST["quantidades"])
 ) {
-    $nome = $_POST["nome"];
-
+    $bairros = $_POST["bairros"];
+    $quantidade = $_POST["quantidades"];
     $escola = $_SESSION['escola'];
+    foreach ($bairros as $nome) {
+        echo $nome;
+    }
     $admin_model = new admin($escola);
-    $result = $admin_model->cadastrar_bairro($nome);
+    $result1 = $admin_model->cadastrar_bairro($bairros);
+    $result2 = $admin_model->cadastrar_quantidade_vaga($quantidade);
 
-    switch ($result) {
+    switch ($result1) {
         case 1:
-            header('Location: ../views/cotas.php?criado');
-            exit();
+            switch ($result2) {
+                case 1:
+                    header('Location: ../views/cotas.php?criado');
+                    exit();
+                case 2:
+                    header('Location: ../views/cotas.php?erro');
+                    exit();
+                case 3:
+                    header('Location: ../views/cotas.php?ja_existe');
+                    exit();
+                default:
+                    header('Location: ../views/cotas.php?falha');
+                    exit();
+            }
+            break;
         case 2:
             header('Location: ../views/cotas.php?erro');
             exit();
@@ -89,17 +109,17 @@ else if (
 if (
     empty($_POST["id_bairro"]) &&
     isset($_POST["nome"]) && !empty($_POST["nome"])
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    ) {
-} else {
+
+
+
+
+
+
+
+
+
+) {
+} /*else {
     header('Location: ../index.php');
     exit();
-}
+}*/
