@@ -509,22 +509,41 @@ $select = new select($escola);
             <main class="p-4 sm:p-6 lg:p-8">
                 <?php
                 $bairros = $select->select_bairros();
-                if (count($bairros) === 0) { ?>
-                    <div class="bg-gradient-to-br from-accent via-white to-accent/50 border-2 border-dashed border-primary/30 rounded-2xl p-8 text-center animate-fade-in-up max-w-2xl mx-auto">
-                        <div class="w-20 h-20 bg-gradient-to-br from-primary/10 to-secondary/10 rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse-soft">
-                            <svg class="w-10 h-10 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                            </svg>
+                $cursos = $select->select_cursos();
+                if (count($bairros) === 0) { 
+                    if (count($cursos) === 0) { ?>
+                        <div class="bg-gradient-to-br from-red-50 via-white to-red-50 border-2 border-dashed border-red-300 rounded-2xl p-8 text-center animate-fade-in-up max-w-2xl mx-auto">
+                            <div class="w-20 h-20 bg-gradient-to-br from-red-100 to-red-200 rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse-soft">
+                                <svg class="w-10 h-10 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M4.93 4.93l14.14 14.14"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-2xl font-bold text-red-700 mb-2 font-display">Nenhum curso cadastrado</h3>
+                            <p class="text-gray-600 mb-6">É necessário cadastrar pelo menos um curso antes de criar cotas.</p>
+                            <a href="cursos.php" class="inline-flex items-center bg-gradient-to-r from-red-600 to-red-700 text-white px-6 py-3 rounded-xl hover:from-red-700 hover:to-red-800 btn-animate font-semibold shadow-xl focus-ring">
+                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                </svg>
+                                Cadastrar Cursos
+                            </a>
                         </div>
-                        <h3 class="text-2xl font-bold text-primary mb-2 font-display">Nenhuma cota ativa</h3>
-                        <p class="text-gray-600 mb-6">Aqui você definirá a distribuição de vagas para cotista.</p>
-                        <button onclick="openBairroModal()" class="inline-flex items-center bg-gradient-to-r from-primary to-dark text-white px-6 py-3 rounded-xl hover:from-dark hover:to-primary btn-animate font-semibold shadow-xl focus-ring">
-                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                            </svg>
-                            Criar cotas
-                        </button>
-                    </div>
+                    <?php } else { ?>
+                        <div class="bg-gradient-to-br from-accent via-white to-accent/50 border-2 border-dashed border-primary/30 rounded-2xl p-8 text-center animate-fade-in-up max-w-2xl mx-auto">
+                            <div class="w-20 h-20 bg-gradient-to-br from-primary/10 to-secondary/10 rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse-soft">
+                                <svg class="w-10 h-10 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-2xl font-bold text-primary mb-2 font-display">Nenhuma cota ativa</h3>
+                            <p class="text-gray-600 mb-6">Aqui você definirá a distribuição de vagas para cotista.</p>
+                            <button onclick="openBairroModal()" class="inline-flex items-center bg-gradient-to-r from-primary to-dark text-white px-6 py-3 rounded-xl hover:from-dark hover:to-primary btn-animate font-semibold shadow-xl focus-ring">
+                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                </svg>
+                                Criar cotas
+                            </button>
+                        </div>
+                    <?php } ?>
                 <?php } else {
 
                     $vagas = $select->select_vagas();
@@ -573,18 +592,15 @@ $select = new select($escola);
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                            <div class="bg-accent/30 p-5 rounded-xl border border-primary/20 shadow-sm">
-                                <h4 class="font-semibold text-gray-700 mb-3 flex items-center">
-                                    <svg class="w-5 h-5 mr-2 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="bg-green-50 p-5 rounded-xl border border-green-200 shadow-sm">
+                                <h4 class="font-semibold text-green-700 mb-3 flex items-center">
+                                    <svg class="w-5 h-5 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                                     </svg>
-                                    PCD
+                                    Total
                                 </h4>
                                 <div class="flex items-center">
-                                    <?php
-
-                                    ?>
-                                    <input type="text" class="w-full px-4 py-3 rounded-lg border input-disabled" value="2" disabled>
+                                    <input type="text" class="w-full px-4 py-3 rounded-lg border input-disabled" value="<?= $vagas['quantidade_alunos'] ?>" disabled>
                                 </div>
                             </div>
 
@@ -593,10 +609,10 @@ $select = new select($escola);
                                     <svg class="w-5 h-5 mr-2 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
                                     </svg>
-                                    Total
+                                    PCD
                                 </h4>
                                 <div class="flex items-center">
-                                    <input type="text" class="w-full px-4 py-3 rounded-lg border input-disabled" value="<?= $vagas['quantidade_alunos'] ?>" disabled>
+                                    <input type="text" class="w-full px-4 py-3 rounded-lg border input-disabled" value="2" disabled>
                                 </div>
                             </div>
                         </div>
@@ -763,16 +779,6 @@ $select = new select($escola);
                 </button>
             </div>
             <div class="p-6">
-                <?php
-                $vagas = $select->select_vagas();
-                $pcd = $vagas['quantidade_alunos'] - 2;
-                $total_publica = $pcd * (80 / 100);
-                $total_privada = $pcd * (20 / 100);
-                $publica_cotas = $total_publica * (30 / 100);
-                $privada_cotas = $total_privada * (30 / 100);
-                $publica_ac = $total_publica * (70 / 100);
-                $privada_ac = $total_privada * (70 / 100);
-                ?>
                 <div class="mb-6">
                     <h3 class="text-lg font-semibold text-gray-800 mb-3">Distribuição de Vagas</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
@@ -782,7 +788,7 @@ $select = new select($escola);
                         </div>
                         <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
                             <p class="text-sm font-medium text-gray-600">Total:</p>
-                            <p class="text-lg font-semibold text-gray-800" id="review-total"><?= $vagas['quantidade_alunos'] ?></p>
+                            <p class="text-lg font-semibold text-gray-800" id="review-total"></p>
                         </div>
                     </div>
 
@@ -792,11 +798,11 @@ $select = new select($escola);
                             <div class="mt-2">
                                 <div class="flex justify-between">
                                     <span class="text-sm text-green-600">AC:</span>
-                                    <span class="font-medium text-green-800" id="review-publica-ac"><?= round($publica_ac) ?></span>
+                                    <span class="font-medium text-green-800" id="review-publica-ac"></span>
                                 </div>
                                 <div class="flex justify-between mt-1">
                                     <span class="text-sm text-green-600">Cota Bairro:</span>
-                                    <span class="font-medium text-green-800" id="review-publica-cota"><?= round($publica_cotas) ?></span>
+                                    <span class="font-medium text-green-800" id="review-publica-cota"></span>
                                 </div>
                             </div>
                         </div>
@@ -806,11 +812,11 @@ $select = new select($escola);
                             <div class="mt-2">
                                 <div class="flex justify-between">
                                     <span class="text-sm text-green-600">AC:</span>
-                                    <span class="font-medium text-green-800" id="review-privada-ac"><?= round($privada_ac) ?></span>
+                                    <span class="font-medium text-green-800" id="review-privada-ac"></span>
                                 </div>
                                 <div class="flex justify-between mt-1">
                                     <span class="text-sm text-green-600">Cota Bairro:</span>
-                                    <span class="font-medium text-green-800" id="review-privada-cota"><?= round($privada_cotas) ?></span>
+                                    <span class="font-medium text-green-800" id="review-privada-cota"></span>
                                 </div>
                             </div>
                         </div>
@@ -820,7 +826,7 @@ $select = new select($escola);
                 <div class="mb-6">
                     <h3 class="text-lg font-semibold text-gray-800 mb-3">Alunos por Turma</h3>
                     <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                        <p class="text-lg font-semibold text-gray-800" id="review-alunos">40</p>
+                        <p class="text-lg font-semibold text-gray-800" id="review-alunos"></p>
                     </div>
                 </div>
 
@@ -923,7 +929,7 @@ $select = new select($escola);
 
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-3">Tipo de Relatório *</label>
-                        <select name="tipo_relatorio" required class="w-full px-4 py-3.5 border border-gray-300 rounded-xl input-modern focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-base">
+                        <select name="tipo_relatorio" id="tipo_relatorio" required class="w-full px-4 py-3.5 border border-gray-300 rounded-xl input-modern focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-base">
                             <option value="" selected disabled>Selecione o tipo de relatório</option>
                             <option value="privada_ac">Privada AC</option>
                             <option value="privada_cotas">Privada Cotas</option>
@@ -936,8 +942,8 @@ $select = new select($escola);
                     </div>
 
                     <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-3">Curso (Opcional)</label>
-                        <select name="curso_id" class="w-full px-4 py-3.5 border border-gray-300 rounded-xl input-modern focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-base">
+                        <label class="block text-sm font-semibold text-gray-700 mb-3" id="label_curso">Curso (Opcional)</label>
+                        <select name="curso_id" id="curso_id" class="w-full px-4 py-3.5 border border-gray-300 rounded-xl input-modern focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-base">
                             <option value="">Todos os cursos</option>
                             <?php
                             $cursos = $select->select_cursos();
@@ -1078,7 +1084,13 @@ $select = new select($escola);
         }
 
         function openBairroModal() {
-            document.getElementById('modalBairroTitle').textContent = 'Cadastrar Bairro';
+            // Verificar se existem cursos cadastrados
+            <?php if (count($cursos) === 0) { ?>
+                alert('É necessário cadastrar pelo menos um curso antes de criar cotas.');
+                return;
+            <?php } ?>
+            
+            document.getElementById('modalBairroTitle').textContent = 'Cadastrar Cota';
             document.getElementById('inpBairroId').value = '';
             document.getElementById('inpBairroNome').value = '';
             document.getElementById('bairroForm').action = '../controllers/controller_bairro.php';
@@ -1124,7 +1136,7 @@ $select = new select($escola);
             }
 
             // Armazenar os valores que precisamos antes de fechar o modal
-            const alunosPorTurma = numAlunos.value;
+            const alunosPorTurma = parseInt(numAlunos.value);
             const bairrosArray = [];
 
             bairrosInputs.forEach(input => {
@@ -1132,6 +1144,16 @@ $select = new select($escola);
                     bairrosArray.push(input.value.trim());
                 }
             });
+
+            // Calcular a distribuição de vagas via JavaScript
+            const pcdFixed = 2;
+            const remaining = alunosPorTurma - pcdFixed;
+            const totalPublica = Math.round(remaining * 0.8);
+            const totalPrivada = Math.round(remaining * 0.2);
+            const publicaCotas = Math.round(totalPublica * 0.3);
+            const privadaCotas = Math.round(totalPrivada * 0.3);
+            const publicaAc = Math.round(totalPublica * 0.7);
+            const privadaAc = Math.round(totalPrivada * 0.7);
 
             // Fechar o modal atual
             closeModal('modalBairro');
@@ -1162,6 +1184,42 @@ $select = new select($escola);
                         if (reviewAlunos) {
                             reviewAlunos.textContent = alunosPorTurma;
                         }
+
+                        // Preencher a distribuição de vagas com verificação de elementos
+                        const reviewPcd = document.getElementById('review-pcd');
+                        const reviewTotal = document.getElementById('review-total');
+                        const reviewPublicaAc = document.getElementById('review-publica-ac');
+                        const reviewPublicaCota = document.getElementById('review-publica-cota');
+                        const reviewPrivadaAc = document.getElementById('review-privada-ac');
+                        const reviewPrivadaCota = document.getElementById('review-privada-cota');
+                        
+                        if (reviewPcd) reviewPcd.textContent = pcdFixed;
+                        if (reviewTotal) reviewTotal.textContent = alunosPorTurma;
+                        if (reviewPublicaAc) reviewPublicaAc.textContent = publicaAc;
+                        if (reviewPublicaCota) reviewPublicaCota.textContent = publicaCotas;
+                        if (reviewPrivadaAc) reviewPrivadaAc.textContent = privadaAc;
+                        if (reviewPrivadaCota) reviewPrivadaCota.textContent = privadaCotas;
+                        
+                        // Debug: mostrar os cálculos no console
+                        console.log('Cálculos do Modal de Revisão:');
+                        console.log('Alunos por turma:', alunosPorTurma);
+                        console.log('PCD:', pcdFixed);
+                        console.log('Restante:', remaining);
+                        console.log('Pública Total:', totalPublica);
+                        console.log('Privada Total:', totalPrivada);
+                        console.log('Pública AC:', publicaAc);
+                        console.log('Pública Cotas:', publicaCotas);
+                        console.log('Privada AC:', privadaAc);
+                        console.log('Privada Cotas:', privadaCotas);
+                        
+                        // Debug: verificar se os elementos existem
+                        console.log('Elementos encontrados:');
+                        console.log('review-pcd:', !!reviewPcd);
+                        console.log('review-total:', !!reviewTotal);
+                        console.log('review-publica-ac:', !!reviewPublicaAc);
+                        console.log('review-publica-cota:', !!reviewPublicaCota);
+                        console.log('review-privada-ac:', !!reviewPrivadaAc);
+                        console.log('review-privada-cota:', !!reviewPrivadaCota);
 
                         // Preencher a lista de bairros
                         const bairrosList = document.getElementById('review-bairros');
@@ -1246,42 +1304,6 @@ $select = new select($escola);
             fieldDiv.remove();
         }
 
-        // Função para abrir o modal de revisão
-        function openReviewModal() {
-            // Validar o formulário antes de abrir o modal de revisão
-            const form = document.getElementById('bairroForm');
-            if (!form.checkValidity()) {
-                form.reportValidity();
-                return;
-            }
-
-            // Obter valor do número de alunos por turma
-            const alunosValue = document.getElementById('inpBairroNome').value;
-
-            // Atualizar somente os campos que existem garantidamente no modal de revisão
-            const reviewAlunosEl = document.getElementById('review-alunos');
-            if (reviewAlunosEl) {
-                reviewAlunosEl.textContent = alunosValue;
-            }
-
-            // Obter e exibir os bairros
-            const bairrosContainer = document.getElementById('review-bairros');
-            if (bairrosContainer) {
-                bairrosContainer.innerHTML = '';
-                const bairrosInputs = document.querySelectorAll('input[name="bairros[]"]');
-                bairrosInputs.forEach(input => {
-                    if (input.value.trim() !== '') {
-                        const li = document.createElement('li');
-                        li.textContent = input.value;
-                        bairrosContainer.appendChild(li);
-                    }
-                });
-            }
-
-            // Fechar o modal de bairro e abrir o modal de revisão
-            closeModal('modalBairro');
-            openModal('modalReview');
-        }
 
         // Feedback by GET flags
         (function() {
@@ -1315,6 +1337,10 @@ $select = new select($escola);
                 title = `Erro ao processar ${entidade.toLowerCase()}`;
                 message = '';
                 type = 'error';
+            } else if (params.has('curso_obrigatorio')) {
+                title = 'Curso obrigatório';
+                message = 'É necessário cadastrar pelo menos um curso antes de criar cotas.';
+                type = 'error';
             } else {
                 return;
             }
@@ -1331,6 +1357,33 @@ $select = new select($escola);
             msgEl.textContent = message;
             openModal('modalFeedback');
         })();
+
+        // Controle do select de cursos baseado no tipo de relatório
+        document.addEventListener('DOMContentLoaded', function() {
+            const tipoRelatorio = document.getElementById('tipo_relatorio');
+            const cursoSelect = document.getElementById('curso_id');
+            const labelCurso = document.getElementById('label_curso');
+            
+            if (tipoRelatorio && cursoSelect && labelCurso) {
+                tipoRelatorio.addEventListener('change', function() {
+                    if (this.value === 'comissao_selecao') {
+                        // Desabilitar e limpar o select de cursos
+                        cursoSelect.disabled = true;
+                        cursoSelect.value = '';
+                        cursoSelect.classList.add('input-disabled');
+                        labelCurso.textContent = 'Curso (Não aplicável)';
+                        labelCurso.classList.add('text-gray-400');
+                    } else {
+                        // Habilitar o select de cursos
+                        cursoSelect.disabled = false;
+                        cursoSelect.classList.remove('input-disabled');
+                        labelCurso.textContent = 'Curso (Obrigatório)';
+                        labelCurso.classList.remove('text-gray-400');
+                        labelCurso.classList.add('text-red-600');
+                    }
+                });
+            }
+        });
     </script>
 </body>
 

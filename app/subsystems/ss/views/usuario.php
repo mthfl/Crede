@@ -913,7 +913,7 @@ $select = new select($escola);
 
                     <div>
                         <label class="block text-sm font-semibold text-gray-700 mb-3">Tipo de Relatório *</label>
-                        <select name="tipo_relatorio" required class="w-full px-4 py-3.5 border border-gray-300 rounded-xl input-modern focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-base">
+                        <select name="tipo_relatorio" id="tipo_relatorio" required class="w-full px-4 py-3.5 border border-gray-300 rounded-xl input-modern focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-base">
                             <option value="" selected disabled>Selecione o tipo de relatório</option>
                             <option value="privada_ac">Privada AC</option>
                             <option value="privada_cotas">Privada Cotas</option>
@@ -926,8 +926,8 @@ $select = new select($escola);
                     </div>
 
                     <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-3">Curso (Opcional)</label>
-                        <select name="curso_id" class="w-full px-4 py-3.5 border border-gray-300 rounded-xl input-modern focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-base">
+                        <label class="block text-sm font-semibold text-gray-700 mb-3" id="label_curso">Curso (Opcional)</label>
+                        <select name="curso_id" id="curso_id" class="w-full px-4 py-3.5 border border-gray-300 rounded-xl input-modern focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-base">
                             <option value="">Todos os cursos</option>
                             <?php
                             $cursos = $select->select_cursos();
@@ -1337,6 +1337,33 @@ $select = new select($escola);
             msgEl.textContent = message;
             openModal('modalFeedback');
         })();
+
+        // Controle do select de cursos baseado no tipo de relatório
+        document.addEventListener('DOMContentLoaded', function() {
+            const tipoRelatorio = document.getElementById('tipo_relatorio');
+            const cursoSelect = document.getElementById('curso_id');
+            const labelCurso = document.getElementById('label_curso');
+            
+            if (tipoRelatorio && cursoSelect && labelCurso) {
+                tipoRelatorio.addEventListener('change', function() {
+                    if (this.value === 'comissao_selecao') {
+                        // Desabilitar e limpar o select de cursos
+                        cursoSelect.disabled = true;
+                        cursoSelect.value = '';
+                        cursoSelect.classList.add('input-disabled');
+                        labelCurso.textContent = 'Curso (Não aplicável)';
+                        labelCurso.classList.add('text-gray-400');
+                    } else {
+                        // Habilitar o select de cursos
+                        cursoSelect.disabled = false;
+                        cursoSelect.classList.remove('input-disabled');
+                        labelCurso.textContent = 'Curso (Obrigatório)';
+                        labelCurso.classList.remove('text-gray-400');
+                        labelCurso.classList.add('text-red-600');
+                    }
+                });
+            }
+        });
     </script>
 </body>
 

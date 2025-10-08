@@ -5,6 +5,17 @@ $session->autenticar_session();
 $session->tempo_session();
 
 require_once(__DIR__ . "/../models/model.admin.php");
+require_once(__DIR__ . "/../models/model.select.php");
+
+// Verificar se existem cursos cadastrados antes de permitir criação de cotas
+$select = new select($_SESSION['escola']);
+$cursos = $select->select_cursos();
+
+if (count($cursos) === 0) {
+    header("location:../views/cotas.php?erro=curso_obrigatorio");
+    exit();
+}
+
 echo "<pre>";
 print_r($_POST);
 echo "</pre>";
