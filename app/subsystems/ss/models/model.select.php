@@ -17,6 +17,7 @@ class select extends connect
     protected string $table13;
     protected string $table14;
     protected string $table15;
+    protected string $table16;
 
     function __construct($escola)
     {
@@ -37,6 +38,7 @@ class select extends connect
         $this->table13 = $table["ss_$escola"][13];
         $this->table14 = $table["ss_$escola"][14];
         $this->table15 = $table["ss_$escola"][15];
+        $this->table16 = $table["ss_$escola"][16];
     }
 
     public function select_vagas(){
@@ -147,7 +149,42 @@ class select extends connect
     public function select_candidatos(): array
     {
         try {
-            $stmt = $this->connect->query("SELECT can.*, cur.nome_curso AS nome_curso, user.nome_user AS nome_user  FROM $this->table1 can INNER JOIN $this->table2 cur ON cur.id = can.id_curso1 INNER JOIN $this->table5 user ON user.id = can.id_cadastrador");
+            $stmt = $this->connect->query(
+                "SELECT can.*, cur.nome_curso AS nome_curso, user.nome_user AS nome_user  
+                FROM $this->table1 can 
+                INNER JOIN $this->table2 cur ON cur.id = can.id_curso1 
+                INNER JOIN $this->table5 user ON user.id = can.id_cadastrador
+                ");
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return [];
+        }
+    }
+    public function select_candidatos_ativos(): array
+    {
+        try {
+            $stmt = $this->connect->query(
+                "SELECT can.*, cur.nome_curso AS nome_curso, user.nome_user AS nome_user  
+                FROM $this->table1 can 
+                INNER JOIN $this->table2 cur ON cur.id = can.id_curso1 
+                INNER JOIN $this->table5 user ON user.id = can.id_cadastrador
+                WHERE can.status = 1
+                ");
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return [];
+        }
+    }
+    public function select_candidatos_inativos(): array
+    {
+        try {
+            $stmt = $this->connect->query(
+                "SELECT can.*, cur.nome_curso AS nome_curso, user.nome_user AS nome_user  
+                FROM $this->table1 can 
+                INNER JOIN $this->table2 cur ON cur.id = can.id_curso1 
+                INNER JOIN $this->table5 user ON user.id = can.id_cadastrador
+                WHERE can.status = 0
+                ");
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             return [];

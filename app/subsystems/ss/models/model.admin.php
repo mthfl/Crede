@@ -12,11 +12,22 @@ class admin extends cadastrador
         $this->table_user2 = $table["crede_users"][2];
     }
 
-    public function cadastrar_quantidade_vaga($quantidade)
+    public function cadastrar_quantidade_vaga(int $quantidade): int
     {
         try {
             $stmt_cadastro = $this->connect->prepare("UPDATE $this->table2 SET quantidade_alunos = :quantidade");
             $stmt_cadastro->bindValue(':quantidade', $quantidade);
+            $stmt_cadastro->execute();
+
+            date_default_timezone_set('America/Fortaleza');
+            $datatime = date('Y/m/d H:i:s');
+            $id_usuario = $_SESSION['id'];
+
+            $stmt_candidato = $this->connect->prepare("INSERT INTO $this->table16 VALUES (NULL, :id_candidato, :id_usuario, :datatime, :tipo_movimentacao, :descricao)");
+            $stmt_candidato->bindValue(":id_usuario", $id_usuario);
+            $stmt_candidato->bindValue(":datatime", $datatime);
+            $stmt_candidato->bindValue(":tipo_movimentacao", 'CADASTRAR QUANTIDADE DE VAGAS');
+            $stmt_candidato->bindValue(":descricao", $quantidade);
             if (!$stmt_cadastro->execute()) {
                 return 2;
             }
@@ -83,31 +94,38 @@ class admin extends cadastrador
      */
     public function cadastrar_curso(string $curso, string $cor): int
     {
-        try {
-            $stmt_check = $this->connect->prepare("SELECT * FROM $this->table2 WHERE nome_curso = :curso");
-            $stmt_check->bindValue(":curso", $curso);
-            $stmt_check->execute();
+        //try {
+        $stmt_check = $this->connect->prepare("SELECT * FROM $this->table2 WHERE nome_curso = :curso");
+        $stmt_check->bindValue(":curso", $curso);
+        $stmt_check->execute();
 
-            if ($stmt_check->rowCount() == 0) {
-
-                $stmt_check = $this->connect->prepare("INSERT INTO $this->table2 VALUES (NULL, :curso, :cor, NULL)");
-                $stmt_check->bindValue(":curso", $curso);
-                $stmt_check->bindValue(":cor", $cor);
-
-                if ($stmt_check->execute()) {
-
-                    return 1;
-                } else {
-
-                    return 2;
-                }
-            } else {
-
-                return 3;
-            }
-        } catch (PDOException $e) {
-            return 0;
+        if ($stmt_check->rowCount() !== 0) {
+            return 3;
         }
+
+        $stmt_check = $this->connect->prepare("INSERT INTO $this->table2 VALUES (NULL, :curso, :cor, NULL)");
+        $stmt_check->bindValue(":curso", $curso);
+        $stmt_check->bindValue(":cor", $cor);
+        $stmt_check->execute();
+
+        date_default_timezone_set('America/Fortaleza');
+        $datatime = date('Y/m/d H:i:s');
+        $id_usuario = $_SESSION['id'];
+
+        $stmt_candidato = $this->connect->prepare("INSERT INTO $this->table16 VALUES (NULL, :id_usuario, :datatime, :tipo_movimentacao, :descricao)");
+        $stmt_candidato->bindValue(":id_usuario", $id_usuario);
+        $stmt_candidato->bindValue(":datatime", $datatime);
+        $stmt_candidato->bindValue(":tipo_movimentacao", 'CADASTRAR CURSO');
+        $stmt_candidato->bindValue(":descricao", $curso);
+        if (!$stmt_candidato->execute()) {
+
+            return 2;
+        }
+
+        return 1;
+        /*} catch (PDOException $e) {
+            return 0;
+        }*/
     }
     public function editar_curso(int $id_curso, string $curso, string $cor): int
     {
@@ -116,24 +134,32 @@ class admin extends cadastrador
             $stmt_check->bindValue(":id_curso", $id_curso);
             $stmt_check->execute();
 
-            if ($stmt_check->rowCount() == 1) {
-
-                $stmt_check = $this->connect->prepare(" UPDATE $this->table2 SET `nome_curso`= :nome_curso, `cor_curso`= :cor WHERE id = :id_curso");
-                $stmt_check->bindValue(":id_curso", $id_curso);
-                $stmt_check->bindValue(":nome_curso", $curso);
-                $stmt_check->bindValue(":cor", $cor);
-
-                if ($stmt_check->execute()) {
-
-                    return 1;
-                } else {
-
-                    return 2;
-                }
-            } else {
-
+            if ($stmt_check->rowCount() !== 1) {
                 return 3;
             }
+
+            $stmt_check = $this->connect->prepare(" UPDATE $this->table2 SET `nome_curso`= :nome_curso, `cor_curso`= :cor WHERE id = :id_curso");
+            $stmt_check->bindValue(":id_curso", $id_curso);
+            $stmt_check->bindValue(":nome_curso", $curso);
+            $stmt_check->bindValue(":cor", $cor);
+            if (!$stmt_check->execute()) {
+                return 2;
+            }
+
+            date_default_timezone_set('America/Fortaleza');
+            $datatime = date('Y/m/d H:i:s');
+            $id_usuario = $_SESSION['id'];
+
+            $stmt_candidato = $this->connect->prepare("INSERT INTO $this->table16 VALUES (NULL, :id_usuario, :datatime, :tipo_movimentacao, :descricao)");
+            $stmt_candidato->bindValue(":id_usuario", $id_usuario);
+            $stmt_candidato->bindValue(":datatime", $datatime);
+            $stmt_candidato->bindValue(":tipo_movimentacao", 'EDITAR CURSO');
+            $stmt_candidato->bindValue(":descricao", $curso);
+            if (!$stmt_candidato->execute()) {
+                return 2;
+            }
+
+            return 1;
         } catch (PDOException $e) {
             return 0;
         }
@@ -141,34 +167,41 @@ class admin extends cadastrador
     public function excluir_curso(int $id_curso): int
     {
         try {
-            $stmt_check = $this->connect->prepare("SELECT * FROM $this->table2 WHERE id = :id_curso");
+            $stmt_curso = $this->connect->prepare("SELECT nome_curso FROM $this->table2 WHERE id = :id_curso");
+            $stmt_curso->bindValue(":id_curso", $id_curso);
+            $stmt_curso->execute();
+            if ($stmt_curso->rowCount() !== 1) {
+                return 3;
+            }
+            $curso = $stmt_curso->fetch(PDO::FETCH_ASSOC);
+
+            $stmt_check = $this->connect->prepare("SELECT * FROM $this->table1 WHERE id_curso1 = :id_curso");
             $stmt_check->bindValue(":id_curso", $id_curso);
             $stmt_check->execute();
 
-            if ($stmt_check->rowCount() == 1) {
-
-                $stmt_check = $this->connect->prepare("SELECT * FROM $this->table1 WHERE id_curso1 = :id_curso");
-                $stmt_check->bindValue(":id_curso", $id_curso);
-                $stmt_check->execute();
-
-                if ($stmt_check->rowCount() > 0) {
-                    return 4;
-                }
-
-                $stmt_check = $this->connect->prepare(" DELETE FROM $this->table2 WHERE id = :id_curso");
-                $stmt_check->bindValue(":id_curso", $id_curso);
-
-                if ($stmt_check->execute()) {
-
-                    return 1;
-                } else {
-
-                    return 2;
-                }
-            } else {
-
-                return 3;
+            if ($stmt_check->rowCount() !== 0) {
+                return 4;
             }
+
+            date_default_timezone_set('America/Fortaleza');
+            $datatime = date('Y/m/d H:i:s');
+            $id_usuario = $_SESSION['id'];
+            $stmt_candidato = $this->connect->prepare("INSERT INTO $this->table16 VALUES (NULL, :id_usuario, :datatime, :tipo_movimentacao, :descricao)");
+            $stmt_candidato->bindValue(":id_usuario", $id_usuario);
+            $stmt_candidato->bindValue(":datatime", $datatime);
+            $stmt_candidato->bindValue(":tipo_movimentacao", 'EXCLUIR CURSO');
+            $stmt_candidato->bindValue(":descricao", $curso['nome_curso']);
+            if (!$stmt_candidato->execute()) {
+                return 2;
+            }
+
+            $stmt_check = $this->connect->prepare(" DELETE FROM $this->table2 WHERE id = :id_curso");
+            $stmt_check->bindValue(":id_curso", $id_curso);
+            if (!$stmt_check->execute()) {
+                return 2;
+            }
+
+            return 1;
         } catch (PDOException $e) {
             return 0;
         }
@@ -178,8 +211,25 @@ class admin extends cadastrador
     {
         try {
 
-            $stmt_candidato = $this->connect->query("SELECT * FROM $this->table1 WHERE id_curso1 = '$id_curso'");
-            $id_candidatos = $stmt_candidato->fetchAll(PDO::FETCH_ASSOC);
+            $stmt_candidatos = $this->connect->query("SELECT * FROM $this->table1 WHERE id_curso1 = '$id_curso'");
+            $id_candidatos = $stmt_candidatos->fetchAll(PDO::FETCH_ASSOC);
+
+            $stmt_curso = $this->connect->prepare("SELECT nome_curso FROM $this->table2 WHERE id = :id_curso");
+            $stmt_curso->bindValue(":id_curso", $id_curso);
+            $stmt_curso->execute();
+            $curso = $stmt_curso->fetch(PDO::FETCH_ASSOC);
+
+            date_default_timezone_set('America/Fortaleza');
+            $datatime = date('Y/m/d H:i:s');
+            $id_usuario = $_SESSION['id'];
+            $stmt_candidato = $this->connect->prepare("INSERT INTO $this->table16 VALUES (NULL, :id_usuario, :datatime, :tipo_movimentacao, :descricao)");
+            $stmt_candidato->bindValue(":id_usuario", $id_usuario);
+            $stmt_candidato->bindValue(":datatime", $datatime);
+            $stmt_candidato->bindValue(":tipo_movimentacao", 'EXCLUIR CANDIDATOS E CURSO');
+            $stmt_candidato->bindValue(":descricao", $curso['nome_curso']);
+            if (!$stmt_candidato->execute()) {
+                return 2;
+            }
 
             foreach ($id_candidatos as $id_candidato) {
                 $stmt_delete = $this->connect->prepare("DELETE FROM $this->table14 WHERE id_candidato = :id_candidato");
@@ -233,26 +283,33 @@ class admin extends cadastrador
             $stmt_check = $this->connect->prepare("SELECT * FROM $this->table5 WHERE cpf = :cpf");
             $stmt_check->bindValue(":cpf", $cpf);
             $stmt_check->execute();
-
-            if ($stmt_check->rowCount() == 0) {
-
-                $stmt_usuario = $this->connect->prepare("INSERT INTO $this->table5(`nome_user`, `email`, `cpf`, `tipo_usuario`, `id_perfil`) VALUES (:nome, :email, :cpf, :tipo, :perfil)");
-                $stmt_usuario->bindValue(":nome", $nome);
-                $stmt_usuario->bindValue(":email", $email);
-                $stmt_usuario->bindValue(":cpf", $cpf);
-                $stmt_usuario->bindValue(":tipo", $tipo_usuario);
-                $stmt_usuario->bindValue(":perfil", $perfil);
-                if ($stmt_usuario->execute()) {
-
-                    return 1;
-                } else {
-
-                    return 2;
-                }
-            } else {
-
+            if ($stmt_check->rowCount() !== 0) {
                 return 3;
             }
+
+            $stmt_usuario = $this->connect->prepare("INSERT INTO $this->table5(`nome_user`, `email`, `cpf`, `tipo_usuario`, `id_perfil`) VALUES (:nome, :email, :cpf, :tipo, :perfil)");
+            $stmt_usuario->bindValue(":nome", $nome);
+            $stmt_usuario->bindValue(":email", $email);
+            $stmt_usuario->bindValue(":cpf", $cpf);
+            $stmt_usuario->bindValue(":tipo", $tipo_usuario);
+            $stmt_usuario->bindValue(":perfil", $perfil);
+            if (!$stmt_usuario->execute()) {
+                return 2;
+            }
+
+            date_default_timezone_set('America/Fortaleza');
+            $datatime = date('Y/m/d H:i:s');
+            $id_usuario = $_SESSION['id'];
+            $stmt_candidato = $this->connect->prepare("INSERT INTO $this->table16 VALUES (NULL, :id_usuario, :datatime, :tipo_movimentacao, :descricao)");
+            $stmt_candidato->bindValue(":id_usuario", $id_usuario);
+            $stmt_candidato->bindValue(":datatime", $datatime);
+            $stmt_candidato->bindValue(":tipo_movimentacao", 'CADASTRAR USUÁRIO');
+            $stmt_candidato->bindValue(":descricao", $nome);
+            if (!$stmt_candidato->execute()) {
+                return 2;
+            }
+
+            return 1;
         } catch (PDOException $e) {
             return 0;
         }
@@ -263,27 +320,34 @@ class admin extends cadastrador
             $stmt_check = $this->connect->prepare("SELECT * FROM $this->table5 WHERE id = :id_usuario");
             $stmt_check->bindValue(":id_usuario", $id_usuario);
             $stmt_check->execute();
-
-            if ($stmt_check->rowCount() == 1) {
-
-                $stmt_usuario = $this->connect->prepare(" UPDATE $this->table5 SET `nome_user`= :nome, `email`= :email, `cpf`= :cpf,`tipo_usuario`= :tipo, `id_perfil`= :perfil WHERE id = :id_usuario");
-                $stmt_usuario->bindValue(":id_usuario", $id_usuario);
-                $stmt_usuario->bindValue(":nome", $nome);
-                $stmt_usuario->bindValue(":email", $email);
-                $stmt_usuario->bindValue(":cpf", $cpf);
-                $stmt_usuario->bindValue(":tipo", $tipo_usuario);
-                $stmt_usuario->bindValue(":perfil", $perfil);
-                if ($stmt_usuario->execute()) {
-
-                    return 1;
-                } else {
-
-                    return 2;
-                }
-            } else {
-
+            if ($stmt_check->rowCount() !== 1) {
                 return 3;
             }
+
+            $stmt_usuario = $this->connect->prepare(" UPDATE $this->table5 SET `nome_user`= :nome, `email`= :email, `cpf`= :cpf,`tipo_usuario`= :tipo, `id_perfil`= :perfil WHERE id = :id_usuario");
+            $stmt_usuario->bindValue(":id_usuario", $id_usuario);
+            $stmt_usuario->bindValue(":nome", $nome);
+            $stmt_usuario->bindValue(":email", $email);
+            $stmt_usuario->bindValue(":cpf", $cpf);
+            $stmt_usuario->bindValue(":tipo", $tipo_usuario);
+            $stmt_usuario->bindValue(":perfil", $perfil);
+            if (!$stmt_usuario->execute()) {
+                return 2;
+            }
+
+            date_default_timezone_set('America/Fortaleza');
+            $datatime = date('Y/m/d H:i:s');
+            $id_usuario = $_SESSION['id'];
+            $stmt_candidato = $this->connect->prepare("INSERT INTO $this->table16 VALUES (NULL, :id_usuario, :datatime, :tipo_movimentacao, :descricao)");
+            $stmt_candidato->bindValue(":id_usuario", $id_usuario);
+            $stmt_candidato->bindValue(":datatime", $datatime);
+            $stmt_candidato->bindValue(":tipo_movimentacao", 'EDITAR USUÁRIO');
+            $stmt_candidato->bindValue(":descricao", $nome);
+            if (!$stmt_candidato->execute()) {
+                return 2;
+            }
+
+            return 1;
         } catch (PDOException $e) {
             return 0;
         }
@@ -305,6 +369,16 @@ class admin extends cadastrador
                     return 2;
                 }
             }
+            date_default_timezone_set('America/Fortaleza');
+            $datatime = date('Y/m/d H:i:s');
+            $id_usuario = $_SESSION['id'];
+            $stmt_candidato = $this->connect->prepare("INSERT INTO $this->table16 VALUES (NULL, :id_usuario, :datatime, :tipo_movimentacao, NULL)");
+            $stmt_candidato->bindValue(":id_usuario", $id_usuario);
+            $stmt_candidato->bindValue(":datatime", $datatime);
+            $stmt_candidato->bindValue(":tipo_movimentacao", 'CADASTRAR BAIRRO');
+            if (!$stmt_candidato->execute()) {
+                return 2;
+            }
             return 1;
         } catch (PDOException $e) {
             return 0;
@@ -316,24 +390,33 @@ class admin extends cadastrador
             $stmt_check = $this->connect->prepare("SELECT * FROM $this->table13 WHERE id = :id_bairro");
             $stmt_check->bindValue(":id_bairro", $id_bairro);
             $stmt_check->execute();
+            $id = $stmt_check->fetch(PDO::FETCH_ASSOC);
 
-            if ($stmt_check->rowCount() == 1) {
-
-                $stmt_usuario = $this->connect->prepare(" UPDATE $this->table13 SET `bairros`= :nome WHERE id = :id_bairro");
-                $stmt_usuario->bindValue(":id_bairro", $id_bairro);
-                $stmt_usuario->bindValue(":nome", $nome);
-
-                if ($stmt_usuario->execute()) {
-
-                    return 1;
-                } else {
-
-                    return 2;
-                }
-            } else {
-
+            if ($stmt_check->rowCount() !== 1) {
                 return 3;
             }
+            $stmt_usuario = $this->connect->prepare(" UPDATE $this->table13 SET `bairros`= :nome WHERE id = :id_bairro");
+            $stmt_usuario->bindValue(":id_bairro", $id_bairro);
+            $stmt_usuario->bindValue(":nome", $nome);
+
+            if (!$stmt_usuario->execute()) {
+
+                return 2;
+            }
+
+            date_default_timezone_set('America/Fortaleza');
+            $datatime = date('Y/m/d H:i:s');
+            $id_usuario = $_SESSION['id'];
+            $stmt_candidato = $this->connect->prepare("INSERT INTO $this->table16 VALUES (NULL, :id_usuario, :datatime, :tipo_movimentacao, :descricao)");
+            $stmt_candidato->bindValue(":id_usuario", $id_usuario);
+            $stmt_candidato->bindValue(":datatime", $datatime);
+            $stmt_candidato->bindValue(":tipo_movimentacao", 'EDITAR BAIRRO');
+            $stmt_candidato->bindValue(":descricao", $id['bairros']);
+            if (!$stmt_candidato->execute()) {
+                return 2;
+            }
+
+            return 1;
         } catch (PDOException $e) {
             return 0;
         }
@@ -344,32 +427,110 @@ class admin extends cadastrador
             $stmt_check = $this->connect->prepare("SELECT * FROM $this->table13 WHERE id = :id_bairro");
             $stmt_check->bindValue(":id_bairro", $id_bairro);
             $stmt_check->execute();
+            $id = $stmt_check->fetch(PDO::FETCH_ASSOC);
 
-            if ($stmt_check->rowCount() == 1) {
-
-                $stmt_usuario = $this->connect->prepare(" DELETE FROM $this->table13 WHERE id = :id_bairro");
-                $stmt_usuario->bindValue(":id_bairro", $id_bairro);
-
-                if ($stmt_usuario->execute()) {
-
-                    return 1;
-                } else {
-
-                    return 2;
-                }
-            } else {
-
+            if ($stmt_check->rowCount() !== 1) {
                 return 3;
             }
+            $stmt_usuario = $this->connect->prepare(" DELETE FROM $this->table13 WHERE id = :id_bairro");
+            $stmt_usuario->bindValue(":id_bairro", $id_bairro);
+
+            if (!$stmt_usuario->execute()) {
+
+                return 2;
+            }
+            date_default_timezone_set('America/Fortaleza');
+            $datatime = date('Y/m/d H:i:s');
+            $id_usuario = $_SESSION['id'];
+            $stmt_candidato = $this->connect->prepare("INSERT INTO $this->table16 VALUES (NULL, :id_usuario, :datatime, :tipo_movimentacao, :descricao)");
+            $stmt_candidato->bindValue(":id_usuario", $id_usuario);
+            $stmt_candidato->bindValue(":datatime", $datatime);
+            $stmt_candidato->bindValue(":tipo_movimentacao", 'EXCLUIR BAIRRO');
+            $stmt_candidato->bindValue(":descricao", $id['bairros']);
+            if (!$stmt_candidato->execute()) {
+                return 2;
+            }
+
+            return 1;
         } catch (PDOException $e) {
             return 0;
         }
     }
-
-    public function excluir_candidato(int $id_candidato)
+    public function inativar_candidato(int $id_candidato)
     {
+        try {
+            $stmt_check = $this->connect->prepare("SELECT * FROM $this->table1 WHERE id = :id_candidato");
+            $stmt_check->bindValue(":id_candidato", $id_candidato);
+            $stmt_check->execute();
+            $candidato = $stmt_check->fetch(PDO::FETCH_ASSOC);
 
-        //try {
+            if ($stmt_check->rowCount() !== 1) {
+                return 3;
+            }
+            $stmt_candidato = $this->connect->prepare("UPDATE $this->table1 SET status = 0 WHERE id = :id_candidato");
+            $stmt_candidato->bindValue(":id_candidato", $id_candidato);
+            if (!$stmt_candidato->execute()) {
+                return 2;
+            }
+
+            date_default_timezone_set('America/Fortaleza');
+            $datatime = date('Y/m/d H:i:s');
+            $id_usuario = $_SESSION['id'];
+            $stmt_candidato = $this->connect->prepare("INSERT INTO $this->table16 VALUES (NULL, :id_usuario, :datatime, :tipo_movimentacao, :descricao)");
+            $stmt_candidato->bindValue(":id_usuario", $id_usuario);
+            $stmt_candidato->bindValue(":datatime", $datatime);
+            $stmt_candidato->bindValue(":tipo_movimentacao", 'INATIVAR CANDIDATO');
+            $stmt_candidato->bindValue(":descricao", $candidato['nome']);
+
+            if (!$stmt_candidato->execute()) {
+
+                return 2;
+            }
+
+            return 1;
+        } catch (PDOException $e) {
+            return 0;
+        }
+    }
+    public function ativar_candidato(int $id_candidato)
+    {
+        try {
+            $stmt_check = $this->connect->prepare("SELECT * FROM $this->table1 WHERE id = :id_candidato");
+            $stmt_check->bindValue(":id_candidato", $id_candidato);
+            $stmt_check->execute();
+            $candidato = $stmt_check->fetch(PDO::FETCH_ASSOC);
+
+            if ($stmt_check->rowCount() !== 1) {
+                return 3;
+            }
+            $stmt_candidato = $this->connect->prepare("UPDATE $this->table1 SET status = 1 WHERE id = :id_candidato");
+            $stmt_candidato->bindValue(":id_candidato", $id_candidato);
+            if (!$stmt_candidato->execute()) {
+                return 2;
+            }
+
+            date_default_timezone_set('America/Fortaleza');
+            $datatime = date('Y/m/d H:i:s');
+            $id_usuario = $_SESSION['id'];
+            $stmt_candidato = $this->connect->prepare("INSERT INTO $this->table16 VALUES (NULL, :id_usuario, :datatime, :tipo_movimentacao, :descricao)");
+            $stmt_candidato->bindValue(":id_usuario", $id_usuario);
+            $stmt_candidato->bindValue(":datatime", $datatime);
+            $stmt_candidato->bindValue(":tipo_movimentacao", 'ATIVAR CANDIDATO');
+            $stmt_candidato->bindValue(":descricao", $candidato['nome']);
+
+            if (!$stmt_candidato->execute()) {
+
+                return 2;
+            }
+
+            return 1;
+        } catch (PDOException $e) {
+            return 0;
+        }
+    }
+    /*public function excluir_candidato(int $id_candidato)
+    {
+        try {
         $stmt_check = $this->connect->prepare("SELECT * FROM $this->table1 WHERE id = :id_candidato");
         $stmt_check->bindValue(":id_candidato", $id_candidato);
         $stmt_check->execute();
@@ -417,10 +578,10 @@ class admin extends cadastrador
 
             return 3;
         }
-        /*} catch (PDOException $e) {
+        } catch (PDOException $e) {
             return 0;
-        }*/
-    }
+        }
+    }*/
     public function limpar_banco(): int
     {
         try {
@@ -437,6 +598,18 @@ class admin extends cadastrador
             $stmt_delete = $this->connect->query("DELETE FROM $this->table2");
             $stmt_delete = $this->connect->query("DELETE FROM $this->table13");
 
+            date_default_timezone_set('America/Fortaleza');
+            $datatime = date('Y/m/d H:i:s');
+            $id_usuario = $_SESSION['id'];
+
+            $stmt_candidato = $this->connect->prepare("INSERT INTO $this->table16 VALUES (NULL, :id_usuario, :datatime, :tipo_movimentacao, NULL)");
+            $stmt_candidato->bindValue(":id_usuario", $id_usuario);
+            $stmt_candidato->bindValue(":datatime", $datatime);
+            $stmt_candidato->bindValue(":tipo_movimentacao", 'CADASTRAR CURSO');
+            if (!$stmt_candidato->execute()) {
+
+                return 2;
+            }
             return 1;
         } catch (PDOException $e) {
             return 0;
@@ -784,6 +957,17 @@ class admin extends cadastrador
                 $stmt->execute();
             }
 
+            date_default_timezone_set('America/Fortaleza');
+            $datatime = date('Y/m/d H:i:s');
+            $id_usuario = $_SESSION['id'];
+            $stmt_candidato = $this->connect->prepare("INSERT INTO $this->table16 VALUES (NULL, :id_usuario, :datatime, :tipo_movimentacao, NULL)");
+            $stmt_candidato->bindValue(":id_usuario", $id_usuario);
+            $stmt_candidato->bindValue(":datatime", $datatime);
+            $stmt_candidato->bindValue(":tipo_movimentacao", 'EDITAR CANDIDATO');
+            if (!$stmt_candidato->execute()) {
+                return 2;
+            }
+
             return 1;
         } catch (PDOException $e) {
             return 0;
@@ -835,13 +1019,28 @@ class admin extends cadastrador
     public function desabilitar_usuario(int $id_usuario): int
     {
         try {
+            $stmt = $this->connect->query("SELECT * FROM $this->table5 WHERE id = '$id_usuario'");
+            $nome = $stmt->fetch(PDO::FETCH_ASSOC);
+
             $stmt = $this->connect->prepare("UPDATE $this->table5 SET status = 0, data_fim = NOW() WHERE id = :id");
             $stmt->bindValue(":id", $id_usuario);
-            if ($stmt->execute()) {
-                return 1;
-            } else {
+            if (!$stmt->execute()) {
                 return 2;
             }
+
+            date_default_timezone_set('America/Fortaleza');
+            $datatime = date('Y/m/d H:i:s');
+            $id_usuario = $_SESSION['id'];
+            $stmt_candidato = $this->connect->prepare("INSERT INTO $this->table16 VALUES (NULL, :id_usuario, :datatime, :tipo_movimentacao, :descricao)");
+            $stmt_candidato->bindValue(":id_usuario", $id_usuario);
+            $stmt_candidato->bindValue(":datatime", $datatime);
+            $stmt_candidato->bindValue(":tipo_movimentacao", 'DESATIVAR USUÁRIO');
+            $stmt_candidato->bindValue(":descricao", $nome['nome_user']);
+            if (!$stmt_candidato->execute()) {
+                return 2;
+            }
+
+            return 1;
         } catch (PDOException $e) {
             return 0;
         }
@@ -849,13 +1048,26 @@ class admin extends cadastrador
     public function habilitar_usuario(int $id_usuario): int
     {
         try {
+            $stmt = $this->connect->query("SELECT * FROM $this->table5 WHERE id = '$id_usuario'");
+            $nome = $stmt->fetch(PDO::FETCH_ASSOC);
+
             $stmt = $this->connect->prepare("UPDATE $this->table5 SET status = 1, data_fim = NULL WHERE id = :id");
             $stmt->bindValue(":id", $id_usuario);
-            if ($stmt->execute()) {
-                return 1;
-            } else {
+            if (!$stmt->execute()) {
                 return 2;
             }
+            date_default_timezone_set('America/Fortaleza');
+            $datatime = date('Y/m/d H:i:s');
+            $id_usuario = $_SESSION['id'];
+            $stmt_candidato = $this->connect->prepare("INSERT INTO $this->table16 VALUES (NULL, :id_usuario, :datatime, :tipo_movimentacao, :descricao)");
+            $stmt_candidato->bindValue(":id_usuario", $id_usuario);
+            $stmt_candidato->bindValue(":datatime", $datatime);
+            $stmt_candidato->bindValue(":tipo_movimentacao", 'HABILITAR USUÁRIO');
+            $stmt_candidato->bindValue(":descricao", $nome['nome_user']);
+            if (!$stmt_candidato->execute()) {
+                return 2;
+            }
+            return 1;
         } catch (PDOException $e) {
             return 0;
         }
@@ -926,4 +1138,6 @@ class admin extends cadastrador
             return 0;
         }
     }
+
+    private function registrar_movimentacao($id_candidato, $id_usuario, $tipo_movimentacao) {}
 }

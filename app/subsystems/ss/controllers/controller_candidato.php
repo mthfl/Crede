@@ -6,7 +6,8 @@ $session->tempo_session();
 require_once(__DIR__ . "/../models/model.admin.php");
 require_once(__DIR__ . "/../models/model.cadastrador.php");
 require_once(__DIR__ . "/../models/model.select.php");
-print_r($_POST);
+//print_r($_POST);
+print_r($_GET);
 
 if (
     isset($_POST['form']) && $_POST['form'] === 'candidato' &&
@@ -385,12 +386,19 @@ if (
             header('Location: ../views/cadastro.php?falha');
             exit();
     }
-} else if (isset($_POST['id_candidato']) && !empty($_POST['id_candidato']) && isset($_POST['acao']) && $_POST['acao'] == 'delete') {
+} else if (isset($_GET['tipo']) && !empty($_GET['tipo']) && isset($_GET['id_excluir']) && !empty($_GET['id_excluir'])) {
     $escola = $_SESSION['escola'];
     $admin_model = new admin($escola);
 
-    $id_candidato = $_POST['id_candidato'];
-    $result = $admin_model->excluir_candidato($id_candidato);
+    $id_candidato = $_GET['id_excluir'];
+
+    $tipo = $_GET['tipo'];
+    if ($tipo === 'inativar') {
+        $result = $admin_model->inativar_candidato($id_candidato);
+    } else if ($tipo === 'ativar') {
+        $result = $admin_model->ativar_candidato($id_candidato);
+    }
+    
     switch ($result) {
         case 1:
             header('Location: ../views/candidatos.php?deletado');
@@ -405,6 +413,7 @@ if (
             header('Location: ../views/candidatos.php?falha');
             exit();
     }
+    
 } else if (isset($_GET['id_candidato']) && !empty($_GET['id_candidato'])) {
     $escola = $_SESSION['escola'];
     $admin_model = new select($escola);

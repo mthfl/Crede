@@ -85,7 +85,7 @@ class cadastrador extends select
         float $reli_3bim_9ano,
     ): int {
         try {
-            $stmt_candidato = $this->connect->prepare("INSERT INTO $this->table1 VALUES (NULL, :nome, :id_curso1, :data_nascimento, :bairro, :publica, :pcd, NULL, :id_cadastrador)");
+            $stmt_candidato = $this->connect->prepare("INSERT INTO $this->table1 VALUES (NULL, :nome, :id_curso1, :data_nascimento, :bairro, :publica, :pcd, NULL, :id_cadastrador, 1)");
             $stmt_candidato->bindValue(":nome", $nome);
             $stmt_candidato->bindValue(":id_curso1", $id_curso1);
             $stmt_candidato->bindValue(":data_nascimento", $data_nascimento);
@@ -400,6 +400,18 @@ class cadastrador extends select
             }
 
             $_SESSION['candidato'] = $nome;
+            date_default_timezone_set('America/Fortaleza');
+            $datatime = date('Y/m/d H:i:s');
+            $id_usuario = $_SESSION['id'];
+            $stmt_candidato = $this->connect->prepare("INSERT INTO $this->table16 VALUES (NULL, :id_usuario, :datatime, :tipo_movimentacao, :descricao)");
+            $stmt_candidato->bindValue(":id_usuario", $id_usuario);
+            $stmt_candidato->bindValue(":datatime", $datatime);
+            $stmt_candidato->bindValue(":tipo_movimentacao", 'CADASTRAR CANDIDATO');
+            $stmt_candidato->bindValue(":descricao", $nome);
+            if (!$stmt_candidato->execute()) {
+                return 2;
+            }
+            
             return 1;
         } catch (PDOException $e) {
             return 0;
@@ -408,7 +420,7 @@ class cadastrador extends select
 
     public function requisicao_alteracao(int $id_usuario, int $id_candidato, string $requisicao): int
     {
-        //try {
+        try {
             $stmt_usuario = $this->connect->prepare("SELECT * FROM $this->table5 WHERE id = :id");
             $stmt_usuario->bindValue(":id", $id_usuario);
             $stmt_usuario->execute();
@@ -431,8 +443,8 @@ class cadastrador extends select
 
                 return 3;
             }
-        /*} catch (PDOException $e) {
+        } catch (PDOException $e) {
             return 0;
-        }*/
+        }
     }
 }

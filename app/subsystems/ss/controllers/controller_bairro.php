@@ -7,7 +7,6 @@ $session->tempo_session();
 require_once(__DIR__ . "/../models/model.admin.php");
 require_once(__DIR__ . "/../models/model.select.php");
 
-// Verificar se existem cursos cadastrados antes de permitir criação de cotas
 $select = new select($_SESSION['escola']);
 $cursos = $select->select_cursos();
 
@@ -15,10 +14,8 @@ if (count($cursos) === 0) {
     header("location:../views/cotas.php?erro=curso_obrigatorio");
     exit();
 }
-
-echo "<pre>";
 print_r($_POST);
-echo "</pre>";
+
 
 //cadastrar bairro
 if (
@@ -29,12 +26,10 @@ if (
     $bairros = $_POST["bairros"];
     $quantidade = $_POST["quantidades"];
     $escola = $_SESSION['escola'];
-    foreach ($bairros as $nome) {
-        echo $nome;
-    }
+    
     $admin_model = new admin($escola);
-    $result1 = $admin_model->cadastrar_bairro($bairros);
-    $result2 = $admin_model->cadastrar_quantidade_vaga($quantidade);
+    $result1 = $admin_model->cadastrar_quantidade_vaga($quantidade);
+    $result2 = $admin_model->cadastrar_bairro($bairros);
 
     switch ($result1) {
         case 1:

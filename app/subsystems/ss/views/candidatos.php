@@ -12,6 +12,7 @@ require_once(__DIR__ . '/../models/model.select.php');
 $select = new select($escola);
 
 $candidatos = $select->select_candidatos();
+$candidatos_ativos = $select->select_candidatos_ativos();
 $cursos = $select->select_cursos();
 $usuarios = $select->select_usuarios();
 ?>
@@ -334,7 +335,7 @@ $usuarios = $select->select_usuarios();
                         </div>
                     <?php } ?>
 
-                    
+
 
                     <!-- Candidatos -->
                     <?php if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'admin' || $_SESSION['tipo_usuario'] === 'cadastrador')) { ?>
@@ -391,7 +392,7 @@ $usuarios = $select->select_usuarios();
                     <!-- Relatórios -->
                     <?php if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'admin')) { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.5s;">
-                            <a href="#" onclick="openModal('modalRelatorios')" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
+                            <a href="./relatorios.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
                                 <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
@@ -400,23 +401,6 @@ $usuarios = $select->select_usuarios();
                                 <div>
                                     <span class="font-semibold text-base">Relatórios</span>
                                     <p class="text-green-200 text-xs mt-1">Gerar documentos</p>
-                                </div>
-                            </a>
-                        </div>
-                    <?php } ?>
-
-                    <!--Resultados-->
-                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
-                        <div class="animate-slide-in-left" style="animation-delay: 0.5s;">
-                            <a href="#" onclick="openModal('modalResultados')" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
-                                <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
-                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <span class="font-semibold text-base">Resultados</span>
-                                    <p class="text-green-200 text-xs mt-1">Consultar dados</p>
                                 </div>
                             </a>
                         </div>
@@ -491,32 +475,32 @@ $usuarios = $select->select_usuarios();
                 </div>
 
                 <!-- Barra de Pesquisa -->
-<div class="mb-6">
-    <div class="flex items-center max-w-md space-x-3">
-        <div class="relative flex-1">
-            <input type="text" id="searchInput" placeholder="Pesquisar por nome do candidato..." class="w-full px-4 py-3 pr-10 border border-gray-300 rounded-xl focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-sm" onkeyup="filterCandidates()">
-            <svg class="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-            </svg>
-        </div>
-        <button onclick="window.location.href='solicitar_alteracao.php'" class="bg-primary text-white px-4 py-3 rounded-xl hover:bg-green-700 transition-all duration-300 font-medium text-sm btn-animate focus-ring flex items-center">
-            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-            </svg>
-            Solicitar Alteração
-        </button>
-    </div>
-</div>
+                <div class="mb-6">
+                    <div class="flex items-center max-w-md space-x-3">
+                        <div class="relative flex-1">
+                            <input type="text" id="searchInput" placeholder="Pesquisar por nome do candidato..." class="w-full px-4 py-3 pr-10 border border-gray-300 rounded-xl focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-sm" onkeyup="filterCandidates()">
+                            <svg class="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                        </div>
+                        <button onclick="window.location.href='solicitar_alteracao.php'" class="bg-primary text-white px-4 py-3 rounded-xl hover:bg-green-700 transition-all duration-300 font-medium text-sm btn-animate focus-ring flex items-center">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                            </svg>
+                            Solicitar Alteração
+                        </button>
+                    </div>
+                </div>
 
-<style>
-    input:focus,
-    select:focus,
-    button:focus,
-    a:focus {
-        outline: 2px solid var(--primary);
-        outline-offset: 2px;
-    }
-</style>
+                <style>
+                    input:focus,
+                    select:focus,
+                    button:focus,
+                    a:focus {
+                        outline: 2px solid var(--primary);
+                        outline-offset: 2px;
+                    }
+                </style>
 
                 <script>
                     function filterCandidates() {
@@ -524,7 +508,7 @@ $usuarios = $select->select_usuarios();
                         const tableRows = document.querySelectorAll('tbody tr');
                         const candidateCards = document.querySelectorAll('.candidate-card');
 
-                      
+
                         tableRows.forEach(row => {
                             const nome = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
                             row.style.display = nome.includes(searchInput) ? '' : 'none';
@@ -566,7 +550,15 @@ $usuarios = $select->select_usuarios();
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-100">
-                                <?php foreach ($candidatos as $cand) {
+
+                                <?php
+
+                                if ($_SESSION['tipo_usuario'] === 'admin') {
+                                    $tipo = $candidatos;
+                                } else {
+                                    $tipo = $candidatos_ativos;
+                                }
+                                foreach ($tipo as $cand) {
                                     $id = $cand['id'] ?? '-';
                                     $nome = $cand['nome'] ?? '-';
                                     $cursoNome = $cand['nome_curso'] ?? '-';
@@ -574,13 +566,13 @@ $usuarios = $select->select_usuarios();
                                     $data = $cand['data'] ?? '-';
                                     $cadastradorNome = $cand['nome_user'] ?? '-';
 
-                                    if($cand['bairro'] == 1){
+                                    if ($cand['bairro'] == 1) {
 
                                         $cota = 'BAIRRO';
-                                    }else if($cand['pcd'] == 1){
+                                    } else if ($cand['pcd'] == 1) {
                                         $cota = 'PCD';
-                                    }else{
-                                        $cota='AMPLA';
+                                    } else {
+                                        $cota = 'AMPLA';
                                     }
                                 ?>
                                     <tr class="hover:bg-accent/30">
@@ -602,14 +594,24 @@ $usuarios = $select->select_usuarios();
                                                         </svg>
                                                         Editar
                                                     </a>
-                                                    <button class="delete-candidato bg-secondary text-white py-2 px-4 rounded-lg hover:bg-orange-600 transition-all duration-300 font-medium text-sm btn-animate focus-ring flex items-center justify-center w-24"
-                                                        data-id="<?= htmlspecialchars((string)($cand['id'] ?? '')) ?>"
-                                                        data-nome="<?= htmlspecialchars((string)($cand['nome'] ?? '')) ?>">
-                                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                                        </svg>
-                                                        Excluir
-                                                    </button>
+                                                    <?php if ($cand['status'] == 1) { ?>
+                                                        
+                                                        <a href="../controllers/controller_candidato.php?id_excluir=<?=$id?>&tipo=inativar" class="delete-candidato bg-secondary text-white py-2 px-4 rounded-lg hover:bg-orange-600 transition-all duration-300 font-medium text-sm btn-animate focus-ring flex items-center justify-center w-24">
+                                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                                            </svg>
+                                                            Inativar
+                                                        </a>
+                                                    <?php } else { ?>
+                                                        
+                                                        <a href="../controllers/controller_candidato.php?id_excluir=<?=$id?>&tipo=ativar" class="delete-candidato bg-secondary text-white py-2 px-4 rounded-lg hover:bg-orange-600 transition-all duration-300 font-medium text-sm btn-animate focus-ring flex items-center justify-center w-24">
+                                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                                            </svg>
+                                                            Ativar
+                                                        </a>
+                                                    <?php } ?>
+
                                                 </div>
                                             </td>
                                         <?php } ?>
@@ -633,13 +635,13 @@ $usuarios = $select->select_usuarios();
                                 $data = $cand['data'] ?? '-';
                                 $cadastradorNome = $cand['nome_user'] ?? '-';
 
-                                if($cand['bairro'] == 1){
+                                if ($cand['bairro'] == 1) {
 
                                     $cota = 'BAIRRO';
-                                }else if($cand['pcd'] == 1){
+                                } else if ($cand['pcd'] == 1) {
                                     $cota = 'PCD';
-                                }else{
-                                    $cota='AMPLA';
+                                } else {
+                                    $cota = 'AMPLA';
                                 }
                             ?>
                                 <div class="candidate-card">
@@ -651,10 +653,10 @@ $usuarios = $select->select_usuarios();
                                         <span class="field-label">Nome</span>
                                         <span class="field-value font-medium"><?= htmlspecialchars((string)$nome) ?></span>
                                     </div>
-                                        <div class="field">
-                                            <span class="field-label">Curso</span>
-                                            <span class="field-value"><?= htmlspecialchars((string)$cursoNome) ?></span>
-                                        </div>
+                                    <div class="field">
+                                        <span class="field-label">Curso</span>
+                                        <span class="field-value"><?= htmlspecialchars((string)$cursoNome) ?></span>
+                                    </div>
                                     <div class="field">
                                         <span class="field-label">Cota</span>
                                         <span class="field-value"><?= htmlspecialchars((string)$cota) ?></span>
@@ -720,6 +722,7 @@ $usuarios = $select->select_usuarios();
                     Esta ação não pode ser desfeita.
                 </p>
                 <form id="deleteCandidatoForm" action="../controllers/controller_candidato.php" method="POST">
+
                     <input type="hidden" name="form" value="candidato">
                     <input type="hidden" id="deleteCandidatoId" name="id_candidato" value="">
                     <div class="flex flex-col sm:flex-row gap-3 justify-center">
@@ -954,7 +957,7 @@ $usuarios = $select->select_usuarios();
             const tipoRelatorio = document.getElementById('tipo_relatorio');
             const cursoSelect = document.getElementById('curso_id');
             const labelCurso = document.getElementById('label_curso');
-            
+
             if (tipoRelatorio && cursoSelect && labelCurso) {
                 tipoRelatorio.addEventListener('change', function() {
                     if (this.value === 'comissao_selecao') {

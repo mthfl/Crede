@@ -4,13 +4,14 @@ $session = new sessions();
 $session->autenticar_session();
 $session->tempo_session();
 //print_r($_POST);
+//print_r($_GET);
 
 if (
     isset($_POST['tipo_relatorio']) && !empty($_POST['tipo_relatorio']) &&
-    isset($_POST['curso_id']) && !empty($_POST['curso_id'])
+    isset($_POST['curso']) && !empty($_POST['curso'])
 ) {
 
-    $curso = $_POST['curso_id'];
+    $curso = $_POST['curso'];
     $tipo_relatorio = $_POST['tipo_relatorio'];
     switch ($tipo_relatorio) {
         case 'privada_ac':
@@ -31,34 +32,38 @@ if (
         case 'publica_geral':
             header("location:../views/reports/relatorios.php?curso=" . $curso . "&tipo_relatorio=PÚBLICA GERAL");
             exit();
-    }
-} else if (
-    isset($_POST['tipo_consulta']) && !empty($_POST['tipo_consulta']) &&
-    isset($_POST['curso_id']) && !empty($_POST['curso_id'])
-) {
-
-    $curso = $_POST['curso_id'];
-    $tipo_relatorio = $_POST['tipo_consulta'];
-    switch ($tipo_relatorio) {
-        case 'classificados':
+        case 'Classificados':
             header("location:../views/reports/resultados/classificados.php?curso=" . $curso);
             exit();
-        case 'classificaveis':
+        case 'Classificaveis':
             header("location:../views/reports/resultados/classificaveis.php?curso=" . $curso);
             exit();
-        case 'resultado_final':
+        case 'Resultado Final':
             header("location:../views/reports/resultados/resultado_final.php?curso=" . $curso);
             exit();
-        case 'resultado_preliminar':
+        case 'Resultado pré-liminar':
             header("location:../views/reports/resultados/resultado_preliminar.php?curso=" . $curso);
+            exit();
+        default:
+            header("location: ../index.php");
             exit();
     }
 }
-if (isset($_POST['tipo_relatorio']) && !empty($_POST['tipo_relatorio']) && empty($_POST['curso_id'])) {
+if (isset($_GET['tipo_relatorio']) && !empty($_GET['tipo_relatorio'])) {
 
-    header("location:../views/reports/comissao_selecao.php?usuarios");
-    exit();
+    $tipo_relatorio = $_GET['tipo_relatorio'];
 
+    switch ($tipo_relatorio) {
+        case 'comissao_selecao':
+            header("location:../views/reports/comissao_selecao.php?usuarios");
+            exit();
+        case 'movimentacoes':
+            header("location:../views/reports/movimentacoes.php?usuarios");
+            exit();
+        default:
+            header("location: ../index.php");
+            exit();
+    }
 } else {
     header("location: ../index.php");
     exit();
