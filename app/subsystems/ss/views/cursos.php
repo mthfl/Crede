@@ -630,7 +630,7 @@ if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) 
                         <?php foreach ($cursos as $index => $curso) { ?>
                             <?php if (isset($_GET['candidato_associado']) && $step === 'email') { ?>
                                 <!-- Modal de Autenticação de Dois Fatores - Email -->
-                                <div class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-fadeIn">
+                                <div class="fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-fadeIn">
                                     <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md border border-gray-200/50 transform transition-all duration-300 animate-scaleIn">
                                         <div class="text-white p-6 rounded-t-2xl relative overflow-hidden" style="background: linear-gradient(135deg, #DC2626, #991B1B);">
                                             <div class="absolute inset-0 bg-gradient-to-br from-black/20 to-transparent"></div>
@@ -699,7 +699,7 @@ if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) 
                                 </div>
                             <?php } elseif (isset($_GET['candidato_associado']) && $step === 'code') { ?>
                                 <!-- Modal de Autenticação de Dois Fatores - Código -->
-                                <div class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-fadeIn">
+                                <div class="fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-fadeIn">
                                     <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md border border-gray-200/50 transform transition-all duration-300 animate-scaleIn">
                                         <div class="text-white p-6 rounded-t-2xl relative overflow-hidden" style="background: linear-gradient(135deg, #DC2626, #991B1B);">
                                             <div class="absolute inset-0 bg-gradient-to-br from-black/20 to-transparent"></div>

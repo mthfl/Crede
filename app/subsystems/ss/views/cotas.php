@@ -18,7 +18,7 @@ $select = new select($escola);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema Escolar - Cotas (Bairros)</title>
+    <title>Sistema Escolar - Cotas</title>
     <link rel="icon" type="image/png" href="https://i.postimg.cc/0N0dsxrM/Bras-o-do-Cear-svg-removebg-preview.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -604,9 +604,9 @@ $select = new select($escola);
                                 </div>
                             </div>
 
-                            <div class="bg-accent/30 p-5 rounded-xl border border-primary/20 shadow-sm">
-                                <h4 class="font-semibold text-gray-700 mb-3 flex items-center">
-                                    <svg class="w-5 h-5 mr-2 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="bg-green-50 p-5 rounded-xl border border-green-200 shadow-sm">
+                                <h4 class="font-semibold text-green-700 mb-3 flex items-center">
+                                    <svg class="w-5 h-5 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
                                     </svg>
                                     PCD
@@ -618,20 +618,25 @@ $select = new select($escola);
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                            <div class="bg-accent/30 p-5 rounded-xl border border-primary/20 shadow-sm">
-                                <h4 class="font-semibold text-primary mb-3 flex items-center">
-                                    <svg class="w-5 h-5 mr-2 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="bg-green-50 p-5 rounded-xl border border-green-200 shadow-sm">
+                                <h4 class="font-semibold text-green-700 mb-3 flex items-center">
+                                    <svg class="w-5 h-5 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
                                     </svg>
                                     Escola Pública
                                 </h4>
                                 <div class="space-y-3">
                                     <div class="flex items-center">
-                                        <span class="w-24 text-sm font-medium text-primary">AC:</span>
+                                        <span class="w-24 text-sm font-medium text-green-700">Total Pública:</span>
+                                        <input type="text" class="flex-1 px-4 py-3 rounded-lg border input-disabled" value="<?= round($publica_ac + $publica_cotas) ?>" disabled>
+                                    </div>
+                                    <div class="border-t border-green-200 my-2 pt-2"></div>
+                                    <div class="flex items-center">
+                                        <span class="w-24 text-sm font-medium text-green-700">AC:</span>
                                         <input type="text" class="flex-1 px-4 py-3 rounded-lg border input-disabled" value="<?= round($publica_ac) ?>" disabled>
                                     </div>
                                     <div class="flex items-center">
-                                        <span class="w-24 text-sm font-medium text-primary">Cota Bairro:</span>
+                                        <span class="w-24 text-sm font-medium text-green-700">Cota Bairro:</span>
                                         <input type="text" class="flex-1 px-4 py-3 rounded-lg border input-disabled" value="<?= round($publica_cotas) ?>" disabled>
                                     </div>
                                 </div>
@@ -645,6 +650,11 @@ $select = new select($escola);
                                     Escola Privada
                                 </h4>
                                 <div class="space-y-3">
+                                    <div class="flex items-center">
+                                        <span class="w-24 text-sm font-medium text-green-700">Total Privada:</span>
+                                        <input type="text" class="flex-1 px-4 py-3 rounded-lg border input-disabled" value="<?= round($privada_ac + $privada_cotas) ?>" disabled>
+                                    </div>
+                                    <div class="border-t border-green-200 my-2 pt-2"></div>
                                     <div class="flex items-center">
                                         <span class="w-24 text-sm font-medium text-green-700">AC:</span>
                                         <input type="text" class="flex-1 px-4 py-3 rounded-lg border input-disabled" value="<?= round($privada_ac) ?>" disabled>
@@ -783,19 +793,23 @@ $select = new select($escola);
                     <h3 class="text-lg font-semibold text-gray-800 mb-3">Distribuição de Vagas</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                         <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                            <p class="text-sm font-medium text-gray-600">PCD:</p>
-                            <p class="text-lg font-semibold text-gray-800" id="review-pcd">2</p>
-                        </div>
-                        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
                             <p class="text-sm font-medium text-gray-600">Total:</p>
                             <p class="text-lg font-semibold text-gray-800" id="review-total"></p>
+                        </div>
+                        <div class="bg-green-50 p-4 rounded-lg border border-green-200">
+                            <p class="text-sm font-medium text-green-700">PCD:</p>
+                            <p class="text-lg font-semibold text-green-800" id="review-pcd">2</p>
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                         <div class="bg-green-50 p-4 rounded-lg border border-green-200">
                             <p class="text-sm font-medium text-green-700">Escola Pública:</p>
-                            <div class="mt-2">
+                            <div class="flex justify-between mt-1">
+                                <span class="text-sm text-green-600">Total Pública:</span>
+                                <span class="font-medium text-green-800" id="review-publica-total"></span>
+                            </div>
+                            <div class="mt-2 pt-2 border-t border-green-200">
                                 <div class="flex justify-between">
                                     <span class="text-sm text-green-600">AC:</span>
                                     <span class="font-medium text-green-800" id="review-publica-ac"></span>
@@ -809,7 +823,11 @@ $select = new select($escola);
 
                         <div class="bg-green-50 p-4 rounded-lg border border-green-200">
                             <p class="text-sm font-medium text-green-700">Escola Privada:</p>
-                            <div class="mt-2">
+                            <div class="flex justify-between mt-1">
+                                <span class="text-sm text-green-600">Total Privada:</span>
+                                <span class="font-medium text-green-800" id="review-privada-total"></span>
+                            </div>
+                            <div class="mt-2 pt-2 border-t border-green-200">
                                 <div class="flex justify-between">
                                     <span class="text-sm text-green-600">AC:</span>
                                     <span class="font-medium text-green-800" id="review-privada-ac"></span>
@@ -1233,15 +1251,19 @@ $select = new select($escola);
                         // Preencher a distribuição de vagas com verificação de elementos
                         const reviewPcd = document.getElementById('review-pcd');
                         const reviewTotal = document.getElementById('review-total');
+                        const reviewPublicaTotal = document.getElementById('review-publica-total');
                         const reviewPublicaAc = document.getElementById('review-publica-ac');
                         const reviewPublicaCota = document.getElementById('review-publica-cota');
+                        const reviewPrivadaTotal = document.getElementById('review-privada-total');
                         const reviewPrivadaAc = document.getElementById('review-privada-ac');
                         const reviewPrivadaCota = document.getElementById('review-privada-cota');
                         
                         if (reviewPcd) reviewPcd.textContent = pcdFixed;
                         if (reviewTotal) reviewTotal.textContent = alunosPorTurma;
+                        if (reviewPublicaTotal) reviewPublicaTotal.textContent = totalPublica;
                         if (reviewPublicaAc) reviewPublicaAc.textContent = publicaAc;
                         if (reviewPublicaCota) reviewPublicaCota.textContent = publicaCotas;
+                        if (reviewPrivadaTotal) reviewPrivadaTotal.textContent = totalPrivada;
                         if (reviewPrivadaAc) reviewPrivadaAc.textContent = privadaAc;
                         if (reviewPrivadaCota) reviewPrivadaCota.textContent = privadaCotas;
                         
