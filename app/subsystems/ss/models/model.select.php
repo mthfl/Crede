@@ -297,4 +297,61 @@ class select extends connect
             return [];
         }
     }
+
+    public function countTotalEscolas() {
+        try {
+            $stmt = $this->connect->query("SELECT COUNT(DISTINCT id_curso1) as total FROM $this->table1 WHERE status = 1");
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $result['total'] ?? 0;
+        } catch (PDOException $e) {
+            return 0;
+        }
+    }
+
+    public function countTotalAlunos() {
+        try {
+            $stmt = $this->connect->query("SELECT COUNT(*) as total FROM $this->table1 WHERE status = 1");
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $result['total'] ?? 0;
+        } catch (PDOException $e) {
+            return 0;
+        }
+    }
+
+    public function countTotalRelatorios() {
+        try {
+            $stmt = $this->connect->query("SELECT COUNT(*) as total FROM $this->table13 WHERE tipo_movimentacao IN ('REQUISIÇÃO REALIZDA', 'REQUISIÇÃO RECUSADA', 'REQUISIÇÃO PENDENTE')");
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $result['total'] ?? 0;
+        } catch (PDOException $e) {
+            return 0;
+        }
+    }
+
+    public function countAlunosPorTipo($tipo) {
+        try {
+            $query = "";
+            switch ($tipo) {
+                case 'publica_ac':
+                    $query = "SELECT COUNT(*) as total FROM $this->table1 WHERE publica = 1 AND bairro = 0 AND status = 1";
+                    break;
+                case 'publica_cotas':
+                    $query = "SELECT COUNT(*) as total FROM $this->table1 WHERE publica = 1 AND bairro > 0 AND status = 1";
+                    break;
+                case 'privada_ac':
+                    $query = "SELECT COUNT(*) as total FROM $this->table1 WHERE publica = 0 AND bairro = 0 AND status = 1";
+                    break;
+                case 'privada_cotas':
+                    $query = "SELECT COUNT(*) as total FROM $this->table1 WHERE publica = 0 AND bairro > 0 AND status = 1";
+                    break;
+                default:
+                    return 0;
+            }
+            $stmt = $this->connect->query($query);
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $result['total'] ?? 0;
+        } catch (PDOException $e) {
+            return 0;
+        }
+    }
 }

@@ -1169,19 +1169,6 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
                         </div>
                     </div>
 
-                    <!-- Informações Adicionais -->
-                    <div class="p-3 rounded-lg bg-blue-50 border border-blue-200">
-                        <div class="flex items-start gap-2">
-                            <svg class="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                            <div>
-                                <p class="text-xs text-blue-800 font-medium">Dica</p>
-                                <p class="text-xs text-blue-700 mt-1">A média é calculada automaticamente conforme você adiciona as notas. Use o botão "Copiar" para usar o resultado em outros campos.</p>
-                            </div>
-                        </div>
-                    </div>
-
                     <!-- Botões -->
                     <div class="flex gap-3 pt-2">
                         <button type="button" id="closeCalculatorBtn" class="flex-1 px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-all duration-200 font-medium text-sm flex items-center justify-center gap-2">
@@ -1189,12 +1176,6 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                             </svg>
                             Fechar
-                        </button>
-                        <button type="button" onclick="copyAverage()" class="flex-1 px-4 py-3 text-white rounded-lg transition-all duration-200 font-medium text-sm flex items-center justify-center gap-2 hover:opacity-90" style="background: linear-gradient(135deg, <?= $curso_cor ?>, #1A3C34);">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
-                            </svg>
-                            Copiar Média
                         </button>
                     </div>
                 </div>
@@ -1345,7 +1326,7 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
             progressBarFill.style.width = `${(currentStep / totalSteps) * 100}%`;
             const calcBtn = document.getElementById('openCalculatorBtn');
             if (calcBtn) {
-                calcBtn.classList.toggle('hidden', currentStep !== 3);
+                calcBtn.classList.toggle('hidden', currentStep !== 2);
             }
         }
 

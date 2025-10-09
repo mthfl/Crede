@@ -18,7 +18,14 @@ $select = new select($escola);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema Escolar - Relatórios</title>
     <link rel="icon" type="image/png" href="https://i.postimg.cc/0N0dsxrM/Bras-o-do-Cear-svg-removebg-preview.png">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -29,46 +36,371 @@ $select = new select($escola);
                         accent: '#E6F4EA',
                         dark: '#1A3C34',
                         light: '#F8FAF9',
+                        white: '#FFFFFF',
+                        success: '#28A745',
+                        warning: '#FFC107',
+                        danger: '#DC3545',
+                        info: '#17A2B8'
                     },
                     fontFamily: {
-                        'display': ['Inter', 'system-ui', 'sans-serif'],
-                        'body': ['Inter', 'system-ui', 'sans-serif'],
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Poppins', 'sans-serif']
                     },
-                    spacing: {
-                        '18': '4.5rem',
-                        '88': '22rem',
+                    boxShadow: {
+                        card: '0 10px 15px -3px rgba(0, 90, 36, 0.1), 0 4px 6px -2px rgba(0, 90, 36, 0.05)',
+                        'card-hover': '0 20px 25px -5px rgba(0, 90, 36, 0.2), 0 10px 10px -5px rgba(0, 90, 36, 0.1)',
+                        'glow': '0 0 20px rgba(255, 165, 0, 0.3)'
                     },
                     animation: {
-                        'slide-in-left': 'slideInLeft 0.5s ease-out',
-                        'slide-in-right': 'slideInRight 0.5s ease-out',
-                        'fade-in-up': 'fadeInUp 0.6s ease-out',
-                        'scale-in': 'scaleIn 0.4s ease-out',
-                        'pulse-soft': 'pulseSoft 2s ease-in-out infinite',
+                        'fade-in': 'fadeIn 0.5s ease-in-out',
+                        'slide-up': 'slideUp 0.5s ease-out',
+                        'pulse-slow': 'pulse 3s infinite',
+                        'bounce-slow': 'bounce 2s infinite'
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' }
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' }
+                        }
                     }
                 }
             }
         }
     </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-
-        :root {
-            --primary: #005A24;
-            --secondary: #FFA500;
-            --accent: #E6F4EA;
-            --dark: #1A3C34;
-            --light: #F8FAF9;
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+            background: linear-gradient(135deg, #F8FAF9 0%, #E6F4EA 100%);
         }
 
-        * {
-            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        .gradient-bg {
+            background: linear-gradient(135deg, #005A24 0%, #1A3C34 100%);
+        }
+
+        .page-title {
+            position: relative;
+            width: 100%;
+            text-align: center;
+        }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, #FFA500, #FF8C00);
+            border-radius: 3px;
+        }
+
+        /* Select2 Styles */
+        .select2-container {
+            width: 100% !important;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .select2-container--default .select2-selection--single {
+            background-color: #fff;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.5rem;
+            height: 3rem;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            color: #374151;
+            font-size: 0.875rem;
+            line-height: 1.25rem;
+            padding-left: 0.75rem;
+            padding-right: 2rem;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__placeholder {
+            color: #9ca3af;
+            font-weight: 500;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 100%;
+            width: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .select2-container--default.select2-container--focus .select2-selection--single,
+        .select2-container--default.select2-container--open .select2-selection--single {
+            border-color: #005A24;
+            box-shadow: 0 0 0 3px rgba(0, 90, 36, 0.1);
+        }
+
+        .select2-dropdown {
+            border: 2px solid #005A24;
+            border-radius: 0.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .select2-results__option {
+            padding: 0.5rem 0.75rem;
+            font-size: 0.875rem;
+        }
+
+        .select2-container--default .select2-results__option--highlighted.select2-results__option--selectable {
+            background-color: #005A24;
+            color: white;
+        }
+
+        .select2-search--dropdown .select2-search__field {
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            padding: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .select2-search--dropdown .select2-search__field:focus {
+            outline: none;
+            border-color: #005A24;
+            box-shadow: 0 0 0 3px rgba(0, 90, 36, 0.1);
+        }
+
+        .stats-card {
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #FFFFFF 0%, #F8FAF9 100%);
+            border: 2px solid transparent;
+        }
+
+        .stats-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 165, 0, 0.1) 0%, rgba(0, 90, 36, 0.05) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+
+        .stats-card:hover::before {
+            opacity: 1;
+        }
+
+        .stats-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 90, 36, 0.2), 0 10px 10px -5px rgba(0, 90, 36, 0.1);
+            border-color: #FFA500;
+        }
+
+        .report-card {
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #FFFFFF 0%, #F8FAF9 100%);
+            border: 2px solid #E6F4EA;
+            border-radius: 1rem;
+        }
+
+        .report-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 165, 0, 0.1) 0%, rgba(0, 90, 36, 0.05) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+
+        .report-card:hover::before {
+            opacity: 1;
+        }
+
+        .report-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 90, 36, 0.2), 0 10px 10px -5px rgba(0, 90, 36, 0.1);
+            border-color: #FFA500;
+        }
+
+        .card-shine {
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0) 100%);
+            transform: skewX(-25deg);
+            transition: all 0.75s ease;
+            z-index: 2;
+        }
+
+        .report-card:hover .card-shine {
+            left: 150%;
+        }
+
+        .report-card:hover .card-icon {
+            transform: scale(1.1);
+            color: #FFA500;
+        }
+
+        .report-card p {
+            z-index: 2;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .report-card:hover p {
+            color: #005A24;
+        }
+
+        .report-card a,
+        .report-card button {
+            position: relative;
+            z-index: 3;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #FFFFFF 0%, #F8FAF9 100%);
+            padding: 2rem;
+            border-radius: 1rem;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 25px 50px -12px rgba(0, 90, 36, 0.25);
+            animation: slideUp 0.5s ease-out;
+            position: relative;
+            border: 2px solid #E6F4EA;
+        }
+
+        .modal-content h2 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            color: #005A24;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .modal-content .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-content label {
+            display: block;
+            font-size: 0.875rem;
+            color: #1A3C34;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .modal-content select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #E6F4EA;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            color: #1A3C34;
+            background-color: #F8FAF9;
+            transition: all 0.3s ease;
+        }
+
+        .modal-content select:focus {
+            border-color: #FFA500;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 165, 0, 0.1);
+        }
+
+        .modal-content .confirm-btn {
+            background: linear-gradient(135deg, #FFA500 0%, #FF8C00 100%);
+            color: #FFFFFF;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            width: 100%;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .modal-content .confirm-btn:hover {
+            background: linear-gradient(135deg, #E59400 0%, #E67E00 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 165, 0, 0.3);
+        }
+
+        .modal-content .close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #1A3C34;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .modal-content .close-btn:hover {
+            color: #DC3545;
         }
 
         .sidebar {
             transform: translateX(-100%);
             transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             backdrop-filter: blur(10px);
-            background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 100%);
+            background: linear-gradient(135deg, #005A24 0%, #1A3C34 100%);
+            z-index: 50;
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            width: 100vw;
+            max-width: 20rem;
+        }
+
+        @media (min-width: 1024px) {
+            .sidebar {
+                width: 20rem;
+                position: static;
+                flex-shrink: 0;
+                transform: translateX(0);
+            }
+
+            .main-content {
+                flex: 1;
+                min-width: 0;
+                margin-left: 0;
+                overflow-x: hidden;
+            }
         }
 
         .sidebar.open {
@@ -87,169 +419,65 @@ $select = new select($escola);
             visibility: visible;
         }
 
-        @keyframes slideInLeft {
-            from { opacity: 0; transform: translateX(-30px); }
-            to { opacity: 1; transform: translateX(0); }
+        .quick-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
         }
 
-        @keyframes slideInRight {
-            from { opacity: 0; transform: translateX(30px); }
-            to { opacity: 1; transform: translateX(0); }
+        .stat-item {
+            background: linear-gradient(135deg, #FFFFFF 0%, #F8FAF9 100%);
+            border: 2px solid #E6F4EA;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
         }
 
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .stat-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 90, 36, 0.15);
+            border-color: #FFA500;
         }
 
-        @keyframes scaleIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #005A24;
+            margin-bottom: 0.5rem;
         }
 
-        @keyframes pulseSoft {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
+        .stat-label {
+            font-size: 0.875rem;
+            color: #646464;
+            font-weight: 500;
         }
 
-        .card-hover {
-            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        .stat-icon {
+            font-size: 1.5rem;
+            color: #FFA500;
+            margin-bottom: 0.5rem;
+        }
+
+        .chart-container {
             position: relative;
-            overflow: hidden;
-        }
-
-        .card-hover::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transition: left 0.5s;
-        }
-
-        .card-hover:hover::before {
-            left: 100%;
-        }
-
-        .card-hover:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 25px 50px -12px rgba(0, 90, 36, 0.25), 0 0 0 1px rgba(0, 90, 36, 0.05);
-        }
-
-        .btn-animate {
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
-
-        .btn-animate::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: width 0.3s, height 0.3s;
-        }
-
-        .btn-animate:hover::before {
-            width: 300px;
             height: 300px;
+            margin: 1rem 0;
         }
 
-        .btn-animate:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        .sidebar-link {
+            transition: all 0.3s ease;
         }
 
-        .btn-animate:active {
-            transform: translateY(0);
+        .sidebar-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateX(0.5rem);
         }
 
-        .nav-item {
-            position: relative;
-            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            border-radius: 12px;
-        }
-
-        .nav-item::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            height: 100%;
-            width: 4px;
-            background: var(--secondary);
-            border-radius: 0 4px 4px 0;
-            transform: scaleY(0);
-            transition: transform 0.3s ease;
-        }
-
-        .nav-item:hover::before {
-            transform: scaleY(1);
-        }
-
-        .nav-item:hover {
-            transform: translateX(8px);
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .sidebar {
-            z-index: 50;
-            position: fixed;
-            left: 0;
-            top: 0;
-            height: 100vh;
-            width: 100vw;
-            max-width: 20rem;
-        }
-
-        @media (min-width: 1024px) {
-            .sidebar {
-                width: 20rem;
-                position: static;
-                flex-shrink: 0;
-            }
-
-            .main-content {
-                flex: 1;
-                min-width: 0;
-                margin-left: 0;
-                overflow-x: hidden;
-            }
-
-            body {
-                overflow-x: hidden;
-            }
-        }
-
-        .grid-item {
-            animation: fadeInUp 0.6s ease-out forwards;
-            opacity: 0;
-        }
-
-        .grid-item:nth-child(1) { animation-delay: 0.1s; }
-        .grid-item:nth-child(2) { animation-delay: 0.2s; }
-        .grid-item:nth-child(3) { animation-delay: 0.3s; }
-        .grid-item:nth-child(4) { animation-delay: 0.4s; }
-        .grid-item:nth-child(5) { animation-delay: 0.5s; }
-        .grid-item:nth-child(6) { animation-delay: 0.6s; }
-        .grid-item:nth-child(7) { animation-delay: 0.7s; }
-
-        .loading-shimmer {
-            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
-        }
-
-        @keyframes shimmer {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
+        .sidebar-link.active {
+            background-color: rgba(255, 165, 0, 0.2);
+            color: #FFA500;
         }
 
         @media (max-width: 768px) {
@@ -257,183 +485,78 @@ $select = new select($escola);
                 width: 100vw;
                 max-width: 320px;
             }
-
-            .card-hover:hover {
-                transform: none;
-                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            }
-
-            .nav-item:hover {
-                transform: none;
-            }
-        }
-
-        .focus-ring:focus {
-            outline: 2px solid var(--secondary);
-            outline-offset: 2px;
-        }
-
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.1);
-            border-radius: 3px;
-        }
-
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: var(--primary);
-            border-radius: 3px;
-        }
-
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: var(--dark);
         }
     </style>
 </head>
-<body class="bg-white min-h-screen font-body">
+<body class="min-h-screen flex flex-col font-sans">
     <div id="overlay" class="overlay fixed inset-0 bg-black/30 z-40 lg:hidden"></div>
-    <div class="flex min-h-screen bg-gray-50 overflow-y-auto lg:overflow-hidden">
+    <div class="flex h-screen overflow-hidden">
         <!-- Sidebar -->
         <aside id="sidebar" class="sidebar fixed left-0 top-0 h-screen w-80 shadow-2xl z-50 lg:translate-x-0 lg:static lg:z-auto custom-scrollbar overflow-y-auto">
-            <div class="p-6">
-                <div class="flex items-center justify-between mb-8 pb-6 border-b border-white/20">
-                    <div class="animate-slide-in-left">
+            <div class="flex flex-col h-full">
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-8 pb-6 border-b border-white/20">
                         <div class="flex items-center space-x-3 mb-2">
                             <img src="https://i.postimg.cc/0N0dsxrM/Bras-o-do-Cear-svg-removebg-preview.png" alt="Brasão do Ceará" class="w-8 h-10 transition-transform hover:scale-105">
-                            <h2 class="text-white text-2xl font-bold font-display">Sistema Seleção</h2>
+                            <h2 class="text-white text-2xl font-bold font-heading">Sistema Seleção</h2>
                         </div>
+                        <button id="closeSidebar" class="text-white lg:hidden p-2 rounded-xl hover:bg-white/10 focus-ring">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
                     </div>
-                    <button id="closeSidebar" class="text-white lg:hidden btn-animate p-2 rounded-xl hover:bg-white/10 focus-ring">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
-                    </button>
+                    <nav class="space-y-2">
+                        <?php if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'admin' || $_SESSION['tipo_usuario'] === 'cadastrador')) { ?>
+                            <a href="../index.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                                <i class="fas fa-home mr-3 text-lg"></i>
+                                <span>Início</span>
+                            </a>
+                        <?php } ?>
+                        <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
+                            <a href="cursos.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                                <i class="fas fa-book mr-3 text-lg"></i>
+                                <span>Cursos</span>
+                            </a>
+                        <?php } ?>
+                        <?php if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'admin' || $_SESSION['tipo_usuario'] === 'cadastrador')) { ?>
+                            <a href="candidatos.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                                <i class="fas fa-users mr-3 text-lg"></i>
+                                <span>Candidatos</span>
+                            </a>
+                        <?php } ?>
+                        <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
+                            <a href="cotas.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                                <i class="fas fa-balance-scale mr-3 text-lg"></i>
+                                <span>Cotas</span>
+                            </a>
+                        <?php } ?>
+                        <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
+                            <a href="usuario.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                                <i class="fas fa-user-cog mr-3 text-lg"></i>
+                                <span>Usuários</span>
+                            </a>
+                        <?php } ?>
+                        <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
+                            <a href="relatorios.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2 active">
+                                <i class="fas fa-clipboard-list mr-3 text-lg"></i>
+                                <span>Relatórios</span>
+                            </a>
+                        <?php } ?>
+                        <?php if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'admin' || $_SESSION['tipo_usuario'] === 'cadastrador')) { ?>
+                            <a href="solicitar_alteracao.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                                <i class="fas fa-edit mr-3 text-lg"></i>
+                                <span>Requisições</span>
+                            </a>
+                        <?php } ?>
+                        <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
+                            <a href="limpar_banco.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
+                                <i class="fas fa-trash-alt mr-3 text-lg"></i>
+                                <span>Limpar Banco</span>
+                            </a>
+                        <?php } ?>
+                    </nav>
                 </div>
-                <nav class="space-y-2">
-                    <?php if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'admin' || $_SESSION['tipo_usuario'] === 'cadastrador')) { ?>
-                        <div class="animate-slide-in-left" style="animation-delay: 0.1s;">
-                            <a href="../index.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
-                                <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
-                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path>
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5a2 2 0 012-2h4a2 2 0 012 2v2H8V5z"></path>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <span class="font-semibold text-base">Dashboard</span>
-                                    <p class="text-green-200 text-xs mt-1">Página inicial</p>
-                                </div>
-                            </a>
-                        </div>
-                    <?php } ?>
-                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
-                        <div class="animate-slide-in-left" style="animation-delay: 0.2s;">
-                            <a href="cursos.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
-                                <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
-                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <span class="font-semibold text-base">Cursos</span>
-                                    <p class="text-green-200 text-xs mt-1">Administrar cursos</p>
-                                </div>
-                            </a>
-                        </div>
-                    <?php } ?>
-                    <?php if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'admin' || $_SESSION['tipo_usuario'] === 'cadastrador')) { ?>
-                        <div class="animate-slide-in-left" style="animation-delay: 0.3s;">
-                            <a href="candidatos.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
-                                <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
-                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <span class="font-semibold text-base">Candidatos</span>
-                                    <p class="text-green-200 text-xs mt-1">Gerenciar inscrições</p>
-                                </div>
-                            </a>
-                        </div>
-                    <?php } ?>
-                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
-                        <div class="animate-slide-in-left" style="animation-delay: 0.35s;">
-                            <a href="cotas.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
-                                <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
-                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a5 5 0 10-10 0v2M5 9h14l-1 11H6L5 9z"></path>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <span class="font-semibold text-base">Cotas</span>
-                                    <p class="text-green-200 text-xs mt-1">Regras e perfis</p>
-                                </div>
-                            </a>
-                        </div>
-                    <?php } ?>
-                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
-                        <div class="animate-slide-in-left" style="animation-delay: 0.4s;">
-                            <a href="usuario.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
-                                <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
-                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <span class="font-semibold text-base">Usuários</span>
-                                    <p class="text-green-200 text-xs mt-1">Controle de acesso</p>
-                                </div>
-                            </a>
-                        </div>
-                    <?php } ?>
-                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
-                        <div class="animate-slide-in-left" style="animation-delay: 0.5s;">
-                            <a href="relatorios.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring bg-white/10">
-                                <div class="w-12 h-12 bg-secondary rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
-                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <span class="font-semibold text-base">Relatórios</span>
-                                    <p class="text-green-200 text-xs mt-1">Gerar documentos</p>
-                                </div>
-                            </a>
-                        </div>
-                    <?php } ?>
-                    <?php if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'admin' || $_SESSION['tipo_usuario'] === 'cadastrador')) { ?>
-                        <div class="animate-slide-in-left" style="animation-delay: 0.6s;">
-                            <a href="solicitar_alteracao.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
-                                <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
-                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <span class="font-semibold text-base">Requisições</span>
-                                    <p class="text-green-200 text-xs mt-1">Alteração de candidato</p>
-                                </div>
-                            </a>
-                        </div>
-                    <?php } ?>
-                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
-                        <div class="animate-slide-in-left" style="animation-delay: 0.7s;">
-                            <a href="limpar_banco.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
-                                <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-red-500 group-hover:scale-110 transition-all duration-300">
-                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <span class="font-semibold text-base">Limpar Banco</span>
-                                    <p class="text-green-200 text-xs mt-1">Resetar dados</p>
-                                </div>
-                            </a>
-                        </div>
-                    <?php } ?>
-                </nav>
             </div>
         </aside>
         <!-- Main Content -->
@@ -441,10 +564,8 @@ $select = new select($escola);
             <header class="bg-white shadow-sm border-b border-gray-200 z-30 sticky top-0">
                 <div class="px-3 sm:px-4 md:px-6 lg:px-8 py-3 sm:py-4">
                     <div class="flex items-center justify-between">
-                        <button id="openSidebar" class="text-primary lg:hidden btn-animate p-2 sm:p-3 rounded-xl hover:bg-accent focus-ring">
-                            <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                            </svg>
+                        <button id="openSidebar" class="text-primary lg:hidden p-2 sm:p-3 rounded-lg hover:bg-accent focus-ring">
+                            <i class="fas fa-bars text-lg"></i>
                         </button>
                         <div class="flex items-center space-x-2 sm:space-x-4 lg:ml-auto">
                             <div class="hidden sm:block text-right">
@@ -454,175 +575,226 @@ $select = new select($escola);
                             <a href="perfil.php" title="Perfil" class="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-primary to-dark rounded-full flex items-center justify-center hover:brightness-95 focus-ring">
                                 <span class="text-white font-bold text-xs sm:text-sm"><?= strtoupper(substr($_SESSION['nome'] ?? 'U', 0, 1)) ?></span>
                             </a>
-                            <a href="models/sessions.php?sair" class="bg-primary text-white px-3 sm:px-4 md:px-6 py-2 sm:py-3 rounded-xl hover:bg-dark btn-animate font-semibold shadow-lg focus-ring text-xs sm:text-sm">
+                            <a href="models/sessions.php?sair" class="bg-primary text-white px-3 sm:px-4 md:px-6 py-2 sm:py-3 rounded-lg hover:bg-dark font-semibold shadow-lg focus-ring text-xs sm:text-sm">
                                 <span class="hidden sm:inline">Sair</span>
-                                <svg class="w-4 h-4 sm:w-5 sm:h-5 sm:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
-                                </svg>
+                                <i class="fas fa-sign-out-alt sm:hidden"></i>
                             </a>
                         </div>
                     </div>
                 </div>
             </header>
             <main class="p-4 sm:p-6 lg:p-8">
-                <h1 class="text-2xl sm:text-3xl font-bold text-primary mb-6 font-display">Relatórios</h1>
-                
+                <div class="text-center mb-8">
+                    <h1 class="text-primary text-3xl md:text-4xl font-bold mb-4 page-title tracking-tight font-heading">
+                        <i class="fas fa-chart-line mr-3 text-secondary"></i>
+                        Relatórios
+                    </h1>
+                    <p class="text-gray-600 text-lg max-w-2xl mx-auto">
+                        Acesse relatórios detalhados e estatísticas em tempo real
+                    </p>
+                </div>
+
+                <!-- Estatísticas Rápidas -->
+                <div class="quick-stats mb-8">
+                    <div class="stat-item">
+                        <div class="stat-icon">
+                            <i class="fas fa-user-graduate"></i>
+                        </div>
+                        <div class="stat-number"><?php echo $select->countTotalAlunos(); ?></div>
+                        <div class="stat-label">Total de Candidatos</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-icon">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <div class="stat-number"><?php echo $select->countTotalEscolas(); ?></div>
+                        <div class="stat-label">Total de Cursos</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="stat-number"><?php echo $select->countTotalRelatorios(); ?></div>
+                        <div class="stat-label">Total de Requisições</div>
+                    </div>
+                </div>
+
+                <!-- Gráfico de Estatísticas -->
+                <div class="bg-white rounded-xl shadow-card p-6 mb-8">
+                    <h2 class="text-xl font-bold text-primary mb-4 flex items-center">
+                        <i class="fas fa-chart-pie mr-2 text-secondary"></i>
+                        Distribuição de Alunos por Modalidade
+                    </h2>
+                    <div class="chart-container">
+                        <canvas id="distributionChart"></canvas>
+                    </div>
+                </div>
+
                 <!-- Escolas Públicas e Privadas -->
-                <h2 class="text-xl font-semibold text-gray-800 mb-4">Escolas Públicas e Privadas</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6 mb-8">
-                    <article class="grid-item card-hover bg-white rounded-2xl shadow-xl border-0 overflow-hidden group relative cursor-pointer" onclick="openReportModal('privada_ac', 'Privada AC')">
-                        <div class="h-2 w-full bg-gradient-to-r from-primary to-dark"></div>
-                        <div class="p-8">
-                            <div class="text-center mb-8">
-                                <h3 class="text-2xl font-bold leading-tight font-display group-hover:scale-105 transition-all duration-300 text-primary">Privada AC</h3>
-                                <div class="w-16 h-0.5 mx-auto mt-3 rounded-full bg-primary/40"></div>
-                            </div>
-                            <div class="text-center">
-                                <p class="text-sm text-gray-600">Relatório de Ampla Concorrência para Escolas Privadas</p>
-                            </div>
+                <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center font-heading">
+                    <i class="fas fa-school mr-2 text-secondary"></i>
+                    Escolas Públicas e Privadas
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-8">
+                    <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in">
+                        <div class="card-shine"></div>
+                        <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
+                            <i class="fas fa-school text-4xl"></i>
                         </div>
-                    </article>
-                    <article class="grid-item card-hover bg-white rounded-2xl shadow-xl border-0 overflow-hidden group relative cursor-pointer" onclick="openReportModal('privada_cotas', 'Privada Cotas')">
-                        <div class="h-2 w-full bg-gradient-to-r from-primary to-dark"></div>
-                        <div class="p-8">
-                            <div class="text-center mb-8">
-                                <h3 class="text-2xl font-bold leading-tight font-display group-hover:scale-105 transition-all duration-300 text-primary">Privada Cotas</h3>
-                                <div class="w-16 h-0.5 mx-auto mt-3 rounded-full bg-primary/40"></div>
-                            </div>
-                            <div class="text-center">
-                                <p class="text-sm text-gray-600">Relatório de Cotas para Escolas Privadas</p>
-                            </div>
+                        <h3 class="text-lg font-bold text-primary mb-2 text-center font-heading">Privada AC</h3>
+                        <p class="text-gray-600 text-center mb-4 text-sm">Relatório de Ampla Concorrência para Escolas Privadas</p>
+                        <button onclick="openReportModal('privada_ac', 'Privada AC')" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105">
+                            <i class="fas fa-file-pdf mr-2"></i>
+                            Gerar PDF
+                        </button>
+                    </div>
+                    <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in" style="animation-delay: 0.1s">
+                        <div class="card-shine"></div>
+                        <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
+                            <i class="fas fa-users text-4xl"></i>
                         </div>
-                    </article>
-                    <article class="grid-item card-hover bg-white rounded-2xl shadow-xl border-0 overflow-hidden group relative cursor-pointer" onclick="openReportModal('privada_geral', 'Privada Geral')">
-                        <div class="h-2 w-full bg-gradient-to-r from-primary to-dark"></div>
-                        <div class="p-8">
-                            <div class="text-center mb-8">
-                                <h3 class="text-2xl font-bold leading-tight font-display group-hover:scale-105 transition-all duration-300 text-primary">Privada Geral</h3>
-                                <div class="w-16 h-0.5 mx-auto mt-3 rounded-full bg-primary/40"></div>
-                            </div>
-                            <div class="text-center">
-                                <p class="text-sm text-gray-600">Relatório Geral para Escolas Privadas</p>
-                            </div>
+                        <h3 class="text-lg font-bold text-primary mb-2 text-center font-heading">Privada Cotas</h3>
+                        <p class="text-gray-600 text-center mb-4 text-sm">Relatório de Cotas para Escolas Privadas</p>
+                        <button onclick="openReportModal('privada_cotas', 'Privada Cotas')" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105">
+                            <i class="fas fa-file-pdf mr-2"></i>
+                            Gerar PDF
+                        </button>
+                    </div>
+                    <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in" style="animation-delay: 0.2s">
+                        <div class="card-shine"></div>
+                        <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
+                            <i class="fas fa-file-alt text-4xl"></i>
                         </div>
-                    </article>
-                    <article class="grid-item card-hover bg-white rounded-2xl shadow-xl border-0 overflow-hidden group relative cursor-pointer" onclick="openReportModal('publica_ac', 'Pública AC')">
-                        <div class="h-2 w-full bg-gradient-to-r from-primary to-dark"></div>
-                        <div class="p-8">
-                            <div class="text-center mb-8">
-                                <h3 class="text-2xl font-bold leading-tight font-display group-hover:scale-105 transition-all duration-300 text-primary">Pública AC</h3>
-                                <div class="w-16 h-0.5 mx-auto mt-3 rounded-full bg-primary/40"></div>
-                            </div>
-                            <div class="text-center">
-                                <p class="text-sm text-gray-600">Relatório de Ampla Concorrência para Escolas Públicas</p>
-                            </div>
+                        <h3 class="text-lg font-bold text-primary mb-2 text-center font-heading">Privada Geral</h3>
+                        <p class="text-gray-600 text-center mb-4 text-sm">Relatório Geral para Escolas Privadas</p>
+                        <button onclick="openReportModal('privada_geral', 'Privada Geral')" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105">
+                            <i class="fas fa-file-pdf mr-2"></i>
+                            Gerar PDF
+                        </button>
+                    </div>
+                    <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in" style="animation-delay: 0.3s">
+                        <div class="card-shine"></div>
+                        <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
+                            <i class="fas fa-school text-4xl"></i>
                         </div>
-                    </article>
-                    <article class="grid-item card-hover bg-white rounded-2xl shadow-xl border-0 overflow-hidden group relative cursor-pointer" onclick="openReportModal('publica_cotas', 'Pública Cotas')">
-                        <div class="h-2 w-full bg-gradient-to-r from-primary to-dark"></div>
-                        <div class="p-8">
-                            <div class="text-center mb-8">
-                                <h3 class="text-2xl font-bold leading-tight font-display group-hover:scale-105 transition-all duration-300 text-primary">Pública Cotas</h3>
-                                <div class="w-16 h-0.5 mx-auto mt-3 rounded-full bg-primary/40"></div>
-                            </div>
-                            <div class="text-center">
-                                <p class="text-sm text-gray-600">Relatório de Cotas para Escolas Públicas</p>
-                            </div>
+                        <h3 class="text-lg font-bold text-primary mb-2 text-center font-heading">Pública AC</h3>
+                        <p class="text-gray-600 text-center mb-4 text-sm">Relatório de Ampla Concorrência para Escolas Públicas</p>
+                        <button onclick="openReportModal('publica_ac', 'Pública AC')" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105">
+                            <i class="fas fa-file-pdf mr-2"></i>
+                            Gerar PDF
+                        </button>
+                    </div>
+                    <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in" style="animation-delay: 0.4s">
+                        <div class="card-shine"></div>
+                        <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
+                            <i class="fas fa-users text-4xl"></i>
                         </div>
-                    </article>
-                    <article class="grid-item card-hover bg-white rounded-2xl shadow-xl border-0 overflow-hidden group relative cursor-pointer" onclick="openReportModal('publica_geral', 'Pública Geral')">
-                        <div class="h-2 w-full bg-gradient-to-r from-primary to-dark"></div>
-                        <div class="p-8">
-                            <div class="text-center mb-8">
-                                <h3 class="text-2xl font-bold leading-tight font-display group-hover:scale-105 transition-all duration-300 text-primary">Pública Geral</h3>
-                                <div class="w-16 h-0.5 mx-auto mt-3 rounded-full bg-primary/40"></div>
-                            </div>
-                            <div class="text-center">
-                                <p class="text-sm text-gray-600">Relatório Geral para Escolas Públicas</p>
-                            </div>
+                        <h3 class="text-lg font-bold text-primary mb-2 text-center font-heading">Pública Cotas</h3>
+                        <p class="text-gray-600 text-center mb-4 text-sm">Relatório de Cotas para Escolas Públicas</p>
+                        <button onclick="openReportModal('publica_cotas', 'Pública Cotas')" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105">
+                            <i class="fas fa-file-pdf mr-2"></i>
+                            Gerar PDF
+                        </button>
+                    </div>
+                    <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in" style="animation-delay: 0.5s">
+                        <div class="card-shine"></div>
+                        <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
+                            <i class="fas fa-file-alt text-4xl"></i>
                         </div>
-                    </article>
+                        <h3 class="text-lg font-bold text-primary mb-2 text-center font-heading">Pública Geral</h3>
+                        <p class="text-gray-600 text-center mb-4 text-sm">Relatório Geral para Escolas Públicas</p>
+                        <button onclick="openReportModal('publica_geral', 'Pública Geral')" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105">
+                            <i class="fas fa-file-pdf mr-2"></i>
+                            Gerar PDF
+                        </button>
+                    </div>
                 </div>
 
                 <!-- Resultados -->
-                <h2 class="text-xl font-semibold text-gray-800 mb-4">Resultados</h2>
+                <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center font-heading">
+                    <i class="fas fa-chart-line mr-2 text-secondary"></i>
+                    Resultados
+                </h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6 mb-8">
-                    <article class="grid-item card-hover bg-white rounded-2xl shadow-xl border-0 overflow-hidden group relative cursor-pointer" onclick="openReportModal('Classificados', 'Classificados')">
-                        <div class="h-2 w-full bg-gradient-to-r from-primary to-dark"></div>
-                        <div class="p-8">
-                            <div class="text-center mb-8">
-                                <h3 class="text-2xl font-bold leading-tight font-display group-hover:scale-105 transition-all duration-300 text-primary">Classificados</h3>
-                                <div class="w-16 h-0.5 mx-auto mt-3 rounded-full bg-primary/40"></div>
-                            </div>
-                            <div class="text-center">
-                                <p class="text-sm text-gray-600">Relatório de Classificados</p>
-                            </div>
+                    <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in" style="animation-delay: 0.1s">
+                        <div class="card-shine"></div>
+                        <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
+                            <i class="fas fa-trophy text-4xl"></i>
                         </div>
-                    </article>
-                    <article class="grid-item card-hover bg-white rounded-2xl shadow-xl border-0 overflow-hidden group relative cursor-pointer" onclick="openReportModal('Classificaveis', 'Classificáveis')">
-                        <div class="h-2 w-full bg-gradient-to-r from-primary to-dark"></div>
-                        <div class="p-8">
-                            <div class="text-center mb-8">
-                                <h3 class="text-2xl font-bold leading-tight font-display group-hover:scale-105 transition-all duration-300 text-primary">Classificáveis</h3>
-                                <div class="w-16 h-0.5 mx-auto mt-3 rounded-full bg-primary/40"></div>
-                            </div>
-                            <div class="text-center">
-                                <p class="text-sm text-gray-600">Relatório de Classificáveis</p>
-                            </div>
+                        <h3 class="text-lg font-bold text-primary mb-2 text-center font-heading">Classificados</h3>
+                        <p class="text-gray-600 text-center mb-4 text-sm">Relatório de Classificados</p>
+                        <button onclick="openReportModal('Classificados', 'Classificados')" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105">
+                            <i class="fas fa-file-pdf mr-2"></i>
+                            Gerar PDF
+                        </button>
+                    </div>
+                    <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in" style="animation-delay: 0.2s">
+                        <div class="card-shine"></div>
+                        <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
+                            <i class="fas fa-list-alt text-4xl"></i>
                         </div>
-                    </article>
-                    <article class="grid-item card-hover bg-white rounded-2xl shadow-xl border-0 overflow-hidden group relative cursor-pointer" onclick="openReportModal('Resultado Final', 'Resultado Final')">
-                        <div class="h-2 w-full bg-gradient-to-r from-primary to-dark"></div>
-                        <div class="p-8">
-                            <div class="text-center mb-8">
-                                <h3 class="text-2xl font-bold leading-tight font-display group-hover:scale-105 transition-all duration-300 text-primary">Resultado Final</h3>
-                                <div class="w-16 h-0.5 mx-auto mt-3 rounded-full bg-primary/40"></div>
-                            </div>
-                            <div class="text-center">
-                                <p class="text-sm text-gray-600">Resultado Final</p>
-                            </div>
+                        <h3 class="text-lg font-bold text-primary mb-2 text-center font-heading">Classificáveis</h3>
+                        <p class="text-gray-600 text-center mb-4 text-sm">Relatório de Classificáveis</p>
+                        <button onclick="openReportModal('Classificaveis', 'Classificáveis')" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105">
+                            <i class="fas fa-file-pdf mr-2"></i>
+                            Gerar PDF
+                        </button>
+                    </div>
+                    <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in" style="animation-delay: 0.3s">
+                        <div class="card-shine"></div>
+                        <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
+                            <i class="fas fa-flag-checkered text-4xl"></i>
                         </div>
-                    </article>
-                    <article class="grid-item card-hover bg-white rounded-2xl shadow-xl border-0 overflow-hidden group relative cursor-pointer" onclick="openReportModal('Resultado pré-liminar', 'Resultado Pré-liminar')">
-                        <div class="h-2 w-full bg-gradient-to-r from-primary to-dark"></div>
-                        <div class="p-8">
-                            <div class="text-center mb-8">
-                                <h3 class="text-2xl font-bold leading-tight font-display group-hover:scale-105 transition-all duration-300 text-primary">Resultado Pré-liminar</h3>
-                                <div class="w-16 h-0.5 mx-auto mt-3 rounded-full bg-primary/40"></div>
-                            </div>
-                            <div class="text-center">
-                                <p class="text-sm text-gray-600">Resultado Pré-liminar</p>
-                            </div>
+                        <h3 class="text-lg font-bold text-primary mb-2 text-center font-heading">Resultado Final</h3>
+                        <p class="text-gray-600 text-center mb-4 text-sm">Resultado Final</p>
+                        <button onclick="openReportModal('Resultado Final', 'Resultado Final')" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105">
+                            <i class="fas fa-file-pdf mr-2"></i>
+                            Gerar PDF
+                        </button>
+                    </div>
+                    <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in" style="animation-delay: 0.4s">
+                        <div class="card-shine"></div>
+                        <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
+                            <i class="fas fa-clipboard-list text-4xl"></i>
                         </div>
-                    </article>
+                        <h3 class="text-lg font-bold text-primary mb-2 text-center font-heading">Resultado Pré-liminar</h3>
+                        <p class="text-gray-600 text-center mb-4 text-sm">Resultado Pré-liminar</p>
+                        <button onclick="openReportModal('Resultado pré-liminar', 'Resultado Pré-liminar')" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105">
+                            <i class="fas fa-file-pdf mr-2"></i>
+                            Gerar PDF
+                        </button>
+                    </div>
                 </div>
 
                 <!-- Relatórios Específicos -->
-                <h2 class="text-xl font-semibold text-gray-800 mb-4">Relatórios Específicos</h2>
+                <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center font-heading">
+                    <i class="fas fa-file-alt mr-2 text-secondary"></i>
+                    Relatórios Específicos
+                </h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
-                    <a href="../controllers/controller_relatorios.php?form=relatorio_pdf&tipo_relatorio=comissao_selecao" class="grid-item card-hover bg-white rounded-2xl shadow-xl border-0 overflow-hidden group relative">
-                        <div class="h-2 w-full bg-gradient-to-r from-primary to-dark"></div>
-                        <div class="p-8">
-                            <div class="text-center mb-8">
-                                <h3 class="text-2xl font-bold leading-tight font-display group-hover:scale-105 transition-all duration-300 text-primary">Comissão de Seleção</h3>
-                                <div class="w-16 h-0.5 mx-auto mt-3 rounded-full bg-primary/40"></div>
-                            </div>
-                            <div class="text-center">
-                                <p class="text-sm text-gray-600">Relatório da Comissão de Seleção</p>
-                            </div>
+                    <a href="../controllers/controller_relatorios.php?form=relatorio_pdf&tipo_relatorio=comissao_selecao" class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in" style="animation-delay: 0.1s">
+                        <div class="card-shine"></div>
+                        <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
+                            <i class="fas fa-users-cog text-4xl"></i>
                         </div>
+                        <h3 class="text-lg font-bold text-primary mb-2 text-center font-heading">Comissão de Seleção</h3>
+                        <p class="text-gray-600 text-center mb-4 text-sm">Relatório da Comissão de Seleção</p>
+                        <span class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105">
+                            <i class="fas fa-file-pdf mr-2"></i>
+                            Gerar PDF
+                        </span>
                     </a>
-                    <a href="../controllers/controller_relatorios.php?form=relatorio_pdf&tipo_relatorio=movimentacoes" class="grid-item card-hover bg-white rounded-2xl shadow-xl border-0 overflow-hidden group relative">
-                        <div class="h-2 w-full bg-gradient-to-r from-primary to-dark"></div>
-                        <div class="p-8">
-                            <div class="text-center mb-8">
-                                <h3 class="text-2xl font-bold leading-tight font-display group-hover:scale-105 transition-all duration-300 text-primary">Movimentações</h3>
-                                <div class="w-16 h-0.5 mx-auto mt-3 rounded-full bg-primary/40"></div>
-                            </div>
-                            <div class="text-center">
-                                <p class="text-sm text-gray-600">Relatório de Movimentações</p>
-                            </div>
+                    <a href="../controllers/controller_relatorios.php?form=relatorio_pdf&tipo_relatorio=movimentacoes" class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in" style="animation-delay: 0.2s">
+                        <div class="card-shine"></div>
+                        <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
+                            <i class="fas fa-exchange-alt text-4xl"></i>
                         </div>
+                        <h3 class="text-lg font-bold text-primary mb-2 text-center font-heading">Movimentações</h3>
+                        <p class="text-gray-600 text-center mb-4 text-sm">Relatório de Movimentações</p>
+                        <span class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105">
+                            <i class="fas fa-file-pdf mr-2"></i>
+                            Gerar PDF
+                        </span>
                     </a>
                 </div>
             </main>
@@ -630,61 +802,91 @@ $select = new select($escola);
     </div>
 
     <!-- Modal for Report Course Selection -->
-    <div id="reportModal" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-2 sm:p-4 z-50">
-        <div class="bg-white w-full max-w-2xl rounded-2xl shadow-2xl max-h-[90vh] overflow-y-auto transform transition-all duration-300 scale-95 opacity-0" id="reportModalContent">
-            <div class="bg-gradient-to-r from-primary to-dark text-white p-6">
-                <div class="flex items-center space-x-3">
-                    <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm border border-white/30 shadow-lg">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                        </svg>
-                    </div>
-                    <div>
-                        <h2 class="text-xl font-bold font-display" id="reportModalTitle">Gerar Relatório</h2>
-                        <p class="text-white/90 text-sm mt-1">Selecione o curso para o relatório</p>
-                    </div>
+    <div id="reportModal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal('reportModal')">×</button>
+            <h2 class="font-heading">
+                <i class="fas fa-file-alt mr-2 text-secondary"></i>
+                Selecionar Curso
+            </h2>
+            <form id="reportForm" action="../controllers/controller_relatorios.php" method="POST" class="space-y-4">
+                <input type="hidden" name="form" value="relatorio_pdf">
+                <input type="hidden" name="tipo_relatorio" id="reportTypeInput">
+                <div class="form-group">
+                    <label for="curso_id" class="font-semibold">
+                        <i class="fas fa-book mr-1"></i>
+                        Curso
+                    </label>
+                    <select name="curso" id="curso_id" required class="select2-curso">
+                        <option value="" disabled selected>SELECIONAR CURSO</option>
+                        <?php
+                        $cursos = $select->select_cursos();
+                        foreach ($cursos as $curso) { ?>
+                            <option value="<?= htmlspecialchars($curso['id']) ?>"><?= htmlspecialchars($curso['nome_curso']) ?></option>
+                        <?php } ?>
+                    </select>
                 </div>
-                <button class="absolute top-6 right-6 p-2 rounded-xl hover:bg-white/10 transition-all group" onclick="closeModal('reportModal')">
-                    <svg class="w-5 h-5 text-white group-hover:scale-110 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
+                <button type="submit" class="confirm-btn">
+                    <i class="fas fa-file-pdf mr-2"></i>
+                    Gerar Relatório
                 </button>
-            </div>
-            <div class="p-6">
-                <form action="../controllers/controller_relatorios.php" method="POST
-                
-                
-                
-                " class="space-y-6">
-                    <input type="hidden" name="form" value="relatorio_pdf">
-                    <input type="hidden" name="tipo_relatorio" id="reportTypeInput">
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-3" id="label_curso">Curso (Obrigatório)</label>
-                        <select name="curso" id="curso_id" required class="w-full px-4 py-3.5 border border-gray-300 rounded-xl input-modern focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-base">
-                            <option value="" selected disabled>Selecione o curso</option>
-                            <?php
-                            $cursos = $select->select_cursos();
-                            foreach ($cursos as $curso) { ?>
-                                <option value="<?= htmlspecialchars($curso['id']) ?>"><?= htmlspecialchars($curso['nome_curso']) ?></option>
-                            <?php } ?>
-                        </select>
-                    </div>
-                    <div class="pt-4 border-t border-gray-200">
-                        <button type="submit" class="w-full bg-gradient-to-r from-primary to-dark text-white px-6 py-3.5 rounded-xl hover:from-dark hover:to-primary btn-animate font-semibold shadow-lg focus-ring transition-all text-base">
-                            <span class="flex items-center justify-center">
-                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                </svg>
-                                Gerar PDF
-                            </span>
-                        </button>
-                    </div>
-                </form>
-            </div>
+            </form>
         </div>
     </div>
 
     <script>
+        // Inicializar o gráfico de distribuição
+        const ctx = document.getElementById('distributionChart').getContext('2d');
+        const distributionChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Pública AC', 'Pública Cotas', 'Privada AC', 'Privada Cotas'],
+                datasets: [{
+                    data: [
+                        <?php echo $select->countAlunosPorTipo('publica_ac'); ?>,
+                        <?php echo $select->countAlunosPorTipo('publica_cotas'); ?>,
+                        <?php echo $select->countAlunosPorTipo('privada_ac'); ?>,
+                        <?php echo $select->countAlunosPorTipo('privada_cotas'); ?>
+                    ],
+                    backgroundColor: [
+                        '#28A745',
+                        '#FFC107',
+                        '#17A2B8',
+                        '#DC3545'
+                    ],
+                    borderWidth: 2,
+                    borderColor: '#FFFFFF'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            font: {
+                                family: 'Inter',
+                                size: 12
+                            },
+                            padding: 20
+                        }
+                    },
+                    tooltip: {
+                        enabled: true,
+                        callbacks: {
+                            label: function(context) {
+                                const label = context.label || '';
+                                const value = context.parsed || 0;
+                                return label + ': ' + value + ' candidatos';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Sidebar toggle
         const sidebar = document.getElementById('sidebar');
         const overlay = document.getElementById('overlay');
         const openSidebar = document.getElementById('openSidebar');
@@ -693,66 +895,123 @@ $select = new select($escola);
         openSidebar.addEventListener('click', () => {
             sidebar.classList.add('open');
             overlay.classList.add('show');
+            document.body.style.overflow = 'hidden';
         });
 
         closeSidebar.addEventListener('click', () => {
             sidebar.classList.remove('open');
             overlay.classList.remove('show');
+            document.body.style.overflow = '';
         });
 
         overlay.addEventListener('click', () => {
             sidebar.classList.remove('open');
             overlay.classList.remove('show');
+            document.body.style.overflow = '';
         });
 
+        // Modal handling
         function openReportModal(reportType, reportLabel) {
             const modal = document.getElementById('reportModal');
             const modalTitle = document.getElementById('reportModalTitle');
             const reportTypeInput = document.getElementById('reportTypeInput');
-            const cursoSelect = document.getElementById('curso_id');
-            const labelCurso = document.getElementById('label_curso');
-
             modalTitle.textContent = `Gerar Relatório: ${reportLabel}`;
             reportTypeInput.value = reportType;
-
-            cursoSelect.disabled = false;
-            cursoSelect.classList.remove('input-disabled');
-            labelCurso.textContent = 'Curso (Obrigatório)';
-            labelCurso.classList.remove('text-gray-400');
-            labelCurso.classList.add('text-red-600');
-
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-            document.body.style.overflow = 'hidden';
+            modal.classList.add('show');
             setTimeout(() => {
-                const content = modal.querySelector('#reportModalContent');
-                if (content) {
-                    content.style.transform = 'scale(1)';
-                    content.style.opacity = '1';
-                }
-            }, 10);
+                $('.select2-curso').select2({
+                    placeholder: "SELECIONAR CURSO",
+                    allowClear: true,
+                    width: '100%',
+                    language: {
+                        noResults: function() {
+                            return "Nenhum curso encontrado";
+                        },
+                        searching: function() {
+                            return "Pesquisando...";
+                        }
+                    }
+                });
+            }, 100);
         }
 
         function closeModal(modalId) {
             const modal = document.getElementById(modalId);
-            if (modal) {
-                const content = modal.querySelector('[id$="Content"]');
-                if (content) {
-                    content.style.transform = 'scale(0.95)';
-                    content.style.opacity = '0';
-                }
-                setTimeout(() => {
-                    modal.classList.add('hidden');
-                    modal.classList.remove('flex');
-                    document.body.style.overflow = 'auto';
-                }, 300);
-            }
+            modal.classList.remove('show');
+            document.getElementById('reportForm').reset();
+            document.body.style.overflow = '';
+            $('.select2-curso').select2('destroy');
         }
 
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 closeModal('reportModal');
             }
+        });
+
+        // Form validation
+        const reportForm = document.getElementById('reportForm');
+        reportForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const curso = document.getElementById('curso_id').value;
+            if (!curso) {
+                showNotification('Por favor, selecione um curso.', 'error');
+                return;
+            }
+            const submitBtn = reportForm.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<span class="loading-spinner"></span> Gerando...';
+            submitBtn.disabled = true;
+            setTimeout(() => {
+                reportForm.submit();
+            }, 1000);
+            setTimeout(() => {
+                if (submitBtn.disabled) {
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                }
+            }, 5000);
+        });
+
+        // Notification function
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg transform transition-all duration-300 translate-x-full`;
+            const bgColor = type === 'error' ? 'bg-red-500' : type === 'success' ? 'bg-green-500' : 'bg-blue-500';
+            notification.className += ` ${bgColor} text-white`;
+            notification.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fas fa-${type === 'error' ? 'exclamation-circle' : type === 'success' ? 'check-circle' : 'info-circle'} mr-2"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            document.body.appendChild(notification);
+            setTimeout(() => {
+                notification.classList.remove('translate-x-full');
+            }, 100);
+            setTimeout(() => {
+                notification.classList.add('translate-x-full');
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // Initialize Select2 on page load
+        $(document).ready(function() {
+            $('.select2-curso').select2({
+                placeholder: "SELECIONAR CURSO",
+                allowClear: true,
+                width: '100%',
+                language: {
+                    noResults: function() {
+                        return "Nenhum curso encontrado";
+                    },
+                    searching: function() {
+                        return "Pesquisando...";
+                    }
+                }
+            });
         });
     </script>
 </body>
