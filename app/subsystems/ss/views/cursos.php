@@ -37,7 +37,6 @@ if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) 
         case 3:
             header("Location: cursos.php?erro_senha");
             exit();
-
         default:
             header("Location: cursos.php?fatal");
             exit();
@@ -448,7 +447,7 @@ if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) 
                         </div>
                     <?php } ?>
 
-                    
+
 
                     <!-- Candidatos -->
                     <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin' || $_SESSION['tipo_usuario'] === 'cadastrador') { ?>
@@ -484,7 +483,7 @@ if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) 
                         </div>
                     <?php } ?>
 
-                    
+
 
                     <!-- Usuários -->
                     <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
@@ -630,7 +629,7 @@ if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) 
                         <?php foreach ($cursos as $index => $curso) { ?>
                             <?php if (isset($_GET['candidato_associado']) && $step === 'email') { ?>
                                 <!-- Modal de Autenticação de Dois Fatores - Email -->
-                                <div class="fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-fadeIn">
+                                <div class="fixed inset-0 bg-black/20 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fadeIn">
                                     <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md border border-gray-200/50 transform transition-all duration-300 animate-scaleIn">
                                         <div class="text-white p-6 rounded-t-2xl relative overflow-hidden" style="background: linear-gradient(135deg, #DC2626, #991B1B);">
                                             <div class="absolute inset-0 bg-gradient-to-br from-black/20 to-transparent"></div>
@@ -680,7 +679,7 @@ if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) 
                                                         </div>
                                                         <input type="email" name="email" required value="<?= htmlspecialchars($_SESSION['email'] ?? '') ?>" placeholder="admin@dominio.com" class="w-full pl-10 px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500 transition-all duration-300 text-sm shadow-sm">
                                                     </div>
-                                                   
+
                                                 </div>
                                             </div>
                                             <div class="flex justify-between p-4 border-t border-gray-200 bg-gray-50 rounded-b-2xl">
@@ -699,7 +698,7 @@ if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) 
                                 </div>
                             <?php } elseif (isset($_GET['candidato_associado']) && $step === 'code') { ?>
                                 <!-- Modal de Autenticação de Dois Fatores - Código -->
-                                <div class="fixed inset-0 bg-black/60 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-fadeIn">
+                                <div class="fixed inset-0 bg-black/20 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fadeIn">
                                     <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md border border-gray-200/50 transform transition-all duration-300 animate-scaleIn">
                                         <div class="text-white p-6 rounded-t-2xl relative overflow-hidden" style="background: linear-gradient(135deg, #DC2626, #991B1B);">
                                             <div class="absolute inset-0 bg-gradient-to-br from-black/20 to-transparent"></div>
@@ -712,7 +711,7 @@ if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) 
                                                     </div>
                                                     <div>
                                                         <h2 class="text-lg sm:text-xl font-bold font-display tracking-tight">Verificar senha</h2>
-                                                      
+
                                                     </div>
                                                 </div>
                                                 <button type="button" onclick="window.location.href='cursos.php'" class="text-white/80 hover:text-white transition-colors duration-300">
@@ -1173,7 +1172,7 @@ if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) 
             const tipoRelatorio = document.getElementById('tipo_relatorio');
             const cursoSelect = document.getElementById('curso_id');
             const labelCurso = document.getElementById('label_curso');
-            
+
             if (tipoRelatorio && cursoSelect && labelCurso) {
                 tipoRelatorio.addEventListener('change', function() {
                     if (this.value === 'comissao_selecao') {

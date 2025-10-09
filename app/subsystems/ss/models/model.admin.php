@@ -53,28 +53,25 @@ class admin extends cadastrador
             $stmt_check = $this->connect_users->prepare("SELECT * FROM $this->table_user1 WHERE email = :email");
             $stmt_check->bindValue(':email', $email);
             $stmt_check->execute();
-
             $user = $stmt_check->fetch(PDO::FETCH_ASSOC);
-            if ($user) {
-                if (password_verify($senha, $user['senha'])) {
 
-                    if ($id_curso !== null) {
-                        $result = $this->excluir_candidato_curso($id_curso);
-                    } else {
-                        $result = $this->limpar_banco();
-                    }
-                    if ($result == 1) {
-                        return 1;
-                    } else {
-                        return 2;
-                    }
-                } else {
-                    return 3;
-                }
-            } else {
-
+            if (!$user) {
                 return 3;
             }
+            if (!password_verify($senha, $user['senha'])) {
+                return 3;
+            }
+
+            if ($id_curso !== null) {
+                $result = $this->excluir_candidato_curso($id_curso);
+            } else {
+                $result = $this->limpar_banco();
+            }
+            if ($result !== 1) {
+                return 2;
+            }
+
+            return 1;
         } catch (Exception $e) {
 
             error_log("Erro no login: " . $e->getMessage());
@@ -185,6 +182,9 @@ class admin extends cadastrador
             $id_candidatos = $stmt_candidato->fetchAll(PDO::FETCH_ASSOC);
 
             foreach ($id_candidatos as $id_candidato) {
+                $stmt_delete = $this->connect->prepare("DELETE FROM $this->table14 WHERE id_candidato = :id_candidato");
+                $stmt_delete->bindValue(":id_candidato", $id_candidato['id']);
+                $stmt_delete->execute();
                 $stmt_delete = $this->connect->prepare("DELETE FROM $this->table4 WHERE id_candidato = :id_candidato");
                 $stmt_delete->bindValue(":id_candidato", $id_candidato['id']);
                 $stmt_delete->execute();
