@@ -1037,7 +1037,7 @@ body {
                         aria-label="Acessar Controle de Estoque - Sistema de gestão de materiais e recursos"
                         data-system="estoque">
                         <div class="card-icon">
-                            <img src="https://i.postimg.cc/wT8bLxNS/Design-sem-nome-7.png" alt="Ícone Controle de Estoque" class="w-24 h-24 object-contain">
+                            <img src="https://i.postimg.cc/hPW3331c/estoque.png" alt="Ícone Controle de Estoque" class="w-24 h-24 object-contain">
                         </div>
                         <h3 class="card-title">Controle de Estoque</h3>
                         <p class="card-description">Gestão completa de materiais e recursos</p>
@@ -1054,7 +1054,7 @@ body {
                         aria-label="Acessar Gerenciador de Escolas - Sistema de gestão de escolas"
                         data-system="escolas">
                         <div class="card-icon">
-                            <img src="https://i.postimg.cc/wT8bLxNS/Design-sem-nome-7.png" alt="Ícone Gerenciador de Escolas" class="w-24 h-24 object-contain">
+                            <img src="https://i.postimg.cc/nrwgXHQc/escola-1.png" alt="Ícone Gerenciador de Escolas" class="w-24 h-24 object-contain">
                         </div>
                         <h3 class="card-title">Gerenciador de Escolas</h3>
                         <p class="card-description">Gestão completa de escolas e recursos</p>
@@ -1072,7 +1072,7 @@ body {
                         aria-label="Acessar Gerenciador Admin CREDE - Sistema de administração central"
                         data-system="admin">
                         <div class="card-icon">
-                            <img src="https://i.postimg.cc/ZqY5Z9TG/useradm.png" alt="Ícone Gerenciador Admin CREDE" class="w-24 h-24 object-contain">
+                            <img src="https://i.postimg.cc/dt5t9dG7/admin.png" alt="Ícone Gerenciador Admin CREDE" class="w-24 h-24 object-contain">
                         </div>
                         <h3 class="card-title">Gerenciador Admin crede</h3>
                         <p class="card-description">Administração central do sistema CREDE</p>
