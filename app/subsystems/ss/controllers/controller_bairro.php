@@ -64,13 +64,14 @@ if (
             exit();
     }
 }
-//editar curso 
+//editar bairro 
 else if (
     isset($_POST["id_bairro"]) && !empty($_POST["id_bairro"]) &&
-    isset($_POST["nome"]) && !empty($_POST["nome"])
+    isset($_POST["nome_bairro"]) && !empty($_POST["nome_bairro"]) &&
+    isset($_POST["acao"]) && $_POST["acao"] === "edit"
 ) {
     $id_bairro = $_POST["id_bairro"];
-    $nome = $_POST["nome"];
+    $nome = $_POST["nome_bairro"];
 
     $escola = $_SESSION['escola'];
     $admin_model = new admin($escola);

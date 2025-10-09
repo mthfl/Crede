@@ -902,6 +902,53 @@ $select = new select($escola);
         </div>
     </div>
 
+    <!-- Modal Editar Bairro Individual -->
+    <div id="modalEditBairro" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-2 sm:p-4 z-50">
+        <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl transform transition-all duration-300 scale-95 opacity-0" id="modalEditBairroContent">
+            <div class="bg-gradient-to-r from-primary to-dark text-white p-4 rounded-t-2xl">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg sm:text-xl font-bold">Editar Bairro</h3>
+                    </div>
+                    <button class="p-2 rounded-xl hover:bg-white/10" onclick="closeModal('modalEditBairro')">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="p-6 sm:p-8">
+                <form id="editBairroForm" action="../controllers/controller_bairro.php" method="POST">
+                    <input type="hidden" name="form" value="bairro">
+                    <input type="hidden" name="acao" value="edit">
+                    <input type="hidden" id="editBairroId" name="id_bairro" value="">
+
+                    <div class="mb-6">
+                        <label class="block text-sm font-semibold text-dark mb-3">Nome do Bairro *</label>
+                        <input id="editBairroNome" name="nome_bairro" type="text" class="w-full px-4 py-3.5 rounded-xl transition-all text-base border-2 focus:border-primary focus:ring-4 focus:ring-primary/10" placeholder="Digite o nome do bairro" required>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-3 justify-end">
+                        <button type="button" class="px-6 py-3 rounded-xl border-2 border-primary font-semibold text-primary hover:bg-primary/10 hover:border-primary transition-all text-base focus-ring" onclick="closeModal('modalEditBairro'); window.history.replaceState({}, document.title, window.location.pathname);">Cancelar</button>
+                        <button type="submit" class="px-6 py-3 bg-gradient-to-r from-primary to-dark text-white font-semibold rounded-xl hover:from-primary/90 hover:to-dark/90 transition-all text-base shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 focus-ring">
+                            <span class="flex items-center">
+                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                Salvar Alterações
+                            </span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal Relatórios -->
     <div id="modalRelatorios" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-2 sm:p-4 z-50">
         <div class="bg-white w-full max-w-2xl rounded-2xl shadow-2xl max-h-[90vh] overflow-y-auto transform transition-all duration-300 scale-95 opacity-0" id="modalRelatoriosContent">
@@ -1098,11 +1145,9 @@ $select = new select($escola);
         }
 
         function openEditBairro(id, nome) {
-            document.getElementById('modalBairroTitle').textContent = 'Editar Bairro';
-            document.getElementById('inpBairroId').value = id || '';
-            document.getElementById('inpBairroNome').value = nome || '';
-            document.getElementById('bairroForm').action = '../controllers/controller_bairro.php';
-            openModal('modalBairro');
+            document.getElementById('editBairroId').value = id || '';
+            document.getElementById('editBairroNome').value = nome || '';
+            openModal('modalEditBairro');
         }
 
         function openDeleteBairro(id, nome) {
@@ -1380,6 +1425,19 @@ $select = new select($escola);
                         labelCurso.textContent = 'Curso (Obrigatório)';
                         labelCurso.classList.remove('text-gray-400');
                         labelCurso.classList.add('text-red-600');
+                    }
+                });
+            }
+
+            // Validação do formulário de edição de bairro
+            const editBairroForm = document.getElementById('editBairroForm');
+            if (editBairroForm) {
+                editBairroForm.addEventListener('submit', function(e) {
+                    const nomeBairro = document.getElementById('editBairroNome');
+                    if (!nomeBairro.value.trim()) {
+                        e.preventDefault();
+                        alert('Por favor, informe o nome do bairro.');
+                        nomeBairro.focus();
                     }
                 });
             }
