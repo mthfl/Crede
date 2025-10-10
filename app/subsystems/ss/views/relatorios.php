@@ -5,6 +5,9 @@ $session->autenticar_session();
 $session->tempo_session();
 
 require_once(__DIR__ . '/../config/connect.php');
+if (!isset($_SESSION['escola']) || empty($_SESSION['escola'])) {
+    die("Escola não definida na sessão");
+}
 $escola = $_SESSION['escola'];
 
 new connect($escola);
@@ -1169,7 +1172,7 @@ $select = new select($escola);
     <div id="reportModal" class="modal">
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal('reportModal')">×</button>
-            <h2 class="font-heading">
+            <h2 class="font-heading" id="reportModalTitle">
                 <i class="fas fa-file-alt mr-2 text-secondary"></i>
                 Selecionar Curso
             </h2>
