@@ -130,6 +130,9 @@ class admin extends cadastrador
     public function editar_curso(int $id_curso, string $curso, string $cor): int
     {
         try {
+            // Converter o nome do curso para maiúsculas
+            $curso = strtoupper($curso);
+
             $stmt_check = $this->connect->prepare("SELECT * FROM $this->table2 WHERE id = :id_curso");
             $stmt_check->bindValue(":id_curso", $id_curso);
             $stmt_check->execute();
