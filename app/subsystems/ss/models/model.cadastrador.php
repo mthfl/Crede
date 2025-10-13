@@ -407,11 +407,11 @@ class cadastrador extends select
             $stmt_candidato->bindValue(":id_usuario", $id_usuario);
             $stmt_candidato->bindValue(":datatime", $datatime);
             $stmt_candidato->bindValue(":tipo_movimentacao", 'CADASTRAR CANDIDATO');
-            $stmt_candidato->bindValue(":descricao", $nome);
+            $stmt_candidato->bindValue(":descricao", "USUÁRIO " . $_SESSION['nome'] . " CADASTROU CANDIDATO(A) " . $nome);
             if (!$stmt_candidato->execute()) {
                 return 2;
             }
-            
+
             return 1;
         } catch (PDOException $e) {
             return 0;
@@ -427,22 +427,34 @@ class cadastrador extends select
             $stmt_candidato = $this->connect->prepare("SELECT * FROM $this->table1 WHERE id = :id");
             $stmt_candidato->bindValue(":id", $id_candidato);
             $stmt_candidato->execute();
-            if ($stmt_candidato->rowCount() == 1 && $stmt_usuario->rowCount() == 1) {
-                $stmt_requisicao = $this->connect->prepare("INSERT INTO $this->table14 VALUES (NULL, :id_candidato, :id_usuario, :requisicao, :status)");
-                $stmt_requisicao->bindValue(":id_usuario", $id_usuario);
-                $stmt_requisicao->bindValue(":id_candidato", $id_candidato);
-                $stmt_requisicao->bindValue(":requisicao", $requisicao);
-                $stmt_requisicao->bindValue(":status", "Pendente");
+            $dado = $stmt_candidato->fetch(PDO::FETCH_ASSOC);
 
-                if ($stmt_requisicao->execute()) {
-                    return 1;
-                } else {
-                    return 2;
-                }
-            } else {
-
+            if ($stmt_candidato->rowCount() !== 1 && $stmt_usuario->rowCount() !== 1) {
                 return 3;
             }
+            $stmt_requisicao = $this->connect->prepare("INSERT INTO $this->table14 VALUES (NULL, :id_candidato, :id_usuario, :requisicao, :status)");
+            $stmt_requisicao->bindValue(":id_usuario", $id_usuario);
+            $stmt_requisicao->bindValue(":id_candidato", $id_candidato);
+            $stmt_requisicao->bindValue(":requisicao", $requisicao);
+            $stmt_requisicao->bindValue(":status", "Pendente");
+
+            if (!$stmt_requisicao->execute()) {
+                return 2;
+            }
+
+            
+            date_default_timezone_set('America/Fortaleza');
+            $datatime = date('Y/m/d H:i:s');
+            $id_usuario = $_SESSION['id'];
+            $stmt_candidato = $this->connect->prepare("INSERT INTO $this->table16 VALUES (NULL, :id_usuario, :datatime, :tipo_movimentacao, :descricao)");
+            $stmt_candidato->bindValue(":id_usuario", $id_usuario);
+            $stmt_candidato->bindValue(":datatime", $datatime);
+            $stmt_candidato->bindValue(":tipo_movimentacao", 'REQUISIÇÃO');
+            $stmt_candidato->bindValue(":descricao", "USUÁRIO " . $_SESSION['nome'] . " FEZ UM REQUISIÇÃO DO CANDIDATO(A) " . $dado['nome']);
+            if (!$stmt_candidato->execute()) {
+                return 2;
+            }
+            return 1;
         } catch (PDOException $e) {
             return 0;
         }

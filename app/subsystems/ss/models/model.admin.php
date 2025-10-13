@@ -27,7 +27,7 @@ class admin extends cadastrador
             $stmt_candidato->bindValue(":id_usuario", $id_usuario);
             $stmt_candidato->bindValue(":datatime", $datatime);
             $stmt_candidato->bindValue(":tipo_movimentacao", 'CADASTRAR QUANTIDADE DE VAGAS');
-            $stmt_candidato->bindValue(":descricao", $quantidade);
+            $stmt_candidato->bindValue(":descricao", "FOI CADASTRADO ". $quantidade." DE VAGAS PARA OS CURSOS");
             if (!$stmt_cadastro->execute()) {
                 return 2;
             }
@@ -116,7 +116,7 @@ class admin extends cadastrador
         $stmt_candidato->bindValue(":id_usuario", $id_usuario);
         $stmt_candidato->bindValue(":datatime", $datatime);
         $stmt_candidato->bindValue(":tipo_movimentacao", 'CADASTRAR CURSO');
-        $stmt_candidato->bindValue(":descricao", $curso);
+        $stmt_candidato->bindValue(":descricao", "FOI CADASTRADO O CURSO ".$curso);
         if (!$stmt_candidato->execute()) {
 
             return 2;
