@@ -800,11 +800,7 @@ if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) 
                                 <p class="text-white/90 text-sm mt-1 font-medium">Preencha os dados do curso</p>
                             </div>
                         </div>
-                        <button onclick="closeModal()" class="w-8 h-8 bg-white/20 hover:bg-white/30 rounded-xl flex items-center justify-center transition-all duration-300 backdrop-blur-sm group border border-white/30 shadow-lg">
-                            <svg class="w-4 h-4 group-hover:rotate-90 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                            </svg>
-                        </button>
+                        
                     </div>
                 </div>
                 <form action="../controllers/controller_curso.php" method="post" id="cursoForm" class="space-y-4">
@@ -838,7 +834,7 @@ if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) 
                                     <svg class="w-4 h-4 mr-2 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                     </svg>
-                                    <span id="saveButtonText">Salvar</span>
+                                    <span id="saveButtonText">Cadastrar</span>
                                 </span>
                             </button>
                         </div>
@@ -1009,7 +1005,7 @@ if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) 
 
         function openCreateModal() {
             document.getElementById('modalTitle').textContent = 'Adicionar Curso';
-            document.getElementById('saveButtonText').textContent = 'Salvar';
+            document.getElementById('saveButtonText').textContent = 'Cadastrar';
             document.getElementById('cursoForm').reset();
             document.getElementById('cursoId').value = '';
             document.getElementById('corCurso').value = '#005A24';
