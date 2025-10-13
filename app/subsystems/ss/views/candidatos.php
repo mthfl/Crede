@@ -575,16 +575,16 @@ $usuarios = $select->select_usuarios();
                                         $cota = 'AMPLA';
                                     }
                                 ?>
-                                    <tr class="hover:bg-accent/30">
-                                        <td class="px-4 py-3 text-gray-700"><?= htmlspecialchars((string)$id) ?></td>
-                                        <td class="px-4 py-3 font-medium text-gray-900"><?= htmlspecialchars((string)$nome) ?></td>
-                                        <td class="px-4 py-3 text-gray-700"><?= htmlspecialchars((string)$cursoNome) ?></td>
-                                        <td class="px-4 py-3 text-gray-700"><?= htmlspecialchars((string)$cota) ?></td>
+                                    <tr class="hover:bg-gray-50 <?= $cand['status'] == 0 ? 'bg-gray-50' : '' ?>">
+                                        <td class="px-4 py-3 <?= $cand['status'] == 0 ? 'text-gray-400' : 'text-gray-600' ?>"><?= htmlspecialchars((string)$id) ?></td>
+                                        <td class="px-4 py-3 font-medium <?= $cand['status'] == 0 ? 'text-gray-400' : 'text-gray-900' ?>"><?= htmlspecialchars((string)$nome) ?></td>
+                                        <td class="px-4 py-3 <?= $cand['status'] == 0 ? 'text-gray-400' : 'text-gray-600' ?>"><?= htmlspecialchars((string)$cursoNome) ?></td>
+                                        <td class="px-4 py-3 <?= $cand['status'] == 0 ? 'text-gray-400' : 'text-gray-600' ?>"><?= htmlspecialchars((string)$cota) ?></td>
                                         <td class="px-4 py-3">
-                                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold <?= $publica === 'Sim' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700' ?>"><?= $publica ?></span>
+                                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium <?= $publica === 'Sim' ? 'bg-gray-200 text-gray-800' : 'bg-gray-100 text-gray-600' ?>"><?= $publica ?></span>
                                         </td>
-                                        <td class="px-4 py-3 text-gray-700"><?= htmlspecialchars((string)$data) ?></td>
-                                        <td class="px-4 py-3 text-gray-700"><?= htmlspecialchars((string)$cadastradorNome) ?></td>
+                                        <td class="px-4 py-3 <?= $cand['status'] == 0 ? 'text-gray-400' : 'text-gray-700' ?>"><?= htmlspecialchars((string)$data) ?></td>
+                                        <td class="px-4 py-3 <?= $cand['status'] == 0 ? 'text-gray-400' : 'text-gray-700' ?>"><?= htmlspecialchars((string)$cadastradorNome) ?></td>
                                         <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
                                             <td class="px-4 py-3">
                                                 <div class="flex space-x-2 justify-center">
@@ -596,20 +596,20 @@ $usuarios = $select->select_usuarios();
                                                     </a>
                                                     <?php if ($cand['status'] == 1) { ?>
                                                         
-                                                        <a href="../controllers/controller_candidato.php?id_excluir=<?=$id?>&tipo=inativar" class="delete-candidato bg-secondary text-white py-2 px-4 rounded-lg hover:bg-orange-600 transition-all duration-300 font-medium text-sm btn-animate focus-ring flex items-center justify-center w-24">
+                                                        <button type="button" onclick="openInactivateModal(<?= $id ?>, '<?= htmlspecialchars($nome) ?>')" class="bg-secondary text-white py-2 px-4 rounded-lg hover:bg-orange-600 transition-all duration-300 font-medium text-sm btn-animate focus-ring flex items-center justify-center w-24">
                                                             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                                                             </svg>
                                                             Inativar
-                                                        </a>
+                                                        </button>
                                                     <?php } else { ?>
                                                         
-                                                        <a href="../controllers/controller_candidato.php?id_excluir=<?=$id?>&tipo=ativar" class="delete-candidato bg-secondary text-white py-2 px-4 rounded-lg hover:bg-orange-600 transition-all duration-300 font-medium text-sm btn-animate focus-ring flex items-center justify-center w-24">
+                                                        <button type="button" onclick="openActivateModal(<?= $id ?>, '<?= htmlspecialchars($nome) ?>')" class="bg-secondary text-white py-2 px-4 rounded-lg hover:bg-orange-600 transition-all duration-300 font-medium text-sm btn-animate focus-ring flex items-center justify-center w-24">
                                                             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                                                             </svg>
                                                             Ativar
-                                                        </a>
+                                                        </button>
                                                     <?php } ?>
 
                                                 </div>
@@ -644,53 +644,80 @@ $usuarios = $select->select_usuarios();
                                     $cota = 'AMPLA';
                                 }
                             ?>
-                                <div class="candidate-card">
-                                    <div class="field">
-                                        <span class="field-label">ID</span>
-                                        <span class="field-value"><?= htmlspecialchars((string)$id) ?></span>
+                                <div class="candidate-card bg-white shadow-sm border border-gray-200 rounded-lg p-6 relative <?= $cand['status'] == 1 ? 'bg-primary text-white' : '' ?>">
+                                    <?php if ($cand['status'] == 0): ?>
+                                        <div class="absolute top-4 right-4">
+                                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-500">Desativado</span>
+                                        </div>
+                                    <?php endif; ?>
+                                    <div class="flex items-center space-x-4 mb-4">
+                                        <div class="w-12 h-12 <?= $cand['status'] == 1 ? 'bg-white text-primary' : 'bg-gray-900 text-white' ?> rounded-full flex items-center justify-center text-lg font-semibold">
+                                            <?= strtoupper(substr($nome, 0, 1)) ?>
+                                        </div>
+                                        <div>
+                                            <h3 class="text-lg font-semibold <?= $cand['status'] == 0 ? 'text-gray-400' : 'text-gray-900' ?>"><?= htmlspecialchars((string)$nome) ?></h3>
+                                            <p class="text-sm <?= $cand['status'] == 0 ? 'text-gray-400' : 'text-gray-600' ?>">ID: <?= htmlspecialchars((string)$id) ?></p>
+                                        </div>
                                     </div>
-                                    <div class="field">
-                                        <span class="field-label">Nome</span>
-                                        <span class="field-value font-medium"><?= htmlspecialchars((string)$nome) ?></span>
-                                    </div>
-                                    <div class="field">
-                                        <span class="field-label">Curso</span>
-                                        <span class="field-value"><?= htmlspecialchars((string)$cursoNome) ?></span>
-                                    </div>
-                                    <div class="field">
-                                        <span class="field-label">Cota</span>
-                                        <span class="field-value"><?= htmlspecialchars((string)$cota) ?></span>
-                                    </div>
-                                    <div class="field">
-                                        <span class="field-label">Pública</span>
-                                        <span class="field-value">
-                                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold <?= $publica === 'Sim' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700' ?>"><?= $publica ?></span>
-                                        </span>
-                                    </div>
-                                    <div class="field">
-                                        <span class="field-label">Data</span>
-                                        <span class="field-value"><?= htmlspecialchars((string)$data) ?></span>
-                                    </div>
-                                    <div class="field">
-                                        <span class="field-label">Cadastrador</span>
-                                        <span class="field-value"><?= htmlspecialchars((string)$cadastradorNome) ?></span>
+                                    <div class="space-y-3">
+                                        <div class="flex items-center space-x-2">
+                                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                                            </svg>
+                                            <span class="<?= $cand['status'] == 0 ? 'text-gray-400' : 'text-gray-700' ?>"><?= htmlspecialchars((string)$cursoNome) ?></span>
+                                        </div>
+                                        
+                                        <div class="flex items-center space-x-2">
+                                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                                            </svg>
+                                            <span class="<?= $cand['status'] == 0 ? 'text-gray-400' : 'text-gray-700' ?>"><?= htmlspecialchars((string)$cota) ?></span>
+                                        </div>
+
+                                        <div class="flex items-center space-x-2">
+                                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"></path>
+                                            </svg>
+                                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium <?= $cand['status'] == 0 ? 'bg-gray-100 text-gray-500' : ($publica === 'Sim' ? 'bg-gray-200 text-gray-800' : 'bg-gray-100 text-gray-600') ?>"><?= $publica ?></span>
+                                        </div>
+
+                                        <div class="flex items-center space-x-2">
+                                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                            </svg>
+                                            <span class="<?= $cand['status'] == 0 ? 'text-gray-400' : 'text-gray-700' ?>"><?= htmlspecialchars((string)$data) ?></span>
+                                        </div>
+
+                                        <div class="flex items-center space-x-2">
+                                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                            </svg>
+                                            <span class="<?= $cand['status'] == 0 ? 'text-gray-400' : 'text-gray-700' ?>"><?= htmlspecialchars((string)$cadastradorNome) ?></span>
+                                        </div>
                                     </div>
                                     <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
                                         <div class="flex space-x-2 mt-4 justify-center">
-                                            <a href="../views/editar_candidato.php?id=<?= $id ?>" class="edit-candidato bg-primary text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-all duration-300 font-medium text-sm btn-animate focus-ring flex items-center justify-center w-24">
+                                            <a href="../views/editar_candidato.php?id=<?= $id ?>" class="edit-candidato <?= $cand['status'] == 1 ? 'bg-primary hover:bg-green-700' : 'bg-gray-900 hover:bg-gray-800' ?> text-white py-2 px-4 rounded-lg transition-all duration-300 font-medium text-sm btn-animate focus-ring flex items-center justify-center w-24">
                                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                                 </svg>
                                                 Editar
                                             </a>
-                                            <button class="delete-candidato bg-secondary text-white py-2 px-4 rounded-lg hover:bg-orange-600 transition-all duration-300 font-medium text-sm btn-animate focus-ring flex items-center justify-center w-24"
-                                                data-id="<?= htmlspecialchars((string)($cand['id'] ?? '')) ?>"
-                                                data-nome="<?= htmlspecialchars((string)($cand['nome'] ?? '')) ?>">
-                                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                                </svg>
-                                                Excluir
-                                            </button>
+                                            <?php if ($cand['status'] == 1) { ?>
+                                                <button type="button" onclick="openInactivateModal(<?= $id ?>, '<?= htmlspecialchars($nome) ?>')" class="bg-secondary text-white py-2 px-4 rounded-lg hover:bg-orange-500 transition-all duration-300 font-medium text-sm btn-animate focus-ring flex items-center justify-center w-24">
+                                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                                    </svg>
+                                                    Inativar
+                                                </button>
+                                            <?php } else { ?>
+                                                <button type="button" onclick="openActivateModal(<?= $id ?>, '<?= htmlspecialchars($nome) ?>')" class="bg-gray-900 text-white py-2 px-4 rounded-lg hover:bg-gray-800 transition-all duration-300 font-medium text-sm btn-animate focus-ring flex items-center justify-center w-24">
+                                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                                    </svg>
+                                                    Ativar
+                                                </button>
+                                            <?php } ?>
                                         </div>
                                     <?php } ?>
                                 </div>
@@ -702,6 +729,48 @@ $usuarios = $select->select_usuarios();
                     </div>
                 </div>
             </main>
+        </div>
+    </div>
+
+    <!-- Modal Confirmar Inativação -->
+    <div id="modalInactivateConfirm" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-2 sm:p-4 z-50">
+        <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl transform transition-all duration-300 scale-95 opacity-0" id="modalInactivateConfirmContent">
+            <div class="p-6 sm:p-8 text-center">
+                <div class="w-20 h-20 rounded-full bg-secondary/20 flex items-center justify-center mx-auto mb-6">
+                    <svg class="w-10 h-10 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M4.93 4.93l14.14 14.14"></path>
+                    </svg>
+                </div>
+                <h3 class="text-xl sm:text-2xl font-bold text-dark font-heading mb-4">Confirmar Inativação</h3>
+                <p class="text-gray-600 text-base mb-6 leading-relaxed">
+                    Tem certeza que deseja inativar o candidato <span class="font-semibold text-dark" id="inactivateCandidatoName"></span>?
+                </p>
+                <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                    <button type="button" class="px-6 py-3 rounded-xl border-2 border-secondary font-semibold text-secondary hover:bg-secondary/10 hover:border-secondary transition-all text-base focus-ring" onclick="closeModal('modalInactivateConfirm')">Cancelar</button>
+                    <a id="inactivateLink" href="#" class="px-6 py-3 bg-gradient-to-r from-secondary to-orange-600 text-white font-semibold rounded-xl hover:from-secondary/90 hover:to-orange-700 transition-all text-base shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 focus-ring text-center">Confirmar Inativação</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Confirmar Ativação -->
+    <div id="modalActivateConfirm" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-2 sm:p-4 z-50">
+        <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl transform transition-all duration-300 scale-95 opacity-0" id="modalActivateConfirmContent">
+            <div class="p-6 sm:p-8 text-center">
+                <div class="w-20 h-20 rounded-full bg-secondary/20 flex items-center justify-center mx-auto mb-6">
+                    <svg class="w-10 h-10 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M4.93 4.93l14.14 14.14"></path>
+                    </svg>
+                </div>
+                <h3 class="text-xl sm:text-2xl font-bold text-dark font-heading mb-4">Confirmar Ativação</h3>
+                <p class="text-gray-600 text-base mb-6 leading-relaxed">
+                    Tem certeza que deseja ativar o candidato <span class="font-semibold text-dark" id="activateCandidatoName"></span>?
+                </p>
+                <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                    <button type="button" class="px-6 py-3 rounded-xl border-2 border-secondary font-semibold text-secondary hover:bg-secondary/10 hover:border-secondary transition-all text-base focus-ring" onclick="closeModal('modalActivateConfirm')">Cancelar</button>
+                    <a id="activateLink" href="#" class="px-6 py-3 bg-gradient-to-r from-secondary to-orange-600 text-white font-semibold rounded-xl hover:from-secondary/90 hover:to-orange-700 transition-all text-base shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 focus-ring text-center">Confirmar Ativação</a>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -922,13 +991,24 @@ $usuarios = $select->select_usuarios();
             }, 10);
         }
 
+        function openInactivateModal(id, nome) {
+            document.getElementById('inactivateCandidatoName').textContent = nome;
+            document.getElementById('inactivateLink').href = `../controllers/controller_candidato.php?id_excluir=${id}&tipo=inativar`;
+            openModal('modalInactivateConfirm');
+        }
+
+        function openActivateModal(id, nome) {
+            document.getElementById('activateCandidatoName').textContent = nome;
+            document.getElementById('activateLink').href = `../controllers/controller_candidato.php?id_excluir=${id}&tipo=ativar`;
+            openModal('modalActivateConfirm');
+        }
+
         // Event delegation for edit and delete buttons
         document.addEventListener('DOMContentLoaded', function() {
             const container = document.querySelector('.bg-white.rounded-2xl');
 
             container.addEventListener('click', function(e) {
                 const target = e.target;
-
 
                 // Handle Delete button
                 if (target.classList.contains('delete-candidato')) {
