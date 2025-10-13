@@ -746,7 +746,7 @@ if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) 
                                 <div class="h-2 w-full" style="background-color: <?= $curso['cor_curso'] ?>"></div>
                                 <div class="p-8">
                                     <div class="text-center mb-8">
-                                        <h3 class="text-2xl font-bold leading-tight font-display group-hover:scale-105 transition-all duration-300" style="color: <?= $curso['cor_curso'] ?>"><?= strtoupper($curso['nome_curso']) ?></h3>
+                                        <h3 class="text-2xl font-bold leading-tight font-display group-hover:scale-105 transition-all duration-300" style="color: <?= $curso['cor_curso'] ?>"><?= $curso['nome_curso'] ?></h3>
                                         <div class="w-16 h-0.5 mx-auto mt-3 rounded-full" style="background-color: <?= $curso['cor_curso'] ?>40"></div>
                                     </div>
 
@@ -808,7 +808,7 @@ if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) 
                         <input type="hidden" id="cursoId" name="curso_id">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Nome do Curso *</label>
-                            <input type="text" id="nomeCurso" name="nome_curso" required placeholder="Digite o nome do curso" style="text-transform: uppercase;" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300 text-sm">
+                            <input type="text" id="nomeCurso" name="nome_curso" required placeholder="Digite o nome do curso" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-300 text-sm">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Cor do Curso *</label>

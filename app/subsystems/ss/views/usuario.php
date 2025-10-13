@@ -723,7 +723,7 @@ $select = new select($escola);
                                 <i class="fa-solid fa-user text-primary"></i>
                                 Nome Completo *
                             </label>
-                            <input id="inpNome" name="nome" type="text" class="input-enhanced w-full px-4 py-4 rounded-xl transition-all text-base border-2 focus:border-primary focus:ring-4 focus:ring-primary/10" placeholder="Digite o nome completo" required style="text-transform: uppercase;">
+                            <input id="inpNome" name="nome" type="text" class="input-enhanced w-full px-4 py-4 rounded-xl transition-all text-base border-2 focus:border-primary focus:ring-4 focus:ring-primary/10" placeholder="Digite o nome completo" required>
                         </div>
                         <div>
                             <label class="block text-sm font-semibold text-dark mb-3 flex items-center gap-2">

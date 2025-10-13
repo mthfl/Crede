@@ -932,7 +932,7 @@ $select = new select($escola);
 
                     <div class="mb-6">
                         <label class="block text-sm font-semibold text-dark mb-3">Nome do Bairro *</label>
-                        <input id="editBairroNome" name="nome_bairro" type="text" class="w-full px-4 py-3.5 rounded-xl transition-all text-base border-2 focus:border-primary focus:ring-4 focus:ring-primary/10" placeholder="Digite o nome do bairro" required style="text-transform: uppercase;">
+                        <input id="editBairroNome" name="nome_bairro" type="text" class="w-full px-4 py-3.5 rounded-xl transition-all text-base border-2 focus:border-primary focus:ring-4 focus:ring-primary/10" placeholder="Digite o nome do bairro" required>
                     </div>
 
                     <div class="flex flex-col sm:flex-row gap-3 justify-end">
