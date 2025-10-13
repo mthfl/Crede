@@ -18,6 +18,16 @@ if (
     $email = $_POST["email"];
     $cpf = $_POST["cpf"];
     $escola = $_POST["escola"];
+    
+    // Aplicar máscara no CPF se não estiver formatado
+    if (!preg_match('/^\d{3}\.\d{3}\.\d{3}-\d{2}$/', $cpf)) {
+        // Remove caracteres não numéricos
+        $cpf_numeros = preg_replace('/\D/', '', $cpf);
+        // Aplica a máscara se tiver 11 dígitos
+        if (strlen($cpf_numeros) === 11) {
+            $cpf = substr($cpf_numeros, 0, 3) . '.' . substr($cpf_numeros, 3, 3) . '.' . substr($cpf_numeros, 6, 3) . '-' . substr($cpf_numeros, 9, 2);
+        }
+    }
 
     $model_usuario = new usuario();
 
@@ -56,6 +66,16 @@ else if (
     $email = $_POST["email"];
     $cpf = $_POST["cpf"];
     $escola = $_POST["escola"];
+    
+    // Aplicar máscara no CPF se não estiver formatado
+    if (!preg_match('/^\d{3}\.\d{3}\.\d{3}-\d{2}$/', $cpf)) {
+        // Remove caracteres não numéricos
+        $cpf_numeros = preg_replace('/\D/', '', $cpf);
+        // Aplica a máscara se tiver 11 dígitos
+        if (strlen($cpf_numeros) === 11) {
+            $cpf = substr($cpf_numeros, 0, 3) . '.' . substr($cpf_numeros, 3, 3) . '.' . substr($cpf_numeros, 6, 3) . '-' . substr($cpf_numeros, 9, 2);
+        }
+    }
 
     $model_usuario = new usuario();
     $result = $model_usuario->update_user($escola, $id, $nome, $email, $cpf);

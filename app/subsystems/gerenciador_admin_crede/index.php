@@ -1638,7 +1638,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        this.inpCpf.value = cpfLimpo;
+        // CPF será enviado com máscara para o banco de dados
         this.submit();
     });
 
