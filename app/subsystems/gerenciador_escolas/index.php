@@ -698,7 +698,7 @@ $escolas = $select->select_escolas();
                     }
                 });
 
-                // Mostrar/ocultar mensagem de "nenhum resultado"
+             
                 const noResults = document.getElementById('noResults');
                 if (visibleCount === 0 && searchTerm !== '') {
                     noResults.style.display = 'block';
