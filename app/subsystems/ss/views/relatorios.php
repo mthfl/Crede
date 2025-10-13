@@ -1204,25 +1204,32 @@ $select = new select($escola);
     <script>
         // Inicializar o gráfico de distribuição
         const ctx = document.getElementById('distributionChart').getContext('2d');
+        // Verifica se há alunos cadastrados
+        const alunosPublicaAC = <?php echo $select->countAlunosPorTipo('publica_ac'); ?>;
+        const alunosPublicaCotas = <?php echo $select->countAlunosPorTipo('publica_cotas'); ?>;
+        const alunosPrivadaAC = <?php echo $select->countAlunosPorTipo('privada_ac'); ?>;
+        const alunosPrivadaCotas = <?php echo $select->countAlunosPorTipo('privada_cotas'); ?>;
+        
+        const totalAlunos = alunosPublicaAC + alunosPublicaCotas + alunosPrivadaAC + alunosPrivadaCotas;
+        
         const distributionChart = new Chart(ctx, {
             type: 'pie',
             data: {
-                labels: ['Pública AC', 'Pública Cotas', 'Privada AC', 'Privada Cotas'],
+                labels: totalAlunos > 0 
+                    ? ['Pública AC', 'Pública Cotas', 'Privada AC', 'Privada Cotas']
+                    : ['Nenhum aluno cadastrado'],
                 datasets: [{
-                    data: [
-                        <?php echo $select->countAlunosPorTipo('publica_ac'); ?>,
-                        <?php echo $select->countAlunosPorTipo('publica_cotas'); ?>,
-                        <?php echo $select->countAlunosPorTipo('privada_ac'); ?>,
-                        <?php echo $select->countAlunosPorTipo('privada_cotas'); ?>
-                    ],
-                    backgroundColor: [
-                        '#28A745',
-                        '#FFC107',
-                        '#17A2B8',
-                        '#DC3545'
-                    ],
+                    data: totalAlunos > 0 
+                        ? [alunosPublicaAC, alunosPublicaCotas, alunosPrivadaAC, alunosPrivadaCotas]
+                        : [1],
+                    backgroundColor: totalAlunos > 0 
+                        ? ['#005A24', '#FFA500', '#1A3C34', '#E6F4EA']
+                        : ['#E6E6E6'],
                     borderWidth: 2,
-                    borderColor: '#FFFFFF'
+                    borderColor: '#FFFFFF',
+                    hoverBackgroundColor: totalAlunos > 0 
+                        ? ['#004a1e', '#e69400', '#142f2a', '#d4e6da']
+                        : ['#d4d4d4']
                 }]
             },
             options: {
@@ -1243,9 +1250,13 @@ $select = new select($escola);
                         enabled: true,
                         callbacks: {
                             label: function(context) {
+                                if (totalAlunos === 0) {
+                                    return 'Nenhum aluno cadastrado no momento';
+                                }
                                 const label = context.label || '';
                                 const value = context.parsed || 0;
-                                return label + ': ' + value + ' candidatos';
+                                const percentage = ((value / totalAlunos) * 100).toFixed(1);
+                                return `${label}: ${value} ${value === 1 ? 'candidato' : 'candidatos'} (${percentage}%)`;
                             }
                         }
                     }
