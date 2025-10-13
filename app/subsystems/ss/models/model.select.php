@@ -160,6 +160,21 @@ class select extends connect
             return [];
         }
     }
+    public function select_candidatos_ativos_requisicoes($id_usuario): array
+    {
+        try {
+            $stmt = $this->connect->query(
+                "SELECT can.*, cur.nome_curso AS nome_curso, user.nome_user AS nome_user  
+                FROM $this->table1 can 
+                INNER JOIN $this->table2 cur ON cur.id = can.id_curso1 
+                INNER JOIN $this->table5 user ON user.id = can.id_cadastrador
+                WHERE can.status = 1 AND can.id_cadastrador = '$id_usuario'
+                ");
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return [];
+        }
+    }
     public function select_candidatos_ativos(): array
     {
         try {

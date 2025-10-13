@@ -613,7 +613,7 @@ $cursos = $select->select_cursos();
                                             <select id="selectAluno" name="id_candidato" class="w-full px-4 py-4 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-base" required>
                                                 <option value="" selected disabled>Selecionar aluno</option>
                                                 <?php
-                                                $dados = $select->select_candidatos();
+                                                $dados = $select->select_candidatos_ativos_requisicoes($_SESSION['id']);
                                                 foreach ($dados as $dado) { ?>
                                                     <option value="<?= $dado['id'] ?>"><?= htmlspecialchars($dado['nome']) ?> | <?= htmlspecialchars($dado['nome_curso']) ?></option>
                                                 <?php } ?>

@@ -49,17 +49,23 @@ if (
             exit();
     }
 }
-if (isset($_GET['tipo_relatorio']) && !empty($_GET['tipo_relatorio'])) {
-
-    $tipo_relatorio = $_GET['tipo_relatorio'];
+if (
+    (isset($_GET['tipo_relatorio']) && !empty($_GET['tipo_relatorio'])) ||
+    (isset($_POST['tipo_relatorio']) && !empty($_POST['tipo_relatorio']))
+) {
+    $tipo_relatorio = $_POST['tipo_relatorio'] ?? $_GET['tipo_relatorio'] ?? '';
+    $id_usuario = $_POST['id_usuario'] ?? $_GET['id_usuario'] ?? '';
 
     switch ($tipo_relatorio) {
         case 'comissao_selecao':
             header("location:../views/reports/comissao_selecao.php?usuarios");
             exit();
         case 'movimentacoes':
-            header("location:../views/reports/movimentacoes.php?usuarios");
+            header("location:../views/reports/movimentacoes.php?id_usuario=" . $id_usuario);
             exit();
+            case 'requisicoes':
+                header("location:../views/reports/requisicoes.php?usuarios");
+                exit();
         default:
             header("location: ../index.php");
             exit();

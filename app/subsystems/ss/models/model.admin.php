@@ -605,7 +605,7 @@ class admin extends cadastrador
             $stmt_candidato = $this->connect->prepare("INSERT INTO $this->table16 VALUES (NULL, :id_usuario, :datatime, :tipo_movimentacao, NULL)");
             $stmt_candidato->bindValue(":id_usuario", $id_usuario);
             $stmt_candidato->bindValue(":datatime", $datatime);
-            $stmt_candidato->bindValue(":tipo_movimentacao", 'CADASTRAR CURSO');
+            $stmt_candidato->bindValue(":tipo_movimentacao", 'LIMPAR BANCO');
             if (!$stmt_candidato->execute()) {
 
                 return 2;
@@ -979,11 +979,24 @@ class admin extends cadastrador
         try {
             $stmt = $this->connect->prepare("UPDATE $this->table14 SET status = 'Concluido' WHERE id = :id");
             $stmt->bindValue(":id", $id_requisicao);
-            if ($stmt->execute()) {
-                return 1;
-            } else {
+            if (!$stmt->execute()) {
                 return 2;
             }
+
+            date_default_timezone_set('America/Fortaleza');
+            $datatime = date('Y/m/d H:i:s');
+            $id_usuario = $_SESSION['id'];
+
+            $stmt_candidato = $this->connect->prepare("INSERT INTO $this->table16 VALUES (NULL, :id_usuario, :datatime, :tipo_movimentacao, NULL)");
+            $stmt_candidato->bindValue(":id_usuario", $id_usuario);
+            $stmt_candidato->bindValue(":datatime", $datatime);
+            $stmt_candidato->bindValue(":tipo_movimentacao", 'REQUISIÇÃO REALIZADA');
+            if (!$stmt_candidato->execute()) {
+
+                return 2;
+            }
+
+            return 1;
         } catch (PDOException $e) {
             return 0;
         }
@@ -993,11 +1006,23 @@ class admin extends cadastrador
         try {
             $stmt = $this->connect->prepare("UPDATE $this->table14 SET status = 'Recusado' WHERE id = :id");
             $stmt->bindValue(":id", $id_requisicao);
-            if ($stmt->execute()) {
-                return 1;
-            } else {
+            if (!$stmt->execute()) {
+                return 2;
+            } 
+
+            date_default_timezone_set('America/Fortaleza');
+            $datatime = date('Y/m/d H:i:s');
+            $id_usuario = $_SESSION['id'];
+
+            $stmt_candidato = $this->connect->prepare("INSERT INTO $this->table16 VALUES (NULL, :id_usuario, :datatime, :tipo_movimentacao, NULL)");
+            $stmt_candidato->bindValue(":id_usuario", $id_usuario);
+            $stmt_candidato->bindValue(":datatime", $datatime);
+            $stmt_candidato->bindValue(":tipo_movimentacao", 'REQUISIÇÃO RECUSADA');
+            if (!$stmt_candidato->execute()) {
                 return 2;
             }
+
+            return 1;
         } catch (PDOException $e) {
             return 0;
         }
@@ -1007,11 +1032,23 @@ class admin extends cadastrador
         try {
             $stmt = $this->connect->prepare("UPDATE $this->table14 SET status = 'Pendente' WHERE id = :id");
             $stmt->bindValue(":id", $id_requisicao);
-            if ($stmt->execute()) {
-                return 1;
-            } else {
+            if (!$stmt->execute()) {
+                return 2;
+            } 
+            
+            date_default_timezone_set('America/Fortaleza');
+            $datatime = date('Y/m/d H:i:s');
+            $id_usuario = $_SESSION['id'];
+
+            $stmt_candidato = $this->connect->prepare("INSERT INTO $this->table16 VALUES (NULL, :id_usuario, :datatime, :tipo_movimentacao, NULL)");
+            $stmt_candidato->bindValue(":id_usuario", $id_usuario);
+            $stmt_candidato->bindValue(":datatime", $datatime);
+            $stmt_candidato->bindValue(":tipo_movimentacao", 'REQUISIÇÃO PENDENTE');
+            if (!$stmt_candidato->execute()) {
                 return 2;
             }
+
+            return 1;
         } catch (PDOException $e) {
             return 0;
         }

@@ -942,7 +942,7 @@ $select = new select($escola);
                             <a href="perfil.php" title="Perfil" class="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-primary to-dark rounded-full flex items-center justify-center hover:brightness-95 focus-ring">
                                 <span class="text-white font-bold text-xs sm:text-sm"><?= strtoupper(substr($_SESSION['nome'] ?? 'U', 0, 1)) ?></span>
                             </a>
-                            <a href="models/sessions.php?sair" class="bg-primary text-white px-3 sm:px-4 md:px-6 py-2 sm:py-3 rounded-lg hover:bg-dark font-semibold shadow-lg focus-ring text-xs sm:text-sm">
+                            <a href="../models/sessions.php?sair" class="bg-primary text-white px-3 sm:px-4 md:px-6 py-2 sm:py-3 rounded-lg hover:bg-dark font-semibold shadow-lg focus-ring text-xs sm:text-sm">
                                 <span class="hidden sm:inline">Sair</span>
                                 <i class="fas fa-sign-out-alt sm:hidden"></i>
                             </a>
@@ -1151,13 +1151,25 @@ $select = new select($escola);
                             Gerar PDF
                         </span>
                     </a>
-                    <a href="../controllers/controller_relatorios.php?form=relatorio_pdf&tipo_relatorio=movimentacoes" class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in" style="animation-delay: 0.2s">
+                    <a href="#" onclick="openUserReportModal()" class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in" style="animation-delay: 0.2s">
                         <div class="card-shine"></div>
                         <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
                             <i class="fas fa-exchange-alt text-4xl"></i>
                         </div>
                         <h3 class="text-lg font-bold text-primary mb-2 text-center font-heading">Movimentações</h3>
                         <p class="text-gray-600 text-center mb-4 text-sm">Relatório de Movimentações</p>
+                        <span class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105">
+                            <i class="fas fa-file-pdf mr-2"></i>
+                            Gerar PDF
+                        </span>
+                    </a>
+                    <a href="../controllers/controller_relatorios.php?tipo_relatorio=requisicoes" class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in" style="animation-delay: 0.2s">
+                        <div class="card-shine"></div>
+                        <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
+                            <i class="fas fa-exchange-alt text-4xl"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-primary mb-2 text-center font-heading">Requisições</h3>
+                        <p class="text-gray-600 text-center mb-4 text-sm">Relatório de Requisições</p>
                         <span class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105">
                             <i class="fas fa-file-pdf mr-2"></i>
                             Gerar PDF
@@ -1190,6 +1202,38 @@ $select = new select($escola);
                         $cursos = $select->select_cursos();
                         foreach ($cursos as $curso) { ?>
                             <option value="<?= htmlspecialchars($curso['id']) ?>"><?= htmlspecialchars($curso['nome_curso']) ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+                <button type="submit" class="confirm-btn">
+                    <i class="fas fa-file-pdf mr-2"></i>
+                    Gerar Relatório
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal for Movimentações User Selection -->
+    <div id="userReportModal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeUserModal()">×</button>
+            <h2 class="font-heading">
+                <i class="fas fa-file-alt mr-2 text-secondary"></i>
+                Selecionar Usuário
+            </h2>
+            <form id="userReportForm" action="../controllers/controller_relatorios.php" method="POST" class="space-y-4">
+                <input type="hidden" name="tipo_relatorio" value="movimentacoes">
+                <div class="form-group">
+                    <label for="usuario_id" class="font-semibold">
+                        <i class="fas fa-user mr-1"></i>
+                        Usuário
+                    </label>
+                    <select name="id_usuario" id="usuario_id" required class="select2-usuario">
+                        <option value="" disabled selected>SELECIONAR USUÁRIO</option>
+                        <?php
+                        $usuarios = $select->select_usuarios();
+                        foreach ($usuarios as $usuario) { ?>
+                            <option value="<?= htmlspecialchars($usuario['id']) ?>"><?= htmlspecialchars($usuario['nome_user']) ?></option>
                         <?php } ?>
                     </select>
                 </div>
@@ -1390,6 +1434,56 @@ $select = new select($escola);
                     }
                 }
             });
+        });
+
+        // Movimentações modal handlers
+        function openUserReportModal() {
+            const modal = document.getElementById('userReportModal');
+            modal.classList.add('show');
+            setTimeout(() => {
+                $('.select2-usuario').select2({
+                    placeholder: "SELECIONAR USUÁRIO",
+                    allowClear: true,
+                    width: '100%',
+                    language: {
+                        noResults: function() { return "Nenhum usuário encontrado"; },
+                        searching: function() { return "Pesquisando..."; }
+                    }
+                });
+            }, 100);
+        }
+
+        function closeUserModal() {
+            const modal = document.getElementById('userReportModal');
+            modal.classList.remove('show');
+            const form = document.getElementById('userReportForm');
+            if (form) form.reset();
+            document.body.style.overflow = '';
+            if ($('.select2-usuario').data('select2')) {
+                $('.select2-usuario').select2('destroy');
+            }
+        }
+
+        // Validate and submit user report form
+        const userReportForm = document.getElementById('userReportForm');
+        userReportForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const usuario = document.getElementById('usuario_id').value;
+            if (!usuario) {
+                showNotification('Por favor, selecione um usuário.', 'error');
+                return;
+            }
+            const submitBtn = userReportForm.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<span class="loading-spinner"></span> Gerando...';
+            submitBtn.disabled = true;
+            setTimeout(() => { userReportForm.submit(); }, 400);
+            setTimeout(() => {
+                if (submitBtn.disabled) {
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                }
+            }, 5000);
         });
     </script>
 </body>
