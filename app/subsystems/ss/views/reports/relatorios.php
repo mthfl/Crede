@@ -97,7 +97,7 @@ require_once(__DIR__ . '/../../assets/libs/fpdf/fpdf.php');
                 INNER JOIN $this->table4 m ON m.id_candidato = can.id 
                 INNER JOIN $this->table5 u ON can.id_cadastrador = u.id 
                 INNER JOIN $this->table2 cur ON can.id_curso1 = cur.id 
-                WHERE can.id_curso1 = :curso AND can.publica = :publica AND can.pcd = :pcd";
+                WHERE can.id_curso1 = :curso AND can.publica = :publica AND can.pcd = :pcd AND status = 1";
         
         // Adicionar filtro de bairro apenas se necessário
         if ($bairro !== null) {
@@ -121,9 +121,9 @@ require_once(__DIR__ . '/../../assets/libs/fpdf/fpdf.php');
 
         $pdf = new FPDF($orientacao, 'mm', 'A4');
         $pdf->AddPage();
-
+        $pdf->Image('../../assets/imgs/fundo_pdf.png', 0, 0, $pdf->GetPageWidth(), $pdf->GetPageHeight(), 'png', '', 0.1);
         // Cabeçalho com larguras ajustadas
-        $pdf->Image(__DIR__ . '/../../assets/imgs/logo.png', 8, 8, 15, 0, 'PNG');
+        
         $pdf->SetFont('Arial', 'B', 25);
         $pdf->SetY(8);
         $pdf->SetX(20);

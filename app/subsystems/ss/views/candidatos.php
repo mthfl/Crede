@@ -11,7 +11,6 @@ new connect($escola);
 require_once(__DIR__ . '/../models/model.select.php');
 $select = new select($escola);
 
-$candidatos = $select->select_candidatos();
 $candidatos_ativos = $select->select_candidatos_ativos();
 $cursos = $select->select_cursos();
 $usuarios = $select->select_usuarios();
@@ -583,12 +582,8 @@ $usuarios = $select->select_usuarios();
 
                                 <?php
 
-                                if ($_SESSION['tipo_usuario'] === 'admin') {
-                                    $tipo = $candidatos;
-                                } else {
-                                    $tipo = $candidatos_ativos;
-                                }
-                                foreach ($tipo as $cand) {
+                                
+                                foreach ($candidatos_ativos as $cand) {
                                     $id = $cand['id'] ?? '-';
                                     $nome = $cand['nome'] ?? '-';
                                     $cursoNome = $cand['nome_curso'] ?? '-';
@@ -664,7 +659,7 @@ $usuarios = $select->select_usuarios();
                                                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                                                             </svg>
-                                                            Inativar
+                                                            Excluir
                                                         </button>
                                                     <?php } else { ?>
                                                         <button type="button" onclick="openActivateModal(<?= $id ?>, '<?= htmlspecialchars($nome) ?>')" class="inline-flex items-center <?= $cand['status'] == 0 ? 'bg-gray-500 text-white hover:bg-gray-600' : 'bg-green-600 text-white hover:bg-green-700' ?> px-4 py-2 rounded-lg transition-all duration-300 font-medium text-sm btn-animate focus-ring">
@@ -679,7 +674,7 @@ $usuarios = $select->select_usuarios();
                                         <?php } ?>
                                     </tr>
                                 <?php } ?>
-                                <?php if (count($candidatos) === 0) { ?>
+                                <?php if (count($candidatos_ativos) === 0) { ?>
                                     <tr>
                                         <td colspan="<?= isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin' ? '7' : '6' ?>" class="px-6 py-12 text-center">
                                             <div class="flex flex-col items-center justify-center">
@@ -699,7 +694,7 @@ $usuarios = $select->select_usuarios();
 
                         <!-- Cards for mobile (below sm) -->
                         <div class="sm:hidden grid gap-6 p-4">
-                            <?php foreach ($candidatos as $cand) {
+                            <?php foreach ($candidatos_ativos as $cand) {
                                 $id = $cand['id'] ?? '-';
                                 $nome = $cand['nome'] ?? '-';
                                 $cursoNome = $cand['nome_curso'] ?? '-';
@@ -788,7 +783,7 @@ $usuarios = $select->select_usuarios();
                                                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                                                             </svg>
-                                                            Inativar
+                                                            Excluir
                                                         </span>
                                                     </button>
                                                 <?php } else { ?>
@@ -806,7 +801,7 @@ $usuarios = $select->select_usuarios();
                                     </div>
                                 </article>
                             <?php } ?>
-                            <?php if (count($candidatos) === 0) { ?>
+                            <?php if (count($candidatos_ativos) === 0) { ?>
                                 <div class="text-center text-gray-500 py-8">Nenhum candidato encontrado.</div>
                             <?php } ?>
                         </div>
@@ -827,7 +822,7 @@ $usuarios = $select->select_usuarios();
                 </div>
                 <h3 class="text-xl sm:text-2xl font-bold text-dark font-heading mb-4">Confirmar Inativação</h3>
                 <p class="text-gray-600 text-base mb-6 leading-relaxed">
-                    Tem certeza que deseja inativar o candidato <span class="font-semibold text-dark" id="inactivateCandidatoName"></span>?
+                    Tem certeza que deseja Excluir o candidato <span class="font-semibold text-dark" id="inactivateCandidatoName"></span>?
                 </p>
                 <div class="flex flex-col sm:flex-row gap-3 justify-center">
                     <button type="button" class="px-6 py-3 rounded-xl border-2 border-secondary font-semibold text-secondary hover:bg-secondary/10 hover:border-secondary transition-all text-base focus-ring" onclick="closeModal('modalInactivateConfirm')">Cancelar</button>
@@ -1077,7 +1072,7 @@ $usuarios = $select->select_usuarios();
 
         function openInactivateModal(id, nome) {
             document.getElementById('inactivateCandidatoName').textContent = nome;
-            document.getElementById('inactivateLink').href = `../controllers/controller_candidato.php?id_excluir=${id}&tipo=inativar`;
+            document.getElementById('inactivateLink').href = `../controllers/controller_candidato.php?id_excluir=${id}&tipo=excluir`;
             openModal('modalInactivateConfirm');
         }
 

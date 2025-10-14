@@ -78,7 +78,7 @@ class relatorios extends connect
 
         $pdf = new PDF();
         $pdf->AddPage();
-
+        $pdf->Image('../../../assets/imgs/fundo_pdf.png', 0, 0, $pdf->GetPageWidth(), $pdf->GetPageHeight(), 'png', '', 0.1);
         $stmtSelect_curso = $this->connect->prepare(
             "SELECT * FROM $this->table2 WHERE id = :id_curso"
         );
@@ -86,8 +86,6 @@ class relatorios extends connect
         $stmtSelect_curso->execute();
         $curso_nome = $stmtSelect_curso->fetch(PDO::FETCH_ASSOC);
         
-        // Cabeçalho com larguras ajustadas
-        $pdf->Image('../../../assets/imgs/logo.png', 8, 8, 15, 0, 'PNG');
         $pdf->SetFont('Arial', 'B', 25);
         $pdf->Cell(185, 10, 'CLASSIFICADOS', 0, 1, 'C');
         $pdf->SetFont('Arial', 'B', 12);
@@ -106,7 +104,7 @@ class relatorios extends connect
             FROM $this->table1 can    
             INNER JOIN $this->table4 m ON m.id_candidato = can.id 
             INNER JOIN $this->table2 cur ON can.id_curso1 = cur.id 
-            WHERE can.id_curso1 = :curso AND can.publica = 1 AND can.pcd = 0 AND can.bairro = 0 
+            WHERE can.id_curso1 = :curso AND can.publica = 1 AND can.pcd = 0 AND can.bairro = 0 AND status = 1 
             ORDER BY m.media_final DESC, can.data_nascimento DESC, m.l_portuguesa_media DESC, m.matematica_media DESC"
         );
         $stmtSelect_ac_publica->bindValue(':curso', $curso);
@@ -119,7 +117,7 @@ class relatorios extends connect
             FROM $this->table1 can    
             INNER JOIN $this->table4 m ON m.id_candidato = can.id 
             INNER JOIN $this->table2 cur ON can.id_curso1 = cur.id 
-            WHERE can.id_curso1 = :curso AND can.publica = 1 AND can.pcd = 0 AND can.bairro = 1 
+            WHERE can.id_curso1 = :curso AND can.publica = 1 AND can.pcd = 0 AND can.bairro = 1 AND status = 1 
             ORDER BY m.media_final DESC, can.data_nascimento DESC, m.l_portuguesa_media DESC, m.matematica_media DESC"
         );
         $stmtSelect_bairro_publica->bindValue(':curso', $curso);
@@ -132,7 +130,7 @@ class relatorios extends connect
             FROM $this->table1 can    
             INNER JOIN $this->table4 m ON m.id_candidato = can.id 
             INNER JOIN $this->table2 cur ON can.id_curso1 = cur.id 
-            WHERE can.id_curso1 = :curso AND can.publica = 1 AND can.pcd = 1 AND can.bairro = 0 
+            WHERE can.id_curso1 = :curso AND can.publica = 1 AND can.pcd = 1 AND can.bairro = 0 AND status = 1 
             ORDER BY m.media_final DESC, can.data_nascimento DESC, m.l_portuguesa_media DESC, m.matematica_media DESC"
         );
         $stmtSelect_pcd_publica->bindValue(':curso', $curso);
@@ -145,7 +143,7 @@ class relatorios extends connect
             FROM $this->table1 can    
             INNER JOIN $this->table4 m ON m.id_candidato = can.id 
             INNER JOIN $this->table2 cur ON can.id_curso1 = cur.id 
-            WHERE can.id_curso1 = :curso AND can.publica = 0 AND can.pcd = 0 AND can.bairro = 0 
+            WHERE can.id_curso1 = :curso AND can.publica = 0 AND can.pcd = 0 AND can.bairro = 0 AND status = 1 
             ORDER BY m.media_final DESC, can.data_nascimento DESC, m.l_portuguesa_media DESC, m.matematica_media DESC"
         );
         $stmtSelect_ac_privada->bindValue(':curso', $curso);
@@ -158,7 +156,7 @@ class relatorios extends connect
             FROM $this->table1 can    
             INNER JOIN $this->table4 m ON m.id_candidato = can.id 
             INNER JOIN $this->table2 cur ON can.id_curso1 = cur.id 
-            WHERE can.id_curso1 = :curso AND can.publica = 0 AND can.pcd = 0 AND can.bairro = 1 
+            WHERE can.id_curso1 = :curso AND can.publica = 0 AND can.pcd = 0 AND can.bairro = 1 AND status = 1 
             ORDER BY m.media_final DESC, can.data_nascimento DESC, m.l_portuguesa_media DESC, m.matematica_media DESC"
         );
         $stmtSelect_bairro_privada->bindValue(':curso', $curso);
@@ -171,7 +169,7 @@ class relatorios extends connect
             FROM $this->table1 can    
             INNER JOIN $this->table4 m ON m.id_candidato = can.id 
             INNER JOIN $this->table2 cur ON can.id_curso1 = cur.id 
-            WHERE can.id_curso1 = :curso AND can.publica = 0 AND can.pcd = 1 AND can.bairro = 0 
+            WHERE can.id_curso1 = :curso AND can.publica = 0 AND can.pcd = 1 AND can.bairro = 0 AND status = 1 
             ORDER BY m.media_final DESC, can.data_nascimento DESC, m.l_portuguesa_media DESC, m.matematica_media DESC"
         );
         $stmtSelect_pcd_privada->bindValue(':curso', $curso);

@@ -85,13 +85,16 @@ class cadastrador extends select
         float $reli_3bim_9ano,
     ): int {
         try {
-            $stmt_candidato = $this->connect->prepare("INSERT INTO $this->table1 VALUES (NULL, :nome, :id_curso1, :data_nascimento, :bairro, :publica, :pcd, NULL, :id_cadastrador, 1)");
+            date_default_timezone_set('America/Fortaleza');
+            $datatime = date('Y/m/d H:i:s');
+            $stmt_candidato = $this->connect->prepare("INSERT INTO $this->table1 VALUES (NULL, :nome, :id_curso1, :data_nascimento, :bairro, :publica, :pcd, :data, :id_cadastrador, 1)");
             $stmt_candidato->bindValue(":nome", $nome);
             $stmt_candidato->bindValue(":id_curso1", $id_curso1);
             $stmt_candidato->bindValue(":data_nascimento", $data_nascimento);
             $stmt_candidato->bindValue(":bairro", $bairro);
             $stmt_candidato->bindValue(":publica", $publica);
             $stmt_candidato->bindValue(":pcd", $pcd);
+            $stmt_candidato->bindValue(":data", $datatime);
             $stmt_candidato->bindValue(":id_cadastrador", $id_cadastrador);
             if (!$stmt_candidato->execute()) {
                 return 2;
@@ -407,7 +410,7 @@ class cadastrador extends select
             $stmt_candidato->bindValue(":id_usuario", $id_usuario);
             $stmt_candidato->bindValue(":datatime", $datatime);
             $stmt_candidato->bindValue(":tipo_movimentacao", 'CADASTRAR CANDIDATO');
-            $stmt_candidato->bindValue(":descricao", "USUÁRIO " . $_SESSION['nome'] . " CADASTROU CANDIDATO(A) " . $nome);
+            $stmt_candidato->bindValue(":descricao", "FOI CADASTRADO O CANDIDATO(A) " . $nome);
             if (!$stmt_candidato->execute()) {
                 return 2;
             }
@@ -432,11 +435,16 @@ class cadastrador extends select
             if ($stmt_candidato->rowCount() !== 1 && $stmt_usuario->rowCount() !== 1) {
                 return 3;
             }
-            $stmt_requisicao = $this->connect->prepare("INSERT INTO $this->table14 VALUES (NULL, :id_candidato, :id_usuario, :requisicao, :status)");
+
+            date_default_timezone_set('America/Fortaleza');
+            $datatime = date('Y/m/d H:i:s');
+
+            $stmt_requisicao = $this->connect->prepare("INSERT INTO $this->table14 VALUES (NULL, :id_candidato, :id_usuario, :requisicao, :status, :data)");
             $stmt_requisicao->bindValue(":id_usuario", $id_usuario);
             $stmt_requisicao->bindValue(":id_candidato", $id_candidato);
             $stmt_requisicao->bindValue(":requisicao", $requisicao);
             $stmt_requisicao->bindValue(":status", "Pendente");
+            $stmt_requisicao->bindValue(":data", $datatime);
 
             if (!$stmt_requisicao->execute()) {
                 return 2;
@@ -450,7 +458,7 @@ class cadastrador extends select
             $stmt_candidato->bindValue(":id_usuario", $id_usuario);
             $stmt_candidato->bindValue(":datatime", $datatime);
             $stmt_candidato->bindValue(":tipo_movimentacao", 'REQUISIÇÃO');
-            $stmt_candidato->bindValue(":descricao", "USUÁRIO " . $_SESSION['nome'] . " FEZ UM REQUISIÇÃO DO CANDIDATO(A) " . $dado['nome']);
+            $stmt_candidato->bindValue(":descricao", "FEITO UMA REQUISIÇÃO DO CANDIDATO(A) " . $dado['nome']);
             if (!$stmt_candidato->execute()) {
                 return 2;
             }

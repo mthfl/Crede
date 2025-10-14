@@ -38,26 +38,6 @@ class admin extends cadastrador
             return 0;
         }
     }
-    public function editar_candidato_quantidade_vaga($quantidade)
-    {
-        try {
-            $stmt_check = $this->connect->query("SELECT * FROM $this->table2 WHERE quantidade_alunos == null");
-            if ($stmt_check->rowCount() == 0) {
-                return 3;
-            }
-
-            $stmt_cadastro = $this->connect->prepare("UPDATE $this->table2 SET quantidade_alunos = :quantidade");
-            $stmt_check->bindValue(':quantidade', $quantidade);
-            if (!$stmt_check->execute()) {
-                return 2;
-            }
-            return 1;
-        } catch (Exception $e) {
-
-            error_log("Erro no login: " . $e->getMessage());
-            return 0;
-        }
-    }
     public function verificar_senha($email, $senha, $id_curso = null)
     {
         try {
@@ -154,7 +134,7 @@ class admin extends cadastrador
             $stmt_candidato->bindValue(":id_usuario", $id_usuario);
             $stmt_candidato->bindValue(":datatime", $datatime);
             $stmt_candidato->bindValue(":tipo_movimentacao", 'EDITAR CURSO');
-            $stmt_candidato->bindValue(":descricao", $curso);
+            $stmt_candidato->bindValue(":descricao", "FOI EDITADO O CURSO ". $curso);
             if (!$stmt_candidato->execute()) {
                 return 2;
             }
@@ -190,7 +170,7 @@ class admin extends cadastrador
             $stmt_candidato->bindValue(":id_usuario", $id_usuario);
             $stmt_candidato->bindValue(":datatime", $datatime);
             $stmt_candidato->bindValue(":tipo_movimentacao", 'EXCLUIR CURSO');
-            $stmt_candidato->bindValue(":descricao", $curso['nome_curso']);
+            $stmt_candidato->bindValue(":descricao", "FOI EXCLUIDO O CURSO ".$curso['nome_curso']);
             if (!$stmt_candidato->execute()) {
                 return 2;
             }
@@ -226,7 +206,7 @@ class admin extends cadastrador
             $stmt_candidato->bindValue(":id_usuario", $id_usuario);
             $stmt_candidato->bindValue(":datatime", $datatime);
             $stmt_candidato->bindValue(":tipo_movimentacao", 'EXCLUIR CANDIDATOS E CURSO');
-            $stmt_candidato->bindValue(":descricao", $curso['nome_curso']);
+            $stmt_candidato->bindValue(":descricao", "FOI EXCLUIDO O CURSO ". $curso['nome_curso']." E OS CANDIDATOS ASSOCIADOS A ELE");
             if (!$stmt_candidato->execute()) {
                 return 2;
             }
@@ -304,7 +284,7 @@ class admin extends cadastrador
             $stmt_candidato->bindValue(":id_usuario", $id_usuario);
             $stmt_candidato->bindValue(":datatime", $datatime);
             $stmt_candidato->bindValue(":tipo_movimentacao", 'CADASTRAR USUÁRIO');
-            $stmt_candidato->bindValue(":descricao", $nome);
+            $stmt_candidato->bindValue(":descricao", "FOI CADASTRADO O USUÁRIO".$nome);
             if (!$stmt_candidato->execute()) {
                 return 2;
             }
@@ -342,7 +322,7 @@ class admin extends cadastrador
             $stmt_candidato->bindValue(":id_usuario", $id_usuario);
             $stmt_candidato->bindValue(":datatime", $datatime);
             $stmt_candidato->bindValue(":tipo_movimentacao", 'EDITAR USUÁRIO');
-            $stmt_candidato->bindValue(":descricao", $nome);
+            $stmt_candidato->bindValue(":descricao", "FOI EDITADO O USUÁRIO".$nome);
             if (!$stmt_candidato->execute()) {
                 return 2;
             }
@@ -411,7 +391,7 @@ class admin extends cadastrador
             $stmt_candidato->bindValue(":id_usuario", $id_usuario);
             $stmt_candidato->bindValue(":datatime", $datatime);
             $stmt_candidato->bindValue(":tipo_movimentacao", 'EDITAR BAIRRO');
-            $stmt_candidato->bindValue(":descricao", $id['bairros']);
+            $stmt_candidato->bindValue(":descricao", "FOI EDITADO O BAIRRO ".$id['bairros']);
             if (!$stmt_candidato->execute()) {
                 return 2;
             }
@@ -446,7 +426,7 @@ class admin extends cadastrador
             $stmt_candidato->bindValue(":id_usuario", $id_usuario);
             $stmt_candidato->bindValue(":datatime", $datatime);
             $stmt_candidato->bindValue(":tipo_movimentacao", 'EXCLUIR BAIRRO');
-            $stmt_candidato->bindValue(":descricao", $id['bairros']);
+            $stmt_candidato->bindValue(":descricao", "FOI EXCLUIDO O BAIRRO ".$id['bairros']);
             if (!$stmt_candidato->execute()) {
                 return 2;
             }
@@ -456,7 +436,7 @@ class admin extends cadastrador
             return 0;
         }
     }
-    public function inativar_candidato(int $id_candidato)
+    public function excluir_candidato(int $id_candidato)
     {
         try {
             $stmt_check = $this->connect->prepare("SELECT * FROM $this->table1 WHERE id = :id_candidato");
@@ -479,8 +459,8 @@ class admin extends cadastrador
             $stmt_candidato = $this->connect->prepare("INSERT INTO $this->table16 VALUES (NULL, :id_usuario, :datatime, :tipo_movimentacao, :descricao)");
             $stmt_candidato->bindValue(":id_usuario", $id_usuario);
             $stmt_candidato->bindValue(":datatime", $datatime);
-            $stmt_candidato->bindValue(":tipo_movimentacao", 'INATIVAR CANDIDATO');
-            $stmt_candidato->bindValue(":descricao", $candidato['nome']);
+            $stmt_candidato->bindValue(":tipo_movimentacao", 'EXCLUIR CANDIDATO');
+            $stmt_candidato->bindValue(":descricao", "O CANDIDATO ".$candidato['nome']." FOI EXCLUIDO");
 
             if (!$stmt_candidato->execute()) {
 
@@ -516,7 +496,7 @@ class admin extends cadastrador
             $stmt_candidato->bindValue(":id_usuario", $id_usuario);
             $stmt_candidato->bindValue(":datatime", $datatime);
             $stmt_candidato->bindValue(":tipo_movimentacao", 'ATIVAR CANDIDATO');
-            $stmt_candidato->bindValue(":descricao", $candidato['nome']);
+            $stmt_candidato->bindValue(":descricao", "O CANDIDATO ".$candidato['nome']." FOI ATIVADO");
 
             if (!$stmt_candidato->execute()) {
 
@@ -977,8 +957,12 @@ class admin extends cadastrador
     public function requisicao_alteracao_realizada(int $id_requisicao): int
     {
         try {
-            $stmt = $this->connect->prepare("UPDATE $this->table14 SET status = 'Concluido' WHERE id = :id");
+
+            date_default_timezone_set('America/Fortaleza');
+            $datatime = date('Y/m/d H:i:s'); 
+            $stmt = $this->connect->prepare("UPDATE $this->table14 SET status = 'Concluido',  data = :data WHERE id = :id");
             $stmt->bindValue(":id", $id_requisicao);
+            $stmt->bindValue(":data", $datatime);
             if (!$stmt->execute()) {
                 return 2;
             }
@@ -1004,11 +988,14 @@ class admin extends cadastrador
     public function requisicao_alteracao_recusada(int $id_requisicao): int
     {
         try {
-            $stmt = $this->connect->prepare("UPDATE $this->table14 SET status = 'Recusado' WHERE id = :id");
+            date_default_timezone_set('America/Fortaleza');
+            $datatime = date('Y/m/d H:i:s'); 
+            $stmt = $this->connect->prepare("UPDATE $this->table14 SET status = 'Recusado',  data = :data WHERE id = :id");
             $stmt->bindValue(":id", $id_requisicao);
+            $stmt->bindValue(":data", $datatime);
             if (!$stmt->execute()) {
                 return 2;
-            } 
+            }
 
             date_default_timezone_set('America/Fortaleza');
             $datatime = date('Y/m/d H:i:s');
@@ -1030,11 +1017,14 @@ class admin extends cadastrador
     public function requisicao_alteracao_pendente(int $id_requisicao): int
     {
         try {
-            $stmt = $this->connect->prepare("UPDATE $this->table14 SET status = 'Pendente' WHERE id = :id");
+            date_default_timezone_set('America/Fortaleza');
+            $datatime = date('Y/m/d H:i:s'); 
+            $stmt = $this->connect->prepare("UPDATE $this->table14 SET status = 'Pendente',  data = :data WHERE id = :id");
             $stmt->bindValue(":id", $id_requisicao);
+            $stmt->bindValue(":data", $datatime);
             if (!$stmt->execute()) {
                 return 2;
-            } 
+            }
             
             date_default_timezone_set('America/Fortaleza');
             $datatime = date('Y/m/d H:i:s');
@@ -1072,7 +1062,7 @@ class admin extends cadastrador
             $stmt_candidato->bindValue(":id_usuario", $id_usuario);
             $stmt_candidato->bindValue(":datatime", $datatime);
             $stmt_candidato->bindValue(":tipo_movimentacao", 'DESATIVAR USUÁRIO');
-            $stmt_candidato->bindValue(":descricao", $nome['nome_user']);
+            $stmt_candidato->bindValue(":descricao", "USUÁRIO ".$nome['nome_user']." FOI DESABILITADO");
             if (!$stmt_candidato->execute()) {
                 return 2;
             }
@@ -1100,7 +1090,7 @@ class admin extends cadastrador
             $stmt_candidato->bindValue(":id_usuario", $id_usuario);
             $stmt_candidato->bindValue(":datatime", $datatime);
             $stmt_candidato->bindValue(":tipo_movimentacao", 'HABILITAR USUÁRIO');
-            $stmt_candidato->bindValue(":descricao", $nome['nome_user']);
+            $stmt_candidato->bindValue(":descricao", "USUÁRIO(A) ".$nome['nome_user']." HABILITADO(A)");
             if (!$stmt_candidato->execute()) {
                 return 2;
             }
@@ -1125,6 +1115,17 @@ class admin extends cadastrador
             } else {
                 return 2;
             }
+            date_default_timezone_set('America/Fortaleza');
+            $datatime = date('Y/m/d H:i:s');
+            $id_usuario = $_SESSION['id'];
+            $stmt_candidato = $this->connect->prepare("INSERT INTO $this->table16 VALUES (NULL, :id_usuario, :datatime, :tipo_movimentacao, :descricao)");
+            $stmt_candidato->bindValue(":id_usuario", $id_usuario);
+            $stmt_candidato->bindValue(":datatime", $datatime);
+            $stmt_candidato->bindValue(":tipo_movimentacao", 'HABILITAR USUÁRIO');
+            $stmt_candidato->bindValue(":descricao", "PERFIL ".$perfil." CRIADO");
+            if (!$stmt_candidato->execute()) {
+                return 2;
+            }
         } catch (PDOException $e) {
             return 0;
         }
@@ -1142,11 +1143,23 @@ class admin extends cadastrador
             $stmt = $this->connect->prepare("UPDATE $this->table15 SET nome_perfil = :perfil WHERE id = :id");
             $stmt->bindValue(":perfil", $perfil);
             $stmt->bindValue(":id", $id_perfil);
-            if ($stmt->execute()) {
-                return 1;
-            } else {
+            if (!$stmt->execute()) {
+                return 2;
+            } 
+
+            date_default_timezone_set('America/Fortaleza');
+            $datatime = date('Y/m/d H:i:s');
+            $id_usuario = $_SESSION['id'];
+            $stmt_candidato = $this->connect->prepare("INSERT INTO $this->table16 VALUES (NULL, :id_usuario, :datatime, :tipo_movimentacao, :descricao)");
+            $stmt_candidato->bindValue(":id_usuario", $id_usuario);
+            $stmt_candidato->bindValue(":datatime", $datatime);
+            $stmt_candidato->bindValue(":tipo_movimentacao", 'HABILITAR USUÁRIO');
+            $stmt_candidato->bindValue(":descricao", "FOI EDITADO O PERFIL ".$perfil);
+            if (!$stmt_candidato->execute()) {
                 return 2;
             }
+            
+            return 1;
         } catch (PDOException $e) {
             return 0;
         }
@@ -1157,6 +1170,7 @@ class admin extends cadastrador
             $stmt_check = $this->connect->prepare("SELECT * FROM $this->table15 WHERE id = :id");
             $stmt_check->bindValue(":id", $id_perfil);
             $stmt_check->execute();
+            $dados = $stmt_check->fetch(PDO::FETCH_ASSOC);
             if ($stmt_check->rowCount() == 0) {
                 return 3;
             }
@@ -1171,10 +1185,19 @@ class admin extends cadastrador
             } else {
                 return 2;
             }
+            date_default_timezone_set('America/Fortaleza');
+            $datatime = date('Y/m/d H:i:s');
+            $id_usuario = $_SESSION['id'];
+            $stmt_candidato = $this->connect->prepare("INSERT INTO $this->table16 VALUES (NULL, :id_usuario, :datatime, :tipo_movimentacao, :descricao)");
+            $stmt_candidato->bindValue(":id_usuario", $id_usuario);
+            $stmt_candidato->bindValue(":datatime", $datatime);
+            $stmt_candidato->bindValue(":tipo_movimentacao", 'HABILITAR USUÁRIO');
+            $stmt_candidato->bindValue(":descricao", "FOI EDITADO O PERFIL ".$dados['nome_perfil']);
+            if (!$stmt_candidato->execute()) {
+                return 2;
+            }
         } catch (PDOException $e) {
             return 0;
         }
     }
-
-    private function registrar_movimentacao($id_candidato, $id_usuario, $tipo_movimentacao) {}
 }

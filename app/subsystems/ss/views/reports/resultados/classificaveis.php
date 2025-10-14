@@ -78,7 +78,7 @@ class relatorios extends connect
 
         $pdf = new PDF();
         $pdf->AddPage();
-
+        $pdf->Image('../../../assets/imgs/fundo_pdf.png', 0, 0, $pdf->GetPageWidth(), $pdf->GetPageHeight(), 'png', '', 0.1);
         $stmtSelect_curso = $this->connect->prepare(
             "SELECT * FROM $this->table2 WHERE id = :id_curso"
         );
@@ -86,8 +86,6 @@ class relatorios extends connect
         $stmtSelect_curso->execute();
         $curso_nome = $stmtSelect_curso->fetch(PDO::FETCH_ASSOC);
         
-        // Cabeçalho com larguras ajustadas
-        $pdf->Image('../../../assets/imgs/logo.png', 8, 8, 15, 0, 'PNG');
         $pdf->SetFont('Arial', 'B', 25);
         $pdf->Cell(185, 10, 'CLASSIFICÁVEIS', 0, 1, 'C');
         $pdf->SetFont('Arial', 'B', 12);

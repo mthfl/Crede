@@ -53,9 +53,9 @@ class relatorios extends connect
 
         $pdf = new PDF('P', 'mm', 'A4');
         $pdf->AddPage();
-
+        $pdf->Image('../../assets/imgs/fundo_pdf.png', 0, 0, $pdf->GetPageWidth(), $pdf->GetPageHeight(), 'png', '', 0.1);
         // Header
-        $pdf->Image(__DIR__ . '/../../assets/imgs/logo.png', 8, 8, 15, 0, 'PNG');
+        
         $pdf->SetFont('Arial', 'B', 25);
         $pdf->SetY(10);
         $pdf->SetX(55);
@@ -107,7 +107,7 @@ class relatorios extends connect
                 $pdf->Cell(60, 7, $dado['tipo_movimentacao'], 1, 0, 'L', true);
 
                 // Tratar descrição nula ou vazia
-                $descricao = $dado['descricao'] ?? 'NÃO INFORMADA';
+                $descricao = $dado['descricao'] ?? '  -  -  -  ';
                 if (empty(trim($descricao))) {
                     $descricao = 'NÃO INFORMADA';
                 }

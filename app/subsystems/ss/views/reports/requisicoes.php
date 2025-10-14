@@ -1,5 +1,4 @@
 <?php
-
 require_once(__DIR__ . '/../../models/sessions.php');
 $session = new sessions();
 $session->autenticar_session();
@@ -24,6 +23,57 @@ class PDF extends FPDF
         $txt = mb_convert_encoding($txt, 'ISO-8859-1', 'UTF-8');
         parent::MultiCell($w, $h, $txt, $border, $align, $fill);
     }
+
+    // Method to estimate number of lines for MultiCell
+    function NbLines($width, $text)
+    {
+        $cw = &$this->CurrentFont['cw'];
+        if ($width == 0) {
+            $width = $this->w - $this->rMargin - $this->x;
+        }
+        $wmax = ($width - 2 * $this->cMargin) * 1000 / $this->FontSize;
+        $s = str_replace("\r", '', $text);
+        $nb = strlen($s);
+        if ($nb > 0 && $s[$nb - 1] == "\n") {
+            $nb--;
+        }
+        $sep = -1;
+        $i = 0;
+        $j = 0;
+        $l = 0;
+        $nl = 1;
+        while ($i < $nb) {
+            $c = $s[$i];
+            if ($c == "\n") {
+                $i++;
+                $sep = -1;
+                $j = $i;
+                $l = 0;
+                $nl++;
+                continue;
+            }
+            if ($c == ' ') {
+                $sep = $i;
+            }
+            $l += isset($cw[$c]) ? $cw[$c] : 0; // Check if character exists in font
+            if ($l > $wmax) {
+                if ($sep == -1) {
+                    if ($i == $j) {
+                        $i++;
+                    }
+                } else {
+                    $i = $sep + 1;
+                }
+                $sep = -1;
+                $j = $i;
+                $l = 0;
+                $nl++;
+            } else {
+                $i++;
+            }
+        }
+        return $nl;
+    }
 }
 
 class relatorios extends connect
@@ -43,29 +93,31 @@ class relatorios extends connect
 
     public function relatorio_requisicoes()
     {
-
         // Fetch completed requests
-        $sql_concluidas = "SELECT r.*, c.nome as nome_candidato 
+        $sql_concluidas = "SELECT r.*, c.nome as nome_candidato, u.nome_user AS nome_usuario 
                           FROM $this->table14 r 
-                          INNER JOIN $this->table1 c ON r.id_candidato = c.id 
+                          INNER JOIN $this->table1 c ON r.id_candidato = c.id
+                          INNER JOIN $this->table5 u ON r.id_usuario = u.id 
                           WHERE r.status = 'Concluido' 
                           ORDER BY r.id DESC";
         $stmtSelect_concluidas = $this->connect->query($sql_concluidas);
         $dados_concluidas = $stmtSelect_concluidas->fetchAll(PDO::FETCH_ASSOC);
 
         // Fetch pending requests
-        $sql_pendentes = "SELECT r.*, c.nome as nome_candidato 
+        $sql_pendentes = "SELECT r.*, c.nome as nome_candidato, u.nome_user AS nome_usuario  
                          FROM $this->table14 r 
                          INNER JOIN $this->table1 c ON r.id_candidato = c.id 
+                         INNER JOIN $this->table5 u ON r.id_usuario = u.id 
                          WHERE r.status = 'Pendente' 
                          ORDER BY r.id DESC";
         $stmtSelect_pendentes = $this->connect->query($sql_pendentes);
         $dados_pendentes = $stmtSelect_pendentes->fetchAll(PDO::FETCH_ASSOC);
 
         // Fetch refused requests
-        $sql_recusadas = "SELECT r.*, c.nome as nome_candidato 
+        $sql_recusadas = "SELECT r.*, c.nome as nome_candidato, u.nome_user AS nome_usuario 
                          FROM $this->table14 r 
-                         INNER JOIN $this->table1 c ON r.id_candidato = c.id 
+                         INNER JOIN $this->table1 c ON r.id_candidato = c.id
+                         INNER JOIN $this->table5 u ON r.id_usuario = u.id  
                          WHERE r.status = 'Recusado' 
                          ORDER BY r.id DESC";
         $stmtSelect_recusadas = $this->connect->query($sql_recusadas);
@@ -73,9 +125,9 @@ class relatorios extends connect
 
         $pdf = new PDF('P', 'mm', 'A4');
         $pdf->AddPage();
-
+        $pdf->Image('../../assets/imgs/fundo_pdf.png', 0, 0, $pdf->GetPageWidth(), $pdf->GetPageHeight(), 'png', '', 0.1);
         // Header
-        $pdf->Image(__DIR__ . '/../../assets/imgs/logo.png', 8, 8, 15, 0, 'PNG');
+        
         $pdf->SetFont('Arial', 'B', 25);
         $pdf->SetY(10);
         $pdf->SetX(55);
@@ -99,8 +151,9 @@ class relatorios extends connect
         $pdf->SetY($y_position);
         $pdf->SetX(10);
         $pdf->Cell(40, 7, 'CANDIDATO', 1, 0, 'C', true);
-        $pdf->Cell(120, 7, 'TEXTO DA REQUISIÇÃO', 1, 0, 'C', true);
-        $pdf->Cell(30, 7, 'STATUS', 1, 1, 'C', true);
+        $pdf->Cell(85, 7, 'TEXTO DA REQUISIÇÃO', 1, 0, 'C', true);
+        $pdf->Cell(35, 7, 'USUÁRIO', 1, 0, 'C', true);
+        $pdf->Cell(30, 7, 'DATA', 1, 1, 'C', true);
         $y_position += 7;
 
         // Reset text color to black
@@ -115,19 +168,26 @@ class relatorios extends connect
             $y_position += 7;
         } else {
             foreach ($dados_concluidas as $dado) {
+                // Limit candidate and user names to 30 characters
+                $nome_candidato = strlen($dado['nome_candidato']) > 20 ? substr($dado['nome_candidato'], 0, 20) . '...' : $dado['nome_candidato'];
+                $nome_usuario = strlen($dado['nome_usuario']) > 17 ? substr($dado['nome_usuario'], 0, 17) . '...' : $dado['nome_usuario'];
+                
+                // Calculate height for MultiCell based on text length
+                $texto = strtoupper($dado['texto']);
+                $num_lines = $pdf->NbLines(90, $texto);
+                $cell_height = 7 * max(1, $num_lines);
+
                 $pdf->SetFillColor(255, 255, 255);
                 $pdf->SetY($y_position);
                 $pdf->SetX(10);
-                $pdf->Cell(40, 7, strtoupper($dado['nome_candidato']), 1, 0, 'L', true);
                 
-                // Truncate long text
-                $texto = $dado['texto'];
-                if (strlen($texto) > 60) {
-                    $texto = substr($texto, 0, 57) . '...';
-                }
-                $pdf->Cell(120, 7, strtoupper($texto), 1, 0, 'L', true);
-                $pdf->Cell(30, 7, strtoupper($dado['status']), 1, 1, 'C', true);
-                $y_position += 7;
+                // Draw cells with dynamic height
+                $pdf->Cell(35, $cell_height, strtoupper($nome_candidato), 1, 0, 'L', true);
+                $pdf->MultiCell(85, 7, $texto, 1, 'L', true);
+                $pdf->SetXY(135, $y_position);
+                $pdf->Cell(35, $cell_height, strtoupper($nome_usuario), 1, 0, 'L', true);
+                $pdf->Cell(30, $cell_height, strtoupper($dado['data']), 1, 1, 'C', true);
+                $y_position += $cell_height;
 
                 // Add new page if needed
                 if ($y_position > 270) {
@@ -155,8 +215,9 @@ class relatorios extends connect
         $pdf->SetY($y_position);
         $pdf->SetX(10);
         $pdf->Cell(40, 7, 'CANDIDATO', 1, 0, 'C', true);
-        $pdf->Cell(120, 7, 'TEXTO DA REQUISIÇÃO', 1, 0, 'C', true);
-        $pdf->Cell(30, 7, 'STATUS', 1, 1, 'C', true);
+        $pdf->Cell(85, 7, 'TEXTO DA REQUISIÇÃO', 1, 0, 'C', true);
+        $pdf->Cell(35, 7, 'USUÁRIO', 1, 0, 'C', true);
+        $pdf->Cell(30, 7, 'DATA', 1, 1, 'C', true);
         $y_position += 7;
 
         // Reset text color to black
@@ -171,19 +232,26 @@ class relatorios extends connect
             $y_position += 7;
         } else {
             foreach ($dados_pendentes as $dado) {
+                // Limit candidate and user names to 30 characters
+                $nome_candidato = strlen($dado['nome_candidato']) > 20 ? substr($dado['nome_candidato'], 0, 20) . '...' : $dado['nome_candidato'];
+                $nome_usuario = strlen($dado['nome_usuario']) > 17 ? substr($dado['nome_usuario'], 0, 17) . '...' : $dado['nome_usuario'];
+                
+                // Calculate height for MultiCell based on text length
+                $texto = strtoupper($dado['texto']);
+                $num_lines = $pdf->NbLines(90, $texto);
+                $cell_height = 7 * max(1, $num_lines);
+
                 $pdf->SetFillColor(255, 255, 255);
                 $pdf->SetY($y_position);
                 $pdf->SetX(10);
-                $pdf->Cell(40, 7, strtoupper($dado['nome_candidato']), 1, 0, 'L', true);
                 
-                // Truncate long text
-                $texto = $dado['texto'];
-                if (strlen($texto) > 60) {
-                    $texto = substr($texto, 0, 57) . '...';
-                }
-                $pdf->Cell(120, 7, strtoupper($texto), 1, 0, 'L', true);
-                $pdf->Cell(30, 7, strtoupper($dado['status']), 1, 1, 'C', true);
-                $y_position += 7;
+                // Draw cells with dynamic height
+                $pdf->Cell(40, $cell_height, strtoupper($nome_candidato), 1, 0, 'L', true);
+                $pdf->MultiCell(85, 7, $texto, 1, 'L', true);
+                $pdf->SetXY(135, $y_position);
+                $pdf->Cell(35, $cell_height, strtoupper($nome_usuario), 1, 0, 'L', true);
+                $pdf->Cell(30, $cell_height, strtoupper($dado['data']), 1, 1, 'C', true);
+                $y_position += $cell_height;
 
                 // Add new page if needed
                 if ($y_position > 270) {
@@ -211,8 +279,9 @@ class relatorios extends connect
         $pdf->SetY($y_position);
         $pdf->SetX(10);
         $pdf->Cell(40, 7, 'CANDIDATO', 1, 0, 'C', true);
-        $pdf->Cell(120, 7, 'TEXTO DA REQUISIÇÃO', 1, 0, 'C', true);
-        $pdf->Cell(30, 7, 'STATUS', 1, 1, 'C', true);
+        $pdf->Cell(85, 7, 'TEXTO DA REQUISIÇÃO', 1, 0, 'C', true);
+        $pdf->Cell(35, 7, 'USUÁRIO', 1, 0, 'C', true);
+        $pdf->Cell(30, 7, 'DATA', 1, 1, 'C', true);
         $y_position += 7;
 
         // Reset text color to black
@@ -227,19 +296,26 @@ class relatorios extends connect
             $y_position += 7;
         } else {
             foreach ($dados_recusadas as $dado) {
+                // Limit candidate and user names to 30 characters
+                $nome_candidato = strlen($dado['nome_candidato']) > 20 ? substr($dado['nome_candidato'], 0, 20) . '...' : $dado['nome_candidato'];
+                $nome_usuario = strlen($dado['nome_usuario']) > 17 ? substr($dado['nome_usuario'], 0, 17) . '...' : $dado['nome_usuario'];
+                
+                // Calculate height for MultiCell based on text length
+                $texto = strtoupper($dado['texto']);
+                $num_lines = $pdf->NbLines(90, $texto);
+                $cell_height = 7 * max(1, $num_lines);
+
                 $pdf->SetFillColor(255, 255, 255);
                 $pdf->SetY($y_position);
                 $pdf->SetX(10);
-                $pdf->Cell(40, 7, strtoupper($dado['nome_candidato']), 1, 0, 'L', true);
                 
-                // Truncate long text
-                $texto = $dado['texto'];
-                if (strlen($texto) > 60) {
-                    $texto = substr($texto, 0, 57) . '...';
-                }
-                $pdf->Cell(120, 7, strtoupper($texto), 1, 0, 'L', true);
-                $pdf->Cell(30, 7, strtoupper($dado['status']), 1, 1, 'C', true);
-                $y_position += 7;
+                // Draw cells with dynamic height
+                $pdf->Cell(35, $cell_height, strtoupper($nome_candidato), 1, 0, 'L', true);
+                $pdf->MultiCell(85, 7, $texto, 1, 'L', true);
+                $pdf->SetXY(105, $y_position);
+                $pdf->Cell(35, $cell_height, strtoupper($nome_usuario), 1, 0, 'L', true);
+                $pdf->Cell(30, $cell_height, strtoupper($dado['data']), 1, 1, 'C', true);
+                $y_position += $cell_height;
 
                 // Add new page if needed
                 if ($y_position > 270) {
@@ -260,3 +336,4 @@ if (isset($_GET['usuarios'])) {
     header('location:../../index.php');
     exit();
 }
+?>

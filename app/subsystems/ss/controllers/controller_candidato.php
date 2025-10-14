@@ -7,7 +7,7 @@ require_once(__DIR__ . "/../models/model.admin.php");
 require_once(__DIR__ . "/../models/model.cadastrador.php");
 require_once(__DIR__ . "/../models/model.select.php");
 //print_r($_POST);
-print_r($_GET);
+//print_r($_GET);
 
 if (
     isset($_POST['form']) && $_POST['form'] === 'candidato' &&
@@ -393,8 +393,8 @@ if (
     $id_candidato = $_GET['id_excluir'];
 
     $tipo = $_GET['tipo'];
-    if ($tipo === 'inativar') {
-        $result = $admin_model->inativar_candidato($id_candidato);
+    if ($tipo === 'excluir') {
+        $result = $admin_model->excluir_candidato($id_candidato);
     } else if ($tipo === 'ativar') {
         $result = $admin_model->ativar_candidato($id_candidato);
     }
@@ -434,7 +434,7 @@ if (
             header('Location: ../views/candidatos.php?falha');
             exit();
     }
-}/*else{
+}else{
     header("location:../index.php");
     exit();
-}*/
+}
