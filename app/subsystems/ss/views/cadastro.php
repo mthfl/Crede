@@ -1326,7 +1326,7 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
             progressBarFill.style.width = `${(currentStep / totalSteps) * 100}%`;
             const calcBtn = document.getElementById('openCalculatorBtn');
             if (calcBtn) {
-                calcBtn.classList.toggle('hidden', currentStep !== 2);
+                calcBtn.classList.toggle('hidden', currentStep !== 2 && currentStep !== 3);
             }
         }
 
