@@ -727,6 +727,7 @@ if (isset($_GET['falha'])) {
                     </div>
 
                     <!-- Submit Button Primeiro Acesso -->
+                    
                     <div class="mt-4 sm:mt-6">
                         <button type="submit"
                                 class="btn-enhanced w-full px-6 py-3 sm:py-4 text-white rounded-xl transition-all duration-300 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50 text-sm sm:text-base font-semibold bg-gradient-to-r from-primary to-dark hover:from-dark hover:to-primary">
@@ -740,8 +741,10 @@ if (isset($_GET['falha'])) {
                 <div class="mt-6 sm:mt-8 text-center space-y-3 sm:space-y-4">
                     <div class="pt-3 sm:pt-4 border-t border-gray-200">
                         <p class="text-gray-500 text-xs sm:text-sm font-sans">
-                            <a href="#" class="text-secondary hover:text-primary transition-colors duration-300">
-                                <i class="fas fa-question-circle mr-1"></i>Precisa de ajuda?
+                    
+                            
+                            <a href="recuperar_senha.php?escola=<?=$escola?>" class="text-secondary hover:text-primary transition-colors duration-300">
+                                <i class="fas fa-question-circle mr-1"></i>Esqueci sua senha?
                             </a>
                             <span class="mx-2">•</span>
                             <a href="mailto:suporte@sistema.com" 
