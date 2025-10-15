@@ -502,28 +502,26 @@ $usuarios = $select->select_usuarios();
             <main class="p-4 sm:p-6 lg:p-8">
                 <div class="flex items-center justify-between mb-6">
                     <div class="text-lg font-semibold text-gray-800">Lista de Candidatos</div>
-                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
-                    <div class="flex items-center gap-2">
-                        <a href="candidatos_excluidos.php" class="bg-secondary text-white px-4 py-3 rounded-xl hover:bg-orange-600 transition-all duration-300 font-medium text-sm btn-animate focus-ring">Candidatos Excluídos</a>
-                    </div>
-                    <?php } ?>
                 </div>
 
                 <!-- Barra de Pesquisa -->
                 <div class="mb-6">
-                    <div class="flex items-center max-w-md space-x-3">
-                        <div class="relative flex-1">
+                    <div class="flex items-center space-x-3">
+                        <div class="relative w-96">
                             <input type="text" id="searchInput" placeholder="Pesquisar por nome do candidato..." class="w-full px-4 py-3 pr-10 border border-gray-300 rounded-xl focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-sm" onkeyup="filterCandidates()">
                             <svg class="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                             </svg>
                         </div>
-                        <button onclick="window.location.href='solicitar_alteracao.php'" class="bg-primary text-white px-4 py-3 rounded-xl hover:bg-green-700 transition-all duration-300 font-medium text-sm btn-animate focus-ring flex items-center">
-                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                            </svg>
-                            Solicitar Alteração
-                        </button>
+                    
+                        <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
+                            <a href="candidatos_excluidos.php" class="bg-primary text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl hover:bg-dark transition-all duration-300 font-medium text-sm btn-animate focus-ring flex items-center shadow hover:shadow-lg">
+                                <svg class="w-4 h-4 mr-1.5 sm:mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m4-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                </svg>
+                                <span>Candidatos Excluídos</span>
+                            </a>
+                        <?php } ?>
                     </div>
                 </div>
 
@@ -543,7 +541,6 @@ $usuarios = $select->select_usuarios();
                         const tableRows = document.querySelectorAll('tbody tr');
                         const candidateCards = document.querySelectorAll('.candidate-card');
 
-
                         tableRows.forEach(row => {
                             const nome = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
                             row.style.display = nome.includes(searchInput) ? '' : 'none';
@@ -555,16 +552,6 @@ $usuarios = $select->select_usuarios();
                         });
                     }
                 </script>
-
-                <style>
-                    input:focus,
-                    select:focus,
-                    button:focus,
-                    a:focus {
-                        outline: 2px solid var(--primary);
-                        outline-offset: 2px;
-                    }
-                </style>
 
                 <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
                     <div class="overflow-x-auto">
@@ -1060,19 +1047,6 @@ $usuarios = $select->select_usuarios();
                 modal.classList.add('hidden');
                 modal.classList.remove('flex');
             }, 300);
-        }
-
-        function openModal(modalId) {
-            const modal = document.getElementById(modalId);
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-            setTimeout(() => {
-                const content = modal.querySelector('[id$="Content"]');
-                if (content) {
-                    content.style.transform = 'scale(1)';
-                    content.style.opacity = '1';
-                }
-            }, 10);
         }
 
         function openInactivateModal(id, nome) {

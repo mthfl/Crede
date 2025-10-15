@@ -184,7 +184,7 @@ class select extends connect
                 INNER JOIN $this->table2 cur ON cur.id = can.id_curso1 
                 INNER JOIN $this->table5 user ON user.id = can.id_cadastrador
                 WHERE can.status = 1
-                ");
+                ORDER BY can.id DESC");
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {
             return [];
