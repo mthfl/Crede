@@ -78,6 +78,14 @@ else if (
     }
 
     $model_usuario = new usuario();
+    
+    // Verificar se o usuário existe antes de atualizar
+    $usuario_atual = $model_usuario->get_user_by_id($escola, $id);
+    if (!$usuario_atual) {
+        header('Location: ../index.php?error=7'); // Usuário não encontrado
+        exit();
+    }
+    
     $result = $model_usuario->update_user($escola, $id, $nome, $email, $cpf);
 
     if ($result) {
