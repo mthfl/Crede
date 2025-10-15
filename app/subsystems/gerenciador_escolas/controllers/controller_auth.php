@@ -200,8 +200,8 @@ if (
             header("Location: ../views/recuperar_senha.php?escola=$escola&falha");
             exit();
     }
-}/*else{
+}else{
 
     header('location:../login.php');
     exit();
-}*/
+}

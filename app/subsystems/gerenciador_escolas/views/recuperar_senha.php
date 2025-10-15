@@ -1,7 +1,7 @@
 <?php
 session_start();
 $escola = $_GET['escola'];
-print_r($_SESSION);
+//print_r($_SESSION);
 
 require_once(__DIR__ . '/../models/model.select.php');
 $select = new model_select();
