@@ -96,7 +96,7 @@ else if (
     $senha = $_POST['senha'];
     $nome_escola_banco = $_POST['escola_banco'];
 
-    
+
     new connect_escolas($nome_escola_banco);
     $model_usuario = new model_usuario($nome_escola_banco);
     $result = $model_usuario->login($email, $senha, $nome_escola_banco);
@@ -118,8 +118,62 @@ else if (
             header("Location: ../views/login.php?escola=$escola&falha");
             exit();
     }
-}else{
+}
+if (
+    isset($_POST['recuperar_senha']) && !empty($_POST['recuperar_senha']) && is_string($_POST['recuperar_senha']) &&
+    isset($_POST['email']) && !empty($_POST['email']) && is_string($_POST['email']) &&
+    isset($_POST['escola_banco']) && !empty($_POST['escola_banco']) && is_string($_POST['escola_banco']) &&
+    isset($_POST['escola']) && !empty($_POST['escola']) && is_string($_POST['escola'])
+) {
+
+    session_start();
+    if (isset($_SESSION['codigo'])) {
+        $email = $_POST['email'];
+        $nome_escola_banco = $_POST['escola_banco'];
+        $escola = $_POST['escola'];
+        $codigo = $_POST['codigo'];
+        if($codigo === $_SESSION['codigo']){
+            header("Location: ../views/recuperar_senha.php?escola=$escola&codigo_invalido");
+                exit();
+        }
+
+        new connect_escolas($nome_escola_banco);
+        $model_usuario = new model_usuario($nome_escola_banco);
+        $result = $model_usuario->verificar_email($email, $nome_escola_banco);
+
+        switch ($result) {
+            case 1:
+                header("Location: ../views/recuperar_senha.php?escola=$escola");
+                exit();
+            case 2:
+                header("Location: ../views/recuperar_senha.php?escola=$escola&erro_email");
+                exit();
+            default:
+                header("Location: ../views/recuperar_senha.php?escola=$escola&falha");
+                exit();
+        }
+    }
+    $email = $_POST['email'];
+    $nome_escola_banco = $_POST['escola_banco'];
+    $escola = $_POST['escola'];
+
+    new connect_escolas($nome_escola_banco);
+    $model_usuario = new model_usuario($nome_escola_banco);
+    $result = $model_usuario->verificar_email($email, $nome_escola_banco);
+
+    switch ($result) {
+        case 1:
+            header("Location: ../views/recuperar_senha.php?escola=$escola");
+            exit();
+        case 2:
+            header("Location: ../views/recuperar_senha.php?escola=$escola&erro_email");
+            exit();
+        default:
+            header("Location: ../views/recuperar_senha.php?escola=$escola&falha");
+            exit();
+    }
+}/*else{
 
     header('location:../login.php');
     exit();
-}
+}*/
