@@ -917,7 +917,9 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
                                                 <input type="text" name="portugues_9_3" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg input-modern text-center text-sm input-focus" style="--tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;" required>
                                             </td>
                                             <td class="border border-gray-300 px-4 py-3">
-                                                <input type="text" name="portugues_9_media" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg input-modern text-center text-sm input-focus bg-yellow-50" style="--tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;" required> 
+                                                <div class="p-2 rounded-lg" style="background: <?= $primary_rgba_01 ?>; border: 1px solid <?= $primary_rgba_02 ?>;">
+                                                    <input type="text" name="portugues_9_media" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-transparent rounded-md input-modern text-center text-sm input-focus" style="background: rgba(255,255,255,0.92); --tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;" required>
+                                                </div>
                                             </td>
                                         </tr>
                                         <tr class="hover:bg-gray-50">
@@ -932,7 +934,9 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
                                                 <input type="text" name="matematica_9_3" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg input-modern text-center text-sm input-focus" style="--tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;" required>
                                             </td>
                                             <td class="border border-gray-300 px-4 py-3">
-                                                <input type="text" name="matematica_9_media" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg input-modern text-center text-sm input-focus bg-yellow-50" style="--tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;" required>
+                                                <div class="p-2 rounded-lg" style="background: <?= $primary_rgba_01 ?>; border: 1px solid <?= $primary_rgba_02 ?>;">
+                                                    <input type="text" name="matematica_9_media" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-transparent rounded-md input-modern text-center text-sm input-focus" style="background: rgba(255,255,255,0.92); --tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;" required>
+                                                </div>
                                             </td>
                                         </tr>
                                         <tr class="hover:bg-gray-50">
@@ -947,7 +951,9 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
                                                 <input type="text" name="historia_9_3" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg input-modern text-center text-sm input-focus" style="--tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;" required>
                                             </td>
                                             <td class="border border-gray-300 px-4 py-3">
-                                                <input type="text" name="historia_9_media" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg input-modern text-center text-sm input-focus bg-yellow-50" style="--tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;" required>
+                                                <div class="p-2 rounded-lg" style="background: <?= $primary_rgba_01 ?>; border: 1px solid <?= $primary_rgba_02 ?>;">
+                                                    <input type="text" name="historia_9_media" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-transparent rounded-md input-modern text-center text-sm input-focus" style="background: rgba(255,255,255,0.92); --tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;" required>
+                                                </div>
                                             </td>
                                         </tr>
                                         <tr class="hover:bg-gray-50">
@@ -962,7 +968,9 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
                                                 <input type="text" name="geografia_9_3" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg input-modern text-center text-sm input-focus" style="--tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;" required>
                                             </td>
                                             <td class="border border-gray-300 px-4 py-3">
-                                                <input type="text" name="geografia_9_media" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg input-modern text-center text-sm input-focus bg-yellow-50" style="--tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;" required>
+                                                <div class="p-2 rounded-lg" style="background: <?= $primary_rgba_01 ?>; border: 1px solid <?= $primary_rgba_02 ?>;">
+                                                    <input type="text" name="geografia_9_media" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-transparent rounded-md input-modern text-center text-sm input-focus" style="background: rgba(255,255,255,0.92); --tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;" required>
+                                                </div>
                                             </td>
                                         </tr>
                                         <tr class="hover:bg-gray-50">
@@ -977,7 +985,9 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
                                                 <input type="text" name="ciencias_9_3" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg input-modern text-center text-sm input-focus" style="--tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;" required>
                                             </td>
                                             <td class="border border-gray-300 px-4 py-3">
-                                                <input type="text" name="ciencias_9_media" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg input-modern text-center text-sm input-focus bg-yellow-50" style="--tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;" required>
+                                                <div class="p-2 rounded-lg" style="background: <?= $primary_rgba_01 ?>; border: 1px solid <?= $primary_rgba_02 ?>;">
+                                                    <input type="text" name="ciencias_9_media" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-transparent rounded-md input-modern text-center text-sm input-focus" style="background: rgba(255,255,255,0.92); --tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;" required>
+                                                </div>
                                             </td>
                                         </tr>
                                         <tr class="hover:bg-gray-50">
@@ -992,7 +1002,9 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
                                                 <input type="text" name="ingles_9_3" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg input-modern text-center text-sm input-focus" style="--tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;" required>
                                             </td>
                                             <td class="border border-gray-300 px-4 py-3">
-                                                <input type="text" name="ingles_9_media" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg input-modern text-center text-sm input-focus bg-yellow-50" style="--tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;" required> 
+                                                <div class="p-2 rounded-lg" style="background: <?= $primary_rgba_01 ?>; border: 1px solid <?= $primary_rgba_02 ?>;">
+                                                    <input type="text" name="ingles_9_media" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-transparent rounded-md input-modern text-center text-sm input-focus" style="background: rgba(255,255,255,0.92); --tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;" required>
+                                                </div>
                                             </td>
                                         </tr>
                                         <tr class="hover:bg-gray-50">
@@ -1007,7 +1019,9 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
                                                 <input type="text" name="artes_9_3" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg input-modern text-center text-sm input-focus" style="--tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;">
                                             </td>
                                             <td class="border border-gray-300 px-4 py-3">
-                                                <input type="text" name="artes_9_media" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg input-modern text-center text-sm input-focus bg-yellow-50" style="--tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;">
+                                                <div class="p-2 rounded-lg" style="background: <?= $primary_rgba_01 ?>; border: 1px solid <?= $primary_rgba_02 ?>;">
+                                                    <input type="text" name="artes_9_media" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-transparent rounded-md input-modern text-center text-sm input-focus" style="background: rgba(255,255,255,0.92); --tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;">
+                                                </div>
                                             </td>
                                         </tr>
                                         <tr class="hover:bg-gray-50">
@@ -1022,7 +1036,9 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
                                                 <input type="text" name="edfisica_9_3" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg input-modern text-center text-sm input-focus" style="--tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;">
                                             </td>
                                             <td class="border border-gray-300 px-4 py-3">
-                                                <input type="text" name="edfisica_9_media" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg input-modern text-center text-sm input-focus bg-yellow-50" style="--tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;">
+                                                <div class="p-2 rounded-lg" style="background: <?= $primary_rgba_01 ?>; border: 1px solid <?= $primary_rgba_02 ?>;">
+                                                    <input type="text" name="edfisica_9_media" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-transparent rounded-md input-modern text-center text-sm input-focus" style="background: rgba(255,255,255,0.92); --tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;">
+                                                </div>
                                             </td>
                                         </tr>
                                         <tr class="hover:bg-gray-50">
@@ -1037,7 +1053,9 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
                                                 <input type="text" name="religiao_9_3" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg input-modern text-center text-sm input-focus" style="--tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;">
                                             </td>
                                             <td class="border border-gray-300 px-4 py-3">
-                                                <input type="text" name="religiao_9_media" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-gray-300 rounded-lg input-modern text-center text-sm input-focus bg-yellow-50" style="--tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;">
+                                                <div class="p-2 rounded-lg" style="background: <?= $primary_rgba_01 ?>; border: 1px solid <?= $primary_rgba_02 ?>;">
+                                                    <input type="text" name="religiao_9_media" placeholder="0,00" oninput="applyGradeMask(this)" class="w-full px-3 py-2 border border-transparent rounded-md input-modern text-center text-sm input-focus" style="background: rgba(255,255,255,0.92); --tw-ring-color: <?= $curso_cor ?>; --tw-border-opacity: 0.5;">
+                                                </div>
                                             </td>
                                         </tr>
                                     </tbody>
