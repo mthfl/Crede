@@ -1,12 +1,19 @@
 <?php 
+session_start();
+if (isset($_GET['outro_email'])) {
+    session_unset();
+    session_destroy();
+}
 if(!isset($_GET['escola']) && empty($_GET['escola'])){
     header('location:../index.php');
     exit();
 }
+
 $escola = $_GET['escola'];
 require_once(__DIR__ . '/../models/model.select.php');
 $select = new model_select();
 $nome_escola_banco = $select->select_escolas_nome($escola);
+
 // Prepara mensagens de modal com base nos GETs enviados pelo controller
 $showModal = false;
 $modalTitle = 'Aviso';

@@ -47,7 +47,6 @@ class model_usuario extends connect_escolas
     public function primeiro_acesso($cpf, $email, $senha)
     {
         try {
-
             $stmt_check = $this->connect->prepare("SELECT * FROM $this->table5 WHERE email = :email AND cpf = :cpf");
             $stmt_check->bindValue(":cpf", $cpf);
             $stmt_check->bindValue(":email", $email);
@@ -123,7 +122,7 @@ class model_usuario extends connect_escolas
     public function verificar_email(string $email, string $escola_banco): int
     {
         try {
-            $stmt = $this->connect->prepare("SELECT * FROM $this->table5 WHERE email = :email");
+            $stmt = $this->connect->prepare("SELECT * FROM $this->table5 WHERE email = :email AND status = 1");
             $stmt->bindValue(':email', $email);
             $stmt->execute();
             if ($stmt->rowCount() == 0) {
@@ -140,6 +139,39 @@ class model_usuario extends connect_escolas
             }
             return 1;
         } catch (Exception $e) {
+            error_log("Erro no login: " . $e->getMessage());
+            return 0;
+        }
+    }
+    public function alterar_senha($email, $senha){
+        try {
+            $stmt_check = $this->connect->prepare("SELECT * FROM $this->table5 WHERE email = :email");
+            $stmt_check->bindValue(":email", $email);
+            $stmt_check->execute();
+            $user = $stmt_check->fetch(PDO::FETCH_ASSOC);
+
+            if ($stmt_check->rowCount() > 0) {
+
+                if ($user['status'] == 0) {
+                    return 4;
+                }
+                $hash = password_hash($senha, PASSWORD_DEFAULT);
+                $stmt_check = $this->connect->prepare("UPDATE $this->table5 SET senha = :senha WHERE email = :email");
+                $stmt_check->bindValue(":email", $email);
+                $stmt_check->bindValue(":senha", $hash);
+
+                if ($stmt_check->execute()) {
+
+                    return 1;
+                } else {
+                    return 2;
+                }
+            } else {
+
+                return 3;
+            }
+        } catch (Exception $e) {
+
             error_log("Erro no login: " . $e->getMessage());
             return 0;
         }

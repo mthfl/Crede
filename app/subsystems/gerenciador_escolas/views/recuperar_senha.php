@@ -1,6 +1,7 @@
 <?php
 session_start();
 $escola = $_GET['escola'];
+print_r($_SESSION);
 
 require_once(__DIR__ . '/../models/model.select.php');
 $select = new model_select();
@@ -35,11 +36,6 @@ if (isset($_GET['erro'])) {
     $showModal = true;
     $modalTitle = 'Erro';
     $modalMessage = 'Ocorreu um erro ao processar sua solicitação. Tente novamente.';
-}
-if (isset($_GET['codigo_enviado'])) {
-    $showModal = true;
-    $modalTitle = 'Código enviado';
-    $modalMessage = 'Um código de verificação foi enviado para o seu e-mail.';
 }
 if (isset($_GET['codigo_invalido'])) {
     $showModal = true;
@@ -588,7 +584,7 @@ if (isset($_GET['senha_alterada'])) {
                     </p>
                 </div>
 
-                <?php if (isset($_SESSION['email_recuperar_senha']) && !isset($_SESSION['codigo'])) { ?>
+                <?php if (isset($_SESSION['email_recuperar_senha']) && isset($_SESSION['codigo']) && !isset($_SESSION['codigo_verificado'])) { ?>
                     <!-- Formulário de Verificação de Código -->
                     <form id="verifyCodeForm" action="../controllers/controller_auth.php" method="POST" class="space-y-4 sm:space-y-6">
                         <input type="hidden" name="escola" value="<?= $escola ?>">
@@ -627,7 +623,7 @@ if (isset($_GET['senha_alterada'])) {
                             <i class="fas fa-arrow-left mr-1"></i>Usar outro e-mail
                         </a>
                     </div>
-                <?php } elseif (isset($_SESSION['email_recuperar_senha']) && isset($_SESSION['codigo_verificado']) && $_SESSION['codigo_verificado'] === true) { ?>
+                <?php } else if (isset($_SESSION['email_recuperar_senha']) && isset($_SESSION['codigo_verificado'])) { ?>
                     <!-- Formulário de Nova Senha -->
                     <form id="newPasswordForm" action="../controllers/controller_auth.php" method="POST" class="space-y-4 sm:space-y-6">
                         <input type="hidden" name="escola" value="<?= $escola ?>">
@@ -712,7 +708,7 @@ if (isset($_GET['senha_alterada'])) {
                 <?php } ?>
                 <!-- Voltar para Login -->
                 <div class="mt-6 sm:mt-8 text-center">
-                    <a href="login.php?escola=<?= $escola ?>" class="text-secondary hover:text-primary transition-colors duration-300 text-sm">
+                    <a href="login.php?escola=<?= $escola ?>&outro_email" class="text-secondary hover:text-primary transition-colors duration-300 text-sm">
                         <i class="fas fa-arrow-left mr-1"></i>Voltar para o login
                     </a>
                 </div>
