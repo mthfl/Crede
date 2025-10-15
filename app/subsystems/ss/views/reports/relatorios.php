@@ -10,7 +10,7 @@ $escola = $_SESSION['escola'];
 new connect($escola);
 require_once(__DIR__ . '/../../assets/libs/fpdf/fpdf.php');
 
-    class relatorios extends connect
+class relatorios extends connect
 {
     protected string $table1;
     protected string $table2;
@@ -33,25 +33,17 @@ require_once(__DIR__ . '/../../assets/libs/fpdf/fpdf.php');
     }
     public function gerarRelatorio($curso, $tipo_relatorio = 'PRIVADA AC')
     {
-        if ((isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin')) {
-            //ADMIN
-            $n = 102;
-            $p = 0; // ñ quebra a linha caso seja cliente 
-            $orientacao = 'L';
-        } else if ((isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'cadastrador')) {
-            //CLIENTE
-            $n = 105;
-            $p = 1; // quebra a linha caso seja cliente 
-            $orientacao = 'P';
-        }
 
-        // Definir a consulta SQL com base no tipo de relatório
+        $n = 102;
+        $p = 0;
+        $orientacao = 'L';
+
         $sql = "";
         $publica = 0;
         $pcd = 0;
         $bairro = 0;
+
         
-        // Determinar os parâmetros da consulta com base no tipo de relatório
         switch ($tipo_relatorio) {
             case 'PRIVADA AC':
                 $publica = 0;
@@ -97,25 +89,25 @@ require_once(__DIR__ . '/../../assets/libs/fpdf/fpdf.php');
                 INNER JOIN $this->table4 m ON m.id_candidato = can.id 
                 INNER JOIN $this->table5 u ON can.id_cadastrador = u.id 
                 INNER JOIN $this->table2 cur ON can.id_curso1 = cur.id 
-                WHERE can.id_curso1 = :curso AND can.publica = :publica AND can.pcd = :pcd AND status = 1";
-        
+                WHERE can.id_curso1 = :curso AND can.publica = :publica AND can.pcd = :pcd AND can.status = 1";
+
         // Adicionar filtro de bairro apenas se necessário
         if ($bairro !== null) {
             $sql .= " AND can.bairro = :bairro";
         }
-        
+
         $sql .= " ORDER BY m.media_final DESC, can.data_nascimento DESC, m.l_portuguesa_media DESC, m.matematica_media DESC;";
-        
+
         $stmtSelect = $this->connect->prepare($sql);
         $stmtSelect->BindValue(':curso', $curso);
         $stmtSelect->BindValue(':publica', $publica);
         $stmtSelect->BindValue(':pcd', $pcd);
-        
+
         // Vincular parâmetro de bairro apenas se necessário
         if ($bairro !== null) {
             $stmtSelect->BindValue(':bairro', $bairro);
         }
-        
+
         $stmtSelect->execute();
         $dados = $stmtSelect->fetchAll(PDO::FETCH_ASSOC);
 
@@ -123,7 +115,7 @@ require_once(__DIR__ . '/../../assets/libs/fpdf/fpdf.php');
         $pdf->AddPage();
         $pdf->Image('../../assets/imgs/fundo_pdf.png', 0, 0, $pdf->GetPageWidth(), $pdf->GetPageHeight(), 'png', '', 0.1);
         // Cabeçalho com larguras ajustadas
-        
+
         $pdf->SetFont('Arial', 'B', 25);
         $pdf->SetY(8);
         $pdf->SetX(20);
@@ -138,7 +130,7 @@ require_once(__DIR__ . '/../../assets/libs/fpdf/fpdf.php');
         $stmt_bairros = $this->connect->query("SELECT * FROM $this->table13");
         $dados_bairros = $stmt_bairros->fetchAll(PDO::FETCH_ASSOC);
         $bairros_para_mostrar = array_slice($dados_bairros, 0, 5);
-       
+
         $pdf->SetFont('Arial', '', 8);
         $pdf->SetY(20);
         $pdf->SetX(17);
@@ -193,7 +185,7 @@ require_once(__DIR__ . '/../../assets/libs/fpdf/fpdf.php');
             } else if ($dado['publica'] == 0 && $dado['bairro'] == 1) {
                 $cota = 'COTAS';
             } else if ($dado['publica'] == 1 && $dado['bairro'] == 1) {
-                    $cota = 'COTAS';
+                $cota = 'COTAS';
             } else {
                 $cota = 'AC';
             }

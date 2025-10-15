@@ -502,6 +502,11 @@ $usuarios = $select->select_usuarios();
             <main class="p-4 sm:p-6 lg:p-8">
                 <div class="flex items-center justify-between mb-6">
                     <div class="text-lg font-semibold text-gray-800">Lista de Candidatos</div>
+                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
+                    <div class="flex items-center gap-2">
+                        <a href="candidatos_excluidos.php" class="bg-secondary text-white px-4 py-3 rounded-xl hover:bg-orange-600 transition-all duration-300 font-medium text-sm btn-animate focus-ring">Candidatos Excluídos</a>
+                    </div>
+                    <?php } ?>
                 </div>
 
                 <!-- Barra de Pesquisa -->
@@ -811,7 +816,7 @@ $usuarios = $select->select_usuarios();
         </div>
     </div>
 
-    <!-- Modal Confirmar Inativação -->
+    <!-- Modal Confirmar Exclusão -->
     <div id="modalInactivateConfirm" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-2 sm:p-4 z-50">
         <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl transform transition-all duration-300 scale-95 opacity-0" id="modalInactivateConfirmContent">
             <div class="p-6 sm:p-8 text-center">
@@ -820,13 +825,13 @@ $usuarios = $select->select_usuarios();
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M4.93 4.93l14.14 14.14"></path>
                     </svg>
                 </div>
-                <h3 class="text-xl sm:text-2xl font-bold text-dark font-heading mb-4">Confirmar Inativação</h3>
+                <h3 class="text-xl sm:text-2xl font-bold text-dark font-heading mb-4">Confirmar Exclusão</h3>
                 <p class="text-gray-600 text-base mb-6 leading-relaxed">
                     Tem certeza que deseja Excluir o candidato <span class="font-semibold text-dark" id="inactivateCandidatoName"></span>?
                 </p>
                 <div class="flex flex-col sm:flex-row gap-3 justify-center">
                     <button type="button" class="px-6 py-3 rounded-xl border-2 border-secondary font-semibold text-secondary hover:bg-secondary/10 hover:border-secondary transition-all text-base focus-ring" onclick="closeModal('modalInactivateConfirm')">Cancelar</button>
-                    <a id="inactivateLink" href="#" class="px-6 py-3 bg-gradient-to-r from-secondary to-orange-600 text-white font-semibold rounded-xl hover:from-secondary/90 hover:to-orange-700 transition-all text-base shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 focus-ring text-center">Confirmar Inativação</a>
+                    <a id="inactivateLink" href="#" class="px-6 py-3 bg-gradient-to-r from-secondary to-orange-600 text-white font-semibold rounded-xl hover:from-secondary/90 hover:to-orange-700 transition-all text-base shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 focus-ring text-center">Confirmar Exclusão</a>
                 </div>
             </div>
         </div>
