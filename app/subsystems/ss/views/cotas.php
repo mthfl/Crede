@@ -726,13 +726,9 @@ $select = new select($escola);
                     <div class="mb-6">
                         <label class="block text-sm font-semibold text-dark mb-3">Bairros da Cota *</label>
                         <div id="bairros-container" class="space-y-3">
-                            <div class="flex items-center">
+                            <!-- Campo inicial: botão será ajustado dinamicamente para que o + fique sempre ao lado do último input -->
+                            <div class="flex items-center bairro-field">
                                 <input type="text" name="bairros[]" class="flex-1 px-4 py-3.5 rounded-xl transition-all text-base border-2 focus:border-primary focus:ring-4 focus:ring-primary/10" placeholder="Digite o nome do bairro" required>
-                                <button type="button" class="ml-2 p-2 bg-primary text-white rounded-lg hover:bg-dark transition-all" onclick="addBairroField()">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                                    </svg>
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -1294,13 +1290,22 @@ $select = new select($escola);
         // Submissão simples com validação mínima
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.getElementById('bairroForm');
-            form.addEventListener('submit', function(e) {
-                const nome = document.getElementById('inpBairroNome');
-                if (!nome.value.trim()) {
-                    e.preventDefault();
-                    alert('Informe o nome do bairro.');
-                }
-            });
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    const nome = document.getElementById('inpBairroNome');
+                    if (!nome.value.trim()) {
+                        e.preventDefault();
+                        alert('Informe o número de alunos por turma.');
+                    }
+                });
+            }
+
+            // Initialize bairro fields buttons (make + appear only on last input)
+            try {
+                renderBairroButtons();
+            } catch (err) {
+                console.error('Falha ao renderizar botões de bairros:', err);
+            }
         });
 
         function openModal(modalId) {
@@ -1335,24 +1340,89 @@ $select = new select($escola);
             }
         }
 
-        function addBairroField() {
-            const container = document.getElementById('bairros-container');
-            const newField = document.createElement('div');
-            newField.className = 'flex items-center';
-            newField.innerHTML = `
-                <input type="text" name="bairros[]" class="flex-1 px-4 py-3.5 rounded-xl transition-all text-base border-2 focus:border-primary focus:ring-4 focus:ring-primary/10" placeholder="Digite o nome do bairro" required>
-                <button type="button" class="ml-2 p-2 bg-secondary text-white rounded-lg hover:bg-orange-600 transition-all" onclick="removeBairroField(this)">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                </button>
-            `;
-            container.appendChild(newField);
+        // Helper to create an input field element (without action buttons)
+        function createBairroField(value = '') {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'flex items-center bairro-field';
+
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.name = 'bairros[]';
+            input.required = true;
+            input.placeholder = 'Digite o nome do bairro';
+            input.className = 'flex-1 px-4 py-3.5 rounded-xl transition-all text-base border-2 focus:border-primary focus:ring-4 focus:ring-primary/10';
+            input.value = value;
+
+            wrapper.appendChild(input);
+            return wrapper;
         }
 
-        function removeBairroField(button) {
-            const fieldDiv = button.parentElement;
-            fieldDiv.remove();
+        // Renders action buttons: '+' on last field, 'x' on previous fields
+        function renderBairroButtons() {
+            const container = document.getElementById('bairros-container');
+            const fields = Array.from(container.querySelectorAll('.bairro-field'));
+
+            // Remove existing trailing buttons to avoid duplicates
+            fields.forEach(f => {
+                const existingBtn = f.querySelector('.bairro-action');
+                if (existingBtn) existingBtn.remove();
+            });
+
+            fields.forEach((field, idx) => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'ml-2 p-2 rounded-lg bairro-action transition-all';
+
+                if (idx === fields.length - 1) {
+                    // Last field: show + button (add)
+                    btn.classList.add('bg-primary', 'text-white');
+                    btn.title = 'Adicionar campo';
+                    btn.innerHTML = `
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                        </svg>`;
+                    btn.onclick = () => {
+                        addBairroField();
+                    };
+                } else {
+                    // Previous fields: show x button (remove)
+                    btn.classList.add('bg-secondary', 'text-white');
+                    btn.title = 'Remover campo';
+                    btn.innerHTML = `
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>`;
+                    btn.onclick = () => {
+                        removeBairroField(field);
+                    };
+                }
+
+                field.appendChild(btn);
+            });
+        }
+
+        function addBairroField(value = '') {
+            const container = document.getElementById('bairros-container');
+            const newField = createBairroField(value);
+            container.appendChild(newField);
+            renderBairroButtons();
+            // focus the new input
+            const input = newField.querySelector('input[name="bairros[]"]');
+            if (input) input.focus();
+        }
+
+        function removeBairroField(fieldElement) {
+            const container = document.getElementById('bairros-container');
+            // Remove the field
+            fieldElement.remove();
+            // Ensure at least one field remains
+            const remaining = container.querySelectorAll('.bairro-field');
+            if (remaining.length === 0) {
+                // add one empty field
+                addBairroField('');
+            } else {
+                renderBairroButtons();
+            }
         }
 
 
