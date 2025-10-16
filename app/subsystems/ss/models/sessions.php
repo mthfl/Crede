@@ -13,11 +13,11 @@ class sessions
 
                 session_unset();
                 session_destroy();
-                header('location:../gerenciador_escolas/index.php');
+                header("location: ../../gerenciador_escolas/index.php");
                 exit();
             }
         } catch (PDOException $e) {
-            header('location: ../views/windows/faltal_erro.php');
+            header("location: ../views/windows/faltal_erro.php");
             exit();
         }
     }
@@ -31,13 +31,14 @@ class sessions
 
                     session_unset();
                     session_destroy();
-                    header('location:../../gerenciador_escolas/index.php');
+                    $dir = __DIR__;
+                    header("location: ../../gerenciador_escolas/index.php");
                     exit();
                 }
             }
             $_SESSION['ultimo_acesso'] = time();
         } catch (PDOException $e) {
-            header('location: ../views/windows/faltal_erro.php');
+            header("location: ../views/windows/faltal_erro.php");
             exit();
         }
     }
@@ -47,10 +48,10 @@ class sessions
         try {
             session_unset();
             session_destroy();
-            header('location:../../gerenciador_escolas/index.php');
+            header("location: ../../gerenciador_escolas/index.php");
             exit();
         } catch (PDOException $e) {
-            header('location: ../views/windows/faltal_erro.php');
+            header("location: ../views/windows/faltal_erro.php");
             exit();
         }
     }

@@ -26,7 +26,7 @@ if (
     $bairros = $_POST["bairros"];
     $quantidade = $_POST["quantidades"];
     $escola = $_SESSION['escola'];
-    
+
     $admin_model = new admin($escola);
     $result1 = $admin_model->cadastrar_quantidade_vaga($quantidade);
     $result2 = $admin_model->cadastrar_bairro($bairros);
@@ -112,21 +112,7 @@ else if (
             header('Location: ../views/cotas.php?falha');
             exit();
     }
-}
-if (
-    empty($_POST["id_bairro"]) &&
-    isset($_POST["nome"]) && !empty($_POST["nome"])
-
-
-
-
-
-
-
-
-
-) {
-} /*else {
+} else {
     header('Location: ../index.php');
     exit();
-}*/
+}

@@ -1,3 +1,4 @@
+
 <?php
 require_once(__DIR__ . '/../models/sessions.php');
 $session = new sessions();
@@ -929,7 +930,7 @@ $select = new select($escola);
                         <a href="faq.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
                             <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994 .54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
                             </div>
                             <div>
@@ -1022,7 +1023,7 @@ $select = new select($escola);
                         </div>
                         <h3 class="text-xl font-bold text-primary mb-2 text-center font-heading">Escolas Públicas e Privadas</h3>
                         <p class="text-gray-600 text-center mb-6">Gere relatórios detalhados por tipo de escola (pública/privada) e modalidade (AC/cotas)</p>
-                        <button onclick="openReportModal('escola', 'Escolas')" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-3 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold flex items-center justify-center">
+                        <button onclick="openSchoolReportModal()" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-3 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold flex items-center justify-center">
                             <i class="fas fa-file-pdf mr-2"></i>
                             Gerar Relatório
                         </button>
@@ -1036,7 +1037,7 @@ $select = new select($escola);
                         </div>
                         <h3 class="text-xl font-bold text-primary mb-2 text-center font-heading">Resultados</h3>
                         <p class="text-gray-600 text-center mb-6">Gere relatórios de classificados, classificáveis e resultados finais</p>
-                        <button onclick="openReportTypeModal('resultados')" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-3 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold flex items-center justify-center">
+                        <button onclick="openReportModal('resultados', 'Resultados')" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-3 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold flex items-center justify-center">
                             <i class="fas fa-file-pdf mr-2"></i>
                             Gerar Relatório
                         </button>
@@ -1060,7 +1061,7 @@ $select = new select($escola);
         </div>
     </div>
 
-    <!-- Modal for Report Selection -->
+    <!-- Modal for Report Selection (Resultados) -->
     <div id="reportModal" class="modal">
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal('reportModal')">×</button>
@@ -1093,6 +1094,58 @@ $select = new select($escola);
                         Curso
                     </label>
                     <select name="curso" id="curso_id" required class="select2-curso">
+                        <option value="" disabled selected>SELECIONAR CURSO</option>
+                        <?php
+                        $cursos = $select->select_cursos();
+                        foreach ($cursos as $curso) { ?>
+                            <option value="<?= htmlspecialchars($curso['id']) ?>"><?= htmlspecialchars($curso['nome_curso']) ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+
+                <button type="submit" class="confirm-btn">
+                    <i class="fas fa-file-pdf mr-2"></i>
+                    Gerar Relatório
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal for School Reports -->
+    <div id="schoolReportModal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal('schoolReportModal')">×</button>
+            <h2 class="font-heading" id="schoolReportModalTitle">
+                <i class="fas fa-file-alt mr-2 text-secondary"></i>
+                Gerar Relatório de Escolas
+            </h2>
+            <form id="schoolReportForm" action="../controllers/controller_relatorios.php" method="POST" class="space-y-4">
+                <input type="hidden" name="form" value="relatorio_pdf">
+                
+                <!-- Tipo de Relatório para Escolas -->
+                <div class="form-group">
+                    <label for="school_tipo_relatorio" class="font-semibold">
+                        <i class="fas fa-list mr-1"></i>
+                        Tipo de Relatório
+                    </label>
+                    <select name="tipo_relatorio" id="school_tipo_relatorio" required class="select2-school-tipo">
+                        <option value="" disabled selected>SELECIONAR TIPO DE RELATÓRIO</option>
+                        <option value="privada_ac">Privada AC</option>
+                        <option value="privada_cotas">Privada Cotas</option>
+                        <option value="privada_geral">Privada Geral</option>
+                        <option value="publica_ac">Pública AC</option>
+                        <option value="publica_cotas">Pública Cotas</option>
+                        <option value="publica_geral">Pública Geral</option>
+                    </select>
+                </div>
+
+                <!-- Curso -->
+                <div class="form-group mt-4">
+                    <label for="school_curso_id" class="font-semibold">
+                        <i class="fas fa-book mr-1"></i>
+                        Curso
+                    </label>
+                    <select name="curso" id="school_curso_id" required class="select2-school-curso">
                         <option value="" disabled selected>SELECIONAR CURSO</option>
                         <?php
                         $cursos = $select->select_cursos();
@@ -1234,13 +1287,11 @@ $select = new select($escola);
             document.body.style.overflow = '';
         });
 
-        // Modal handling
+        // Modal handling for Results
         function openReportModal(reportType, reportLabel) {
             const modal = document.getElementById('reportModal');
             const modalTitle = document.getElementById('reportModalTitle');
-            const reportTypeInput = document.getElementById('tipo_relatorio');
             modalTitle.textContent = `Gerar Relatório: ${reportLabel}`;
-            reportTypeInput.value = reportType;
             modal.classList.add('show');
             setTimeout(() => {
                 $('.select2-tipo').select2({
@@ -1272,15 +1323,12 @@ $select = new select($escola);
             }, 100);
         }
 
-        function openReportTypeModal(tipoRelatorio) {
-            const modal = document.getElementById('reportModal');
-            const modalTitle = document.getElementById('reportModalTitle');
-            const reportTypeSelect = document.getElementById('tipo_relatorio');
-            modalTitle.textContent = 'Gerar Relatório de ' + tipoRelatorio;
-            reportTypeSelect.value = tipoRelatorio;
+        // Modal handling for Schools
+        function openSchoolReportModal() {
+            const modal = document.getElementById('schoolReportModal');
             modal.classList.add('show');
             setTimeout(() => {
-                $('.select2-tipo').select2({
+                $('.select2-school-tipo').select2({
                     placeholder: "SELECIONAR TIPO DE RELATÓRIO",
                     allowClear: true,
                     width: '100%',
@@ -1293,7 +1341,7 @@ $select = new select($escola);
                         }
                     }
                 });
-                $('.select2-curso').select2({
+                $('.select2-school-curso').select2({
                     placeholder: "SELECIONAR CURSO",
                     allowClear: true,
                     width: '100%',
@@ -1312,25 +1360,35 @@ $select = new select($escola);
         function closeModal(modalId) {
             const modal = document.getElementById(modalId);
             modal.classList.remove('show');
-            document.getElementById('reportForm').reset();
             document.body.style.overflow = '';
-            $('.select2-curso').select2('destroy');
-            $('.select2-tipo').select2('destroy');
+            if (modalId === 'reportModal') {
+                $('.select2-curso').select2('destroy');
+                $('.select2-tipo').select2('destroy');
+            } else if (modalId === 'schoolReportModal') {
+                $('.select2-school-curso').select2('destroy');
+                $('.select2-school-tipo').select2('destroy');
+            } else if (modalId === 'specificReportModal') {
+                $('.select2-specific').select2('destroy');
+                $('.select2-user').select2('destroy');
+            }
         }
 
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
                 closeModal('reportModal');
+                closeModal('schoolReportModal');
+                closeModal('specificReportModal');
             }
         });
 
-        // Form validation
+        // Form validation for Results
         const reportForm = document.getElementById('reportForm');
         reportForm.addEventListener('submit', function(e) {
             e.preventDefault();
+            const tipo = document.getElementById('tipo_relatorio').value;
             const curso = document.getElementById('curso_id').value;
-            if (!curso) {
-                showNotification('Por favor, selecione um curso.', 'error');
+            if (!tipo || !curso) {
+                showNotification('Por favor, selecione tipo e curso.', 'error');
                 return;
             }
             const submitBtn = reportForm.querySelector('button[type="submit"]');
@@ -1339,6 +1397,31 @@ $select = new select($escola);
             submitBtn.disabled = true;
             setTimeout(() => {
                 reportForm.submit();
+            }, 1000);
+            setTimeout(() => {
+                if (submitBtn.disabled) {
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                }
+            }, 5000);
+        });
+
+        // Form validation for Schools
+        const schoolReportForm = document.getElementById('schoolReportForm');
+        schoolReportForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const tipo = document.getElementById('school_tipo_relatorio').value;
+            const curso = document.getElementById('school_curso_id').value;
+            if (!tipo || !curso) {
+                showNotification('Por favor, selecione tipo e curso.', 'error');
+                return;
+            }
+            const submitBtn = schoolReportForm.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<span class="loading-spinner"></span> Gerando...';
+            submitBtn.disabled = true;
+            setTimeout(() => {
+                schoolReportForm.submit();
             }, 1000);
             setTimeout(() => {
                 if (submitBtn.disabled) {
@@ -1388,6 +1471,32 @@ $select = new select($escola);
                 }
             });
             $('.select2-tipo').select2({
+                placeholder: "SELECIONAR TIPO DE RELATÓRIO",
+                allowClear: true,
+                width: '100%',
+                language: {
+                    noResults: function() {
+                        return "Nenhum tipo encontrado";
+                    },
+                    searching: function() {
+                        return "Pesquisando...";
+                    }
+                }
+            });
+            $('.select2-school-curso').select2({
+                placeholder: "SELECIONAR CURSO",
+                allowClear: true,
+                width: '100%',
+                language: {
+                    noResults: function() {
+                        return "Nenhum curso encontrado";
+                    },
+                    searching: function() {
+                        return "Pesquisando...";
+                    }
+                }
+            });
+            $('.select2-school-tipo').select2({
                 placeholder: "SELECIONAR TIPO DE RELATÓRIO",
                 allowClear: true,
                 width: '100%',

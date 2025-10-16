@@ -39,10 +39,7 @@ if (
             header('Location: ../views/usuario.php?falha');
             exit();
     }
-} else 
-
-//editar usuairo
-if (
+} else if (
     isset($_POST["id_usuario"]) && !empty($_POST["id_usuario"]) &&
     isset($_POST["nome"]) && !empty($_POST["nome"]) &&
     isset($_POST["email"]) && !empty($_POST["email"]) &&
@@ -78,7 +75,7 @@ if (
 } else if (
     isset($_POST["id_usuario"]) && !empty($_POST["id_usuario"]) &&
     isset($_POST["habilitar"]) && !empty($_POST["habilitar"]) &&
-    !isset($_POST["nome"]) && !isset($_POST["email"]) && !isset($_POST["cpf"]) && !isset($_POST["tipo"]) && !isset($_POST["perfil"]) && !isset($_POST["descricao"]) 
+    !isset($_POST["nome"]) && !isset($_POST["email"]) && !isset($_POST["cpf"]) && !isset($_POST["tipo"]) && !isset($_POST["perfil"]) && !isset($_POST["descricao"])
 ) {
     $id_usuario = $_POST["id_usuario"];
     $escola = $_SESSION['escola'];
@@ -99,10 +96,7 @@ if (
             header('Location: ../views/usuario.php?falha');
             exit();
     }
-} else 
-
-//excluir curso
-if (
+} else if (
     isset($_POST["id_usuario"]) && !empty($_POST["id_usuario"]) &&
     !isset($_POST["nome"]) && empty($_POST["nome"]) &&
     !isset($_POST["email"]) && empty($_POST["email"]) &&
@@ -164,12 +158,12 @@ if (
     $novo_status = $_POST['novo_status'];
     $escola = $_SESSION['escola'];
     $admin_model = new admin($escola);
-    
+
     if ($novo_status == 'Concluido') {
         $result = $admin_model->requisicao_alteracao_realizada($id_requisicao);
-    } else if($novo_status == 'Recusado') {
+    } else if ($novo_status == 'Recusado') {
         $result = $admin_model->requisicao_alteracao_recusada($id_requisicao);
-    } else if($novo_status == 'Pendente') {
+    } else if ($novo_status == 'Pendente') {
         $result = $admin_model->requisicao_alteracao_pendente($id_requisicao);
     }
     switch ($result) {
@@ -178,6 +172,9 @@ if (
             exit();
         case 2:
             header('Location: ../views/solicitar_alteracao.php?erro');
+            exit();
+        default:
+            header('Location: ../views/solicitar_alteracao.php?fatal');
             exit();
     }
 } else if (empty($_POST['id_perfil']) && isset($_POST['nome_perfil']) && !empty($_POST['nome_perfil'])) {
