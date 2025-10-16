@@ -751,7 +751,7 @@ if (isset($_GET['falha'])) {
                     
                             
                             <a href="recuperar_senha.php?escola=<?=$escola?>" class="text-secondary hover:text-primary transition-colors duration-300">
-                                <i class="fas fa-question-circle mr-1"></i>Esqueci sua senha?
+                                <i class="fas fa-question-circle mr-1"></i>Esqueceu sua senha?
                             </a>
                             <span class="mx-2">•</span>
                             <a href="mailto:suporte@sistema.com" 

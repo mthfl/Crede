@@ -638,7 +638,7 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                         </svg>
                     </div>
-                    <span class="ml-3 font-medium">Voltar</span>
+                    <span class="ml-3 font-medium">Página Inicial</span>
                 </button>
             </div>
 

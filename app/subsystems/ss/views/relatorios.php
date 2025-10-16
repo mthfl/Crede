@@ -923,6 +923,21 @@ $select = new select($escola);
                             </a>
                         </div>
                     <?php } ?>
+
+                    <!-- FAQ -->
+                    <div class="animate-slide-in-left" style="animation-delay: 0.7s;">
+                        <a href="faq.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
+                            <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <span class="font-semibold text-base">FAQ</span>
+                                <p class="text-green-200 text-xs mt-1">Dúvidas frequentes</p>
+                            </div>
+                        </a>
+                    </div>
                 </nav>
             </div>
         </aside>
@@ -1062,7 +1077,7 @@ $select = new select($escola);
                         <i class="fas fa-list mr-1"></i>
                         Tipo de Relatório
                     </label>
-                    <select name="tipo_relatorio" id="tipo_relatorio" required class="select2-curso">
+                    <select name="tipo_relatorio" id="tipo_relatorio" required class="select2-tipo">
                         <option value="" disabled selected>SELECIONAR TIPO DE RELATÓRIO</option>
                         <option value="Classificados">Classificados</option>
                         <option value="Classificaveis">Classificáveis</option>
@@ -1228,6 +1243,19 @@ $select = new select($escola);
             reportTypeInput.value = reportType;
             modal.classList.add('show');
             setTimeout(() => {
+                $('.select2-tipo').select2({
+                    placeholder: "SELECIONAR TIPO DE RELATÓRIO",
+                    allowClear: true,
+                    width: '100%',
+                    language: {
+                        noResults: function() {
+                            return "Nenhum tipo encontrado";
+                        },
+                        searching: function() {
+                            return "Pesquisando...";
+                        }
+                    }
+                });
                 $('.select2-curso').select2({
                     placeholder: "SELECIONAR CURSO",
                     allowClear: true,
@@ -1252,6 +1280,19 @@ $select = new select($escola);
             reportTypeSelect.value = tipoRelatorio;
             modal.classList.add('show');
             setTimeout(() => {
+                $('.select2-tipo').select2({
+                    placeholder: "SELECIONAR TIPO DE RELATÓRIO",
+                    allowClear: true,
+                    width: '100%',
+                    language: {
+                        noResults: function() {
+                            return "Nenhum tipo encontrado";
+                        },
+                        searching: function() {
+                            return "Pesquisando...";
+                        }
+                    }
+                });
                 $('.select2-curso').select2({
                     placeholder: "SELECIONAR CURSO",
                     allowClear: true,
@@ -1274,6 +1315,7 @@ $select = new select($escola);
             document.getElementById('reportForm').reset();
             document.body.style.overflow = '';
             $('.select2-curso').select2('destroy');
+            $('.select2-tipo').select2('destroy');
         }
 
         document.addEventListener('keydown', function(e) {
@@ -1339,6 +1381,19 @@ $select = new select($escola);
                 language: {
                     noResults: function() {
                         return "Nenhum curso encontrado";
+                    },
+                    searching: function() {
+                        return "Pesquisando...";
+                    }
+                }
+            });
+            $('.select2-tipo').select2({
+                placeholder: "SELECIONAR TIPO DE RELATÓRIO",
+                allowClear: true,
+                width: '100%',
+                language: {
+                    noResults: function() {
+                        return "Nenhum tipo encontrado";
                     },
                     searching: function() {
                         return "Pesquisando...";
