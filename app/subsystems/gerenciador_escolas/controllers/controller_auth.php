@@ -1,7 +1,7 @@
 <?php
 require_once(__DIR__ . "/../models/model.usuario.php");
 require_once(__DIR__ . "/../config/connect_escolas.php");
-print_r($_POST);
+//print_r($_POST);
 //pre-cadastro
 if (
     isset($_POST['escola']) && !empty($_POST['escola']) && is_string($_POST['escola']) &&
@@ -127,26 +127,54 @@ if (
 ) {
 
     session_start();
-    if (isset($_SESSION['codigo'])) {
+    if (isset($_SESSION['codigo']) && !isset($_POST['nova_senha']) && empty($_POST['nova_senha'])) {
         $email = $_POST['email'];
         $nome_escola_banco = $_POST['escola_banco'];
         $escola = $_POST['escola'];
         $codigo = $_POST['codigo'];
-        if($codigo === $_SESSION['codigo']){
+        if ($codigo === $_SESSION['codigo']) {
             header("Location: ../views/recuperar_senha.php?escola=$escola&codigo_invalido");
-                exit();
+            exit();
         }
 
         new connect_escolas($nome_escola_banco);
         $model_usuario = new model_usuario($nome_escola_banco);
-        $result = $model_usuario->verificar_email($email, $nome_escola_banco);
+
+
+        $_SESSION['codigo_verificado'] = true;
+
+        header("Location: ../views/recuperar_senha.php?escola=$escola");
+        exit();
+    } else if (isset($_SESSION['codigo']) && isset($_POST['nova_senha']) && !empty($_POST['nova_senha'])) {
+
+        $email = $_POST['email'];
+        $nome_escola_banco = $_POST['escola_banco'];
+        $escola = $_POST['escola'];
+        $nova_senha = $_POST['nova_senha'];
+        $confirmar_senha = $_POST['confirmar_senha'];
+
+        if ($nova_senha !== $confirmar_senha) {
+            header("Location: ../views/recuperar_senha.php?escola=$escola&senhas_invalidas");
+            exit();
+        }
+
+        new connect_escolas($nome_escola_banco);
+        $model_usuario = new model_usuario($nome_escola_banco);
+        $result = $model_usuario->alterar_senha($email, $nova_senha);
+        session_destroy();
 
         switch ($result) {
             case 1:
-                header("Location: ../views/recuperar_senha.php?escola=$escola");
+                header("Location: ../views/login.php?escola=$escola&senha_alterada");
                 exit();
             case 2:
+                header("Location: ../views/recuperar_senha.php?escola=$escola&erro");
+                exit();
+            case 3:
                 header("Location: ../views/recuperar_senha.php?escola=$escola&erro_email");
+                exit();
+            case 4:
+                header("Location: ../views/recuperar_senha.php?escola=$escola&usuario_desativado");
                 exit();
             default:
                 header("Location: ../views/recuperar_senha.php?escola=$escola&falha");
@@ -172,8 +200,8 @@ if (
             header("Location: ../views/recuperar_senha.php?escola=$escola&falha");
             exit();
     }
-}/*else{
+}else{
 
     header('location:../login.php');
     exit();
-}*/
+}
