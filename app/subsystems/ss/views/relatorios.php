@@ -997,201 +997,82 @@ $select = new select($escola);
                     </div>
                 </div>
 
-                <!-- Escolas Públicas e Privadas -->
-                <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center font-heading">
-                    <i class="fas fa-school mr-2 text-secondary"></i>
-                    Escolas Públicas e Privadas
-                </h2>
+                <!-- Seção de Relatórios -->
                 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-8">
+                    <!-- Escolas Públicas e Privadas -->
                     <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in">
                         <div class="card-shine"></div>
                         <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
                             <i class="fas fa-school text-4xl"></i>
                         </div>
-                        <h3 class="text-lg font-bold text-primary mb-2 text-center font-heading">Privada AC</h3>
-                        <p class="text-gray-600 text-center mb-4 text-sm">Relatório de Ampla Concorrência para Escolas Privadas</p>
-                        <button onclick="openReportModal('privada_ac', 'Privada AC')" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105">
+                        <h3 class="text-xl font-bold text-primary mb-2 text-center font-heading">Escolas Públicas e Privadas</h3>
+                        <p class="text-gray-600 text-center mb-6">Gere relatórios detalhados por tipo de escola (pública/privada) e modalidade (AC/cotas)</p>
+                        <button onclick="openReportModal('escola', 'Escolas')" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-3 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold flex items-center justify-center">
                             <i class="fas fa-file-pdf mr-2"></i>
-                            Gerar PDF
+                            Gerar Relatório
                         </button>
                     </div>
-                    <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in" style="animation-delay: 0.1s">
+
+                    <!-- Resultados -->
+                    <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in">
                         <div class="card-shine"></div>
                         <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
-                            <i class="fas fa-users text-4xl"></i>
+                            <i class="fas fa-chart-line text-4xl"></i>
                         </div>
-                        <h3 class="text-lg font-bold text-primary mb-2 text-center font-heading">Privada Cotas</h3>
-                        <p class="text-gray-600 text-center mb-4 text-sm">Relatório de Cotas para Escolas Privadas</p>
-                        <button onclick="openReportModal('privada_cotas', 'Privada Cotas')" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105">
+                        <h3 class="text-xl font-bold text-primary mb-2 text-center font-heading">Resultados</h3>
+                        <p class="text-gray-600 text-center mb-6">Gere relatórios de classificados, classificáveis e resultados finais</p>
+                        <button onclick="openReportTypeModal('resultados')" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-3 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold flex items-center justify-center">
                             <i class="fas fa-file-pdf mr-2"></i>
-                            Gerar PDF
+                            Gerar Relatório
                         </button>
                     </div>
-                    <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in" style="animation-delay: 0.2s">
+
+                    <!-- Relatórios Específicos -->
+                    <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in">
                         <div class="card-shine"></div>
                         <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
                             <i class="fas fa-file-alt text-4xl"></i>
                         </div>
-                        <h3 class="text-lg font-bold text-primary mb-2 text-center font-heading">Privada Geral</h3>
-                        <p class="text-gray-600 text-center mb-4 text-sm">Relatório Geral para Escolas Privadas</p>
-                        <button onclick="openReportModal('privada_geral', 'Privada Geral')" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105">
+                        <h3 class="text-xl font-bold text-primary mb-2 text-center font-heading">Relatórios Específicos</h3>
+                        <p class="text-gray-600 text-center mb-6">Gere relatórios específicos como comissão de seleção, movimentações e requisições</p>
+                        <button onclick="openSpecificReportModal()" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-3 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold flex items-center justify-center">
                             <i class="fas fa-file-pdf mr-2"></i>
-                            Gerar PDF
+                            Gerar Relatório
                         </button>
                     </div>
-                    <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in" style="animation-delay: 0.3s">
-                        <div class="card-shine"></div>
-                        <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
-                            <i class="fas fa-school text-4xl"></i>
-                        </div>
-                        <h3 class="text-lg font-bold text-primary mb-2 text-center font-heading">Pública AC</h3>
-                        <p class="text-gray-600 text-center mb-4 text-sm">Relatório de Ampla Concorrência para Escolas Públicas</p>
-                        <button onclick="openReportModal('publica_ac', 'Pública AC')" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105">
-                            <i class="fas fa-file-pdf mr-2"></i>
-                            Gerar PDF
-                        </button>
-                    </div>
-                    <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in" style="animation-delay: 0.4s">
-                        <div class="card-shine"></div>
-                        <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
-                            <i class="fas fa-users text-4xl"></i>
-                        </div>
-                        <h3 class="text-lg font-bold text-primary mb-2 text-center font-heading">Pública Cotas</h3>
-                        <p class="text-gray-600 text-center mb-4 text-sm">Relatório de Cotas para Escolas Públicas</p>
-                        <button onclick="openReportModal('publica_cotas', 'Pública Cotas')" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105">
-                            <i class="fas fa-file-pdf mr-2"></i>
-                            Gerar PDF
-                        </button>
-                    </div>
-                    <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in" style="animation-delay: 0.5s">
-                        <div class="card-shine"></div>
-                        <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
-                            <i class="fas fa-file-alt text-4xl"></i>
-                        </div>
-                        <h3 class="text-lg font-bold text-primary mb-2 text-center font-heading">Pública Geral</h3>
-                        <p class="text-gray-600 text-center mb-4 text-sm">Relatório Geral para Escolas Públicas</p>
-                        <button onclick="openReportModal('publica_geral', 'Pública Geral')" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105">
-                            <i class="fas fa-file-pdf mr-2"></i>
-                            Gerar PDF
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Resultados -->
-                <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center font-heading">
-                    <i class="fas fa-chart-line mr-2 text-secondary"></i>
-                    Resultados
-                </h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6 mb-8">
-                    <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in" style="animation-delay: 0.1s">
-                        <div class="card-shine"></div>
-                        <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
-                            <i class="fas fa-trophy text-4xl"></i>
-                        </div>
-                        <h3 class="text-lg font-bold text-primary mb-2 text-center font-heading">Classificados</h3>
-                        <p class="text-gray-600 text-center mb-4 text-sm">Relatório de Classificados</p>
-                        <button onclick="openReportModal('Classificados', 'Classificados')" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105">
-                            <i class="fas fa-file-pdf mr-2"></i>
-                            Gerar PDF
-                        </button>
-                    </div>
-                    <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in" style="animation-delay: 0.2s">
-                        <div class="card-shine"></div>
-                        <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
-                            <i class="fas fa-list-alt text-4xl"></i>
-                        </div>
-                        <h3 class="text-lg font-bold text-primary mb-2 text-center font-heading">Classificáveis</h3>
-                        <p class="text-gray-600 text-center mb-4 text-sm">Relatório de Classificáveis</p>
-                        <button onclick="openReportModal('Classificaveis', 'Classificáveis')" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105">
-                            <i class="fas fa-file-pdf mr-2"></i>
-                            Gerar PDF
-                        </button>
-                    </div>
-                    <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in" style="animation-delay: 0.3s">
-                        <div class="card-shine"></div>
-                        <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
-                            <i class="fas fa-flag-checkered text-4xl"></i>
-                        </div>
-                        <h3 class="text-lg font-bold text-primary mb-2 text-center font-heading">Resultado Final</h3>
-                        <p class="text-gray-600 text-center mb-4 text-sm">Resultado Final</p>
-                        <button onclick="openReportModal('Resultado Final', 'Resultado Final')" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105">
-                            <i class="fas fa-file-pdf mr-2"></i>
-                            Gerar PDF
-                        </button>
-                    </div>
-                    <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in" style="animation-delay: 0.4s">
-                        <div class="card-shine"></div>
-                        <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
-                            <i class="fas fa-clipboard-list text-4xl"></i>
-                        </div>
-                        <h3 class="text-lg font-bold text-primary mb-2 text-center font-heading">Resultado Pré-liminar</h3>
-                        <p class="text-gray-600 text-center mb-4 text-sm">Resultado Pré-liminar</p>
-                        <button onclick="openReportModal('Resultado pré-liminar', 'Resultado Pré-liminar')" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105">
-                            <i class="fas fa-file-pdf mr-2"></i>
-                            Gerar PDF
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Relatórios Específicos -->
-                <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center font-heading">
-                    <i class="fas fa-file-alt mr-2 text-secondary"></i>
-                    Relatórios Específicos
-                </h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
-                    <a href="../controllers/controller_relatorios.php?form=relatorio_pdf&tipo_relatorio=comissao_selecao" class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in" style="animation-delay: 0.1s">
-                        <div class="card-shine"></div>
-                        <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
-                            <i class="fas fa-users-cog text-4xl"></i>
-                        </div>
-                        <h3 class="text-lg font-bold text-primary mb-2 text-center font-heading">Comissão de Seleção</h3>
-                        <p class="text-gray-600 text-center mb-4 text-sm">Relatório da Comissão de Seleção</p>
-                        <span class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105">
-                            <i class="fas fa-file-pdf mr-2"></i>
-                            Gerar PDF
-                        </span>
-                    </a>
-                    <a href="#" onclick="openUserReportModal()" class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in" style="animation-delay: 0.2s">
-                        <div class="card-shine"></div>
-                        <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
-                            <i class="fas fa-exchange-alt text-4xl"></i>
-                        </div>
-                        <h3 class="text-lg font-bold text-primary mb-2 text-center font-heading">Movimentações</h3>
-                        <p class="text-gray-600 text-center mb-4 text-sm">Relatório de Movimentações</p>
-                        <span class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105">
-                            <i class="fas fa-file-pdf mr-2"></i>
-                            Gerar PDF
-                        </span>
-                    </a>
-                    <a href="../controllers/controller_relatorios.php?tipo_relatorio=requisicoes" class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in" style="animation-delay: 0.2s">
-                        <div class="card-shine"></div>
-                        <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
-                            <i class="fas fa-exchange-alt text-4xl"></i>
-                        </div>
-                        <h3 class="text-lg font-bold text-primary mb-2 text-center font-heading">Requisições</h3>
-                        <p class="text-gray-600 text-center mb-4 text-sm">Relatório de Requisições</p>
-                        <span class="bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold transform hover:scale-105">
-                            <i class="fas fa-file-pdf mr-2"></i>
-                            Gerar PDF
-                        </span>
-                    </a>
                 </div>
             </main>
         </div>
     </div>
 
-    <!-- Modal for Report Course Selection -->
+    <!-- Modal for Report Selection -->
     <div id="reportModal" class="modal">
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal('reportModal')">×</button>
             <h2 class="font-heading" id="reportModalTitle">
                 <i class="fas fa-file-alt mr-2 text-secondary"></i>
-                Selecionar Curso
+                Gerar Relatório
             </h2>
             <form id="reportForm" action="../controllers/controller_relatorios.php" method="POST" class="space-y-4">
                 <input type="hidden" name="form" value="relatorio_pdf">
-                <input type="hidden" name="tipo_relatorio" id="reportTypeInput">
+                
+                <!-- Tipo de Relatório -->
                 <div class="form-group">
+                    <label for="tipo_relatorio" class="font-semibold">
+                        <i class="fas fa-list mr-1"></i>
+                        Tipo de Relatório
+                    </label>
+                    <select name="tipo_relatorio" id="tipo_relatorio" required class="select2-curso">
+                        <option value="" disabled selected>SELECIONAR TIPO DE RELATÓRIO</option>
+                        <option value="Classificados">Classificados</option>
+                        <option value="Classificaveis">Classificáveis</option>
+                        <option value="Resultado Final">Resultado Final</option>
+                        <option value="Resultado pré-liminar">Resultado Pré-liminar</option>
+                    </select>
+                </div>
+
+                <!-- Curso -->
+                <div class="form-group mt-4">
                     <label for="curso_id" class="font-semibold">
                         <i class="fas fa-book mr-1"></i>
                         Curso
@@ -1205,6 +1086,7 @@ $select = new select($escola);
                         <?php } ?>
                     </select>
                 </div>
+
                 <button type="submit" class="confirm-btn">
                     <i class="fas fa-file-pdf mr-2"></i>
                     Gerar Relatório
@@ -1232,9 +1114,14 @@ $select = new select($escola);
                         <option value="" disabled selected>SELECIONAR USUÁRIO</option>
                         <?php
                         $usuarios = $select->select_usuarios();
-                        foreach ($usuarios as $usuario) { ?>
-                            <option value="<?= htmlspecialchars($usuario['id']) ?>"><?= htmlspecialchars($usuario['nome_user']) ?></option>
-                        <?php } ?>
+                        if ($usuarios && count($usuarios) > 0) {
+                            foreach ($usuarios as $usuario) {
+                                echo "<option value='" . htmlspecialchars($usuario['id']) . "'>" . htmlspecialchars($usuario['nome_user']) . "</option>";
+                            }
+                        } else {
+                            echo "<option value='' disabled>Nenhum usuário ativo encontrado</option>";
+                        }
+                        ?>
                     </select>
                 </div>
                 <button type="submit" class="confirm-btn">
@@ -1336,9 +1223,33 @@ $select = new select($escola);
         function openReportModal(reportType, reportLabel) {
             const modal = document.getElementById('reportModal');
             const modalTitle = document.getElementById('reportModalTitle');
-            const reportTypeInput = document.getElementById('reportTypeInput');
+            const reportTypeInput = document.getElementById('tipo_relatorio');
             modalTitle.textContent = `Gerar Relatório: ${reportLabel}`;
             reportTypeInput.value = reportType;
+            modal.classList.add('show');
+            setTimeout(() => {
+                $('.select2-curso').select2({
+                    placeholder: "SELECIONAR CURSO",
+                    allowClear: true,
+                    width: '100%',
+                    language: {
+                        noResults: function() {
+                            return "Nenhum curso encontrado";
+                        },
+                        searching: function() {
+                            return "Pesquisando...";
+                        }
+                    }
+                });
+            }, 100);
+        }
+
+        function openReportTypeModal(tipoRelatorio) {
+            const modal = document.getElementById('reportModal');
+            const modalTitle = document.getElementById('reportModalTitle');
+            const reportTypeSelect = document.getElementById('tipo_relatorio');
+            modalTitle.textContent = 'Gerar Relatório de ' + tipoRelatorio;
+            reportTypeSelect.value = tipoRelatorio;
             modal.classList.add('show');
             setTimeout(() => {
                 $('.select2-curso').select2({
@@ -1464,6 +1375,105 @@ $select = new select($escola);
             }
         }
 
+        function openSpecificReportModal() {
+            const modal = document.getElementById('specificReportModal');
+            modal.classList.add('show');
+            setTimeout(() => {
+                $('.select2-specific').select2({
+                    placeholder: "SELECIONAR TIPO DE RELATÓRIO",
+                    allowClear: true,
+                    width: '100%',
+                    language: {
+                        noResults: function() {
+                            return "Nenhum tipo encontrado";
+                        },
+                        searching: function() {
+                            return "Pesquisando...";
+                        }
+                    }
+                });
+
+                $('.select2-user').select2({
+                    placeholder: "SELECIONAR USUÁRIO",
+                    allowClear: true,
+                    width: '100%',
+                    language: {
+                        noResults: function() {
+                            return "Nenhum usuário encontrado";
+                        },
+                        searching: function() {
+                            return "Pesquisando...";
+                        }
+                    }
+                });
+
+                // Inicializar o evento de mudança do tipo de relatório
+                $('#specific_report_type').on('change', function() {
+                    const reportType = $(this).val();
+                    const userSelectContainer = document.getElementById('userSelectContainer');
+                    
+                    if (reportType === 'movimentacoes') {
+                        userSelectContainer.style.display = 'block';
+                    } else {
+                        userSelectContainer.style.display = 'none';
+                    }
+                });
+            }, 100);
+        }
+
+        // Validação do formulário de relatório específico
+        const specificReportForm = document.getElementById('specificReportForm');
+        specificReportForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const reportType = document.getElementById('specific_report_type').value;
+            
+            if (!reportType) {
+                showNotification('Por favor, selecione um tipo de relatório.', 'error');
+                return;
+            }
+
+            const userSelectContainer = document.getElementById('userSelectContainer');
+            const userId = document.getElementById('user_id')?.value;
+
+            if (reportType === 'movimentacoes') {
+                userSelectContainer.style.display = 'block';
+                if (!userId) {
+                    showNotification('Por favor, selecione um usuário.', 'error');
+                    return;
+                }
+            } else {
+                userSelectContainer.style.display = 'none';
+            }
+
+            const submitBtn = specificReportForm.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<span class="loading-spinner"></span> Gerando...';
+            submitBtn.disabled = true;
+
+            let url = '../controllers/controller_relatorios.php?form=relatorio_pdf';
+
+            switch (reportType) {
+                case 'comissao_selecao':
+                    url += '&tipo_relatorio=comissao_selecao';
+                    break;
+                case 'movimentacoes':
+                    url += '&tipo_relatorio=movimentacoes&id_usuario=' + userId;  // Corrigido de user_id para id_usuario
+                    break;
+                case 'requisicoes':
+                    url += '&tipo_relatorio=requisicoes';
+                    break;
+            }
+
+            window.location.href = url;
+
+            setTimeout(() => {
+                if (submitBtn.disabled) {
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                }
+            }, 5000);
+        });
+
         // Validate and submit user report form
         const userReportForm = document.getElementById('userReportForm');
         userReportForm.addEventListener('submit', function(e) {
@@ -1486,5 +1496,52 @@ $select = new select($escola);
             }, 5000);
         });
     </script>
+
+    <!-- Modal for Specific Reports -->
+    <div id="specificReportModal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal('specificReportModal')">×</button>
+            <h2 class="font-heading">
+                <i class="fas fa-file-alt mr-2 text-secondary"></i>
+                Selecionar Tipo de Relatório
+            </h2>
+            <form id="specificReportForm" action="../controllers/controller_relatorios.php" method="POST" class="space-y-4">
+                <input type="hidden" name="form" value="relatorio_pdf">
+                <div class="form-group">
+                    <label for="specific_report_type" class="font-semibold">
+                        <i class="fas fa-list mr-1"></i>
+                        Tipo de Relatório
+                    </label>
+                    <select name="tipo_relatorio" id="specific_report_type" required class="select2-specific">
+                        <option value="" disabled selected>SELECIONAR TIPO DE RELATÓRIO</option>
+                        <option value="comissao_selecao">Comissão de Seleção</option>
+                        <option value="movimentacoes">Movimentações</option>
+                        <option value="requisicoes">Requisições</option>
+                    </select>
+                </div>
+                
+                <!-- Campo de usuário (visível apenas para relatório de movimentações) -->
+                <div id="userSelectContainer" class="form-group mt-4" style="display: none;">
+                    <label for="user_id" class="font-semibold">
+                        <i class="fas fa-user mr-1"></i>
+                        Selecionar Usuário
+                    </label>
+                    <select name="user_id" id="user_id" class="select2-user">
+                        <option value="" disabled selected>SELECIONAR USUÁRIO</option>
+                        <?php
+                        $usuarios = $select->select_usuarios();
+                        foreach ($usuarios as $user) { ?>
+                            <option value="<?= htmlspecialchars($user['id']) ?>"><?= htmlspecialchars($user['nome_user']) ?></option>
+                        <?php } ?>
+                    </select>
+                </div>
+
+                <button type="submit" class="confirm-btn w-full">
+                    <i class="fas fa-file-pdf mr-2"></i>
+                    Gerar Relatório
+                </button>
+            </form>
+        </div>
+    </div>
 </body>
 </html>
