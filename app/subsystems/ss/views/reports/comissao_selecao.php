@@ -1,5 +1,4 @@
 <?php
-
 require_once(__DIR__ . '/../../models/sessions.php');
 $session = new sessions();
 $session->autenticar_session();
@@ -9,6 +8,22 @@ require_once(__DIR__ . '/../../config/connect.php');
 require_once(__DIR__ . '/../../assets/libs/fpdf/fpdf.php');
 
 $escola = $_SESSION['escola'];
+
+// Classe FPDF customizada para suporte a UTF-8
+class PDF extends FPDF
+{
+    function Cell($w, $h = 0, $txt = '', $border = 0, $ln = 0, $align = '', $fill = false, $link = '')
+    {
+        $txt = mb_convert_encoding($txt, 'ISO-8859-1', 'UTF-8');
+        parent::Cell($w, $h, $txt, $border, $ln, $align, $fill, $link);
+    }
+
+    function MultiCell($w, $h, $txt, $border = 0, $align = 'J', $fill = false)
+    {
+        $txt = mb_convert_encoding($txt, 'ISO-8859-1', 'UTF-8');
+        parent::MultiCell($w, $h, $txt, $border, $align, $fill);
+    }
+}
 
 class relatorios extends connect
 {
@@ -35,27 +50,27 @@ class relatorios extends connect
         $stmtSelect_desativado = $this->connect->query($sql_desativado);
         $dados_desativado = $stmtSelect_desativado->fetchAll(PDO::FETCH_ASSOC);
 
-        $pdf = new FPDF('P', 'mm', 'A4');
+        $pdf = new PDF('P', 'mm', 'A4');
         $pdf->AddPage();
         $pdf->Image('../../assets/imgs/fundo_pdf.png', 0, 0, $pdf->GetPageWidth(), $pdf->GetPageHeight(), 'png', '', 0.1);
+
         // Header
-        
         $pdf->SetFont('Arial', 'B', 25);
         $pdf->SetY(10);
         $pdf->SetX(55);
-        $pdf->Cell(110, 8, utf8_decode(strtoupper('COMISSÃO DE SELEÇÃO')), 0, 1, 'C');
+        $pdf->Cell(110, 8, strtoupper('COMISSÃO DE SELEÇÃO'), 0, 1, 'C');
 
         // Table Header
         $pdf->SetFont('Arial', 'B', 10);
         $pdf->SetFillColor(0, 90, 36); // Green background
         $pdf->SetTextColor(255, 255, 255); // White text
         $pdf->SetY(50);
-        $pdf->SetX(5);
-        $pdf->Cell(80, 7, utf8_decode(strtoupper('NOME')), 1, 0, 'C', true);
-        $pdf->Cell(30, 7, utf8_decode(strtoupper('PERFIL')), 1, 0, 'C', true);
-        $pdf->Cell(30, 7, utf8_decode(strtoupper('USUÁRIO')), 1, 0, 'C', true);
-        $pdf->Cell(30, 7, utf8_decode(strtoupper('DATA DE INÍCIO')), 1, 0, 'C', true);
-        $pdf->Cell(30, 7, utf8_decode(strtoupper('DATA DE FIM')), 1, 1, 'C', true);
+        $pdf->SetX(8);
+        $pdf->Cell(75, 7, strtoupper('NOME'), 1, 0, 'C', true);
+        $pdf->Cell(30, 7, strtoupper('PERFIL'), 1, 0, 'C', true);
+        $pdf->Cell(25, 7, strtoupper('USUÁRIO'), 1, 0, 'C', true);
+        $pdf->Cell(30, 7, strtoupper('DATA DE INÍCIO'), 1, 0, 'C', true);
+        $pdf->Cell(30, 7, strtoupper('DATA DE FIM'), 1, 1, 'C', true);
 
         // Reset text color to black
         $pdf->SetTextColor(0, 0, 0);
@@ -68,28 +83,28 @@ class relatorios extends connect
         $pdf->SetFont('Arial', 'B', 16);
         $pdf->SetFillColor(255, 255, 255); // White background
         $pdf->SetY(40);
-        $pdf->SetX(5);
-        $pdf->Cell(200, 7, utf8_decode(strtoupper('USUÁRIOS ATIVOS')), 0, 1, 'C', true);
+        $pdf->SetX(8);
+        $pdf->Cell(190, 7, strtoupper('USUÁRIOS ATIVOS'), 0, 1, 'C', true);
         $y_position += 7;
         $pdf->SetFont('Arial', '', 8);
 
         if (empty($dados_ativo)) {
             $pdf->SetY($y_position);
-            $pdf->SetX(5);
+            $pdf->SetX(8);
             $pdf->SetFillColor(0, 90, 36); // Green background for empty message
-            $pdf->Cell(200, 7, utf8_decode(strtoupper('NENHUM USUÁRIO ATIVO ENCONTRADO')), 1, 1, 'C', true);
+            $pdf->Cell(200, 7, strtoupper('NENHUM USUÁRIO ATIVO ENCONTRADO'), 1, 1, 'C', true);
             $y_position += 7;
         } else {
             $valor = 1;
             foreach ($dados_ativo as $dado) {
-                $pdf->SetFillColor(255,255,255);
+                $pdf->SetFillColor(255, 255, 255);
                 $pdf->SetY($y_position);
-                $pdf->SetX(5);
-                $pdf->Cell(80, 7, utf8_decode(strtoupper($dado['nome_user'])), 1, 0, 'L', true);
-                $pdf->Cell(30, 7, utf8_decode(strtoupper($dado['id_perfil'] != null ? $this->select_perfil($dado['id_perfil']) : 'SEM PERFIL')), 1, 0, 'L', true);
-                $pdf->Cell(30, 7, utf8_decode(strtoupper($dado['tipo_usuario'])), 1, 0, 'L', true);
-                $pdf->Cell(30, 7, utf8_decode(strtoupper($dado['data_inicio'])), 1, 0, 'L', true);
-                $pdf->Cell(30, 7, utf8_decode(strtoupper($dado['data_fim'] ?? 'NÃO SE APLICA')), 1, 1, 'L', true);
+                $pdf->SetX(8);
+                $pdf->Cell(75, 7, strtoupper($dado['nome_user']), 1, 0, 'L', true);
+                $pdf->Cell(30, 7, strtoupper($dado['id_perfil'] != null ? $this->select_perfil($dado['id_perfil']) : 'SEM PERFIL'), 1, 0, 'L', true);
+                $pdf->Cell(25, 7, strtoupper($dado['tipo_usuario']), 1, 0, 'L', true);
+                $pdf->Cell(30, 7, strtoupper($dado['data_inicio']), 1, 0, 'L', true);
+                $pdf->Cell(30, 7, strtoupper($dado['data_fim'] ?? 'NÃO SE APLICA'), 1, 1, 'L', true);
                 $y_position += 7;
                 $valor++;
             }
@@ -99,32 +114,31 @@ class relatorios extends connect
         // Deactivated Users Section
         $pdf->SetFont('Arial', 'B', 16);
         $pdf->SetFillColor(255, 255, 255); // White background
-        $pdf->SetTextColor(0, 0, 0); // White text
+        $pdf->SetTextColor(0, 0, 0); // Black text
         $pdf->SetY($y_position);
-        $pdf->SetX(5);
-        $pdf->Cell(200, 7, utf8_decode(strtoupper('USUÁRIOS DESATIVADOS')), 0, 1, 'C', true);
+        $pdf->SetX(8);
+        $pdf->Cell(180, 7, strtoupper('USUÁRIOS DESATIVADOS'), 0, 1, 'C', true);
         $y_position += 10;
-
 
         $pdf->SetFont('Arial', 'B', 10);
         $pdf->SetTextColor(255, 255, 255); // White text
         $pdf->SetFillColor(0, 90, 36); // Green background
         $pdf->SetY($y_position);
-        $pdf->SetX(5);
-        $pdf->Cell(80, 7, utf8_decode(strtoupper('NOME')), 1, 0, 'C', true);
-        $pdf->Cell(30, 7, utf8_decode(strtoupper('PERFIL')), 1, 0, 'C', true);
-        $pdf->Cell(30, 7, utf8_decode(strtoupper('USUÁRIO')), 1, 0, 'C', true);
-        $pdf->Cell(30, 7, utf8_decode(strtoupper('DATA DE INÍCIO')), 1, 0, 'C', true);
-        $pdf->Cell(30, 7, utf8_decode(strtoupper('DATA DE FIM')), 1, 1, 'C', true);
+        $pdf->SetX(8);
+        $pdf->Cell(75, 7, strtoupper('NOME'), 1, 0, 'C', true);
+        $pdf->Cell(30, 7, strtoupper('PERFIL'), 1, 0, 'C', true);
+        $pdf->Cell(25, 7, strtoupper('USUÁRIO'), 1, 0, 'C', true);
+        $pdf->Cell(30, 7, strtoupper('DATA DE INÍCIO'), 1, 0, 'C', true);
+        $pdf->Cell(30, 7, strtoupper('DATA DE FIM'), 1, 1, 'C', true);
 
         $y_position += 7;
-        $pdf->SetTextColor(0, 0, 0); // White text
+        $pdf->SetTextColor(0, 0, 0); // Black text
         $pdf->SetFont('Arial', '', 8);
         if (empty($dados_desativado)) {
             $pdf->SetY($y_position);
-            $pdf->SetX(5);
+            $pdf->SetX(8);
             $pdf->SetFillColor(0, 90, 36); // Green background for empty message
-            $pdf->Cell(200, 7, utf8_decode(strtoupper('NENHUM USUÁRIO DESATIVADO ENCONTRADO')), 1, 1, 'C', true);
+            $pdf->Cell(190, 7, strtoupper('NENHUM USUÁRIO DESATIVADO ENCONTRADO'), 1, 1, 'C', true);
             $y_position += 7;
         } else {
             $valor = 1;
@@ -133,11 +147,11 @@ class relatorios extends connect
                 $pdf->SetFillColor($cor, $cor, $cor);
                 $pdf->SetY($y_position);
                 $pdf->SetX(5);
-                $pdf->Cell(80, 7, utf8_decode(strtoupper($dado['nome_user'])), 1, 0, 'L', true);
-                $pdf->Cell(30, 7, utf8_decode(strtoupper($dado['id_perfil'] != null ? $this->select_perfil($dado['id_perfil']) : 'SEM PERFIL')), 1, 0, 'L', true);
-                $pdf->Cell(30, 7, utf8_decode(strtoupper($dado['tipo_usuario'])), 1, 0, 'L', true);
-                $pdf->Cell(30, 7, utf8_decode(strtoupper($dado['data_inicio'])), 1, 0, 'L', true);
-                $pdf->Cell(30, 7, utf8_decode(strtoupper($dado['data_fim'] ?? 'SEM DATA')), 1, 1, 'L', true);
+                $pdf->Cell(75, 7, strtoupper($dado['nome_user']), 1, 0, 'L', true);
+                $pdf->Cell(30, 7, strtoupper($dado['id_perfil'] != null ? $this->select_perfil($dado['id_perfil']) : 'SEM PERFIL'), 1, 0, 'L', true);
+                $pdf->Cell(30, 7, strtoupper($dado['tipo_usuario']), 1, 0, 'L', true);
+                $pdf->Cell(30, 7, strtoupper($dado['data_inicio']), 1, 0, 'L', true);
+                $pdf->Cell(30, 7, strtoupper($dado['data_fim'] ?? 'SEM DATA'), 1, 1, 'L', true);
                 $y_position += 7;
                 $valor++;
             }
