@@ -1021,7 +1021,7 @@ $select = new select($escola);
                         <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
                             <i class="fas fa-school text-4xl"></i>
                         </div>
-                        <h3 class="text-xl font-bold text-primary mb-2 text-center font-heading">Escolas Públicas e Privadas</h3>
+                        <h3 class="text-xl font-bold text-primary mb-2 text-center font-heading">Relatórios</h3>
                         <p class="text-gray-600 text-center mb-6">Gere relatórios detalhados por tipo de escola (pública/privada) e modalidade (AC/cotas)</p>
                         <button onclick="openSchoolReportModal()" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-3 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold flex items-center justify-center">
                             <i class="fas fa-file-pdf mr-2"></i>
@@ -1130,12 +1130,12 @@ $select = new select($escola);
                     </label>
                     <select name="tipo_relatorio" id="school_tipo_relatorio" required class="select2-school-tipo">
                         <option value="" disabled selected>SELECIONAR TIPO DE RELATÓRIO</option>
-                        <option value="privada_ac">Privada AC</option>
-                        <option value="privada_cotas">Privada Cotas</option>
-                        <option value="privada_geral">Privada Geral</option>
                         <option value="publica_ac">Pública AC</option>
                         <option value="publica_cotas">Pública Cotas</option>
                         <option value="publica_geral">Pública Geral</option>
+                        <option value="privada_ac">Privada AC</option>
+                        <option value="privada_cotas">Privada Cotas</option>
+                        <option value="privada_geral">Privada Geral</option>
                     </select>
                 </div>
 
@@ -1185,12 +1185,12 @@ $select = new select($escola);
                         ? [alunosPublicaAC, alunosPublicaCotas, alunosPrivadaAC, alunosPrivadaCotas]
                         : [1],
                     backgroundColor: totalAlunos > 0 
-                        ? ['#005A24', '#FFA500', '#1A3C34', '#E6F4EA']
+                        ? ['#005A24', '#FFA500', '#0A4D2E', '#FF8C00']
                         : ['#E6E6E6'],
                     borderWidth: 2,
                     borderColor: '#FFFFFF',
                     hoverBackgroundColor: totalAlunos > 0 
-                        ? ['#004a1e', '#e69400', '#142f2a', '#d4e6da']
+                        ? ['#004a1e', '#e69400', '#083d25', '#e67e00']
                         : ['#d4d4d4']
                 }]
             },

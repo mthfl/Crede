@@ -197,7 +197,11 @@ class model_usuario extends connect_escolas
                             color: #FFFFFF;
                         }
                         .header img { margin: 0 auto; width: 80px; }
-                        .header h1 { font-family: "Poppins", sans-serif; font-size: 24px; font-weight: 600; margin-top: 10px; }
+                        .header h1 { font-family: "Poppins", sans-serif; font-size: 24px; font-weight: 600; margin-top: 10px; color: #FFFFFF !important; }
+                        /* Garantindo que o título seja branco em todos os dispositivos */
+                        @media only screen and (max-width: 600px) {
+                            .header h1 { color: #FFFFFF !important; }
+                        }
                         .content { padding: 30px 20px; background-color: #FFFFFF; text-align: center; }
                         .content h2 { font-family: "Poppins", sans-serif; font-size: 20px; color: #1A3C34; margin-bottom: 15px; }
                         .content p { font-size: 16px; color: #374151; line-height: 1.5; margin-bottom: 20px; }
@@ -221,9 +225,7 @@ class model_usuario extends connect_escolas
                     <table role="presentation" class="email-container">
                         <tr>
                             <td class="header">
-                                <img src="https://i.postimg.cc/0N0dsxrM/Bras-o-do-Cear-svg-removebg-preview.png" alt="Logo Salaberga">
-                                <h1 style="color: #FFFFFF;">Sistema de Seleção</h1>
-                            </td>
+                                <img src="https://i.postimg.cc/0N0dsxrM/Bras-o-do-Cear-svg-removebg-preview.png" alt="Logo Salaberga">                         </td>
                         </tr>
                         <tr>
                             <td class="content">
