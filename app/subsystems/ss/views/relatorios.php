@@ -1163,43 +1163,6 @@ $select = new select($escola);
         </div>
     </div>
 
-    <!-- Modal for Movimentações User Selection -->
-    <div id="userReportModal" class="modal">
-        <div class="modal-content">
-            <button class="close-btn" onclick="closeUserModal()">×</button>
-            <h2 class="font-heading">
-                <i class="fas fa-file-alt mr-2 text-secondary"></i>
-                Selecionar Usuário
-            </h2>
-            <form id="userReportForm" action="../controllers/controller_relatorios.php" method="POST" class="space-y-4">
-                <input type="hidden" name="tipo_relatorio" value="movimentacoes">
-                <div class="form-group">
-                    <label for="usuario_id" class="font-semibold">
-                        <i class="fas fa-user mr-1"></i>
-                        Usuário
-                    </label>
-                    <select name="id_usuario" id="usuario_id" required class="select2-usuario">
-                        <option value="" disabled selected>SELECIONAR USUÁRIO</option>
-                        <?php
-                        $usuarios = $select->select_usuarios();
-                        if ($usuarios && count($usuarios) > 0) {
-                            foreach ($usuarios as $usuario) {
-                                echo "<option value='" . htmlspecialchars($usuario['id']) . "'>" . htmlspecialchars($usuario['nome_user']) . "</option>";
-                            }
-                        } else {
-                            echo "<option value='' disabled>Nenhum usuário ativo encontrado</option>";
-                        }
-                        ?>
-                    </select>
-                </div>
-                <button type="submit" class="confirm-btn">
-                    <i class="fas fa-file-pdf mr-2"></i>
-                    Gerar Relatório
-                </button>
-            </form>
-        </div>
-    </div>
-
     <script>
         // Inicializar o gráfico de distribuição
         const ctx = document.getElementById('distributionChart').getContext('2d');
@@ -1695,7 +1658,7 @@ $select = new select($escola);
                         <?php
                         $usuarios = $select->select_usuarios();
                         foreach ($usuarios as $user) { ?>
-                            <option value="<?= htmlspecialchars($user['id']) ?>"><?= htmlspecialchars($user['nome_user']) ?></option>
+                            <option value="<?= htmlspecialchars($user['id']) ?>"><?= htmlspecialchars($user['nome_user']) ?>teste</option>
                         <?php } ?>
                     </select>
                 </div>

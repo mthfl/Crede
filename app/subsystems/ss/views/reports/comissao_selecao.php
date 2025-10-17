@@ -47,7 +47,7 @@ class relatorios extends connect
 
         // Table Header
         $pdf->SetFont('Arial', 'B', 10);
-        $pdf->SetFillColor(93, 164, 67); // Green background
+        $pdf->SetFillColor(0, 90, 36); // Green background
         $pdf->SetTextColor(255, 255, 255); // White text
         $pdf->SetY(50);
         $pdf->SetX(5);
@@ -76,7 +76,7 @@ class relatorios extends connect
         if (empty($dados_ativo)) {
             $pdf->SetY($y_position);
             $pdf->SetX(5);
-            $pdf->SetFillColor(93, 164, 67); // Green background for empty message
+            $pdf->SetFillColor(0, 90, 36); // Green background for empty message
             $pdf->Cell(200, 7, utf8_decode(strtoupper('NENHUM USUÁRIO ATIVO ENCONTRADO')), 1, 1, 'C', true);
             $y_position += 7;
         } else {
@@ -108,7 +108,7 @@ class relatorios extends connect
 
         $pdf->SetFont('Arial', 'B', 10);
         $pdf->SetTextColor(255, 255, 255); // White text
-        $pdf->SetFillColor(192,192,192); // Green background
+        $pdf->SetFillColor(0, 90, 36); // Green background
         $pdf->SetY($y_position);
         $pdf->SetX(5);
         $pdf->Cell(80, 7, utf8_decode(strtoupper('NOME')), 1, 0, 'C', true);
@@ -123,7 +123,7 @@ class relatorios extends connect
         if (empty($dados_desativado)) {
             $pdf->SetY($y_position);
             $pdf->SetX(5);
-            $pdf->SetFillColor(93, 164, 67); // Green background for empty message
+            $pdf->SetFillColor(0, 90, 36); // Green background for empty message
             $pdf->Cell(200, 7, utf8_decode(strtoupper('NENHUM USUÁRIO DESATIVADO ENCONTRADO')), 1, 1, 'C', true);
             $y_position += 7;
         } else {

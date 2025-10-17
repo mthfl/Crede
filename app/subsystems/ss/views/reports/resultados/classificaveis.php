@@ -76,7 +76,7 @@ class relatorios extends connect
         $privada_cotas = floor($total_privada * (30 / 100));
         $privada_ac = $total_privada - $privada_cotas;
 
-        $pdf = new PDF();
+        $pdf = new PDF('P', 'mm', 'A4');
         $pdf->AddPage();
         $pdf->Image('../../../assets/imgs/fundo_pdf.png', 0, 0, $pdf->GetPageWidth(), $pdf->GetPageHeight(), 'png', '', 0.1);
         $stmtSelect_curso = $this->connect->prepare(
@@ -86,13 +86,18 @@ class relatorios extends connect
         $stmtSelect_curso->execute();
         $curso_nome = $stmtSelect_curso->fetch(PDO::FETCH_ASSOC);
         
+        // Styling adjusted to match the base code
         $pdf->SetFont('Arial', 'B', 25);
-        $pdf->Cell(185, 10, 'CLASSIFICÁVEIS', 0, 1, 'C');
+        $pdf->SetY(8);
+        $pdf->SetX(60);
+        $pdf->Cell(90, 8, 'CLASSIFICÁVEIS', 0, 1, 'C');
         $pdf->SetFont('Arial', 'B', 12);
-        $pdf->Cell(185, 5, " - " . mb_strtoupper($curso_nome['nome_curso'], 'UTF-8') . " - ", 0, 1, 'C');
+        $pdf->SetY(16);
+        $pdf->SetX(11);
+        $pdf->Cell(188, 6, " - " . mb_strtoupper($curso_nome['nome_curso'], 'UTF-8') . " - ", 0, 1, 'C');
         $pdf->SetFont('Arial', 'B', 8);
-        $pdf->Cell(0, 10, ('PCD = PESSOA COM DEFICIENCIA | COTISTA = INCLUSO NA COTA DO BAIRRO | AC = AMPLA CONCORRENCIA'), 0, 1, 'C');
-        $pdf->SetFont('Arial', 'b', 12);
+        $pdf->Cell(188, 6, 'PCD = PESSOA COM DEFICIÊNCIA | COTISTA = INCLUSO NA COTA DO BAIRRO | AC = AMPLA CONCORRÊNCIA', 0, 1, 'C');
+        $pdf->SetFont('Arial', 'B', 12);
         $pdf->Cell(185, 10, '', 0, 1, 'C');
 
         // Array para armazenar os classificáveis de cada segmento
@@ -216,31 +221,30 @@ class relatorios extends connect
 
         // Fonte do cabeçalho
         $pdf->SetFont('Arial', 'B', 12);
-        $pdf->SetFillColor(255, 165, 0); //fundo laranja para lista de espera
-        $pdf->SetTextColor(255, 255, 255);  //texto branco
-        $pdf->Cell(191, -8, $titulo, 1, 0, 'C', true);
-        $pdf->Ln(0);
+        $pdf->SetFillColor(0, 90, 36); // fundo verde (#005A24)
+        $pdf->SetTextColor(255, 255, 255); // texto branco
+        $pdf->Cell(188, 5, $titulo, 1, 1, 'C', true);
 
-        $pdf->SetFont('Arial', 'B', 12);
-        $pdf->SetFillColor(255, 165, 0); //fundo laranja
-        $pdf->SetTextColor(255, 255, 255);  //texto branco
-        $pdf->Cell(10, 7, 'POS', 1, 0, 'C', true);
-        $pdf->Cell(90, 7, 'NOME', 1, 0, 'C', true);
-        $pdf->Cell(32, 7, 'CURSO', 1, 0, 'C', true);
-        $pdf->Cell(18, 7, 'ORIGEM', 1, 0, 'C', true);
-        $pdf->Cell(26, 7, 'SEGMENTO', 1, 0, 'C', true);
-        $pdf->Cell(15, 7, 'MEDIA', 1, 1, 'C', true);
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->SetFillColor(0, 90, 36); // fundo verde (#005A24)
+        $pdf->SetTextColor(255, 255, 255); // texto branco
+        $pdf->Cell(10, 5, 'CH', 1, 0, 'C', true);
+        $pdf->Cell(93, 5, 'NOME', 1, 0, 'C', true);
+        $pdf->Cell(30, 5, 'CURSO', 1, 0, 'C', true);
+        $pdf->Cell(20, 5, 'ORIGEM', 1, 0, 'C', true);
+        $pdf->Cell(20, 5, 'SEGM.', 1, 0, 'C', true);
+        $pdf->Cell(15, 5, 'MEDIA', 1, 1, 'C', true);
 
         // Resetar cor do texto para preto
         $pdf->SetTextColor(0, 0, 0);
-        $pdf->SetFont('Arial', '', 10);
+        $pdf->SetFont('Arial', '', 8);
 
         // Dados com cores alternadas
         $posicao = 1;
 
         foreach ($dados as $row) {
             // Definir escola
-            $escola = ($row['publica'] == 1) ? ('PUBLICA') : ('PRIVADA');
+            $escola = ($row['publica'] == 1) ? 'PÚBLICA' : 'PRIVADA';
 
             // Definir cota
             if ($row['pcd'] == 1) {
@@ -252,16 +256,16 @@ class relatorios extends connect
             }
 
             // Definir cor da linha
-            $cor = $posicao % 2 ? 255 : 240;
+            $cor = $posicao % 2 ? 255 : 192;
             $pdf->SetFillColor($cor, $cor, $cor);
 
             // Imprimir linha no PDF - TUDO EM CAIXA ALTA
-            $pdf->Cell(10, 7, sprintf("%03d", $posicao), 1, 0, 'C', true);
-            $pdf->Cell(90, 7, mb_strtoupper($row['nome'], 'UTF-8'), 1, 0, 'L', true);
-            $pdf->Cell(32, 7, mb_strtoupper($row['nome_curso'], 'UTF-8'), 1, 0, 'L', true);
-            $pdf->Cell(18, 7, $escola, 1, 0, 'L', true);
-            $pdf->Cell(26, 7, $cota, 1, 0, 'L', true);
-            $pdf->Cell(15, 7, number_format($row['media_final'], 2), 1, 1, 'C', true);
+            $pdf->Cell(10, 5, sprintf("%03d", $posicao), 1, 0, 'C', true);
+            $pdf->Cell(93, 5, mb_strtoupper($row['nome'], 'UTF-8'), 1, 0, 'L', true);
+            $pdf->Cell(30, 5, mb_strtoupper($row['nome_curso'], 'UTF-8'), 1, 0, 'L', true);
+            $pdf->Cell(20, 5, $escola, 1, 0, 'L', true);
+            $pdf->Cell(20, 5, $cota, 1, 0, 'C', true);
+            $pdf->Cell(15, 5, number_format($row['media_final'], 2), 1, 1, 'C', true);
 
             $posicao++;
         }
@@ -273,7 +277,7 @@ if (isset($_GET['curso']) && !empty($_GET['curso'])) {
     $relatorios = new relatorios($escola);
     $curso = $_GET['curso'];
     $relatorios->classificaveis($curso);
-} /*else {
+} else {
     header('location:../../../index.php');
     exit();
-}*/
+}

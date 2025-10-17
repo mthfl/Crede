@@ -27,12 +27,13 @@ class PDF extends FPDF
     // Method to estimate number of lines for MultiCell
     function NbLines($width, $text)
     {
+        $texto = mb_convert_encoding($text, 'ISO-8859-1', 'UTF-8');
         $cw = &$this->CurrentFont['cw'];
         if ($width == 0) {
             $width = $this->w - $this->rMargin - $this->x;
         }
         $wmax = ($width - 2 * $this->cMargin) * 1000 / $this->FontSize;
-        $s = str_replace("\r", '', $text);
+        $s = str_replace("\r", '', $texto);
         $nb = strlen($s);
         if ($nb > 0 && $s[$nb - 1] == "\n") {
             $nb--;
@@ -133,11 +134,11 @@ class relatorios extends connect
         $pdf->SetX(55);
         $pdf->Cell(110, 8, 'RELATÓRIO DE REQUISIÇÕES', 0, 1, 'C');
 
-        $y_position = 52;
+        $y_position = 32;
 
         // COMPLETED REQUESTS SECTION
         $pdf->SetFont('Arial', 'B', 14);
-        $pdf->SetFillColor(93, 164, 67); // Green background
+        $pdf->SetFillColor(0, 90, 36); // Green background
         $pdf->SetTextColor(255, 255, 255); // White text
         $pdf->SetY($y_position);
         $pdf->SetX(10);
@@ -146,7 +147,7 @@ class relatorios extends connect
 
         // Table Header for Completed
         $pdf->SetFont('Arial', 'B', 10);
-        $pdf->SetFillColor(93, 164, 67); // Green background
+        $pdf->SetFillColor(0, 90, 36); // Green background
         $pdf->SetTextColor(255, 255, 255); // White text
         $pdf->SetY($y_position);
         $pdf->SetX(10);
@@ -163,7 +164,8 @@ class relatorios extends connect
         if (empty($dados_concluidas)) {
             $pdf->SetY($y_position);
             $pdf->SetX(10);
-            $pdf->SetFillColor(93, 164, 67); // Green background for empty message
+            $pdf->SetFillColor(0, 90, 36); // Green background for empty message
+            $pdf->SetTextColor(255, 255, 255); // White text
             $pdf->Cell(190, 7, 'NENHUMA REQUISIÇÃO CONCLUÍDA ENCONTRADA', 1, 1, 'C', true);
             $y_position += 7;
         } else {
@@ -201,7 +203,7 @@ class relatorios extends connect
 
         // PENDING REQUESTS SECTION
         $pdf->SetFont('Arial', 'B', 14);
-        $pdf->SetFillColor(255, 193, 7); // Yellow background
+        $pdf->SetFillColor(255, 165, 0); // Yellow background
         $pdf->SetTextColor(0, 0, 0); // Black text
         $pdf->SetY($y_position);
         $pdf->SetX(10);
@@ -210,7 +212,7 @@ class relatorios extends connect
 
         // Table Header for Pending
         $pdf->SetFont('Arial', 'B', 10);
-        $pdf->SetFillColor(255, 193, 7); // Yellow background
+        $pdf->SetFillColor(255, 165, 0); // Yellow background
         $pdf->SetTextColor(0, 0, 0); // Black text
         $pdf->SetY($y_position);
         $pdf->SetX(10);
@@ -227,7 +229,7 @@ class relatorios extends connect
         if (empty($dados_pendentes)) {
             $pdf->SetY($y_position);
             $pdf->SetX(10);
-            $pdf->SetFillColor(255, 193, 7); // Yellow background for empty message
+            $pdf->SetFillColor(255, 165, 0); // Yellow background for empty message
             $pdf->Cell(190, 7, 'NENHUMA REQUISIÇÃO PENDENTE ENCONTRADA', 1, 1, 'C', true);
             $y_position += 7;
         } else {

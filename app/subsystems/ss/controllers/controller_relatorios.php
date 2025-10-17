@@ -3,8 +3,8 @@ require_once(__DIR__ . '/../models/sessions.php');
 $session = new sessions();
 $session->autenticar_session();
 $session->tempo_session();
-//print_r($_POST);
-//print_r($_GET);
+print_r($_POST);
+print_r($_GET);
 
 if (
     isset($_POST['tipo_relatorio']) && !empty($_POST['tipo_relatorio']) &&
@@ -50,11 +50,10 @@ if (
     }
 }
 if (
-    (isset($_GET['tipo_relatorio']) && !empty($_GET['tipo_relatorio'])) ||
     (isset($_POST['tipo_relatorio']) && !empty($_POST['tipo_relatorio']))
 ) {
-    $tipo_relatorio = $_POST['tipo_relatorio'] ?? $_GET['tipo_relatorio'] ?? '';
-    $id_usuario = $_POST['id_usuario'] ?? $_GET['id_usuario'] ?? '';
+    $tipo_relatorio = $_POST['tipo_relatorio'];
+    $id_usuario = $_POST['user_id'] ?? '';
 
     switch ($tipo_relatorio) {
         case 'comissao_selecao':

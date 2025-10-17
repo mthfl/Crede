@@ -10,22 +10,6 @@ $escola = $_SESSION['escola'];
 new connect($escola);
 require_once(__DIR__ . '/../../../assets/libs/fpdf/fpdf.php');
 
-// Classe FPDF customizada para suporte a UTF-8
-class PDF extends FPDF
-{
-    function Cell($w, $h = 0, $txt = '', $border = 0, $ln = 0, $align = '', $fill = false, $link = '')
-    {
-        $txt = mb_convert_encoding($txt, 'ISO-8859-1', 'UTF-8');
-        parent::Cell($w, $h, $txt, $border, $ln, $align, $fill, $link);
-    }
-
-    function MultiCell($w, $h, $txt, $border = 0, $align = 'J', $fill = false)
-    {
-        $txt = mb_convert_encoding($txt, 'ISO-8859-1', 'UTF-8');
-        parent::MultiCell($w, $h, $txt, $border, $align, $fill);
-    }
-}
-
 class relatorios extends connect
 {
     protected string $table1;
@@ -47,14 +31,8 @@ class relatorios extends connect
         $this->table13 = $table["ss_$escola"][13];
     }
 
-    public function private_ac($curso)
+    public function gerarRelatorio($curso)
     {
-        require_once(__DIR__ . '/../../../config/connect.php');
-        $escola = $_SESSION['escola'];
-        require_once(__DIR__ . '/../../../models/model.select.php');
-        $select = new select($escola);
-        
-        // Obter total de vagas do curso
         $stmtSelect_vagas = $this->connect->prepare(
             "SELECT quantidade_alunos FROM $this->table2 WHERE id = :id_curso"
         );
@@ -76,7 +54,7 @@ class relatorios extends connect
         $privada_cotas = floor($total_privada * (30 / 100));
         $privada_ac = $total_privada - $privada_cotas;
 
-        $pdf = new PDF();
+        $pdf = new FPDF('P', 'mm', 'A4');
         $pdf->AddPage();
         $pdf->Image('../../../assets/imgs/fundo_pdf.png', 0, 0, $pdf->GetPageWidth(), $pdf->GetPageHeight(), 'png', '', 0.1);
         $stmtSelect_curso = $this->connect->prepare(
@@ -86,14 +64,18 @@ class relatorios extends connect
         $stmtSelect_curso->execute();
         $curso_nome = $stmtSelect_curso->fetch(PDO::FETCH_ASSOC);
         
-        // Cabeçalho com larguras ajustadas
+        // Styling adjusted to match the first code
         $pdf->SetFont('Arial', 'B', 25);
-        $pdf->Cell(185, 10, 'RESULTADO PRELIMINAR', 0, 1, 'C');
+        $pdf->SetY(8);
+        $pdf->SetX(60);
+        $pdf->Cell(90, 8, mb_convert_encoding('RESULTADO PRELIMINAR', 'ISO-8859-1', 'UTF-8'), 0, 1, 'C');
         $pdf->SetFont('Arial', 'B', 12);
-        $pdf->Cell(185, 5, " - " . mb_strtoupper($curso_nome['nome_curso'], 'UTF-8') . " - ", 0, 1, 'C');
+        $pdf->SetY(16);
+        $pdf->SetX(11);
+        $pdf->Cell(188, 6, mb_convert_encoding(" - " . mb_strtoupper($curso_nome['nome_curso'], 'UTF-8') . " - ", 'ISO-8859-1', 'UTF-8'), 0, 1, 'C');
         $pdf->SetFont('Arial', 'B', 8);
-        $pdf->Cell(0, 10, ('PCD = PESSOA COM DEFICIENCIA | COTISTA = INCLUSO NA COTA DO BAIRRO | AC = AMPLA CONCORRENCIA'), 0, 1, 'C');
-        $pdf->SetFont('Arial', 'b', 12);
+        $pdf->Cell(188, 6, mb_convert_encoding('PCD = PESSOA COM DEFICIÊNCIA | COTISTA = INCLUSO NA COTA DO BAIRRO | AC = AMPLA CONCORRÊNCIA', 'ISO-8859-1', 'UTF-8'), 0, 1, 'C');
+        $pdf->SetFont('Arial', 'B', 12);
         $pdf->Cell(185, 10, '', 0, 1, 'C');
 
         // Array para armazenar os classificados de cada segmento
@@ -105,7 +87,7 @@ class relatorios extends connect
             FROM $this->table1 can    
             INNER JOIN $this->table4 m ON m.id_candidato = can.id 
             INNER JOIN $this->table2 cur ON can.id_curso1 = cur.id 
-            WHERE can.id_curso1 = :curso AND can.publica = 1 AND can.pcd = 0 AND can.bairro = 0 
+            WHERE can.id_curso1 = :curso AND can.publica = 1 AND can.pcd = 0 AND can.bairro = 0 AND status = 1 
             ORDER BY m.media_final DESC, can.data_nascimento DESC, m.l_portuguesa_media DESC, m.matematica_media DESC"
         );
         $stmtSelect_ac_publica->bindValue(':curso', $curso);
@@ -118,7 +100,7 @@ class relatorios extends connect
             FROM $this->table1 can    
             INNER JOIN $this->table4 m ON m.id_candidato = can.id 
             INNER JOIN $this->table2 cur ON can.id_curso1 = cur.id 
-            WHERE can.id_curso1 = :curso AND can.publica = 1 AND can.pcd = 0 AND can.bairro = 1 
+            WHERE can.id_curso1 = :curso AND can.publica = 1 AND can.pcd = 0 AND can.bairro = 1 AND status = 1 
             ORDER BY m.media_final DESC, can.data_nascimento DESC, m.l_portuguesa_media DESC, m.matematica_media DESC"
         );
         $stmtSelect_bairro_publica->bindValue(':curso', $curso);
@@ -131,7 +113,7 @@ class relatorios extends connect
             FROM $this->table1 can    
             INNER JOIN $this->table4 m ON m.id_candidato = can.id 
             INNER JOIN $this->table2 cur ON can.id_curso1 = cur.id 
-            WHERE can.id_curso1 = :curso AND can.publica = 1 AND can.pcd = 1 AND can.bairro = 0 
+            WHERE can.id_curso1 = :curso AND can.publica = 1 AND can.pcd = 1 AND can.bairro = 0 AND status = 1 
             ORDER BY m.media_final DESC, can.data_nascimento DESC, m.l_portuguesa_media DESC, m.matematica_media DESC"
         );
         $stmtSelect_pcd_publica->bindValue(':curso', $curso);
@@ -144,7 +126,7 @@ class relatorios extends connect
             FROM $this->table1 can    
             INNER JOIN $this->table4 m ON m.id_candidato = can.id 
             INNER JOIN $this->table2 cur ON can.id_curso1 = cur.id 
-            WHERE can.id_curso1 = :curso AND can.publica = 0 AND can.pcd = 0 AND can.bairro = 0 
+            WHERE can.id_curso1 = :curso AND can.publica = 0 AND can.pcd = 0 AND can.bairro = 0 AND status = 1 
             ORDER BY m.media_final DESC, can.data_nascimento DESC, m.l_portuguesa_media DESC, m.matematica_media DESC"
         );
         $stmtSelect_ac_privada->bindValue(':curso', $curso);
@@ -157,7 +139,7 @@ class relatorios extends connect
             FROM $this->table1 can    
             INNER JOIN $this->table4 m ON m.id_candidato = can.id 
             INNER JOIN $this->table2 cur ON can.id_curso1 = cur.id 
-            WHERE can.id_curso1 = :curso AND can.publica = 0 AND can.pcd = 0 AND can.bairro = 1 
+            WHERE can.id_curso1 = :curso AND can.publica = 0 AND can.pcd = 0 AND can.bairro = 1 AND status = 1 
             ORDER BY m.media_final DESC, can.data_nascimento DESC, m.l_portuguesa_media DESC, m.matematica_media DESC"
         );
         $stmtSelect_bairro_privada->bindValue(':curso', $curso);
@@ -170,7 +152,7 @@ class relatorios extends connect
             FROM $this->table1 can    
             INNER JOIN $this->table4 m ON m.id_candidato = can.id 
             INNER JOIN $this->table2 cur ON can.id_curso1 = cur.id 
-            WHERE can.id_curso1 = :curso AND can.publica = 0 AND can.pcd = 1 AND can.bairro = 0 
+            WHERE can.id_curso1 = :curso AND can.publica = 0 AND can.pcd = 1 AND can.bairro = 0 AND status = 1 
             ORDER BY m.media_final DESC, can.data_nascimento DESC, m.l_portuguesa_media DESC, m.matematica_media DESC"
         );
         $stmtSelect_pcd_privada->bindValue(':curso', $curso);
@@ -232,39 +214,38 @@ class relatorios extends connect
 
         // Fonte do cabeçalho
         $pdf->SetFont('Arial', 'B', 12);
-        $pdf->SetFillColor(93, 164, 67); //fundo verde
-        $pdf->SetTextColor(255, 255, 255);  //texto branco
-        $pdf->Cell(191, -8, $titulo, 1, 0, 'C', true);
-        $pdf->Ln(0);
+        $pdf->SetFillColor(0, 90, 36); // fundo verde (#005A24)
+        $pdf->SetTextColor(255, 255, 255); // texto branco
+        $pdf->Cell(188, 5, mb_convert_encoding($titulo, 'ISO-8859-1', 'UTF-8'), 1, 1, 'C', true);
 
-        $pdf->SetFont('Arial', 'B', 12);
-        $pdf->SetFillColor(93, 164, 67); //fundo verde
-        $pdf->SetTextColor(255, 255, 255);  //texto branco
-        $pdf->Cell(10, 7, 'CH', 1, 0, 'C', true);
-        $pdf->Cell(90, 7, 'NOME', 1, 0, 'C', true);
-        $pdf->Cell(32, 7, 'CURSO', 1, 0, 'C', true);
-        $pdf->Cell(18, 7, 'ORIGEM', 1, 0, 'C', true);
-        $pdf->Cell(26, 7, 'SEGMENTO', 1, 0, 'C', true);
-        $pdf->Cell(15, 7, 'MEDIA', 1, 1, 'C', true);
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->SetFillColor(0, 90, 36); // fundo verde (#005A24)
+        $pdf->SetTextColor(255, 255, 255); // texto branco
+        $pdf->Cell(10, 5, mb_convert_encoding('CH', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
+        $pdf->Cell(93, 5, mb_convert_encoding('NOME', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
+        $pdf->Cell(30, 5, mb_convert_encoding('CURSO', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
+        $pdf->Cell(20, 5, mb_convert_encoding('ORIGEM', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
+        $pdf->Cell(20, 5, mb_convert_encoding('SEGM.', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
+        $pdf->Cell(15, 5, mb_convert_encoding('MEDIA', 'ISO-8859-1', 'UTF-8'), 1, 1, 'C', true);
 
         // Resetar cor do texto para preto
         $pdf->SetTextColor(0, 0, 0);
-        $pdf->SetFont('Arial', '', 10);
+        $pdf->SetFont('Arial', '', 8);
 
         // Dados com cores alternadas
         $classificacao = 1;
 
         foreach ($dados as $row) {
             // Definir escola
-            $escola = ($row['publica'] == 1) ? ('PUBLICA') : ('PRIVADA');
+            $escola = ($row['publica'] == 1) ? mb_convert_encoding('PÚBLICA', 'ISO-8859-1', 'UTF-8') : mb_convert_encoding('PRIVADA', 'ISO-8859-1', 'UTF-8');
 
             // Definir cota
             if ($row['pcd'] == 1) {
-                $cota = 'PCD';
+                $cota = mb_convert_encoding('PCD', 'ISO-8859-1', 'UTF-8');
             } else if ($row['bairro'] == 1) {
-                $cota = 'COTISTA';
+                $cota = mb_convert_encoding('COTISTA', 'ISO-8859-1', 'UTF-8');
             } else {
-                $cota = 'AC';
+                $cota = mb_convert_encoding('AC', 'ISO-8859-1', 'UTF-8');
             }
 
             // Definir cor da linha
@@ -272,12 +253,12 @@ class relatorios extends connect
             $pdf->SetFillColor($cor, $cor, $cor);
 
             // Imprimir linha no PDF - TUDO EM CAIXA ALTA
-            $pdf->Cell(10, 7, sprintf("%03d", $classificacao), 1, 0, 'C', true);
-            $pdf->Cell(90, 7, mb_strtoupper($row['nome'], 'UTF-8'), 1, 0, 'L', true);
-            $pdf->Cell(32, 7, mb_strtoupper($row['nome_curso'], 'UTF-8'), 1, 0, 'L', true);
-            $pdf->Cell(18, 7, $escola, 1, 0, 'L', true);
-            $pdf->Cell(26, 7, $cota, 1, 0, 'L', true);
-            $pdf->Cell(15, 7, number_format($row['media_final'], 2), 1, 1, 'C', true);
+            $pdf->Cell(10, 5, sprintf("%03d", $classificacao), 1, 0, 'C', true);
+            $pdf->Cell(93, 5, mb_convert_encoding(mb_strtoupper($row['nome'], 'UTF-8'), 'ISO-8859-1', 'UTF-8'), 1, 0, 'L', true);
+            $pdf->Cell(30, 5, mb_convert_encoding(mb_strtoupper($row['nome_curso'], 'UTF-8'), 'ISO-8859-1', 'UTF-8'), 1, 0, 'L', true);
+            $pdf->Cell(20, 5, $escola, 1, 0, 'L', true);
+            $pdf->Cell(20, 5, $cota, 1, 0, 'C', true);
+            $pdf->Cell(15, 5, number_format($row['media_final'], 2), 1, 1, 'C', true);
 
             $classificacao++;
         }
@@ -288,7 +269,7 @@ class relatorios extends connect
 if (isset($_GET['curso']) && !empty($_GET['curso'])) {
     $relatorios = new relatorios($escola);
     $curso = $_GET['curso'];
-    $relatorios->private_ac($curso);
+    $relatorios->gerarRelatorio($curso);
 } else {
     header('location:../../../index.php');
     exit();
