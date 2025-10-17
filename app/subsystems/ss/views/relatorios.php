@@ -1658,7 +1658,7 @@ $select = new select($escola);
                         <?php
                         $usuarios = $select->select_usuarios();
                         foreach ($usuarios as $user) { ?>
-                            <option value="<?= htmlspecialchars($user['id']) ?>"><?= htmlspecialchars($user['nome_user']) ?>teste</option>
+                            <option value="<?= htmlspecialchars($user['id']) ?>"><?= htmlspecialchars($user['nome_user']) ?></option>
                         <?php } ?>
                     </select>
                 </div>
