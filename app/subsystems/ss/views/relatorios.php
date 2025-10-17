@@ -16,10 +16,10 @@ require_once(__DIR__ . '/../models/model.select.php');
 $select = new select($escola);
 ?>
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" style="height: auto; overflow-y: auto;">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <title>Sistema Escolar - Relatórios</title>
     <link rel="icon" type="image/png" href="https://i.postimg.cc/0N0dsxrM/Bras-o-do-Cear-svg-removebg-preview.png">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
@@ -125,6 +125,10 @@ $select = new select($escola);
             font-family: 'Inter', sans-serif;
             scroll-behavior: smooth;
             background: linear-gradient(135deg, #F8FAF9 0%, #E6F4EA 100%);
+            height: auto;
+            min-height: 100%;
+            overflow-y: auto;
+            position: relative;
         }
 
         .gradient-bg {
@@ -688,6 +692,20 @@ $select = new select($escola);
 
             .nav-item:hover {
                 transform: none;
+            }
+            
+            .main-content {
+                height: auto;
+                min-height: 100vh;
+                overflow-y: auto !important;
+                -webkit-overflow-scrolling: touch;
+            }
+            
+            html, body {
+                height: auto;
+                overflow-y: auto !important;
+                position: relative;
+                -webkit-overflow-scrolling: touch;
             }
         }
 

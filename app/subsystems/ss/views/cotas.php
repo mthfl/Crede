@@ -673,15 +673,14 @@ $select = new select($escola);
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
                         <?php foreach ($bairros as $bairro) { ?>
-                            <article class="grid-item card-hover bg-white rounded-2xl shadow-xl border-0 overflow-hidden group relative" data-id="<?= htmlspecialchars($bairro['id']) ?>" data-nome="<?= htmlspecialchars($bairro['bairros']) ?>">
+                            <article class="grid-item card-hover bg-white rounded-2xl shadow-xl border-0 overflow-hidden group relative flex flex-col h-[200px]" data-id="<?= htmlspecialchars($bairro['id']) ?>" data-nome="<?= htmlspecialchars($bairro['bairros']) ?>">
                                 <div class="h-2 w-full bg-gradient-to-r from-primary to-secondary"></div>
-                                <div class="p-8">
-                                    <div class="text-center mb-8">
+                                <div class="p-6 flex flex-col flex-grow">
+                                    <div class="text-center mb-4 flex-grow">
                                         <h3 class="text-xl font-bold leading-tight font-display group-hover:scale-105 transition-all duration-300 text-primary"><?= htmlspecialchars($bairro['bairros'] ?? 'Sem nome') ?></h3>
                                         <div class="w-16 h-0.5 mx-auto mt-3 rounded-full bg-primary/40"></div>
                                     </div>
-                                    <div class="mb-6"></div>
-                                    <div class="flex space-x-2">
+                                    <div class="flex space-x-2 mt-auto">
                                         <button type="button" onclick='openEditBairro(<?= json_encode($bairro['id'] ?? '') ?>, <?= json_encode($bairro['bairros']) ?>)' class="flex-1 bg-primary text-white py-2 px-4 rounded-lg hover:bg-dark transition-all duration-300 font-medium text-sm btn-animate focus-ring">Editar</button>
                                         <button type="button" onclick='openDeleteBairro(<?= json_encode($bairro['id'] ?? '') ?>, <?= json_encode($bairro['bairros']) ?>)' class="flex-1 bg-secondary text-white py-2 px-4 rounded-lg hover:bg-orange-600 transition-all duration-300 font-medium text-sm btn-animate focus-ring">Excluir</button>
                                     </div>

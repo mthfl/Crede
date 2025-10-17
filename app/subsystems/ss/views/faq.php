@@ -327,8 +327,8 @@ $select = new select($escola);
 
 <body class="bg-white min-h-screen font-body">
     <div id="overlay" class="overlay fixed inset-0 bg-black/30 z-40 lg:hidden"></div>
-    <div class="flex min-h-screen bg-gray-50 overflow-y-auto lg:overflow-hidden">
-        <aside id="sidebar" class="sidebar fixed left-0 top-0 h-screen w-80 shadow-2xl z-50 lg:translate-x-0 lg:static lg:z-auto custom-scrollbar overflow-y-auto">
+    <div class="flex min-h-screen bg-gray-50">
+        <aside id="sidebar" class="sidebar fixed left-0 top-0 h-screen w-80 shadow-2xl z-50 lg:translate-x-0 lg:static lg:h-auto lg:min-h-screen lg:z-auto custom-scrollbar overflow-y-auto">
             <div class="p-6">
                 <div class="flex items-center justify-between mb-8 pb-6 border-b border-white/20">
                     <div class="animate-slide-in-left">
