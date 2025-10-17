@@ -156,37 +156,4 @@ class usuario extends select
         }
     }
     
-    // Função para buscar um usuário específico pelo ID
-    public function get_user_by_id(string $epKey, int $id): ?array
-    {
-        try {
-            $map = [
-                'estgdm' => [$this->connect_estgdm, $this->table1],
-                'epaf'   => [$this->connect_epaf, $this->table2],
-                'epmfm'  => [$this->connect_epmfm, $this->table3],
-                'epav'   => [$this->connect_epav, $this->table4],
-                'eedq'   => [$this->connect_eedq, $this->table5],
-                'ejin'   => [$this->connect_ejin, $this->table6],
-                'epfads' => [$this->connect_epfads, $this->table7],
-                'emcvm'  => [$this->connect_emcvm, $this->table8],
-                'eglgfm' => [$this->connect_eglgfm, $this->table9],
-                'epldtv' => [$this->connect_epldtv, $this->table10],
-                'ercr'   => [$this->connect_ercr, $this->table11],
-            ];
-            if (!isset($map[$epKey])) {
-                throw new InvalidArgumentException('Escola inválida');
-            }
-            [$pdo, $table] = $map[$epKey];
-            $stmt = $pdo->prepare("SELECT * FROM $table WHERE id = :id");
-            $stmt->bindValue(':id', $id, PDO::PARAM_INT);
-            $stmt->execute();
-            
-            if ($stmt->rowCount() > 0) {
-                return $stmt->fetch(PDO::FETCH_ASSOC);
-            }
-            return null;
-        } catch (PDOException $e) {
-            return null;
-        }
-    }
 }

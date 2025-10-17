@@ -518,8 +518,11 @@ $select = new select();
                         $dados = $select->select_epaf();
                         ?>
                         <div class="contents">
-                            <?php foreach($dados as $dado){ ?>
-                            <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl user-card group hover:shadow-2xl transition-all duration-500" data-nome="<?= strtolower($dado['nome_user']) ?>" data-email="<?= strtolower($dado['email']) ?>" data-escola="1">
+                            <?php foreach($dados as $dado){ 
+                                $isActive = !isset($dado['status']) || $dado['status'] == 1;
+                                $cardClass = $isActive ? "" : "opacity-70 grayscale";
+                            ?>
+                            <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl user-card group hover:shadow-2xl transition-all duration-500 <?= $cardClass ?>" data-nome="<?= strtolower($dado['nome_user']) ?>" data-email="<?= strtolower($dado['email']) ?>" data-escola="1" data-status="<?= $isActive ? 'active' : 'inactive' ?>">
                                 <!-- Header do Card com Avatar e Nome -->
                                 <div class="flex items-start gap-3 mb-4">
                                     <div class="relative">
@@ -596,8 +599,11 @@ $select = new select();
                         $dados = $select->select_epmfm();
                         ?>
                         <div class="contents">
-                            <?php foreach($dados as $dado){ ?>
-                            <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl user-card group hover:shadow-2xl transition-all duration-500" data-nome="<?= strtolower($dado['nome_user']) ?>" data-email="<?= strtolower($dado['email']) ?>" data-escola="1">
+                            <?php foreach($dados as $dado){ 
+                                $isActive = !isset($dado['status']) || $dado['status'] == 1;
+                                $cardClass = $isActive ? "" : "opacity-70 grayscale";
+                            ?>
+                            <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl user-card group hover:shadow-2xl transition-all duration-500 <?= $cardClass ?>" data-nome="<?= strtolower($dado['nome_user']) ?>" data-email="<?= strtolower($dado['email']) ?>" data-escola="1" data-status="<?= $isActive ? 'active' : 'inactive' ?>">
                                 <!-- Header do Card com Avatar e Nome -->
                                 <div class="flex items-start gap-3 mb-4">
                                     <div class="relative">
@@ -674,8 +680,11 @@ $select = new select();
                         $dados = $select->select_epav();
                         ?>
                         <div class="contents">
-                            <?php foreach($dados as $dado){ ?>
-                            <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl user-card group hover:shadow-2xl transition-all duration-500" data-nome="<?= strtolower($dado['nome_user']) ?>" data-email="<?= strtolower($dado['email']) ?>" data-escola="1">
+                            <?php foreach($dados as $dado){ 
+                                $isActive = !isset($dado['status']) || $dado['status'] == 1;
+                                $cardClass = $isActive ? "" : "opacity-70 grayscale";
+                            ?>
+                            <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl user-card group hover:shadow-2xl transition-all duration-500 <?= $cardClass ?>" data-nome="<?= strtolower($dado['nome_user']) ?>" data-email="<?= strtolower($dado['email']) ?>" data-escola="1" data-status="<?= $isActive ? 'active' : 'inactive' ?>">
                                 <!-- Header do Card com Avatar e Nome -->
                                 <div class="flex items-start gap-3 mb-4">
                                     <div class="relative">
@@ -752,8 +761,11 @@ $select = new select();
                         $dados = $select->select_eedq();
                         ?>
                         <div class="contents">
-                            <?php foreach($dados as $dado){ ?>
-                            <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl user-card group hover:shadow-2xl transition-all duration-500" data-nome="<?= strtolower($dado['nome_user']) ?>" data-email="<?= strtolower($dado['email']) ?>" data-escola="1">
+                            <?php foreach($dados as $dado){ 
+                                $isActive = !isset($dado['status']) || $dado['status'] == 1;
+                                $cardClass = $isActive ? "" : "opacity-70 grayscale";
+                            ?>
+                            <div class="card-enhanced p-4 sm:p-5 lg:p-6 rounded-2xl sm:rounded-3xl user-card group hover:shadow-2xl transition-all duration-500 <?= $cardClass ?>" data-nome="<?= strtolower($dado['nome_user']) ?>" data-email="<?= strtolower($dado['email']) ?>" data-escola="1" data-status="<?= $isActive ? 'active' : 'inactive' ?>">
                                 <!-- Header do Card com Avatar e Nome -->
                                 <div class="flex items-start gap-3 mb-4">
                                     <div class="relative">

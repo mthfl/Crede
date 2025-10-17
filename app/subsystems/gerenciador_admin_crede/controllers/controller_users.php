@@ -67,25 +67,8 @@ else if (
     $cpf = $_POST["cpf"];
     $escola = $_POST["escola"];
     
-    // Aplicar máscara no CPF se não estiver formatado
-    if (!preg_match('/^\d{3}\.\d{3}\.\d{3}-\d{2}$/', $cpf)) {
-        // Remove caracteres não numéricos
-        $cpf_numeros = preg_replace('/\D/', '', $cpf);
-        // Aplica a máscara se tiver 11 dígitos
-        if (strlen($cpf_numeros) === 11) {
-            $cpf = substr($cpf_numeros, 0, 3) . '.' . substr($cpf_numeros, 3, 3) . '.' . substr($cpf_numeros, 6, 3) . '-' . substr($cpf_numeros, 9, 2);
-        }
-    }
-
     $model_usuario = new usuario();
-    
-    // Verificar se o usuário existe antes de atualizar
-    $usuario_atual = $model_usuario->get_user_by_id($escola, $id);
-    if (!$usuario_atual) {
-        header('Location: ../index.php?error=7'); // Usuário não encontrado
-        exit();
-    }
-    
+
     $result = $model_usuario->update_user($escola, $id, $nome, $email, $cpf);
 
     if ($result) {
