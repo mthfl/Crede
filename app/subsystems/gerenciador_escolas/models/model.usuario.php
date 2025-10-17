@@ -222,7 +222,7 @@ class model_usuario extends connect_escolas
                         <tr>
                             <td class="header">
                                 <img src="https://i.postimg.cc/0N0dsxrM/Bras-o-do-Cear-svg-removebg-preview.png" alt="Logo Salaberga">
-                                <h1>Sistema Salaberga</h1>
+                                <h1 style="color: #FFFFFF;">Sistema de Seleção</h1>
                             </td>
                         </tr>
                         <tr>
