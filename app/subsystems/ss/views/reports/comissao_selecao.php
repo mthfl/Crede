@@ -146,10 +146,10 @@ class relatorios extends connect
                 $cor = $valor % 2 ? 255 : 192; // Alternate row colors
                 $pdf->SetFillColor($cor, $cor, $cor);
                 $pdf->SetY($y_position);
-                $pdf->SetX(5);
+                $pdf->SetX(8);
                 $pdf->Cell(75, 7, strtoupper($dado['nome_user']), 1, 0, 'L', true);
                 $pdf->Cell(30, 7, strtoupper($dado['id_perfil'] != null ? $this->select_perfil($dado['id_perfil']) : 'SEM PERFIL'), 1, 0, 'L', true);
-                $pdf->Cell(30, 7, strtoupper($dado['tipo_usuario']), 1, 0, 'L', true);
+                $pdf->Cell(25, 7, strtoupper($dado['tipo_usuario']), 1, 0, 'L', true);
                 $pdf->Cell(30, 7, strtoupper($dado['data_inicio']), 1, 0, 'L', true);
                 $pdf->Cell(30, 7, strtoupper($dado['data_fim'] ?? 'SEM DATA'), 1, 1, 'L', true);
                 $y_position += 7;
