@@ -1,4 +1,3 @@
-
 <?php
 require_once(__DIR__ . '/../models/sessions.php');
 $session = new sessions();
@@ -1021,13 +1020,24 @@ $select = new select($escola);
                 </div>
 
                 <!-- Gráfico de Estatísticas -->
-                <div class="bg-white rounded-xl shadow-card p-6 mb-8">
-                    <h2 class="text-xl font-bold text-primary mb-4 flex items-center">
-                        <i class="fas fa-chart-pie mr-2 text-secondary"></i>
-                        Distribuição de Alunos por Modalidade
-                    </h2>
-                    <div class="chart-container">
-                        <canvas id="distributionChart"></canvas>
+                <div class="bg-white rounded-xl shadow-card p-6 mb-8 flex flex-col md:flex-row gap-8">
+                    <div class="w-full">
+                        <h2 class="text-xl font-bold text-primary mb-4 flex items-center">
+                            <i class="fas fa-chart-bar mr-2 text-secondary"></i>
+                            Gráficos
+                        </h2>
+                        <div class="flex flex-col md:flex-row gap-8">
+                            <div class="flex-1">
+                                <div class="chart-container" style="height:300px;">
+                                    <canvas id="distributionChart"></canvas>
+                                </div>
+                            </div>
+                            <div class="flex-1">
+                                <div class="chart-container" style="height:300px;">
+                                    <canvas id="barChartCursos"></canvas>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -1182,16 +1192,28 @@ $select = new select($escola);
     </div>
 
     <script>
-        // Inicializar o gráfico de distribuição
+        // Gráfico de Pizza - Distribuição
         const ctx = document.getElementById('distributionChart').getContext('2d');
-        // Verifica se há alunos cadastrados
         const alunosPublicaAC = <?php echo $select->countAlunosPorTipo('publica_ac'); ?>;
         const alunosPublicaCotas = <?php echo $select->countAlunosPorTipo('publica_cotas'); ?>;
         const alunosPrivadaAC = <?php echo $select->countAlunosPorTipo('privada_ac'); ?>;
         const alunosPrivadaCotas = <?php echo $select->countAlunosPorTipo('privada_cotas'); ?>;
-        
         const totalAlunos = alunosPublicaAC + alunosPublicaCotas + alunosPrivadaAC + alunosPrivadaCotas;
-        
+
+        // Nova paleta de cores para o gráfico de pizza
+        const pieColors = [
+            '#005A24', // primary
+            '#FFA500', // secondary
+            '#E6F4EA', // accent
+            '#1A3C34'  // dark
+        ];
+        const pieHoverColors = [
+            '#004a1e', // primary hover
+            '#e69400', // secondary hover
+            '#b6e2d6', // accent hover
+            '#163024'  // dark hover
+        ];
+
         const distributionChart = new Chart(ctx, {
             type: 'pie',
             data: {
@@ -1203,12 +1225,12 @@ $select = new select($escola);
                         ? [alunosPublicaAC, alunosPublicaCotas, alunosPrivadaAC, alunosPrivadaCotas]
                         : [1],
                     backgroundColor: totalAlunos > 0 
-                        ? ['#005A24', '#FFA500', '#0A4D2E', '#FF8C00']
+                        ? pieColors
                         : ['#E6E6E6'],
                     borderWidth: 2,
                     borderColor: '#FFFFFF',
                     hoverBackgroundColor: totalAlunos > 0 
-                        ? ['#004a1e', '#e69400', '#083d25', '#e67e00']
+                        ? pieHoverColors
                         : ['#d4d4d4']
                 }]
             },
@@ -1219,10 +1241,7 @@ $select = new select($escola);
                     legend: {
                         position: 'bottom',
                         labels: {
-                            font: {
-                                family: 'Inter',
-                                size: 12
-                            },
+                            font: { family: 'Inter', size: 12 },
                             padding: 20
                         }
                     },
@@ -1239,6 +1258,70 @@ $select = new select($escola);
                                 return `${label}: ${value} ${value === 1 ? 'candidato' : 'candidatos'} (${percentage}%)`;
                             }
                         }
+                    }
+                }
+            }
+        });
+
+        // Gráfico de Barras - Candidatos por Curso
+        const cursosData = <?php
+            $cursos = $select->select_cursos();
+            $labels = [];
+            $values = [];
+            foreach ($cursos as $curso) {
+                $labels[] = htmlspecialchars($curso['nome_curso']);
+                $values[] = $select->countAlunosPorCurso($curso['id']);
+            }
+            echo json_encode(['labels' => $labels, 'values' => $values]);
+        ?>;
+
+        // Paleta de cores para barras (alternando entre várias cores)
+        const barPalette = [
+            '#005A24', // primary
+            '#FFA500', // secondary
+            '#E6F4EA', // accent
+            '#1A3C34', // dark
+            '#FFC107', // warning
+            '#17A2B8'  // info
+        ];
+        const barColors = [];
+        for (let i = 0; i < cursosData.labels.length; i++) {
+            barColors.push(barPalette[i % barPalette.length]);
+        }
+
+        const ctxBar = document.getElementById('barChartCursos').getContext('2d');
+        const barChartCursos = new Chart(ctxBar, {
+            type: 'bar',
+            data: {
+                labels: cursosData.labels,
+                datasets: [{
+                    label: 'Candidatos',
+                    data: cursosData.values,
+                    backgroundColor: barColors,
+                    borderColor: barColors,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return `${context.label}: ${context.parsed.y} candidatos`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        ticks: { font: { family: 'Inter', size: 12 } }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        ticks: { font: { family: 'Inter', size: 12 } }
                     }
                 }
             }
