@@ -323,6 +323,16 @@ class select extends connect
         }
     }
 
+    public function countTotalCursos() {
+        try {
+            $stmt = $this->connect->query("SELECT COUNT(*) as total FROM $this->table2");
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $result['total'] ?? 0;
+        } catch (PDOException $e) {
+            return 0;
+        }
+    }
+
     public function countTotalAlunos() {
         try {
             $stmt = $this->connect->query("SELECT COUNT(*) as total FROM $this->table1 WHERE status = 1");
@@ -335,7 +345,7 @@ class select extends connect
 
     public function countTotalRelatorios() {
         try {
-            $stmt = $this->connect->query("SELECT COUNT(*) as total FROM $this->table13 WHERE tipo_movimentacao IN ('REQUISIÇÃO REALIZDA', 'REQUISIÇÃO RECUSADA', 'REQUISIÇÃO PENDENTE')");
+            $stmt = $this->connect->query("SELECT COUNT(*) as total FROM $this->table14 WHERE status IN ('Pendente', 'Concluido', 'Recusado')");
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
             return $result['total'] ?? 0;
         } catch (PDOException $e) {
@@ -369,4 +379,20 @@ class select extends connect
             return 0;
         }
     }
+
+    public function countAlunosPorCurso(): array
+{
+    try {
+        $sql = "SELECT c.nome_curso, COUNT(a.id) as total 
+                FROM $this->table2 c 
+                LEFT JOIN $this->table1 a ON a.id_curso1 = c.id 
+                GROUP BY c.id, c.nome_curso 
+                ORDER BY total DESC";
+        $stmt = $this->connect->query($sql);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        return [];
+    }
+}
+
 }

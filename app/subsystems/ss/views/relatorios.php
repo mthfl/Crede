@@ -225,7 +225,7 @@ $select = new select($escola);
         }
 
         .stats-card {
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1); /* Reduced from 0.3s to 0.2s */
             position: relative;
             overflow: hidden;
             background: linear-gradient(135deg, #FFFFFF 0%, #F8FAF9 100%);
@@ -241,7 +241,7 @@ $select = new select($escola);
             height: 100%;
             background: linear-gradient(135deg, rgba(255, 165, 0, 0.1) 0%, rgba(0, 90, 36, 0.05) 100%);
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.2s ease; /* Reduced from 0.3s to 0.2s */
             z-index: 1;
         }
 
@@ -250,8 +250,8 @@ $select = new select($escola);
         }
 
         .stats-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgba(0, 90, 36, 0.2), 0 10px 10px -5px rgba(0, 90, 36, 0.1);
+            transform: translateY(-3px) scale(1.01); /* Reduced from translateY(-5px) and added slight scale */
+            box-shadow: 0 10px 15px -3px rgba(0, 90, 36, 0.15), 0 5px 5px -2px rgba(0, 90, 36, 0.08); /* Smaller shadow */
             border-color: #FFA500;
         }
 
@@ -1007,7 +1007,7 @@ $select = new select($escola);
                         <div class="stat-icon">
                             <i class="fas fa-graduation-cap"></i>
                         </div>
-                        <div class="stat-number"><?php echo $select->countTotalEscolas(); ?></div>
+                        <div class="stat-number"><?php echo $select->countTotalCursos(); ?></div>
                         <div class="stat-label">Total de Cursos</div>
                     </div>
                     <div class="stat-item">
@@ -1019,28 +1019,36 @@ $select = new select($escola);
                     </div>
                 </div>
 
-                <!-- Gráfico de Estatísticas -->
-                <div class="bg-white rounded-xl shadow-card p-6 mb-8 flex flex-col md:flex-row gap-8">
-                    <div class="w-full">
-                        <h2 class="text-xl font-bold text-primary mb-4 flex items-center">
-                            <i class="fas fa-chart-bar mr-2 text-secondary"></i>
-                            Gráficos
-                        </h2>
-                        <div class="flex flex-col md:flex-row gap-8">
-                            <div class="flex-1">
-                                <div class="chart-container" style="height:300px;">
-                                    <canvas id="distributionChart"></canvas>
-                                </div>
-                            </div>
-                            <div class="flex-1">
-                                <div class="chart-container" style="height:300px;">
-                                    <canvas id="barChartCursos"></canvas>
-                                </div>
-                            </div>
+                  <!-- Gráfico de Estatísticas -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                    <!-- Gráfico de Pizza -->
+                    <div class="bg-white rounded-xl shadow-card p-6 border-2 border-accent hover:border-secondary transition-all duration-300">
+                        <div class="flex items-center justify-between mb-4 pb-3 border-b-2 border-accent">
+                            <h3 class="text-xl font-bold text-primary font-heading flex items-center">
+                                <i class="fas fa-chart-pie text-secondary mr-3"></i>
+                                Distribuição por Modalidade
+                            </h3>
+                            
+                        </div>
+                        <div class="chart-container" style="height: 320px;">
+                            <canvas id="distributionChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <!-- Gráfico de Barras -->
+                    <div class="bg-white rounded-xl shadow-card p-6 border-2 border-accent hover:border-secondary transition-all duration-300">
+                        <div class="flex items-center justify-between mb-4 pb-3 border-b-2 border-accent">
+                            <h3 class="text-xl font-bold text-primary font-heading flex items-center">
+                                <i class="fas fa-chart-bar text-secondary mr-3"></i>
+                                Candidatos por Curso
+                            </h3>
+                         
+                        </div>
+                        <div class="chart-container" style="height: 320px;">
+                            <canvas id="coursesChart"></canvas>
                         </div>
                     </div>
                 </div>
-
                 <!-- Seção de Relatórios -->
                 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-8">
                     <!-- Escolas Públicas e Privadas -->
@@ -1190,144 +1198,305 @@ $select = new select($escola);
             </form>
         </div>
     </div>
+<script>
+    // Definir cores do sistema
+    const systemColors = {
+        primary: '#005A24',
+        secondary: '#FFA500',
+        dark: '#1A3C34',
+        accent: '#E6F4EA'
+    };
 
-    <script>
-        // Gráfico de Pizza - Distribuição
-        const ctx = document.getElementById('distributionChart').getContext('2d');
-        const alunosPublicaAC = <?php echo $select->countAlunosPorTipo('publica_ac'); ?>;
-        const alunosPublicaCotas = <?php echo $select->countAlunosPorTipo('publica_cotas'); ?>;
-        const alunosPrivadaAC = <?php echo $select->countAlunosPorTipo('privada_ac'); ?>;
-        const alunosPrivadaCotas = <?php echo $select->countAlunosPorTipo('privada_cotas'); ?>;
-        const totalAlunos = alunosPublicaAC + alunosPublicaCotas + alunosPrivadaAC + alunosPrivadaCotas;
+    // Função para formatar nome do curso
+    function formatarNomeCurso(nome) {
+        return nome
+            .replace('TÉCNICO EM ', '')
+            .replace('TÉCNICO', '')
+            .trim()
+            .split(' ')
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+            .join(' ');
+    }
 
-        // Nova paleta de cores para o gráfico de pizza
-        const pieColors = [
-            '#005A24', // primary
-            '#FFA500', // secondary
-            '#E6F4EA', // accent
-            '#1A3C34'  // dark
-        ];
-        const pieHoverColors = [
-            '#004a1e', // primary hover
-            '#e69400', // secondary hover
-            '#b6e2d6', // accent hover
-            '#163024'  // dark hover
-        ];
+    // Dados dos alunos por tipo
+    const alunosPublicaAC = <?php echo $select->countAlunosPorTipo('publica_ac'); ?>;
+    const alunosPublicaCotas = <?php echo $select->countAlunosPorTipo('publica_cotas'); ?>;
+    const alunosPrivadaAC = <?php echo $select->countAlunosPorTipo('privada_ac'); ?>;
+    const alunosPrivadaCotas = <?php echo $select->countAlunosPorTipo('privada_cotas'); ?>;
+    
+    const totalAlunos = alunosPublicaAC + alunosPublicaCotas + alunosPrivadaAC + alunosPrivadaCotas;
 
-        const distributionChart = new Chart(ctx, {
-            type: 'pie',
-            data: {
-                labels: totalAlunos > 0 
-                    ? ['Pública AC', 'Pública Cotas', 'Privada AC', 'Privada Cotas']
-                    : ['Nenhum aluno cadastrado'],
-                datasets: [{
-                    data: totalAlunos > 0 
-                        ? [alunosPublicaAC, alunosPublicaCotas, alunosPrivadaAC, alunosPrivadaCotas]
-                        : [1],
-                    backgroundColor: totalAlunos > 0 
-                        ? pieColors
-                        : ['#E6E6E6'],
-                    borderWidth: 2,
-                    borderColor: '#FFFFFF',
-                    hoverBackgroundColor: totalAlunos > 0 
-                        ? pieHoverColors
-                        : ['#d4d4d4']
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            font: { family: 'Inter', size: 12 },
-                            padding: 20
-                        }
-                    },
-                    tooltip: {
-                        enabled: true,
-                        callbacks: {
-                            label: function(context) {
-                                if (totalAlunos === 0) {
-                                    return 'Nenhum aluno cadastrado no momento';
-                                }
-                                const label = context.label || '';
-                                const value = context.parsed || 0;
-                                const percentage = ((value / totalAlunos) * 100).toFixed(1);
-                                return `${label}: ${value} ${value === 1 ? 'candidato' : 'candidatos'} (${percentage}%)`;
+    // Dados dos alunos por curso
+    const dadosCursos = <?php 
+        $cursos = $select->countAlunosPorCurso();
+        echo json_encode($cursos); 
+    ?>;
+    
+    // ==========================================
+    // GRÁFICO DE ROSCA (DISTRIBUIÇÃO)
+    // ==========================================
+    const ctxPie = document.getElementById('distributionChart').getContext('2d');
+    const distributionChart = new Chart(ctxPie, {
+        type: 'doughnut',
+        data: {
+            labels: totalAlunos > 0 
+                ? ['Pública (Ampla)', 'Pública (Cotas)', 'Privada (Ampla)', 'Privada (Cotas)']
+                : ['Nenhum aluno cadastrado'],
+            datasets: [{
+                data: totalAlunos > 0 
+                    ? [alunosPublicaAC, alunosPublicaCotas, alunosPrivadaAC, alunosPrivadaCotas]
+                    : [1],
+                backgroundColor: totalAlunos > 0 
+                    ? [
+                        systemColors.primary,    // Verde escuro
+                        systemColors.secondary,  // Laranja
+                        systemColors.dark,       // Verde muito escuro
+                        '#B8E6D1'               // Verde claro
+                      ]
+                    : ['#e0e0e0'],
+                borderWidth: 4,
+                borderColor: '#ffffff',
+                hoverOffset: 20,
+                hoverBorderColor: '#ffffff',
+                hoverBorderWidth: 5
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '65%', // Tamanho do buraco no meio (rosca)
+            plugins: {
+                title: {
+                    display: false
+                },
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        font: {
+                            family: 'Inter',
+                            size: 13,
+                            weight: '600'
+                        },
+                        padding: 20,
+                        usePointStyle: true,
+                        pointStyle: 'circle',
+                        boxWidth: 12,
+                        boxHeight: 12,
+                        color: '#1A3C34',
+                        generateLabels: function(chart) {
+                            const data = chart.data;
+                            if (data.labels.length && data.datasets.length) {
+                                return data.labels.map((label, i) => {
+                                    const value = data.datasets[0].data[i];
+                                    const percentage = totalAlunos > 0 ? ((value / totalAlunos) * 100).toFixed(1) : 0;
+                                    return {
+                                        text: `${label} (${percentage}%)`,
+                                        fillStyle: data.datasets[0].backgroundColor[i],
+                                        hidden: false,
+                                        index: i
+                                    };
+                                });
                             }
-                        }
-                    }
-                }
-            }
-        });
-
-        // Gráfico de Barras - Candidatos por Curso
-        const cursosData = <?php
-            $cursos = $select->select_cursos();
-            $labels = [];
-            $values = [];
-            foreach ($cursos as $curso) {
-                $labels[] = htmlspecialchars($curso['nome_curso']);
-                $values[] = $select->countAlunosPorCurso($curso['id']);
-            }
-            echo json_encode(['labels' => $labels, 'values' => $values]);
-        ?>;
-
-        // Paleta de cores para barras (alternando entre várias cores)
-        const barPalette = [
-            '#005A24', // primary
-            '#FFA500', // secondary
-            '#E6F4EA', // accent
-            '#1A3C34', // dark
-            '#FFC107', // warning
-            '#17A2B8'  // info
-        ];
-        const barColors = [];
-        for (let i = 0; i < cursosData.labels.length; i++) {
-            barColors.push(barPalette[i % barPalette.length]);
-        }
-
-        const ctxBar = document.getElementById('barChartCursos').getContext('2d');
-        const barChartCursos = new Chart(ctxBar, {
-            type: 'bar',
-            data: {
-                labels: cursosData.labels,
-                datasets: [{
-                    label: 'Candidatos',
-                    data: cursosData.values,
-                    backgroundColor: barColors,
-                    borderColor: barColors,
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: false },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                return `${context.label}: ${context.parsed.y} candidatos`;
-                            }
+                            return [];
                         }
                     }
                 },
-                scales: {
-                    x: {
-                        ticks: { font: { family: 'Inter', size: 12 } }
+                tooltip: {
+                    backgroundColor: 'rgba(26, 60, 52, 0.95)',
+                    titleColor: '#ffffff',
+                    bodyColor: '#ffffff',
+                    borderColor: systemColors.secondary,
+                    borderWidth: 2,
+                    padding: 16,
+                    displayColors: true,
+                    boxWidth: 15,
+                    boxHeight: 15,
+                    boxPadding: 8,
+                    titleFont: {
+                        family: 'Inter',
+                        size: 15,
+                        weight: 'bold'
                     },
-                    y: {
-                        beginAtZero: true,
-                        ticks: { font: { family: 'Inter', size: 12 } }
+                    bodyFont: {
+                        family: 'Inter',
+                        size: 14,
+                        weight: '500'
+                    },
+                    callbacks: {
+                        label: function(context) {
+                            const label = context.label || '';
+                            const value = context.parsed || 0;
+                            const percentage = totalAlunos > 0 ? ((value / totalAlunos) * 100).toFixed(1) : 0;
+                            return ` ${value} candidatos (${percentage}%)`;
+                        }
                     }
                 }
+            },
+            animation: {
+                animateRotate: true,
+                animateScale: true,
+                duration: 800,
+                easing: 'easeInOutCubic'
             }
-        });
+        }
+    });
 
-        // Sidebar toggle
+
+    const ctxBar = document.getElementById('coursesChart').getContext('2d');
+    
+    
+    const createGradient = (ctx, chartArea) => {
+        const gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
+        gradient.addColorStop(0, '#FF8C00');   // Laranja escuro (base)
+        gradient.addColorStop(0.5, '#FFA500'); // Laranja médio (meio)
+        gradient.addColorStop(1, '#FFB520');   // Laranja claro (topo)
+        return gradient;
+    };
+
+    const coursesChart = new Chart(ctxBar, {
+        type: 'bar',
+        data: {
+            labels: dadosCursos.map(curso => formatarNomeCurso(curso.nome_curso)),
+            datasets: [{
+                label: 'Candidatos',
+                data: dadosCursos.map(curso => curso.total),
+                backgroundColor: function(context) {
+                    const chart = context.chart;
+                    const {ctx, chartArea} = chart;
+                    if (!chartArea) {
+                        return systemColors.secondary;
+                    }
+                    return createGradient(ctx, chartArea);
+                },
+                borderColor: 'transparent',
+                borderWidth: 0,
+                borderRadius: {
+                    topLeft: 10,
+                    topRight: 10,
+                    bottomLeft: 0,
+                    bottomRight: 0
+                },
+                borderSkipped: false,
+                hoverBackgroundColor: function(context) {
+                    const chart = context.chart;
+                    const {ctx, chartArea} = chart;
+                    if (!chartArea) {
+                        return systemColors.primary;
+                    }
+                    // Gradiente verde no hover
+                    const gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
+                    gradient.addColorStop(0, '#003D18');
+                    gradient.addColorStop(0.5, '#005A24');
+                    gradient.addColorStop(1, '#007830');
+                    return gradient;
+                },
+                barThickness: 35,
+                maxBarThickness: 45
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        color: 'rgba(0, 90, 36, 0.1)',
+                        lineWidth: 1.5,
+                        drawBorder: false
+                    },
+                    border: {
+                        display: false,
+                        dash: [5, 5]
+                    },
+                    ticks: {
+                        font: {
+                            family: 'Inter',
+                            size: 13,
+                            weight: '600'
+                        },
+                        color: '#1A3C34',
+                        padding: 12,
+                        stepSize: Math.ceil(Math.max(...dadosCursos.map(c => c.total)) / 5)
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false,
+                        drawBorder: false
+                    },
+                    border: {
+                        display: false
+                    },
+                    ticks: {
+                        font: {
+                            family: 'Inter',
+                            size: 12,
+                            weight: '600'
+                        },
+                        color: '#1A3C34',
+                        maxRotation: 45,
+                        minRotation: 45,
+                        padding: 12
+                    }
+                }
+            },
+            plugins: {
+                title: {
+                    display: false
+                },
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(26, 60, 52, 0.95)',
+                    titleColor: '#ffffff',
+                    bodyColor: '#ffffff',
+                    borderColor: systemColors.secondary,
+                    borderWidth: 2,
+                    padding: 16,
+                    displayColors: false,
+                    titleFont: {
+                        family: 'Inter',
+                        size: 15,
+                        weight: 'bold'
+                    },
+                    bodyFont: {
+                        family: 'Inter',
+                        size: 14,
+                        weight: '500'
+                    },
+                    callbacks: {
+                        title: function(context) {
+                            return context[0].label;
+                        },
+                        label: function(context) {
+                            return `Total: ${context.raw} candidato${context.raw !== 1 ? 's' : ''}`;
+                        }
+                    },
+                    yAlign: 'bottom'
+                }
+            },
+            animation: {
+                duration: 800,
+                easing: 'easeInOutQuart',
+                delay: (context) => {
+                    let delay = 0;
+                    if (context.type === 'data' && context.mode === 'default') {
+                        delay = context.dataIndex * 50; // Cada barra aparece com 100ms de delay
+                    }
+                    return delay;
+                }
+            },
+            interaction: {
+                intersect: false,
+                mode: 'index'
+            }
+        }
+    });
+</script>
+    <!-- Sidebar toggle -->
+    <script>
         const sidebar = document.getElementById('sidebar');
         const overlay = document.getElementById('overlay');
         const openSidebar = document.getElementById('openSidebar');
@@ -1350,8 +1519,10 @@ $select = new select($escola);
             overlay.classList.remove('show');
             document.body.style.overflow = '';
         });
+    </script>
 
-        // Modal handling for Results
+    <!-- Modal handling for Results -->
+    <script>
         function openReportModal(reportType, reportLabel) {
             const modal = document.getElementById('reportModal');
             const modalTitle = document.getElementById('reportModalTitle');
@@ -1386,8 +1557,10 @@ $select = new select($escola);
                 });
             }, 100);
         }
+    </script>
 
-        // Modal handling for Schools
+    <!-- Modal handling for Schools -->
+    <script>
         function openSchoolReportModal() {
             const modal = document.getElementById('schoolReportModal');
             modal.classList.add('show');
@@ -1420,7 +1593,9 @@ $select = new select($escola);
                 });
             }, 100);
         }
+    </script>
 
+    <script>
         function closeModal(modalId) {
             const modal = document.getElementById(modalId);
             modal.classList.remove('show');
@@ -1444,8 +1619,10 @@ $select = new select($escola);
                 closeModal('specificReportModal');
             }
         });
+    </script>
 
-        // Form validation for Results
+    <!-- Form validation for Results -->
+    <script>
         const reportForm = document.getElementById('reportForm');
         reportForm.addEventListener('submit', function(e) {
             e.preventDefault();
@@ -1469,8 +1646,10 @@ $select = new select($escola);
                 }
             }, 5000);
         });
+    </script>
 
-        // Form validation for Schools
+    <!-- Form validation for Schools -->
+    <script>
         const schoolReportForm = document.getElementById('schoolReportForm');
         schoolReportForm.addEventListener('submit', function(e) {
             e.preventDefault();
@@ -1494,8 +1673,10 @@ $select = new select($escola);
                 }
             }, 5000);
         });
+    </script>
 
-        // Notification function
+    <!-- Notification function -->
+    <script>
         function showNotification(message, type = 'info') {
             const notification = document.createElement('div');
             notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg transform transition-all duration-300 translate-x-full`;
@@ -1518,8 +1699,10 @@ $select = new select($escola);
                 }, 300);
             }, 3000);
         }
+    </script>
 
-        // Initialize Select2 on page load
+    <!-- Initialize Select2 on page load -->
+    <script>
         $(document).ready(function() {
             $('.select2-curso').select2({
                 placeholder: "SELECIONAR CURSO",
@@ -1574,8 +1757,10 @@ $select = new select($escola);
                 }
             });
         });
+    </script>
 
-        // Movimentações modal handlers
+    <!-- Movimentações modal handlers -->
+    <script>
         function openUserReportModal() {
             const modal = document.getElementById('userReportModal');
             modal.classList.add('show');
@@ -1648,8 +1833,10 @@ $select = new select($escola);
                 });
             }, 100);
         }
+    </script>
 
-        // Validação do formulário de relatório específico
+    <!-- Validação do formulário de relatório específico -->
+    <script>
         const specificReportForm = document.getElementById('specificReportForm');
         specificReportForm.addEventListener('submit', function(e) {
             e.preventDefault();
@@ -1701,8 +1888,10 @@ $select = new select($escola);
                 }
             }, 5000);
         });
+    </script>
 
-        // Validate and submit user report form
+    <!-- Validate and submit user report form -->
+    <script>
         const userReportForm = document.getElementById('userReportForm');
         userReportForm.addEventListener('submit', function(e) {
             e.preventDefault();

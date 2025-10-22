@@ -1246,23 +1246,42 @@ $cursos = $select->select_cursos();
             const tabButtons = document.querySelectorAll('.tab-button');
             const tabContents = document.querySelectorAll('.tab-content');
             
-            // Verificar se há uma âncora na URL
-            const hash = window.location.hash;
-            if (hash) {
-                const targetTabId = hash.substring(1); // Remove o # do início
-                const targetButton = document.querySelector(`[data-tab="${targetTabId}"]`);
-                
+                    // Verificar a aba na URL e ativar
+            const urlParams = new URLSearchParams(window.location.search);
+            const tabFromUrl = urlParams.get('tab');
+            
+            if (tabFromUrl) {
+                const targetButton = document.querySelector(`[data-tab="${tabFromUrl}"]`);
                 if (targetButton) {
-                    // Simular clique no botão da aba correspondente
                     setTimeout(() => {
                         targetButton.click();
                     }, 100);
                 }
-            }
-            
+            } else {
+                // Se não houver tab na URL, ativar a aba pendentes por padrão
+                const defaultButton = document.querySelector('[data-tab="tab-pendentes"]');
+                if (defaultButton) {
+                    setTimeout(() => {
+                        defaultButton.click();
+                    }, 100);
+                }
+            }            // Adicionar o parâmetro tab a todos os formulários de atualização de status
+            document.querySelectorAll('form[action*="controller_usuario.php"]').forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    const activeTab = document.querySelector('.tab-button.active')?.getAttribute('data-tab') || 'tab-pendentes';
+                    const tabInput = document.createElement('input');
+                    tabInput.type = 'hidden';
+                    tabInput.name = 'redirect_tab';
+                    tabInput.value = activeTab;
+                    this.appendChild(tabInput);
+                });
+            });
+
             tabButtons.forEach(button => {
                 button.addEventListener('click', () => {
                     const tabId = button.getAttribute('data-tab');
+                    // Salvar a aba ativa no sessionStorage
+                    sessionStorage.setItem('activeTab', tabId);
                     
                     // Remover classes ativas de todos os botões
                     tabButtons.forEach(btn => {
@@ -1272,14 +1291,14 @@ $cursos = $select->select_cursos();
                     
                     // Adicionar classes ativas ao botão clicado com base no tipo de aba
                     button.classList.add('font-semibold');
-                    button.classList.remove('border-transparent', 'text-gray-500', 'hover:text-gray-700');
+                    button.classList.remove('border-transparent', 'text-gray-500', 'hover:text-gray-700', 'active');
                     
                     if (tabId === 'tab-pendentes') {
-                        button.classList.add('border-secondary', 'text-secondary');
+                        button.classList.add('border-secondary', 'text-secondary', 'active');
                     } else if (tabId === 'tab-recusadas') {
-                        button.classList.add('border-red-500', 'text-red-700');
+                        button.classList.add('border-red-500', 'text-red-700', 'active');
                     } else if (tabId === 'tab-concluidas') {
-                        button.classList.add('border-green-500', 'text-green-700');
+                        button.classList.add('border-green-500', 'text-green-700', 'active');
                     }
                     
                     // Esconder todos os conteúdos
@@ -1295,6 +1314,8 @@ $cursos = $select->select_cursos();
                 });
             });
         });
+
+        // Remove a função duplicada pois já temos uma versão atualizada acima
 
         // Função de notificação
         function showNotification(message, type = 'info') {

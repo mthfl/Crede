@@ -159,22 +159,27 @@ if (
     $escola = $_SESSION['escola'];
     $admin_model = new admin($escola);
 
+    // Definir a aba de destino baseado no novo status
     if ($novo_status == 'Concluido') {
         $result = $admin_model->requisicao_alteracao_realizada($id_requisicao);
+        $redirect_tab = 'tab-concluidas';
     } else if ($novo_status == 'Recusado') {
         $result = $admin_model->requisicao_alteracao_recusada($id_requisicao);
+        $redirect_tab = 'tab-recusadas';
     } else if ($novo_status == 'Pendente') {
         $result = $admin_model->requisicao_alteracao_pendente($id_requisicao);
+        $redirect_tab = 'tab-pendentes';
     }
+    
     switch ($result) {
         case 1:
-            header('Location: ../views/solicitar_alteracao.php?realizado#tab-concluidas');
+            header('Location: ../views/solicitar_alteracao.php?realizado&tab=' . $redirect_tab);
             exit();
         case 2:
-            header('Location: ../views/solicitar_alteracao.php?erro');
+            header('Location: ../views/solicitar_alteracao.php?erro&tab=' . $redirect_tab);
             exit();
         default:
-            header('Location: ../views/solicitar_alteracao.php?fatal');
+            header('Location: ../views/solicitar_alteracao.php?fatal&tab=' . $redirect_tab);
             exit();
     }
 } else if (empty($_POST['id_perfil']) && isset($_POST['nome_perfil']) && !empty($_POST['nome_perfil'])) {
