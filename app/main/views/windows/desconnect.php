@@ -63,7 +63,7 @@
 
             <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 text-center text-sm text-gray-500">
                 <div class="flex items-center justify-center gap-2">
-                    <img src="https://i.postimg.cc/0N0dsxrM/Bras-o-do-Cear-svg-removebg-preview.png" alt="Logo Ceará" class="w-5 h-5 object-contain"/>
+                    <img src="../../assets/Brasão_do_Ceará.svg.png" alt="Logo Ceará" class="w-5 h-5 object-contain"/>
                     <span>CREDE • Coordenadoria Regional de Desenvolvimento da Educação</span>
                 </div>
             </div>

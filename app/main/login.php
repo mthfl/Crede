@@ -502,7 +502,7 @@
                 
                 <div class="text-center mb-6 sm:mb-8">
                     <div class="inline-block p-3 sm:p-4 rounded-2xl">
-                        <img src="https://i.postimg.cc/0N0dsxrM/Bras-o-do-Cear-svg-removebg-preview.png" 
+                        <img src="assets/Brasão_do_Ceará.svg.png" 
                              alt="Logo Sistema" 
                              class="w-16 h-16 sm:w-20 sm:h-20 object-contain">
                     </div>

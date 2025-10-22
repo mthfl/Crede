@@ -1588,7 +1588,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="flex items-center justify-between py-4">
                 <div class="flex items-center space-x-4">
                     <div class="header-logo">
-                        <img src="https://i.postimg.cc/0N0dsxrM/Bras-o-do-Cear-svg-removebg-preview.png" 
+                        <img src="../assets/Brasão_do_Ceará.svg.png" 
                              alt="Logo Ceará">
                     </div>
                     <div>

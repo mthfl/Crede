@@ -963,7 +963,7 @@ $session->tempo_session();
             <div class="flex items-center justify-between header-content">
                 <div class="flex items-center space-x-4 sm:space-x-6">
                     <div class="w-14 h-14 flex items-center justify-center bg-white rounded-2xl ">
-                        <img src="https://i.postimg.cc/0N0dsxrM/Bras-o-do-Cear-svg-removebg-preview.png"
+                        <img src="../assets/Brasão_do_Ceará.svg.png"
                             alt="Logo Ceará"
                             class="w-10 h-10 object-contain">
                     </div>
