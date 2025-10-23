@@ -132,17 +132,58 @@ class relatorios extends connect
 
         $pdf = new FPDF($orientacao, 'mm', 'A4');
         $pdf->AddPage();
-        $pdf->Image('../../assets/imgs/fundo_pdf.png', 0, 0, $pdf->GetPageWidth(), $pdf->GetPageHeight(), 'png', '', 0.1);
+        $pdf->Image('../../assets/imgs/fundo5_pdf.png', 0, 0, $pdf->GetPageWidth(), $pdf->GetPageHeight(), 'png', '', 0.1);
         // Cabeçalho com larguras ajustadas
         
-        $pdf->SetFont('Arial', 'B', 25);
+        $pdf->SetFont('Arial', 'B', 20);
         $pdf->SetY(8);
-        $pdf->SetX(20);
-        $pdf->Cell(90, 8, mb_convert_encoding($tipo_relatorio, 'ISO-8859-1', 'UTF-8'), 0, 1, 'C');
+        $pdf->SetX(8.50);
+        $pdf->Cell(22, 8, mb_convert_encoding($tipo_relatorio, 'ISO-8859-1', 'UTF-8'), 0, 1, 'L');
         $pdf->SetFont('Arial', 'B', 8);
-        $pdf->SetY(16);
-        $pdf->SetX(11);
-        $pdf->Cell(188, 6, mb_convert_encoding('PCD = PESSOA COM DEFICIÊNCIA | COTISTA = INCLUSO NA COTA DO BAIRRO | AC = AMPLA CONCORRÊNCIA', 'ISO-8859-1', 'UTF-8'), 0, 1, 'C');
+ 
+
+        //LEGENDAS PCD  |  COTISTAS  |  AC  ///////////////////////////////////////////////////////////////////////////////
+                $pdf->SetLeftMargin(138);
+                // Linha 1
+                $pdf->SetY(8);
+                $pdf->SetFont('Arial', 'B', 8);
+                $pdf->SetTextColor(255, 174, 25); // texto amarelo
+                
+                $pdf->Write(5, mb_convert_encoding('PCD', 'ISO-8859-1', 'UTF-8'));
+                
+                $pdf->SetTextColor(0, 90, 36); // volta pro preto
+                $pdf->SetFont('Arial', '', 8);
+                $pdf->Write(5, mb_convert_encoding('  PESSOA COM DEFICIÊNCIA', 'ISO-8859-1', 'UTF-8'));
+                
+                
+                // Linha 2
+                $pdf->SetY(12);
+                $pdf->SetFont('Arial', 'B', 8);
+                $pdf->SetTextColor(255, 174, 25); // texto amarelo
+                
+                $pdf->Write(5, mb_convert_encoding('COTISTA', 'ISO-8859-1', 'UTF-8'));
+                
+                $pdf->SetTextColor(0, 90, 36);
+                $pdf->SetFont('Arial', '', 8);
+                $pdf->Write(5, mb_convert_encoding('  COTA DO BAIRRO', 'ISO-8859-1', 'UTF-8'));
+                
+                
+                // Linha 3
+                $pdf->SetY(16);
+                $pdf->SetFont('Arial', 'B', 8);
+                $pdf->SetTextColor(255, 174, 25); // texto amarelo
+                
+                $pdf->Write(5, mb_convert_encoding('AC', 'ISO-8859-1', 'UTF-8'));
+                
+                $pdf->SetTextColor(0, 90, 36);
+                $pdf->SetFont('Arial', '', 8);
+                $pdf->Write(5, mb_convert_encoding('  AMPLA CONCORRÊNCIA', 'ISO-8859-1', 'UTF-8'));
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        
+
+        $pdf->SetLeftMargin(10);
+        
+
         $pdf->SetFont('Arial', 'B', 12);
         $pdf->Cell(185, 10, '', 0, 1, 'C');
 
@@ -151,38 +192,55 @@ class relatorios extends connect
         $bairros_para_mostrar = array_slice($dados_bairros, 0, 5);
        
         $pdf->SetFont('Arial', '', 8);
-        $pdf->SetY(20);
-        $pdf->SetX(17);
+
+       
+       
         // Título e bairros alinhados na mesma linha, exceto para PRIVADA AC e PÚBLICA AC
         if ($tipo_relatorio !== 'PRIVADA AC' && $tipo_relatorio !== 'PÚBLICA AC') {
-            $pdf->Cell(50, 6, mb_convert_encoding('BAIRROS DE COTA:', 'ISO-8859-1', 'UTF-8'), 0, 0, 'C');
+            // mesmo alinhamento do tipo_relatorio
+            $pdf->SetY(20);
+            $pdf->SetX(8.50);
+        
+            // título em amarelo (mesma cor usada em PCD, COTISTA e AC)
+            $pdf->SetFont('Arial', 'B', 8);
+            $pdf->SetTextColor(255, 174, 25);
+            $pdf->Cell(28, 6, mb_convert_encoding('BAIRROS DE COTA:', 'ISO-8859-1', 'UTF-8'), 0, 0, 'L');
+        
+            // texto dos bairros em verde-escuro
+            $pdf->SetTextColor(0, 90, 36);
             $pdf->SetFont('Arial', '', 8);
-            $x_pos = 55; // Inicia logo após o título
-            $item_width = 25; // Ajustado para caber 2 bairros com separador
+        
+            // monta a string dos bairros separados por " | "
+            $bairros_texto = '';
             foreach ($bairros_para_mostrar as $index => $dado) {
-                $pdf->SetX($x_pos);
                 $bairro = strtoupper(mb_convert_encoding($dado['bairros'], 'ISO-8859-1', 'UTF-8'));
-                // Adiciona vírgula e espaço, exceto no último bairro
-                $texto = ($index < count($bairros_para_mostrar) - 1) ? $bairro . ', ' : $bairro;
-                $pdf->Cell($item_width, 6, $texto, 0, 0, 'L');
-                $x_pos += $item_width;
+                $bairros_texto .= ($index < count($bairros_para_mostrar) - 1) ? $bairro . ' | ' : $bairro;
             }
+        
+            // imprime os bairros na mesma linha
+            $pdf->Cell(0, 6, $bairros_texto, 0, 1, 'L');
+            $pdf->SetY(16);
+        
+        } else {
+            // mesmo espaçamento vertical quando não há seção de bairros
+            $pdf->SetY(16); // posição equivalente à parte inferior da seção de bairros
         }
 
-        $pdf->SetFont('Arial', 'B', 12);
+
+        $pdf->SetFont('Arial', 'B', 8);
         $pdf->Cell(185, 10, '', 0, 1, 'C');
         // Fonte do cabeçalho
-        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->SetFont('Arial', 'B', 8);
         $pdf->SetFillColor(0, 90, 36); //fundo verde
         $pdf->SetTextColor(255, 255, 255);  //texto branco
-        $pdf->Cell(10, $altura_celula, mb_convert_encoding('CH', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
-        $pdf->Cell($celula_nome, $altura_celula, mb_convert_encoding('Nome', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
-        $pdf->Cell($celula_curso, $altura_celula, mb_convert_encoding('Curso', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
-        $pdf->Cell($celula_origem, $altura_celula, mb_convert_encoding('Origem', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
+        $pdf->Cell(10, $altura_celula, mb_convert_encoding('CL', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
+        $pdf->Cell($celula_nome, $altura_celula, mb_convert_encoding('NOME', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
+        $pdf->Cell($celula_curso, $altura_celula, mb_convert_encoding('CURSO', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
+        $pdf->Cell($celula_origem, $altura_celula, mb_convert_encoding('ORIGEM', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
         if ((isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin')) {
-            $pdf->Cell($celula_segmento, $altura_celula, mb_convert_encoding('Segm.', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
-            $pdf->Cell(17, $altura_celula, mb_convert_encoding('Media', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
-            $pdf->Cell($celula_cadastrador, $altura_celula, mb_convert_encoding('Resp. Cadastro', 'ISO-8859-1', 'UTF-8'), 1, 1, 'C', true);
+            $pdf->Cell($celula_segmento, $altura_celula, mb_convert_encoding('SEG', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
+            $pdf->Cell(17, $altura_celula, mb_convert_encoding('MEDIA', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
+            $pdf->Cell($celula_cadastrador, $altura_celula, mb_convert_encoding('CADASTRADOR(A)', 'ISO-8859-1', 'UTF-8'), 1, 1, 'C', true);
         } else {
             $pdf->Cell(26, $altura_celula, mb_convert_encoding('Segmento', 'ISO-8859-1', 'UTF-8'), 1, 1, 'C', true);
         }
