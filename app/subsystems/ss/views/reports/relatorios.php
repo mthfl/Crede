@@ -61,72 +61,70 @@ class relatorios extends connect
         $publica = 0;
         $pcd = 0;
         $bairro = 0;
-        
+
         // Determinar os parâmetros da consulta com base no tipo de relatório
         switch ($tipo_relatorio) {
             case 'PRIVADA AC':
-                $publica = 0;
-                $pcd = 0;
-                $bairro = 0;
-                break;
-            case 'PRIVADA COTAS':
-                $publica = 0;
-                $pcd = 0;
-                $bairro = 1;
-                break;
-            case 'PRIVADA GERAL':
-                $publica = 0;
-                $pcd = 0;
-                $bairro = null; // Não filtrar por bairro
-                break;
-            case 'PÚBLICA AC':
-                $publica = 1;
-                $pcd = 0;
-                $bairro = 0;
-                break;
-            case 'PÚBLICA COTAS':
-                $publica = 1;
-                $pcd = 0;
-                $bairro = 1;
-                break;
-            case 'PÚBLICA GERAL':
-                $publica = 1;
-                $pcd = 0;
-                $bairro = null; // Não filtrar por bairro
-                break;
-            default:
-                $publica = 0;
-                $pcd = 0;
-                $bairro = 0;
-                $tipo_relatorio = 'PRIVADA AC';
-                break;
-        }
-
-        // Construir a consulta SQL com base nos parâmetros
-        $sql = "SELECT can.nome, cur.nome_curso, can.publica, can.bairro, can.pcd, m.media_final, u.nome_user 
+                $sql = "SELECT can.nome, cur.nome_curso, can.publica, can.bairro, can.pcd, m.media_final, u.nome_user 
                 FROM $this->table1 can    
                 INNER JOIN $this->table4 m ON m.id_candidato = can.id 
                 INNER JOIN $this->table5 u ON can.id_cadastrador = u.id 
                 INNER JOIN $this->table2 cur ON can.id_curso1 = cur.id 
-                WHERE can.id_curso1 = :curso AND can.publica = :publica AND can.pcd = :pcd AND can.status = 1";
-        
-        // Adicionar filtro de bairro apenas se necessário
-        if ($bairro !== null) {
-            $sql .= " AND can.bairro = :bairro";
+                WHERE can.id_curso1 = :curso AND can.publica = 0 AND can.pcd = 0 AND can.bairro = 0 AND can.status = 1
+                ORDER BY m.media_final DESC, can.data_nascimento DESC, m.l_portuguesa_media DESC, m.matematica_media DESC";
+                break;
+            case 'PRIVADA COTAS':
+                $sql = "SELECT can.nome, cur.nome_curso, can.publica, can.bairro, can.pcd, m.media_final, u.nome_user 
+                FROM $this->table1 can    
+                INNER JOIN $this->table4 m ON m.id_candidato = can.id 
+                INNER JOIN $this->table5 u ON can.id_cadastrador = u.id 
+                INNER JOIN $this->table2 cur ON can.id_curso1 = cur.id 
+                WHERE can.id_curso1 = :curso AND can.publica = 0 AND (can.pcd = 1 OR can.bairro = 1) AND can.status = 1
+                ORDER BY m.media_final DESC, can.data_nascimento DESC, m.l_portuguesa_media DESC, m.matematica_media DESC";
+                break;
+            case 'PRIVADA GERAL':
+                $sql = "SELECT can.nome, cur.nome_curso, can.publica, can.bairro, can.pcd, m.media_final, u.nome_user 
+                FROM $this->table1 can    
+                INNER JOIN $this->table4 m ON m.id_candidato = can.id 
+                INNER JOIN $this->table5 u ON can.id_cadastrador = u.id 
+                INNER JOIN $this->table2 cur ON can.id_curso1 = cur.id 
+                WHERE can.id_curso1 = :curso AND can.publica = 0 AND can.status = 1
+                ORDER BY m.media_final DESC, can.data_nascimento DESC, m.l_portuguesa_media DESC, m.matematica_media DESC";
+                break;
+            case 'PÚBLICA AC':
+                $sql = "SELECT can.nome, cur.nome_curso, can.publica, can.bairro, can.pcd, m.media_final, u.nome_user 
+                FROM $this->table1 can    
+                INNER JOIN $this->table4 m ON m.id_candidato = can.id 
+                INNER JOIN $this->table5 u ON can.id_cadastrador = u.id 
+                INNER JOIN $this->table2 cur ON can.id_curso1 = cur.id 
+                WHERE can.id_curso1 = :curso AND can.publica = 1 AND can.pcd = 0 AND can.bairro = 0 AND can.status = 1
+                ORDER BY m.media_final DESC, can.data_nascimento DESC, m.l_portuguesa_media DESC, m.matematica_media DESC";
+                break;
+            case 'PÚBLICA COTAS':
+                $sql = "SELECT can.nome, cur.nome_curso, can.publica, can.bairro, can.pcd, m.media_final, u.nome_user 
+                FROM $this->table1 can    
+                INNER JOIN $this->table4 m ON m.id_candidato = can.id 
+                INNER JOIN $this->table5 u ON can.id_cadastrador = u.id 
+                INNER JOIN $this->table2 cur ON can.id_curso1 = cur.id 
+                WHERE can.id_curso1 = :curso AND can.publica = 1 AND (can.pcd = 1 OR can.bairro = 1) AND can.status = 1
+                ORDER BY m.media_final DESC, can.data_nascimento DESC, m.l_portuguesa_media DESC, m.matematica_media DESC";
+                break;
+            case 'PÚBLICA GERAL':
+                $sql = "SELECT can.nome, cur.nome_curso, can.publica, can.bairro, can.pcd, m.media_final, u.nome_user 
+                FROM $this->table1 can    
+                INNER JOIN $this->table4 m ON m.id_candidato = can.id 
+                INNER JOIN $this->table5 u ON can.id_cadastrador = u.id 
+                INNER JOIN $this->table2 cur ON can.id_curso1 = cur.id 
+                WHERE can.id_curso1 = :curso AND can.publica = 1 AND can.status = 1
+                ORDER BY m.media_final DESC, can.data_nascimento DESC, m.l_portuguesa_media DESC, m.matematica_media DESC";
+                break;
+            default:
+                
+                header("location:../relatorios.php");
         }
-        
-        $sql .= " ORDER BY m.media_final DESC, can.data_nascimento DESC, m.l_portuguesa_media DESC, m.matematica_media DESC;";
-        
+
         $stmtSelect = $this->connect->prepare($sql);
         $stmtSelect->BindValue(':curso', $curso);
-        $stmtSelect->BindValue(':publica', $publica);
-        $stmtSelect->BindValue(':pcd', $pcd);
-        
-        // Vincular parâmetro de bairro apenas se necessário
-        if ($bairro !== null) {
-            $stmtSelect->BindValue(':bairro', $bairro);
-        }
-        
         $stmtSelect->execute();
         $dados = $stmtSelect->fetchAll(PDO::FETCH_ASSOC);
 
@@ -134,55 +132,55 @@ class relatorios extends connect
         $pdf->AddPage();
         $pdf->Image('../../assets/imgs/fundo5_pdf.png', 0, 0, $pdf->GetPageWidth(), $pdf->GetPageHeight(), 'png', '', 0.1);
         // Cabeçalho com larguras ajustadas
-        
+
         $pdf->SetFont('Arial', 'B', 20);
         $pdf->SetY(8);
         $pdf->SetX(8.50);
         $pdf->Cell(22, 8, mb_convert_encoding($tipo_relatorio, 'ISO-8859-1', 'UTF-8'), 0, 1, 'L');
         $pdf->SetFont('Arial', 'B', 8);
- 
+
 
         //LEGENDAS PCD  |  COTISTAS  |  AC  ///////////////////////////////////////////////////////////////////////////////
-                $pdf->SetLeftMargin(138);
-                // Linha 1
-                $pdf->SetY(8);
-                $pdf->SetFont('Arial', 'B', 8);
-                $pdf->SetTextColor(255, 174, 25); // texto amarelo
-                
-                $pdf->Write(5, mb_convert_encoding('PCD', 'ISO-8859-1', 'UTF-8'));
-                
-                $pdf->SetTextColor(0, 90, 36); // volta pro preto
-                $pdf->SetFont('Arial', '', 8);
-                $pdf->Write(5, mb_convert_encoding('  PESSOA COM DEFICIÊNCIA', 'ISO-8859-1', 'UTF-8'));
-                
-                
-                // Linha 2
-                $pdf->SetY(12);
-                $pdf->SetFont('Arial', 'B', 8);
-                $pdf->SetTextColor(255, 174, 25); // texto amarelo
-                
-                $pdf->Write(5, mb_convert_encoding('COTISTA', 'ISO-8859-1', 'UTF-8'));
-                
-                $pdf->SetTextColor(0, 90, 36);
-                $pdf->SetFont('Arial', '', 8);
-                $pdf->Write(5, mb_convert_encoding('  COTA DO BAIRRO', 'ISO-8859-1', 'UTF-8'));
-                
-                
-                // Linha 3
-                $pdf->SetY(16);
-                $pdf->SetFont('Arial', 'B', 8);
-                $pdf->SetTextColor(255, 174, 25); // texto amarelo
-                
-                $pdf->Write(5, mb_convert_encoding('AC', 'ISO-8859-1', 'UTF-8'));
-                
-                $pdf->SetTextColor(0, 90, 36);
-                $pdf->SetFont('Arial', '', 8);
-                $pdf->Write(5, mb_convert_encoding('  AMPLA CONCORRÊNCIA', 'ISO-8859-1', 'UTF-8'));
+        $pdf->SetLeftMargin(138);
+        // Linha 1
+        $pdf->SetY(8);
+        $pdf->SetFont('Arial', 'B', 8);
+        $pdf->SetTextColor(255, 174, 25); // texto amarelo
+
+        $pdf->Write(5, mb_convert_encoding('PCD', 'ISO-8859-1', 'UTF-8'));
+
+        $pdf->SetTextColor(0, 90, 36); // volta pro preto
+        $pdf->SetFont('Arial', '', 8);
+        $pdf->Write(5, mb_convert_encoding('  PESSOA COM DEFICIÊNCIA', 'ISO-8859-1', 'UTF-8'));
+
+
+        // Linha 2
+        $pdf->SetY(12);
+        $pdf->SetFont('Arial', 'B', 8);
+        $pdf->SetTextColor(255, 174, 25); // texto amarelo
+
+        $pdf->Write(5, mb_convert_encoding('COTISTA', 'ISO-8859-1', 'UTF-8'));
+
+        $pdf->SetTextColor(0, 90, 36);
+        $pdf->SetFont('Arial', '', 8);
+        $pdf->Write(5, mb_convert_encoding('  COTA DO BAIRRO', 'ISO-8859-1', 'UTF-8'));
+
+
+        // Linha 3
+        $pdf->SetY(16);
+        $pdf->SetFont('Arial', 'B', 8);
+        $pdf->SetTextColor(255, 174, 25); // texto amarelo
+
+        $pdf->Write(5, mb_convert_encoding('AC', 'ISO-8859-1', 'UTF-8'));
+
+        $pdf->SetTextColor(0, 90, 36);
+        $pdf->SetFont('Arial', '', 8);
+        $pdf->Write(5, mb_convert_encoding('  AMPLA CONCORRÊNCIA', 'ISO-8859-1', 'UTF-8'));
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        
+
 
         $pdf->SetLeftMargin(10);
-        
+
 
         $pdf->SetFont('Arial', 'B', 12);
         $pdf->Cell(185, 10, '', 0, 1, 'C');
@@ -190,37 +188,36 @@ class relatorios extends connect
         $stmt_bairros = $this->connect->query("SELECT * FROM $this->table13");
         $dados_bairros = $stmt_bairros->fetchAll(PDO::FETCH_ASSOC);
         $bairros_para_mostrar = array_slice($dados_bairros, 0, 5);
-       
+
         $pdf->SetFont('Arial', '', 8);
 
-       
-       
+
+
         // Título e bairros alinhados na mesma linha, exceto para PRIVADA AC e PÚBLICA AC
         if ($tipo_relatorio !== 'PRIVADA AC' && $tipo_relatorio !== 'PÚBLICA AC') {
             // mesmo alinhamento do tipo_relatorio
             $pdf->SetY(20);
             $pdf->SetX(8.50);
-        
+
             // título em amarelo (mesma cor usada em PCD, COTISTA e AC)
             $pdf->SetFont('Arial', 'B', 8);
             $pdf->SetTextColor(255, 174, 25);
             $pdf->Cell(28, 6, mb_convert_encoding('BAIRROS DE COTA:', 'ISO-8859-1', 'UTF-8'), 0, 0, 'L');
-        
+
             // texto dos bairros em verde-escuro
             $pdf->SetTextColor(0, 90, 36);
             $pdf->SetFont('Arial', '', 8);
-        
+
             // monta a string dos bairros separados por " | "
             $bairros_texto = '';
             foreach ($bairros_para_mostrar as $index => $dado) {
                 $bairro = strtoupper(mb_convert_encoding($dado['bairros'], 'ISO-8859-1', 'UTF-8'));
                 $bairros_texto .= ($index < count($bairros_para_mostrar) - 1) ? $bairro . ' | ' : $bairro;
             }
-        
+
             // imprime os bairros na mesma linha
             $pdf->Cell(0, 6, $bairros_texto, 0, 1, 'L');
             $pdf->SetY(16);
-        
         } else {
             // mesmo espaçamento vertical quando não há seção de bairros
             $pdf->SetY(16); // posição equivalente à parte inferior da seção de bairros
