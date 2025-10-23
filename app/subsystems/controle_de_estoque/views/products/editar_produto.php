@@ -424,7 +424,7 @@ if (isset($_GET['id_produto']) && !empty($_GET['id_produto'])) {
                         <span>Solicitar</span>
                     </a>
                 <?php } ?>
-                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['Dev_estoque'])|| isset($_SESSION['liberador_estoque'])) { ?>
+                <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['Dev_estoque']) || isset($_SESSION['liberador_estoque'])) { ?>
                     <a href="../relatorios.php" class="sidebar-link flex items-center p-3 rounded-lg transition-all duration-200 hover:bg-white/10 hover:translate-x-2">
                         <i class="fas fa-clipboard-list mr-3 text-lg"></i>
                         <span>Relatórios</span>
@@ -479,29 +479,22 @@ if (isset($_GET['id_produto']) && !empty($_GET['id_produto'])) {
                                 class="w-full px-4 py-3 border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent text-center font-semibold"
                                 aria-label="Nome do produto">
                         </div>
-                    <?php } ?>
-                    <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['liberador_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
+   
                         <div>
                             <input value="<?= $dados['nome_produto'] ?>" type="text" placeholder="NOME DO PRODUTO | MARCA | MODELO | PACOTE OU UNIDADE" id="nome" name="nome_produto" style="text-transform: uppercase;" oninput="this.value = this.value.toUpperCase();" required
                                 class="w-full px-4 py-3 border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent text-center font-semibold"
                                 aria-label="Nome do produto">
                         </div>
-                    <?php } ?>
-                    <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
                         <div>
                             <input value="<?= $dados['quantidade'] ?>" type="number" placeholder="QUANTIDADE" min="1" id="quantidade" name="quantidade" required
                                 class="w-full px-4 py-3 border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent text-center font-semibold"
                                 aria-label="Quantidade do produto">
                         </div>
-                    <?php } ?>
-                    <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
                         <div>
                             <input value="<?= $dados['vencimento'] ?>" type="date" placeholder="VALIDADE" min="1" id="validade" name="validade"
                                 class="w-full px-4 py-3 border-2 border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent text-center font-semibold"
                                 aria-label="Quantidade do produto">
                         </div>
-                    <?php } ?>
-                    <?php if (isset($_SESSION['Admin_estoque']) || isset($_SESSION['Dev_estoque'])) { ?>
 
                         <div class="p-4 border-2 border-primary rounded-lg">
                             <p class="font-semibold text-primary mb-3 text-center">Selecione a Categoria</p>
@@ -510,23 +503,33 @@ if (isset($_GET['id_produto']) && !empty($_GET['id_produto'])) {
                                 <option value="<?= $dados['id_categoria'] ?>" selected><?= $dados['categoria'] ?></option>
 
                                 <?php
-                                $dados = $select->select_categoria();
-                                foreach ($dados as $dado) {
+                                $dados_c = $select->select_categoria();
+                                foreach ($dados_c as $dado) {
                                 ?>
                                     <option value="<?= $dado['id'] ?>"><?= $dado['nome_categoria'] ?></option>
                                 <?php } ?>
+                            </select>
+                        </div>
+                        <div class="p-4 border-2 border-primary rounded-lg">
+                        <p class="font-semibold text-primary mb-3 text-center">Selecione o tipo de produto</p>
+                            <select class="js-example-basic-single " id="tipo" name="tipo" required data-placeholder="Selecione o tipo de produto">
+                                <option class="text-center " value="" disabled selected hidden>Selecione o tipo de produto</option>
+
+                                <option value="Unidade">Unidade</option>
+                                <option value="Embalagem">Embalagem</option>
+                                <option value="Peso">Peso</option>
+                                <option value="Comprimento">Comprimento</option>
+                                <option value="Volume">Volume</option>
                             </select>
                         </div>
                     <?php } ?>
                 </div>
                 <button type="submit" name="editar" value="EDITAR" class="w-full bg-secondary text-white font-bold py-3 px-4 rounded-lg hover:bg-opacity-90 transition-colors"
                     aria-label="Adicionar produto">
-                    ADICIONAR
+                    SALVAR
                 </button>
-        </div>
 
-
-        </form>
+            </form>
         </div>
     </main>
 

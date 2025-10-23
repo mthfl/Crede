@@ -56,10 +56,10 @@ class admin extends liberador
             return 0;
         }
     }
-    public function editar_produto_geral(int $id_produto, $barcode, string $nome, int $quantidade, int $id_categoria, string $validade): int
+    public function editar_produto_geral(int $id_produto, $barcode, string $nome, int $quantidade, int $id_categoria, string $validade,string $tipo): int
     {
         try {
-            $consulta = "UPDATE $this->table4 SET barcode = :barcode, nome_produto = :nome, quantidade = :quantidade, id_categoria = :id_categoria, vencimento = :validade WHERE id = :id";
+            $consulta = "UPDATE $this->table4 SET barcode = :barcode, nome_produto = :nome, quantidade = :quantidade, id_categoria = :id_categoria, vencimento = :validade, tipo_produto = :tipo WHERE id = :id";
             $query = $this->connect->prepare($consulta);
             $query->bindValue(":id", $id_produto);
             $query->bindValue(":nome", $nome);
@@ -67,6 +67,7 @@ class admin extends liberador
             $query->bindValue(":quantidade", $quantidade);
             $query->bindValue(":id_categoria", $id_categoria);
             $query->bindValue(":validade", $validade);
+            $query->bindValue(":tipo", $tipo);
 
             if ($query->execute()) {
                 return 1;

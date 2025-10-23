@@ -22,7 +22,7 @@ class liberador extends connect
         $this->table4 = $table['crede_estoque'][4];
     }
 
-    public function cadastrar_produto($barcode, string $nome, int $quantidade, int $id_categoria, string $validade): int
+    public function cadastrar_produto($barcode, string $nome, int $quantidade, int $id_categoria, string $validade, string $tipo_produto): int
     {
         $consulta = "SELECT * FROM $this->table4 WHERE nome_produto = :nome";
         $query = $this->connect->prepare($consulta);
@@ -33,7 +33,7 @@ class liberador extends connect
             date_default_timezone_set('America/Fortaleza');
             $data = date('Y-m-d H:i:s');
 
-            $consulta = "INSERT INTO $this->table4 VALUES (null, :barcode, :nome, :quantidade, :id_categoria,:validade, :data)";
+            $consulta = "INSERT INTO $this->table4 VALUES (null, :barcode, :nome, :quantidade, :id_categoria,:validade, :data, :tipo)";
             $query = $this->connect->prepare($consulta);
             $query->bindValue(":nome", $nome);
             $query->bindValue(":barcode", $barcode);
@@ -41,6 +41,7 @@ class liberador extends connect
             $query->bindValue(":id_categoria", $id_categoria);
             $query->bindValue(":validade", $validade);
             $query->bindValue(":data", $data);
+            $query->bindValue(":tipo", $tipo_produto);
 
             if ($query->execute()) {
                 return 1;

@@ -526,6 +526,18 @@ $select = new select();
                             <?php } ?>
                         </select>
                     </div>
+                    <div class="p-4 border-2 border-primary rounded-lg">
+                        
+                        <select class="js-example-basic-single " id="tipo" name="tipo" required data-placeholder="Selecione o tipo de produto">
+                            <option class="text-center " value="" disabled selected hidden>Selecione o tipo de produto</option>
+
+                            <option value="Unidade">Unidade</option>
+                            <option value="Embalagem">Embalagem</option>
+                            <option value="Peso">Peso</option>
+                            <option value="Comprimento">Comprimento</option>
+                            <option value="Volume">Volume</option>
+                        </select>
+                    </div>
                 </div>
                 <button type="submit" name="btn" value="Adicionar" class="w-full bg-secondary text-white font-bold py-3 px-4 rounded-lg hover:bg-opacity-90 transition-colors"
                     aria-label="Adicionar produto">

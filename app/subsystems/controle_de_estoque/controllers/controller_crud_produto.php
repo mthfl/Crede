@@ -21,6 +21,7 @@ if (
     $quantidade = $_POST['quantidade'] ?? null;
     $validade = $_POST['validade'] ?? null;
     $id_categoria = $_POST['id_categoria'] ?? null;
+    $tipo = $_POST['tipo'] ?? null;
 
     if (isset($_POST['editar'])) {
 
@@ -42,7 +43,7 @@ if (
             }
         } else {
             $obj = new admin();
-            $result = $obj->editar_produto_geral($id_produto, $barcode, $nome, $quantidade, $id_categoria, $validade);
+            $result = $obj->editar_produto_geral($id_produto, $barcode, $nome, $quantidade, $id_categoria, $validade, $tipo);
 
             switch ($result) {
                 case 1:
@@ -59,7 +60,7 @@ if (
     } else {
 
         $obj = new liberador();
-        $result = $obj->cadastrar_produto($barcode, $nome, $quantidade, $id_categoria, $validade);
+        $result = $obj->cadastrar_produto($barcode, $nome, $quantidade, $id_categoria, $validade, $tipo);
 
         switch ($result) {
             case 1:

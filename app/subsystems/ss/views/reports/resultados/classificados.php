@@ -56,7 +56,7 @@ class relatorios extends connect
 
         $pdf = new FPDF('P', 'mm', 'A4');
         $pdf->AddPage();
-        $pdf->Image('../../../assets/imgs/fundo_pdf.png', 0, 0, $pdf->GetPageWidth(), $pdf->GetPageHeight(), 'png', '', 0.1);
+        $pdf->Image('../../../assets/imgs/fundo5_pdf.png', 0, 0, $pdf->GetPageWidth(), $pdf->GetPageHeight(), 'png', '', 0.1);
         $stmtSelect_curso = $this->connect->prepare(
             "SELECT * FROM $this->table2 WHERE id = :id_curso"
         );
