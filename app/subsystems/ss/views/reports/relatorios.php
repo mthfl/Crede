@@ -121,6 +121,7 @@ class relatorios extends connect
             default:
                 
                 header("location:../relatorios.php");
+                exit();
         }
 
         $stmtSelect = $this->connect->prepare($sql);
