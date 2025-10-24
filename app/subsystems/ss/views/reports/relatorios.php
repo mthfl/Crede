@@ -10,6 +10,15 @@ $escola = $_SESSION['escola'];
 new connect($escola);
 require_once(__DIR__ . '/../../assets/libs/fpdf/fpdf.php');
 
+class PDF extends FPDF
+{
+    function AddPage($orientation = '', $size = '', $rotation = 0)
+    {
+        parent::AddPage($orientation, $size, $rotation);
+        $this->Image('../../assets/imgs/fundo5_pdf.png', 0, 0, $this->GetPageWidth(), $this->GetPageHeight(), 'png', '', 0.1);
+    }
+}
+
 class relatorios extends connect
 {
     protected string $table1;
@@ -119,7 +128,6 @@ class relatorios extends connect
                 ORDER BY m.media_final DESC, can.data_nascimento DESC, m.l_portuguesa_media DESC, m.matematica_media DESC";
                 break;
             default:
-                
                 header("location:../relatorios.php");
                 exit();
         }
@@ -129,9 +137,8 @@ class relatorios extends connect
         $stmtSelect->execute();
         $dados = $stmtSelect->fetchAll(PDO::FETCH_ASSOC);
 
-        $pdf = new FPDF($orientacao, 'mm', 'A4');
+        $pdf = new PDF($orientacao, 'mm', 'A4');
         $pdf->AddPage();
-        $pdf->Image('../../assets/imgs/fundo5_pdf.png', 0, 0, $pdf->GetPageWidth(), $pdf->GetPageHeight(), 'png', '', 0.1);
         // Cabeçalho com larguras ajustadas
 
         $pdf->SetFont('Arial', 'B', 20);
@@ -140,48 +147,37 @@ class relatorios extends connect
         $pdf->Cell(22, 8, mb_convert_encoding($tipo_relatorio, 'ISO-8859-1', 'UTF-8'), 0, 1, 'L');
         $pdf->SetFont('Arial', 'B', 8);
 
-
         //LEGENDAS PCD  |  COTISTAS  |  AC  ///////////////////////////////////////////////////////////////////////////////
         $pdf->SetLeftMargin(138);
         // Linha 1
         $pdf->SetY(8);
         $pdf->SetFont('Arial', 'B', 8);
         $pdf->SetTextColor(255, 174, 25); // texto amarelo
-
         $pdf->Write(5, mb_convert_encoding('PCD', 'ISO-8859-1', 'UTF-8'));
-
         $pdf->SetTextColor(0, 90, 36); // volta pro preto
         $pdf->SetFont('Arial', '', 8);
         $pdf->Write(5, mb_convert_encoding('  PESSOA COM DEFICIÊNCIA', 'ISO-8859-1', 'UTF-8'));
-
 
         // Linha 2
         $pdf->SetY(12);
         $pdf->SetFont('Arial', 'B', 8);
         $pdf->SetTextColor(255, 174, 25); // texto amarelo
-
         $pdf->Write(5, mb_convert_encoding('COTISTA', 'ISO-8859-1', 'UTF-8'));
-
         $pdf->SetTextColor(0, 90, 36);
         $pdf->SetFont('Arial', '', 8);
         $pdf->Write(5, mb_convert_encoding('  COTA DO BAIRRO', 'ISO-8859-1', 'UTF-8'));
-
 
         // Linha 3
         $pdf->SetY(16);
         $pdf->SetFont('Arial', 'B', 8);
         $pdf->SetTextColor(255, 174, 25); // texto amarelo
-
         $pdf->Write(5, mb_convert_encoding('AC', 'ISO-8859-1', 'UTF-8'));
-
         $pdf->SetTextColor(0, 90, 36);
         $pdf->SetFont('Arial', '', 8);
         $pdf->Write(5, mb_convert_encoding('  AMPLA CONCORRÊNCIA', 'ISO-8859-1', 'UTF-8'));
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
         $pdf->SetLeftMargin(10);
-
 
         $pdf->SetFont('Arial', 'B', 12);
         $pdf->Cell(185, 10, '', 0, 1, 'C');
@@ -191,8 +187,6 @@ class relatorios extends connect
         $bairros_para_mostrar = array_slice($dados_bairros, 0, 5);
 
         $pdf->SetFont('Arial', '', 8);
-
-
 
         // Título e bairros alinhados na mesma linha, exceto para PRIVADA AC e PÚBLICA AC
         if ($tipo_relatorio !== 'PRIVADA AC' && $tipo_relatorio !== 'PÚBLICA AC') {
@@ -223,7 +217,6 @@ class relatorios extends connect
             // mesmo espaçamento vertical quando não há seção de bairros
             $pdf->SetY(16); // posição equivalente à parte inferior da seção de bairros
         }
-
 
         $pdf->SetFont('Arial', 'B', 8);
         $pdf->Cell(185, 10, '', 0, 1, 'C');
@@ -276,7 +269,13 @@ class relatorios extends connect
             $pdf->Cell($celula_segmento, $altura_celula, $cota, 1, $p, 'C', true); // verificar parâmetro 'p' na parte superior do relatório
             if ((isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin')) {
                 $pdf->Cell(17, $altura_celula, number_format($dado['media_final'], 2), 1, 0, 'C', true);
-                $pdf->Cell($celula_cadastrador, $altura_celula, strtoupper(mb_convert_encoding($dado['nome_user'], 'ISO-8859-1', 'UTF-8')), 1, 1, 'L', true);
+                $cadastrador_text = strtoupper(mb_convert_encoding($dado['nome_user'], 'ISO-8859-1', 'UTF-8'));
+                $text_width = $pdf->GetStringWidth($cadastrador_text);
+                if ($text_width > $celula_cadastrador) {
+                    $max_chars = floor(($celula_cadastrador / $text_width) * strlen($cadastrador_text)) - 3;
+                    $cadastrador_text = substr($cadastrador_text, 0, $max_chars) . '...';
+                }
+                $pdf->Cell($celula_cadastrador, $altura_celula, $cadastrador_text, 1, 1, 'L', true);
             }
             $classificacao++;
         }

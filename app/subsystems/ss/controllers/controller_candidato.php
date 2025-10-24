@@ -227,9 +227,9 @@ if (
     $nome = $_POST["nome"];
     $data_nascimento = $_POST["data_nascimento"];
     // Processar campo cota do formulário
-    echo $cota = $_POST['cota'] ?? 'ampla';
-    echo $pcd = ($cota === 'pcd') ? 1 : 0;
-    echo $bairro = ($cota === 'bairro') ? 1 : 0;
+    $cota = $_POST['cota'] ?? 'ampla';
+    $pcd = ($cota === 'pcd') ? 1 : 0;
+    $bairro = ($cota === 'bairro') ? 1 : 0;
     $id_curso1 = (int)$_POST["curso_id"];
     $publica = $_POST["tipo_escola"] == 'publica' ? 1 : 0;
     $id_cadastrador = $_SESSION['id'];

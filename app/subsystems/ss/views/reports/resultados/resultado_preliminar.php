@@ -10,6 +10,15 @@ $escola = $_SESSION['escola'];
 new connect($escola);
 require_once(__DIR__ . '/../../../assets/libs/fpdf/fpdf.php');
 
+class PDF extends FPDF
+{
+    function AddPage($orientation = '', $size = '', $rotation = 0)
+    {
+        parent::AddPage($orientation, $size, $rotation);
+        $this->Image('../../../assets/imgs/fundo5_pdf.png', 0, 0, $this->GetPageWidth(), $this->GetPageHeight(), 'png', '', 0.1);
+    }
+}
+
 class relatorios extends connect
 {
     protected string $table1;
@@ -31,8 +40,33 @@ class relatorios extends connect
         $this->table13 = $table["ss_$escola"][13];
     }
 
-    public function gerarRelatorio($curso)
+    public function gerarRelatorio($curso, $tipo_relatorio = 'TODOS')
     {
+        if ((isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin')) {
+            // ADMIN
+            $celula_ch = 10;
+            $celula_nome = 93;
+            $celula_curso = 30;
+            $celula_origem = 20;
+            $celula_segmento = 20;
+            $celula_media = 15;
+            $altura_celula = 5;
+            $p = 0; // Não quebra a linha caso seja admin
+            $orientacao = 'P';
+        } else if ((isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'cadastrador')) {
+            // CLIENTE
+            $celula_ch = 10;
+            $celula_nome = 93;
+            $celula_curso = 30;
+            $celula_origem = 20;
+            $celula_segmento = 20;
+            $celula_media = 15;
+            $altura_celula = 5;
+            $p = 1; // Quebra a linha caso seja cliente
+            $orientacao = 'P';
+        }
+
+        // Cálculo das vagas
         $stmtSelect_vagas = $this->connect->prepare(
             "SELECT quantidade_alunos FROM $this->table2 WHERE id = :id_curso"
         );
@@ -41,42 +75,17 @@ class relatorios extends connect
         $vagas_curso = $stmtSelect_vagas->fetch(PDO::FETCH_ASSOC);
         $total_vagas = $vagas_curso['quantidade_alunos'];
 
-        // Cálculo das vagas por segmento
-        $vagas_pcd = 2; // Vagas reservadas para PCD
+        $vagas_pcd = 2; 
         $vagas_restantes = $total_vagas - $vagas_pcd;
-        
-        $total_publica = floor($vagas_restantes * (80 / 100));
-        $total_privada = $vagas_restantes - $total_publica;
-        
-        $publica_cotas = floor($total_publica * (30 / 100));
-        $publica_ac = $total_publica - $publica_cotas;
-        
-        $privada_cotas = floor($total_privada * (30 / 100));
-        $privada_ac = $total_privada - $privada_cotas;
 
-        $pdf = new FPDF('P', 'mm', 'A4');
-        $pdf->AddPage();
-        $pdf->Image('../../../assets/imgs/fundo_pdf.png', 0, 0, $pdf->GetPageWidth(), $pdf->GetPageHeight(), 'png', '', 0.1);
-        $stmtSelect_curso = $this->connect->prepare(
-            "SELECT * FROM $this->table2 WHERE id = :id_curso"
-        );
-        $stmtSelect_curso->bindValue(':id_curso', $curso);
-        $stmtSelect_curso->execute();
-        $curso_nome = $stmtSelect_curso->fetch(PDO::FETCH_ASSOC);
-        
-        // Styling adjusted to match the first code
-        $pdf->SetFont('Arial', 'B', 25);
-        $pdf->SetY(8);
-        $pdf->SetX(60);
-        $pdf->Cell(90, 8, mb_convert_encoding('RESULTADO PRELIMINAR', 'ISO-8859-1', 'UTF-8'), 0, 1, 'C');
-        $pdf->SetFont('Arial', 'B', 12);
-        $pdf->SetY(16);
-        $pdf->SetX(11);
-        $pdf->Cell(188, 6, mb_convert_encoding(" - " . mb_strtoupper($curso_nome['nome_curso'], 'UTF-8') . " - ", 'ISO-8859-1', 'UTF-8'), 0, 1, 'C');
-        $pdf->SetFont('Arial', 'B', 8);
-        $pdf->Cell(188, 6, mb_convert_encoding('PCD = PESSOA COM DEFICIÊNCIA | COTISTA = INCLUSO NA COTA DO BAIRRO | AC = AMPLA CONCORRÊNCIA', 'ISO-8859-1', 'UTF-8'), 0, 1, 'C');
-        $pdf->SetFont('Arial', 'B', 12);
-        $pdf->Cell(185, 10, '', 0, 1, 'C');
+        round($total_publica = $vagas_restantes * (80 / 100))."<br>";
+        round($total_privada = $vagas_restantes * (20 / 100))."<br>";
+
+        round($publica_cotas = $total_publica * (30 / 100))."<br>";
+        round($privada_cotas = $total_privada * (30 / 100))."<br>";
+
+        round($publica_ac = $total_publica * (70 / 100))."<br>";
+        round($privada_ac = $total_privada * (70 / 100))."<br>";
 
         // Array para armazenar os classificados de cada segmento
         $classificados = [];
@@ -164,112 +173,190 @@ class relatorios extends connect
 
         // PCD - Total (2 vagas para PCD independente de rede)
         $total_pcd = array_merge($classificados['pcd_publica'], $classificados['pcd_privada']);
-        usort($total_pcd, function($a, $b) {
+        usort($total_pcd, function ($a, $b) {
             return $b['media_final'] <=> $a['media_final'];
         });
         $vagas_ocupadas['pcd'] = array_slice($total_pcd, 0, $vagas_pcd);
         $vagas_sobra_pcd = $vagas_pcd - count($vagas_ocupadas['pcd']);
 
         // PÚBLICA COTAS - Verificar se há vagas não preenchidas
-        $vagas_ocupadas['publica_cotas'] = array_slice($classificados['publica_cotas'], 0, $publica_cotas);
+        $vagas_ocupadas['publica_cotas'] = array_slice($classificados['publica_cotas'], 0, round($publica_cotas));
         $vagas_sobra_publica_cotas = $publica_cotas - count($vagas_ocupadas['publica_cotas']);
 
         // PRIVADA COTAS - Verificar se há vagas não preenchidas
-        $vagas_ocupadas['privada_cotas'] = array_slice($classificados['privada_cotas'], 0, $privada_cotas);
+        $vagas_ocupadas['privada_cotas'] = array_slice($classificados['privada_cotas'], 0, round($privada_cotas));
         $vagas_sobra_privada_cotas = $privada_cotas - count($vagas_ocupadas['privada_cotas']);
 
         // PÚBLICA AC - Adicionar vagas que sobraram das cotas públicas
         $limite_publica_ac = $publica_ac + $vagas_sobra_publica_cotas + $vagas_sobra_pcd;
-        $vagas_ocupadas['publica_ac'] = array_slice($classificados['publica_ac'], 0, $limite_publica_ac);
+        $vagas_ocupadas['publica_ac'] = array_slice($classificados['publica_ac'], 0, round($limite_publica_ac));
 
         // PRIVADA AC - Adicionar vagas que sobraram das cotas privadas
         $limite_privada_ac = $privada_ac + $vagas_sobra_privada_cotas;
-        $vagas_ocupadas['privada_ac'] = array_slice($classificados['privada_ac'], 0, $limite_privada_ac);
+        $vagas_ocupadas['privada_ac'] = array_slice($classificados['privada_ac'], 0, round($limite_privada_ac));
 
-        // IMPRIMIR RELATÓRIO
+        // Inicializar PDF
+        $pdf = new PDF($orientacao, 'mm', 'A4');
+        $pdf->AddPage();
 
-        // PÚBLICA - AC
-        $this->imprimirSegmento($pdf, "REDE PUBLICA - AC", $vagas_ocupadas['publica_ac']);
+        // Cabeçalho (apenas na primeira página)
+        $stmtSelect_curso = $this->connect->prepare(
+            "SELECT * FROM $this->table2 WHERE id = :id_curso"
+        );
+        $stmtSelect_curso->bindValue(':id_curso', $curso);
+        $stmtSelect_curso->execute();
+        $curso_nome = $stmtSelect_curso->fetch(PDO::FETCH_ASSOC);
 
-        // PÚBLICA - COTA
-        $this->imprimirSegmento($pdf, "REDE PUBLICA - COTA", $vagas_ocupadas['publica_cotas']);
+        $pdf->SetFont('Arial', 'B', 20);
+        $pdf->SetY(8);
+        $pdf->SetX(8.50);
+        $pdf->Cell(22, 8, mb_convert_encoding('RESULTADO PRÉ-LIMINAR', 'ISO-8859-1', 'UTF-8'), 0, 1, 'L');
+        $pdf->SetFont('Arial', 'B', 8);
+        $pdf->SetY(16);
+        $pdf->SetX(11);
+        $pdf->Cell(188, 6, mb_convert_encoding(" - " . mb_strtoupper($curso_nome['nome_curso'], 'UTF-8') . " - ", 'ISO-8859-1', 'UTF-8'), 0, 1, 'C');
 
-        // PCD
-        $this->imprimirSegmento($pdf, "PCD", $vagas_ocupadas['pcd']);
-
-        // PRIVADA - AC
-        $this->imprimirSegmento($pdf, "REDE PRIVADA - AC", $vagas_ocupadas['privada_ac']);
-
-        // PRIVADA - COTA
-        $this->imprimirSegmento($pdf, "REDE PRIVADA - COTA", $vagas_ocupadas['privada_cotas']);
-
-        $pdf->Output('classificados.pdf', 'I');
-    }
-
-    private function imprimirSegmento($pdf, $titulo, $dados)
-    {
-        if (empty($dados)) {
-            return;
-        }
-
-        // Fonte do cabeçalho
-        $pdf->SetFont('Arial', 'B', 12);
-        $pdf->SetFillColor(0, 90, 36); // fundo verde (#005A24)
-        $pdf->SetTextColor(255, 255, 255); // texto branco
-        $pdf->Cell(188, 5, mb_convert_encoding($titulo, 'ISO-8859-1', 'UTF-8'), 1, 1, 'C', true);
-
-        $pdf->SetFont('Arial', 'B', 10);
-        $pdf->SetFillColor(0, 90, 36); // fundo verde (#005A24)
-        $pdf->SetTextColor(255, 255, 255); // texto branco
-        $pdf->Cell(10, 5, mb_convert_encoding('CH', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
-        $pdf->Cell(93, 5, mb_convert_encoding('NOME', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
-        $pdf->Cell(30, 5, mb_convert_encoding('CURSO', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
-        $pdf->Cell(20, 5, mb_convert_encoding('ORIGEM', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
-        $pdf->Cell(20, 5, mb_convert_encoding('SEGM.', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
-        $pdf->Cell(15, 5, mb_convert_encoding('MEDIA', 'ISO-8859-1', 'UTF-8'), 1, 1, 'C', true);
-
-        // Resetar cor do texto para preto
-        $pdf->SetTextColor(0, 0, 0);
+        // LEGENDAS PCD | COTISTAS | AC (apenas na primeira página)
+        $pdf->SetLeftMargin(138);
+        $pdf->SetY(8);
+        $pdf->SetFont('Arial', 'B', 8);
+        $pdf->SetTextColor(255, 174, 25); // texto amarelo
+        $pdf->Write(5, mb_convert_encoding('PCD', 'ISO-8859-1', 'UTF-8'));
+        $pdf->SetTextColor(0, 90, 36); // texto verde
         $pdf->SetFont('Arial', '', 8);
+        $pdf->Write(5, mb_convert_encoding('  PESSOA COM DEFICIÊNCIA', 'ISO-8859-1', 'UTF-8'));
 
-        // Dados com cores alternadas
-        $classificacao = 1;
+        $pdf->SetY(12);
+        $pdf->SetFont('Arial', 'B', 8);
+        $pdf->SetTextColor(255, 174, 25);
+        $pdf->Write(5, mb_convert_encoding('COTISTA', 'ISO-8859-1', 'UTF-8'));
+        $pdf->SetTextColor(0, 90, 36);
+        $pdf->SetFont('Arial', '', 8);
+        $pdf->Write(5, mb_convert_encoding('  COTA DO BAIRRO', 'ISO-8859-1', 'UTF-8'));
 
-        foreach ($dados as $row) {
-            // Definir escola
-            $escola = ($row['publica'] == 1) ? mb_convert_encoding('PÚBLICA', 'ISO-8859-1', 'UTF-8') : mb_convert_encoding('PRIVADA', 'ISO-8859-1', 'UTF-8');
+        $pdf->SetY(16);
+        $pdf->SetFont('Arial', 'B', 8);
+        $pdf->SetTextColor(255, 174, 25);
+        $pdf->Write(5, mb_convert_encoding('AC', 'ISO-8859-1', 'UTF-8'));
+        $pdf->SetTextColor(0, 90, 36);
+        $pdf->SetFont('Arial', '', 8);
+        $pdf->Write(5, mb_convert_encoding('  AMPLA CONCORRÊNCIA', 'ISO-8859-1', 'UTF-8'));
 
-            // Definir cota
-            if ($row['pcd'] == 1) {
-                $cota = mb_convert_encoding('PCD', 'ISO-8859-1', 'UTF-8');
-            } else if ($row['bairro'] == 1) {
-                $cota = mb_convert_encoding('COTISTA', 'ISO-8859-1', 'UTF-8');
-            } else {
-                $cota = mb_convert_encoding('AC', 'ISO-8859-1', 'UTF-8');
+        $pdf->SetLeftMargin(10);
+        $pdf->SetFont('Arial', 'B', 8);
+        $pdf->Cell(185, 10, '', 0, 1, 'C');
+
+        // Bairros (apenas na primeira página)
+        $stmt_bairros = $this->connect->query("SELECT * FROM $this->table13");
+        $dados_bairros = $stmt_bairros->fetchAll(PDO::FETCH_ASSOC);
+        $bairros_para_mostrar = array_slice($dados_bairros, 0, 5);
+
+        $pdf->SetY(20);
+        $pdf->SetX(8.50);
+        $pdf->SetFont('Arial', 'B', 8);
+        $pdf->SetTextColor(255, 174, 25);
+        $pdf->Cell(28, 6, mb_convert_encoding('BAIRROS DE COTA:', 'ISO-8859-1', 'UTF-8'), 0, 0, 'L');
+        $pdf->SetTextColor(0, 90, 36);
+        $pdf->SetFont('Arial', '', 8);
+        $bairros_texto = '';
+        foreach ($bairros_para_mostrar as $index => $dado) {
+            $bairro = strtoupper(mb_convert_encoding($dado['bairros'], 'ISO-8859-1', 'UTF-8'));
+            $bairros_texto .= ($index < count($bairros_para_mostrar) - 1) ? $bairro . ' | ' : $bairro;
+        }
+        $pdf->Cell(0, 6, $bairros_texto, 0, 1, 'L');
+        $pdf->SetY(30); // Ajustar posição Y após o cabeçalho
+
+        // IMPRIMIR RELATÓRIO PARA TODOS OS SEGMENTOS
+        $segmentos = [
+            ['titulo' => 'PÚBLICA - AC', 'dados' => $vagas_ocupadas['publica_ac']],
+            ['titulo' => 'PÚBLICA - COTA', 'dados' => $vagas_ocupadas['publica_cotas']],
+            ['titulo' => 'PCD', 'dados' => $vagas_ocupadas['pcd']],
+            ['titulo' => 'PRIVADA - AC', 'dados' => $vagas_ocupadas['privada_ac']],
+            ['titulo' => 'PRIVADA - COTA', 'dados' => $vagas_ocupadas['privada_cotas']]
+        ];
+
+        foreach ($segmentos as $segmento) {
+            $titulo = $segmento['titulo'];
+            $dados = $segmento['dados'];
+
+            if (empty($dados)) {
+                continue;
             }
 
-            // Definir cor da linha
-            $cor = $classificacao % 2 ? 255 : 192;
-            $pdf->SetFillColor($cor, $cor, $cor);
+            // Verificar se há espaço suficiente na página para o segmento
+            $linhas_necessarias = count($dados) + 2; // +2 para o título e cabeçalho da tabela
+            $espaco_por_linha = $altura_celula;
+            $espaco_total = $linhas_necessarias * $espaco_por_linha + 10; // +10 para o espaço após o segmento
+            $espaco_disponivel = $pdf->GetPageHeight() - $pdf->GetY() - 10; // Margem inferior
 
-            // Imprimir linha no PDF - TUDO EM CAIXA ALTA
-            $pdf->Cell(10, 5, sprintf("%03d", $classificacao), 1, 0, 'C', true);
-            $pdf->Cell(93, 5, mb_convert_encoding(mb_strtoupper($row['nome'], 'UTF-8'), 'ISO-8859-1', 'UTF-8'), 1, 0, 'L', true);
-            $pdf->Cell(30, 5, mb_convert_encoding(mb_strtoupper($row['nome_curso'], 'UTF-8'), 'ISO-8859-1', 'UTF-8'), 1, 0, 'L', true);
-            $pdf->Cell(20, 5, $escola, 1, 0, 'L', true);
-            $pdf->Cell(20, 5, $cota, 1, 0, 'C', true);
-            $pdf->Cell(15, 5, number_format($row['media_final'], 2), 1, 1, 'C', true);
+            if ($espaco_total > $espaco_disponivel) {
+                $pdf->AddPage();
+                $pdf->SetY(10); // Iniciar no topo da nova página, sem repetir o cabeçalho
+            }
 
-            $classificacao++;
+            // Imprimir título do segmento em uma célula fixa
+            $pdf->SetFont('Arial', 'B', 12);
+            $pdf->SetFillColor(0, 90, 36); // fundo verde (#005A24)
+            $pdf->SetTextColor(255, 255, 255); // texto branco
+            $pdf->Cell(188, 5, mb_convert_encoding($titulo, 'ISO-8859-1', 'UTF-8'), 1, 1, 'C', true);
+
+            // Cabeçalho da tabela
+            $pdf->SetFont('Arial', 'B', 10);
+            $pdf->SetFillColor(0, 90, 36); // fundo verde (#005A24)
+            $pdf->SetTextColor(255, 255, 255); // texto branco
+            $pdf->Cell($celula_ch, $altura_celula, mb_convert_encoding('CH', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
+            $pdf->Cell($celula_nome, $altura_celula, mb_convert_encoding('NOME', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
+            $pdf->Cell($celula_curso, $altura_celula, mb_convert_encoding('CURSO', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
+            $pdf->Cell($celula_origem, $altura_celula, mb_convert_encoding('ORIGEM', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
+            $pdf->Cell($celula_segmento, $altura_celula, mb_convert_encoding('SEGM.', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
+            $pdf->Cell($celula_media, $altura_celula, mb_convert_encoding('MEDIA', 'ISO-8859-1', 'UTF-8'), 1, 1, 'C', true);
+
+            // Resetar cor do texto para preto
+            $pdf->SetTextColor(0, 0, 0);
+            $pdf->SetFont('Arial', '', 8);
+
+            // Dados com cores alternadas
+            $classificacao = 1;
+
+            foreach ($dados as $row) {
+                // Definir escola
+                $escola = ($row['publica'] == 1) ? mb_convert_encoding('PÚBLICA', 'ISO-8859-1', 'UTF-8') : mb_convert_encoding('PRIVADA', 'ISO-8859-1', 'UTF-8');
+
+                // Definir cota
+                if ($row['pcd'] == 1) {
+                    $cota = mb_convert_encoding('PCD', 'ISO-8859-1', 'UTF-8');
+                } else if ($row['bairro'] == 1) {
+                    $cota = mb_convert_encoding('COTISTA', 'ISO-8859-1', 'UTF-8');
+                } else {
+                    $cota = mb_convert_encoding('AC', 'ISO-8859-1', 'UTF-8');
+                }
+
+                // Definir cor da linha
+                $cor = $classificacao % 2 ? 255 : 192;
+                $pdf->SetFillColor($cor, $cor, $cor);
+
+                // Imprimir linha no PDF - TUDO EM CAIXA ALTA
+                $pdf->Cell($celula_ch, $altura_celula, sprintf("%03d", $classificacao), 1, 0, 'C', true);
+                $pdf->Cell($celula_nome, $altura_celula, mb_convert_encoding(mb_strtoupper($row['nome'], 'UTF-8'), 'ISO-8859-1', 'UTF-8'), 1, 0, 'L', true);
+                $pdf->Cell($celula_curso, $altura_celula, mb_convert_encoding(mb_strtoupper($row['nome_curso'], 'UTF-8'), 'ISO-8859-1', 'UTF-8'), 1, 0, 'L', true);
+                $pdf->Cell($celula_origem, $altura_celula, $escola, 1, 0, 'L', true);
+                $pdf->Cell($celula_segmento, $altura_celula, $cota, 1, 0, 'C', true);
+                $pdf->Cell($celula_media, $altura_celula, number_format($row['media_final'], 2), 1, 1, 'C', true);
+
+                $classificacao++;
+            }
+            $pdf->Ln(10);
         }
-        $pdf->Ln(10);
+
+        $pdf->Output('RESULTADO_PRE_LIMINAR.pdf', 'I');
     }
 }
 
 if (isset($_GET['curso']) && !empty($_GET['curso'])) {
     $relatorios = new relatorios($escola);
     $curso = $_GET['curso'];
-    $relatorios->gerarRelatorio($curso);
+    $tipo_relatorio = isset($_GET['tipo_relatorio']) ? $_GET['tipo_relatorio'] : 'TODOS';
+    $relatorios->gerarRelatorio($curso, $tipo_relatorio);
 } else {
     header('location:../../../index.php');
     exit();

@@ -126,13 +126,13 @@ class relatorios extends connect
 
         $pdf = new PDF('P', 'mm', 'A4');
         $pdf->AddPage();
-        $pdf->Image('../../assets/imgs/fundo_pdf.png', 0, 0, $pdf->GetPageWidth(), $pdf->GetPageHeight(), 'png', '', 0.1);
+        $pdf->Image('../../assets/imgs/fundo5_pdf.png', 0, 0, $pdf->GetPageWidth(), $pdf->GetPageHeight(), 'png', '', 0.1);
         // Header
         
         $pdf->SetFont('Arial', 'B', 25);
         $pdf->SetY(10);
         $pdf->SetX(55);
-        $pdf->Cell(110, 8, 'RELATÓRIO DE REQUISIÇÕES', 0, 1, 'C');
+        $pdf->Cell(40, 4, 'RELATÓRIO DE REQUISIÇÕES', 0, 1, 'C');
 
         $y_position = 32;
 
@@ -184,8 +184,8 @@ class relatorios extends connect
                 $pdf->SetX(10);
                 
                 // Draw cells with dynamic height
-                $pdf->Cell(35, $cell_height, strtoupper($nome_candidato), 1, 0, 'L', true);
-                $pdf->MultiCell(85, 7, $texto, 1, 'L', true);
+                $pdf->Cell(40, $cell_height, strtoupper($nome_candidato), 1, 0, 'L', true);
+                $pdf->MultiCell(90, 7, $texto, 1, 'L', true);
                 $pdf->SetXY(135, $y_position);
                 $pdf->Cell(35, $cell_height, strtoupper($nome_usuario), 1, 0, 'L', true);
                 $pdf->Cell(30, $cell_height, strtoupper($dado['data']), 1, 1, 'C', true);

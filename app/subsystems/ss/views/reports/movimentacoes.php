@@ -53,13 +53,13 @@ class relatorios extends connect
 
         $pdf = new PDF('P', 'mm', 'A4');
         $pdf->AddPage();
-        $pdf->Image('../../assets/imgs/fundo_pdf.png', 0, 0, $pdf->GetPageWidth(), $pdf->GetPageHeight(), 'png', '', 0.1);
+        $pdf->Image('../../assets/imgs/fundo5_pdf.png', 0, 0, $pdf->GetPageWidth(), $pdf->GetPageHeight(), 'png', '', 0.1);
         // Header
         
         $pdf->SetFont('Arial', 'B', 25);
         $pdf->SetY(10);
         $pdf->SetX(55);
-        $pdf->Cell(110, 8, 'RELATÓRIO DE MOVIMENTAÇÕES', 0, 1, 'C');
+        $pdf->Cell(55, 4, 'RELATÓRIO DE MOVIMENTAÇÕES', 0, 1, 'C');
 
         // User info
         $pdf->SetFont('Arial', 'B', 12);
@@ -69,7 +69,7 @@ class relatorios extends connect
 
         // Table Header
         $pdf->SetFont('Arial', 'B', 10);
-        $pdf->SetFillColor(93, 164, 67); // Green background
+        $pdf->SetFillColor(0, 90, 36); // Green background
         $pdf->SetTextColor(255, 255, 255); // White text
         $pdf->SetY(45);
         $pdf->SetX(10);

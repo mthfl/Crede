@@ -13,7 +13,7 @@ if (
     isset($_POST["nome_curso"]) && !empty($_POST["nome_curso"]) &&
     isset($_POST["cor_curso"]) && !empty($_POST["cor_curso"])
 ) {
-    $nome_curso = $_POST["nome_curso"];
+    strtoupper($nome_curso = $_POST["nome_curso"]);
     $cor = $_POST["cor_curso"];
 
     $escola = $_SESSION['escola'];
@@ -42,7 +42,7 @@ else if (
     isset($_POST["cor_curso"]) && !empty($_POST["cor_curso"])
 ) {
     $id_curso = $_POST["curso_id"];
-    $nome_curso = $_POST["nome_curso"];
+    strtoupper($nome_curso = $_POST["nome_curso"]);
     $cor = $_POST["cor_curso"];
 
     $escola = $_SESSION['escola'];

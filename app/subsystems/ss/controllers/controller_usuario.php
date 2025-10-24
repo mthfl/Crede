@@ -16,7 +16,7 @@ if (
     isset($_POST["tipo"]) && !empty($_POST["tipo"]) &&
     isset($_POST["perfil"]) && !empty($_POST["perfil"])
 ) {
-    $nome = $_POST["nome"];
+    strtoupper($nome = $_POST["nome"]);
     $email = $_POST["email"];
     $cpf = $_POST["cpf"];
     $tipo = $_POST["tipo"];
@@ -48,7 +48,7 @@ if (
     isset($_POST["perfil"]) && !empty($_POST["perfil"])
 ) {
     $id_usuario = $_POST["id_usuario"];
-    $nome = $_POST["nome"];
+    strtoupper($nome = $_POST["nome"]);
     $email = $_POST["email"];
     $cpf = $_POST["cpf"];
     $tipo = $_POST["tipo"];
@@ -184,7 +184,7 @@ if (
     }
 } else if (empty($_POST['id_perfil']) && isset($_POST['nome_perfil']) && !empty($_POST['nome_perfil'])) {
 
-    $nome_perfil = $_POST['nome_perfil'];
+    strtoupper($nome_perfil = $_POST['nome_perfil']);
     $escola = $_SESSION['escola'];
 
     $admin_model = new admin($escola);
@@ -225,7 +225,7 @@ if (
     }
 } else if (isset($_POST['id_perfil']) && !empty($_POST['id_perfil']) && isset($_POST['nome_perfil']) && !empty($_POST['nome_perfil'])) {
     $id_perfil = $_POST['id_perfil'];
-    $nome_perfil = $_POST['nome_perfil'];
+    strtoupper($nome_perfil = $_POST['nome_perfil']);
     $escola = $_SESSION['escola'];
     $admin_model = new admin($escola);
     $result = $admin_model->editar_perfil($id_perfil, $nome_perfil);

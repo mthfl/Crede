@@ -23,7 +23,7 @@ if (
     isset($_POST["bairros"]) && !empty($_POST["bairros"]) &&
     isset($_POST["quantidades"]) && !empty($_POST["quantidades"])
 ) {
-    $bairros = $_POST["bairros"];
+    strtoupper($bairros = $_POST["bairros"]);
     $quantidade = $_POST["quantidades"];
     $escola = $_SESSION['escola'];
 
@@ -66,7 +66,7 @@ else if (
     isset($_POST["acao"]) && $_POST["acao"] === "edit"
 ) {
     $id_bairro = $_POST["id_bairro"];
-    $nome = $_POST["nome_bairro"];
+    strtoupper($nome = $_POST["nome_bairro"]);
 
     $escola = $_SESSION['escola'];
     $admin_model = new admin($escola);

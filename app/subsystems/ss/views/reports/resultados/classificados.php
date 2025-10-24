@@ -78,14 +78,14 @@ class relatorios extends connect
         $vagas_pcd = 2; 
         $vagas_restantes = $total_vagas - $vagas_pcd;
 
-        $total_publica = $vagas_restantes * (80 / 100);
-        $total_privada = $vagas_restantes * (20 / 100);
+        round($total_publica = $vagas_restantes * (80 / 100))."<br>";
+        round($total_privada = $vagas_restantes * (20 / 100))."<br>";
 
-        $publica_cotas = $total_publica * (30 / 100);
-        $privada_cotas = $total_privada * (30 / 100);
+        round($publica_cotas = $total_publica * (30 / 100))."<br>";
+        round($privada_cotas = $total_privada * (30 / 100))."<br>";
 
-        $publica_ac = $total_publica * (70 / 100);
-        $privada_ac = $total_privada * (70 / 100);
+        round($publica_ac = $total_publica * (70 / 100))."<br>";
+        round($privada_ac = $total_privada * (70 / 100))."<br>";
 
         // Array para armazenar os classificados de cada segmento
         $classificados = [];
@@ -180,20 +180,20 @@ class relatorios extends connect
         $vagas_sobra_pcd = $vagas_pcd - count($vagas_ocupadas['pcd']);
 
         // PÚBLICA COTAS - Verificar se há vagas não preenchidas
-        $vagas_ocupadas['publica_cotas'] = array_slice($classificados['publica_cotas'], 0, $publica_cotas);
+        $vagas_ocupadas['publica_cotas'] = array_slice($classificados['publica_cotas'], 0, round($publica_cotas));
         $vagas_sobra_publica_cotas = $publica_cotas - count($vagas_ocupadas['publica_cotas']);
 
         // PRIVADA COTAS - Verificar se há vagas não preenchidas
-        $vagas_ocupadas['privada_cotas'] = array_slice($classificados['privada_cotas'], 0, $privada_cotas);
+        $vagas_ocupadas['privada_cotas'] = array_slice($classificados['privada_cotas'], 0, round($privada_cotas));
         $vagas_sobra_privada_cotas = $privada_cotas - count($vagas_ocupadas['privada_cotas']);
 
         // PÚBLICA AC - Adicionar vagas que sobraram das cotas públicas
         $limite_publica_ac = $publica_ac + $vagas_sobra_publica_cotas + $vagas_sobra_pcd;
-        $vagas_ocupadas['publica_ac'] = array_slice($classificados['publica_ac'], 0, $limite_publica_ac);
+        $vagas_ocupadas['publica_ac'] = array_slice($classificados['publica_ac'], 0, round($limite_publica_ac));
 
         // PRIVADA AC - Adicionar vagas que sobraram das cotas privadas
         $limite_privada_ac = $privada_ac + $vagas_sobra_privada_cotas;
-        $vagas_ocupadas['privada_ac'] = array_slice($classificados['privada_ac'], 0, $limite_privada_ac);
+        $vagas_ocupadas['privada_ac'] = array_slice($classificados['privada_ac'], 0, round($limite_privada_ac));
 
         // Inicializar PDF
         $pdf = new PDF($orientacao, 'mm', 'A4');
@@ -268,14 +268,17 @@ class relatorios extends connect
 
         // IMPRIMIR RELATÓRIO PARA TODOS OS SEGMENTOS
         $segmentos = [
-            'PÚBLICA - AC' => $vagas_ocupadas['publica_ac'],
-            'PÚBLICA - COTA' => $vagas_ocupadas['publica_cotas'],
-            'PCD' => $vagas_ocupadas['pcd'],
-            'PRIVADA - AC' => $vagas_ocupadas['privada_ac'],
-            'PRIVADA - COTA' => $vagas_ocupadas['privada_cotas']
+            ['titulo' => 'PÚBLICA - AC', 'dados' => $vagas_ocupadas['publica_ac']],
+            ['titulo' => 'PÚBLICA - COTA', 'dados' => $vagas_ocupadas['publica_cotas']],
+            ['titulo' => 'PCD', 'dados' => $vagas_ocupadas['pcd']],
+            ['titulo' => 'PRIVADA - AC', 'dados' => $vagas_ocupadas['privada_ac']],
+            ['titulo' => 'PRIVADA - COTA', 'dados' => $vagas_ocupadas['privada_cotas']]
         ];
 
-        foreach ($segmentos as $titulo => $dados) {
+        foreach ($segmentos as $segmento) {
+            $titulo = $segmento['titulo'];
+            $dados = $segmento['dados'];
+
             if (empty($dados)) {
                 continue;
             }
@@ -291,7 +294,7 @@ class relatorios extends connect
                 $pdf->SetY(10); // Iniciar no topo da nova página, sem repetir o cabeçalho
             }
 
-            // Fonte do cabeçalho
+            // Imprimir título do segmento em uma célula fixa
             $pdf->SetFont('Arial', 'B', 12);
             $pdf->SetFillColor(0, 90, 36); // fundo verde (#005A24)
             $pdf->SetTextColor(255, 255, 255); // texto branco
