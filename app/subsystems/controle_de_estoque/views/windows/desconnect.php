@@ -63,7 +63,7 @@
 
             <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 text-center text-sm text-gray-500">
                 <div class="flex items-center justify-center gap-2">
-                    <img src="../../../assets/Brasão_do_Ceará.svg.png" alt="Logo Ceará" class="w-5 h-5 object-contain"/>
+                    <img src="../../assets/Brasão_do_Ceará.svg.png" alt="Logo Ceará" class="w-5 h-5 object-contain"/>
                 </div>
             </div>
         </section>

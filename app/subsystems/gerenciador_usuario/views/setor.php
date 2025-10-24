@@ -409,7 +409,7 @@ $fotoPerfil = isset($_SESSION['foto_perfil']) ? $_SESSION['foto_perfil'] : '';
                         <i class="fa-solid fa-arrow-left text-sm sm:text-base md:text-lg group-hover:scale-110 transition-transform"></i>
                     </a>
                     <div class="w-6 h-6 sm:w-8 sm:h-8 md:w-12 md:h-12 rounded-lg sm:rounded-xl md:rounded-2xl flex items-center justify-center">
-                        <img class="w-5 h-5 sm:w-6 sm:h-6 md:w-10 md:h-10 object-contain" src="https://i.postimg.cc/0N0dsxrM/Bras-o-do-Cear-svg-removebg-preview.png" alt="Logo CREDE">
+                        <img class="w-5 h-5 sm:w-6 sm:h-6 md:w-10 md:h-10 object-contain" src="../assets/Brasão_do_Ceará.svg.png" alt="Logo CREDE">
                     </div>
                     <div>
                         <h1 class="font-bold text-sm sm:text-base md:text-xl text-dark font-heading">CREDE</h1>

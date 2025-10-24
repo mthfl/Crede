@@ -340,7 +340,7 @@ if (!isset($_GET['barcode']) || empty($_GET['barcode'])) {
             <!-- Logo e título -->
             <div class="p-6 border-b border-white/20">
                 <div class="flex items-center">
-                    <img src="https://i.postimg.cc/0N0dsxrM/Bras-o-do-Cear-svg-removebg-preview.png" alt="Logo STGM" class="h-12 mr-3 transition-transform hover:scale-105">
+                    <img src="../../assets/Brasão_do_Ceará.svg.png" alt="Logo STGM" class="h-12 mr-3 transition-transform hover:scale-105">
                     <span class="text-white font-heading text-lg font-semibold">CREDE Estoque</span>
                 </div>
             </div>

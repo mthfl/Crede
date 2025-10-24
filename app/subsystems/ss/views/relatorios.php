@@ -809,7 +809,7 @@ $select = new select($escola);
                 <div class="flex items-center justify-between mb-8 pb-6 border-b border-white/20">
                     <div class="animate-slide-in-left">
                         <div class="flex items-center space-x-3 mb-2">
-                            <img src="https://i.postimg.cc/0N0dsxrM/Bras-o-do-Cear-svg-removebg-preview.png" alt="Brasão do Ceará" class="w-8 h-10 transition-transform hover:scale-105">
+                            <img src="../assets/Brasão_do_Ceará.svg.png" alt="Brasão do Ceará" class="w-8 h-10 transition-transform hover:scale-105">
                             <h2 class="text-white text-2xl font-bold font-display">Sistema Seleção</h2>
                         </div>
                     </div>

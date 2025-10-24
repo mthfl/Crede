@@ -391,7 +391,7 @@ $select = new select();
                         <i class="fa-solid fa-arrow-left text-base sm:text-lg group-hover:scale-110 transition-transform"></i>
                     </a>
                     <div class="w-8 h-8 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center">
-                        <img class="w-6 h-6 sm:w-10 sm:h-10 object-contain" src="https://i.postimg.cc/0N0dsxrM/Bras-o-do-Cear-svg-removebg-preview.png" alt="Logo CREDE">
+                        <img class="w-6 h-6 sm:w-10 sm:h-10 object-contain" src="assets/Brasão_do_Ceará.svg.png" alt="Logo CREDE">
                     </div>
                     <div>
                         <h1 class="font-bold text-base sm:text-xl text-dark font-heading">CREDE</h1>

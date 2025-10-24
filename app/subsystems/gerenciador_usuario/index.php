@@ -344,7 +344,7 @@ $session->tempo_session();
             <div class="flex items-center justify-between max-w-7xl mx-auto">
                 <div class="flex items-center gap-4">
                     <div class="w-12 h-12 rounded-2xl flex items-center justify-center">
-                        <img class="w-8 h-8 object-contain" src="https://i.postimg.cc/0N0dsxrM/Bras-o-do-Cear-svg-removebg-preview.png" alt="Logo CREDE">
+                        <img class="w-8 h-8 object-contain" src="assets/Brasão_do_Ceará.svg.png" alt="Logo CREDE">
                     </div>
                     <div>
                         <h1 class="font-bold text-xl text-dark font-heading">CREDE 1</h1>
