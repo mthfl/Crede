@@ -360,14 +360,20 @@ class select extends connect
                 case 'publica_ac':
                     $query = "SELECT COUNT(*) as total FROM $this->table1 WHERE publica = 1 AND bairro = 0 AND status = 1";
                     break;
-                case 'publica_cotas':
-                    $query = "SELECT COUNT(*) as total FROM $this->table1 WHERE publica = 1 AND bairro > 0 AND status = 1";
+                case 'publica_cotas_bairro':
+                    $query = "SELECT COUNT(*) as total FROM $this->table1 WHERE publica = 1 AND bairro > 0 AND pcd = 0 AND status = 1";
+                    break;
+                case 'publica_cotas_pcd':
+                    $query = "SELECT COUNT(*) as total FROM $this->table1 WHERE publica = 1 AND pcd = 1 AND status = 1";
                     break;
                 case 'privada_ac':
                     $query = "SELECT COUNT(*) as total FROM $this->table1 WHERE publica = 0 AND bairro = 0 AND status = 1";
                     break;
-                case 'privada_cotas':
-                    $query = "SELECT COUNT(*) as total FROM $this->table1 WHERE publica = 0 AND bairro > 0 AND status = 1";
+                case 'privada_cotas_bairro':
+                    $query = "SELECT COUNT(*) as total FROM $this->table1 WHERE publica = 0 AND bairro > 0 AND pcd = 0 AND status = 1";
+                    break;
+                case 'privada_cotas_pcd':
+                    $query = "SELECT COUNT(*) as total FROM $this->table1 WHERE publica = 0 AND pcd = 1 AND status = 1";
                     break;
                 default:
                     return 0;

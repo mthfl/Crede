@@ -1,17 +1,17 @@
 <?php
-require_once(__DIR__ . '/../models/sessions.php');
+require_once __DIR__ . "/../models/sessions.php";
 $session = new sessions();
 $session->autenticar_session();
 $session->tempo_session();
 
-require_once(__DIR__ . '/../config/connect.php');
-if (!isset($_SESSION['escola']) || empty($_SESSION['escola'])) {
+require_once __DIR__ . "/../config/connect.php";
+if (!isset($_SESSION["escola"]) || empty($_SESSION["escola"])) {
     die("Escola não definida na sessão");
 }
-$escola = $_SESSION['escola'];
+$escola = $_SESSION["escola"];
 
 new connect($escola);
-require_once(__DIR__ . '/../models/model.select.php');
+require_once __DIR__ . "/../models/model.select.php";
 $select = new select($escola);
 ?>
 <!DOCTYPE html>
@@ -692,14 +692,14 @@ $select = new select($escola);
             .nav-item:hover {
                 transform: none;
             }
-            
+
             .main-content {
                 height: auto;
                 min-height: 100vh;
                 overflow-y: auto !important;
                 -webkit-overflow-scrolling: touch;
             }
-            
+
             html, body {
                 height: auto;
                 overflow-y: auto !important;
@@ -772,11 +772,139 @@ $select = new select($escola);
             margin-bottom: 0.5rem;
         }
 
-        .chart-container {
-            position: relative;
-            height: 300px;
-            margin: 1rem 0;
-        }
+       .chart-container {
+    position: relative;
+    height: 300px;
+    margin: 1rem 0;
+}
+/* Estilo personalizado para legenda em duas colunas */
+#distributionChart {
+    margin-bottom: 1rem;
+}
+
+.legend-container {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: flex-start;
+    margin-top: 0.1rem;
+    margin-left: 40px;
+    padding: 0.5rem;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.9), rgba(230, 244, 234, 0.4));
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 90, 36, 0.05);
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.legend-column {
+    flex: 1;
+    max-width: 45%;
+    padding: 0.5rem;
+
+    border-radius: 8px;
+
+    transition: all 0.3s ease;
+    text-align: left;
+}
+
+@media (max-width: 640px) {
+    .legend-container {
+        flex-direction: column;
+    }
+    .legend-column {
+        max-width: 100%;
+        min-width: auto;
+    }
+    .legend-item::after {
+        width: calc(100% - 2rem);
+    }
+}
+
+
+
+.legend-column > h4 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #1A3C34;
+    padding: 0.25rem 0;
+    margin-bottom: 0.35rem;
+    border-bottom: 2px solid;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: fit-content;
+}
+
+.legend-column:first-child > h4 {
+    border-bottom-color: #005A24;
+}
+
+.legend-column:last-child > h4 {
+    border-bottom-color: #FFA500;
+}
+
+.legend-column > h4::before {
+    content: '';
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+}
+
+.legend-column:first-child > h4::before {
+    background-color: #004D1F;
+}
+
+.legend-column:last-child > h4::before {
+    background-color: #CC7A00;
+}
+
+.legend-column:hover > h4::before {
+    transform: scale(1.2);
+}
+
+.legend-subgroup {
+    padding: 0.25rem;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.legend-subgroup h5 {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #1A3C34;
+    margin-bottom: 0.25rem;
+    opacity: 0.9;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    padding: 0.15rem 0.25rem;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    color: #1A3C34;
+    font-weight: 500;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+.legend-item:hover {
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+.legend-item .legend-color {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+}
+
+.legend-item:hover .legend-color {
+    transform: scale(1.3);
+}
 
         .sidebar-link {
             transition: all 0.3s ease;
@@ -820,7 +948,11 @@ $select = new select($escola);
                     </button>
                 </div>
                 <nav class="space-y-2">
-                    <?php if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'admin' || $_SESSION['tipo_usuario'] === 'cadastrador')) { ?>
+                    <?php if (
+                        isset($_SESSION["tipo_usuario"]) &&
+                        ($_SESSION["tipo_usuario"] === "admin" ||
+                            $_SESSION["tipo_usuario"] === "cadastrador")
+                    ) { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.1s;">
                             <a href="../index.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
                                 <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
@@ -836,7 +968,10 @@ $select = new select($escola);
                             </a>
                         </div>
                     <?php } ?>
-                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
+                    <?php if (
+                        isset($_SESSION["tipo_usuario"]) &&
+                        $_SESSION["tipo_usuario"] === "admin"
+                    ) { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.2s;">
                             <a href="cursos.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
                                 <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
@@ -851,7 +986,11 @@ $select = new select($escola);
                             </a>
                         </div>
                     <?php } ?>
-                    <?php if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'admin' || $_SESSION['tipo_usuario'] === 'cadastrador')) { ?>
+                    <?php if (
+                        isset($_SESSION["tipo_usuario"]) &&
+                        ($_SESSION["tipo_usuario"] === "admin" ||
+                            $_SESSION["tipo_usuario"] === "cadastrador")
+                    ) { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.3s;">
                             <a href="candidatos.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
                                 <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
@@ -866,7 +1005,10 @@ $select = new select($escola);
                             </a>
                         </div>
                     <?php } ?>
-                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
+                    <?php if (
+                        isset($_SESSION["tipo_usuario"]) &&
+                        $_SESSION["tipo_usuario"] === "admin"
+                    ) { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.35s;">
                             <a href="cotas.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
                                 <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
@@ -881,7 +1023,10 @@ $select = new select($escola);
                             </a>
                         </div>
                     <?php } ?>
-                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
+                    <?php if (
+                        isset($_SESSION["tipo_usuario"]) &&
+                        $_SESSION["tipo_usuario"] === "admin"
+                    ) { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.4s;">
                             <a href="usuario.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
                                 <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
@@ -896,7 +1041,10 @@ $select = new select($escola);
                             </a>
                         </div>
                     <?php } ?>
-                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
+                    <?php if (
+                        isset($_SESSION["tipo_usuario"]) &&
+                        $_SESSION["tipo_usuario"] === "admin"
+                    ) { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.5s;">
                             <a href="relatorios.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring bg-white/10">
                                 <div class="w-12 h-12 bg-secondary rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
@@ -911,7 +1059,11 @@ $select = new select($escola);
                             </a>
                         </div>
                     <?php } ?>
-                    <?php if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'admin' || $_SESSION['tipo_usuario'] === 'cadastrador')) { ?>
+                    <?php if (
+                        isset($_SESSION["tipo_usuario"]) &&
+                        ($_SESSION["tipo_usuario"] === "admin" ||
+                            $_SESSION["tipo_usuario"] === "cadastrador")
+                    ) { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.6s;">
                             <a href="solicitar_alteracao.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
                                 <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
@@ -926,7 +1078,10 @@ $select = new select($escola);
                             </a>
                         </div>
                     <?php } ?>
-                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
+                    <?php if (
+                        isset($_SESSION["tipo_usuario"]) &&
+                        $_SESSION["tipo_usuario"] === "admin"
+                    ) { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.6s;">
                             <a href="limpar_banco.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
                                 <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-red-500 group-hover:scale-110 transition-all duration-300">
@@ -970,10 +1125,14 @@ $select = new select($escola);
                         <div class="flex items-center space-x-2 sm:space-x-4 lg:ml-auto">
                             <div class="hidden sm:block text-right">
                                 <p class="text-xs sm:text-sm font-semibold text-gray-900">Bem-vindo,</p>
-                                <p class="text-xs sm:text-sm text-primary font-medium"><?= $_SESSION['nome'] ?? 'Usuário' ?></p>
+                                <p class="text-xs sm:text-sm text-primary font-medium"><?= $_SESSION[
+                                    "nome"
+                                ] ?? "Usuário" ?></p>
                             </div>
                             <a href="perfil.php" title="Perfil" class="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-primary to-dark rounded-full flex items-center justify-center hover:brightness-95 focus-ring">
-                                <span class="text-white font-bold text-xs sm:text-sm"><?= strtoupper(substr($_SESSION['nome'] ?? 'U', 0, 1)) ?></span>
+                                <span class="text-white font-bold text-xs sm:text-sm"><?= strtoupper(
+                                    substr($_SESSION["nome"] ?? "U", 0, 1),
+                                ) ?></span>
                             </a>
                             <a href="../models/sessions.php?sair" class="bg-primary text-white px-3 sm:px-4 md:px-6 py-2 sm:py-3 rounded-lg hover:bg-dark font-semibold shadow-lg focus-ring text-xs sm:text-sm">
                                 <span class="hidden sm:inline">Sair</span>
@@ -1021,33 +1180,63 @@ $select = new select($escola);
 
                   <!-- Gráfico de Estatísticas -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-                    <!-- Gráfico de Pizza -->
-                    <div class="bg-white rounded-xl shadow-card p-6 border-2 border-accent hover:border-secondary transition-all duration-300">
-                        <div class="flex items-center justify-between mb-4 pb-3 border-b-2 border-accent">
-                            <h3 class="text-xl font-bold text-primary font-heading flex items-center">
-                                <i class="fas fa-chart-pie text-secondary mr-3"></i>
-                                Distribuição por Modalidade
-                            </h3>
-                            
+
+            <div class="bg-white rounded-xl shadow-card p-6 border-2 border-accent hover:border-secondary transition-all duration-300">
+                <div class="flex items-center justify-between mb-4 pb-3 border-b-2 border-accent">
+                    <h3 class="text-xl font-bold text-primary font-heading flex items-center">
+                        <i class="fas fa-chart-pie text-secondary mr-3"></i>
+                        Distribuição por Modalidade
+                    </h3>
+                </div>
+                <div class="chart-container" style="height: 240px;">
+                    <canvas id="distributionChart"></canvas>
+                </div>
+
+                    <div class="legend-container">
+                        <div class="legend-column" style="align-self: flex-start;">
+                            <h4>Pública (Ampla) (<span id="public-ampla-percent">0%</span>)</h4>
+                            <div class="legend-subgroup">
+                                <h5>Pública (Cotas) (<span id="public-cotas-percent">0%</span>)</h5>
+                                <div class="legend-item" id="legend-public-bairro" style="display: none;">
+                                    <span class="legend-color" style="background-color: #007A2E;"></span>
+                                    <span class="legend-text"></span>
+                                </div>
+                                <div class="legend-item" id="legend-public-pcd" style="display: none;">
+                                    <span class="legend-color" style="background-color: #009A38;"></span>
+                                    <span class="legend-text"></span>
+                                </div>
+                            </div>
                         </div>
-                        <div class="chart-container" style="height: 320px;">
-                            <canvas id="distributionChart"></canvas>
+                        <div class="legend-column" style="align-self: flex-end;">
+                            <h4>Privada (Ampla) (<span id="private-ampla-percent">0%</span>)</h4>
+                            <div class="legend-subgroup">
+                                <h5>Privada (Cotas) (<span id="private-cotas-percent">0%</span>)</h5>
+                                <div class="legend-item" id="legend-private-bairro" style="display: none;">
+                                    <span class="legend-color" style="background-color: #FFB733;"></span>
+                                    <span class="legend-text"></span>
+                                </div>
+                                <div class="legend-item" id="legend-private-pcd" style="display: none;">
+                                    <span class="legend-color" style="background-color: #FFC966;"></span>
+                                    <span class="legend-text"></span>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    
+                    </div>
+
                     <!-- Gráfico de Barras -->
-                    <div class="bg-white rounded-xl shadow-card p-6 border-2 border-accent hover:border-secondary transition-all duration-300">
-                        <div class="flex items-center justify-between mb-4 pb-3 border-b-2 border-accent">
-                            <h3 class="text-xl font-bold text-primary font-heading flex items-center">
-                                <i class="fas fa-chart-bar text-secondary mr-3"></i>
-                                Candidatos por Curso
-                            </h3>
-                         
-                        </div>
-                        <div class="chart-container" style="height: 320px;">
-                            <canvas id="coursesChart"></canvas>
-                        </div>
+                    <!-- Gráfico de Barras com rótulos abaixo de cada barra -->
+                <div class="bg-white rounded-xl shadow-card p-6 border-2 border-accent hover:border-secondary transition-all duration-300">
+                    <div class="flex items-center justify-between mb-4 pb-3 border-b-2 border-accent">
+                        <h3 class="text-xl font-bold text-primary font-heading flex items-center">
+                            <i class="fas fa-chart-bar text-secondary mr-3"></i>
+                            Candidatos por Curso
+                        </h3>
                     </div>
+                    <div class="chart-container chart-bar" style="height: 280px;">
+                        <canvas id="coursesChart"></canvas>
+                    </div>
+                </div>
                 </div>
                 <!-- Seção de Relatórios -->
                 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-8">
@@ -1107,7 +1296,7 @@ $select = new select($escola);
             </h2>
             <form id="reportForm" action="../controllers/controller_relatorios.php" method="POST" class="space-y-4">
                 <input type="hidden" name="form" value="relatorio_pdf">
-                
+
                 <!-- Tipo de Relatório -->
                 <div class="form-group">
                     <label for="tipo_relatorio" class="font-semibold">
@@ -1134,8 +1323,13 @@ $select = new select($escola);
                         <?php
                         $cursos = $select->select_cursos();
                         foreach ($cursos as $curso) { ?>
-                            <option value="<?= htmlspecialchars($curso['id']) ?>"><?= htmlspecialchars($curso['nome_curso']) ?></option>
-                        <?php } ?>
+                            <option value="<?= htmlspecialchars(
+                                $curso["id"],
+                            ) ?>"><?= htmlspecialchars(
+    $curso["nome_curso"],
+) ?></option>
+                        <?php }
+                        ?>
                     </select>
                 </div>
 
@@ -1157,7 +1351,7 @@ $select = new select($escola);
             </h2>
             <form id="schoolReportForm" action="../controllers/controller_relatorios.php" method="POST" class="space-y-4">
                 <input type="hidden" name="form" value="relatorio_pdf">
-                
+
                 <!-- Tipo de Relatório para Escolas -->
                 <div class="form-group">
                     <label for="school_tipo_relatorio" class="font-semibold">
@@ -1186,8 +1380,13 @@ $select = new select($escola);
                         <?php
                         $cursos = $select->select_cursos();
                         foreach ($cursos as $curso) { ?>
-                            <option value="<?= htmlspecialchars($curso['id']) ?>"><?= htmlspecialchars($curso['nome_curso']) ?></option>
-                        <?php } ?>
+                            <option value="<?= htmlspecialchars(
+                                $curso["id"],
+                            ) ?>"><?= htmlspecialchars(
+    $curso["nome_curso"],
+) ?></option>
+                        <?php }
+                        ?>
                     </select>
                 </div>
 
@@ -1198,7 +1397,7 @@ $select = new select($escola);
             </form>
         </div>
     </div>
-<script>
+<<script>
     // Definir cores do sistema
     const systemColors = {
         primary: '#005A24',
@@ -1219,19 +1418,34 @@ $select = new select($escola);
     }
 
     // Dados dos alunos por tipo
-    const alunosPublicaAC = <?php echo $select->countAlunosPorTipo('publica_ac'); ?>;
-    const alunosPublicaCotas = <?php echo $select->countAlunosPorTipo('publica_cotas'); ?>;
-    const alunosPrivadaAC = <?php echo $select->countAlunosPorTipo('privada_ac'); ?>;
-    const alunosPrivadaCotas = <?php echo $select->countAlunosPorTipo('privada_cotas'); ?>;
-    
-    const totalAlunos = alunosPublicaAC + alunosPublicaCotas + alunosPrivadaAC + alunosPrivadaCotas;
+    const alunosPublicaAC = <?php echo $select->countAlunosPorTipo(
+        "publica_ac",
+    ); ?>;
+    const alunosPublicaCotasBairro = <?php echo $select->countAlunosPorTipo(
+        "publica_cotas_bairro",
+    ); ?>;
+    const alunosPublicaCotasPCD = <?php echo $select->countAlunosPorTipo(
+        "publica_cotas_pcd",
+    ); ?>;
+    const alunosPrivadaAC = <?php echo $select->countAlunosPorTipo(
+        "privada_ac",
+    ); ?>;
+    const alunosPrivadaCotasBairro = <?php echo $select->countAlunosPorTipo(
+        "privada_cotas_bairro",
+    ); ?>;
+    const alunosPrivadaCotasPCD = <?php echo $select->countAlunosPorTipo(
+        "privada_cotas_pcd",
+    ); ?>;
+
+    const totalAlunos = alunosPublicaAC + alunosPublicaCotasBairro + alunosPublicaCotasPCD +
+                       alunosPrivadaAC + alunosPrivadaCotasBairro + alunosPrivadaCotasPCD;
 
     // Dados dos alunos por curso
-    const dadosCursos = <?php 
-        $cursos = $select->countAlunosPorCurso();
-        echo json_encode($cursos); 
+    const dadosCursos = <?php
+    $cursos = $select->countAlunosPorCurso();
+    echo json_encode($cursos);
     ?>;
-    
+
     // ==========================================
     // GRÁFICO DE ROSCA (DISTRIBUIÇÃO)
     // ==========================================
@@ -1239,67 +1453,56 @@ $select = new select($escola);
     const distributionChart = new Chart(ctxPie, {
         type: 'doughnut',
         data: {
-            labels: totalAlunos > 0 
-                ? ['Pública (Ampla)', 'Pública (Cotas)', 'Privada (Ampla)', 'Privada (Cotas)']
+            labels: totalAlunos > 0
+                ? [
+                    'Escola Pública - Ampla Concorrência',
+                    'Escola Pública - Cotas Bairro',
+                    'Escola Pública - Cotas PCD',
+                    'Escola Privada - Ampla Concorrência',
+                    'Escola Privada - Cotas Bairro',
+                    'Escola Privada - Cotas PCD'
+                ]
                 : ['Nenhum aluno cadastrado'],
             datasets: [{
-                data: totalAlunos > 0 
-                    ? [alunosPublicaAC, alunosPublicaCotas, alunosPrivadaAC, alunosPrivadaCotas]
-                    : [1],
-                backgroundColor: totalAlunos > 0 
+                data: totalAlunos > 0
                     ? [
-                        systemColors.primary,    // Verde escuro
-                        systemColors.secondary,  // Laranja
-                        systemColors.dark,       // Verde muito escuro
-                        '#B8E6D1'               // Verde claro
-                      ]
+                        alunosPublicaAC,
+                        alunosPublicaCotasBairro,
+                        alunosPublicaCotasPCD,
+                        alunosPrivadaAC,
+                        alunosPrivadaCotasBairro,
+                        alunosPrivadaCotasPCD
+                    ]
+                    : [1],
+                backgroundColor: totalAlunos > 0
+                    ? [
+                        '#004D1F',  // Verde mais escuro - Pública AC
+                        '#006428',  // Verde escuro - Pública Cotas Bairro
+                        '#007A32',  // Verde médio escuro - Pública PCD
+                        '#CC7A00',  // Laranja mais escuro - Privada AC
+                        '#E68A00',  // Laranja escuro - Privada Cotas Bairro
+                        '#FF9900'   // Laranja médio escuro - Privada PCD
+                    ]
                     : ['#e0e0e0'],
-                borderWidth: 4,
+                borderWidth: 2,
                 borderColor: '#ffffff',
-                hoverOffset: 20,
+                hoverOffset: 15,
                 hoverBorderColor: '#ffffff',
-                hoverBorderWidth: 5
+                hoverBorderWidth: 3
             }]
         },
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            cutout: '65%', // Tamanho do buraco no meio (rosca)
+            cutout: '70%',
+            rotation: -90,
+            circumference: 360,
             plugins: {
                 title: {
                     display: false
                 },
                 legend: {
-                    position: 'bottom',
-                    labels: {
-                        font: {
-                            family: 'Inter',
-                            size: 13,
-                            weight: '600'
-                        },
-                        padding: 20,
-                        usePointStyle: true,
-                        pointStyle: 'circle',
-                        boxWidth: 12,
-                        boxHeight: 12,
-                        color: '#1A3C34',
-                        generateLabels: function(chart) {
-                            const data = chart.data;
-                            if (data.labels.length && data.datasets.length) {
-                                return data.labels.map((label, i) => {
-                                    const value = data.datasets[0].data[i];
-                                    const percentage = totalAlunos > 0 ? ((value / totalAlunos) * 100).toFixed(1) : 0;
-                                    return {
-                                        text: `${label} (${percentage}%)`,
-                                        fillStyle: data.datasets[0].backgroundColor[i],
-                                        hidden: false,
-                                        index: i
-                                    };
-                                });
-                            }
-                            return [];
-                        }
-                    }
+                    display: false
                 },
                 tooltip: {
                     backgroundColor: 'rgba(26, 60, 52, 0.95)',
@@ -1341,15 +1544,107 @@ $select = new select($escola);
         }
     });
 
+    // Preencher legenda customizada
+    // Preencher legenda customizada
+function updateCustomLegend() {
+    // Calcular percentuais individuais
+    function calcularPorcentagem(valor) {
+        return totalAlunos > 0 ? ((valor / totalAlunos) * 100).toFixed(1) : '0';
+    }
 
+    // Dados completos com valores e percentuais
+    const dadosEstatisticas = {
+        publica: {
+            ampla: {
+                valor: alunosPublicaAC,
+                percentual: calcularPorcentagem(alunosPublicaAC)
+            },
+            cotasBairro: {
+                valor: alunosPublicaCotasBairro,
+                percentual: calcularPorcentagem(alunosPublicaCotasBairro)
+            },
+            cotasPCD: {
+                valor: alunosPublicaCotasPCD,
+                percentual: calcularPorcentagem(alunosPublicaCotasPCD)
+            }
+        },
+        privada: {
+            ampla: {
+                valor: alunosPrivadaAC,
+                percentual: calcularPorcentagem(alunosPrivadaAC)
+            },
+            cotasBairro: {
+                valor: alunosPrivadaCotasBairro,
+                percentual: calcularPorcentagem(alunosPrivadaCotasBairro)
+            },
+            cotasPCD: {
+                valor: alunosPrivadaCotasPCD,
+                percentual: calcularPorcentagem(alunosPrivadaCotasPCD)
+            }
+        }
+    };
+
+    // Calcular totais para grupos
+    const totalPublicaCotas = alunosPublicaCotasBairro + alunosPublicaCotasPCD;
+    const totalPrivadaCotas = alunosPrivadaCotasBairro + alunosPrivadaCotasPCD;
+
+    // Atualizar percentuais dos títulos principais
+    if (totalAlunos > 0) {
+        document.getElementById('public-ampla-percent').textContent =
+            dadosEstatisticas.publica.ampla.percentual + '%';
+        document.getElementById('public-cotas-percent').textContent =
+            calcularPorcentagem(totalPublicaCotas) + '%';
+        document.getElementById('private-ampla-percent').textContent =
+            dadosEstatisticas.privada.ampla.percentual + '%';
+        document.getElementById('private-cotas-percent').textContent =
+            calcularPorcentagem(totalPrivadaCotas) + '%';
+    }
+
+    // Atualizar legendas individuais
+    const legendData = [
+        {
+            id: 'legend-public-pcd',
+            ...dadosEstatisticas.publica.cotasPCD,
+            label: 'Cota (PCD)'
+        },
+        {
+            id: 'legend-public-bairro',
+            ...dadosEstatisticas.publica.cotasBairro,
+            label: 'Cota (Bairro)'
+        },
+        {
+            id: 'legend-private-pcd',
+            ...dadosEstatisticas.privada.cotasPCD,
+            label: 'Cota (PCD)'
+        },
+        {
+            id: 'legend-private-bairro',
+            ...dadosEstatisticas.privada.cotasBairro,
+            label: 'Cota (Bairro)'
+        }
+    ];
+
+    legendData.forEach(item => {
+        const element = document.getElementById(item.id);
+        if (element && item.valor > 0) {
+            element.style.display = 'flex';
+            element.querySelector('.legend-text').textContent = `${item.label} ${item.percentual}%`;
+        }
+    });
+}
+
+updateCustomLegend();
+
+    // ==========================================
+    // GRÁFICO DE BARRAS (CURSOS)
+    // ==========================================
     const ctxBar = document.getElementById('coursesChart').getContext('2d');
-    
-    
+
     const createGradient = (ctx, chartArea) => {
         const gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
-        gradient.addColorStop(0, '#FF8C00');   // Laranja escuro (base)
-        gradient.addColorStop(0.5, '#FFA500'); // Laranja médio (meio)
-        gradient.addColorStop(1, '#FFB520');   // Laranja claro (topo)
+        gradient.addColorStop(0, '#FF8C00');
+        gradient.addColorStop(0.5, '#FFA500');
+        gradient.addColorStop(1, '#FFB520');
         return gradient;
     };
 
@@ -1383,7 +1678,6 @@ $select = new select($escola);
                     if (!chartArea) {
                         return systemColors.primary;
                     }
-                    // Gradiente verde no hover
                     const gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
                     gradient.addColorStop(0, '#003D18');
                     gradient.addColorStop(0.5, '#005A24');
@@ -1397,6 +1691,11 @@ $select = new select($escola);
         options: {
             responsive: true,
             maintainAspectRatio: false,
+            layout: {
+                padding: {
+                    bottom: 0
+                }
+            },
             scales: {
                 y: {
                     beginAtZero: true,
@@ -1435,9 +1734,9 @@ $select = new select($escola);
                             weight: '600'
                         },
                         color: '#1A3C34',
-                        maxRotation: 45,
-                        minRotation: 45,
-                        padding: 12
+                        maxRotation: 0,
+                        minRotation: 0,
+                        padding: 0
                     }
                 }
             },
@@ -1483,7 +1782,7 @@ $select = new select($escola);
                 delay: (context) => {
                     let delay = 0;
                     if (context.type === 'data' && context.mode === 'default') {
-                        delay = context.dataIndex * 50; // Cada barra aparece com 100ms de delay
+                        delay = context.dataIndex * 50;
                     }
                     return delay;
                 }
@@ -1824,7 +2123,7 @@ $select = new select($escola);
                 $('#specific_report_type').on('change', function() {
                     const reportType = $(this).val();
                     const userSelectContainer = document.getElementById('userSelectContainer');
-                    
+
                     if (reportType === 'movimentacoes') {
                         userSelectContainer.style.display = 'block';
                     } else {
@@ -1841,7 +2140,7 @@ $select = new select($escola);
         specificReportForm.addEventListener('submit', function(e) {
             e.preventDefault();
             const reportType = document.getElementById('specific_report_type').value;
-            
+
             if (!reportType) {
                 showNotification('Por favor, selecione um tipo de relatório.', 'error');
                 return;
@@ -1936,7 +2235,7 @@ $select = new select($escola);
                         <option value="requisicoes">Requisições</option>
                     </select>
                 </div>
-                
+
                 <!-- Campo de usuário (visível apenas para relatório de movimentações) -->
                 <div id="userSelectContainer" class="form-group mt-4" style="display: none;">
                     <label for="user_id" class="font-semibold">
@@ -1948,8 +2247,13 @@ $select = new select($escola);
                         <?php
                         $usuarios = $select->select_usuarios();
                         foreach ($usuarios as $user) { ?>
-                            <option value="<?= htmlspecialchars($user['id']) ?>"><?= htmlspecialchars($user['nome_user']) ?></option>
-                        <?php } ?>
+                            <option value="<?= htmlspecialchars(
+                                $user["id"],
+                            ) ?>"><?= htmlspecialchars(
+    $user["nome_user"],
+) ?></option>
+                        <?php }
+                        ?>
                     </select>
                 </div>
 
