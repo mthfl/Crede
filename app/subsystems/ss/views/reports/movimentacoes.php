@@ -56,9 +56,17 @@ class relatorios extends connect
         $pdf->Image('../../assets/imgs/fundo5_pdf.png', 0, 0, $pdf->GetPageWidth(), $pdf->GetPageHeight(), 'png', '', 0.1);
         // Header
         
-        $pdf->SetFont('Arial', 'B', 25);
+        date_default_timezone_set('America/Fortaleza');
+        $pdf->SetFont('Arial', 'B', 13);
+        $pdf->SetY(3);
+        $pdf->SetX(46);
+        $pdf->Cell(40, 4, $_SESSION['nome_escola'], 0, 0, 'C');
+        $pdf->SetX(155);
+        $pdf->Cell(40, 4, $datatime = date('Y/m/d H:i:s'), 0, 1, 'C');
+
+        $pdf->SetFont('Arial', 'B', 20);
         $pdf->SetY(10);
-        $pdf->SetX(55);
+        $pdf->SetX(40);
         $pdf->Cell(55, 4, 'RELATÓRIO DE MOVIMENTAÇÕES', 0, 1, 'C');
 
         // User info

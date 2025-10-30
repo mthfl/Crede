@@ -78,14 +78,14 @@ class relatorios extends connect
         $vagas_pcd = 2; 
         $vagas_restantes = $total_vagas - $vagas_pcd;
 
-        round($total_publica = $vagas_restantes * (80 / 100))."<br>";
-        round($total_privada = $vagas_restantes * (20 / 100))."<br>";
+        round($total_publica = $vagas_restantes * (80 / 100));
+        round($total_privada = $vagas_restantes * (20 / 100));
 
-        round($publica_cotas = $total_publica * (30 / 100))."<br>";
-        round($privada_cotas = $total_privada * (30 / 100))."<br>";
+        round($publica_cotas = $total_publica * (30 / 100));
+        round($privada_cotas = $total_privada * (30 / 100));
 
-        round($publica_ac = $total_publica * (70 / 100))."<br>";
-        round($privada_ac = $total_privada * (70 / 100))."<br>";
+        round($publica_ac = $total_publica * (70 / 100));
+        round($privada_ac = $total_privada * (70 / 100));
 
         // Array para armazenar os classificados de cada segmento
         $classificados = [];
@@ -198,6 +198,14 @@ class relatorios extends connect
         // Inicializar PDF
         $pdf = new PDF($orientacao, 'mm', 'A4');
         $pdf->AddPage();
+        
+        date_default_timezone_set('America/Fortaleza');
+        $pdf->SetFont('Arial', 'B', 13);
+        $pdf->SetY(3);
+        $pdf->SetX(46);
+        $pdf->Cell(40, 4, $_SESSION['nome_escola'], 0, 0, 'C');
+        $pdf->SetX(155);
+        $pdf->Cell(40, 4, $datatime = date('Y/m/d H:i:s'), 0, 1, 'C');
 
         // Cabeçalho (apenas na primeira página)
         $stmtSelect_curso = $this->connect->prepare(

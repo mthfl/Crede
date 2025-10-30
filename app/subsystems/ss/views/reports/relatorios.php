@@ -140,7 +140,14 @@ class relatorios extends connect
         $pdf = new PDF($orientacao, 'mm', 'A4');
         $pdf->AddPage();
         // Cabeçalho com larguras ajustadas
-
+        date_default_timezone_set('America/Fortaleza');
+        $pdf->SetFont('Arial', 'B', 13);
+        $pdf->SetY(3);
+        $pdf->SetX(46);
+        $pdf->Cell(40, 4, $_SESSION['nome_escola'], 0, 0, 'C');
+        $pdf->SetX(155);
+        $pdf->Cell(40, 4, $datatime = date('Y/m/d H:i:s'), 0, 1, 'C');
+        
         $pdf->SetFont('Arial', 'B', 20);
         $pdf->SetY(8);
         $pdf->SetX(8.50);

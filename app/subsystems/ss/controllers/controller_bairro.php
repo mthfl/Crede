@@ -14,8 +14,7 @@ if (count($cursos) === 0) {
     header("location:../views/cotas.php?erro=curso_obrigatorio");
     exit();
 }
-print_r($_POST);
-
+//print_r($_POST);
 
 //cadastrar bairro
 if (
@@ -23,13 +22,13 @@ if (
     isset($_POST["bairros"]) && !empty($_POST["bairros"]) &&
     isset($_POST["quantidades"]) && !empty($_POST["quantidades"])
 ) {
-    strtoupper($bairros = $_POST["bairros"]);
+    $bairros = strtoupper($_POST["bairros"]);
     $quantidade = $_POST["quantidades"];
     $escola = $_SESSION['escola'];
 
     $admin_model = new admin($escola);
     $result1 = $admin_model->cadastrar_quantidade_vaga($quantidade);
-    $result2 = $admin_model->cadastrar_bairro($bairros);
+    $result2 = $admin_model->cadastrar_bairro([$bairros]);
 
     switch ($result1) {
         case 1:
@@ -66,7 +65,7 @@ else if (
     isset($_POST["acao"]) && $_POST["acao"] === "edit"
 ) {
     $id_bairro = $_POST["id_bairro"];
-    strtoupper($nome = $_POST["nome_bairro"]);
+    $nome = strtoupper($_POST["nome_bairro"]);
 
     $escola = $_SESSION['escola'];
     $admin_model = new admin($escola);

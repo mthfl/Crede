@@ -7,10 +7,11 @@ require_once('../src/Exception.php');
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
+
 class model_usuario extends connect_escolas
 {
     private string $table5;
-
+    private string $table6;
 
     function __construct($escola_banco)
     {
@@ -18,6 +19,7 @@ class model_usuario extends connect_escolas
         $table = require(__DIR__ . '/../../../.env/tables.php');
 
         $this->table5 = $table["ss_$escola_banco"][5];
+        $this->table6 = $table["crede_users"][6];
     }
 
     public function pre_cadastro(string $cpf, string $email): int
@@ -93,9 +95,13 @@ class model_usuario extends connect_escolas
             $stmt_check = $this->connect->prepare("SELECT * FROM $this->table5 WHERE email = :email");
             $stmt_check->bindValue(':email', $email);
             $stmt_check->execute();
-
             $user = $stmt_check->fetch(PDO::FETCH_ASSOC);
 
+            $stmt_escola = $this->connect_crede1->prepare("SELECT * FROM $this->table6 WHERE escola_banco = :escola");
+            $stmt_escola->bindValue(':escola', $escola);
+            $stmt_escola->execute();
+            $nome_escola = $stmt_escola->fetch(PDO::FETCH_ASSOC);
+            
             if ($user) {
                 if ($user['status'] == 0) {
                     return 4;
@@ -112,6 +118,7 @@ class model_usuario extends connect_escolas
                     $_SESSION['tipo_usuario'] = $user['tipo_usuario'];
                     $_SESSION['id_perfil'] = $user['id_perfil'];
                     $_SESSION['escola'] = $escola;
+                    $_SESSION['nome_escola'] = $nome_escola['nome_escola']; 
                     return 1;
                 } else {
                     return 3;
@@ -126,7 +133,7 @@ class model_usuario extends connect_escolas
             return 0;
         }
     }
-    public function verificar_email(string $email, string $escola_banco):int
+    public function verificar_email(string $email, string $escola_banco): int
     {
         try {
             $stmt = $this->connect->prepare("SELECT * FROM $this->table5 WHERE email = :email AND status = 1");
@@ -142,12 +149,12 @@ class model_usuario extends connect_escolas
             $_SESSION['email_recuperar_senha'] = $email;
             $_SESSION['codigo'] = random_int(100000, 999999);
 
-            $dados = require(__DIR__.'/../../../.env/config.php');
+            $dados = require(__DIR__ . '/../../../.env/config.php');
             $mail = new PHPMailer(true);
             try {
                 // Configurações do servidor
                 $mail->SMTPDebug = 0; // Desativar debug em produção (ou use SMTP::DEBUG_SERVER para testes locais)
-                $mail->Debugoutput = function($str, $level) {
+                $mail->Debugoutput = function ($str, $level) {
                     error_log("PHPMailer Debug [$level]: $str"); // Redirecionar debug para error_log
                 };
                 $mail->isSMTP();
@@ -157,11 +164,11 @@ class model_usuario extends connect_escolas
                 $mail->Password = $dados['emails']['senha']; // Senha do e-mail
                 $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
                 $mail->Port = $dados['emails']['porta']; // e.g., 587
-            
+
                 // Destinatário e remetente
                 $mail->setFrom($dados['emails']['email'], 'Sistema Salaberga');
                 $mail->addAddress($email);
-            
+
                 // Conteúdo do e-mail
                 $mail->isHTML(true);
                 $mail->CharSet = 'UTF-8';
@@ -245,9 +252,9 @@ class model_usuario extends connect_escolas
                     </table>
                 </body>
                 </html>';
-            
+
                 $mail->AltBody = "Olá,\n\nVocê solicitou a recuperação de senha para o Sistema Salaberga. Use o código abaixo para redefinir sua senha:\n\n" . $_SESSION['codigo'] . "\n\nEste código é válido por 10 minutos.";
-            
+
                 // Enviar e-mail
                 $mail->send();
                 error_log("E-mail enviado com sucesso para $email em " . date('Y-m-d H:i:s'));

@@ -85,6 +85,14 @@ class relatorios extends connect
         $pdf = new PDF('P', 'mm', 'A4');
         $pdf->AddPage();
 
+        date_default_timezone_set('America/Fortaleza');
+        $pdf->SetFont('Arial', 'B', 13);
+        $pdf->SetY(3);
+        $pdf->SetX(46);
+        $pdf->Cell(40, 4, $_SESSION['nome_escola'], 0, 0, 'C');
+        $pdf->SetX(155);
+        $pdf->Cell(40, 4, $datatime = date('Y/m/d H:i:s'), 0, 1, 'C');
+        
         // Cabeçalho (apenas na primeira página)
         $stmtSelect_curso = $this->connect->prepare(
             "SELECT * FROM $this->table2 WHERE id = :id_curso"

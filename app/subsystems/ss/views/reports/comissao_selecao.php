@@ -54,10 +54,18 @@ class relatorios extends connect
         $pdf->AddPage();
         $pdf->Image('../../assets/imgs/fundo5_pdf.png', 0, 0, $pdf->GetPageWidth(), $pdf->GetPageHeight(), 'png', '', 0.1);
 
+        date_default_timezone_set('America/Fortaleza');
+        $pdf->SetFont('Arial', 'B', 13);
+        $pdf->SetY(3);
+        $pdf->SetX(46);
+        $pdf->Cell(40, 4, $_SESSION['nome_escola'], 0, 0, 'C');
+        $pdf->SetX(155);
+        $pdf->Cell(40, 4, $datatime = date('Y/m/d H:i:s'), 0, 1, 'C');
+
         // Header
-        $pdf->SetFont('Arial', 'B', 25);
+        $pdf->SetFont('Arial', 'B', 20);
         $pdf->SetY(10);
-        $pdf->SetX(55);
+        $pdf->SetX(44);
         $pdf->Cell(15, 4, strtoupper('COMISSÃO DE SELEÇÃO'), 0, 1, 'C');
 
         // Table Header
