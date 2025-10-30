@@ -35,10 +35,10 @@ class connect_escolas
             } catch (PDOException $e) {
                 // Se falhar, tentar o banco da hospedagem
 
-                $host_crede1 = $config['local']["crede_users"]['host'];
-                $database_crede1 = $config['local']["crede_users"]['banco'];
-                $user_crede1 = $config['local']["crede_users"]['user'];
-                $password_crede1 = $config['local']["crede_users"]['senha'];
+                $host_crede1 = $config['hospedagem']["crede_users"]['host'];
+                $database_crede1 = $config['hospedagem']["crede_users"]['banco'];
+                $user_crede1 = $config['hospedagem']["crede_users"]['user'];
+                $password_crede1 = $config['hospedagem']["crede_users"]['senha'];
 
                 $this->connect_crede1 = new PDO('mysql:host=' . $host_crede1 . ';dbname=' . $database_crede1 . ';charset=utf8', $user_crede1, $password_crede1);
                 $this->connect_crede1->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
