@@ -62,17 +62,22 @@ class relatorios extends connect
         $pdf->SetX(155);
         $pdf->Cell(40, 4, $datatime = date('Y/m/d H:i:s'), 0, 1, 'C');
 
-        // Header
-        $pdf->SetFont('Arial', 'B', 20);
+        $pdf->SetFont('Arial', 'B', 17);
         $pdf->SetY(10);
-        $pdf->SetX(44);
-        $pdf->Cell(15, 4, strtoupper('COMISSÃO DE SELEÇÃO'), 0, 1, 'C');
+        $pdf->SetX(8);
+        $nome_relatorio = 'COMISSÃO DE SELEÇÃO';
+        $count = mb_strlen($nome_relatorio);
+        $pdf->Cell(55, 4, $nome_relatorio, 0, 1, 'L');
+        $pdf->SetFillColor(255,165,0);
+        $pdf->SetY(16);
+        $pdf->SetX(9 );
+        $pdf->Cell(3.9*$count, 1.2, '', 0, 1, 'L', true);
 
         // Table Header
         $pdf->SetFont('Arial', 'B', 10);
         $pdf->SetFillColor(0, 90, 36); // Green background
         $pdf->SetTextColor(255, 255, 255); // White text
-        $pdf->SetY(50);
+        $pdf->SetY(40);
         $pdf->SetX(8);
         $pdf->Cell(75, 7, strtoupper('NOME'), 1, 0, 'C', true);
         $pdf->Cell(30, 7, strtoupper('PERFIL'), 1, 0, 'C', true);
@@ -85,12 +90,12 @@ class relatorios extends connect
         $pdf->SetFont('Arial', '', 8);
 
         // Initialize Y position
-        $y_position = 50;
+        $y_position = 40;
 
         // Active Users Section
         $pdf->SetFont('Arial', 'B', 16);
         $pdf->SetFillColor(255, 255, 255); // White background
-        $pdf->SetY(40);
+        $pdf->SetY(30);
         $pdf->SetX(8);
         $pdf->Cell(190, 7, strtoupper('USUÁRIOS ATIVOS'), 0, 1, 'C', true);
         $y_position += 7;

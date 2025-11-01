@@ -154,40 +154,38 @@ class relatorios extends connect
         $pdf->Cell(22, 8, mb_convert_encoding($tipo_relatorio, 'ISO-8859-1', 'UTF-8'), 0, 1, 'L');
         $pdf->SetFont('Arial', 'B', 8);
 
-        //LEGENDAS PCD  |  COTISTAS  |  AC  ///////////////////////////////////////////////////////////////////////////////
-        $pdf->SetLeftMargin(138);
-        // Linha 1
-        $pdf->SetY(8);
-        $pdf->SetFont('Arial', 'B', 8);
-        $pdf->SetTextColor(255, 174, 25); // texto amarelo
-        $pdf->Write(5, mb_convert_encoding('PCD', 'ISO-8859-1', 'UTF-8'));
-        $pdf->SetTextColor(0, 90, 36); // volta pro preto
-        $pdf->SetFont('Arial', '', 8);
-        $pdf->Write(5, mb_convert_encoding('  PESSOA COM DEFICIÊNCIA', 'ISO-8859-1', 'UTF-8'));
-
-        // Linha 2
-        $pdf->SetY(12);
-        $pdf->SetFont('Arial', 'B', 8);
-        $pdf->SetTextColor(255, 174, 25); // texto amarelo
-        $pdf->Write(5, mb_convert_encoding('COTISTA', 'ISO-8859-1', 'UTF-8'));
-        $pdf->SetTextColor(0, 90, 36);
-        $pdf->SetFont('Arial', '', 8);
-        $pdf->Write(5, mb_convert_encoding('  COTA DO BAIRRO', 'ISO-8859-1', 'UTF-8'));
-
-        // Linha 3
-        $pdf->SetY(16);
-        $pdf->SetFont('Arial', 'B', 8);
-        $pdf->SetTextColor(255, 174, 25); // texto amarelo
-        $pdf->Write(5, mb_convert_encoding('AC', 'ISO-8859-1', 'UTF-8'));
-        $pdf->SetTextColor(0, 90, 36);
-        $pdf->SetFont('Arial', '', 8);
-        $pdf->Write(5, mb_convert_encoding('  AMPLA CONCORRÊNCIA', 'ISO-8859-1', 'UTF-8'));
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        $pdf->SetLeftMargin(10);
-
-        $pdf->SetFont('Arial', 'B', 12);
-        $pdf->Cell(185, 10, '', 0, 1, 'C');
+          // LEGENDAS (PCD | COTISTA | AC) – posição onde antes ficavam os bairros
+          $pdf->SetY(20);
+          $pdf->SetX(8.5);
+          $pdf->SetFont('Arial','B',8);
+          $pdf->SetTextColor(255,174,25);
+          $pdf->Cell(20,6,mb_convert_encoding('PCD:','ISO-8859-1','UTF-8'),0,0,'L');
+          $pdf->SetTextColor(0,90,36);
+          $pdf->SetFont('Arial','',8);
+          $pdf->SetX(16);
+          $pdf->Cell(70,6,mb_convert_encoding('PESSOA COM DEFICIÊNCIA  |','ISO-8859-1','UTF-8'),0,0,'L');
+  
+          $pdf->SetX(58);
+          $pdf->SetFont('Arial','B',8);
+          $pdf->SetTextColor(255,174,25);
+          $pdf->Cell(25,6,mb_convert_encoding('COTISTA:','ISO-8859-1','UTF-8'),0,0,'L');
+          $pdf->SetTextColor(0,90,36);
+          $pdf->SetFont('Arial','',8);
+          $pdf->SetX(72);
+          $pdf->Cell(70,6,mb_convert_encoding('COTA DO BAIRRO  |','ISO-8859-1','UTF-8'),0,0,'L');
+  
+          $pdf->SetX(101);
+          $pdf->SetFont('Arial','B',8);
+          $pdf->SetTextColor(255,174,25);
+          $pdf->Cell(15,6,mb_convert_encoding('AC:','ISO-8859-1','UTF-8'),0,0,'L');
+          $pdf->SetTextColor(0,90,36);
+          $pdf->SetFont('Arial','',8);
+          $pdf->SetX(107);
+          $pdf->Cell(0,6,mb_convert_encoding('AMPLA CONCORRÊNCIA','ISO-8859-1','UTF-8'),0,1,'L');
+  
+          $pdf->SetLeftMargin(10);
+          $pdf->SetTextColor(0,0,0);
+          $pdf->Cell(185,10,'',0,1,'C');
 
         $stmt_bairros = $this->connect->query("SELECT * FROM $this->table13");
         $dados_bairros = $stmt_bairros->fetchAll(PDO::FETCH_ASSOC);

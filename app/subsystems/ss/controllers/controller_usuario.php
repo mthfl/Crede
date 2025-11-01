@@ -15,7 +15,7 @@ if (
     isset($_POST["tipo"]) && !empty($_POST["tipo"]) &&
     isset($_POST["perfil"]) && !empty($_POST["perfil"])
 ) {
-    $nome = strtoupper($_POST["nome"]);
+    $nome = mb_strtoupper($_POST["nome"], 'UTF-8');
     $email = $_POST["email"];
     $cpf = $_POST["cpf"];
     $tipo = $_POST["tipo"];
@@ -47,7 +47,7 @@ if (
     isset($_POST["perfil"]) && !empty($_POST["perfil"])
 ) {
     $id_usuario = $_POST["id_usuario"];
-    $nome = strtoupper($_POST["nome"]);
+    $nome = mb_strtoupper($_POST["nome"], 'UTF-8');
     $email = $_POST["email"];
     $cpf = $_POST["cpf"];
     $tipo = $_POST["tipo"];
@@ -133,7 +133,7 @@ if (
 
     $id_candidato = $_POST['id_candidato'];
     $id_usuario = $_POST['id_usuario'];
-    $descricao = strtoupper($_POST['descricao']);
+    $descricao = mb_strtoupper($_POST['descricao'], 'UTF-8');
     $result = $cadastrador_model->requisicao_alteracao($id_usuario, $id_candidato, $descricao);
     switch ($result) {
         case 1:
@@ -183,7 +183,7 @@ if (
     }
 } else if (empty($_POST['id_perfil']) && isset($_POST['nome_perfil']) && !empty($_POST['nome_perfil'])) {
 
-    $nome_perfil = strtoupper($_POST['nome_perfil']);
+    $nome_perfil = mb_strtoupper($_POST['nome_perfil'], 'UTF-8');
     $escola = $_SESSION['escola'];
 
     $admin_model = new admin($escola);
@@ -224,7 +224,7 @@ if (
     }
 } else if (isset($_POST['id_perfil']) && !empty($_POST['id_perfil']) && isset($_POST['nome_perfil']) && !empty($_POST['nome_perfil'])) {
     $id_perfil = $_POST['id_perfil'];
-    $nome_perfil = strtoupper($_POST['nome_perfil']);
+    $nome_perfil = mb_strtoupper($_POST['nome_perfil'], 'UTF-8');
     $escola = $_SESSION['escola'];
     $admin_model = new admin($escola);
     $result = $admin_model->editar_perfil($id_perfil, $nome_perfil);

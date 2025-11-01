@@ -7,71 +7,24 @@ $session->tempo_session();
 require_once(__DIR__ . '/../../config/connect.php');
 require_once(__DIR__ . '/../../assets/libs/fpdf/fpdf.php');
 $escola = $_SESSION['escola'];
+
 // Classe FPDF customizada para suporte a UTF-8
 class PDF extends FPDF
 {
     function Cell($w, $h = 0, $txt = '', $border = 0, $ln = 0, $align = '', $fill = false, $link = '')
     {
-        $txt = mb_convert_encoding($txt, 'ISO-8859-1', 'UTF-8');
+        if (mb_detect_encoding($txt, 'UTF-8', true) === 'UTF-8') {
+            $txt = iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $txt);
+        }
         parent::Cell($w, $h, $txt, $border, $ln, $align, $fill, $link);
     }
 
     function MultiCell($w, $h, $txt, $border = 0, $align = 'J', $fill = false)
     {
-        $txt = mb_convert_encoding($txt, 'ISO-8859-1', 'UTF-8');
+        if (mb_detect_encoding($txt, 'UTF-8', true) === 'UTF-8') {
+            $txt = iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $txt);
+        }
         parent::MultiCell($w, $h, $txt, $border, $align, $fill);
-    }
-
-    // Method to estimate number of lines for MultiCell
-    function NbLines($width, $text)
-    {
-        $texto = mb_convert_encoding($text, 'ISO-8859-1', 'UTF-8');
-        $cw = &$this->CurrentFont['cw'];
-        if ($width == 0) {
-            $width = $this->w - $this->rMargin - $this->x;
-        }
-        $wmax = ($width - 2 * $this->cMargin) * 1000 / $this->FontSize;
-        $s = str_replace("\r", '', $texto);
-        $nb = strlen($s);
-        if ($nb > 0 && $s[$nb - 1] == "\n") {
-            $nb--;
-        }
-        $sep = -1;
-        $i = 0;
-        $j = 0;
-        $l = 0;
-        $nl = 1;
-        while ($i < $nb) {
-            $c = $s[$i];
-            if ($c == "\n") {
-                $i++;
-                $sep = -1;
-                $j = $i;
-                $l = 0;
-                $nl++;
-                continue;
-            }
-            if ($c == ' ') {
-                $sep = $i;
-            }
-            $l += isset($cw[$c]) ? $cw[$c] : 0; // Check if character exists in font
-            if ($l > $wmax) {
-                if ($sep == -1) {
-                    if ($i == $j) {
-                        $i++;
-                    }
-                } else {
-                    $i = $sep + 1;
-                }
-                $sep = -1;
-                $j = $i;
-                $l = 0;
-                $nl++;
-            } else {
-                $i++;
-            }
-        }
-        return $nl;
     }
 }
 
@@ -135,10 +88,16 @@ class relatorios extends connect
         $pdf->SetX(155);
         $pdf->Cell(40, 4, $datatime = date('Y/m/d H:i:s'), 0, 1, 'C');
 
-        $pdf->SetFont('Arial', 'B', 20);
+        $pdf->SetFont('Arial', 'B', 17);
         $pdf->SetY(10);
-        $pdf->SetX(41);
-        $pdf->Cell(40, 4, 'RELATÓRIO DE REQUISIÇÕES', 0, 1, 'C');
+        $pdf->SetX(8);
+        $nome_relatorio = 'RELATÓRIO DE MOVIMENTAÇÕES';
+        $count = mb_strlen($nome_relatorio);
+        $pdf->Cell(55, 4, $nome_relatorio, 0, 1, 'L');
+        $pdf->SetFillColor(255,165,0);
+        $pdf->SetY(16);
+        $pdf->SetX(9 );
+        $pdf->Cell(3.9*$count, 1.2, '', 0, 1, 'L', true);
 
         $y_position = 32;
 
@@ -176,26 +135,50 @@ class relatorios extends connect
             $y_position += 7;
         } else {
             foreach ($dados_concluidas as $dado) {
-                // Limit candidate and user names to 30 characters
-                $nome_candidato = strlen($dado['nome_candidato']) > 20 ? substr($dado['nome_candidato'], 0, 20) . '...' : $dado['nome_candidato'];
-                $nome_usuario = strlen($dado['nome_usuario']) > 17 ? substr($dado['nome_usuario'], 0, 17) . '...' : $dado['nome_usuario'];
+                // Break text into lines of 50 characters
+                $texto_requisicao = $dado['texto'];
+                $linhas_texto = [];
+                if (mb_strlen($texto_requisicao, 'UTF-8') > 50) {
+                    $texto_requisicao = wordwrap($texto_requisicao, 50, "\n", true);
+                    $linhas_texto = explode("\n", $texto_requisicao);
+                } else {
+                    $linhas_texto = [$texto_requisicao];
+                }
                 
-                // Calculate height for MultiCell based on text length
-                $texto = strtoupper($dado['texto']);
-                $num_lines = $pdf->NbLines(90, $texto);
-                $cell_height = 7 * max(1, $num_lines);
+                // Calculate row height based on number of lines
+                $num_linhas = count($linhas_texto);
+                $altura_linha = 7;
+                $altura_total = max($altura_linha, $altura_linha * $num_linhas);
 
                 $pdf->SetFillColor(255, 255, 255);
-                $pdf->SetY($y_position);
-                $pdf->SetX(10);
+                $x_inicial = 10;
+                $y_inicial = $y_position;
+                $y_atual = $y_inicial;
                 
-                // Draw cells with dynamic height
-                $pdf->Cell(40, $cell_height, strtoupper($nome_candidato), 1, 0, 'L', true);
-                $pdf->MultiCell(90, 7, $texto, 1, 'L', true);
-                $pdf->SetXY(135, $y_position);
-                $pdf->Cell(35, $cell_height, strtoupper($nome_usuario), 1, 0, 'L', true);
-                $pdf->Cell(30, $cell_height, strtoupper($dado['data']), 1, 1, 'C', true);
-                $y_position += $cell_height;
+                // Prepare text content with truncation for long names
+                $nome_candidato_original = mb_strtoupper($dado['nome_candidato'], 'UTF-8');
+                $nome_candidato = mb_strlen($nome_candidato_original, 'UTF-8') > 18 ? mb_substr($nome_candidato_original, 0, 20, 'UTF-8') . '...' : $nome_candidato_original;
+                $nome_usuario_original = mb_strtoupper($dado['nome_usuario'], 'UTF-8');
+                $nome_usuario = mb_strlen($nome_usuario_original, 'UTF-8') > 18 ? mb_substr($nome_usuario_original, 0, 20, 'UTF-8') . '...' : $nome_usuario_original;
+                $data = mb_strtoupper($dado['data'], 'UTF-8');
+                
+                // Draw candidate cell (first column) with border - centered vertically
+                $pdf->SetXY($x_inicial, $y_atual);
+                $pdf->Cell(40, $altura_total, $nome_candidato, 1, 0, 'L', true);
+                
+                // Draw text cell with MultiCell (second column) with border
+                $pdf->SetXY($x_inicial + 40, $y_atual);
+                $pdf->MultiCell(85, $altura_linha, $texto_requisicao, 1, 'L', true);
+                
+                // Draw user cell (third column) with border - centered vertically
+                $pdf->SetXY($x_inicial + 40 + 85, $y_atual);
+                $pdf->Cell(35, $altura_total, $nome_usuario, 1, 0, 'L', true);
+                
+                // Draw date cell (fourth column) with border - centered vertically
+                $pdf->SetXY($x_inicial + 40 + 85 + 35, $y_atual);
+                $pdf->Cell(30, $altura_total, $data, 1, 1, 'C', true);
+                
+                $y_position += $altura_total;
 
                 // Add new page if needed
                 if ($y_position > 270) {
@@ -240,26 +223,50 @@ class relatorios extends connect
             $y_position += 7;
         } else {
             foreach ($dados_pendentes as $dado) {
-                // Limit candidate and user names to 30 characters
-                $nome_candidato = strlen($dado['nome_candidato']) > 20 ? substr($dado['nome_candidato'], 0, 20) . '...' : $dado['nome_candidato'];
-                $nome_usuario = strlen($dado['nome_usuario']) > 17 ? substr($dado['nome_usuario'], 0, 17) . '...' : $dado['nome_usuario'];
+                // Break text into lines of 50 characters
+                $texto_requisicao = $dado['texto'];
+                $linhas_texto = [];
+                if (mb_strlen($texto_requisicao, 'UTF-8') > 50) {
+                    $texto_requisicao = wordwrap($texto_requisicao, 50, "\n", true);
+                    $linhas_texto = explode("\n", $texto_requisicao);
+                } else {
+                    $linhas_texto = [$texto_requisicao];
+                }
                 
-                // Calculate height for MultiCell based on text length
-                $texto = strtoupper($dado['texto']);
-                $num_lines = $pdf->NbLines(90, $texto);
-                $cell_height = 7 * max(1, $num_lines);
+                // Calculate row height based on number of lines
+                $num_linhas = count($linhas_texto);
+                $altura_linha = 7;
+                $altura_total = max($altura_linha, $altura_linha * $num_linhas);
 
                 $pdf->SetFillColor(255, 255, 255);
-                $pdf->SetY($y_position);
-                $pdf->SetX(10);
+                $x_inicial = 10;
+                $y_inicial = $y_position;
+                $y_atual = $y_inicial;
                 
-                // Draw cells with dynamic height
-                $pdf->Cell(40, $cell_height, strtoupper($nome_candidato), 1, 0, 'L', true);
-                $pdf->MultiCell(85, 7, $texto, 1, 'L', true);
-                $pdf->SetXY(135, $y_position);
-                $pdf->Cell(35, $cell_height, strtoupper($nome_usuario), 1, 0, 'L', true);
-                $pdf->Cell(30, $cell_height, strtoupper($dado['data']), 1, 1, 'C', true);
-                $y_position += $cell_height;
+                // Prepare text content with truncation for long names
+                $nome_candidato_original = mb_strtoupper($dado['nome_candidato'], 'UTF-8');
+                $nome_candidato = mb_strlen($nome_candidato_original, 'UTF-8') > 18 ? mb_substr($nome_candidato_original, 0, 20, 'UTF-8') . '...' : $nome_candidato_original;
+                $nome_usuario_original = mb_strtoupper($dado['nome_usuario'], 'UTF-8');
+                $nome_usuario = mb_strlen($nome_usuario_original, 'UTF-8') > 18 ? mb_substr($nome_usuario_original, 0, 20, 'UTF-8') . '...' : $nome_usuario_original;
+                $data = mb_strtoupper($dado['data'], 'UTF-8');
+                
+                // Draw candidate cell (first column) with border - centered vertically
+                $pdf->SetXY($x_inicial, $y_atual);
+                $pdf->Cell(40, $altura_total, $nome_candidato, 1, 0, 'L', true);
+                
+                // Draw text cell with MultiCell (second column) with border
+                $pdf->SetXY($x_inicial + 40, $y_atual);
+                $pdf->MultiCell(85, $altura_linha, $texto_requisicao, 1, 'L', true);
+                
+                // Draw user cell (third column) with border - centered vertically
+                $pdf->SetXY($x_inicial + 40 + 85, $y_atual);
+                $pdf->Cell(35, $altura_total, $nome_usuario, 1, 0, 'L', true);
+                
+                // Draw date cell (fourth column) with border - centered vertically
+                $pdf->SetXY($x_inicial + 40 + 85 + 35, $y_atual);
+                $pdf->Cell(30, $altura_total, $data, 1, 1, 'C', true);
+                
+                $y_position += $altura_total;
 
                 // Add new page if needed
                 if ($y_position > 270) {
@@ -304,26 +311,50 @@ class relatorios extends connect
             $y_position += 7;
         } else {
             foreach ($dados_recusadas as $dado) {
-                // Limit candidate and user names to 30 characters
-                $nome_candidato = strlen($dado['nome_candidato']) > 20 ? substr($dado['nome_candidato'], 0, 20) . '...' : $dado['nome_candidato'];
-                $nome_usuario = strlen($dado['nome_usuario']) > 17 ? substr($dado['nome_usuario'], 0, 17) . '...' : $dado['nome_usuario'];
+                // Break text into lines of 50 characters
+                $texto_requisicao = $dado['texto'];
+                $linhas_texto = [];
+                if (mb_strlen($texto_requisicao, 'UTF-8') > 50) {
+                    $texto_requisicao = wordwrap($texto_requisicao, 50, "\n", true);
+                    $linhas_texto = explode("\n", $texto_requisicao);
+                } else {
+                    $linhas_texto = [$texto_requisicao];
+                }
                 
-                // Calculate height for MultiCell based on text length
-                $texto = strtoupper($dado['texto']);
-                $num_lines = $pdf->NbLines(90, $texto);
-                $cell_height = 7 * max(1, $num_lines);
+                // Calculate row height based on number of lines
+                $num_linhas = count($linhas_texto);
+                $altura_linha = 7;
+                $altura_total = max($altura_linha, $altura_linha * $num_linhas);
 
                 $pdf->SetFillColor(255, 255, 255);
-                $pdf->SetY($y_position);
-                $pdf->SetX(10);
+                $x_inicial = 10;
+                $y_inicial = $y_position;
+                $y_atual = $y_inicial;
                 
-                // Draw cells with dynamic height
-                $pdf->Cell(35, $cell_height, strtoupper($nome_candidato), 1, 0, 'L', true);
-                $pdf->MultiCell(85, 7, $texto, 1, 'L', true);
-                $pdf->SetXY(105, $y_position);
-                $pdf->Cell(35, $cell_height, strtoupper($nome_usuario), 1, 0, 'L', true);
-                $pdf->Cell(30, $cell_height, strtoupper($dado['data']), 1, 1, 'C', true);
-                $y_position += $cell_height;
+                // Prepare text content with truncation for long names
+                $nome_candidato_original = mb_strtoupper($dado['nome_candidato'], 'UTF-8');
+                $nome_candidato = mb_strlen($nome_candidato_original, 'UTF-8') > 18 ? mb_substr($nome_candidato_original, 0, 20, 'UTF-8') . '...' : $nome_candidato_original;
+                $nome_usuario_original = mb_strtoupper($dado['nome_usuario'], 'UTF-8');
+                $nome_usuario = mb_strlen($nome_usuario_original, 'UTF-8') > 18 ? mb_substr($nome_usuario_original, 0, 20, 'UTF-8') . '...' : $nome_usuario_original;
+                $data = mb_strtoupper($dado['data'], 'UTF-8');
+                
+                // Draw candidate cell (first column) with border - centered vertically
+                $pdf->SetXY($x_inicial, $y_atual);
+                $pdf->Cell(40, $altura_total, $nome_candidato, 1, 0, 'L', true);
+                
+                // Draw text cell with MultiCell (second column) with border
+                $pdf->SetXY($x_inicial + 40, $y_atual);
+                $pdf->MultiCell(85, $altura_linha, $texto_requisicao, 1, 'L', true);
+                
+                // Draw user cell (third column) with border - centered vertically
+                $pdf->SetXY($x_inicial + 40 + 85, $y_atual);
+                $pdf->Cell(35, $altura_total, $nome_usuario, 1, 0, 'L', true);
+                
+                // Draw date cell (fourth column) with border - centered vertically
+                $pdf->SetXY($x_inicial + 40 + 85 + 35, $y_atual);
+                $pdf->Cell(30, $altura_total, $data, 1, 1, 'C', true);
+                
+                $y_position += $altura_total;
 
                 // Add new page if needed
                 if ($y_position > 270) {

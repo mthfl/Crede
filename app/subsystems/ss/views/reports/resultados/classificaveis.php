@@ -260,6 +260,7 @@ class relatorios extends connect
             $pdf->SetTextColor(0, 0, 0);
             $pdf->Cell(185, 10, 'NÃO HÁ CANDIDATOS NA LISTA DE ESPERA', 0, 1, 'C');
         } else {
+            $primeiro_segmento = true;
             foreach ($segmentos as $segmento) {
                 $titulo = $segmento['titulo'];
                 $dados = $segmento['dados'];
@@ -268,10 +269,16 @@ class relatorios extends connect
                     continue;
                 }
 
+                // Adicionar 10 linhas de espaçamento antes de cada segmento (exceto o primeiro)
+                if (!$primeiro_segmento) {
+                    $pdf->SetY($pdf->GetY() + 50); // 10 linhas * 5mm por linha = 50mm
+                }
+                $primeiro_segmento = false;
+
                 // Verificar se há espaço suficiente na página para o segmento
                 $linhas_necessarias = count($dados) + 2; // +2 para o título e cabeçalho da tabela
                 $espaco_por_linha = 5; // Altura da célula
-                $espaco_total = $linhas_necessarias * $espaco_por_linha + 10; // +10 para o espaço após o segmento
+                $espaco_total = $linhas_necessarias * $espaco_por_linha; // Espaço necessário para o segmento
                 $espaco_disponivel = $pdf->GetPageHeight() - $pdf->GetY() - 10; // Margem inferior
 
                 if ($espaco_total > $espaco_disponivel) {
@@ -330,7 +337,6 @@ class relatorios extends connect
 
                     $posicao++;
                 }
-                $pdf->Ln(10);
             }
         }
 

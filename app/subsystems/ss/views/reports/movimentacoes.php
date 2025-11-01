@@ -64,10 +64,16 @@ class relatorios extends connect
         $pdf->SetX(155);
         $pdf->Cell(40, 4, $datatime = date('Y/m/d H:i:s'), 0, 1, 'C');
 
-        $pdf->SetFont('Arial', 'B', 20);
+        $pdf->SetFont('Arial', 'B', 17);
         $pdf->SetY(10);
-        $pdf->SetX(40);
-        $pdf->Cell(55, 4, 'RELATÓRIO DE MOVIMENTAÇÕES', 0, 1, 'C');
+        $pdf->SetX(8);
+        $nome_relatorio = 'RELATÓRIO DE MOVIMENTAÇÕES';
+        $count = mb_strlen($nome_relatorio);
+        $pdf->Cell(55, 4, $nome_relatorio, 0, 1, 'L');
+        $pdf->SetFillColor(255,165,0);
+        $pdf->SetY(16);
+        $pdf->SetX(9 );
+        $pdf->Cell(3.9*$count, 1.2, '', 0, 1, 'L', true);
 
         // User info
         $pdf->SetFont('Arial', 'B', 12);
