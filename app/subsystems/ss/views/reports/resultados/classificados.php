@@ -16,7 +16,7 @@ class PDF extends FPDF
     {
         parent::AddPage($orientation, $size, $rotation);
         $this->Image('../../../assets/imgs/fundo5_pdf.png', 0, 0,
-                     $this->GetPageWidth(), $this->GetPageHeight(), 'png', '', 0.1);
+                     $this->GetPageWidth(), $this->GetPageHeight(), 'png');
     }
 }
 
@@ -254,17 +254,46 @@ class relatorios extends connect
             ['titulo'=>'PRIVADA - COTA',    'dados'=>$vagas_ocupadas['privada_cotas']]
         ];
 
-        $imprimiu_infos = false;
+        $primeira_pagina = true;
+        $bairros_exibidos = false;
         foreach ($segmentos as $seg) {
             $titulo = $seg['titulo'];
             $dados  = $seg['dados'];
             if (empty($dados)) continue;
 
-            // Verifica espaço na página
+            // Verificar se precisa exibir bairros antes de criar nova página
+            $y_atual = $pdf->GetY();
             $linhas = count($dados) + 2;
             $espaco = $linhas * $altura_celula + 10;
-            if ($espaco > $pdf->GetPageHeight() - $pdf->GetY() - 10) {
+            
+            // Se está na primeira página e próximo ao final, exibir bairros antes de criar nova página
+            if ($primeira_pagina && ($y_atual + $espaco > 250) && !$bairros_exibidos) {
+                // Exibir bairros no final da primeira página
+                $pdf->SetY(260);
+                $pdf->SetX(8.5);
+                
+                // Data/Hora à direita
+                $pdf->SetTextColor(0,0,0);
+                $pdf->SetFont('Arial','',8);
+                $pdf->Cell(0,5,$this->data_hora_pdf,0,1,'R');
+                
+                // Bairros
+                $pdf->SetFont('Arial','B',8);
+                $pdf->SetTextColor(255,174,25);
+                $pdf->SetX(8.5);
+                $pdf->Cell(35,5,mb_convert_encoding('BAIRROS DE COTA:','ISO-8859-1','UTF-8'),0,0,'L');
+                $pdf->SetTextColor(0,90,36);
+                $pdf->SetFont('Arial','',8);
+                $pdf->SetX(37);
+                $pdf->Cell(0,5,$this->bairros_texto_pdf,0,1,'L');
+                $bairros_exibidos = true;
+                
+                // Criar nova página após exibir bairros
                 $pdf->AddPage();
+                $primeira_pagina = false;
+            } else if ($espaco > $pdf->GetPageHeight() - $y_atual - 10) {
+                $pdf->AddPage();
+                $primeira_pagina = false;
                 $pdf->SetY(10);
             }
 
@@ -309,30 +338,33 @@ class relatorios extends connect
                 $class++;
             }
 
-            // ---------- DATA/HORA E BAIRROS (após o segmento PCD) ----------
-            if ($titulo === 'PCD' && !$imprimiu_infos) {
-                $pdf->Ln(3);
-
-                // Data/Hora à esquerda
-                $pdf->SetX(10);
-                $pdf->SetTextColor(0,0,0);
-                $pdf->SetFont('Arial','',10);
-                $pdf->Cell(0,5,$this->data_hora_pdf,0,1,'R');
-
-                // Bairros à direita
-                $pdf->SetFont('Arial','B',8);
-                $pdf->SetTextColor(255,174,25);
-                $pdf->Cell(35,5,mb_convert_encoding('BAIRROS DE COTA:','ISO-8859-1','UTF-8'),0,0,'L');
-                $pdf->SetTextColor(0,90,36);
-                $pdf->SetFont('Arial','',8);
-                $pdf->SetX(39);
-                $pdf->Cell(0,5,$this->bairros_texto_pdf,0,1,'L');
-
-                $pdf->Ln(5);
-                $imprimiu_infos = true;
+            $pdf->Ln(10);
+        }
+        
+        // Se ainda estamos na primeira página e não exibimos os bairros, exibir no final
+        if ($primeira_pagina && !$bairros_exibidos) {
+            $y_atual = $pdf->GetY();
+            if ($y_atual < 260) {
+                $pdf->SetY(260);
             } else {
-                $pdf->Ln(10);
+                $pdf->SetY($y_atual + 5);
             }
+            $pdf->SetX(8.5);
+            
+            // Data/Hora à direita
+            $pdf->SetTextColor(0,0,0);
+            $pdf->SetFont('Arial','',8);
+            $pdf->Cell(0,5,$this->data_hora_pdf,0,1,'R');
+            
+            // Bairros
+            $pdf->SetFont('Arial','B',8);
+            $pdf->SetTextColor(255,174,25);
+            $pdf->SetX(8.5);
+            $pdf->Cell(35,5,mb_convert_encoding('BAIRROS DE COTA:','ISO-8859-1','UTF-8'),0,0,'L');
+            $pdf->SetTextColor(0,90,36);
+            $pdf->SetFont('Arial','',8);
+            $pdf->SetX(37);
+            $pdf->Cell(0,5,$this->bairros_texto_pdf,0,1,'L');
         }
 
         $pdf->Output('classificados.pdf','I');

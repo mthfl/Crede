@@ -15,7 +15,7 @@ class PDF extends FPDF
     function AddPage($orientation = '', $size = '', $rotation = 0)
     {
         parent::AddPage($orientation, $size, $rotation);
-        $this->Image('../../assets/imgs/fundo5_pdf.png', 0, 0, $this->GetPageWidth(), $this->GetPageHeight(), 'png', '', 0.1);
+        $this->Image('../../assets/imgs/fundo5_pdf.png', 0, 0, $this->GetPageWidth(), $this->GetPageHeight(), 'png');
     }
 }
 
@@ -187,42 +187,11 @@ class relatorios extends connect
           $pdf->SetTextColor(0,0,0);
           $pdf->Cell(185,10,'',0,1,'C');
 
+        // Buscar dados dos bairros para exibir no final da primeira página
         $stmt_bairros = $this->connect->query("SELECT * FROM $this->table13");
         $dados_bairros = $stmt_bairros->fetchAll(PDO::FETCH_ASSOC);
         $bairros_para_mostrar = array_slice($dados_bairros, 0, 5);
-
-        $pdf->SetFont('Arial', '', 8);
-
-        // Título e bairros alinhados na mesma linha, exceto para PRIVADA AC e PÚBLICA AC
-        if ($tipo_relatorio !== 'PRIVADA AC' && $tipo_relatorio !== 'PÚBLICA AC') {
-            // mesmo alinhamento do tipo_relatorio
-            $pdf->SetY(20);
-            $pdf->SetX(8.50);
-
-            // título em amarelo (mesma cor usada em PCD, COTISTA e AC)
-            $pdf->SetFont('Arial', 'B', 8);
-            $pdf->SetTextColor(255, 174, 25);
-            $pdf->Cell(28, 6, mb_convert_encoding('BAIRROS DE COTA:', 'ISO-8859-1', 'UTF-8'), 0, 0, 'L');
-
-            // texto dos bairros em verde-escuro
-            $pdf->SetTextColor(0, 90, 36);
-            $pdf->SetFont('Arial', '', 8);
-
-            // monta a string dos bairros separados por " | "
-            $bairros_texto = '';
-            foreach ($bairros_para_mostrar as $index => $dado) {
-                $bairro = strtoupper(mb_convert_encoding($dado['bairros'], 'ISO-8859-1', 'UTF-8'));
-                $bairros_texto .= ($index < count($bairros_para_mostrar) - 1) ? $bairro . ' | ' : $bairro;
-            }
-
-            // imprime os bairros na mesma linha
-            $pdf->Cell(0, 6, $bairros_texto, 0, 1, 'L');
-            $pdf->SetY(16);
-        } else {
-            // mesmo espaçamento vertical quando não há seção de bairros
-            $pdf->SetY(16); // posição equivalente à parte inferior da seção de bairros
-        }
-
+$pdf->SetY(20);
         $pdf->SetFont('Arial', 'B', 8);
         $pdf->Cell(185, 10, '', 0, 1, 'C');
         // Fonte do cabeçalho
@@ -246,8 +215,85 @@ class relatorios extends connect
 
         // Dados com cores alternadas
         $classificacao = 001;
+        $primeira_pagina = true;
+        $bairros_exibidos = false;
 
         foreach ($dados as $dado) {
+            // Verificar se precisa criar nova página
+            $y_atual = $pdf->GetY();
+            
+            // Se está na primeira página e próximo ao final, exibir bairros antes de criar nova página
+            if ($primeira_pagina && $y_atual > 250 && !$bairros_exibidos && $tipo_relatorio !== 'PRIVADA AC' && $tipo_relatorio !== 'PÚBLICA AC') {
+                // Exibir bairros no final da primeira página
+                $pdf->SetY(260);
+                $pdf->SetX(8.50);
+                
+                // título em amarelo (mesma cor usada em PCD, COTISTA e AC)
+                $pdf->SetFont('Arial', 'B', 8);
+                $pdf->SetTextColor(255, 174, 25);
+                $pdf->Cell(28, 6, mb_convert_encoding('BAIRROS DE COTA:', 'ISO-8859-1', 'UTF-8'), 0, 0, 'L');
+                
+                // texto dos bairros em verde-escuro
+                $pdf->SetTextColor(0, 90, 36);
+                $pdf->SetFont('Arial', '', 8);
+                
+                // monta a string dos bairros separados por " | "
+                $bairros_texto = '';
+                foreach ($bairros_para_mostrar as $index => $dado_bairro) {
+                    $bairro = strtoupper(mb_convert_encoding($dado_bairro['bairros'], 'ISO-8859-1', 'UTF-8'));
+                    $bairros_texto .= ($index < count($bairros_para_mostrar) - 1) ? $bairro . ' | ' : $bairro;
+                }
+                
+                // imprime os bairros na mesma linha
+                $pdf->Cell(0, 6, $bairros_texto, 0, 1, 'L');
+                $pdf->SetTextColor(0, 0, 0);
+                $bairros_exibidos = true;
+                
+                // Criar nova página após exibir bairros
+                $pdf->AddPage();
+                $primeira_pagina = false;
+                
+                // Recriar cabeçalho da tabela na nova página
+                $pdf->SetFont('Arial', 'B', 8);
+                $pdf->SetFillColor(0, 90, 36);
+                $pdf->SetTextColor(255, 255, 255);
+                $pdf->Cell(10, $altura_celula, mb_convert_encoding('CL', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
+                $pdf->Cell($celula_nome, $altura_celula, mb_convert_encoding('NOME', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
+                $pdf->Cell($celula_curso, $altura_celula, mb_convert_encoding('CURSO', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
+                $pdf->Cell($celula_origem, $altura_celula, mb_convert_encoding('ORIGEM', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
+                if ((isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin')) {
+                    $pdf->Cell($celula_segmento, $altura_celula, mb_convert_encoding('SEG', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
+                    $pdf->Cell(17, $altura_celula, mb_convert_encoding('MEDIA', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
+                    $pdf->Cell($celula_cadastrador, $altura_celula, mb_convert_encoding('CADASTRADOR(A)', 'ISO-8859-1', 'UTF-8'), 1, 1, 'C', true);
+                } else {
+                    $pdf->Cell(26, $altura_celula, mb_convert_encoding('Segmento', 'ISO-8859-1', 'UTF-8'), 1, 1, 'C', true);
+                }
+                $pdf->SetTextColor(0, 0, 0);
+                $pdf->SetFont('Arial', '', 8);
+            } else if ($primeira_pagina && $y_atual > 270) {
+                // Se não há bairros para exibir e está no final da página, criar nova página
+                $pdf->AddPage();
+                $primeira_pagina = false;
+                
+                // Recriar cabeçalho da tabela na nova página
+                $pdf->SetFont('Arial', 'B', 8);
+                $pdf->SetFillColor(0, 90, 36);
+                $pdf->SetTextColor(255, 255, 255);
+                $pdf->Cell(10, $altura_celula, mb_convert_encoding('CL', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
+                $pdf->Cell($celula_nome, $altura_celula, mb_convert_encoding('NOME', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
+                $pdf->Cell($celula_curso, $altura_celula, mb_convert_encoding('CURSO', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
+                $pdf->Cell($celula_origem, $altura_celula, mb_convert_encoding('ORIGEM', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
+                if ((isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin')) {
+                    $pdf->Cell($celula_segmento, $altura_celula, mb_convert_encoding('SEG', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
+                    $pdf->Cell(17, $altura_celula, mb_convert_encoding('MEDIA', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
+                    $pdf->Cell($celula_cadastrador, $altura_celula, mb_convert_encoding('CADASTRADOR(A)', 'ISO-8859-1', 'UTF-8'), 1, 1, 'C', true);
+                } else {
+                    $pdf->Cell(26, $altura_celula, mb_convert_encoding('Segmento', 'ISO-8859-1', 'UTF-8'), 1, 1, 'C', true);
+                }
+                $pdf->SetTextColor(0, 0, 0);
+                $pdf->SetFont('Arial', '', 8);
+            }
+
             // Definir escola
             $escola = ($dado['publica'] == 1) ? mb_convert_encoding('PÚBLICA', 'ISO-8859-1', 'UTF-8') : mb_convert_encoding('PRIVADA', 'ISO-8859-1', 'UTF-8');
 
@@ -275,14 +321,44 @@ class relatorios extends connect
             if ((isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin')) {
                 $pdf->Cell(17, $altura_celula, number_format($dado['media_final'], 2), 1, 0, 'C', true);
                 $cadastrador_text = strtoupper(mb_convert_encoding($dado['nome_user'], 'ISO-8859-1', 'UTF-8'));
-                $text_width = $pdf->GetStringWidth($cadastrador_text);
-                if ($text_width > $celula_cadastrador) {
-                    $max_chars = floor(($celula_cadastrador / $text_width) * strlen($cadastrador_text)) - 3;
-                    $cadastrador_text = substr($cadastrador_text, 0, $max_chars) . '...';
+                // Truncar se tiver mais de 18 caracteres
+                if (mb_strlen($cadastrador_text) > 18) {
+                    $cadastrador_text = mb_substr($cadastrador_text, 0, 18) . '...';
                 }
                 $pdf->Cell($celula_cadastrador, $altura_celula, $cadastrador_text, 1, 1, 'L', true);
             }
             $classificacao++;
+        }
+        
+        // Se ainda estamos na primeira página e não exibimos os bairros, exibir no final
+        if ($primeira_pagina && !$bairros_exibidos && $tipo_relatorio !== 'PRIVADA AC' && $tipo_relatorio !== 'PÚBLICA AC') {
+            $y_atual = $pdf->GetY();
+            if ($y_atual < 260) {
+                $pdf->SetY(260);
+            } else {
+                $pdf->SetY($y_atual + 5);
+            }
+            $pdf->SetX(8.50);
+            
+            // título em amarelo (mesma cor usada em PCD, COTISTA e AC)
+            $pdf->SetFont('Arial', 'B', 8);
+            $pdf->SetTextColor(255, 174, 25);
+            $pdf->Cell(28, 6, mb_convert_encoding('BAIRROS DE COTA:', 'ISO-8859-1', 'UTF-8'), 0, 0, 'L');
+            
+            // texto dos bairros em verde-escuro
+            $pdf->SetTextColor(0, 90, 36);
+            $pdf->SetFont('Arial', '', 8);
+            
+            // monta a string dos bairros separados por " | "
+            $bairros_texto = '';
+            foreach ($bairros_para_mostrar as $index => $dado_bairro) {
+                $bairro = strtoupper(mb_convert_encoding($dado_bairro['bairros'], 'ISO-8859-1', 'UTF-8'));
+                $bairros_texto .= ($index < count($bairros_para_mostrar) - 1) ? $bairro . ' | ' : $bairro;
+            }
+            
+            // imprime os bairros na mesma linha
+            $pdf->Cell(0, 6, $bairros_texto, 0, 1, 'L');
+            $pdf->SetTextColor(0, 0, 0);
         }
         $pdf->Output('classificacao.pdf', 'I');
     }
