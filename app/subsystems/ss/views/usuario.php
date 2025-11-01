@@ -1075,12 +1075,13 @@ $select = new select($escola);
                 }
                 selectTipo.value = tipoValor;
                 if (selectPerfil) {
-                    // tenta selecionar por nome igual ao tipo_usuario se for o mesmo texto
-                    Array.from(selectPerfil.options).forEach(opt => {
-                        if (opt.value === (user.perfil || user.nome_perfil || '')) {
-                            opt.selected = true;
-                        }
-                    });
+                    // Seleciona o perfil usando o id_perfil
+                    const idPerfil = user.id_perfil || '';
+                    if (idPerfil) {
+                        selectPerfil.value = idPerfil.toString();
+                    } else {
+                        selectPerfil.value = '';
+                    }
                 }
                 document.getElementById('userForm').action = '../controllers/controller_usuario.php';
                 openModal('modalUser');
