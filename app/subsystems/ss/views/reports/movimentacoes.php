@@ -53,7 +53,7 @@ class relatorios extends connect
 
         $pdf = new PDF('P', 'mm', 'A4');
         $pdf->AddPage();
-        $pdf->Image('../../assets/imgs/fundo5_pdf.png', 0, 0, $pdf->GetPageWidth(), $pdf->GetPageHeight(), 'png', '', 0.1);
+        $pdf->Image('../../assets/imgs/fundo5_pdf.png', 0, 0, $pdf->GetPageWidth(), $pdf->GetPageHeight(), 'png');
         // Header
         
         date_default_timezone_set('America/Fortaleza');
@@ -88,8 +88,8 @@ class relatorios extends connect
         $pdf->SetY(45);
         $pdf->SetX(10);
         $pdf->Cell(30, 7, 'Data', 1, 0, 'C', true);
-        $pdf->Cell(60, 7, 'Tipo de Movimentação', 1, 0, 'C', true);
-        $pdf->Cell(100, 7, 'Descrição', 1, 1, 'C', true);
+        $pdf->Cell(50, 7, 'Tipo de Movimentação', 1, 0, 'C', true);
+        $pdf->Cell(110, 7, 'Descrição', 1, 1, 'C', true);
 
         // Reset text color to black
         $pdf->SetTextColor(0, 0, 0);
@@ -118,30 +118,35 @@ class relatorios extends connect
                 $pdf->SetY($y_position);
                 $pdf->SetX(10);
                 $pdf->Cell(30, 7, $dado['data'], 1, 0, 'L', true);
-                $pdf->Cell(60, 7, $dado['tipo_movimentacao'], 1, 0, 'L', true);
+                $pdf->Cell(50, 7, $dado['tipo_movimentacao'], 1, 0, 'L', true);
 
                 // Tratar descrição nula ou vazia
                 $descricao = $dado['descricao'] ?? '  -  -  -  ';
                 if (empty(trim($descricao))) {
                     $descricao = 'NÃO INFORMADA';
                 }
-                $pdf->Cell(100, 7, $descricao, 1, 1, 'L', true);
+                // Truncar descrição se tiver mais de 60 caracteres
+                if (mb_strlen($descricao) > 60) {
+                    $descricao = mb_substr($descricao, 0, 60) . '...';
+                }
+                $pdf->Cell(110, 7, $descricao, 1, 1, 'L', true);
                 $y_position += 7;
 
                 // Add new page if needed
                 if ($y_position > 270) {
                     $pdf->AddPage();
+                    $pdf->Image('../../assets/imgs/fundo5_pdf.png', 0, 0, $pdf->GetPageWidth(), $pdf->GetPageHeight(), 'png');
                     $y_position = 20;
 
                     // Add header to new page
                     $pdf->SetFont('Arial', 'B', 10);
-                    $pdf->SetFillColor(93, 164, 67);
+                    $pdf->SetFillColor(0, 90, 36); // Same green background as first page
                     $pdf->SetTextColor(255, 255, 255);
                     $pdf->SetY(10);
-                    $pdf->SetX(5);
+                    $pdf->SetX(10);
                     $pdf->Cell(30, 7, 'Data', 1, 0, 'C', true);
-                    $pdf->Cell(60, 7, 'Tipo de Movimentação', 1, 0, 'C', true);
-                    $pdf->Cell(100, 7, 'Descrição', 1, 1, 'C', true);
+                    $pdf->Cell(50, 7, 'Tipo de Movimentação', 1, 0, 'C', true);
+                    $pdf->Cell(110, 7, 'Descrição', 1, 1, 'C', true);
                     $pdf->SetTextColor(0, 0, 0);
                     $pdf->SetFont('Arial', '', 8);
                     $y_position = 17;

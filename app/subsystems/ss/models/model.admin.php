@@ -27,7 +27,7 @@ class admin extends cadastrador
             $stmt_candidato->bindValue(":id_usuario", $id_usuario);
             $stmt_candidato->bindValue(":datatime", $datatime);
             $stmt_candidato->bindValue(":tipo_movimentacao", 'CADASTRAR QUANTIDADE DE VAGAS');
-            $stmt_candidato->bindValue(":descricao", "FOI CADASTRADO ". $quantidade." DE VAGAS PARA OS CURSOS");
+            $stmt_candidato->bindValue(":descricao", "FOI CADASTRADO " . $quantidade . " DE VAGAS PARA OS CURSOS");
             if (!$stmt_cadastro->execute()) {
                 return 2;
             }
@@ -96,7 +96,7 @@ class admin extends cadastrador
         $stmt_candidato->bindValue(":id_usuario", $id_usuario);
         $stmt_candidato->bindValue(":datatime", $datatime);
         $stmt_candidato->bindValue(":tipo_movimentacao", 'CADASTRAR CURSO');
-        $stmt_candidato->bindValue(":descricao", "FOI CADASTRADO O CURSO ".$curso);
+        $stmt_candidato->bindValue(":descricao", "FOI CADASTRADO O CURSO " . $curso);
         if (!$stmt_candidato->execute()) {
 
             return 2;
@@ -134,7 +134,7 @@ class admin extends cadastrador
             $stmt_candidato->bindValue(":id_usuario", $id_usuario);
             $stmt_candidato->bindValue(":datatime", $datatime);
             $stmt_candidato->bindValue(":tipo_movimentacao", 'EDITAR CURSO');
-            $stmt_candidato->bindValue(":descricao", "FOI EDITADO O CURSO ". $curso);
+            $stmt_candidato->bindValue(":descricao", "FOI EDITADO O CURSO " . $curso);
             if (!$stmt_candidato->execute()) {
                 return 2;
             }
@@ -170,7 +170,7 @@ class admin extends cadastrador
             $stmt_candidato->bindValue(":id_usuario", $id_usuario);
             $stmt_candidato->bindValue(":datatime", $datatime);
             $stmt_candidato->bindValue(":tipo_movimentacao", 'EXCLUIR CURSO');
-            $stmt_candidato->bindValue(":descricao", "FOI EXCLUIDO O CURSO ".$curso['nome_curso']);
+            $stmt_candidato->bindValue(":descricao", "FOI EXCLUIDO O CURSO " . $curso['nome_curso']);
             if (!$stmt_candidato->execute()) {
                 return 2;
             }
@@ -206,7 +206,7 @@ class admin extends cadastrador
             $stmt_candidato->bindValue(":id_usuario", $id_usuario);
             $stmt_candidato->bindValue(":datatime", $datatime);
             $stmt_candidato->bindValue(":tipo_movimentacao", 'EXCLUIR CANDIDATOS E CURSO');
-            $stmt_candidato->bindValue(":descricao", "FOI EXCLUIDO O CURSO ". $curso['nome_curso']." E OS CANDIDATOS ASSOCIADOS A ELE");
+            $stmt_candidato->bindValue(":descricao", "FOI EXCLUIDO O CURSO " . $curso['nome_curso'] . " E OS CANDIDATOS ASSOCIADOS");
             if (!$stmt_candidato->execute()) {
                 return 2;
             }
@@ -284,7 +284,7 @@ class admin extends cadastrador
             $stmt_candidato->bindValue(":id_usuario", $id_usuario);
             $stmt_candidato->bindValue(":datatime", $datatime);
             $stmt_candidato->bindValue(":tipo_movimentacao", 'CADASTRAR USUÁRIO');
-            $stmt_candidato->bindValue(":descricao", "FOI CADASTRADO O USUÁRIO".$nome);
+            $stmt_candidato->bindValue(":descricao", "FOI CADASTRADO O USUÁRIO" . $nome);
             if (!$stmt_candidato->execute()) {
                 return 2;
             }
@@ -322,7 +322,7 @@ class admin extends cadastrador
             $stmt_candidato->bindValue(":id_usuario", $id_usuario);
             $stmt_candidato->bindValue(":datatime", $datatime);
             $stmt_candidato->bindValue(":tipo_movimentacao", 'EDITAR USUÁRIO');
-            $stmt_candidato->bindValue(":descricao", "FOI EDITADO O USUÁRIO".$nome);
+            $stmt_candidato->bindValue(":descricao", "FOI EDITADO O USUÁRIO" . $nome);
             if (!$stmt_candidato->execute()) {
                 return 2;
             }
@@ -339,14 +339,15 @@ class admin extends cadastrador
     public function cadastrar_bairro(array $nomes): int
     {
         try {
-            foreach ($nomes as $nome) {
+            foreach ($nomes as $nome_array) {
+                foreach ($nome_array as $nome) {
+                    $stmt_usuario = $this->connect->prepare("INSERT INTO $this->table13(`bairros`) VALUES (:nome)");
+                    $stmt_usuario->bindValue(":nome", mb_strtoupper($nome, 'UTF-8'));
 
-                $stmt_usuario = $this->connect->prepare("INSERT INTO $this->table13(`bairros`) VALUES (:nome)");
-                $stmt_usuario->bindValue(":nome", $nome);
+                    if (!$stmt_usuario->execute()) {
 
-                if (!$stmt_usuario->execute()) {
-
-                    return 2;
+                        return 2;
+                    }
                 }
             }
             date_default_timezone_set('America/Fortaleza');
@@ -391,7 +392,7 @@ class admin extends cadastrador
             $stmt_candidato->bindValue(":id_usuario", $id_usuario);
             $stmt_candidato->bindValue(":datatime", $datatime);
             $stmt_candidato->bindValue(":tipo_movimentacao", 'EDITAR BAIRRO');
-            $stmt_candidato->bindValue(":descricao", "FOI EDITADO O BAIRRO ".$id['bairros']);
+            $stmt_candidato->bindValue(":descricao", "FOI EDITADO O BAIRRO " . $id['bairros']);
             if (!$stmt_candidato->execute()) {
                 return 2;
             }
@@ -426,7 +427,7 @@ class admin extends cadastrador
             $stmt_candidato->bindValue(":id_usuario", $id_usuario);
             $stmt_candidato->bindValue(":datatime", $datatime);
             $stmt_candidato->bindValue(":tipo_movimentacao", 'EXCLUIR BAIRRO');
-            $stmt_candidato->bindValue(":descricao", "FOI EXCLUIDO O BAIRRO ".$id['bairros']);
+            $stmt_candidato->bindValue(":descricao", "FOI EXCLUIDO O BAIRRO " . $id['bairros']);
             if (!$stmt_candidato->execute()) {
                 return 2;
             }
@@ -460,7 +461,7 @@ class admin extends cadastrador
             $stmt_candidato->bindValue(":id_usuario", $id_usuario);
             $stmt_candidato->bindValue(":datatime", $datatime);
             $stmt_candidato->bindValue(":tipo_movimentacao", 'EXCLUIR CANDIDATO');
-            $stmt_candidato->bindValue(":descricao", "O CANDIDATO ".$candidato['nome']." FOI EXCLUIDO");
+            $stmt_candidato->bindValue(":descricao", "O CANDIDATO " . $candidato['nome'] . " FOI EXCLUIDO");
 
             if (!$stmt_candidato->execute()) {
 
@@ -496,7 +497,7 @@ class admin extends cadastrador
             $stmt_candidato->bindValue(":id_usuario", $id_usuario);
             $stmt_candidato->bindValue(":datatime", $datatime);
             $stmt_candidato->bindValue(":tipo_movimentacao", 'ATIVAR CANDIDATO');
-            $stmt_candidato->bindValue(":descricao", "O CANDIDATO ".$candidato['nome']." FOI ATIVADO");
+            $stmt_candidato->bindValue(":descricao", "O CANDIDATO " . $candidato['nome'] . " FOI ATIVADO");
 
             if (!$stmt_candidato->execute()) {
 
@@ -959,7 +960,7 @@ class admin extends cadastrador
         try {
 
             date_default_timezone_set('America/Fortaleza');
-            $datatime = date('Y/m/d H:i:s'); 
+            $datatime = date('Y/m/d H:i:s');
             $stmt = $this->connect->prepare("UPDATE $this->table14 SET status = 'Concluido',  data = :data WHERE id = :id");
             $stmt->bindValue(":id", $id_requisicao);
             $stmt->bindValue(":data", $datatime);
@@ -989,7 +990,7 @@ class admin extends cadastrador
     {
         try {
             date_default_timezone_set('America/Fortaleza');
-            $datatime = date('Y/m/d H:i:s'); 
+            $datatime = date('Y/m/d H:i:s');
             $stmt = $this->connect->prepare("UPDATE $this->table14 SET status = 'Recusado',  data = :data WHERE id = :id");
             $stmt->bindValue(":id", $id_requisicao);
             $stmt->bindValue(":data", $datatime);
@@ -1018,14 +1019,14 @@ class admin extends cadastrador
     {
         try {
             date_default_timezone_set('America/Fortaleza');
-            $datatime = date('Y/m/d H:i:s'); 
+            $datatime = date('Y/m/d H:i:s');
             $stmt = $this->connect->prepare("UPDATE $this->table14 SET status = 'Pendente',  data = :data WHERE id = :id");
             $stmt->bindValue(":id", $id_requisicao);
             $stmt->bindValue(":data", $datatime);
             if (!$stmt->execute()) {
                 return 2;
             }
-            
+
             date_default_timezone_set('America/Fortaleza');
             $datatime = date('Y/m/d H:i:s');
             $id_usuario = $_SESSION['id'];
@@ -1062,7 +1063,7 @@ class admin extends cadastrador
             $stmt_candidato->bindValue(":id_usuario", $id_usuario);
             $stmt_candidato->bindValue(":datatime", $datatime);
             $stmt_candidato->bindValue(":tipo_movimentacao", 'DESATIVAR USUÁRIO');
-            $stmt_candidato->bindValue(":descricao", "USUÁRIO ".$nome['nome_user']." FOI DESABILITADO");
+            $stmt_candidato->bindValue(":descricao", "USUÁRIO " . $nome['nome_user'] . " FOI DESABILITADO");
             if (!$stmt_candidato->execute()) {
                 return 2;
             }
@@ -1090,7 +1091,7 @@ class admin extends cadastrador
             $stmt_candidato->bindValue(":id_usuario", $id_usuario);
             $stmt_candidato->bindValue(":datatime", $datatime);
             $stmt_candidato->bindValue(":tipo_movimentacao", 'HABILITAR USUÁRIO');
-            $stmt_candidato->bindValue(":descricao", "USUÁRIO(A) ".$nome['nome_user']." HABILITADO(A)");
+            $stmt_candidato->bindValue(":descricao", "USUÁRIO(A) " . $nome['nome_user'] . " HABILITADO(A)");
             if (!$stmt_candidato->execute()) {
                 return 2;
             }
@@ -1122,7 +1123,7 @@ class admin extends cadastrador
             $stmt_candidato->bindValue(":id_usuario", $id_usuario);
             $stmt_candidato->bindValue(":datatime", $datatime);
             $stmt_candidato->bindValue(":tipo_movimentacao", 'HABILITAR USUÁRIO');
-            $stmt_candidato->bindValue(":descricao", "PERFIL ".$perfil." CRIADO");
+            $stmt_candidato->bindValue(":descricao", "PERFIL " . $perfil . " CRIADO");
             if (!$stmt_candidato->execute()) {
                 return 2;
             }
@@ -1145,7 +1146,7 @@ class admin extends cadastrador
             $stmt->bindValue(":id", $id_perfil);
             if (!$stmt->execute()) {
                 return 2;
-            } 
+            }
 
             date_default_timezone_set('America/Fortaleza');
             $datatime = date('Y/m/d H:i:s');
@@ -1154,11 +1155,11 @@ class admin extends cadastrador
             $stmt_candidato->bindValue(":id_usuario", $id_usuario);
             $stmt_candidato->bindValue(":datatime", $datatime);
             $stmt_candidato->bindValue(":tipo_movimentacao", 'HABILITAR USUÁRIO');
-            $stmt_candidato->bindValue(":descricao", "FOI EDITADO O PERFIL ".$perfil);
+            $stmt_candidato->bindValue(":descricao", "FOI EDITADO O PERFIL " . $perfil);
             if (!$stmt_candidato->execute()) {
                 return 2;
             }
-            
+
             return 1;
         } catch (PDOException $e) {
             return 0;
@@ -1192,7 +1193,7 @@ class admin extends cadastrador
             $stmt_candidato->bindValue(":id_usuario", $id_usuario);
             $stmt_candidato->bindValue(":datatime", $datatime);
             $stmt_candidato->bindValue(":tipo_movimentacao", 'HABILITAR USUÁRIO');
-            $stmt_candidato->bindValue(":descricao", "FOI EDITADO O PERFIL ".$dados['nome_perfil']);
+            $stmt_candidato->bindValue(":descricao", "FOI EDITADO O PERFIL " . $dados['nome_perfil']);
             if (!$stmt_candidato->execute()) {
                 return 2;
             }

@@ -22,7 +22,7 @@ if (
     isset($_POST["bairros"]) && !empty($_POST["bairros"]) &&
     isset($_POST["quantidades"]) && !empty($_POST["quantidades"])
 ) {
-    $bairros = mb_strtoupper($_POST["bairros"],'UTF-8');
+    $bairros = $_POST["bairros"];
     $quantidade = $_POST["quantidades"];
     $escola = $_SESSION['escola'];
 
