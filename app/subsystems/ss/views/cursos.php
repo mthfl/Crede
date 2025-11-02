@@ -725,7 +725,7 @@ if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) 
                                                 <input type="hidden" name="id_curso" value="<?= $curso['id'] ?>">
                                                 <input type="hidden" name="email" value="<?= htmlspecialchars($_SESSION['email']) ?>" />
                                                 <div class="bg-gray-50 p-4 rounded-xl transition-all duration-300 hover:bg-gray-100">
-                                                    <label class="block text-sm font-medium text-gray-700 mb-2">Código de Verificação</label>
+                                                    <label class="block text-sm font-medium text-gray-700 mb-2">Senha para Verificação</label>
                                                     <div class="relative">
                                                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                                                             <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -815,7 +815,7 @@ if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) 
                                 <p class="text-white/90 text-sm mt-1 font-medium">Preencha os dados do curso</p>
                             </div>
                         </div>
-                        
+
                     </div>
                 </div>
                 <form action="../controllers/controller_curso.php" method="post" id="cursoForm" class="space-y-4">

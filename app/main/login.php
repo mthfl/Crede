@@ -414,22 +414,22 @@
         ::-webkit-scrollbar-thumb:hover {
             background: linear-gradient(135deg, #1A3C34 0%, #E76F51 100%);
         }
-        
+
         @media (max-width: 640px) {
             .main-container {
                 width: 95%;
                 margin: 1rem auto;
             }
-            
+
             .input-group label {
                 font-size: 0.9rem;
             }
-            
+
             .btn-enhanced {
                 padding: 0.75rem 1rem;
             }
         }
-        
+
         @media (max-width: 475px) {
             .main-container {
                 width: 100%;
@@ -437,7 +437,7 @@
                 border-radius: 0;
                 min-height: 100vh;
             }
-            
+
             .form-container {
                 padding: 1.5rem;
             }
@@ -446,7 +446,7 @@
 </head>
 
 <body class="font-sans bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200 min-h-screen flex items-center justify-center p-0 sm:p-4">
-    
+
     <div class="floating-elements">
         <div class="cloud small" style="top: 20%; animation-delay: 0s;"></div>
         <div class="cloud small" style="top: 60%; animation-delay: -10s;"></div>
@@ -455,17 +455,17 @@
 
     <div class="main-container w-full max-w-6xl bg-white rounded-none sm:rounded-3xl shadow-strong overflow-hidden animate-fade-in-up relative z-10">
         <div class="flex flex-col lg:flex-row min-h-[100vh] sm:min-h-[600px]">
-            
+
             <div class="hidden md:block lg:flex-1 bg-gradient-primary relative overflow-hidden animate-slide-in-left">
                 <div class="absolute inset-0 bg-black/40"></div>
                 <div class="absolute inset-0 bg-gradient-to-br from-primary/80 via-transparent to-secondary/80"></div>
-                
+
                 <div class="absolute top-10 left-10 w-20 h-20 border-2 border-white/30 rounded-full animate-float"></div>
                 <div class="absolute bottom-20 right-10 w-16 h-16 border-2 border-white/30 rounded-full animate-sway"></div>
                 <div class="absolute top-1/3 right-20 w-12 h-12 bg-white/20 rounded-full animate-bounce-gentle"></div>
-                
-                
-                
+
+
+
                 <div class="relative z-10 h-full flex flex-col justify-center items-center p-8 lg:p-12 text-center text-white">
                     <div class="mb-8">
                         <i class="fas fa-building text-6xl lg:text-8xl mb-6 text-secondary"></i>
@@ -474,11 +474,11 @@
                     <h1 class="text-3xl lg:text-5xl font-bold mb-6 leading-tight font-heading">
                         Login <span class="text-secondary">CREDE 1</span>
                     </h1>
-                    
+
                     <p class="text-lg lg:text-xl mb-8 max-w-md leading-relaxed opacity-90 font-sans">
                         Coordenadoria Regional de Desenvolvimento da Educação
                     </p>
-                    
+
                     <div class="flex space-x-4 text-sm opacity-80">
                         <div class="flex items-center animate-bounce-gentle" style="animation-delay: 0.5s;">
                             <i class="fas fa-graduation-cap mr-2 text-yellow-300"></i>
@@ -497,13 +497,13 @@
             </div>
 
             <div class="w-full lg:flex-1 p-4 xs:p-6 sm:p-8 lg:p-12 flex flex-col justify-center animate-slide-in-right relative">
-                
-                
-                
+
+
+
                 <div class="text-center mb-6 sm:mb-8">
                     <div class="inline-block p-3 sm:p-4 rounded-2xl">
-                        <img src="assets/Brasão_do_Ceará.svg.png" 
-                             alt="Logo Sistema" 
+                        <img src="./assets/Brasão_do_Ceará.svg.png"
+                             alt="Logo Sistema"
                              class="w-16 h-16 sm:w-20 sm:h-20 object-contain">
                     </div>
                     <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 mb-2 font-heading">
@@ -517,14 +517,14 @@
                 <!-- Tipo de Acesso -->
                 <div class="mb-6">
                     <div class="flex bg-gray-100 rounded-xl p-1">
-                        <button type="button" 
-                                id="loginOption" 
+                        <button type="button"
+                                id="loginOption"
                                 class="flex-1 py-2 px-4 rounded-lg font-medium transition-all duration-300 bg-white text-primary shadow-sm">
                             <i class="fas fa-sign-in-alt mr-2"></i>
                             Login
                         </button>
-                        <button type="button" 
-                                id="primeiroAcessoOption" 
+                        <button type="button"
+                                id="primeiroAcessoOption"
                                 class="flex-1 py-2 px-4 rounded-lg font-medium transition-all duration-300 text-gray-600 hover:text-primary">
                             <i class="fas fa-key mr-2"></i>
                             Primeiro Acesso
@@ -532,20 +532,20 @@
                     </div>
                 </div>
 
-                <form id="loginForm" 
-                      action="controllers/controller_auth.php" 
-                      method="POST" 
+                <form id="loginForm"
+                      action="controllers/controller_auth.php"
+                      method="POST"
                       class="space-y-4 sm:space-y-6">
-                    
+
                     <div class="input-group">
                         <div class="relative">
-                            <input type="email" 
-                                   name="email" 
-                                   id="loginEmail" 
-                                   placeholder=" " 
-                                   required 
+                            <input type="email"
+                                   name="email"
+                                   id="loginEmail"
+                                   placeholder=" "
+                                   required
                                    class="w-full px-4 py-3 sm:py-4 pl-10 sm:pl-12 rounded-xl text-gray-800 focus:shadow-primary transition-all duration-300 peer text-sm sm:text-base">
-                            <label for="loginEmail" 
+                            <label for="loginEmail"
                                    class="absolute left-10 mx-10 sm:left-12 top-3 sm:top-4 transition-all duration-300 peer-focus:text-secondary peer-focus:text-xs sm:peer-focus:text-sm peer-focus:-translate-y--1 peer-focus:font-semibold peer-[:not(:placeholder-shown)]:text-xs sm:peer-[:not(:placeholder-shown)]:text-sm peer-[:not(:placeholder-shown)]: peer-[:not(:placeholder-shown)]:text-secondary peer-[:not(:placeholder-shown)]:font-semibold text-sm sm:text-base">
                                 E-mail
                             </label>
@@ -555,13 +555,13 @@
 
                     <div class="input-group">
                         <div class="relative">
-                            <input type="password" 
-                                   name="senha" 
-                                   id="loginPassword" 
-                                   placeholder=" " 
+                            <input type="password"
+                                   name="senha"
+                                   id="loginPassword"
+                                   placeholder=" "
                                    required
                                    class="w-full px-4 py-3 sm:py-4 pl-10 sm:pl-12 pr-10 sm:pr-12 rounded-xl text-gray-800 focus:shadow-primary transition-all duration-300 peer text-sm sm:text-base">
-                            <label for="loginPassword" 
+                            <label for="loginPassword"
                                    class="absolute left-10 mx-10 sm:left-12 top-3 sm:top-4 transition-all duration-300 peer-focus:text-secondary peer-focus:text-xs sm:peer-focus:text-sm peer-focus:-translate-y--1 peer-focus:font-semibold peer-[:not(:placeholder-shown)]:text-xs sm:peer-[:not(:placeholder-shown)]:text-sm peer-[:not(:placeholder-shown)]:-translate-y-7 peer-[:not(:placeholder-shown)]:text-secondary peer-[:not(:placeholder-shown)]:font-semibold text-sm sm:text-base">
                                 Senha
                             </label>
@@ -578,7 +578,7 @@
                     <?php endif; ?>
 
                     <div class="mt-4 sm:mt-6">
-                        <button type="submit" 
+                        <button type="submit"
                                 class="btn-enhanced w-full px-6 py-3 sm:py-4 text-white rounded-xl transition-all duration-300 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-accent focus:ring-opacity-50 text-sm sm:text-base font-semibold bg-gradient-to-r from-primary to-dark hover:from-dark hover:to-primary">
                             <i class="fas fa-sign-in-alt mr-2"></i>
                             <span>Acessar Sistema</span>
@@ -586,20 +586,20 @@
                     </div>
                 </form>
 
-                <form id="primeiroAcessoForm" 
-                      action="controllers/controller_auth.php" 
-                      method="POST" 
+                <form id="primeiroAcessoForm"
+                      action="controllers/controller_auth.php"
+                      method="POST"
                       class="space-y-4 sm:space-y-6 hidden">
-                    
+
                     <div class="input-group">
                         <div class="relative">
-                            <input type="email" 
-                                   name="email" 
-                                   id="primeiroAcessoEmail" 
-                                   placeholder=" " 
-                                   required 
+                            <input type="email"
+                                   name="email"
+                                   id="primeiroAcessoEmail"
+                                   placeholder=" "
+                                   required
                                    class="w-full px-4 py-3 sm:py-4 pl-10 sm:pl-12 rounded-xl text-gray-800 focus:shadow-primary transition-all duration-300 peer text-sm sm:text-base">
-                            <label for="primeiroAcessoEmail" 
+                            <label for="primeiroAcessoEmail"
                                    class="absolute left-10 mx-10 sm:left-12 top-3 sm:top-4 transition-all duration-300 peer-focus:text-secondary peer-focus:text-xs sm:peer-focus:text-sm peer-focus:-translate-y--1 peer-focus:font-semibold peer-[:not(:placeholder-shown)]:text-xs sm:peer-[:not(:placeholder-shown)]:text-sm peer-[:not(:placeholder-shown)]: peer-[:not(:placeholder-shown)]:text-secondary peer-[:not(:placeholder-shown)]:font-semibold text-sm sm:text-base">
                                 E-mail
                             </label>
@@ -609,14 +609,14 @@
 
                     <div class="input-group">
                         <div class="relative">
-                            <input type="text" 
-                                   name="CPF" 
-                                   id="primeiroAcessoCpf" 
-                                   placeholder=" " 
+                            <input type="text"
+                                   name="CPF"
+                                   id="primeiroAcessoCpf"
+                                   placeholder=" "
                                    required
                                    maxlength="14"
                                    class="w-full px-4 py-3 sm:py-4 pl-10 sm:pl-12 rounded-xl text-gray-800 focus:shadow-primary transition-all duration-300 peer text-sm sm:text-base">
-                            <label for="primeiroAcessoCpf" 
+                            <label for="primeiroAcessoCpf"
                                    class="absolute left-10 mx-10 sm:left-12 top-3 sm:top-4 transition-all duration-300 peer-focus:text-secondary peer-focus:text-xs sm:peer-focus:text-sm peer-focus:-translate-y--1 peer-focus:font-semibold peer-[:not(:placeholder-shown)]:text-xs sm:peer-[:not(:placeholder-shown)]:text-sm peer-[:not(:placeholder-shown)]: peer-[:not(:placeholder-shown)]:text-secondary peer-[:not(:placeholder-shown)]:font-semibold text-sm sm:text-base">
                                 CPF
                             </label>
@@ -640,7 +640,7 @@
                                 <i class="fas fa-question-circle mr-1"></i>Precisa de ajuda?
                             </a>
                             <span class="mx-2">•</span>
-                            <a href="mailto:suporte@sistema.com" 
+                            <a href="mailto:suporte@sistema.com"
                                class="text-secondary hover:text-primary transition-colors duration-300">
                                 Contate o suporte
                             </a>
@@ -661,7 +661,7 @@
             const primeiroAcessoCpfInput = document.getElementById('primeiroAcessoCpf');
             const loginEmailInput = document.getElementById('loginEmail');
             const primeiroAcessoEmailInput = document.getElementById('primeiroAcessoEmail');
-            
+
             const loginOption = document.getElementById('loginOption');
             const primeiroAcessoOption = document.getElementById('primeiroAcessoOption');
 
@@ -671,16 +671,16 @@
                     loginOption.classList.add('text-gray-600');
                     primeiroAcessoOption.classList.remove('text-gray-600');
                     primeiroAcessoOption.classList.add('bg-white', 'text-primary', 'shadow-sm');
-                    
+
                     loginForm.classList.add('hidden');
                     primeiroAcessoForm.classList.remove('hidden');
-                    
+
                 } else {
                     primeiroAcessoOption.classList.remove('bg-white', 'text-primary', 'shadow-sm');
                     primeiroAcessoOption.classList.add('text-gray-600');
                     loginOption.classList.remove('text-gray-600');
                     loginOption.classList.add('bg-white', 'text-primary', 'shadow-sm');
-                    
+
                     primeiroAcessoForm.classList.add('hidden');
                     loginForm.classList.remove('hidden');
                 }
@@ -692,7 +692,7 @@
             togglePassword.addEventListener('click', function() {
                 const type = loginPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
                 loginPasswordInput.setAttribute('type', type);
-                
+
                 this.classList.toggle('fa-eye');
                 this.classList.toggle('fa-eye-slash');
                 this.style.transform = 'scale(1.2) rotate(10deg)';
@@ -712,7 +712,7 @@
 
 
             loginForm.addEventListener('submit', function(e) {
-                
+
                 const email = loginEmailInput.value.trim();
                 const password = loginPasswordInput.value;
 
@@ -727,26 +727,26 @@
                     loginPasswordInput.focus();
                     return;
                 }
-                
+
                 const submitButton = loginForm.querySelector('button[type="submit"]');
                 submitButton.classList.add('loading');
                 submitButton.disabled = true;
-                
+
                 const originalText = submitButton.innerHTML;
                 submitButton.innerHTML = '<span><i class="fas fa-spinner fa-spin mr-2"></i>Entrando...</span>';
-                
+
                 setTimeout(() => {
                     submitButton.classList.remove('loading');
                     submitButton.disabled = false;
                     submitButton.innerHTML = originalText;
-                    
+
                     alert('Login realizado com sucesso!');
                 }, 2000);
             });
 
             primeiroAcessoForm.addEventListener('submit', function(e) {
-               
-                
+
+
                 const email = primeiroAcessoEmailInput.value.trim();
                 const cpf = primeiroAcessoCpfInput.value.trim();
 
@@ -761,15 +761,15 @@
                     primeiroAcessoCpfInput.focus();
                     return;
                 }
-                
+
                 const submitButton = primeiroAcessoForm.querySelector('button[type="submit"]');
                 submitButton.classList.add('loading');
                 submitButton.disabled = true;
-                
+
                 const originalText = submitButton.innerHTML;
                 submitButton.innerHTML = '<span><i class="fas fa-spinner fa-spin mr-2"></i>Verificando...</span>';
-                
-                
+
+
             });
 
             const inputs = document.querySelectorAll('input');
@@ -778,7 +778,7 @@
                     this.parentElement.style.transform = 'translateY(-2px)';
                     this.style.boxShadow = '0 0 20px rgba(0, 90, 36, 0.3)';
                 });
-                
+
                 input.addEventListener('blur', function() {
                     this.parentElement.style.transform = 'translateY(0)';
                     this.style.boxShadow = '';
@@ -791,7 +791,7 @@
                 const size = Math.max(rect.width, rect.height);
                 const x = e.clientX - rect.left - size / 2;
                 const y = e.clientY - rect.top - size / 2;
-                
+
                 ripple.style.cssText = `
                     position: absolute;
                     width: ${size}px;
@@ -804,9 +804,9 @@
                     animation: ripple 0.6s ease-out;
                     pointer-events: none;
                 `;
-                
+
                 this.appendChild(ripple);
-                
+
                 setTimeout(() => {
                     ripple.remove();
                 }, 600);
@@ -824,8 +824,8 @@
             document.head.appendChild(style);
 
 
-            
-            
+
+
         });
 
             document.addEventListener('keydown', function(e) {
@@ -837,14 +837,14 @@
         document.addEventListener('mousedown', function() {
             document.body.classList.remove('keyboard-navigation');
         });
-        
+
         window.addEventListener('orientationchange', function() {
             setTimeout(() => {
                 const vh = window.innerHeight * 0.01;
                 document.documentElement.style.setProperty('--vh', `${vh}px`);
             }, 100);
         });
-        
+
         (function() {
             const vh = window.innerHeight * 0.01;
             document.documentElement.style.setProperty('--vh', `${vh}px`);

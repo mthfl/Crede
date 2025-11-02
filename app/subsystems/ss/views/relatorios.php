@@ -1212,11 +1212,11 @@ $select = new select($escola);
                             <div class="legend-subgroup">
                                 <h5>Privada (Cotas) (<span id="private-cotas-percent">0%</span>)</h5>
                                 <div class="legend-item" id="legend-private-bairro" style="display: none;">
-                                    <span class="legend-color" style="background-color: #FFB733;"></span>
+                                    <span class="legend-color" style="background-color: #FFD180;"></span>
                                     <span class="legend-text"></span>
                                 </div>
                                 <div class="legend-item" id="legend-private-pcd" style="display: none;">
-                                    <span class="legend-color" style="background-color: #FFC966;"></span>
+                                    <span class="legend-color" style="background-color: #FFE082;"></span>
                                     <span class="legend-text"></span>
                                 </div>
                             </div>
@@ -1474,16 +1474,16 @@ $select = new select($escola);
                         alunosPrivadaCotasPCD
                     ]
                     : [1],
-                backgroundColor: totalAlunos > 0
-                    ? [
-                        '#004D1F',  // Verde mais escuro - Pública AC
-                        '#006428',  // Verde escuro - Pública Cotas Bairro
-                        '#007A32',  // Verde médio escuro - Pública PCD
-                        '#CC7A00',  // Laranja mais escuro - Privada AC
-                        '#E68A00',  // Laranja escuro - Privada Cotas Bairro
-                        '#FF9900'   // Laranja médio escuro - Privada PCD
-                    ]
-                    : ['#e0e0e0'],
+         backgroundColor: totalAlunos > 0
+    ? [
+        '#004D1F',  // Verde mais escuro - Pública AC
+        '#006428',  // Verde escuro - Pública Cotas Bairro
+        '#007A32',  // Verde médio escuro - Pública PCD
+        '#FFA500',  // Laranja padrão - Privada AC
+        '#FFD180',  // Laranja claro - Privada Cotas Bairro
+        '#FFE082'   // Amarelo claro - Privada PCD
+    ]
+    : ['#e0e0e0'],
                 borderWidth: 2,
                 borderColor: '#ffffff',
                 hoverOffset: 15,
