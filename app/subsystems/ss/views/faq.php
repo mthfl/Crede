@@ -1,14 +1,14 @@
 <?php
-require_once(__DIR__ . '/../models/sessions.php');
+require_once __DIR__ . "/../models/sessions.php";
 $session = new sessions();
 $session->autenticar_session();
 $session->tempo_session();
 
-require_once(__DIR__ . '/../config/connect.php');
-$escola = $_SESSION['escola'];
+require_once __DIR__ . "/../config/connect.php";
+$escola = $_SESSION["escola"];
 
 new connect($escola);
-require_once(__DIR__ . '/../models/model.select.php');
+require_once __DIR__ . "/../models/model.select.php";
 $select = new select($escola);
 ?>
 <!DOCTYPE html>
@@ -345,7 +345,11 @@ $select = new select($escola);
                 </div>
                 <nav class="space-y-2">
                    <!-- Dashboard -->
-                   <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin' || $_SESSION['tipo_usuario'] === 'cadastrador') { ?>
+                   <?php if (
+                       (isset($_SESSION["tipo_usuario"]) &&
+                           $_SESSION["tipo_usuario"] === "admin") ||
+                       $_SESSION["tipo_usuario"] === "cadastrador"
+                   ) { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.1s;">
                             <a href="../index.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring ">
                                 <div class="w-12 h-12 bg-white/10  rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
@@ -363,7 +367,10 @@ $select = new select($escola);
                     <?php } ?>
 
                     <!-- Cursos -->
-                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
+                    <?php if (
+                        isset($_SESSION["tipo_usuario"]) &&
+                        $_SESSION["tipo_usuario"] === "admin"
+                    ) { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.2s;">
                             <a href="cursos.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
                                 <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
@@ -380,7 +387,11 @@ $select = new select($escola);
                     <?php } ?>
 
                     <!-- Candidatos -->
-                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin' || $_SESSION['tipo_usuario'] === 'cadastrador') { ?>
+                    <?php if (
+                        (isset($_SESSION["tipo_usuario"]) &&
+                            $_SESSION["tipo_usuario"] === "admin") ||
+                        $_SESSION["tipo_usuario"] === "cadastrador"
+                    ) { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.3s;">
                             <a href="candidatos.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
                                 <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
@@ -398,7 +409,10 @@ $select = new select($escola);
 
 
                       <!-- Cotas -->
-                      <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
+                      <?php if (
+                          isset($_SESSION["tipo_usuario"]) &&
+                          $_SESSION["tipo_usuario"] === "admin"
+                      ) { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.35s;">
                             <a href="cotas.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
                                 <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
@@ -413,11 +427,14 @@ $select = new select($escola);
                             </a>
                         </div>
                     <?php } ?>
-            
-               
+
+
 
                     <!-- Relatórios -->
-                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
+                    <?php if (
+                        isset($_SESSION["tipo_usuario"]) &&
+                        $_SESSION["tipo_usuario"] === "admin"
+                    ) { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.5s;">
                             <a href="relatorios.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
                                 <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
@@ -434,7 +451,10 @@ $select = new select($escola);
                     <?php } ?>
 
                     <!-- Usuários -->
-                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
+                    <?php if (
+                        isset($_SESSION["tipo_usuario"]) &&
+                        $_SESSION["tipo_usuario"] === "admin"
+                    ) { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.4s;">
                             <a href="usuario.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
                                 <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
@@ -451,7 +471,11 @@ $select = new select($escola);
                     <?php } ?>
 
                     <!-- Requisição de cadastro -->
-                    <?php if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'admin' || $_SESSION['tipo_usuario'] === 'cadastrador')) { ?>
+                    <?php if (
+                        isset($_SESSION["tipo_usuario"]) &&
+                        ($_SESSION["tipo_usuario"] === "admin" ||
+                            $_SESSION["tipo_usuario"] === "cadastrador")
+                    ) { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.6s;">
                             <a href="solicitar_alteracao.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
                                 <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
@@ -468,7 +492,10 @@ $select = new select($escola);
                     <?php } ?>
 
                     <!-- Limpar Banco -->
-                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
+                    <?php if (
+                        isset($_SESSION["tipo_usuario"]) &&
+                        $_SESSION["tipo_usuario"] === "admin"
+                    ) { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.6s;">
                             <a href="limpar_banco.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
                                 <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-red-500 group-hover:scale-110 transition-all duration-300">
@@ -500,7 +527,7 @@ $select = new select($escola);
                 </nav>
             </div>
         </aside>
-        
+
         <div class="main-content flex-1 bg-white">
             <header class="bg-white shadow-sm border-b border-gray-200 z-30 sticky top-0">
                 <div class="px-3 sm:px-4 md:px-6 lg:px-8 py-3 sm:py-4">
@@ -513,10 +540,14 @@ $select = new select($escola);
                         <div class="flex items-center space-x-2 sm:space-x-4 lg:ml-auto">
                             <div class="hidden sm:block text-right">
                                 <p class="text-xs sm:text-sm font-semibold text-gray-900">Bem-vindo,</p>
-                                <p class="text-xs sm:text-sm text-primary font-medium"><?= $_SESSION['nome'] ?? 'Usuário' ?></p>
+                                <p class="text-xs sm:text-sm text-primary font-medium"><?= $_SESSION[
+                                    "nome"
+                                ] ?? "Usuário" ?></p>
                             </div>
                             <a href="../../main/views/perfil.php" title="Perfil" class="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-primary to-dark rounded-full flex items-center justify-center hover:brightness-95 focus-ring">
-                                <span class="text-white font-bold text-xs sm:text-sm"><?= strtoupper(substr($_SESSION['nome'] ?? 'U', 0, 1)) ?></span>
+                                <span class="text-white font-bold text-xs sm:text-sm"><?= strtoupper(
+                                    substr($_SESSION["nome"] ?? "U", 0, 1),
+                                ) ?></span>
                             </a>
                             <a href="../models/sessions.php?sair" class="bg-primary text-white px-3 sm:px-4 md:px-6 py-2 sm:py-3 rounded-xl hover:bg-dark btn-animate font-semibold shadow-lg focus-ring text-xs sm:text-sm">
                                 <span class="hidden sm:inline">Sair</span>
@@ -543,7 +574,7 @@ $select = new select($escola);
                             <p class="text-gray-600 mt-1">Dúvidas frequentes sobre o sistema</p>
                         </div>
                     </div>
-                    
+
                     <!-- Barra de pesquisa -->
                     <div class="relative max-w-md">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -551,7 +582,7 @@ $select = new select($escola);
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                             </svg>
                         </div>
-                        <input type="text" id="searchInput" placeholder="Pesquisar nas perguntas..." 
+                        <input type="text" id="searchInput" placeholder="Pesquisar nas perguntas..."
                                class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200">
                     </div>
                 </div>
@@ -789,6 +820,154 @@ $select = new select($escola);
                         </div>
                     </div>
                 </div>
+                    <!-- Item FAQ 9 -->
+                    <div class="faq-item bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden card-hover">
+                        <button class="faq-toggle w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-all duration-200 focus:outline-none focus:bg-gray-50">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <span class="text-white font-bold text-sm">9</span>
+                                </div>
+                                <h3 class="text-lg font-semibold text-gray-900">Como excluir um candidato do sistema?</h3>
+                            </div>
+                            <svg class="w-5 h-5 text-gray-400 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div class="faq-content">
+                            <div class="px-6 pb-4 text-gray-600">
+                                <p class="mb-3">Para excluir um candidato:</p>
+                                <ol class="list-decimal list-inside space-y-2 ml-4">
+                                    <li>Acesse a seção "Candidatos" no menu lateral.</li>
+                                    <li>Localize o candidato na lista.</li>
+                                    <li>Clique no ícone de exclusão (lixeira) ao lado do nome.</li>
+                                    <li>Confirme a exclusão na janela modal.</li>
+                                    <li>O candidato será removido do sistema.</li>
+                                </ol>
+                                <div class="mt-4 bg-red-50 p-3 rounded-lg border-l-4 border-red-400">
+                                    <p class="text-red-800 text-sm"><strong>Atenção:</strong> A exclusão é definitiva e não pode ser desfeita.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Item FAQ 10 -->
+                    <div class="faq-item bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden card-hover">
+                        <button class="faq-toggle w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-all duration-200 focus:outline-none focus:bg-gray-50">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <span class="text-white font-bold text-sm">10</span>
+                                </div>
+                                <h3 class="text-lg font-semibold text-gray-900">Como cadastrar ou editar bairros para cotas?</h3>
+                            </div>
+                            <svg class="w-5 h-5 text-gray-400 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div class="faq-content">
+                            <div class="px-6 pb-4 text-gray-600">
+                                <p class="mb-3">Para cadastrar um novo bairro:</p>
+                                <ol class="list-decimal list-inside space-y-2 ml-4">
+                                    <li>Acesse a seção "Cotas" no menu lateral.</li>
+                                    <li>Clique em "Adicionar Bairro".</li>
+                                    <li>Preencha o nome do bairro e a quantidade de alunos.</li>
+                                    <li>Salve para adicionar o bairro à lista.</li>
+                                </ol>
+                                <p class="mb-3 mt-4">Para editar um bairro existente:</p>
+                                <ol class="list-decimal list-inside space-y-2 ml-4">
+                                    <li>Clique no ícone de edição (lápis) ao lado do bairro desejado.</li>
+                                    <li>Altere as informações e salve.</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Item FAQ 11 -->
+                    <div class="faq-item bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden card-hover">
+                        <button class="faq-toggle w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-all duration-200 focus:outline-none focus:bg-gray-50">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <span class="text-white font-bold text-sm">11</span>
+                                </div>
+                                <h3 class="text-lg font-semibold text-gray-900">Quem pode acessar a área de administração do sistema?</h3>
+                            </div>
+                            <svg class="w-5 h-5 text-gray-400 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div class="faq-content">
+                            <div class="px-6 pb-4 text-gray-600">
+                                <p class="mb-3">Apenas usuários com perfil de <strong>administrador</strong> têm acesso total à área de administração, incluindo cadastro de cursos, cotas, usuários e relatórios. Usuários do tipo <strong>cadastrador</strong> têm permissões limitadas, geralmente restritas ao cadastro de candidatos.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Item FAQ 12 -->
+                    <div class="faq-item bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden card-hover">
+                        <button class="faq-toggle w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-all duration-200 focus:outline-none focus:bg-gray-50">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <span class="text-white font-bold text-sm">12</span>
+                                </div>
+                                <h3 class="text-lg font-semibold text-gray-900">Como redefinir minha senha se não recebi o e-mail de recuperação?</h3>
+                            </div>
+                            <svg class="w-5 h-5 text-gray-400 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div class="faq-content">
+                            <div class="px-6 pb-4 text-gray-600">
+                                <p class="mb-3">Se você não recebeu o e-mail:</p>
+                                <ul class="list-disc list-inside space-y-2 ml-4">
+                                    <li>Verifique sua caixa de spam ou lixo eletrônico.</li>
+                                    <li>Confirme se o e-mail cadastrado está correto.</li>
+                                    <li>Caso não encontre, entre em contato com o administrador do sistema para suporte.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Item FAQ 13 -->
+                    <div class="faq-item bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden card-hover">
+                        <button class="faq-toggle w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-all duration-200 focus:outline-none focus:bg-gray-50">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <span class="text-white font-bold text-sm">13</span>
+                                </div>
+                                <h3 class="text-lg font-semibold text-gray-900">Como limpar o banco de dados do sistema?</h3>
+                            </div>
+                            <svg class="w-5 h-5 text-gray-400 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div class="faq-content">
+                            <div class="px-6 pb-4 text-gray-600">
+                                <p class="mb-3">Apenas administradores podem acessar a opção "Limpar Banco" no menu lateral.</p>
+                                <ul class="list-disc list-inside space-y-2 ml-4">
+                                    <li>Essa ação remove todos os dados cadastrados (candidatos, cursos, cotas, etc.).</li>
+                                    <li><strong>Atenção:</strong> Essa operação é irreversível e deve ser feita com cautela.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Item FAQ 14 -->
+                    <div class="faq-item bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden card-hover">
+                        <button class="faq-toggle w-full px-6 py-4 text-left flex items-center justify-between hover:bg-gray-50 transition-all duration-200 focus:outline-none focus:bg-gray-50">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <span class="text-white font-bold text-sm">14</span>
+                                </div>
+                                <h3 class="text-lg font-semibold text-gray-900">Como funciona a comissão de seleção?</h3>
+                            </div>
+                            <svg class="w-5 h-5 text-gray-400 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        <div class="faq-content">
+                            <div class="px-6 pb-4 text-gray-600">
+                                <p class="mb-3">A comissão de seleção é responsável por validar e homologar os resultados dos candidatos.</p>
+                                <ul class="list-disc list-inside space-y-2 ml-4">
+                                    <li>O sistema permite gerar relatórios específicos para a comissão.</li>
+                                    <li>Facilita a análise dos dados e a tomada de decisão.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
 
                 <!-- Mensagem quando não há resultados na pesquisa -->
                 <div id="noResults" class="hidden text-center py-12">
@@ -840,7 +1019,7 @@ $select = new select($escola);
 
                 toggle.addEventListener('click', () => {
                     const isActive = item.classList.contains('active');
-                    
+
                     // Close all other items
                     faqItems.forEach(otherItem => {
                         if (otherItem !== item) {
@@ -868,11 +1047,11 @@ $select = new select($escola);
                 faqItems.forEach(item => {
                     const question = item.querySelector('h3').textContent.toLowerCase();
                     const answer = item.querySelector('.faq-content').textContent.toLowerCase();
-                    
+
                     if (question.includes(searchTerm) || answer.includes(searchTerm)) {
                         item.style.display = 'block';
                         visibleItems++;
-                        
+
                         // Highlight search terms
                         if (searchTerm.length > 0) {
                             highlightSearchTerms(item, searchTerm);
@@ -896,7 +1075,7 @@ $select = new select($escola);
             function highlightSearchTerms(item, term) {
                 const question = item.querySelector('h3');
                 const answer = item.querySelector('.faq-content');
-                
+
                 // Simple highlighting - in a real implementation, you'd want more sophisticated highlighting
                 if (question.textContent.toLowerCase().includes(term)) {
                     const regex = new RegExp(`(${term})`, 'gi');

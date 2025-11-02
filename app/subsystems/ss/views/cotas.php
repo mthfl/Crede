@@ -1,16 +1,15 @@
 <?php
-require_once(__DIR__ . '/../models/sessions.php');
+require_once __DIR__ . "/../models/sessions.php";
 $session = new sessions();
 $session->autenticar_session();
 $session->tempo_session();
 
-require_once(__DIR__ . '/../config/connect.php');
-$escola = $_SESSION['escola'];
+require_once __DIR__ . "/../config/connect.php";
+$escola = $_SESSION["escola"];
 
 new connect($escola);
-require_once(__DIR__ . '/../models/model.select.php');
+require_once __DIR__ . "/../models/model.select.php";
 $select = new select($escola);
-
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -320,7 +319,11 @@ $select = new select($escola);
                 </div>
                 <nav class="space-y-2">
                     <!-- Dashboard -->
-                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin' || $_SESSION['tipo_usuario'] === 'cadastrador') { ?>
+                    <?php if (
+                        (isset($_SESSION["tipo_usuario"]) &&
+                            $_SESSION["tipo_usuario"] === "admin") ||
+                        $_SESSION["tipo_usuario"] === "cadastrador"
+                    ) { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.1s;">
                             <a href="../index.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring ">
                                 <div class="w-12 h-12 bg-white/10  rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
@@ -338,7 +341,10 @@ $select = new select($escola);
                     <?php } ?>
 
                     <!-- Cursos -->
-                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
+                    <?php if (
+                        isset($_SESSION["tipo_usuario"]) &&
+                        $_SESSION["tipo_usuario"] === "admin"
+                    ) { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.2s;">
                             <a href="cursos.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
                                 <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
@@ -357,7 +363,11 @@ $select = new select($escola);
 
 
                     <!-- Candidatos -->
-                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin' || $_SESSION['tipo_usuario'] === 'cadastrador') { ?>
+                    <?php if (
+                        (isset($_SESSION["tipo_usuario"]) &&
+                            $_SESSION["tipo_usuario"] === "admin") ||
+                        $_SESSION["tipo_usuario"] === "cadastrador"
+                    ) { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.3s;">
                             <a href="candidatos.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
                                 <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
@@ -374,7 +384,10 @@ $select = new select($escola);
                     <?php } ?>
 
                     <!-- Cotas -->
-                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
+                    <?php if (
+                        isset($_SESSION["tipo_usuario"]) &&
+                        $_SESSION["tipo_usuario"] === "admin"
+                    ) { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.35s;">
                             <a href="cotas.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring bg-white/10">
                                 <div class="w-12 h-12 bg-secondary rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
@@ -393,7 +406,10 @@ $select = new select($escola);
 
 
                     <!-- Usuários -->
-                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
+                    <?php if (
+                        isset($_SESSION["tipo_usuario"]) &&
+                        $_SESSION["tipo_usuario"] === "admin"
+                    ) { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.4s;">
                             <a href="usuario.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
                                 <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
@@ -410,7 +426,10 @@ $select = new select($escola);
                     <?php } ?>
 
                     <!-- Relatórios -->
-                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
+                    <?php if (
+                        isset($_SESSION["tipo_usuario"]) &&
+                        $_SESSION["tipo_usuario"] === "admin"
+                    ) { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.5s;">
                             <a href="./relatorios.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
                                 <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
@@ -428,7 +447,11 @@ $select = new select($escola);
 
 
                     <!-- Requisição de cadastro -->
-                    <?php if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'admin' || $_SESSION['tipo_usuario'] === 'cadastrador')) { ?>
+                    <?php if (
+                        isset($_SESSION["tipo_usuario"]) &&
+                        ($_SESSION["tipo_usuario"] === "admin" ||
+                            $_SESSION["tipo_usuario"] === "cadastrador")
+                    ) { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.6s;">
                             <a href="solicitar_alteracao.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
                                 <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
@@ -445,7 +468,10 @@ $select = new select($escola);
                     <?php } ?>
 
                     <!-- Limpar Banco -->
-                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
+                    <?php if (
+                        isset($_SESSION["tipo_usuario"]) &&
+                        $_SESSION["tipo_usuario"] === "admin"
+                    ) { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.6s;">
                             <a href="limpar_banco.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
                                 <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-red-500 group-hover:scale-110 transition-all duration-300">
@@ -490,10 +516,14 @@ $select = new select($escola);
                         <div class="flex items-center space-x-2 sm:space-x-4 lg:ml-auto">
                             <div class="hidden sm:block text-right">
                                 <p class="text-xs sm:text-sm font-semibold text-gray-900">Bem-vindo,</p>
-                                <p class="text-xs sm:text-sm text-primary font-medium"><?= $_SESSION['nome'] ?? 'Usuário' ?></p>
+                                <p class="text-xs sm:text-sm text-primary font-medium"><?= $_SESSION[
+                                    "nome"
+                                ] ?? "Usuário" ?></p>
                             </div>
                             <a href="../../main/views/perfil.php" title="Perfil" class="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-primary to-dark rounded-full flex items-center justify-center hover:brightness-95 focus-ring">
-                                <span class="text-white font-bold text-xs sm:text-sm"><?= strtoupper(substr($_SESSION['nome'] ?? 'U', 0, 1)) ?></span>
+                                <span class="text-white font-bold text-xs sm:text-sm"><?= strtoupper(
+                                    substr($_SESSION["nome"] ?? "U", 0, 1),
+                                ) ?></span>
                             </a>
                             <a href="../models/sessions.php?sair" class="bg-primary text-white px-3 sm:px-4 md:px-6 py-2 sm:py-3 rounded-xl hover:bg-dark btn-animate font-semibold shadow-lg focus-ring text-xs sm:text-sm">
                                 <span class="hidden sm:inline">Sair</span>
@@ -509,7 +539,7 @@ $select = new select($escola);
                 <?php
                 $bairros = $select->select_bairros();
                 $cursos = $select->select_cursos();
-                if (count($bairros) === 0) { 
+                if (count($bairros) === 0) {
                     if (count($cursos) === 0) { ?>
                         <div class="bg-gradient-to-br from-red-50 via-white to-red-50 border-2 border-dashed border-red-300 rounded-2xl p-8 text-center animate-fade-in-up max-w-2xl mx-auto">
                             <div class="w-20 h-20 bg-gradient-to-br from-red-100 to-red-200 rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse-soft">
@@ -543,17 +573,18 @@ $select = new select($escola);
                             </button>
                         </div>
                     <?php } ?>
-                <?php } else {
+                <?php
+                } else {
 
                     $vagas = $select->select_vagas();
-                    $pcd = $vagas['quantidade_alunos'] - 2;
+                    $pcd = $vagas["quantidade_alunos"] - 2;
                     $total_publica = $pcd * (80 / 100);
                     $total_privada = $pcd * (20 / 100);
                     $publica_cotas = $total_publica * (30 / 100);
                     $privada_cotas = $total_privada * (30 / 100);
                     $publica_ac = $total_publica * (70 / 100);
                     $privada_ac = $total_privada * (70 / 100);
-                ?>
+                    ?>
                     <div class="mb-8">
                         <div class="flex items-center justify-between mb-6">
                             <div class="flex items-center gap-4">
@@ -573,7 +604,11 @@ $select = new select($escola);
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M7 20H2v-2a3 3 0 015.356-1.857m9.288 0a5.002 5.002 0 00-9.288 0"></path>
                                         </svg>
-                                        <?= count($bairros) ?> bairros ativos
+                                        <?= count($bairros) ?> <?= count(
+     $bairros,
+ ) === 1
+     ? "bairro ativo"
+     : "bairros ativos" ?>
                                     </span>
 
                                 </div>
@@ -599,7 +634,9 @@ $select = new select($escola);
                                     Total
                                 </h4>
                                 <div class="flex items-center">
-                                    <input type="text" class="w-full px-4 py-3 rounded-lg border input-disabled" value="<?= $vagas['quantidade_alunos'] ?>" disabled>
+                                    <input type="text" class="w-full px-4 py-3 rounded-lg border input-disabled" value="<?= $vagas[
+                                        "quantidade_alunos"
+                                    ] ?>" disabled>
                                 </div>
                             </div>
 
@@ -627,16 +664,22 @@ $select = new select($escola);
                                 <div class="space-y-3">
                                     <div class="flex items-center">
                                         <span class="w-24 text-sm font-medium text-green-700">Total Pública:</span>
-                                        <input type="text" class="flex-1 px-4 py-3 rounded-lg border input-disabled" value="<?= round($publica_ac + $publica_cotas) ?>" disabled>
+                                        <input type="text" class="flex-1 px-4 py-3 rounded-lg border input-disabled" value="<?= round(
+                                            $publica_ac + $publica_cotas,
+                                        ) ?>" disabled>
                                     </div>
                                     <div class="border-t border-green-200 my-2 pt-2"></div>
                                     <div class="flex items-center">
                                         <span class="w-24 text-sm font-medium text-green-700">AC:</span>
-                                        <input type="text" class="flex-1 px-4 py-3 rounded-lg border input-disabled" value="<?= round($publica_ac) ?>" disabled>
+                                        <input type="text" class="flex-1 px-4 py-3 rounded-lg border input-disabled" value="<?= round(
+                                            $publica_ac,
+                                        ) ?>" disabled>
                                     </div>
                                     <div class="flex items-center">
                                         <span class="w-24 text-sm font-medium text-green-700">Cota Bairro:</span>
-                                        <input type="text" class="flex-1 px-4 py-3 rounded-lg border input-disabled" value="<?= round($publica_cotas) ?>" disabled>
+                                        <input type="text" class="flex-1 px-4 py-3 rounded-lg border input-disabled" value="<?= round(
+                                            $publica_cotas,
+                                        ) ?>" disabled>
                                     </div>
                                 </div>
                             </div>
@@ -651,16 +694,22 @@ $select = new select($escola);
                                 <div class="space-y-3">
                                     <div class="flex items-center">
                                         <span class="w-24 text-sm font-medium text-green-700">Total Privada:</span>
-                                        <input type="text" class="flex-1 px-4 py-3 rounded-lg border input-disabled" value="<?= round($privada_ac + $privada_cotas) ?>" disabled>
+                                        <input type="text" class="flex-1 px-4 py-3 rounded-lg border input-disabled" value="<?= round(
+                                            $privada_ac + $privada_cotas,
+                                        ) ?>" disabled>
                                     </div>
                                     <div class="border-t border-green-200 my-2 pt-2"></div>
                                     <div class="flex items-center">
                                         <span class="w-24 text-sm font-medium text-green-700">AC:</span>
-                                        <input type="text" class="flex-1 px-4 py-3 rounded-lg border input-disabled" value="<?= round($privada_ac) ?>" disabled>
+                                        <input type="text" class="flex-1 px-4 py-3 rounded-lg border input-disabled" value="<?= round(
+                                            $privada_ac,
+                                        ) ?>" disabled>
                                     </div>
                                     <div class="flex items-center">
                                         <span class="w-24 text-sm font-medium text-green-700">Cota Bairro:</span>
-                                        <input type="text" class="flex-1 px-4 py-3 rounded-lg border input-disabled" value="<?= round($privada_cotas) ?>" disabled>
+                                        <input type="text" class="flex-1 px-4 py-3 rounded-lg border input-disabled" value="<?= round(
+                                            $privada_cotas,
+                                        ) ?>" disabled>
                                     </div>
                                 </div>
                             </div>
@@ -673,22 +722,38 @@ $select = new select($escola);
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
                         <?php foreach ($bairros as $bairro) { ?>
-                            <article class="grid-item card-hover bg-white rounded-2xl shadow-xl border-0 overflow-hidden group relative flex flex-col h-[200px]" data-id="<?= htmlspecialchars($bairro['id']) ?>" data-nome="<?= htmlspecialchars($bairro['bairros']) ?>">
+                            <article class="grid-item card-hover bg-white rounded-2xl shadow-xl border-0 overflow-hidden group relative flex flex-col h-[200px]" data-id="<?= htmlspecialchars(
+                                $bairro["id"],
+                            ) ?>" data-nome="<?= htmlspecialchars(
+    $bairro["bairros"],
+) ?>">
                                 <div class="h-2 w-full bg-gradient-to-r from-primary to-secondary"></div>
                                 <div class="p-6 flex flex-col flex-grow">
                                     <div class="text-center mb-4 flex-grow">
-                                        <h3 class="text-xl font-bold leading-tight font-display group-hover:scale-105 transition-all duration-300 text-primary"><?= htmlspecialchars($bairro['bairros'] ?? 'Sem nome') ?></h3>
+                                        <h3 class="text-xl font-bold leading-tight font-display group-hover:scale-105 transition-all duration-300 text-primary"><?= htmlspecialchars(
+                                            $bairro["bairros"] ?? "Sem nome",
+                                        ) ?></h3>
                                         <div class="w-16 h-0.5 mx-auto mt-3 rounded-full bg-primary/40"></div>
                                     </div>
                                     <div class="flex space-x-2 mt-auto">
-                                        <button type="button" onclick='openEditBairro(<?= json_encode($bairro['id'] ?? '') ?>, <?= json_encode($bairro['bairros']) ?>)' class="flex-1 bg-primary text-white py-2 px-4 rounded-lg hover:bg-dark transition-all duration-300 font-medium text-sm btn-animate focus-ring">Editar</button>
-                                        <button type="button" onclick='openDeleteBairro(<?= json_encode($bairro['id'] ?? '') ?>, <?= json_encode($bairro['bairros']) ?>)' class="flex-1 bg-secondary text-white py-2 px-4 rounded-lg hover:bg-orange-600 transition-all duration-300 font-medium text-sm btn-animate focus-ring">Excluir</button>
+                                        <button type="button" onclick='openEditBairro(<?= json_encode(
+                                            $bairro["id"] ?? "",
+                                        ) ?>, <?= json_encode(
+    $bairro["bairros"],
+) ?>)' class="flex-1 bg-primary text-white py-2 px-4 rounded-lg hover:bg-dark transition-all duration-300 font-medium text-sm btn-animate focus-ring">Editar</button>
+                                        <button type="button" onclick='openDeleteBairro(<?= json_encode(
+                                            $bairro["id"] ?? "",
+                                        ) ?>, <?= json_encode(
+    $bairro["bairros"],
+) ?>)' class="flex-1 bg-secondary text-white py-2 px-4 rounded-lg hover:bg-orange-600 transition-all duration-300 font-medium text-sm btn-animate focus-ring">Excluir</button>
                                     </div>
                                 </div>
                             </article>
                         <?php } ?>
                     </div>
-                <?php } ?>
+                <?php
+                }
+                ?>
             </main>
         </div>
     </div>
@@ -1007,8 +1072,13 @@ $select = new select($escola);
                             <?php
                             $cursos = $select->select_cursos();
                             foreach ($cursos as $curso) { ?>
-                                <option value="<?= htmlspecialchars($curso['id']) ?>"><?= htmlspecialchars($curso['nome_curso']) ?></option>
-                            <?php } ?>
+                                <option value="<?= htmlspecialchars(
+                                    $curso["id"],
+                                ) ?>"><?= htmlspecialchars(
+    $curso["nome_curso"],
+) ?></option>
+                            <?php }
+                            ?>
                         </select>
                     </div>
 
@@ -1070,8 +1140,13 @@ $select = new select($escola);
                             <?php
                             $cursos = $select->select_cursos();
                             foreach ($cursos as $curso) { ?>
-                                <option value="<?= htmlspecialchars($curso['id']) ?>"><?= htmlspecialchars($curso['nome_curso']) ?></option>
-                            <?php } ?>
+                                <option value="<?= htmlspecialchars(
+                                    $curso["id"],
+                                ) ?>"><?= htmlspecialchars(
+    $curso["nome_curso"],
+) ?></option>
+                            <?php }
+                            ?>
                         </select>
                     </div>
                     <div class="pt-4 border-t border-gray-200">
@@ -1148,7 +1223,7 @@ $select = new select($escola);
                 alert('É necessário cadastrar pelo menos um curso antes de criar cotas.');
                 return;
             <?php } ?>
-            
+
             document.getElementById('modalBairroTitle').textContent = 'Cadastrar Cota';
             document.getElementById('inpBairroId').value = '';
             document.getElementById('inpBairroNome').value = '';
@@ -1251,7 +1326,7 @@ $select = new select($escola);
                         const reviewPrivadaTotal = document.getElementById('review-privada-total');
                         const reviewPrivadaAc = document.getElementById('review-privada-ac');
                         const reviewPrivadaCota = document.getElementById('review-privada-cota');
-                        
+
                         if (reviewPcd) reviewPcd.textContent = pcdFixed;
                         if (reviewTotal) reviewTotal.textContent = alunosPorTurma;
                         if (reviewPublicaTotal) reviewPublicaTotal.textContent = totalPublica;
@@ -1260,7 +1335,7 @@ $select = new select($escola);
                         if (reviewPrivadaTotal) reviewPrivadaTotal.textContent = totalPrivada;
                         if (reviewPrivadaAc) reviewPrivadaAc.textContent = privadaAc;
                         if (reviewPrivadaCota) reviewPrivadaCota.textContent = privadaCotas;
-                        
+
                         // Debug: mostrar os cálculos no console
                         console.log('Cálculos do Modal de Revisão:');
                         console.log('Alunos por turma:', alunosPorTurma);
@@ -1272,7 +1347,7 @@ $select = new select($escola);
                         console.log('Pública Cotas:', publicaCotas);
                         console.log('Privada AC:', privadaAc);
                         console.log('Privada Cotas:', privadaCotas);
-                        
+
                         // Debug: verificar se os elementos existem
                         console.log('Elementos encontrados:');
                         console.log('review-pcd:', !!reviewPcd);
@@ -1498,7 +1573,7 @@ $select = new select($escola);
             const tipoRelatorio = document.getElementById('tipo_relatorio');
             const cursoSelect = document.getElementById('curso_id');
             const labelCurso = document.getElementById('label_curso');
-            
+
             if (tipoRelatorio && cursoSelect && labelCurso) {
                 tipoRelatorio.addEventListener('change', function() {
                     if (this.value === 'comissao_selecao') {

@@ -158,6 +158,13 @@ $select = new select($escola);
             font-family: 'Inter', sans-serif;
         }
 
+        /* Ajuste do botão de limpar (x) do Select2 */
+        .select2-selection__clear {
+            margin-left: 0.5rem !important;
+            position: relative;
+            left: 0.2rem;
+        }
+
         .select2-container--default .select2-selection--single {
             background-color: #fff;
             border: 2px solid #e5e7eb;
@@ -1194,29 +1201,29 @@ $select = new select($escola);
 
                     <div class="legend-container">
                         <div class="legend-column" style="align-self: flex-start;">
-                            <h4>Pública (Ampla) (<span id="public-ampla-percent">0%</span>)</h4>
+                            <h4>Pública (Ampla) (<span id="public-ampla-percent">0%</span>) <span class="legend-color" style="background-color: #005A24; display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-left: 4px; vertical-align: middle;"></span></h4>
                             <div class="legend-subgroup">
                                 <h5>Pública (Cotas) (<span id="public-cotas-percent">0%</span>)</h5>
                                 <div class="legend-item" id="legend-public-bairro" style="display: none;">
-                                    <span class="legend-color" style="background-color: #007A2E;"></span>
+                                    <span class="legend-color" style="background-color: #4CAF50;"></span>
                                     <span class="legend-text"></span>
                                 </div>
                                 <div class="legend-item" id="legend-public-pcd" style="display: none;">
-                                    <span class="legend-color" style="background-color: #009A38;"></span>
+                                    <span class="legend-color" style="background-color: #A5D6A7;"></span>
                                     <span class="legend-text"></span>
                                 </div>
                             </div>
                         </div>
                         <div class="legend-column" style="align-self: flex-end;">
-                            <h4>Privada (Ampla) (<span id="private-ampla-percent">0%</span>)</h4>
+                            <h4>Privada (Ampla) (<span id="private-ampla-percent">0%</span>) <span class="legend-color" style="background-color: #FFA500; display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-left: 4px; vertical-align: middle;"></span></h4>
                             <div class="legend-subgroup">
                                 <h5>Privada (Cotas) (<span id="private-cotas-percent">0%</span>)</h5>
                                 <div class="legend-item" id="legend-private-bairro" style="display: none;">
-                                    <span class="legend-color" style="background-color: #FFD180;"></span>
+                                    <span class="legend-color" style="background-color: #FF8C00;"></span>
                                     <span class="legend-text"></span>
                                 </div>
                                 <div class="legend-item" id="legend-private-pcd" style="display: none;">
-                                    <span class="legend-color" style="background-color: #FFE082;"></span>
+                                    <span class="legend-color" style="background-color: #FFD180;"></span>
                                     <span class="legend-text"></span>
                                 </div>
                             </div>
@@ -1476,12 +1483,12 @@ $select = new select($escola);
                     : [1],
          backgroundColor: totalAlunos > 0
     ? [
-        '#004D1F',  // Verde mais escuro - Pública AC
-        '#006428',  // Verde escuro - Pública Cotas Bairro
-        '#007A32',  // Verde médio escuro - Pública PCD
-        '#FFA500',  // Laranja padrão - Privada AC
-        '#FFD180',  // Laranja claro - Privada Cotas Bairro
-        '#FFE082'   // Amarelo claro - Privada PCD
+        '#005A24',  // Verde padrão do sistema - Pública AC
+        '#4CAF50',  // Verde médio - Pública Cotas Bairro
+        '#A5D6A7',  // Verde claro - Pública Cotas PCD
+        '#FFA500',  // Laranja padrão do sistema - Privada AC
+        '#FF8C00',  // Laranja escuro - Privada Cotas Bairro
+        '#FFD180'   // Laranja claro - Privada Cotas PCD
     ]
     : ['#e0e0e0'],
                 borderWidth: 2,
