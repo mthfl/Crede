@@ -269,19 +269,36 @@ class relatorios extends connect
                     continue;
                 }
 
-                // Adicionar 10 linhas de espaçamento antes de cada segmento (exceto o primeiro)
-                if (!$primeiro_segmento) {
-                    $pdf->SetY($pdf->GetY() + 50); // 10 linhas * 5mm por linha = 50mm
-                }
-                $primeiro_segmento = false;
+                // Se for o primeiro segmento, garantir que estamos na posição correta após o cabeçalho
+                if ($primeiro_segmento) {
+                    $pdf->SetY(30);
+                    $primeiro_segmento = false;
+                } else {
+                    // Adicionar espaçamento de 10mm entre segmentos
+                    $espacamento_segmento = 10;
+                    $y_atual = $pdf->GetY();
+                    $altura_pagina = $pdf->GetPageHeight();
+                    $y_com_espacamento = $y_atual + $espacamento_segmento;
 
-                // Verificar se há espaço suficiente na página para o segmento
+                    // Se o espaçamento ultrapassar a página, criar nova página
+                    if ($y_com_espacamento > $altura_pagina - 10) {
+                        $pdf->AddPage();
+                        $pdf->SetY(10);
+                    } else {
+                        $pdf->SetY($y_com_espacamento);
+                    }
+                }
+
+                // Verificar se há espaço suficiente na página para o segmento completo
                 $linhas_necessarias = count($dados) + 2; // +2 para o título e cabeçalho da tabela
                 $espaco_por_linha = 5; // Altura da célula
                 $espaco_total = $linhas_necessarias * $espaco_por_linha; // Espaço necessário para o segmento
-                $espaco_disponivel = $pdf->GetPageHeight() - $pdf->GetY() - 10; // Margem inferior
+                $y_atual = $pdf->GetY();
+                $altura_pagina = $pdf->GetPageHeight();
+                $espaco_disponivel = $altura_pagina - $y_atual - 10; // Margem inferior
 
-                if ($espaco_total > $espaco_disponivel) {
+                // Só adiciona nova página se realmente não houver espaço
+                if ($espaco_total > $espaco_disponivel && $y_atual > 35) {
                     $pdf->AddPage();
                     $pdf->SetY(10); // Iniciar no topo da nova página, sem repetir o cabeçalho
                 }
