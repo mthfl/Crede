@@ -46,7 +46,6 @@ if (
                     header('Location: ../views/cotas.php?falha');
                     exit();
             }
-            break;
         case 2:
             header('Location: ../views/cotas.php?erro');
             exit();
@@ -74,6 +73,31 @@ else if (
     switch ($result) {
         case 1:
             header('Location: ../views/cotas.php?editado');
+            exit();
+        case 2:
+            header('Location: ../views/cotas.php?erro');
+            exit();
+        case 3:
+            header('Location: ../views/cotas.php?ja_existe');
+            exit();
+        default:
+            header('Location: ../views/cotas.php?falha');
+            exit();
+    }
+}
+//editar quantidade de vagas
+else if (
+    isset($_POST["acao"]) && $_POST["acao"] === "editar_vagas" &&
+    isset($_POST["quantidades"]) && !empty($_POST["quantidades"])
+) {
+    $quantidade = (int) $_POST["quantidades"];
+    $escola = $_SESSION['escola'];
+    $admin_model = new admin($escola);
+    $result = $admin_model->cadastrar_quantidade_vaga($quantidade);
+
+    switch ($result) {
+        case 1:
+            header('Location: ../views/cotas.php?vagas_editadas');
             exit();
         case 2:
             header('Location: ../views/cotas.php?erro');

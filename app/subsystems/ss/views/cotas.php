@@ -516,14 +516,12 @@ $select = new select($escola);
                         <div class="flex items-center space-x-2 sm:space-x-4 lg:ml-auto">
                             <div class="hidden sm:block text-right">
                                 <p class="text-xs sm:text-sm font-semibold text-gray-900">Bem-vindo,</p>
-                                <p class="text-xs sm:text-sm text-primary font-medium"><?= $_SESSION[
-                                    "nome"
-                                ] ?? "Usuário" ?></p>
+                                <p class="text-xs sm:text-sm text-primary font-medium"><?= $_SESSION["nome"] ?? "Usuário" ?></p>
                             </div>
                             <a href="../../main/views/perfil.php" title="Perfil" class="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-primary to-dark rounded-full flex items-center justify-center hover:brightness-95 focus-ring">
                                 <span class="text-white font-bold text-xs sm:text-sm"><?= strtoupper(
-                                    substr($_SESSION["nome"] ?? "U", 0, 1),
-                                ) ?></span>
+                                                                                            substr($_SESSION["nome"] ?? "U", 0, 1),
+                                                                                        ) ?></span>
                             </a>
                             <a href="../models/sessions.php?sair" class="bg-primary text-white px-3 sm:px-4 md:px-6 py-2 sm:py-3 rounded-xl hover:bg-dark btn-animate font-semibold shadow-lg focus-ring text-xs sm:text-sm">
                                 <span class="hidden sm:inline">Sair</span>
@@ -584,7 +582,7 @@ $select = new select($escola);
                     $privada_cotas = $total_privada * (30 / 100);
                     $publica_ac = $total_publica * (70 / 100);
                     $privada_ac = $total_privada * (70 / 100);
-                    ?>
+                ?>
                     <div class="mb-8">
                         <div class="flex items-center justify-between mb-6">
                             <div class="flex items-center gap-4">
@@ -605,10 +603,10 @@ $select = new select($escola);
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M7 20H2v-2a3 3 0 015.356-1.857m9.288 0a5.002 5.002 0 00-9.288 0"></path>
                                         </svg>
                                         <?= count($bairros) ?> <?= count(
-     $bairros,
- ) === 1
-     ? "bairro ativo"
-     : "bairros ativos" ?>
+                                                                    $bairros,
+                                                                ) === 1
+                                                                    ? "bairro ativo"
+                                                                    : "bairros ativos" ?>
                                     </span>
 
                                 </div>
@@ -634,9 +632,7 @@ $select = new select($escola);
                                     Total
                                 </h4>
                                 <div class="flex items-center">
-                                    <input type="text" class="w-full px-4 py-3 rounded-lg border input-disabled" value="<?= $vagas[
-                                        "quantidade_alunos"
-                                    ] ?>" disabled>
+                                    <input type="text" class="w-full px-4 py-3 rounded-lg border input-disabled" value="<?= $vagas["quantidade_alunos"] ?>" disabled>
                                 </div>
                             </div>
 
@@ -665,21 +661,21 @@ $select = new select($escola);
                                     <div class="flex items-center">
                                         <span class="w-24 text-sm font-medium text-green-700">Total Pública:</span>
                                         <input type="text" class="flex-1 px-4 py-3 rounded-lg border input-disabled" value="<?= round(
-                                            $publica_ac + $publica_cotas,
-                                        ) ?>" disabled>
+                                                                                                                                $publica_ac + $publica_cotas,
+                                                                                                                            ) ?>" disabled>
                                     </div>
                                     <div class="border-t border-green-200 my-2 pt-2"></div>
                                     <div class="flex items-center">
                                         <span class="w-24 text-sm font-medium text-green-700">AC:</span>
                                         <input type="text" class="flex-1 px-4 py-3 rounded-lg border input-disabled" value="<?= round(
-                                            $publica_ac,
-                                        ) ?>" disabled>
+                                                                                                                                $publica_ac,
+                                                                                                                            ) ?>" disabled>
                                     </div>
                                     <div class="flex items-center">
                                         <span class="w-24 text-sm font-medium text-green-700">Cota Bairro:</span>
                                         <input type="text" class="flex-1 px-4 py-3 rounded-lg border input-disabled" value="<?= round(
-                                            $publica_cotas,
-                                        ) ?>" disabled>
+                                                                                                                                $publica_cotas,
+                                                                                                                            ) ?>" disabled>
                                     </div>
                                 </div>
                             </div>
@@ -695,61 +691,73 @@ $select = new select($escola);
                                     <div class="flex items-center">
                                         <span class="w-24 text-sm font-medium text-green-700">Total Privada:</span>
                                         <input type="text" class="flex-1 px-4 py-3 rounded-lg border input-disabled" value="<?= round(
-                                            $privada_ac + $privada_cotas,
-                                        ) ?>" disabled>
+                                                                                                                                $privada_ac + $privada_cotas,
+                                                                                                                            ) ?>" disabled>
                                     </div>
                                     <div class="border-t border-green-200 my-2 pt-2"></div>
                                     <div class="flex items-center">
                                         <span class="w-24 text-sm font-medium text-green-700">AC:</span>
                                         <input type="text" class="flex-1 px-4 py-3 rounded-lg border input-disabled" value="<?= round(
-                                            $privada_ac,
-                                        ) ?>" disabled>
+                                                                                                                                $privada_ac,
+                                                                                                                            ) ?>" disabled>
                                     </div>
                                     <div class="flex items-center">
                                         <span class="w-24 text-sm font-medium text-green-700">Cota Bairro:</span>
                                         <input type="text" class="flex-1 px-4 py-3 rounded-lg border input-disabled" value="<?= round(
-                                            $privada_cotas,
-                                        ) ?>" disabled>
+                                                                                                                                $privada_cotas,
+                                                                                                                            ) ?>" disabled>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="flex justify-end mt-6">
-
+                        <div class="flex flex-col gap-3 md:flex-row md:justify-end mt-6">
+                            <button type="button" onclick="openEditVagasModal()" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl border-2 border-primary text-primary font-semibold shadow-lg hover:bg-primary/5 transition-all duration-300 btn-animate focus-ring">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536M9 11l6-6 3 3-6 6H9v-3zM3 21h6"></path>
+                                </svg>
+                                Editar vagas
+                            </button>
+                            <button type="button" onclick="openAddBairroModal()" class="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-primary to-dark text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300 btn-animate focus-ring">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                </svg>
+                                Adicionar Bairro
+                            </button>
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
                         <?php foreach ($bairros as $bairro) { ?>
                             <article class="grid-item card-hover bg-white rounded-2xl shadow-xl border-0 overflow-hidden group relative flex flex-col h-[200px]" data-id="<?= htmlspecialchars(
-                                $bairro["id"],
-                            ) ?>" data-nome="<?= htmlspecialchars(
-    $bairro["bairros"],
-) ?>">
+                                                                                                                                                                                $bairro["id"],
+                                                                                                                                                                            ) ?>" data-nome="<?= htmlspecialchars(
+                                                    $bairro["bairros"],
+                                                ) ?>">
                                 <div class="h-2 w-full bg-gradient-to-r from-primary to-secondary"></div>
                                 <div class="p-6 flex flex-col flex-grow">
                                     <div class="text-center mb-4 flex-grow">
                                         <h3 class="text-xl font-bold leading-tight font-display group-hover:scale-105 transition-all duration-300 text-primary"><?= htmlspecialchars(
-                                            $bairro["bairros"] ?? "Sem nome",
-                                        ) ?></h3>
+                                                                                                                                                                    $bairro["bairros"] ?? "Sem nome",
+                                                                                                                                                                ) ?></h3>
                                         <div class="w-16 h-0.5 mx-auto mt-3 rounded-full bg-primary/40"></div>
                                     </div>
                                     <div class="flex space-x-2 mt-auto">
                                         <button type="button" onclick='openEditBairro(<?= json_encode(
-                                            $bairro["id"] ?? "",
-                                        ) ?>, <?= json_encode(
-    $bairro["bairros"],
-) ?>)' class="flex-1 bg-primary text-white py-2 px-4 rounded-lg hover:bg-dark transition-all duration-300 font-medium text-sm btn-animate focus-ring">Editar</button>
+                                                                                            $bairro["id"] ?? "",
+                                                                                        ) ?>, <?= json_encode(
+                                                    $bairro["bairros"],
+                                                ) ?>)' class="flex-1 bg-primary text-white py-2 px-4 rounded-lg hover:bg-dark transition-all duration-300 font-medium text-sm btn-animate focus-ring">Editar</button>
                                         <button type="button" onclick='openDeleteBairro(<?= json_encode(
-                                            $bairro["id"] ?? "",
-                                        ) ?>, <?= json_encode(
-    $bairro["bairros"],
-) ?>)' class="flex-1 bg-secondary text-white py-2 px-4 rounded-lg hover:bg-orange-600 transition-all duration-300 font-medium text-sm btn-animate focus-ring">Excluir</button>
+                                                                                            $bairro["id"] ?? "",
+                                                                                        ) ?>, <?= json_encode(
+                                                    $bairro["bairros"],
+                                                ) ?>)' class="flex-1 bg-secondary text-white py-2 px-4 rounded-lg hover:bg-orange-600 transition-all duration-300 font-medium text-sm btn-animate focus-ring">Excluir</button>
                                     </div>
                                 </div>
                             </article>
                         <?php } ?>
+                    
                     </div>
                 <?php
                 }
@@ -934,6 +942,90 @@ $select = new select($escola);
         </div>
     </div>
 
+    <!-- Modal Adicionar Bairro -->
+    <div id="modalAddBairro" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-2 sm:p-4 z-50">
+        <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl transform transition-all duration-300 scale-95 opacity-0" id="modalAddBairroContent">
+            <div class="bg-gradient-to-r from-primary to-dark text-white p-4 rounded-t-2xl">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg sm:text-xl font-bold">Adicionar Bairro</h3>
+                    </div>
+                    <button class="p-2 rounded-xl hover:bg-white/10" onclick="closeModal('modalAddBairro')">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="p-6 sm:p-8">
+                <form id="addBairroForm" action="../controllers/controller_bairro.php" method="POST">
+                    <input type="hidden" name="form" value="bairro">
+                    <input type="hidden" name="quantidades" id="addBairroQuantidade" value="<?= htmlspecialchars($vagas['quantidade_alunos'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+                    <div class="mb-6">
+                        <label class="block text-sm font-semibold text-dark mb-3">Nome do Novo Bairro *</label>
+                        <input id="addBairroNome" name="bairros[]" type="text" class="w-full px-4 py-3.5 rounded-xl transition-all text-base border-2 focus:border-primary focus:ring-4 focus:ring-primary/10" placeholder="Digite o nome do bairro" required>
+                    </div>
+                    <div class="flex flex-col sm:flex-row gap-3 justify-end">
+                        <button type="button" class="px-6 py-3 rounded-xl border-2 border-primary font-semibold text-primary hover:bg-primary/10 hover:border-primary transition-all text-base focus-ring" onclick="closeModal('modalAddBairro'); window.history.replaceState({}, document.title, window.location.pathname);">Cancelar</button>
+                        <button type="submit" class="px-6 py-3 bg-gradient-to-r from-primary to-dark text-white font-semibold rounded-xl hover:from-primary/90 hover:to-dark/90 transition-all text-base shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 focus-ring flex items-center justify-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            Salvar Bairro
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Editar Vagas -->
+    <div id="modalEditVagas" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-2 sm:p-4 z-50">
+        <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl transform transition-all duration-300 scale-95 opacity-0" id="modalEditVagasContent">
+            <div class="bg-gradient-to-r from-primary to-dark text-white p-4 rounded-t-2xl">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v4m0 0H8m4 0h4M6 20h12"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg sm:text-xl font-bold">Editar Quantidade de Vagas</h3>
+                    </div>
+                    <button class="p-2 rounded-xl hover:bg-white/10" onclick="closeModal('modalEditVagas')">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="p-6 sm:p-8">
+                <form id="editVagasForm" action="../controllers/controller_bairro.php" method="POST">
+                    <input type="hidden" name="form" value="bairro">
+                    <input type="hidden" name="acao" value="editar_vagas">
+                    <div class="mb-6">
+                        <label class="block text-sm font-semibold text-dark mb-3">Total de alunos por turma *</label>
+                        <input id="editVagasQuantidade" name="quantidades" type="number" min="1" max="999" step="1" class="w-full px-4 py-3.5 rounded-xl transition-all text-base border-2 focus:border-primary focus:ring-4 focus:ring-primary/10" placeholder="Informe o total de alunos" required oninput="this.value = this.value.replace(/[^0-9]/g, '')" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                    </div>
+                    <div class="flex flex-col sm:flex-row gap-3 justify-end">
+                        <button type="button" class="px-6 py-3 rounded-xl border-2 border-primary font-semibold text-primary hover:bg-primary/10 hover:border-primary transition-all text-base focus-ring" onclick="closeModal('modalEditVagas'); window.history.replaceState({}, document.title, window.location.pathname);">Cancelar</button>
+                        <button type="submit" class="px-6 py-3 bg-gradient-to-r from-primary to-dark text-white font-semibold rounded-xl hover:from-primary/90 hover:to-dark/90 transition-all text-base shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 focus-ring flex items-center justify-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            Salvar alterações
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal Confirmar Exclusão -->
     <div id="modalDeleteBairro" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-2 sm:p-4 z-50">
         <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl transform transition-all duration-300 scale-95 opacity-0" id="modalDeleteBairroContent">
@@ -1073,10 +1165,10 @@ $select = new select($escola);
                             $cursos = $select->select_cursos();
                             foreach ($cursos as $curso) { ?>
                                 <option value="<?= htmlspecialchars(
-                                    $curso["id"],
-                                ) ?>"><?= htmlspecialchars(
-    $curso["nome_curso"],
-) ?></option>
+                                                    $curso["id"],
+                                                ) ?>"><?= htmlspecialchars(
+                                            $curso["nome_curso"],
+                                        ) ?></option>
                             <?php }
                             ?>
                         </select>
@@ -1141,10 +1233,10 @@ $select = new select($escola);
                             $cursos = $select->select_cursos();
                             foreach ($cursos as $curso) { ?>
                                 <option value="<?= htmlspecialchars(
-                                    $curso["id"],
-                                ) ?>"><?= htmlspecialchars(
-    $curso["nome_curso"],
-) ?></option>
+                                                    $curso["id"],
+                                                ) ?>"><?= htmlspecialchars(
+                                            $curso["nome_curso"],
+                                        ) ?></option>
                             <?php }
                             ?>
                         </select>
@@ -1229,6 +1321,26 @@ $select = new select($escola);
             document.getElementById('inpBairroNome').value = '';
             document.getElementById('bairroForm').action = '../controllers/controller_bairro.php';
             openModal('modalBairro');
+        }
+
+        function openAddBairroModal() {
+            const addForm = document.getElementById('addBairroForm');
+            if (addForm) {
+                addForm.reset();
+                const quantidadeHidden = document.getElementById('addBairroQuantidade');
+                if (quantidadeHidden && quantidadeHidden.defaultValue) {
+                    quantidadeHidden.value = quantidadeHidden.defaultValue;
+                }
+            }
+            openModal('modalAddBairro');
+        }
+
+        function openEditVagasModal() {
+            const vagasInput = document.getElementById('editVagasQuantidade');
+            if (vagasInput) {
+                vagasInput.value = '<?= htmlspecialchars($vagas["quantidade_alunos"] ?? "", ENT_QUOTES, "UTF-8") ?>';
+            }
+            openModal('modalEditVagas');
         }
 
         function openEditBairro(id, nome) {
@@ -1547,6 +1659,10 @@ $select = new select($escola);
                 title = `Erro ao processar ${entidade.toLowerCase()}`;
                 message = '';
                 type = 'error';
+            } else if (params.has('vagas_editadas')) {
+                title = 'Vagas atualizadas com sucesso';
+                message = 'A quantidade de alunos por turma foi atualizada.';
+                type = 'success';
             } else if (params.has('curso_obrigatorio')) {
                 title = 'Curso obrigatório';
                 message = 'É necessário cadastrar pelo menos um curso antes de criar cotas.';
@@ -1595,6 +1711,30 @@ $select = new select($escola);
             }
 
             // Validação do formulário de edição de bairro
+            const editVagasForm = document.getElementById('editVagasForm');
+            if (editVagasForm) {
+                editVagasForm.addEventListener('submit', function(e) {
+                    const total = document.getElementById('editVagasQuantidade');
+                    if (!total.value.trim()) {
+                        e.preventDefault();
+                        alert('Informe o total de alunos por turma.');
+                        total.focus();
+                    }
+                });
+            }
+
+            const addBairroForm = document.getElementById('addBairroForm');
+            if (addBairroForm) {
+                addBairroForm.addEventListener('submit', function(e) {
+                    const nomeNovoBairro = document.getElementById('addBairroNome');
+                    if (!nomeNovoBairro.value.trim()) {
+                        e.preventDefault();
+                        alert('Por favor, informe o nome do novo bairro.');
+                        nomeNovoBairro.focus();
+                    }
+                });
+            }
+
             const editBairroForm = document.getElementById('editBairroForm');
             if (editBairroForm) {
                 editBairroForm.addEventListener('submit', function(e) {
