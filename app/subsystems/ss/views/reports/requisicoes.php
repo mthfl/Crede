@@ -91,7 +91,7 @@ class relatorios extends connect
         $pdf->SetFont('Arial', 'B', 17);
         $pdf->SetY(10);
         $pdf->SetX(8);
-        $nome_relatorio = 'RELATÓRIO DE MOVIMENTAÇÕES';
+        $nome_relatorio = 'RELATÓRIO DE REQUISIÇÕES';
         $count = mb_strlen($nome_relatorio);
         $pdf->Cell(55, 4, $nome_relatorio, 0, 1, 'L');
         $pdf->SetFillColor(255,165,0);

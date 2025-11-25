@@ -58,7 +58,7 @@ class relatorios extends connect
             isset($_SESSION["tipo_usuario"]) &&
             $_SESSION["tipo_usuario"] === "admin"
         ) {
-            $celula_ch = 10;
+            $celula_cl = 10;
             $celula_nome = 93;
             $celula_curso = 30;
             $celula_origem = 20;
@@ -71,7 +71,7 @@ class relatorios extends connect
             isset($_SESSION["tipo_usuario"]) &&
             $_SESSION["tipo_usuario"] === "cadastrador"
         ) {
-            $celula_ch = 10;
+            $celula_cl = 10;
             $celula_nome = 93;
             $celula_curso = 30;
             $celula_origem = 20;
@@ -410,7 +410,7 @@ class relatorios extends connect
                     35,
                     5,
                     mb_convert_encoding(
-                        "BAIRROS DE COTA:",
+                        "BAIRROS DA COTA:",
                         "ISO-8859-1",
                         "UTF-8",
                     ),
@@ -451,13 +451,13 @@ class relatorios extends connect
             $pdf->SetFont("Arial", "B", 10);
             $pdf->SetFillColor(0, 90, 36);
             $pdf->SetTextColor(255, 255, 255);
-            $pdf->Cell($celula_ch, $altura_celula, "CH", 1, 0, "C", true);
+            $pdf->Cell($celula_cl, $altura_celula, "CL", 1, 0, "C", true);
             $pdf->Cell($celula_nome, $altura_celula, "NOME", 1, 0, "C", true);
             $pdf->Cell($celula_curso, $altura_celula, "CURSO", 1, 0, "C", true);
             $pdf->Cell(
                 $celula_origem,
                 $altura_celula,
-                "ORIGEM",
+                "SEGM.",
                 1,
                 0,
                 "C",
@@ -466,7 +466,7 @@ class relatorios extends connect
             $pdf->Cell(
                 $celula_segmento,
                 $altura_celula,
-                "SEGM.",
+                "ORIGEM",
                 1,
                 0,
                 "C",
@@ -497,7 +497,7 @@ class relatorios extends connect
                 );
 
                 $pdf->Cell(
-                    $celula_ch,
+                    $celula_cl,
                     $altura_celula,
                     sprintf("%03d", $class),
                     1,
@@ -534,19 +534,19 @@ class relatorios extends connect
                 $pdf->Cell(
                     $celula_origem,
                     $altura_celula,
-                    $origem,
+                    $cota,
                     1,
                     0,
-                    "L",
+                    "C",
                     true,
                 );
                 $pdf->Cell(
                     $celula_segmento,
                     $altura_celula,
-                    $cota,
+                    $origem,
                     1,
                     0,
-                    "C",
+                    "L",
                     true,
                 );
                 $pdf->Cell(
@@ -586,7 +586,7 @@ class relatorios extends connect
             $pdf->Cell(
                 35,
                 5,
-                mb_convert_encoding("BAIRROS DE COTA:", "ISO-8859-1", "UTF-8"),
+                mb_convert_encoding("BAIRROS DA COTA:", "ISO-8859-1", "UTF-8"),
                 0,
                 0,
                 "L",

@@ -201,13 +201,13 @@ $pdf->SetY(20);
         $pdf->Cell(10, $altura_celula, mb_convert_encoding('CL', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
         $pdf->Cell($celula_nome, $altura_celula, mb_convert_encoding('NOME', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
         $pdf->Cell($celula_curso, $altura_celula, mb_convert_encoding('CURSO', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
-        $pdf->Cell($celula_origem, $altura_celula, mb_convert_encoding('ORIGEM', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
+        $pdf->Cell($celula_origem, $altura_celula, mb_convert_encoding('SEG', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
         if ((isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin')) {
-            $pdf->Cell($celula_segmento, $altura_celula, mb_convert_encoding('SEG', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
+            $pdf->Cell($celula_segmento, $altura_celula, mb_convert_encoding('ORIGEM', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
             $pdf->Cell(17, $altura_celula, mb_convert_encoding('MEDIA', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
             $pdf->Cell($celula_cadastrador, $altura_celula, mb_convert_encoding('CADASTRADOR(A)', 'ISO-8859-1', 'UTF-8'), 1, 1, 'C', true);
         } else {
-            $pdf->Cell(26, $altura_celula, mb_convert_encoding('Segmento', 'ISO-8859-1', 'UTF-8'), 1, 1, 'C', true);
+            $pdf->Cell(26, $altura_celula, mb_convert_encoding('ORIGEM', 'ISO-8859-1', 'UTF-8'), 1, 1, 'C', true);
         }
         // Resetar cor do texto para preto
         $pdf->SetTextColor(0, 0, 0);
@@ -231,7 +231,7 @@ $pdf->SetY(20);
                 // título em amarelo (mesma cor usada em PCD, COTISTA e AC)
                 $pdf->SetFont('Arial', 'B', 8);
                 $pdf->SetTextColor(255, 174, 25);
-                $pdf->Cell(28, 6, mb_convert_encoding('BAIRROS DE COTA:', 'ISO-8859-1', 'UTF-8'), 0, 0, 'L');
+                $pdf->Cell(28, 6, mb_convert_encoding('BAIRROS DA COTA:', 'ISO-8859-1', 'UTF-8'), 0, 0, 'L');
                 
                 // texto dos bairros em verde-escuro
                 $pdf->SetTextColor(0, 90, 36);
@@ -260,13 +260,13 @@ $pdf->SetY(20);
                 $pdf->Cell(10, $altura_celula, mb_convert_encoding('CL', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
                 $pdf->Cell($celula_nome, $altura_celula, mb_convert_encoding('NOME', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
                 $pdf->Cell($celula_curso, $altura_celula, mb_convert_encoding('CURSO', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
-                $pdf->Cell($celula_origem, $altura_celula, mb_convert_encoding('ORIGEM', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
+                $pdf->Cell($celula_origem, $altura_celula, mb_convert_encoding('SEG', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
                 if ((isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin')) {
-                    $pdf->Cell($celula_segmento, $altura_celula, mb_convert_encoding('SEG', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
+                    $pdf->Cell($celula_segmento, $altura_celula, mb_convert_encoding('ORIGEM', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
                     $pdf->Cell(17, $altura_celula, mb_convert_encoding('MEDIA', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
                     $pdf->Cell($celula_cadastrador, $altura_celula, mb_convert_encoding('CADASTRADOR(A)', 'ISO-8859-1', 'UTF-8'), 1, 1, 'C', true);
                 } else {
-                    $pdf->Cell(26, $altura_celula, mb_convert_encoding('Segmento', 'ISO-8859-1', 'UTF-8'), 1, 1, 'C', true);
+                    $pdf->Cell(26, $altura_celula, mb_convert_encoding('ORIGEM', 'ISO-8859-1', 'UTF-8'), 1, 1, 'C', true);
                 }
                 $pdf->SetTextColor(0, 0, 0);
                 $pdf->SetFont('Arial', '', 8);
@@ -282,13 +282,13 @@ $pdf->SetY(20);
                 $pdf->Cell(10, $altura_celula, mb_convert_encoding('CL', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
                 $pdf->Cell($celula_nome, $altura_celula, mb_convert_encoding('NOME', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
                 $pdf->Cell($celula_curso, $altura_celula, mb_convert_encoding('CURSO', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
-                $pdf->Cell($celula_origem, $altura_celula, mb_convert_encoding('ORIGEM', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
+                $pdf->Cell($celula_origem, $altura_celula, mb_convert_encoding('SEG', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
                 if ((isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin')) {
-                    $pdf->Cell($celula_segmento, $altura_celula, mb_convert_encoding('SEG', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
+                    $pdf->Cell($celula_segmento, $altura_celula, mb_convert_encoding('ORIGEM', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
                     $pdf->Cell(17, $altura_celula, mb_convert_encoding('MEDIA', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
                     $pdf->Cell($celula_cadastrador, $altura_celula, mb_convert_encoding('CADASTRADOR(A)', 'ISO-8859-1', 'UTF-8'), 1, 1, 'C', true);
                 } else {
-                    $pdf->Cell(26, $altura_celula, mb_convert_encoding('Segmento', 'ISO-8859-1', 'UTF-8'), 1, 1, 'C', true);
+                    $pdf->Cell(26, $altura_celula, mb_convert_encoding('ORIGEM', 'ISO-8859-1', 'UTF-8'), 1, 1, 'C', true);
                 }
                 $pdf->SetTextColor(0, 0, 0);
                 $pdf->SetFont('Arial', '', 8);
@@ -316,8 +316,8 @@ $pdf->SetY(20);
             $pdf->Cell(10, $altura_celula, sprintf("%03d", $classificacao), 1, 0, 'C', true);
             $pdf->Cell($celula_nome, $altura_celula, strtoupper(mb_convert_encoding($dado['nome'], 'ISO-8859-1', 'UTF-8')), 1, 0, 'L', true);
             $pdf->Cell($celula_curso, $altura_celula, strtoupper(mb_convert_encoding($dado['nome_curso'], 'ISO-8859-1', 'UTF-8')), 1, 0, 'L', true);
-            $pdf->Cell($celula_origem, $altura_celula, $escola, 1, 0, 'L', true);
-            $pdf->Cell($celula_segmento, $altura_celula, $cota, 1, $p, 'C', true); // verificar parâmetro 'p' na parte superior do relatório
+            $pdf->Cell($celula_origem, $altura_celula, $cota, 1, 0, 'C', true);
+            $pdf->Cell($celula_segmento, $altura_celula, $escola, 1, $p, 'L', true); // verificar parâmetro 'p' na parte superior do relatório
             if ((isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin')) {
                 $pdf->Cell(17, $altura_celula, number_format($dado['media_final'], 2), 1, 0, 'C', true);
                 $cadastrador_text = strtoupper(mb_convert_encoding($dado['nome_user'], 'ISO-8859-1', 'UTF-8'));
@@ -343,7 +343,7 @@ $pdf->SetY(20);
             // título em amarelo (mesma cor usada em PCD, COTISTA e AC)
             $pdf->SetFont('Arial', 'B', 8);
             $pdf->SetTextColor(255, 174, 25);
-            $pdf->Cell(28, 6, mb_convert_encoding('BAIRROS DE COTA:', 'ISO-8859-1', 'UTF-8'), 0, 0, 'L');
+            $pdf->Cell(28, 6, mb_convert_encoding('BAIRROS DA COTA:', 'ISO-8859-1', 'UTF-8'), 0, 0, 'L');
             
             // texto dos bairros em verde-escuro
             $pdf->SetTextColor(0, 90, 36);

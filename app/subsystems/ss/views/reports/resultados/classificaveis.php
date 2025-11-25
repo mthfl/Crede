@@ -149,7 +149,7 @@ class relatorios extends connect
         $pdf->SetX(8.50);
         $pdf->SetFont('Arial', 'B', 8);
         $pdf->SetTextColor(255, 174, 25);
-        $pdf->Cell(28, 6, 'BAIRROS DE COTA:', 0, 0, 'L');
+        $pdf->Cell(28, 6, 'BAIRROS DA COTA:', 0, 0, 'L');
         $pdf->SetTextColor(0, 90, 36);
         $pdf->SetFont('Arial', '', 8);
         $bairros_texto = '';
@@ -313,11 +313,11 @@ class relatorios extends connect
                 $pdf->SetFont('Arial', 'B', 10);
                 $pdf->SetFillColor(0, 90, 36); // fundo verde (#005A24)
                 $pdf->SetTextColor(255, 255, 255); // texto branco
-                $pdf->Cell(10, 5, 'CH', 1, 0, 'C', true);
+                $pdf->Cell(10, 5, 'CL', 1, 0, 'C', true);
                 $pdf->Cell(93, 5, 'NOME', 1, 0, 'C', true);
                 $pdf->Cell(30, 5, 'CURSO', 1, 0, 'C', true);
-                $pdf->Cell(20, 5, 'ORIGEM', 1, 0, 'C', true);
                 $pdf->Cell(20, 5, 'SEGM.', 1, 0, 'C', true);
+                $pdf->Cell(20, 5, 'ORIGEM', 1, 0, 'C', true);
                 $pdf->Cell(15, 5, 'MEDIA', 1, 1, 'C', true);
 
                 // Resetar cor do texto para preto
@@ -348,8 +348,8 @@ class relatorios extends connect
                     $pdf->Cell(10, 5, sprintf("%03d", $posicao), 1, 0, 'C', true);
                     $pdf->Cell(93, 5, mb_strtoupper($row['nome'], 'UTF-8'), 1, 0, 'L', true);
                     $pdf->Cell(30, 5, mb_strtoupper($row['nome_curso'], 'UTF-8'), 1, 0, 'L', true);
-                    $pdf->Cell(20, 5, $escola, 1, 0, 'L', true);
                     $pdf->Cell(20, 5, $cota, 1, 0, 'C', true);
+                    $pdf->Cell(20, 5, $escola, 1, 0, 'L', true);
                     $pdf->Cell(15, 5, number_format($row['media_final'], 2), 1, 1, 'C', true);
 
                     $posicao++;

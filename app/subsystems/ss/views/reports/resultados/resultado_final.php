@@ -49,11 +49,11 @@ class relatorios extends connect
     {
         /* ---------- CONFIGURAÇÕES DE LAYOUT ---------- */
         if ((isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin')) {
-            $celula_ch = 10; $celula_nome = 93; $celula_curso = 30;
+            $celula_cl = 10; $celula_nome = 93; $celula_curso = 30;
             $celula_origem = 20; $celula_segmento = 20; $celula_media = 15;
             $altura_celula = 5; $p = 0; $orientacao = 'P';
         } else if ((isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'cadastrador')) {
-            $celula_ch = 10; $celula_nome = 93; $celula_curso = 30;
+            $celula_cl = 10; $celula_nome = 93; $celula_curso = 30;
             $celula_origem = 20; $celula_segmento = 20; $celula_media = 15;
             $altura_celula = 5; $p = 1; $orientacao = 'P';
         }
@@ -281,7 +281,7 @@ class relatorios extends connect
                 $pdf->SetFont('Arial','B',8);
                 $pdf->SetTextColor(255,174,25);
                 $pdf->SetX(8.5);
-                $pdf->Cell(35,5,mb_convert_encoding('BAIRROS DE COTA:','ISO-8859-1','UTF-8'),0,0,'L');
+                $pdf->Cell(35,5,mb_convert_encoding('BAIRROS DA COTA:','ISO-8859-1','UTF-8'),0,0,'L');
                 $pdf->SetTextColor(0,90,36);
                 $pdf->SetFont('Arial','',8);
                 $pdf->SetX(39);
@@ -307,11 +307,11 @@ class relatorios extends connect
             $pdf->SetFont('Arial','B',10);
             $pdf->SetFillColor(0,90,36);
             $pdf->SetTextColor(255,255,255);
-            $pdf->Cell($celula_ch,      $altura_celula,'CH',1,0,'C',true);
+            $pdf->Cell($celula_cl,      $altura_celula,'CL',1,0,'C',true);
             $pdf->Cell($celula_nome,    $altura_celula,'NOME',1,0,'C',true);
             $pdf->Cell($celula_curso,   $altura_celula,'CURSO',1,0,'C',true);
-            $pdf->Cell($celula_origem,  $altura_celula,'ORIGEM',1,0,'C',true);
-            $pdf->Cell($celula_segmento,$altura_celula,'SEGM.',1,0,'C',true);
+            $pdf->Cell($celula_origem,  $altura_celula,'SEGM.',1,0,'C',true);
+            $pdf->Cell($celula_segmento,$altura_celula,'ORIGEM',1,0,'C',true);
             $pdf->Cell($celula_media,   $altura_celula,'MEDIA',1,1,'C',true);
 
             // Linhas de dados
@@ -329,11 +329,11 @@ class relatorios extends connect
 
                 $pdf->SetFillColor($class%2 ? 255 : 192, $class%2 ? 255 : 192, $class%2 ? 255 : 192);
 
-                $pdf->Cell($celula_ch,      $altura_celula,sprintf('%03d',$class),1,0,'C',true);
+                $pdf->Cell($celula_cl,      $altura_celula,sprintf('%03d',$class),1,0,'C',true);
                 $pdf->Cell($celula_nome,    $altura_celula,mb_convert_encoding(mb_strtoupper($row['nome'],'UTF-8'),'ISO-8859-1','UTF-8'),1,0,'L',true);
                 $pdf->Cell($celula_curso,   $altura_celula,mb_convert_encoding(mb_strtoupper($row['nome_curso'],'UTF-8'),'ISO-8859-1','UTF-8'),1,0,'L',true);
-                $pdf->Cell($celula_origem,  $altura_celula,$origem,1,0,'L',true);
-                $pdf->Cell($celula_segmento,$altura_celula,$cota,1,0,'C',true);
+                $pdf->Cell($celula_origem,  $altura_celula,$cota,1,0,'C',true);
+                $pdf->Cell($celula_segmento,$altura_celula,$origem,1,0,'L',true);
                 $pdf->Cell($celula_media,   $altura_celula,number_format($row['media_final'],2),1,1,'C',true);
                 $class++;
             }
@@ -360,7 +360,7 @@ class relatorios extends connect
             $pdf->SetFont('Arial','B',8);
             $pdf->SetTextColor(255,174,25);
             $pdf->SetX(8.5);
-            $pdf->Cell(35,5,mb_convert_encoding('BAIRROS DE COTA:','ISO-8859-1','UTF-8'),0,0,'L');
+            $pdf->Cell(35,5,mb_convert_encoding('BAIRROS DA COTA:','ISO-8859-1','UTF-8'),0,0,'L');
             $pdf->SetTextColor(0,90,36);
             $pdf->SetFont('Arial','',8);
             $pdf->SetX(39);
