@@ -534,7 +534,7 @@ $usuarios = $select->select_usuarios();
                                 <svg class="w-4 h-4 mr-1.5 sm:mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m4-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                                 </svg>
-                                <span>Candidatos Excluídos</span>
+                                <span>Candidatos Inativos</span>
                             </a>
                         <?php } ?>
                     </div>
@@ -576,8 +576,8 @@ $usuarios = $select->select_usuarios();
                                 <tr class="bg-gradient-to-r from-primary to-dark text-white">
                                     <th class="px-6 py-4 text-left text-sm font-semibold font-display">Nome</th>
                                     <th class="px-6 py-4 text-left text-sm font-semibold font-display">Curso</th>
-                                    <th class="px-6 py-4 text-left text-sm font-semibold font-display">Cota</th>
-                                    <th class="px-6 py-4 text-left text-sm font-semibold font-display">Pública</th>
+                                    <th class="px-6 py-4 text-left text-sm font-semibold font-display">Seguimento</th>
+                                    <th class="px-6 py-4 text-left text-sm font-semibold font-display">Origem</th>
                                     <th class="px-6 py-4 text-left text-sm font-semibold font-display">Data</th>
                                     <th class="px-6 py-4 text-left text-sm font-semibold font-display">Cadastrador</th>
                                     <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
@@ -594,7 +594,7 @@ $usuarios = $select->select_usuarios();
                                     $id = $cand['id'] ?? '-';
                                     $nome = $cand['nome'] ?? '-';
                                     $cursoNome = $cand['nome_curso'] ?? '-';
-                                    $publica = $cand['publica'] === 1 ? 'Sim' : 'Não';
+                                    $origem = (isset($cand['publica']) && (int)$cand['publica'] === 1) ? 'Pública' : 'Privada';
                                     $data = $cand['data'] ?? '-';
                                     $cadastradorNome = $cand['nome_user'] ?? '-';
 
@@ -629,11 +629,11 @@ $usuarios = $select->select_usuarios();
                                             </span>
                                         </td>
                                         <td class="px-6 py-4">
-                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold <?= $publica === 'Sim' ? ($cand['status'] == 0 ? 'bg-gray-200 text-gray-600 border border-gray-300' : 'bg-green-100 text-green-800 border border-green-200') : ($cand['status'] == 0 ? 'bg-gray-100 text-gray-500 border border-gray-200' : 'bg-gray-100 text-gray-600 border border-gray-200') ?>">
+                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold <?= $origem === 'Pública' ? ($cand['status'] == 0 ? 'bg-gray-200 text-gray-600 border border-gray-300' : 'bg-green-100 text-green-800 border border-green-200') : ($cand['status'] == 0 ? 'bg-gray-100 text-gray-500 border border-gray-200' : 'bg-gray-100 text-gray-600 border border-gray-200') ?>">
                                                 <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                                                 </svg>
-                                                <?= $publica ?>
+                                                <?= $origem ?>
                                             </span>
                                         </td>
                                         <td class="px-6 py-4 text-sm <?= $cand['status'] == 0 ? 'text-gray-400' : 'text-gray-700' ?>">
@@ -666,7 +666,7 @@ $usuarios = $select->select_usuarios();
                                                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                                                             </svg>
-                                                            Excluir
+                                                            Desativar
                                                         </button>
                                                     <?php } else { ?>
                                                         <button type="button" onclick="openActivateModal(<?= $id ?>, '<?= htmlspecialchars($nome) ?>')" class="inline-flex items-center <?= $cand['status'] == 0 ? 'bg-gray-500 text-white hover:bg-gray-600' : 'bg-green-600 text-white hover:bg-green-700' ?> px-4 py-2 rounded-lg transition-all duration-300 font-medium text-sm btn-animate focus-ring">
@@ -705,7 +705,7 @@ $usuarios = $select->select_usuarios();
                                 $id = $cand['id'] ?? '-';
                                 $nome = $cand['nome'] ?? '-';
                                 $cursoNome = $cand['nome_curso'] ?? '-';
-                                $publica = $cand['publica'] === 1 ? 'Sim' : 'Não';
+                                $origem = (isset($cand['publica']) && (int)$cand['publica'] === 1) ? 'Pública' : 'Privada';
                                 $data = $cand['data'] ?? '-';
                                 $cadastradorNome = $cand['nome_user'] ?? '-';
 
@@ -749,15 +749,15 @@ $usuarios = $select->select_usuarios();
                                                 <svg class="w-4 h-4 mr-2 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
                                                 </svg>
-                                                <span class="font-medium">Cota:</span>
+                                                <span class="font-medium">Seguimento:</span>
                                                 <span class="ml-2 px-2 py-1 bg-primary/10 text-primary rounded-full text-xs font-medium"><?= htmlspecialchars((string)$cota) ?></span>
                                             </div>
                                             <div class="flex items-center text-sm text-gray-600">
                                                 <svg class="w-4 h-4 mr-2 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"></path>
                                                 </svg>
-                                                <span class="font-medium">Pública:</span>
-                                                <span class="ml-2 px-2 py-1 bg-primary/10 text-primary rounded-full text-xs font-medium"><?= $publica ?></span>
+                                                <span class="font-medium">Origem:</span>
+                                                <span class="ml-2 px-2 py-1 bg-primary/10 text-primary rounded-full text-xs font-medium"><?= $origem ?></span>
                                             </div>
                                             <div class="flex items-center text-sm text-gray-600">
                                                 <svg class="w-4 h-4 mr-2 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -790,7 +790,7 @@ $usuarios = $select->select_usuarios();
                                                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                                                             </svg>
-                                                            Excluir
+                                                            Desativar
                                                         </span>
                                                     </button>
                                                 <?php } else { ?>
@@ -818,7 +818,7 @@ $usuarios = $select->select_usuarios();
         </div>
     </div>
 
-    <!-- Modal Confirmar Exclusão -->
+    <!-- Modal Confirmar Desativação -->
     <div id="modalInactivateConfirm" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-2 sm:p-4 z-50">
         <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl transform transition-all duration-300 scale-95 opacity-0" id="modalInactivateConfirmContent">
             <div class="p-6 sm:p-8 text-center">
@@ -827,13 +827,34 @@ $usuarios = $select->select_usuarios();
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M4.93 4.93l14.14 14.14"></path>
                     </svg>
                 </div>
-                <h3 class="text-xl sm:text-2xl font-bold text-dark font-heading mb-4">Confirmar Exclusão</h3>
-                <p class="text-gray-600 text-base mb-6 leading-relaxed">
-                    Tem certeza que deseja Excluir o candidato <span class="font-semibold text-dark" id="inactivateCandidatoName"></span>?
+                <h3 class="text-xl sm:text-2xl font-bold text-dark font-heading mb-4">Confirmar Desativação</h3>
+                <p class="text-gray-600 text-base mb-4 leading-relaxed">
+                    Tem certeza que deseja desativar o candidato <span class="font-semibold text-dark" id="inactivateCandidatoName"></span>?
                 </p>
+                <div class="mb-4 text-left">
+                    <label for="inactivateReason" class="block text-sm font-semibold text-gray-700 mb-2">Motivo da desativação *</label>
+                    <div class="relative">
+                        <select id="inactivateReason" class="w-full appearance-none px-4 py-3.5 border border-gray-300 rounded-xl bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-base pr-10">
+                            <option value="" selected disabled>Selecione um motivo</option>
+                            <option value="desistencia">Desistência voluntária</option>
+                            <option value="documento_invalido">Documento inválido</option>
+                            <option value="informacao_inconsistente">Informação inconsistente</option>
+                            <option value="transferencia">Transferência escolar</option>
+                            <option value="familia">Solicitação da família</option>
+                            <option value="erro_cadastro">Erro de cadastro</option>
+                            <option value="vaga_duplicada">Vaga duplicada</option>
+                            <option value="outros">Outros (especifique)</option>
+                        </select>
+                        <svg class="w-5 h-5 text-gray-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" viewBox="0 0 20 20" fill="none" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 8l4 4 4-4" />
+                        </svg>
+                    </div>
+                    <input id="inactivateReasonOther" type="text" placeholder="Descreva o motivo" class="mt-3 w-full px-4 py-3.5 border border-gray-300 rounded-xl hidden focus:border-primary focus:ring-4 focus:ring-primary/10 text-base" />
+                    
+                </div>
                 <div class="flex flex-col sm:flex-row gap-3 justify-center">
                     <button type="button" class="px-6 py-3 rounded-xl border-2 border-secondary font-semibold text-secondary hover:bg-secondary/10 hover:border-secondary transition-all text-base focus-ring" onclick="closeModal('modalInactivateConfirm')">Cancelar</button>
-                    <a id="inactivateLink" href="#" class="px-6 py-3 bg-gradient-to-r from-secondary to-orange-600 text-white font-semibold rounded-xl hover:from-secondary/90 hover:to-orange-700 transition-all text-base shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 focus-ring text-center">Confirmar Exclusão</a>
+                    <a id="inactivateLink" href="#" class="px-6 py-3 bg-gradient-to-r from-secondary to-orange-600 text-white font-semibold rounded-xl hover:from-secondary/90 hover:to-orange-700 transition-all text-base shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 focus-ring text-center">Confirmar Desativação</a>
                 </div>
             </div>
         </div>
@@ -1103,6 +1124,23 @@ $usuarios = $select->select_usuarios();
                     alert('Por favor, preencha todos os campos obrigatórios.');
                 }
             });
+        });
+
+        // Toggle 'Outros' reason text field in desativation modal
+        document.addEventListener('DOMContentLoaded', function() {
+            const reasonSelect = document.getElementById('inactivateReason');
+            const otherInput = document.getElementById('inactivateReasonOther');
+            if (reasonSelect && otherInput) {
+                reasonSelect.addEventListener('change', function() {
+                    if (this.value === 'outros') {
+                        otherInput.classList.remove('hidden');
+                        otherInput.focus();
+                    } else {
+                        otherInput.classList.add('hidden');
+                        otherInput.value = '';
+                    }
+                });
+            }
         });
 
         // Controle do select de cursos baseado no tipo de relatório

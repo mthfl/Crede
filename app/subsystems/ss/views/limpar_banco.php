@@ -213,8 +213,10 @@ if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) 
                             required 
                             placeholder="••••••"
                             class="w-full px-5 py-4 rounded-2xl text-base font-mono text-center tracking-widest text-xl border-2 border-gray-300 input-focus transition-all focus:border-red-500 focus:ring-0 focus:shadow-lg"
-                            autocomplete="off"
-                            maxlength="6"
+                            autocomplete="current-password"
+                            autofocus
+                            aria-label="Senha de confirmação (6 dígitos)"
+                            
                         />
                         <p class="text-xs text-gray-500 text-center">
                             Digite a senha de 6 dígitos enviada para <strong class="text-red-600"><?= htmlspecialchars($_POST['email'] ?? '') ?></strong>

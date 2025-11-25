@@ -571,8 +571,8 @@ $usuarios = $select->select_usuarios();
                                 <tr class="bg-gradient-to-r from-primary to-dark text-white">
                                     <th class="px-6 py-4 text-left text-sm font-semibold font-display">Nome</th>
                                     <th class="px-6 py-4 text-left text-sm font-semibold font-display">Curso</th>
-                                    <th class="px-6 py-4 text-left text-sm font-semibold font-display">Cota</th>
-                                    <th class="px-6 py-4 text-left text-sm font-semibold font-display">Pública</th>
+                                    <th class="px-6 py-4 text-left text-sm font-semibold font-display">Seguimento</th>
+                                    <th class="px-6 py-4 text-left text-sm font-semibold font-display">Origem</th>
                                     <th class="px-6 py-4 text-left text-sm font-semibold font-display">Data</th>
                                     <th class="px-6 py-4 text-left text-sm font-semibold font-display">Cadastrador</th>
                                     <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
@@ -586,7 +586,7 @@ $usuarios = $select->select_usuarios();
                                     $id = $cand['id'] ?? '-';
                                     $nome = $cand['nome'] ?? '-';
                                     $cursoNome = $cand['nome_curso'] ?? '-';
-                                    $publica = ($cand['publica'] ?? 0) == 1 ? 'Sim' : 'Não';
+                                    $origem = (isset($cand['publica']) && (int)$cand['publica'] === 1) ? 'Pública' : 'Privada';
                                     $data = $cand['data'] ?? '-';
                                     $cadastradorNome = $cand['nome_user'] ?? '-';
 
@@ -623,7 +623,7 @@ $usuarios = $select->select_usuarios();
                                                 <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                                                 </svg>
-                                                <?= $publica ?>
+                                                <?= $origem ?>
                                             </span>
                                         </td>
                                         <td class="px-6 py-4 text-sm text-gray-400">
@@ -680,7 +680,7 @@ $usuarios = $select->select_usuarios();
                                 $id = $cand['id'] ?? '-';
                                 $nome = $cand['nome'] ?? '-';
                                 $cursoNome = $cand['nome_curso'] ?? '-';
-                                $publica = ($cand['publica'] ?? 0) == 1 ? 'Sim' : 'Não';
+                                $origem = (isset($cand['publica']) && (int)$cand['publica'] === 1) ? 'Pública' : 'Privada';
                                 $data = $cand['data'] ?? '-';
                                 $cadastradorNome = $cand['nome_user'] ?? '-';
 
@@ -721,19 +721,19 @@ $usuarios = $select->select_usuarios();
                                             </div>
                                             
                                             <div class="field">
-                                                <div class="text-gray-500 text-xs mb-1">Cota</div>
+                                                <div class="text-gray-500 text-xs mb-1">Seguimento</div>
                                                 <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-500 border border-gray-200">
                                                     <?= htmlspecialchars($cota) ?>
                                                 </span>
                                             </div>
 
                                             <div class="field">
-                                                <div class="text-gray-500 text-xs mb-1">Escola Pública</div>
+                                                <div class="text-gray-500 text-xs mb-1">Origem</div>
                                                 <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-semibold bg-gray-200 text-gray-600 border border-gray-300">
                                                     <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                                                     </svg>
-                                                    <?= $publica ?>
+                                                    <?= $origem ?>
                                                 </span>
                                             </div>
 
