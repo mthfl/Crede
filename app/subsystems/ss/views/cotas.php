@@ -319,11 +319,7 @@ $select = new select($escola);
                 </div>
                 <nav class="space-y-2">
                     <!-- Dashboard -->
-                    <?php if (
-                        (isset($_SESSION["tipo_usuario"]) &&
-                            $_SESSION["tipo_usuario"] === "admin") ||
-                        $_SESSION["tipo_usuario"] === "cadastrador"
-                    ) { ?>
+                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin' || $_SESSION['tipo_usuario'] === 'cadastrador') { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.1s;">
                             <a href="../index.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring ">
                                 <div class="w-12 h-12 bg-white/10  rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
@@ -340,12 +336,26 @@ $select = new select($escola);
                         </div>
                     <?php } ?>
 
-                    <!-- Cursos -->
-                    <?php if (
-                        isset($_SESSION["tipo_usuario"]) &&
-                        $_SESSION["tipo_usuario"] === "admin"
-                    ) { ?>
+                    <!-- Usuários -->
+                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.2s;">
+                            <a href="usuario.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring ">
+                                <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <span class="font-semibold text-base">Usuários</span>
+                                    <p class="text-green-200 text-xs mt-1">Controle de acesso</p>
+                                </div>
+                            </a>
+                        </div>
+                    <?php } ?>
+
+                    <!-- Cursos -->
+                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
+                        <div class="animate-slide-in-left" style="animation-delay: 0.25s;">
                             <a href="cursos.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
                                 <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -360,15 +370,26 @@ $select = new select($escola);
                         </div>
                     <?php } ?>
 
-
+                    <!-- Cotas -->
+                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
+                        <div class="animate-slide-in-left" style="animation-delay: 0.3s;">
+                            <a href="cotas.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group bg-white/10 focus-ring">
+                                <div class="w-12 h-12 bg-secondary rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a5 5 0 10-10 0v2M5 9h14l-1 11H6L5 9z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <span class="font-semibold text-base">Cotas</span>
+                                    <p class="text-green-200 text-xs mt-1">Regras e perfis</p>
+                                </div>
+                            </a>
+                        </div>
+                    <?php } ?>
 
                     <!-- Candidatos -->
-                    <?php if (
-                        (isset($_SESSION["tipo_usuario"]) &&
-                            $_SESSION["tipo_usuario"] === "admin") ||
-                        $_SESSION["tipo_usuario"] === "cadastrador"
-                    ) { ?>
-                        <div class="animate-slide-in-left" style="animation-delay: 0.3s;">
+                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin' || $_SESSION['tipo_usuario'] === 'cadastrador') { ?>
+                        <div class="animate-slide-in-left" style="animation-delay: 0.35s;">
                             <a href="candidatos.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
                                 <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -383,76 +404,9 @@ $select = new select($escola);
                         </div>
                     <?php } ?>
 
-                    <!-- Cotas -->
-                    <?php if (
-                        isset($_SESSION["tipo_usuario"]) &&
-                        $_SESSION["tipo_usuario"] === "admin"
-                    ) { ?>
-                        <div class="animate-slide-in-left" style="animation-delay: 0.35s;">
-                            <a href="cotas.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring bg-white/10">
-                                <div class="w-12 h-12 bg-secondary rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
-                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a5 5 0 10-10 0v2M5 9h14l-1 11H6L5 9z"></path>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <span class="font-semibold text-base">Cotas</span>
-                                    <p class="text-green-200 text-xs mt-1">Regras e perfis</p>
-                                </div>
-                            </a>
-                        </div>
-                    <?php } ?>
-
-
-
-                    <!-- Usuários -->
-                    <?php if (
-                        isset($_SESSION["tipo_usuario"]) &&
-                        $_SESSION["tipo_usuario"] === "admin"
-                    ) { ?>
+                    <!-- Requisições -->
+                    <?php if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'admin' || $_SESSION['tipo_usuario'] === 'cadastrador')) { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.4s;">
-                            <a href="usuario.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
-                                <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
-                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <span class="font-semibold text-base">Usuários</span>
-                                    <p class="text-green-200 text-xs mt-1">Controle de acesso</p>
-                                </div>
-                            </a>
-                        </div>
-                    <?php } ?>
-
-                    <!-- Relatórios -->
-                    <?php if (
-                        isset($_SESSION["tipo_usuario"]) &&
-                        $_SESSION["tipo_usuario"] === "admin"
-                    ) { ?>
-                        <div class="animate-slide-in-left" style="animation-delay: 0.5s;">
-                            <a href="./relatorios.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
-                                <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
-                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <span class="font-semibold text-base">Relatórios</span>
-                                    <p class="text-green-200 text-xs mt-1">Gerar documentos</p>
-                                </div>
-                            </a>
-                        </div>
-                    <?php } ?>
-
-
-                    <!-- Requisição de cadastro -->
-                    <?php if (
-                        isset($_SESSION["tipo_usuario"]) &&
-                        ($_SESSION["tipo_usuario"] === "admin" ||
-                            $_SESSION["tipo_usuario"] === "cadastrador")
-                    ) { ?>
-                        <div class="animate-slide-in-left" style="animation-delay: 0.6s;">
                             <a href="solicitar_alteracao.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
                                 <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -467,12 +421,26 @@ $select = new select($escola);
                         </div>
                     <?php } ?>
 
+                    <!-- Relatórios -->
+                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
+                        <div class="animate-slide-in-left" style="animation-delay: 0.45s;">
+                            <a href="./relatorios.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
+                                <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <span class="font-semibold text-base">Relatórios</span>
+                                    <p class="text-green-200 text-xs mt-1">Gerar documentos</p>
+                                </div>
+                            </a>
+                        </div>
+                    <?php } ?>
+
                     <!-- Limpar Banco -->
-                    <?php if (
-                        isset($_SESSION["tipo_usuario"]) &&
-                        $_SESSION["tipo_usuario"] === "admin"
-                    ) { ?>
-                        <div class="animate-slide-in-left" style="animation-delay: 0.6s;">
+                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
+                        <div class="animate-slide-in-left" style="animation-delay: 0.5s;">
                             <a href="limpar_banco.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
                                 <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-red-500 group-hover:scale-110 transition-all duration-300">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -488,7 +456,7 @@ $select = new select($escola);
                     <?php } ?>
 
                     <!-- FAQ -->
-                    <div class="animate-slide-in-left" style="animation-delay: 0.7s;">
+                    <div class="animate-slide-in-left" style="animation-delay: 0.55s;">
                         <a href="faq.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
                             <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
