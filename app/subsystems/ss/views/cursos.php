@@ -430,10 +430,27 @@ if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) 
                         </div>
                     <?php } ?>
 
-                    <!-- Cursos -->
+                    <!-- Usuários -->
                     <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.2s;">
-                            <a href="cursos.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring bg-white/10">
+                            <a href="usuario.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring ">
+                                <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <span class="font-semibold text-base">Usuários</span>
+                                    <p class="text-green-200 text-xs mt-1">Controle de acesso</p>
+                                </div>
+                            </a>
+                        </div>
+                    <?php } ?>
+
+                    <!-- Cursos -->
+                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
+                        <div class="animate-slide-in-left" style="animation-delay: 0.25s;">
+                            <a href="cursos.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group bg-white/10 focus-ring">
                                 <div class="w-12 h-12 bg-secondary rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
@@ -447,28 +464,9 @@ if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) 
                         </div>
                     <?php } ?>
 
-
-
-                    <!-- Candidatos -->
-                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin' || $_SESSION['tipo_usuario'] === 'cadastrador') { ?>
-                        <div class="animate-slide-in-left" style="animation-delay: 0.3s;">
-                            <a href="candidatos.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
-                                <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
-                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <span class="font-semibold text-base">Candidatos</span>
-                                    <p class="text-green-200 text-xs mt-1">Gerenciar inscrições</p>
-                                </div>
-                            </a>
-                        </div>
-                    <?php } ?>
-
                     <!-- Cotas -->
                     <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
-                        <div class="animate-slide-in-left" style="animation-delay: 0.35s;">
+                        <div class="animate-slide-in-left" style="animation-delay: 0.3s;">
                             <a href="cotas.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
                                 <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -483,46 +481,26 @@ if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) 
                         </div>
                     <?php } ?>
 
-
-
-                    <!-- Usuários -->
-                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
-                        <div class="animate-slide-in-left" style="animation-delay: 0.4s;">
-                            <a href="usuario.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
+                    <!-- Candidatos -->
+                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin' || $_SESSION['tipo_usuario'] === 'cadastrador') { ?>
+                        <div class="animate-slide-in-left" style="animation-delay: 0.35s;">
+                            <a href="candidatos.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
                                 <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
                                     </svg>
                                 </div>
                                 <div>
-                                    <span class="font-semibold text-base">Usuários</span>
-                                    <p class="text-green-200 text-xs mt-1">Controle de acesso</p>
+                                    <span class="font-semibold text-base">Candidatos</span>
+                                    <p class="text-green-200 text-xs mt-1">Gerenciar inscrições</p>
                                 </div>
                             </a>
                         </div>
                     <?php } ?>
 
-                    <!-- Relatórios -->
-                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
-                        <div class="animate-slide-in-left" style="animation-delay: 0.5s;">
-                            <a href="./relatorios.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
-                                <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
-                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                    </svg>
-                                </div>
-                                <div>
-                                    <span class="font-semibold text-base">Relatórios</span>
-                                    <p class="text-green-200 text-xs mt-1">Gerar documentos</p>
-                                </div>
-                            </a>
-                        </div>
-                    <?php } ?>
-
-
-                    <!-- Requisição de cadastro -->
+                    <!-- Requisições -->
                     <?php if (isset($_SESSION['tipo_usuario']) && ($_SESSION['tipo_usuario'] === 'admin' || $_SESSION['tipo_usuario'] === 'cadastrador')) { ?>
-                        <div class="animate-slide-in-left" style="animation-delay: 0.6s;">
+                        <div class="animate-slide-in-left" style="animation-delay: 0.4s;">
                             <a href="solicitar_alteracao.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
                                 <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -537,9 +515,26 @@ if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) 
                         </div>
                     <?php } ?>
 
+                    <!-- Relatórios -->
+                    <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
+                        <div class="animate-slide-in-left" style="animation-delay: 0.45s;">
+                            <a href="./relatorios.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
+                                <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <span class="font-semibold text-base">Relatórios</span>
+                                    <p class="text-green-200 text-xs mt-1">Gerar documentos</p>
+                                </div>
+                            </a>
+                        </div>
+                    <?php } ?>
+
                     <!-- Limpar Banco -->
                     <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
-                        <div class="animate-slide-in-left" style="animation-delay: 0.6s;">
+                        <div class="animate-slide-in-left" style="animation-delay: 0.5s;">
                             <a href="limpar_banco.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
                                 <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-red-500 group-hover:scale-110 transition-all duration-300">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -555,7 +550,7 @@ if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) 
                     <?php } ?>
 
                     <!-- FAQ -->
-                    <div class="animate-slide-in-left" style="animation-delay: 0.7s;">
+                    <div class="animate-slide-in-left" style="animation-delay: 0.55s;">
                         <a href="faq.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
                             <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
