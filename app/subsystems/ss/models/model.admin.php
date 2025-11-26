@@ -23,7 +23,7 @@ class admin extends cadastrador
             $datatime = date('Y/m/d H:i:s');
             $id_usuario = $_SESSION['id'];
 
-            $stmt_candidato = $this->connect->prepare("INSERT INTO $this->table16 VALUES (NULL, :id_candidato, :id_usuario, :datatime, :tipo_movimentacao, :descricao)");
+            $stmt_candidato = $this->connect->prepare("INSERT INTO $this->table16 VALUES (NULL,:id_usuario, :datatime, :tipo_movimentacao, :descricao)");
             $stmt_candidato->bindValue(":id_usuario", $id_usuario);
             $stmt_candidato->bindValue(":datatime", $datatime);
             $stmt_candidato->bindValue(":tipo_movimentacao", 'CADASTRAR QUANTIDADE DE VAGAS');
