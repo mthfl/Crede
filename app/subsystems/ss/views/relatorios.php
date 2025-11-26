@@ -1031,59 +1031,52 @@ $select = new select($escola);
                     </div>
                     <div class="stat-item">
                         <div class="stat-icon">
-                            <i class="fas fa-graduation-cap"></i>
+                            <i class="fas fa-school"></i>
                         </div>
-                        <div class="stat-number"><?php echo $select->countTotalCursos(); ?></div>
-                        <div class="stat-label">Total de Cursos</div>
+                        <div class="stat-number"><?php echo $select->countTotalPublicos(); ?></div>
+                        <div class="stat-label">Candidatos Escola Pública</div>
                     </div>
                     <div class="stat-item">
                         <div class="stat-icon">
-                            <i class="fas fa-file-alt"></i>
+                            <i class="fas fa-building"></i>
                         </div>
-                        <div class="stat-number"><?php echo $select->countTotalRelatorios(); ?></div>
-                        <div class="stat-label">Total de Requisições</div>
+                        <div class="stat-number"><?php echo $select->countTotalPrivados(); ?></div>
+                        <div class="stat-label">Candidatos Escola Privada</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-icon">
+                            <i class="fas fa-wheelchair"></i>
+                        </div>
+                        <div class="stat-number"><?php echo $select->countTotalPCDs(); ?></div>
+                        <div class="stat-label">Candidatos PCD</div>
                     </div>
                 </div>
 
                 <!-- Gráfico de Barras e Cards de Relatórios -->
-                <div class="grid grid-cols-1 lg:grid-cols-3 lg:grid-rows-2 gap-6 mb-8">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
                     <!-- Gráfico de Barras - Ocupa 2 colunas e 2 linhas (maior) -->
-                    <div class="bg-white rounded-xl shadow-card p-6 border-2 border-accent hover:border-secondary transition-all duration-300 lg:col-span-2 lg:row-span-2">
+                    <div class="bg-white rounded-xl shadow-card p-6 border-2 border-accent hover:border-secondary transition-all duration-300 lg:col-span-2">
                         <div class="flex items-center justify-between mb-4 pb-3 border-b-2 border-accent">
                             <h3 class="text-xl font-bold text-primary font-heading flex items-center">
                                 <i class="fas fa-chart-bar text-secondary mr-3"></i>
                                 Candidatos por Curso
                             </h3>
                         </div>
-                        <div class="chart-container chart-bar" style="height: 500px;">
+                        <div class="chart-container chart-bar" style="height: 250px;">
                             <canvas id="coursesChart"></canvas>
                         </div>
                     </div>
 
-                    <!-- Card Unificado: Relatórios e Resultados - Canto Superior Direito -->
-                    <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in lg:col-start-3 lg:row-start-1">
+                    <!-- Card Unificado: Relatórios -->
+                    <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in lg:col-start-3 space-y-4">
                         <div class="card-shine"></div>
                         <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
                             <i class="fas fa-school text-4xl"></i>
                         </div>
-                        <h3 class="text-xl font-bold text-primary mb-2 text-center font-heading">Relatórios e Resultados</h3>
-                        <p class="text-gray-600 text-center mb-6 text-sm">Gere relatórios detalhados por tipo de escola (pública/privada) e modalidade (AC/cotas), além de relatórios de classificados, classificáveis e resultados finais</p>
-                        <button onclick="openUnifiedReportModal()" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-3 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold flex items-center justify-center w-full">
-                            <i class="fas fa-file-pdf mr-2"></i>
-                            Gerar Relatório
-                        </button>
-                    </div>
-
-                    <!-- Relatórios Específicos - Logo abaixo do card de Relatórios -->
-                    <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in lg:col-start-3 lg:row-start-2">
-                        <div class="card-shine"></div>
-                        <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
-                            <i class="fas fa-file-alt text-4xl"></i>
-                        </div>
-                        <h3 class="text-xl font-bold text-primary mb-2 text-center font-heading">Relatórios Específicos</h3>
-                        <p class="text-gray-600 text-center mb-6 text-sm">Gere relatórios específicos como comissão de seleção, movimentações e requisições</p>
-                        <button onclick="openSpecificReportModal()" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-3 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold flex items-center justify-center w-full">
-                            <i class="fas fa-file-pdf mr-2"></i>
+                        <h3 class="text-xl font-bold text-primary text-center font-heading">Relatórios Gerais e Específicos</h3>
+                        <p class="text-gray-600 text-center text-sm">Acesse em um único lugar relatórios completos por modalidade, escola e status, além de documentos específicos como comissão, movimentações e requisições.</p>
+                        <button onclick="openUnifiedReportModal()" class="w-full bg-gradient-to-r from-secondary to-orange-500 text-white py-3 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold flex items-center justify-center">
+                            <i class="fas fa-file-download mr-2"></i>
                             Gerar Relatório
                         </button>
                     </div>
@@ -1092,119 +1085,7 @@ $select = new select($escola);
         </div>
     </div>
 
-    <!-- Modal for Report Selection (Resultados) -->
-    <div id="reportModal" class="modal">
-        <div class="modal-content">
-            <button class="close-btn" onclick="closeModal('reportModal')">×</button>
-            <h2 class="font-heading" id="reportModalTitle">
-                <i class="fas fa-file-alt mr-2 text-secondary"></i>
-                Gerar Relatório
-            </h2>
-            <form id="reportForm" action="../controllers/controller_relatorios.php" method="POST" class="space-y-4">
-                <input type="hidden" name="form" value="relatorio_pdf">
-
-                <!-- Tipo de Relatório -->
-                <div class="form-group">
-                    <label for="tipo_relatorio" class="font-semibold">
-                        <i class="fas fa-list mr-1"></i>
-                        Tipo de Relatório
-                    </label>
-                    <select name="tipo_relatorio" id="tipo_relatorio" required class="select2-tipo">
-                        <option value="" disabled selected>SELECIONAR TIPO DE RELATÓRIO</option>
-                        <option value="Classificados">Classificados</option>
-                        <option value="Classificaveis">Classificáveis</option>
-                        <option value="Resultado Final">Resultado Final</option>
-                        <option value="Resultado pré-liminar">Resultado Pré-liminar</option>
-                    </select>
-                </div>
-
-                <!-- Curso -->
-                <div class="form-group mt-4">
-                    <label for="curso_id" class="font-semibold">
-                        <i class="fas fa-book mr-1"></i>
-                        Curso
-                    </label>
-                    <select name="curso" id="curso_id" required class="select2-curso">
-                        <option value="" disabled selected>SELECIONAR CURSO</option>
-                        <?php
-                        $cursos = $select->select_cursos();
-                        foreach ($cursos as $curso) { ?>
-                            <option value="<?= htmlspecialchars(
-                                $curso["id"],
-                            ) ?>"><?= htmlspecialchars(
-    $curso["nome_curso"],
-) ?></option>
-                        <?php }
-                        ?>
-                    </select>
-                </div>
-
-                <button type="submit" class="confirm-btn">
-                    <i class="fas fa-file-pdf mr-2"></i>
-                    Gerar Relatório
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Modal for School Reports -->
-    <div id="schoolReportModal" class="modal">
-        <div class="modal-content">
-            <button class="close-btn" onclick="closeModal('schoolReportModal')">×</button>
-            <h2 class="font-heading" id="schoolReportModalTitle">
-                <i class="fas fa-file-alt mr-2 text-secondary"></i>
-                Gerar Relatório de Escolas
-            </h2>
-            <form id="schoolReportForm" action="../controllers/controller_relatorios.php" method="POST" class="space-y-4">
-                <input type="hidden" name="form" value="relatorio_pdf">
-
-                <!-- Tipo de Relatório para Escolas -->
-                <div class="form-group">
-                    <label for="school_tipo_relatorio" class="font-semibold">
-                        <i class="fas fa-list mr-1"></i>
-                        Tipo de Relatório
-                    </label>
-                    <select name="tipo_relatorio" id="school_tipo_relatorio" required class="select2-school-tipo">
-                        <option value="" disabled selected>SELECIONAR TIPO DE RELATÓRIO</option>
-                        <option value="publica_ac">Pública AC</option>
-                        <option value="publica_cotas">Pública Cotas</option>
-                        <option value="publica_geral">Pública Geral</option>
-                        <option value="privada_ac">Privada AC</option>
-                        <option value="privada_cotas">Privada Cotas</option>
-                        <option value="privada_geral">Privada Geral</option>
-                    </select>
-                </div>
-
-                <!-- Curso -->
-                <div class="form-group mt-4">
-                    <label for="school_curso_id" class="font-semibold">
-                        <i class="fas fa-book mr-1"></i>
-                        Curso
-                    </label>
-                    <select name="curso" id="school_curso_id" required class="select2-school-curso">
-                        <option value="" disabled selected>SELECIONAR CURSO</option>
-                        <?php
-                        $cursos = $select->select_cursos();
-                        foreach ($cursos as $curso) { ?>
-                            <option value="<?= htmlspecialchars(
-                                $curso["id"],
-                            ) ?>"><?= htmlspecialchars(
-    $curso["nome_curso"],
-) ?></option>
-                        <?php }
-                        ?>
-                    </select>
-                </div>
-
-                <button type="submit" class="confirm-btn">
-                    <i class="fas fa-file-pdf mr-2"></i>
-                    Gerar Relatório
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Modal Unificado para Relatórios e Resultados -->
+    <!-- Modal Unificado -->
     <div id="unifiedReportModal" class="modal">
         <div class="modal-content">
             <button class="close-btn" onclick="closeModal('unifiedReportModal')">×</button>
@@ -1215,7 +1096,6 @@ $select = new select($escola);
             <form id="unifiedReportForm" action="../controllers/controller_relatorios.php" method="POST" class="space-y-4">
                 <input type="hidden" name="form" value="relatorio_pdf">
 
-                <!-- Tipo de Relatório -->
                 <div class="form-group">
                     <label for="unified_tipo_relatorio" class="font-semibold">
                         <i class="fas fa-list mr-1"></i>
@@ -1223,25 +1103,20 @@ $select = new select($escola);
                     </label>
                     <select name="tipo_relatorio" id="unified_tipo_relatorio" required class="select2-unified-tipo">
                         <option value="" disabled selected>SELECIONAR TIPO DE RELATÓRIO</option>
-                        <option value="privada_ac">Privada AC</option>
-                        <option value="privada_cotas">Privada Cotas</option>
-                        <option value="privada_geral">Privada Geral</option>
-                        <option value="publica_ac">Pública AC</option>
-                        <option value="publica_cotas">Pública Cotas</option>
-                        <option value="publica_geral">Pública Geral</option>
-                        <option value="Classificados">Classificados</option>
-                        <option value="Classificaveis">Classificáveis</option>
                         <option value="Resultado Final">Resultado Final</option>
+                        <option value="comissao_selecao">Comissão de Seleção</option>
+                        <option value="movimentacoes">Movimentações</option>
+                        <option value="requisicoes">Requisições</option>
+                        <option value="can_desabilitados">Candidatos Desabilitados</option>
                     </select>
                 </div>
 
-                <!-- Curso -->
-                <div class="form-group mt-4">
+                <div class="form-group mt-4" id="unifiedCourseGroup" style="display: none;">
                     <label for="unified_curso_id" class="font-semibold">
                         <i class="fas fa-book mr-1"></i>
                         Curso
                     </label>
-                    <select name="curso" id="unified_curso_id" required class="select2-unified-curso">
+                    <select name="curso" id="unified_curso_id" class="select2-unified-curso">
                         <option value="" disabled selected>SELECIONAR CURSO</option>
                         <?php
                         $cursos = $select->select_cursos();
@@ -1250,6 +1125,26 @@ $select = new select($escola);
                                 $curso["id"],
                             ) ?>"><?= htmlspecialchars(
     $curso["nome_curso"],
+) ?></option>
+                        <?php }
+                        ?>
+                    </select>
+                </div>
+
+                <div class="form-group mt-4" id="unifiedUserGroup" style="display: none;">
+                    <label for="unified_user_id" class="font-semibold">
+                        <i class="fas fa-user mr-1"></i>
+                        Selecionar Usuário
+                    </label>
+                    <select name="id_usuario" id="unified_user_id" class="select2-unified-user">
+                        <option value="" disabled selected>SELECIONAR USUÁRIO</option>
+                        <?php
+                        $usuarios = $select->select_usuarios();
+                        foreach ($usuarios as $user) { ?>
+                            <option value="<?= htmlspecialchars(
+                                $user["id"],
+                            ) ?>"><?= htmlspecialchars(
+    $user["nome_user"],
 ) ?></option>
                         <?php }
                         ?>
@@ -1474,234 +1369,134 @@ $select = new select($escola);
         });
     </script>
 
-    <!-- Modal handling for Results -->
+    <!-- Modal handling -->
     <script>
-        function openReportModal(reportType, reportLabel) {
-            const modal = document.getElementById('reportModal');
-            const modalTitle = document.getElementById('reportModalTitle');
-            modalTitle.textContent = `Gerar Relatório: ${reportLabel}`;
-            modal.classList.add('show');
-            setTimeout(() => {
-                $('.select2-tipo').select2({
-                    placeholder: "SELECIONAR TIPO DE RELATÓRIO",
-                    allowClear: true,
-                    width: '100%',
-                    language: {
-                        noResults: function() {
-                            return "Nenhum tipo encontrado";
-                        },
-                        searching: function() {
-                            return "Pesquisando...";
-                        }
-                    }
-                });
-                $('.select2-curso').select2({
-                    placeholder: "SELECIONAR CURSO",
-                    allowClear: true,
-                    width: '100%',
-                    language: {
-                        noResults: function() {
-                            return "Nenhum curso encontrado";
-                        },
-                        searching: function() {
-                            return "Pesquisando...";
-                        }
-                    }
-                });
-            }, 100);
+        function toggleCourseField(show) {
+            const group = document.getElementById('unifiedCourseGroup');
+            const select = document.getElementById('unified_curso_id');
+            if (!group || !select) return;
+            if (show) {
+                group.style.display = 'block';
+                select.setAttribute('required', 'required');
+            } else {
+                group.style.display = 'none';
+                select.removeAttribute('required');
+                select.value = '';
+            }
         }
-    </script>
 
-    <!-- Modal handling for Schools -->
-    <script>
-        function openSchoolReportModal() {
-            const modal = document.getElementById('schoolReportModal');
-            modal.classList.add('show');
-            setTimeout(() => {
-                $('.select2-school-tipo').select2({
-                    placeholder: "SELECIONAR TIPO DE RELATÓRIO",
-                    allowClear: true,
-                    width: '100%',
-                    language: {
-                        noResults: function() {
-                            return "Nenhum tipo encontrado";
-                        },
-                        searching: function() {
-                            return "Pesquisando...";
-                        }
-                    }
-                });
-                $('.select2-school-curso').select2({
-                    placeholder: "SELECIONAR CURSO",
-                    allowClear: true,
-                    width: '100%',
-                    language: {
-                        noResults: function() {
-                            return "Nenhum curso encontrado";
-                        },
-                        searching: function() {
-                            return "Pesquisando...";
-                        }
-                    }
-                });
-            }, 100);
+        function toggleUserField(show) {
+            const group = document.getElementById('unifiedUserGroup');
+            const select = document.getElementById('unified_user_id');
+            if (!group || !select) return;
+            if (show) {
+                group.style.display = 'block';
+                select.setAttribute('required', 'required');
+            } else {
+                group.style.display = 'none';
+                select.removeAttribute('required');
+                select.value = '';
+            }
         }
-    </script>
 
-    <!-- Modal handling for Unified Reports -->
-    <script>
+        function handleReportTypeChange(value) {
+            toggleCourseField(value === 'Resultado Final');
+            toggleUserField(value === 'movimentacoes');
+        }
+
+        let unifiedTypeChangeAttached = false;
+
         function openUnifiedReportModal() {
             const modal = document.getElementById('unifiedReportModal');
+            const form = document.getElementById('unifiedReportForm');
+            if (!modal || !form) return;
+            form.reset();
+            handleReportTypeChange('');
             modal.classList.add('show');
-            
-            // Reset form
-            document.getElementById('unifiedReportForm').reset();
-            document.getElementById('unified_tipo_relatorio').value = '';
-            document.getElementById('unified_curso_id').value = '';
-            
-            setTimeout(() => {
-                // Inicializar Select2 para tipo de relatório
-                $('.select2-unified-tipo').select2({
-                    placeholder: "SELECIONAR TIPO DE RELATÓRIO",
-                    allowClear: true,
-                    width: '100%',
-                    language: {
-                        noResults: function() {
-                            return "Nenhum tipo encontrado";
-                        },
-                        searching: function() {
-                            return "Pesquisando...";
-                        }
-                    }
-                });
+            document.body.style.overflow = 'hidden';
 
-                // Inicializar Select2 para curso
-                $('.select2-unified-curso').select2({
-                    placeholder: "SELECIONAR CURSO",
-                    allowClear: true,
-                    width: '100%',
-                    language: {
-                        noResults: function() {
-                            return "Nenhum curso encontrado";
-                        },
-                        searching: function() {
-                            return "Pesquisando...";
-                        }
-                    }
+            const tipoSelect = document.getElementById('unified_tipo_relatorio');
+            if (tipoSelect && !unifiedTypeChangeAttached) {
+                tipoSelect.addEventListener('change', function() {
+                    handleReportTypeChange(this.value);
                 });
-            }, 100);
+                unifiedTypeChangeAttached = true;
+            }
         }
-    </script>
 
-    <script>
         function closeModal(modalId) {
             const modal = document.getElementById(modalId);
+            if (!modal) return;
             modal.classList.remove('show');
             document.body.style.overflow = '';
-            if (modalId === 'reportModal') {
-                $('.select2-curso').select2('destroy');
-                $('.select2-tipo').select2('destroy');
-            } else if (modalId === 'schoolReportModal') {
-                $('.select2-school-curso').select2('destroy');
-                $('.select2-school-tipo').select2('destroy');
-            } else if (modalId === 'specificReportModal') {
-                $('.select2-specific').select2('destroy');
-                $('.select2-user').select2('destroy');
-            } else if (modalId === 'unifiedReportModal') {
-                $('.select2-unified-tipo').select2('destroy');
-                $('.select2-unified-curso').select2('destroy');
-            }
         }
 
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
-                closeModal('reportModal');
-                closeModal('schoolReportModal');
-                closeModal('specificReportModal');
                 closeModal('unifiedReportModal');
             }
         });
-    </script>
 
-    <!-- Form validation for Results -->
-    <script>
-        const reportForm = document.getElementById('reportForm');
-        reportForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const tipo = document.getElementById('tipo_relatorio').value;
-            const curso = document.getElementById('curso_id').value;
-            if (!tipo || !curso) {
-                showNotification('Por favor, selecione tipo e curso.', 'error');
-                return;
-            }
-            const submitBtn = reportForm.querySelector('button[type="submit"]');
-            const originalText = submitBtn.innerHTML;
-            submitBtn.innerHTML = '<span class="loading-spinner"></span> Gerando...';
-            submitBtn.disabled = true;
-            setTimeout(() => {
-                reportForm.submit();
-            }, 1000);
-            setTimeout(() => {
-                if (submitBtn.disabled) {
-                    submitBtn.innerHTML = originalText;
-                    submitBtn.disabled = false;
-                }
-            }, 5000);
-        });
-    </script>
-
-    <!-- Form validation for Schools -->
-    <script>
-        const schoolReportForm = document.getElementById('schoolReportForm');
-        schoolReportForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const tipo = document.getElementById('school_tipo_relatorio').value;
-            const curso = document.getElementById('school_curso_id').value;
-            if (!tipo || !curso) {
-                showNotification('Por favor, selecione tipo e curso.', 'error');
-                return;
-            }
-            const submitBtn = schoolReportForm.querySelector('button[type="submit"]');
-            const originalText = submitBtn.innerHTML;
-            submitBtn.innerHTML = '<span class="loading-spinner"></span> Gerando...';
-            submitBtn.disabled = true;
-            setTimeout(() => {
-                schoolReportForm.submit();
-            }, 1000);
-            setTimeout(() => {
-                if (submitBtn.disabled) {
-                    submitBtn.innerHTML = originalText;
-                    submitBtn.disabled = false;
-                }
-            }, 5000);
-        });
-    </script>
-
-    <!-- Form validation for Unified Reports -->
-    <script>
         const unifiedReportForm = document.getElementById('unifiedReportForm');
-        unifiedReportForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const tipo = document.getElementById('unified_tipo_relatorio').value;
-            const curso = document.getElementById('unified_curso_id').value;
-            if (!tipo || !curso) {
-                showNotification('Por favor, selecione tipo e curso.', 'error');
-                return;
-            }
-            const submitBtn = unifiedReportForm.querySelector('button[type="submit"]');
-            const originalText = submitBtn.innerHTML;
-            submitBtn.innerHTML = '<span class="loading-spinner"></span> Gerando...';
-            submitBtn.disabled = true;
-            setTimeout(() => {
-                unifiedReportForm.submit();
-            }, 1000);
-            setTimeout(() => {
-                if (submitBtn.disabled) {
-                    submitBtn.innerHTML = originalText;
-                    submitBtn.disabled = false;
+        const redirectTypes = ['comissao_selecao', 'movimentacoes', 'requisicoes', 'can_desabilitados'];
+
+        if (unifiedReportForm) {
+            unifiedReportForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const tipo = document.getElementById('unified_tipo_relatorio').value;
+                const curso = document.getElementById('unified_curso_id').value;
+                const usuario = document.getElementById('unified_user_id').value;
+
+                if (!tipo) {
+                    showNotification('Por favor, selecione um tipo de relatório.', 'error');
+                    return;
                 }
-            }, 5000);
-        });
+
+                if (tipo === 'Resultado Final' && !curso) {
+                    showNotification('Selecione o curso para Resultado Final.', 'error');
+                    return;
+                }
+
+                if (tipo === 'movimentacoes' && !usuario) {
+                    showNotification('Selecione um usuário para Movimentações.', 'error');
+                    return;
+                }
+
+                const submitBtn = unifiedReportForm.querySelector('button[type="submit"]');
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<span class="loading-spinner"></span> Gerando...';
+                submitBtn.disabled = true;
+
+                if (redirectTypes.includes(tipo)) {
+                    let url = '../controllers/controller_relatorios.php?form=relatorio_pdf';
+                    switch (tipo) {
+                        case 'comissao_selecao':
+                            url += '&tipo_relatorio=comissao_selecao';
+                            break;
+                        case 'movimentacoes':
+                            url += '&tipo_relatorio=movimentacoes&id_usuario=' + encodeURIComponent(usuario);
+                            break;
+                        case 'requisicoes':
+                            url += '&tipo_relatorio=requisicoes';
+                            break;
+                        case 'can_desabilitados':
+                            url += '&tipo_relatorio=can_desabilitados';
+                            break;
+                    }
+                    window.location.href = url;
+                    setTimeout(() => {
+                        submitBtn.innerHTML = originalText;
+                        submitBtn.disabled = false;
+                    }, 4000);
+                } else {
+                    unifiedReportForm.submit();
+                    setTimeout(() => {
+                        submitBtn.innerHTML = originalText;
+                        submitBtn.disabled = false;
+                    }, 4000);
+                }
+            });
+        }
     </script>
 
     <!-- Notification function -->
@@ -1730,270 +1525,5 @@ $select = new select($escola);
         }
     </script>
 
-    <!-- Initialize Select2 on page load -->
-    <script>
-        $(document).ready(function() {
-            $('.select2-curso').select2({
-                placeholder: "SELECIONAR CURSO",
-                allowClear: true,
-                width: '100%',
-                language: {
-                    noResults: function() {
-                        return "Nenhum curso encontrado";
-                    },
-                    searching: function() {
-                        return "Pesquisando...";
-                    }
-                }
-            });
-            $('.select2-tipo').select2({
-                placeholder: "SELECIONAR TIPO DE RELATÓRIO",
-                allowClear: true,
-                width: '100%',
-                language: {
-                    noResults: function() {
-                        return "Nenhum tipo encontrado";
-                    },
-                    searching: function() {
-                        return "Pesquisando...";
-                    }
-                }
-            });
-            $('.select2-school-curso').select2({
-                placeholder: "SELECIONAR CURSO",
-                allowClear: true,
-                width: '100%',
-                language: {
-                    noResults: function() {
-                        return "Nenhum curso encontrado";
-                    },
-                    searching: function() {
-                        return "Pesquisando...";
-                    }
-                }
-            });
-            $('.select2-school-tipo').select2({
-                placeholder: "SELECIONAR TIPO DE RELATÓRIO",
-                allowClear: true,
-                width: '100%',
-                language: {
-                    noResults: function() {
-                        return "Nenhum tipo encontrado";
-                    },
-                    searching: function() {
-                        return "Pesquisando...";
-                    }
-                }
-            });
-        });
-    </script>
-
-    <!-- Movimentações modal handlers -->
-    <script>
-        function openUserReportModal() {
-            const modal = document.getElementById('userReportModal');
-            modal.classList.add('show');
-            setTimeout(() => {
-                $('.select2-usuario').select2({
-                    placeholder: "SELECIONAR USUÁRIO",
-                    allowClear: true,
-                    width: '100%',
-                    language: {
-                        noResults: function() { return "Nenhum usuário encontrado"; },
-                        searching: function() { return "Pesquisando..."; }
-                    }
-                });
-            }, 100);
-        }
-
-        function closeUserModal() {
-            const modal = document.getElementById('userReportModal');
-            modal.classList.remove('show');
-            const form = document.getElementById('userReportForm');
-            if (form) form.reset();
-            document.body.style.overflow = '';
-            if ($('.select2-usuario').data('select2')) {
-                $('.select2-usuario').select2('destroy');
-            }
-        }
-
-        function openSpecificReportModal() {
-            const modal = document.getElementById('specificReportModal');
-            modal.classList.add('show');
-            setTimeout(() => {
-                $('.select2-specific').select2({
-                    placeholder: "SELECIONAR TIPO DE RELATÓRIO",
-                    allowClear: true,
-                    width: '100%',
-                    language: {
-                        noResults: function() {
-                            return "Nenhum tipo encontrado";
-                        },
-                        searching: function() {
-                            return "Pesquisando...";
-                        }
-                    }
-                });
-
-                $('.select2-user').select2({
-                    placeholder: "SELECIONAR USUÁRIO",
-                    allowClear: true,
-                    width: '100%',
-                    language: {
-                        noResults: function() {
-                            return "Nenhum usuário encontrado";
-                        },
-                        searching: function() {
-                            return "Pesquisando...";
-                        }
-                    }
-                });
-
-                // Inicializar o evento de mudança do tipo de relatório
-                $('#specific_report_type').on('change', function() {
-                    const reportType = $(this).val();
-                    const userSelectContainer = document.getElementById('userSelectContainer');
-
-                    if (reportType === 'movimentacoes') {
-                        userSelectContainer.style.display = 'block';
-                    } else {
-                        userSelectContainer.style.display = 'none';
-                    }
-                });
-            }, 100);
-        }
-    </script>
-
-    <!-- Validação do formulário de relatório específico -->
-    <script>
-        const specificReportForm = document.getElementById('specificReportForm');
-        specificReportForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const reportType = document.getElementById('specific_report_type').value;
-
-            if (!reportType) {
-                showNotification('Por favor, selecione um tipo de relatório.', 'error');
-                return;
-            }
-
-            const userSelectContainer = document.getElementById('userSelectContainer');
-            const userId = document.getElementById('user_id')?.value;
-
-            if (reportType === 'movimentacoes') {
-                userSelectContainer.style.display = 'block';
-                if (!userId) {
-                    showNotification('Por favor, selecione um usuário.', 'error');
-                    return;
-                }
-            } else {
-                userSelectContainer.style.display = 'none';
-            }
-
-            const submitBtn = specificReportForm.querySelector('button[type="submit"]');
-            const originalText = submitBtn.innerHTML;
-            submitBtn.innerHTML = '<span class="loading-spinner"></span> Gerando...';
-            submitBtn.disabled = true;
-
-            let url = '../controllers/controller_relatorios.php?form=relatorio_pdf';
-
-            switch (reportType) {
-                case 'comissao_selecao':
-                    url += '&tipo_relatorio=comissao_selecao';
-                    break;
-                case 'movimentacoes':
-                    url += '&tipo_relatorio=movimentacoes&id_usuario=' + userId;  // Corrigido de user_id para id_usuario
-                    break;
-                case 'requisicoes':
-                    url += '&tipo_relatorio=requisicoes';
-                    break;
-            }
-
-            window.location.href = url;
-
-            setTimeout(() => {
-                if (submitBtn.disabled) {
-                    submitBtn.innerHTML = originalText;
-                    submitBtn.disabled = false;
-                }
-            }, 5000);
-        });
-    </script>
-
-    <!-- Validate and submit user report form -->
-    <script>
-        const userReportForm = document.getElementById('userReportForm');
-        userReportForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const usuario = document.getElementById('usuario_id').value;
-            if (!usuario) {
-                showNotification('Por favor, selecione um usuário.', 'error');
-                return;
-            }
-            const submitBtn = userReportForm.querySelector('button[type="submit"]');
-            const originalText = submitBtn.innerHTML;
-            submitBtn.innerHTML = '<span class="loading-spinner"></span> Gerando...';
-            submitBtn.disabled = true;
-            setTimeout(() => { userReportForm.submit(); }, 400);
-            setTimeout(() => {
-                if (submitBtn.disabled) {
-                    submitBtn.innerHTML = originalText;
-                    submitBtn.disabled = false;
-                }
-            }, 5000);
-        });
-    </script>
-
-    <!-- Modal for Specific Reports -->
-    <div id="specificReportModal" class="modal">
-        <div class="modal-content">
-            <button class="close-btn" onclick="closeModal('specificReportModal')">×</button>
-            <h2 class="font-heading">
-                <i class="fas fa-file-alt mr-2 text-secondary"></i>
-                Selecionar Tipo de Relatório
-            </h2>
-            <form id="specificReportForm" action="../controllers/controller_relatorios.php" method="POST" class="space-y-4">
-                <input type="hidden" name="form" value="relatorio_pdf">
-                <div class="form-group">
-                    <label for="specific_report_type" class="font-semibold">
-                        <i class="fas fa-list mr-1"></i>
-                        Tipo de Relatório
-                    </label>
-                    <select name="tipo_relatorio" id="specific_report_type" required class="select2-specific">
-                        <option value="" disabled selected>SELECIONAR TIPO DE RELATÓRIO</option>
-                        <option value="comissao_selecao">Comissão de Seleção</option>
-                        <option value="movimentacoes">Movimentações</option>
-                        <option value="requisicoes">Requisições</option>
-                        <option value="can_desabilitados">Candidatos Desabilitados</option>
-                    </select>
-                </div>
-
-                <!-- Campo de usuário (visível apenas para relatório de movimentações) -->
-                <div id="userSelectContainer" class="form-group mt-4" style="display: none;">
-                    <label for="user_id" class="font-semibold">
-                        <i class="fas fa-user mr-1"></i>
-                        Selecionar Usuário
-                    </label>
-                    <select name="user_id" id="user_id" class="select2-user">
-                        <option value="" disabled selected>SELECIONAR USUÁRIO</option>
-                        <?php
-                        $usuarios = $select->select_usuarios();
-                        foreach ($usuarios as $user) { ?>
-                            <option value="<?= htmlspecialchars(
-                                $user["id"],
-                            ) ?>"><?= htmlspecialchars(
-    $user["nome_user"],
-) ?></option>
-                        <?php }
-                        ?>
-                    </select>
-                </div>
-
-                <button type="submit" class="confirm-btn w-full">
-                    <i class="fas fa-file-pdf mr-2"></i>
-                    Gerar Relatório
-                </button>
-            </form>
-        </div>
-    </div>
 </body>
 </html>

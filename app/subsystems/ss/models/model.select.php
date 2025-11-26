@@ -345,6 +345,36 @@ class select extends connect
         }
     }
 
+    public function countTotalPublicos() {
+        try {
+            $stmt = $this->connect->query("SELECT COUNT(*) as total FROM $this->table1 WHERE publica = 1 AND status = 1");
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $result['total'] ?? 0;
+        } catch (PDOException $e) {
+            return 0;
+        }
+    }
+
+    public function countTotalPrivados() {
+        try {
+            $stmt = $this->connect->query("SELECT COUNT(*) as total FROM $this->table1 WHERE publica = 0 AND status = 1");
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $result['total'] ?? 0;
+        } catch (PDOException $e) {
+            return 0;
+        }
+    }
+
+    public function countTotalPCDs() {
+        try {
+            $stmt = $this->connect->query("SELECT COUNT(*) as total FROM $this->table1 WHERE pcd = 1 AND status = 1");
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $result['total'] ?? 0;
+        } catch (PDOException $e) {
+            return 0;
+        }
+    }
+
     public function countTotalRelatorios() {
         try {
             $stmt = $this->connect->query("SELECT COUNT(*) as total FROM $this->table14 WHERE status IN ('Pendente', 'Concluido', 'Recusado')");

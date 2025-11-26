@@ -68,10 +68,10 @@ class relatorios extends connect
         $nome_relatorio = 'COMISSÃO DE SELEÇÃO';
         $count = mb_strlen($nome_relatorio);
         $pdf->Cell(55, 4, $nome_relatorio, 0, 1, 'L');
-        $pdf->SetFillColor(255,165,0);
+        $pdf->SetFillColor(255, 165, 0);
         $pdf->SetY(16);
-        $pdf->SetX(9 );
-        $pdf->Cell(3.9*$count, 1.2, '', 0, 1, 'L', true);
+        $pdf->SetX(9);
+        $pdf->Cell(3.9 * $count, 1.2, '', 0, 1, 'L', true);
 
         // Table Header
         $pdf->SetFont('Arial', 'B', 10);
@@ -101,13 +101,8 @@ class relatorios extends connect
         $y_position += 7;
         $pdf->SetFont('Arial', '', 8);
 
-        if (empty($dados_ativo)) {
-            $pdf->SetY($y_position);
-            $pdf->SetX(8);
-            $pdf->SetFillColor(0, 90, 36); // Green background for empty message
-            $pdf->Cell(200, 7, strtoupper('NENHUM USUÁRIO ATIVO ENCONTRADO'), 1, 1, 'C', true);
-            $y_position += 7;
-        } else {
+        if (!empty($dados_ativo)) {
+
             $valor = 1;
             foreach ($dados_ativo as $dado) {
                 $pdf->SetFillColor(255, 255, 255);
@@ -147,13 +142,8 @@ class relatorios extends connect
         $y_position += 7;
         $pdf->SetTextColor(0, 0, 0); // Black text
         $pdf->SetFont('Arial', '', 8);
-        if (empty($dados_desativado)) {
-            $pdf->SetY($y_position);
-            $pdf->SetX(8);
-            $pdf->SetFillColor(0, 90, 36); // Green background for empty message
-            $pdf->Cell(190, 7, strtoupper('NENHUM USUÁRIO DESATIVADO ENCONTRADO'), 1, 1, 'C', true);
-            $y_position += 7;
-        } else {
+        if (!empty($dados_desativado)) {
+
             $valor = 1;
             foreach ($dados_desativado as $dado) {
                 $cor = $valor % 2 ? 255 : 192; // Alternate row colors
