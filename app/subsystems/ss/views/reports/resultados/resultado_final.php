@@ -15,8 +15,14 @@ class PDF extends FPDF
     function AddPage($orientation = '', $size = '', $rotation = 0)
     {
         parent::AddPage($orientation, $size, $rotation);
-        $this->Image('../../../assets/imgs/fundo5_pdf.png', 0, 0,
-                     $this->GetPageWidth(), $this->GetPageHeight(), 'png');
+        $this->Image(
+            '../../../assets/imgs/fundo5_pdf.png',
+            0,
+            0,
+            $this->GetPageWidth(),
+            $this->GetPageHeight(),
+            'png'
+        );
     }
 }
 
@@ -29,7 +35,6 @@ class relatorios extends connect
     protected string $table5;
     protected string $table13;
 
-    // dados que serão impressos depois do segmento PCD
     public $data_hora_pdf;
     public $bairros_texto_pdf;
 
@@ -47,18 +52,29 @@ class relatorios extends connect
 
     public function gerarRelatorio($curso, $tipo_relatorio = 'TODOS')
     {
-        /* ---------- CONFIGURAÇÕES DE LAYOUT ---------- */
         if ((isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin')) {
-            $celula_cl = 10; $celula_nome = 93; $celula_curso = 30;
-            $celula_origem = 20; $celula_segmento = 20; $celula_media = 15;
-            $altura_celula = 5; $p = 0; $orientacao = 'P';
+            $celula_cl = 10;
+            $celula_nome = 70;
+            $celula_curso = 25;
+            $celula_origem = 18;
+            $celula_segmento = 18;
+            $celula_media = 15;
+            $celula_status = 32;
+            $altura_celula = 5;
+            $orientacao = 'P';
         } else if ((isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'cadastrador')) {
-            $celula_cl = 10; $celula_nome = 93; $celula_curso = 30;
-            $celula_origem = 20; $celula_segmento = 20; $celula_media = 15;
-            $altura_celula = 5; $p = 1; $orientacao = 'P';
+            $celula_cl = 10;
+            $celula_nome = 70;
+            $celula_curso = 25;
+            $celula_origem = 18;
+            $celula_segmento = 18;
+            $celula_media = 15;
+            $celula_status = 32;
+            $altura_celula = 5;
+            $orientacao = 'P';
         }
 
-        /* ---------- CÁLCULO DE VAGAS ---------- */
+        // ---------- CÁLCULO DE VAGAS ----------
         $stmtSelect_vagas = $this->connect->prepare(
             "SELECT quantidade_alunos FROM $this->table2 WHERE id = :id_curso"
         );
@@ -79,295 +95,220 @@ class relatorios extends connect
         $publica_ac = round($total_publica * 0.7);
         $privada_ac = round($total_privada * 0.7);
 
-        /* ---------- CONSULTAS POR SEGMENTO ---------- */
-        $classificados = [];
+        // ---------- CONSULTAS POR SEGMENTO ----------
+        $todos_candidatos = [];
 
-        // PÚBLICA - AC
-        $stmt = $this->connect->prepare(
-            "SELECT can.nome, cur.nome_curso, can.publica, can.bairro, can.pcd, m.media_final
-             FROM $this->table1 can
-             INNER JOIN $this->table4 m ON m.id_candidato = can.id
-             INNER JOIN $this->table2 cur ON can.id_curso1 = cur.id
-             WHERE can.id_curso1 = :curso AND can.publica = 1 AND can.pcd = 0 AND can.bairro = 0 AND status = 1
-             ORDER BY m.media_final DESC, can.data_nascimento DESC, m.l_portuguesa_media DESC, m.matematica_media DESC"
-        );
-        $stmt->bindValue(':curso', $curso);
-        $stmt->execute();
-        $classificados['publica_ac'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $queries = [
+            'publica_ac' => "SELECT can.id, can.nome, cur.nome_curso, can.publica, can.bairro, can.pcd, m.media_final
+                             FROM $this->table1 can
+                             INNER JOIN $this->table4 m ON m.id_candidato = can.id
+                             INNER JOIN $this->table2 cur ON can.id_curso1 = cur.id
+                             WHERE can.id_curso1 = :curso AND can.publica = 1 AND can.pcd = 0 AND can.bairro = 0 AND status = 1
+                             ORDER BY m.media_final DESC, can.data_nascimento DESC",
+            'publica_cotas' => "SELECT can.id, can.nome, cur.nome_curso, can.publica, can.bairro, can.pcd, m.media_final
+                                FROM $this->table1 can
+                                INNER JOIN $this->table4 m ON m.id_candidato = can.id
+                                INNER JOIN $this->table2 cur ON can.id_curso1 = cur.id
+                                WHERE can.id_curso1 = :curso AND can.publica = 1 AND can.pcd = 0 AND can.bairro = 1 AND status = 1
+                                ORDER BY m.media_final DESC, can.data_nascimento DESC",
+            'pcd_publica' => "SELECT can.id, can.nome, cur.nome_curso, can.publica, can.bairro, can.pcd, m.media_final
+                              FROM $this->table1 can
+                              INNER JOIN $this->table4 m ON m.id_candidato = can.id
+                              INNER JOIN $this->table2 cur ON can.id_curso1 = cur.id
+                              WHERE can.id_curso1 = :curso AND can.publica = 1 AND can.pcd = 1 AND status = 1
+                              ORDER BY m.media_final DESC, can.data_nascimento DESC",
+            'privada_ac' => "SELECT can.id, can.nome, cur.nome_curso, can.publica, can.bairro, can.pcd, m.media_final
+                             FROM $this->table1 can
+                             INNER JOIN $this->table4 m ON m.id_candidato = can.id
+                             INNER JOIN $this->table2 cur ON can.id_curso1 = cur.id
+                             WHERE can.id_curso1 = :curso AND can.publica = 0 AND can.pcd = 0 AND can.bairro = 0 AND status = 1
+                             ORDER BY m.media_final DESC, can.data_nascimento DESC",
+            'privada_cotas' => "SELECT can.id, can.nome, cur.nome_curso, can.publica, can.bairro, can.pcd, m.media_final
+                                 FROM $this->table1 can
+                                 INNER JOIN $this->table4 m ON m.id_candidato = can.id
+                                 INNER JOIN $this->table2 cur ON can.id_curso1 = cur.id
+                                 WHERE can.id_curso1 = :curso AND can.publica = 0 AND can.pcd = 0 AND can.bairro = 1 AND status = 1
+                                 ORDER BY m.media_final DESC, can.data_nascimento DESC",
+            'pcd_privada' => "SELECT can.id, can.nome, cur.nome_curso, can.publica, can.bairro, can.pcd, m.media_final
+                              FROM $this->table1 can
+                              INNER JOIN $this->table4 m ON m.id_candidato = can.id
+                              INNER JOIN $this->table2 cur ON can.id_curso1 = cur.id
+                              WHERE can.id_curso1 = :curso AND can.publica = 0 AND can.pcd = 1 AND status = 1
+                              ORDER BY m.media_final DESC, can.data_nascimento DESC"
+        ];
 
-        // PÚBLICA - COTA
-        $stmt = $this->connect->prepare(
-            "SELECT can.nome, cur.nome_curso, can.publica, can.bairro, can.pcd, m.media_final
-             FROM $this->table1 can
-             INNER JOIN $this->table4 m ON m.id_candidato = can.id
-             INNER JOIN $this->table2 cur ON can.id_curso1 = cur.id
-             WHERE can.id_curso1 = :curso AND can.publica = 1 AND can.pcd = 0 AND can.bairro = 1 AND status = 1
-             ORDER BY m.media_final DESC, can.data_nascimento DESC, m.l_portuguesa_media DESC, m.matematica_media DESC"
-        );
-        $stmt->bindValue(':curso', $curso);
-        $stmt->execute();
-        $classificados['publica_cotas'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($queries as $key => $sql) {
+            $stmt = $this->connect->prepare($sql);
+            $stmt->bindValue(':curso', $curso);
+            $stmt->execute();
+            $todos_candidatos[$key] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
 
-        // PCD - PÚBLICA
-        $stmt = $this->connect->prepare(
-            "SELECT can.nome, cur.nome_curso, can.publica, can.bairro, can.pcd, m.media_final
-             FROM $this->table1 can
-             INNER JOIN $this->table4 m ON m.id_candidato = can.id
-             INNER JOIN $this->table2 cur ON can.id_curso1 = cur.id
-             WHERE can.id_curso1 = :curso AND can.publica = 1 AND can.pcd = 1 AND can.bairro = 0 AND status = 1
-             ORDER BY m.media_final DESC, can.data_nascimento DESC, m.l_portuguesa_media DESC, m.matematica_media DESC"
-        );
-        $stmt->bindValue(':curso', $curso);
-        $stmt->execute();
-        $classificados['pcd_publica'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        // PRIVADA - AC
-        $stmt = $this->connect->prepare(
-            "SELECT can.nome, cur.nome_curso, can.publica, can.bairro, can.pcd, m.media_final
-             FROM $this->table1 can
-             INNER JOIN $this->table4 m ON m.id_candidato = can.id
-             INNER JOIN $this->table2 cur ON can.id_curso1 = cur.id
-             WHERE can.id_curso1 = :curso AND can.publica = 0 AND can.pcd = 0 AND can.bairro = 0 AND status = 1
-             ORDER BY m.media_final DESC, can.data_nascimento DESC, m.l_portuguesa_media DESC, m.matematica_media DESC"
-        );
-        $stmt->bindValue(':curso', $curso);
-        $stmt->execute();
-        $classificados['privada_ac'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        // PRIVADA - COTA
-        $stmt = $this->connect->prepare(
-            "SELECT can.nome, cur.nome_curso, can.publica, can.bairro, can.pcd, m.media_final
-             FROM $this->table1 can
-             INNER JOIN $this->table4 m ON m.id_candidato = can.id
-             INNER JOIN $this->table2 cur ON can.id_curso1 = cur.id
-             WHERE can.id_curso1 = :curso AND can.publica = 0 AND can.pcd = 0 AND can.bairro = 1 AND status = 1
-             ORDER BY m.media_final DESC, can.data_nascimento DESC, m.l_portuguesa_media DESC, m.matematica_media DESC"
-        );
-        $stmt->bindValue(':curso', $curso);
-        $stmt->execute();
-        $classificados['privada_cotas'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        // PCD - PRIVADA
-        $stmt = $this->connect->prepare(
-            "SELECT can.nome, cur.nome_curso, can.publica, can.bairro, can.pcd, m.media_final
-             FROM $this->table1 can
-             INNER JOIN $this->table4 m ON m.id_candidato = can.id
-             INNER JOIN $this->table2 cur ON can.id_curso1 = cur.id
-             WHERE can.id_curso1 = :curso AND can.publica = 0 AND can.pcd = 1 AND can.bairro = 0 AND status = 1
-             ORDER BY m.media_final DESC, can.data_nascimento DESC, m.l_portuguesa_media DESC, m.matematica_media DESC"
-        );
-        $stmt->bindValue(':curso', $curso);
-        $stmt->execute();
-        $classificados['pcd_privada'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        /* ---------- REDISTRIBUIÇÃO DE VAGAS ---------- */
+        // ---------- REDISTRIBUIÇÃO DE VAGAS ----------
         $vagas_ocupadas = [];
+        $ids_classificados = [];
 
-        // PCD (2 vagas)
-        $total_pcd = array_merge($classificados['pcd_publica'], $classificados['pcd_privada']);
-        usort($total_pcd, fn($a,$b) => $b['media_final'] <=> $a['media_final']);
+        $total_pcd = array_merge($todos_candidatos['pcd_publica'], $todos_candidatos['pcd_privada']);
+        usort($total_pcd, fn($a, $b) => $b['media_final'] <=> $a['media_final']);
         $vagas_ocupadas['pcd'] = array_slice($total_pcd, 0, $vagas_pcd);
-        $vagas_sobra_pcd = $vagas_pcd - count($vagas_ocupadas['pcd']);
+        foreach ($vagas_ocupadas['pcd'] as $cand) $ids_classificados[] = $cand['id'];
 
-        // COTAS PÚBLICA
-        $vagas_ocupadas['publica_cotas'] = array_slice($classificados['publica_cotas'], 0, $publica_cotas);
-        $vagas_sobra_publica_cotas = $publica_cotas - count($vagas_ocupadas['publica_cotas']);
+        $vagas_ocupadas['publica_cotas'] = array_slice($todos_candidatos['publica_cotas'], 0, $publica_cotas);
+        foreach ($vagas_ocupadas['publica_cotas'] as $cand) $ids_classificados[] = $cand['id'];
 
-        // COTAS PRIVADA
-        $vagas_ocupadas['privada_cotas'] = array_slice($classificados['privada_cotas'], 0, $privada_cotas);
-        $vagas_sobra_privada_cotas = $privada_cotas - count($vagas_ocupadas['privada_cotas']);
+        $vagas_ocupadas['privada_cotas'] = array_slice($todos_candidatos['privada_cotas'], 0, $privada_cotas);
+        foreach ($vagas_ocupadas['privada_cotas'] as $cand) $ids_classificados[] = $cand['id'];
 
-        // AC PÚBLICA (sobra PCD + sobra cota pública)
-        $limite_publica_ac = $publica_ac + $vagas_sobra_publica_cotas + $vagas_sobra_pcd;
-        $vagas_ocupadas['publica_ac'] = array_slice($classificados['publica_ac'], 0, round($limite_publica_ac));
+        $limite_publica_ac = $publica_ac + ($publica_cotas - count($vagas_ocupadas['publica_cotas'])) + ($vagas_pcd - count($vagas_ocupadas['pcd']));
+        $vagas_ocupadas['publica_ac'] = array_slice($todos_candidatos['publica_ac'], 0, $limite_publica_ac);
+        foreach ($vagas_ocupadas['publica_ac'] as $cand) $ids_classificados[] = $cand['id'];
 
-        // AC PRIVADA (sobra cota privada)
-        $limite_privada_ac = $privada_ac + $vagas_sobra_privada_cotas;
-        $vagas_ocupadas['privada_ac'] = array_slice($classificados['privada_ac'], 0, round($limite_privada_ac));
+        $limite_privada_ac = $privada_ac + ($privada_cotas - count($vagas_ocupadas['privada_cotas']));
+        $vagas_ocupadas['privada_ac'] = array_slice($todos_candidatos['privada_ac'], 0, $limite_privada_ac);
+        foreach ($vagas_ocupadas['privada_ac'] as $cand) $ids_classificados[] = $cand['id'];
 
-        /* ---------- INÍCIO DO PDF ---------- */
+        // ---------- DATA/HORA E BAIRROS ----------
+        date_default_timezone_set('America/Fortaleza');
+        $this->data_hora_pdf = date('d/m/Y H:i:s');
+
+        $stmt_bairros = $this->connect->query("SELECT bairros FROM $this->table13 ORDER BY id LIMIT 5");
+        $bairros = $stmt_bairros->fetchAll(PDO::FETCH_COLUMN);
+        $this->bairros_texto_pdf = implode(' | ', array_map('strtoupper', $bairros));
+
+        // ---------- INÍCIO DO PDF ----------
         $pdf = new PDF($orientacao, 'mm', 'A4');
         $pdf->AddPage();
 
-        date_default_timezone_set('America/Fortaleza');
-        $pdf->SetFont('Arial','B',13);
+        // Nome da escola
+        $pdf->SetFont('Arial', 'B', 13);
         $pdf->SetY(3);
-        $pdf->Cell(4,4,$_SESSION['nome_escola'],0,0,'L');
+        $pdf->Cell(0, 6, $_SESSION['nome_escola'], 0, 1, 'L');
 
-        // TÍTULO PRINCIPAL
-        $pdf->SetFont('Arial','B',20);
+        // Título principal
+        $pdf->SetFont('Arial', 'B', 20);
         $pdf->SetY(8);
         $pdf->SetX(8.5);
-        $pdf->Cell(22,8,mb_convert_encoding('RESULTADO FINAL','ISO-8859-1','UTF-8'),0,1,'L');
+        $pdf->Cell(0, 8, mb_convert_encoding('RESULTADO FINAL', 'ISO-8859-1', 'UTF-8'), 0, 1, 'L');
 
-        // LEGENDAS (PCD | COTISTA | AC) – posição onde antes ficavam os bairros
-        $pdf->SetY(20);
+        // Data e hora
+        $pdf->SetY(8);
+        $pdf->SetX(-70);
+        $pdf->SetFont('Arial', 'B', 11);
+        $pdf->Cell(0, 8, $this->data_hora_pdf, 0, 0, 'R');
+
+        // Legendas
+        $pdf->SetY(18);
         $pdf->SetX(8.5);
-        $pdf->SetFont('Arial','B',8);
-        $pdf->SetTextColor(255,174,25);
-        $pdf->Cell(20,6,mb_convert_encoding('PCD:','ISO-8859-1','UTF-8'),0,0,'L');
-        $pdf->SetTextColor(0,90,36);
-        $pdf->SetFont('Arial','',8);
+        $pdf->SetFont('Arial', 'B', 8);
+        $pdf->SetTextColor(255, 174, 25);
+        $pdf->Cell(20, 6, 'PCD:', 0, 0, 'L');
+        $pdf->SetTextColor(0, 90, 36);
+        $pdf->SetFont('Arial', '', 8);
         $pdf->SetX(16);
-        $pdf->Cell(70,6,mb_convert_encoding('PESSOA COM DEFICIÊNCIA  |','ISO-8859-1','UTF-8'),0,0,'L');
+        $pdf->Cell(70, 6, mb_convert_encoding('PESSOA COM DEFICIÊNCIA  |', 'ISO-8859-1', 'UTF-8'), 0, 0, 'L');
 
         $pdf->SetX(58);
-        $pdf->SetFont('Arial','B',8);
-        $pdf->SetTextColor(255,174,25);
-        $pdf->Cell(25,6,mb_convert_encoding('COTISTA:','ISO-8859-1','UTF-8'),0,0,'L');
-        $pdf->SetTextColor(0,90,36);
-        $pdf->SetFont('Arial','',8);
+        $pdf->SetFont('Arial', 'B', 8);
+        $pdf->SetTextColor(255, 174, 25);
+        $pdf->Cell(25, 6, 'COTISTA:', 0, 0, 'L');
+        $pdf->SetTextColor(0, 90, 36);
+        $pdf->SetFont('Arial', '', 8);
         $pdf->SetX(72);
-        $pdf->Cell(70,6,mb_convert_encoding('COTA DO BAIRRO  |','ISO-8859-1','UTF-8'),0,0,'L');
+        $pdf->Cell(70, 6, mb_convert_encoding('COTA DO BAIRRO  |', 'ISO-8859-1', 'UTF-8'), 0, 0, 'L');
 
         $pdf->SetX(101);
-        $pdf->SetFont('Arial','B',8);
-        $pdf->SetTextColor(255,174,25);
-        $pdf->Cell(15,6,mb_convert_encoding('AC:','ISO-8859-1','UTF-8'),0,0,'L');
-        $pdf->SetTextColor(0,90,36);
-        $pdf->SetFont('Arial','',8);
+        $pdf->SetFont('Arial', 'B', 8);
+        $pdf->SetTextColor(255, 174, 25);
+        $pdf->Cell(15, 6, 'AC:', 0, 0, 'L');
+        $pdf->SetTextColor(0, 90, 36);
+        $pdf->SetFont('Arial', '', 8);
         $pdf->SetX(107);
-        $pdf->Cell(0,6,mb_convert_encoding('AMPLA CONCORRÊNCIA','ISO-8859-1','UTF-8'),0,1,'L');
+        $pdf->Cell(0, 6, mb_convert_encoding('AMPLA CONCORRÊNCIA', 'ISO-8859-1', 'UTF-8'), 0, 1, 'L');
 
-        $pdf->SetLeftMargin(10);
-        $pdf->SetTextColor(0,0,0);
-        $pdf->Cell(185,10,'',0,1,'C');
+        // Bairros da cota
+        $pdf->SetX(8.5);
+        $pdf->SetFont('Arial', 'B', 8);
+        $pdf->SetTextColor(255, 174, 25);
+        $pdf->Cell(35, 5, mb_convert_encoding('BAIRROS DA COTA:', 'ISO-8859-1', 'UTF-8'), 0, 0, 'L');
+        $pdf->SetTextColor(0, 90, 36);
+        $pdf->SetFont('Arial', '', 8);
+        $pdf->SetX(39);
+        $pdf->Cell(0, 5, $this->bairros_texto_pdf, 0, 1, 'L');
 
-        // PREPARA DATA/HORA E BAIRROS (serão impressos depois do segmento PCD)
-        $stmt_bairros = $this->connect->query("SELECT * FROM $this->table13");
-        $dados_bairros = $stmt_bairros->fetchAll(PDO::FETCH_ASSOC);
-        $bairros_para_mostrar = array_slice($dados_bairros, 0, 5);
-        $bairros_texto = '';
-        foreach ($bairros_para_mostrar as $i => $b) {
-            $bairro = strtoupper(mb_convert_encoding($b['bairros'],'ISO-8859-1','UTF-8'));
-            $bairros_texto .= ($i < count($bairros_para_mostrar)-1) ? $bairro.' | ' : $bairro;
-        }
-        $this->data_hora_pdf     = date('d/m/Y H:i:s');
-        $this->bairros_texto_pdf = $bairros_texto;
+        // Linha separadora verde
+        $pdf->SetDrawColor(0, 90, 36);
+        $pdf->SetLineWidth(0.8);
+        $pdf->Line(10, $pdf->GetY() + 3, 200, $pdf->GetY() + 3);
+        $pdf->SetLineWidth(0.2);
+        $pdf->Ln(8);
 
-        /* ---------- IMPRESSÃO DOS SEGMENTOS ---------- */
+        // Bordas sempre pretas
+        $pdf->SetDrawColor(0, 0, 0);
+
+        // ---------- IMPRESSÃO DOS SEGMENTOS ----------
         $segmentos = [
-            ['titulo'=>'PÚBLICA - AC',      'dados'=>$vagas_ocupadas['publica_ac']],
-            ['titulo'=>'PÚBLICA - COTA',    'dados'=>$vagas_ocupadas['publica_cotas']],
-            ['titulo'=>'PCD',               'dados'=>$vagas_ocupadas['pcd']],
-            ['titulo'=>'PRIVADA - AC',      'dados'=>$vagas_ocupadas['privada_ac']],
-            ['titulo'=>'PRIVADA - COTA',    'dados'=>$vagas_ocupadas['privada_cotas']]
+            ['titulo' => 'PÚBLICA - AC',      'dados' => $todos_candidatos['publica_ac']],
+            ['titulo' => 'PÚBLICA - COTA',    'dados' => $todos_candidatos['publica_cotas']],
+            ['titulo' => 'PCD',               'dados' => $total_pcd],
+            ['titulo' => 'PRIVADA - AC',      'dados' => $todos_candidatos['privada_ac']],
+            ['titulo' => 'PRIVADA - COTA',    'dados' => $todos_candidatos['privada_cotas']]
         ];
 
-        $primeira_pagina = true;
-        $bairros_exibidos = false;
+        $pdf->SetLeftMargin(10);
+        $pdf->SetTextColor(0, 0, 0);
+
         foreach ($segmentos as $seg) {
-            $titulo = $seg['titulo'];
-            $dados  = $seg['dados'];
-            if (empty($dados)) continue;
+            if (empty($seg['dados'])) continue;
 
-            // Verificar se precisa exibir bairros antes de criar nova página
-            $y_atual = $pdf->GetY();
-            $linhas = count($dados) + 2;
-            $espaco = $linhas * $altura_celula + 10;
-            
-            // Se está na primeira página e próximo ao final, exibir bairros antes de criar nova página
-            if ($primeira_pagina && ($y_atual + $espaco > 250) && !$bairros_exibidos) {
-                // Exibir bairros no final da primeira página
-                $pdf->SetY(260);
-                $pdf->SetX(8.5);
-                
-                // Data/Hora à direita
-                $pdf->SetTextColor(0,0,0);
-                $pdf->SetFont('Arial','',10);
-                $pdf->Cell(0,5,$this->data_hora_pdf,0,1,'R');
-                
-                // Bairros
-                $pdf->SetFont('Arial','B',8);
-                $pdf->SetTextColor(255,174,25);
-                $pdf->SetX(8.5);
-                $pdf->Cell(35,5,mb_convert_encoding('BAIRROS DA COTA:','ISO-8859-1','UTF-8'),0,0,'L');
-                $pdf->SetTextColor(0,90,36);
-                $pdf->SetFont('Arial','',8);
-                $pdf->SetX(39);
-                $pdf->Cell(0,5,$this->bairros_texto_pdf,0,1,'L');
-                $bairros_exibidos = true;
-                
-                // Criar nova página após exibir bairros
-                $pdf->AddPage();
-                $primeira_pagina = false;
-            } else if ($espaco > $pdf->GetPageHeight() - $y_atual - 10) {
-                $pdf->AddPage();
-                $primeira_pagina = false;
-                $pdf->SetY(10);
-            }
+            // Título do segmento - Verde com texto branco
+            $pdf->SetFont('Arial', 'B', 12);
+            $pdf->SetFillColor(0, 90, 36);
+            $pdf->SetTextColor(255, 255, 255);
+            $pdf->Cell(188, 7, mb_convert_encoding($seg['titulo'], 'ISO-8859-1', 'UTF-8'), 1, 1, 'C', true);
 
-            // Título do segmento
-            $pdf->SetFont('Arial','B',12);
-            $pdf->SetFillColor(0,90,36);
-            $pdf->SetTextColor(255,255,255);
-            $pdf->Cell(188,5,mb_convert_encoding($titulo,'ISO-8859-1','UTF-8'),1,1,'C',true);
+            // Cabeçalho da tabela - Verde com texto branco
+            $pdf->SetFont('Arial', 'B', 10);
+            $pdf->SetFillColor(0, 90, 36);
+            $pdf->SetTextColor(255, 255, 255);
+            $pdf->Cell($celula_cl, $altura_celula + 1, 'CL', 1, 0, 'C', true);
+            $pdf->Cell($celula_nome, $altura_celula + 1, 'NOME', 1, 0, 'C', true);
+            $pdf->Cell($celula_curso, $altura_celula + 1, 'CURSO', 1, 0, 'C', true);
+            $pdf->Cell($celula_origem, $altura_celula + 1, 'SEGM.', 1, 0, 'C', true);
+            $pdf->Cell($celula_segmento, $altura_celula + 1, 'ORIGEM', 1, 0, 'C', true);
+            $pdf->Cell($celula_media, $altura_celula + 1, mb_convert_encoding('MÉDIA', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
+            $pdf->Cell($celula_status, $altura_celula + 1, 'STATUS', 1, 1, 'C', true);
 
-            // Cabeçalho da tabela
-            $pdf->SetFont('Arial','B',10);
-            $pdf->SetFillColor(0,90,36);
-            $pdf->SetTextColor(255,255,255);
-            $pdf->Cell($celula_cl,      $altura_celula,'CL',1,0,'C',true);
-            $pdf->Cell($celula_nome,    $altura_celula,'NOME',1,0,'C',true);
-            $pdf->Cell($celula_curso,   $altura_celula,'CURSO',1,0,'C',true);
-            $pdf->Cell($celula_origem,  $altura_celula,'SEGM.',1,0,'C',true);
-            $pdf->Cell($celula_segmento,$altura_celula,'ORIGEM',1,0,'C',true);
-            $pdf->Cell($celula_media,   $altura_celula,'MEDIA',1,1,'C',true);
-
-            // Linhas de dados
-            $pdf->SetTextColor(0,0,0);
-            $pdf->SetFont('Arial','',8);
+            // Linhas de dados - Zebrado cinza claro / branco
+            $pdf->SetTextColor(0, 0, 0);
+            $pdf->SetFont('Arial', '', 8);
             $class = 1;
-            foreach ($dados as $row) {
-                $origem = $row['publica'] ? mb_convert_encoding('PÚBLICA','ISO-8859-1','UTF-8')
-                                          : mb_convert_encoding('PRIVADA','ISO-8859-1','UTF-8');
 
-                // operador ternário com parênteses (linha 317)
-                $cota = $row['pcd'] ? mb_convert_encoding('PCD','ISO-8859-1','UTF-8')
-                         : ( $row['bairro'] ? mb_convert_encoding('COTISTA','ISO-8859-1','UTF-8')
-                                           : mb_convert_encoding('AC','ISO-8859-1','UTF-8') );
+            foreach ($seg['dados'] as $row) {
+                $origem = $row['publica'] ? 'PÚBLICA' : 'PRIVADA';
+                $cota   = $row['pcd'] ? 'PCD' : ($row['bairro'] ? 'COTISTA' : 'AC');
+                $status = in_array($row['id'], $ids_classificados) ? 'CLASSIFICADO' : 'CLASSIFICÁVEL';
 
-                $pdf->SetFillColor($class%2 ? 255 : 192, $class%2 ? 255 : 192, $class%2 ? 255 : 192);
+                // Zebrado: linha par = cinza claro, ímpar = branco
+                if ($class % 2 == 0) {
+                    $pdf->SetFillColor(240, 240, 240); // cinza claro
+                } else {
+                    $pdf->SetFillColor(255, 255, 255); // branco
+                }
 
-                $pdf->Cell($celula_cl,      $altura_celula,sprintf('%03d',$class),1,0,'C',true);
-                $pdf->Cell($celula_nome,    $altura_celula,mb_convert_encoding(mb_strtoupper($row['nome'],'UTF-8'),'ISO-8859-1','UTF-8'),1,0,'L',true);
-                $pdf->Cell($celula_curso,   $altura_celula,mb_convert_encoding(mb_strtoupper($row['nome_curso'],'UTF-8'),'ISO-8859-1','UTF-8'),1,0,'L',true);
-                $pdf->Cell($celula_origem,  $altura_celula,$cota,1,0,'C',true);
-                $pdf->Cell($celula_segmento,$altura_celula,$origem,1,0,'L',true);
-                $pdf->Cell($celula_media,   $altura_celula,number_format($row['media_final'],2),1,1,'C',true);
+                $pdf->Cell($celula_cl, $altura_celula, sprintf('%03d', $class), 1, 0, 'C', true);
+                $pdf->Cell($celula_nome, $altura_celula, mb_convert_encoding(mb_strtoupper($row['nome']), 'ISO-8859-1', 'UTF-8'), 1, 0, 'L', true);
+                $pdf->Cell($celula_curso, $altura_celula, mb_convert_encoding(mb_strtoupper($row['nome_curso']), 'ISO-8859-1', 'UTF-8'), 1, 0, 'L', true);
+                $pdf->Cell($celula_origem, $altura_celula, mb_convert_encoding($cota, 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
+                $pdf->Cell($celula_segmento, $altura_celula, mb_convert_encoding($origem, 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
+                $pdf->Cell($celula_media, $altura_celula, number_format($row['media_final'], 2), 1, 0, 'C', true);
+                $pdf->Cell($celula_status, $altura_celula, mb_convert_encoding($status, 'ISO-8859-1', 'UTF-8'), 1, 1, 'C', true);
+
                 $class++;
             }
-
-            $pdf->Ln(10);
-        }
-        
-        // Se ainda estamos na primeira página e não exibimos os bairros, exibir no final
-        if ($primeira_pagina && !$bairros_exibidos) {
-            $y_atual = $pdf->GetY();
-            if ($y_atual < 260) {
-                $pdf->SetY(260);
-            } else {
-                $pdf->SetY($y_atual + 5);
-            }
-            $pdf->SetX(8.5);
-            
-            // Data/Hora à direita
-            $pdf->SetTextColor(0,0,0);
-            $pdf->SetFont('Arial','',10);
-            $pdf->Cell(0,5,$this->data_hora_pdf,0,1,'R');
-            
-            // Bairros
-            $pdf->SetFont('Arial','B',8);
-            $pdf->SetTextColor(255,174,25);
-            $pdf->SetX(8.5);
-            $pdf->Cell(35,5,mb_convert_encoding('BAIRROS DA COTA:','ISO-8859-1','UTF-8'),0,0,'L');
-            $pdf->SetTextColor(0,90,36);
-            $pdf->SetFont('Arial','',8);
-            $pdf->SetX(39);
-            $pdf->Cell(0,5,$this->bairros_texto_pdf,0,1,'L');
+            $pdf->Ln(5);
         }
 
-        $pdf->Output('resultado_final.pdf','I');
+        $pdf->Output('I', 'resultado_final.pdf');
     }
 }
 

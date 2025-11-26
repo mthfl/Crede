@@ -62,9 +62,12 @@ if (
         case 'movimentacoes':
             header("location:../views/reports/movimentacoes.php?id_usuario=" . $id_usuario);
             exit();
-            case 'requisicoes':
-                header("location:../views/reports/requisicoes.php?usuarios");
-                exit();
+        case 'requisicoes':
+            header("location:../views/reports/requisicoes.php?usuarios");
+            exit();
+        case 'can_desabilitados':
+            header("location:../views/reports/candidatos_desabilitados.php?usuarios");
+            exit();
         default:
             header("location: ../index.php");
             exit();

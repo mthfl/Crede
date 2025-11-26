@@ -525,7 +525,7 @@ $usuarios = $select->select_usuarios();
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                             </svg>
                         </div>
-                    
+
                         <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
                             <a href="candidatos_excluidos.php" class="bg-primary text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl hover:bg-dark transition-all duration-300 font-medium text-sm btn-animate focus-ring flex items-center shadow hover:shadow-lg">
                                 <svg class="w-4 h-4 mr-1.5 sm:mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -586,7 +586,7 @@ $usuarios = $select->select_usuarios();
 
                                 <?php
 
-                                
+
                                 foreach ($candidatos_ativos as $cand) {
                                     $id = $cand['id'] ?? '-';
                                     $nome = $cand['nome'] ?? '-';
@@ -818,42 +818,48 @@ $usuarios = $select->select_usuarios();
     <!-- Modal Confirmar Desativação -->
     <div id="modalInactivateConfirm" class="fixed inset-0 bg-black/60 backdrop-blur-md hidden items-center justify-center p-2 sm:p-4 z-50">
         <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl transform transition-all duration-300 scale-95 opacity-0" id="modalInactivateConfirmContent">
-            <div class="p-6 sm:p-8 text-center">
-                <div class="w-20 h-20 rounded-full bg-secondary/20 flex items-center justify-center mx-auto mb-6">
-                    <svg class="w-10 h-10 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M4.93 4.93l14.14 14.14"></path>
-                    </svg>
+            <form id="inactivateForm" method="POST" action="../controllers/controller_candidato.php" class="p-6 sm:p-8">
+                <input type="hidden" name="tipo" value="desabilitar">
+                <input type="hidden" name="id_excluir" id="inactivateCandidatoId" value="">
+                <div class="text-center">
+                    <div class="w-20 h-20 rounded-full bg-secondary/20 flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-10 h-10 text-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M4.93 4.93l14.14 14.14"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl sm:text-2xl font-bold text-dark font-heading mb-4">Confirmar Desativação</h3>
+                    <p class="text-gray-600 text-base mb-4 leading-relaxed">
+                        Tem certeza que deseja desativar o candidato <span class="font-semibold text-dark" id="inactivateCandidatoName"></span>?
+                    </p>
                 </div>
-                <h3 class="text-xl sm:text-2xl font-bold text-dark font-heading mb-4">Confirmar Desativação</h3>
-                <p class="text-gray-600 text-base mb-4 leading-relaxed">
-                    Tem certeza que deseja desativar o candidato <span class="font-semibold text-dark" id="inactivateCandidatoName"></span>?
-                </p>
                 <div class="mb-4 text-left">
                     <label for="inactivateReason" class="block text-sm font-semibold text-gray-700 mb-2">Motivo da desativação *</label>
                     <div class="relative">
-                        <select id="inactivateReason" class="w-full appearance-none px-4 py-3.5 border border-gray-300 rounded-xl bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-base pr-10">
-                            <option value="" selected disabled>Selecione um motivo</option>
-                            <option value="desistencia">Desistência voluntária</option>
-                            <option value="documento_invalido">Documento inválido</option>
-                            <option value="informacao_inconsistente">Informação inconsistente</option>
-                            <option value="transferencia">Transferência escolar</option>
-                            <option value="familia">Solicitação da família</option>
-                            <option value="erro_cadastro">Erro de cadastro</option>
-                            <option value="vaga_duplicada">Vaga duplicada</option>
-                            <option value="outros">Outros (especifique)</option>
+                        <select id="inactivateReason" name="motivo" required class="w-full appearance-none px-4 py-3.5 border border-gray-300 rounded-xl bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-base pr-10">
+                            <option value="" selected disabled>SELECIONE UM MOTIVO</option>
+                            <option value="DESISTÊNCIA VOLUNTÁRIA">DESISTÊNCIA VOLUNTÁRIA</option>
+                            <option value="DOCUMENTO INVÁLIDO">DOCUMENTO INVÁLIDO</option>
+                            <option value="INFORMAÇÃO INCONSISTENTE">INFORMAÇÃO INCONSISTENTE</option>
+                            <option value="TRANSFERÊNCIA ESCOLAR">TRANSFERÊNCIA ESCOLAR</option>
+                            <option value="SOLICITAÇÃO DA FAMÍLIA">SOLICITAÇÃO DA FAMÍLIA</option>
+                            <option value="ERRO DE CADASTRO">ERRO DE CADASTRO</option>
+                            <option value="VAGA DUPLICADA">VAGA DUPLICADA</option>
+                            <option value="outros">OUTROS (ESPECIFIQUE)</option>
                         </select>
                         <svg class="w-5 h-5 text-gray-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" viewBox="0 0 20 20" fill="none" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 8l4 4 4-4" />
                         </svg>
                     </div>
-                    <input id="inactivateReasonOther" type="text" placeholder="Descreva o motivo" class="mt-3 w-full px-4 py-3.5 border border-gray-300 rounded-xl hidden focus:border-primary focus:ring-4 focus:ring-primary/10 text-base" />
-                    
+                    <div id="inactivateReasonOtherContainer" class="mt-3 hidden">
+                        <label for="inactivateReasonOther" class="block text-sm font-semibold text-gray-700 mb-2">Descreva o motivo *</label>
+                        <input id="inactivateReasonOther" name="motivo_outros" type="text" placeholder="Descreva o motivo" class="w-full px-4 py-3.5 border border-gray-300 rounded-xl focus:border-primary focus:ring-4 focus:ring-primary/10 text-base" />
+                    </div>
                 </div>
                 <div class="flex flex-col sm:flex-row gap-3 justify-center">
                     <button type="button" class="px-6 py-3 rounded-xl border-2 border-secondary font-semibold text-secondary hover:bg-secondary/10 hover:border-secondary transition-all text-base focus-ring" onclick="closeModal('modalInactivateConfirm')">Cancelar</button>
-                    <a id="inactivateLink" href="#" class="px-6 py-3 bg-gradient-to-r from-secondary to-orange-600 text-white font-semibold rounded-xl hover:from-secondary/90 hover:to-orange-700 transition-all text-base shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 focus-ring text-center">Confirmar Desativação</a>
+                    <button type="submit" class="px-6 py-3 bg-gradient-to-r from-secondary to-orange-600 text-white font-semibold rounded-xl hover:from-secondary/90 hover:to-orange-700 transition-all text-base shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 focus-ring">Confirmar Desativação</button>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 
@@ -1084,7 +1090,12 @@ $usuarios = $select->select_usuarios();
 
         function openInactivateModal(id, nome) {
             document.getElementById('inactivateCandidatoName').textContent = nome;
-            document.getElementById('inactivateLink').href = `../controllers/controller_candidato.php?id_excluir=${id}&tipo=excluir`;
+            document.getElementById('inactivateCandidatoId').value = id;
+            // Reset form
+            document.getElementById('inactivateForm').reset();
+            document.getElementById('inactivateCandidatoId').value = id;
+            document.getElementById('inactivateReasonOtherContainer').classList.add('hidden');
+            document.getElementById('inactivateReasonOther').removeAttribute('required');
             openModal('modalInactivateConfirm');
         }
 
@@ -1126,15 +1137,41 @@ $usuarios = $select->select_usuarios();
         // Toggle 'Outros' reason text field in desativation modal
         document.addEventListener('DOMContentLoaded', function() {
             const reasonSelect = document.getElementById('inactivateReason');
+            const otherContainer = document.getElementById('inactivateReasonOtherContainer');
             const otherInput = document.getElementById('inactivateReasonOther');
-            if (reasonSelect && otherInput) {
+            const inactivateForm = document.getElementById('inactivateForm');
+
+            if (reasonSelect && otherContainer && otherInput) {
                 reasonSelect.addEventListener('change', function() {
                     if (this.value === 'outros') {
-                        otherInput.classList.remove('hidden');
+                        otherContainer.classList.remove('hidden');
+                        otherInput.setAttribute('required', 'required');
                         otherInput.focus();
                     } else {
-                        otherInput.classList.add('hidden');
+                        otherContainer.classList.add('hidden');
+                        otherInput.removeAttribute('required');
                         otherInput.value = '';
+                    }
+                });
+            }
+
+            // Validação do formulário de desativação
+            if (inactivateForm) {
+                inactivateForm.addEventListener('submit', function(e) {
+                    const motivo = document.getElementById('inactivateReason').value;
+                    const motivoOutros = document.getElementById('inactivateReasonOther').value;
+
+                    if (!motivo) {
+                        e.preventDefault();
+                        alert('Por favor, selecione um motivo para a desativação.');
+                        return false;
+                    }
+
+                    if (motivo === 'outros' && !motivoOutros.trim()) {
+                        e.preventDefault();
+                        alert('Por favor, descreva o motivo da desativação.');
+                        document.getElementById('inactivateReasonOther').focus();
+                        return false;
                     }
                 });
             }

@@ -784,134 +784,6 @@ $select = new select($escola);
     height: 300px;
     margin: 1rem 0;
 }
-/* Estilo personalizado para legenda em duas colunas */
-#distributionChart {
-    margin-bottom: 1rem;
-}
-
-.legend-container {
-    display: flex;
-    justify-content: space-evenly;
-    align-items: flex-start;
-    margin-top: 0.1rem;
-    margin-left: 40px;
-    padding: 0.5rem;
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.9), rgba(230, 244, 234, 0.4));
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 90, 36, 0.05);
-    flex-wrap: wrap;
-    gap: 1rem;
-}
-
-.legend-column {
-    flex: 1;
-    max-width: 45%;
-    padding: 0.5rem;
-
-    border-radius: 8px;
-
-    transition: all 0.3s ease;
-    text-align: left;
-}
-
-@media (max-width: 640px) {
-    .legend-container {
-        flex-direction: column;
-    }
-    .legend-column {
-        max-width: 100%;
-        min-width: auto;
-    }
-    .legend-item::after {
-        width: calc(100% - 2rem);
-    }
-}
-
-
-
-.legend-column > h4 {
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: #1A3C34;
-    padding: 0.25rem 0;
-    margin-bottom: 0.35rem;
-    border-bottom: 2px solid;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    width: fit-content;
-}
-
-.legend-column:first-child > h4 {
-    border-bottom-color: #005A24;
-}
-
-.legend-column:last-child > h4 {
-    border-bottom-color: #FFA500;
-}
-
-.legend-column > h4::before {
-    content: '';
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    flex-shrink: 0;
-    transition: transform 0.3s ease;
-}
-
-.legend-column:first-child > h4::before {
-    background-color: #004D1F;
-}
-
-.legend-column:last-child > h4::before {
-    background-color: #CC7A00;
-}
-
-.legend-column:hover > h4::before {
-    transform: scale(1.2);
-}
-
-.legend-subgroup {
-    padding: 0.25rem;
-    border-radius: 6px;
-    background: rgba(255, 255, 255, 0.5);
-}
-
-.legend-subgroup h5 {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: #1A3C34;
-    margin-bottom: 0.25rem;
-    opacity: 0.9;
-}
-
-.legend-item {
-    display: flex;
-    align-items: center;
-    padding: 0.15rem 0.25rem;
-    gap: 0.5rem;
-    font-size: 0.8rem;
-    color: #1A3C34;
-    font-weight: 500;
-    border-radius: 4px;
-    transition: background-color 0.2s ease;
-}
-
-.legend-item:hover {
-    background-color: rgba(255, 255, 255, 0.8);
-}
-
-.legend-item .legend-color {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    flex-shrink: 0;
-    transition: transform 0.2s ease;
-}
-
-.legend-item:hover .legend-color {
-    transform: scale(1.3);
-}
 
         .sidebar-link {
             transition: all 0.3s ease;
@@ -1173,105 +1045,44 @@ $select = new select($escola);
                     </div>
                 </div>
 
-                  <!-- Gráfico de Estatísticas -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-
-            <div class="bg-white rounded-xl shadow-card p-6 border-2 border-accent hover:border-secondary transition-all duration-300">
-                <div class="flex items-center justify-between mb-4 pb-3 border-b-2 border-accent">
-                    <h3 class="text-xl font-bold text-primary font-heading flex items-center">
-                        <i class="fas fa-chart-pie text-secondary mr-3"></i>
-                        Distribuição por Modalidade
-                    </h3>
-                </div>
-                <div class="chart-container" style="height: 240px;">
-                    <canvas id="distributionChart"></canvas>
-                </div>
-
-                    <div class="legend-container">
-                        <div class="legend-column" style="align-self: flex-start;">
-                            <h4>Pública (Ampla) (<span id="public-ampla-percent">0%</span>) <span class="legend-color" style="background-color: #005A24; display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-left: 4px; vertical-align: middle;"></span></h4>
-                            <div class="legend-subgroup">
-                                <h5>Pública (Cotas) (<span id="public-cotas-percent">0%</span>)</h5>
-                                <div class="legend-item" id="legend-public-bairro" style="display: none;">
-                                    <span class="legend-color" style="background-color: #4CAF50;"></span>
-                                    <span class="legend-text"></span>
-                                </div>
-                                <div class="legend-item" id="legend-public-pcd" style="display: none;">
-                                    <span class="legend-color" style="background-color: #A5D6A7;"></span>
-                                    <span class="legend-text"></span>
-                                </div>
-                            </div>
+                <!-- Gráfico de Barras e Cards de Relatórios -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 lg:grid-rows-2 gap-6 mb-8">
+                    <!-- Gráfico de Barras - Ocupa 2 colunas e 2 linhas (maior) -->
+                    <div class="bg-white rounded-xl shadow-card p-6 border-2 border-accent hover:border-secondary transition-all duration-300 lg:col-span-2 lg:row-span-2">
+                        <div class="flex items-center justify-between mb-4 pb-3 border-b-2 border-accent">
+                            <h3 class="text-xl font-bold text-primary font-heading flex items-center">
+                                <i class="fas fa-chart-bar text-secondary mr-3"></i>
+                                Candidatos por Curso
+                            </h3>
                         </div>
-                        <div class="legend-column" style="align-self: flex-end;">
-                            <h4>Privada (Ampla) (<span id="private-ampla-percent">0%</span>) <span class="legend-color" style="background-color: #FFA500; display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-left: 4px; vertical-align: middle;"></span></h4>
-                            <div class="legend-subgroup">
-                                <h5>Privada (Cotas) (<span id="private-cotas-percent">0%</span>)</h5>
-                                <div class="legend-item" id="legend-private-bairro" style="display: none;">
-                                    <span class="legend-color" style="background-color: #FF8C00;"></span>
-                                    <span class="legend-text"></span>
-                                </div>
-                                <div class="legend-item" id="legend-private-pcd" style="display: none;">
-                                    <span class="legend-color" style="background-color: #FFD180;"></span>
-                                    <span class="legend-text"></span>
-                                </div>
-                            </div>
+                        <div class="chart-container chart-bar" style="height: 500px;">
+                            <canvas id="coursesChart"></canvas>
                         </div>
                     </div>
-                    </div>
 
-                    <!-- Gráfico de Barras -->
-                    <!-- Gráfico de Barras com rótulos abaixo de cada barra -->
-                <div class="bg-white rounded-xl shadow-card p-6 border-2 border-accent hover:border-secondary transition-all duration-300">
-                    <div class="flex items-center justify-between mb-4 pb-3 border-b-2 border-accent">
-                        <h3 class="text-xl font-bold text-primary font-heading flex items-center">
-                            <i class="fas fa-chart-bar text-secondary mr-3"></i>
-                            Candidatos por Curso
-                        </h3>
-                    </div>
-                    <div class="chart-container chart-bar" style="height: 280px;">
-                        <canvas id="coursesChart"></canvas>
-                    </div>
-                </div>
-                </div>
-                <!-- Seção de Relatórios -->
-                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-8">
-                    <!-- Escolas Públicas e Privadas -->
-                    <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in">
+                    <!-- Card Unificado: Relatórios e Resultados - Canto Superior Direito -->
+                    <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in lg:col-start-3 lg:row-start-1">
                         <div class="card-shine"></div>
                         <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
                             <i class="fas fa-school text-4xl"></i>
                         </div>
-                        <h3 class="text-xl font-bold text-primary mb-2 text-center font-heading">Relatórios</h3>
-                        <p class="text-gray-600 text-center mb-6">Gere relatórios detalhados por tipo de escola (pública/privada) e modalidade (AC/cotas)</p>
-                        <button onclick="openSchoolReportModal()" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-3 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold flex items-center justify-center">
+                        <h3 class="text-xl font-bold text-primary mb-2 text-center font-heading">Relatórios e Resultados</h3>
+                        <p class="text-gray-600 text-center mb-6 text-sm">Gere relatórios detalhados por tipo de escola (pública/privada) e modalidade (AC/cotas), além de relatórios de classificados, classificáveis e resultados finais</p>
+                        <button onclick="openUnifiedReportModal()" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-3 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold flex items-center justify-center w-full">
                             <i class="fas fa-file-pdf mr-2"></i>
                             Gerar Relatório
                         </button>
                     </div>
 
-                    <!-- Resultados -->
-                    <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in">
-                        <div class="card-shine"></div>
-                        <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
-                            <i class="fas fa-chart-line text-4xl"></i>
-                        </div>
-                        <h3 class="text-xl font-bold text-primary mb-2 text-center font-heading">Resultados</h3>
-                        <p class="text-gray-600 text-center mb-6">Gere relatórios de classificados, classificáveis e resultados finais</p>
-                        <button onclick="openReportModal('resultados', 'Resultados')" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-3 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold flex items-center justify-center">
-                            <i class="fas fa-file-pdf mr-2"></i>
-                            Gerar Relatório
-                        </button>
-                    </div>
-
-                    <!-- Relatórios Específicos -->
-                    <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in">
+                    <!-- Relatórios Específicos - Logo abaixo do card de Relatórios -->
+                    <div class="report-card bg-white border-2 border-primary rounded-xl shadow-card p-6 flex flex-col items-center animate-fade-in lg:col-start-3 lg:row-start-2">
                         <div class="card-shine"></div>
                         <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
                             <i class="fas fa-file-alt text-4xl"></i>
                         </div>
                         <h3 class="text-xl font-bold text-primary mb-2 text-center font-heading">Relatórios Específicos</h3>
-                        <p class="text-gray-600 text-center mb-6">Gere relatórios específicos como comissão de seleção, movimentações e requisições</p>
-                        <button onclick="openSpecificReportModal()" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-3 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold flex items-center justify-center">
+                        <p class="text-gray-600 text-center mb-6 text-sm">Gere relatórios específicos como comissão de seleção, movimentações e requisições</p>
+                        <button onclick="openSpecificReportModal()" class="bg-gradient-to-r from-secondary to-orange-500 text-white py-3 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold flex items-center justify-center w-full">
                             <i class="fas fa-file-pdf mr-2"></i>
                             Gerar Relatório
                         </button>
@@ -1392,7 +1203,67 @@ $select = new select($escola);
             </form>
         </div>
     </div>
-<<script>
+
+    <!-- Modal Unificado para Relatórios e Resultados -->
+    <div id="unifiedReportModal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeModal('unifiedReportModal')">×</button>
+            <h2 class="font-heading">
+                <i class="fas fa-file-alt mr-2 text-secondary"></i>
+                Gerar Relatório
+            </h2>
+            <form id="unifiedReportForm" action="../controllers/controller_relatorios.php" method="POST" class="space-y-4">
+                <input type="hidden" name="form" value="relatorio_pdf">
+
+                <!-- Tipo de Relatório -->
+                <div class="form-group">
+                    <label for="unified_tipo_relatorio" class="font-semibold">
+                        <i class="fas fa-list mr-1"></i>
+                        Tipo de Relatório
+                    </label>
+                    <select name="tipo_relatorio" id="unified_tipo_relatorio" required class="select2-unified-tipo">
+                        <option value="" disabled selected>SELECIONAR TIPO DE RELATÓRIO</option>
+                        <option value="privada_ac">Privada AC</option>
+                        <option value="privada_cotas">Privada Cotas</option>
+                        <option value="privada_geral">Privada Geral</option>
+                        <option value="publica_ac">Pública AC</option>
+                        <option value="publica_cotas">Pública Cotas</option>
+                        <option value="publica_geral">Pública Geral</option>
+                        <option value="Classificados">Classificados</option>
+                        <option value="Classificaveis">Classificáveis</option>
+                        <option value="Resultado Final">Resultado Final</option>
+                    </select>
+                </div>
+
+                <!-- Curso -->
+                <div class="form-group mt-4">
+                    <label for="unified_curso_id" class="font-semibold">
+                        <i class="fas fa-book mr-1"></i>
+                        Curso
+                    </label>
+                    <select name="curso" id="unified_curso_id" required class="select2-unified-curso">
+                        <option value="" disabled selected>SELECIONAR CURSO</option>
+                        <?php
+                        $cursos = $select->select_cursos();
+                        foreach ($cursos as $curso) { ?>
+                            <option value="<?= htmlspecialchars(
+                                $curso["id"],
+                            ) ?>"><?= htmlspecialchars(
+    $curso["nome_curso"],
+) ?></option>
+                        <?php }
+                        ?>
+                    </select>
+                </div>
+
+                <button type="submit" class="confirm-btn">
+                    <i class="fas fa-file-pdf mr-2"></i>
+                    Gerar Relatório
+                </button>
+            </form>
+        </div>
+    </div>
+<script>
     // Definir cores do sistema
     const systemColors = {
         primary: '#005A24',
@@ -1412,223 +1283,11 @@ $select = new select($escola);
             .join(' ');
     }
 
-    // Dados dos alunos por tipo
-    const alunosPublicaAC = <?php echo $select->countAlunosPorTipo(
-        "publica_ac",
-    ); ?>;
-    const alunosPublicaCotasBairro = <?php echo $select->countAlunosPorTipo(
-        "publica_cotas_bairro",
-    ); ?>;
-    const alunosPublicaCotasPCD = <?php echo $select->countAlunosPorTipo(
-        "publica_cotas_pcd",
-    ); ?>;
-    const alunosPrivadaAC = <?php echo $select->countAlunosPorTipo(
-        "privada_ac",
-    ); ?>;
-    const alunosPrivadaCotasBairro = <?php echo $select->countAlunosPorTipo(
-        "privada_cotas_bairro",
-    ); ?>;
-    const alunosPrivadaCotasPCD = <?php echo $select->countAlunosPorTipo(
-        "privada_cotas_pcd",
-    ); ?>;
-
-    const totalAlunos = alunosPublicaAC + alunosPublicaCotasBairro + alunosPublicaCotasPCD +
-                       alunosPrivadaAC + alunosPrivadaCotasBairro + alunosPrivadaCotasPCD;
-
     // Dados dos alunos por curso
     const dadosCursos = <?php
     $cursos = $select->countAlunosPorCurso();
     echo json_encode($cursos);
     ?>;
-
-    // ==========================================
-    // GRÁFICO DE ROSCA (DISTRIBUIÇÃO)
-    // ==========================================
-    const ctxPie = document.getElementById('distributionChart').getContext('2d');
-    const distributionChart = new Chart(ctxPie, {
-        type: 'doughnut',
-        data: {
-            labels: totalAlunos > 0
-                ? [
-                    'Escola Pública - Ampla Concorrência',
-                    'Escola Pública - Cotas Bairro',
-                    'Escola Pública - Cotas PCD',
-                    'Escola Privada - Ampla Concorrência',
-                    'Escola Privada - Cotas Bairro',
-                    'Escola Privada - Cotas PCD'
-                ]
-                : ['Nenhum aluno cadastrado'],
-            datasets: [{
-                data: totalAlunos > 0
-                    ? [
-                        alunosPublicaAC,
-                        alunosPublicaCotasBairro,
-                        alunosPublicaCotasPCD,
-                        alunosPrivadaAC,
-                        alunosPrivadaCotasBairro,
-                        alunosPrivadaCotasPCD
-                    ]
-                    : [1],
-         backgroundColor: totalAlunos > 0
-    ? [
-        '#005A24',  // Verde padrão do sistema - Pública AC
-        '#4CAF50',  // Verde médio - Pública Cotas Bairro
-        '#A5D6A7',  // Verde claro - Pública Cotas PCD
-        '#FFA500',  // Laranja padrão do sistema - Privada AC
-        '#FF8C00',  // Laranja escuro - Privada Cotas Bairro
-        '#FFD180'   // Laranja claro - Privada Cotas PCD
-    ]
-    : ['#e0e0e0'],
-                borderWidth: 2,
-                borderColor: '#ffffff',
-                hoverOffset: 15,
-                hoverBorderColor: '#ffffff',
-                hoverBorderWidth: 3
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            cutout: '70%',
-            rotation: -90,
-            circumference: 360,
-            plugins: {
-                title: {
-                    display: false
-                },
-                legend: {
-                    display: false
-                },
-                tooltip: {
-                    backgroundColor: 'rgba(26, 60, 52, 0.95)',
-                    titleColor: '#ffffff',
-                    bodyColor: '#ffffff',
-                    borderColor: systemColors.secondary,
-                    borderWidth: 2,
-                    padding: 16,
-                    displayColors: true,
-                    boxWidth: 15,
-                    boxHeight: 15,
-                    boxPadding: 8,
-                    titleFont: {
-                        family: 'Inter',
-                        size: 15,
-                        weight: 'bold'
-                    },
-                    bodyFont: {
-                        family: 'Inter',
-                        size: 14,
-                        weight: '500'
-                    },
-                    callbacks: {
-                        label: function(context) {
-                            const label = context.label || '';
-                            const value = context.parsed || 0;
-                            const percentage = totalAlunos > 0 ? ((value / totalAlunos) * 100).toFixed(1) : 0;
-                            return ` ${value} candidatos (${percentage}%)`;
-                        }
-                    }
-                }
-            },
-            animation: {
-                animateRotate: true,
-                animateScale: true,
-                duration: 800,
-                easing: 'easeInOutCubic'
-            }
-        }
-    });
-
-    // Preencher legenda customizada
-    // Preencher legenda customizada
-function updateCustomLegend() {
-    // Calcular percentuais individuais
-    function calcularPorcentagem(valor) {
-        return totalAlunos > 0 ? ((valor / totalAlunos) * 100).toFixed(1) : '0';
-    }
-
-    // Dados completos com valores e percentuais
-    const dadosEstatisticas = {
-        publica: {
-            ampla: {
-                valor: alunosPublicaAC,
-                percentual: calcularPorcentagem(alunosPublicaAC)
-            },
-            cotasBairro: {
-                valor: alunosPublicaCotasBairro,
-                percentual: calcularPorcentagem(alunosPublicaCotasBairro)
-            },
-            cotasPCD: {
-                valor: alunosPublicaCotasPCD,
-                percentual: calcularPorcentagem(alunosPublicaCotasPCD)
-            }
-        },
-        privada: {
-            ampla: {
-                valor: alunosPrivadaAC,
-                percentual: calcularPorcentagem(alunosPrivadaAC)
-            },
-            cotasBairro: {
-                valor: alunosPrivadaCotasBairro,
-                percentual: calcularPorcentagem(alunosPrivadaCotasBairro)
-            },
-            cotasPCD: {
-                valor: alunosPrivadaCotasPCD,
-                percentual: calcularPorcentagem(alunosPrivadaCotasPCD)
-            }
-        }
-    };
-
-    // Calcular totais para grupos
-    const totalPublicaCotas = alunosPublicaCotasBairro + alunosPublicaCotasPCD;
-    const totalPrivadaCotas = alunosPrivadaCotasBairro + alunosPrivadaCotasPCD;
-
-    // Atualizar percentuais dos títulos principais
-    if (totalAlunos > 0) {
-        document.getElementById('public-ampla-percent').textContent =
-            dadosEstatisticas.publica.ampla.percentual + '%';
-        document.getElementById('public-cotas-percent').textContent =
-            calcularPorcentagem(totalPublicaCotas) + '%';
-        document.getElementById('private-ampla-percent').textContent =
-            dadosEstatisticas.privada.ampla.percentual + '%';
-        document.getElementById('private-cotas-percent').textContent =
-            calcularPorcentagem(totalPrivadaCotas) + '%';
-    }
-
-    // Atualizar legendas individuais
-    const legendData = [
-        {
-            id: 'legend-public-pcd',
-            ...dadosEstatisticas.publica.cotasPCD,
-            label: 'Cota (PCD)'
-        },
-        {
-            id: 'legend-public-bairro',
-            ...dadosEstatisticas.publica.cotasBairro,
-            label: 'Cota (Bairro)'
-        },
-        {
-            id: 'legend-private-pcd',
-            ...dadosEstatisticas.privada.cotasPCD,
-            label: 'Cota (PCD)'
-        },
-        {
-            id: 'legend-private-bairro',
-            ...dadosEstatisticas.privada.cotasBairro,
-            label: 'Cota (Bairro)'
-        }
-    ];
-
-    legendData.forEach(item => {
-        const element = document.getElementById(item.id);
-        if (element && item.valor > 0) {
-            element.style.display = 'flex';
-            element.querySelector('.legend-text').textContent = `${item.label} ${item.percentual}%`;
-        }
-    });
-}
-
-updateCustomLegend();
 
     // ==========================================
     // GRÁFICO DE BARRAS (CURSOS)
@@ -1889,6 +1548,51 @@ updateCustomLegend();
         }
     </script>
 
+    <!-- Modal handling for Unified Reports -->
+    <script>
+        function openUnifiedReportModal() {
+            const modal = document.getElementById('unifiedReportModal');
+            modal.classList.add('show');
+            
+            // Reset form
+            document.getElementById('unifiedReportForm').reset();
+            document.getElementById('unified_tipo_relatorio').value = '';
+            document.getElementById('unified_curso_id').value = '';
+            
+            setTimeout(() => {
+                // Inicializar Select2 para tipo de relatório
+                $('.select2-unified-tipo').select2({
+                    placeholder: "SELECIONAR TIPO DE RELATÓRIO",
+                    allowClear: true,
+                    width: '100%',
+                    language: {
+                        noResults: function() {
+                            return "Nenhum tipo encontrado";
+                        },
+                        searching: function() {
+                            return "Pesquisando...";
+                        }
+                    }
+                });
+
+                // Inicializar Select2 para curso
+                $('.select2-unified-curso').select2({
+                    placeholder: "SELECIONAR CURSO",
+                    allowClear: true,
+                    width: '100%',
+                    language: {
+                        noResults: function() {
+                            return "Nenhum curso encontrado";
+                        },
+                        searching: function() {
+                            return "Pesquisando...";
+                        }
+                    }
+                });
+            }, 100);
+        }
+    </script>
+
     <script>
         function closeModal(modalId) {
             const modal = document.getElementById(modalId);
@@ -1903,6 +1607,9 @@ updateCustomLegend();
             } else if (modalId === 'specificReportModal') {
                 $('.select2-specific').select2('destroy');
                 $('.select2-user').select2('destroy');
+            } else if (modalId === 'unifiedReportModal') {
+                $('.select2-unified-tipo').select2('destroy');
+                $('.select2-unified-curso').select2('destroy');
             }
         }
 
@@ -1911,6 +1618,7 @@ updateCustomLegend();
                 closeModal('reportModal');
                 closeModal('schoolReportModal');
                 closeModal('specificReportModal');
+                closeModal('unifiedReportModal');
             }
         });
     </script>
@@ -1959,6 +1667,33 @@ updateCustomLegend();
             submitBtn.disabled = true;
             setTimeout(() => {
                 schoolReportForm.submit();
+            }, 1000);
+            setTimeout(() => {
+                if (submitBtn.disabled) {
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                }
+            }, 5000);
+        });
+    </script>
+
+    <!-- Form validation for Unified Reports -->
+    <script>
+        const unifiedReportForm = document.getElementById('unifiedReportForm');
+        unifiedReportForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const tipo = document.getElementById('unified_tipo_relatorio').value;
+            const curso = document.getElementById('unified_curso_id').value;
+            if (!tipo || !curso) {
+                showNotification('Por favor, selecione tipo e curso.', 'error');
+                return;
+            }
+            const submitBtn = unifiedReportForm.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<span class="loading-spinner"></span> Gerando...';
+            submitBtn.disabled = true;
+            setTimeout(() => {
+                unifiedReportForm.submit();
             }, 1000);
             setTimeout(() => {
                 if (submitBtn.disabled) {
@@ -2228,6 +1963,7 @@ updateCustomLegend();
                         <option value="comissao_selecao">Comissão de Seleção</option>
                         <option value="movimentacoes">Movimentações</option>
                         <option value="requisicoes">Requisições</option>
+                        <option value="can_desabilitados">Candidatos Desabilitados</option>
                     </select>
                 </div>
 

@@ -93,7 +93,7 @@ else if (
     $quantidade = (int) $_POST["quantidades"];
     $escola = $_SESSION['escola'];
     $admin_model = new admin($escola);
-    $result = $admin_model->cadastrar_quantidade_vaga($quantidade);
+    $result = $admin_model->editar_quantidade_vaga($quantidade);
 
     switch ($result) {
         case 1:

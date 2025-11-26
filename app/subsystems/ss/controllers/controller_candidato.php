@@ -6,8 +6,8 @@ $session->tempo_session();
 require_once(__DIR__ . "/../models/model.admin.php");
 require_once(__DIR__ . "/../models/model.cadastrador.php");
 require_once(__DIR__ . "/../models/model.select.php");
-//print_r($_POST);
-//print_r($_GET);
+print_r($_POST);
+print_r($_GET);
 
 if (
     isset($_POST['form']) && $_POST['form'] === 'candidato' &&
@@ -386,21 +386,39 @@ if (
             header('Location: ../views/cadastro.php?falha');
             exit();
     }
-} else if (isset($_GET['tipo']) && !empty($_GET['tipo']) && isset($_GET['id_excluir']) && !empty($_GET['id_excluir'])) {
+} else if (
+    isset($_POST['tipo']) && !empty($_POST['tipo']) && isset($_POST['id_excluir']) && !empty($_POST['id_excluir']) ||
+    isset($_GET['tipo']) && !empty($_GET['tipo']) && isset($_GET['id_excluir']) && !empty($_GET['id_excluir'])
+) {
+    // Processar desativação via POST (com motivo)
     $escola = $_SESSION['escola'];
     $admin_model = new admin($escola);
 
-    $id_candidato = $_GET['id_excluir'];
+    $id_candidato = $_POST['id_excluir'] ?? $_GET['id_excluir'];
+    $tipo = $_POST['tipo'] ?? $_GET['tipo'];
+    $motivo = isset($_POST['motivo']) ? $_POST['motivo'] : '';
+    $motivo_outros = isset($_POST['motivo_outros']) ? $_POST['motivo_outros'] : '';
 
-    $tipo = $_GET['tipo'];
-    if ($tipo === 'excluir') {
-        $result = $admin_model->excluir_candidato($id_candidato);
-    } else if ($tipo === 'ativar') {
-        $result = $admin_model->ativar_candidato($id_candidato);
+    // Se o motivo for "outros", usar o texto personalizado
+    if ($motivo === 'outros' && !empty($motivo_outros)) {
+        $motivo = $motivo_outros;
     }
-    
+
+    if ($tipo === 'desabilitar') {
+        $result = $admin_model->desabilitar_candidato($id_candidato, strtoupper($motivo));
+    } else if ($tipo === 'ativar') {
+        echo $result = $admin_model->ativar_candidato($id_candidato);
+    }
+
     switch ($result) {
         case 1:
+            if ($tipo === 'desabilitar') {
+                header('Location: ../views/candidatos.php?desabilitado');
+                exit();
+            } else if ($tipo === 'ativar') {
+                header('Location: ../views/candidatos.php?ativado');
+                exit();
+            }
             header('Location: ../views/candidatos.php?deletado');
             exit();
         case 2:
@@ -413,7 +431,6 @@ if (
             header('Location: ../views/candidatos.php?falha');
             exit();
     }
-    
 } else if (isset($_GET['id_candidato']) && !empty($_GET['id_candidato'])) {
     $escola = $_SESSION['escola'];
     $admin_model = new select($escola);
@@ -434,7 +451,7 @@ if (
             header('Location: ../views/candidatos.php?falha');
             exit();
     }
-}else{
+}/*else{
     header("location:../index.php");
     exit();
-}
+}*/
