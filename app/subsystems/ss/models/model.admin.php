@@ -67,13 +67,13 @@ class admin extends cadastrador
     public function verificar_senha($email, $senha, $id_curso = null)
     {
         try {
-            $stmt_check = $this->connect_users->prepare("SELECT * FROM $this->table_user1 WHERE email = :email");
+            $stmt_check = $this->connect->prepare("SELECT * FROM $this->table5 WHERE email = :email");
             $stmt_check->bindValue(':email', $email);
             $stmt_check->execute();
             $user = $stmt_check->fetch(PDO::FETCH_ASSOC);
 
-            if (!$user) {
-                return 3;
+            if ($stmt_check->rowCount() === 0) {
+                return 2;
             }
             if (!password_verify($senha, $user['senha'])) {
                 return 3;

@@ -104,37 +104,37 @@ class relatorios extends connect
                              INNER JOIN $this->table4 m ON m.id_candidato = can.id
                              INNER JOIN $this->table2 cur ON can.id_curso1 = cur.id
                              WHERE can.id_curso1 = :curso AND can.publica = 1 AND can.pcd = 0 AND can.bairro = 0 AND status = 1
-                             ORDER BY m.media_final DESC, can.data_nascimento DESC",
+                             ORDER BY m.media_final DESC, can.data_nascimento ASC, m.l_portuguesa_media DESC, m.matematica_media DESC",
             'publica_cotas' => "SELECT can.id, can.nome, cur.nome_curso, can.publica, can.bairro, can.pcd, m.media_final
                                 FROM $this->table1 can
                                 INNER JOIN $this->table4 m ON m.id_candidato = can.id
                                 INNER JOIN $this->table2 cur ON can.id_curso1 = cur.id
                                 WHERE can.id_curso1 = :curso AND can.publica = 1 AND can.pcd = 0 AND can.bairro = 1 AND status = 1
-                                ORDER BY m.media_final DESC, can.data_nascimento DESC",
+                                ORDER BY m.media_final DESC, can.data_nascimento ASC, m.l_portuguesa_media DESC, m.matematica_media DESC",
             'pcd_publica' => "SELECT can.id, can.nome, cur.nome_curso, can.publica, can.bairro, can.pcd, m.media_final
                               FROM $this->table1 can
                               INNER JOIN $this->table4 m ON m.id_candidato = can.id
                               INNER JOIN $this->table2 cur ON can.id_curso1 = cur.id
                               WHERE can.id_curso1 = :curso AND can.publica = 1 AND can.pcd = 1 AND status = 1
-                              ORDER BY m.media_final DESC, can.data_nascimento DESC",
+                              ORDER BY m.media_final DESC, can.data_nascimento ASC, m.l_portuguesa_media DESC, m.matematica_media DESC",
             'privada_ac' => "SELECT can.id, can.nome, cur.nome_curso, can.publica, can.bairro, can.pcd, m.media_final
                              FROM $this->table1 can
                              INNER JOIN $this->table4 m ON m.id_candidato = can.id
                              INNER JOIN $this->table2 cur ON can.id_curso1 = cur.id
                              WHERE can.id_curso1 = :curso AND can.publica = 0 AND can.pcd = 0 AND can.bairro = 0 AND status = 1
-                             ORDER BY m.media_final DESC, can.data_nascimento DESC",
+                             ORDER BY m.media_final DESC, can.data_nascimento ASC, m.l_portuguesa_media DESC, m.matematica_media DESC",
             'privada_cotas' => "SELECT can.id, can.nome, cur.nome_curso, can.publica, can.bairro, can.pcd, m.media_final
                                  FROM $this->table1 can
                                  INNER JOIN $this->table4 m ON m.id_candidato = can.id
                                  INNER JOIN $this->table2 cur ON can.id_curso1 = cur.id
                                  WHERE can.id_curso1 = :curso AND can.publica = 0 AND can.pcd = 0 AND can.bairro = 1 AND status = 1
-                                 ORDER BY m.media_final DESC, can.data_nascimento DESC",
+                                 ORDER BY m.media_final DESC, can.data_nascimento ASC, m.l_portuguesa_media DESC, m.matematica_media DESC",
             'pcd_privada' => "SELECT can.id, can.nome, cur.nome_curso, can.publica, can.bairro, can.pcd, m.media_final
                               FROM $this->table1 can
                               INNER JOIN $this->table4 m ON m.id_candidato = can.id
                               INNER JOIN $this->table2 cur ON can.id_curso1 = cur.id
                               WHERE can.id_curso1 = :curso AND can.publica = 0 AND can.pcd = 1 AND status = 1
-                              ORDER BY m.media_final DESC, can.data_nascimento DESC"
+                              ORDER BY m.media_final DESC, can.data_nascimento ASC, m.l_portuguesa_media DESC, m.matematica_media DESC"
         ];
 
         foreach ($queries as $key => $sql) {
@@ -182,7 +182,8 @@ class relatorios extends connect
         // Nome da escola
         $pdf->SetFont('Arial', 'B', 13);
         $pdf->SetY(3);
-        $pdf->Cell(0, 6, $_SESSION['nome_escola'], 0, 1, 'L');
+        $pdf->SetX(8.5);
+        $pdf->Cell(0, 6, mb_convert_encoding($_SESSION['nome_escola'], 'ISO-8859-1', 'UTF-8'), 0, 1, 'L');
 
         // Título principal
         $pdf->SetFont('Arial', 'B', 20);
@@ -286,7 +287,11 @@ class relatorios extends connect
             foreach ($seg['dados'] as $row) {
                 $origem = $row['publica'] ? 'PÚBLICA' : 'PRIVADA';
                 $cota   = $row['pcd'] ? 'PCD' : ($row['bairro'] ? 'COTISTA' : 'AC');
-                $status = in_array($row['id'], $ids_classificados) ? 'CLASSIFICADO' : 'CLASSIFICÁVEL';
+                $isClassificado = in_array($row['id'], $ids_classificados);
+                $status = $isClassificado ? 'CLASSIFICADO' : 'CLASSIFICÁVEL';
+
+                // destaques visuais para classificados
+                $pdf->SetFont('Arial', $isClassificado ? 'B' : '', 8);
 
                 // Zebrado: linha par = cinza claro, ímpar = branco
                 if ($class % 2 == 0) {

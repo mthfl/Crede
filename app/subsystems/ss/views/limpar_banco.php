@@ -3,8 +3,10 @@ require_once(__DIR__ . '/../models/sessions.php');
 $session = new sessions();
 $session->autenticar_session();
 $session->tempo_session();
+
 require_once(__DIR__ . '/../config/connect.php');
 $escola = $_SESSION['escola'];
+
 new connect($escola);
 require_once(__DIR__ . '/../models/model.select.php');
 $select = new select($escola);
@@ -26,6 +28,8 @@ if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) 
             header("Location: ../index.php?banco_limpo");
             exit();
         case 2:
+            header("Location: ../index.php?erro");
+            exit();
         case 3:
             header("Location: ../index.php?erro_senha");
             exit();
