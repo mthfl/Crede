@@ -1073,7 +1073,7 @@ $select = new select($escola);
                         <div class="card-icon w-16 h-16 text-primary mb-4 flex items-center justify-center">
                             <i class="fas fa-school text-4xl"></i>
                         </div>
-                        <h3 class="text-xl font-bold text-primary text-center font-heading">Relatórios Gerais e Específicos</h3>
+                        <h3 class="text-xl font-bold text-primary text-center font-heading">Relatórios</h3>
                         <p class="text-gray-600 text-center text-sm">Acesse em um único lugar relatórios completos por modalidade, escola e status, além de documentos específicos como comissão, movimentações e requisições.</p>
                         <button onclick="openUnifiedReportModal()" class="w-full bg-gradient-to-r from-secondary to-orange-500 text-white py-3 px-6 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold flex items-center justify-center">
                             <i class="fas fa-file-download mr-2"></i>
@@ -1103,11 +1103,12 @@ $select = new select($escola);
                     </label>
                     <select name="tipo_relatorio" id="unified_tipo_relatorio" required class="select2-unified-tipo">
                         <option value="" disabled selected>SELECIONAR TIPO DE RELATÓRIO</option>
-                        <option value="Resultado Final">Resultado Final</option>
-                        <option value="comissao_selecao">Comissão de Seleção</option>
-                        <option value="movimentacoes">Movimentações</option>
-                        <option value="requisicoes">Requisições</option>
-                        <option value="can_desabilitados">Candidatos Desabilitados</option>
+                        <option value="Resultado Final">RESULTADO</option>
+                        <option value="comissao_selecao">COMISSÃO DE SELEÇÃO</option>
+                        <option value="can_desabilitados">CANDIDATOS DESABILITADOS</option>
+                        <option value="movimentacoes">MOVIMENTAÇÕES</option>
+                        <option value="requisicoes">REQUISIÇÕES</option>
+                        
                     </select>
                 </div>
 
