@@ -1084,6 +1084,23 @@ $session->tempo_session();
                     </a>
                 <?php } ?>
 
+                <?php if (isset($_SESSION['SS Admin']) || isset($_SESSION['ss_admin']) || isset($_SESSION['Admin']) || isset($_SESSION['Gerenciador de Admins'])) { ?>
+                    <a href="../../subsystems/ss_admin/index.php">
+                        <div class="system-card animate-on-scroll"
+                            tabindex="0"
+                            role="button"
+                            aria-label="Acessar Admin Dashboard - Monitoramento de candidatos"
+                            data-system="ss_admin">
+                            <div class="card-icon">
+                                <img src="https://i.postimg.cc/dt5t9dG7/admin.png" alt="Ícone Admin" class="w-24 h-24 object-contain">
+                            </div>
+                            <h3 class="card-title">Admin Dashboard</h3>
+                            <p class="card-description">Painel para administradores visualizarem o progresso de candidatos por escola</p>
+                            <span class="card-badge">Acessar Sistema</span>
+                        </div>
+                    </a>
+                <?php } ?>
+
             </div>
     </main>
 
