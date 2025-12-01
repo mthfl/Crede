@@ -834,7 +834,7 @@ require_once __DIR__ . '/controllers/controller_admin_dashboard.php';
 
                     <!-- Botões de Navegação (Desktop) -->
                     <div class="hidden md:flex items-center space-x-4">
-                        <button class="w-10 h-10 rounded-xl bg-accent hover:bg-primary text-primary hover:text-white transition-all duration-300 flex items-center justify-center" title="Voltar" onclick="window.history.back()">
+                        <button class="w-10 h-10 rounded-xl bg-accent hover:bg-primary text-primary hover:text-white transition-all duration-300 flex items-center justify-center" title="Voltar" onclick="window.location.href='../../main/views/subsystems.php'">
                             <i class="fas fa-arrow-left"></i>
                         </button>
                     </div>
