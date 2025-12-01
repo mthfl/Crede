@@ -20,6 +20,7 @@ if ($escola) {
 require_once __DIR__ . '/../models/AdminDashboard.php';
 
 $cursosChartData = [];
+$cotasPorCurso   = [];
 $usuariosEscola  = [];
 $quickStats      = [
     'totalAlunos'   => 0,
@@ -32,6 +33,7 @@ $candidatos      = [];
 if ($escola) {
     $dashboard = new AdminDashboard($escola);
     $cursosChartData = $dashboard->getCursosChartData();
+    $cotasPorCurso   = $dashboard->getCotasPorCurso();
     $usuariosEscola  = $dashboard->getUsuariosEscola();
     $quickStats      = $dashboard->getQuickStats();
     $candidatos      = $dashboard->getCandidatos();

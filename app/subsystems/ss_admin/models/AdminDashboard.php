@@ -17,6 +17,11 @@ class AdminDashboard
         return $this->select->countAlunosPorCurso();
     }
 
+    public function getCotasPorCurso(): array
+    {
+        return $this->select->getCotasPorCurso();
+    }
+
     public function getUsuariosEscola(): array
     {
         return $this->select->select_usuarios();

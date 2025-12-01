@@ -703,6 +703,12 @@ require_once __DIR__ . '/controllers/controller_admin_dashboard.php';
             margin: 1rem 0;
         }
 
+        .pizza-chart-wrapper {
+            position: relative;
+            height: 250px;
+            margin: 0.5rem 0;
+        }
+
         .sidebar-link {
             transition: all 0.3s ease;
         }
@@ -970,16 +976,20 @@ require_once __DIR__ . '/controllers/controller_admin_dashboard.php';
                         </div>
                     </div>
 
-                    <!-- Gráfico de Barras - Progresso por Curso -->
-                    <div class="bg-white rounded-xl shadow-card p-6 border-2 border-accent hover:border-secondary transition-all duration-300 mb-8">
+                    <!-- Gráficos de Pizza - Cotas por Curso -->
+                    <div class="mb-8">
                         <div class="flex items-center justify-between mb-4 pb-3 border-b-2 border-accent">
                             <h3 class="text-xl font-bold text-primary font-heading flex items-center">
-                                <i class="fas fa-chart-bar text-secondary mr-3"></i>
-                                Candidatos por Curso
+                                <i class="fas fa-chart-pie text-secondary mr-3"></i>
+                                Distribuição de Cotas por Curso
                             </h3>
                         </div>
-                        <div class="chart-container">
-                            <canvas id="cursosChart"></canvas>
+                        <div id="cursosPizzaContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                            <!-- Os gráficos serão criados dinamicamente via JavaScript -->
+                        </div>
+                        <!-- Legenda única centralizada -->
+                        <div id="legendaUnica" class="mt-6 flex flex-wrap justify-center items-center gap-6 bg-white rounded-xl shadow-card p-4 border-2 border-accent">
+                            <!-- A legenda será criada dinamicamente via JavaScript -->
                         </div>
                     </div>
 
@@ -1077,10 +1087,10 @@ require_once __DIR__ . '/controllers/controller_admin_dashboard.php';
             document.getElementById('statsContainer').style.display = 'block';
             document.getElementById('noSchoolSelected').style.display = 'none';
             
-            // Animar charts
+            // Animar charts - aguardar um pouco mais para garantir que o DOM está pronto
             setTimeout(() => {
                 inicializarCharts();
-            }, 200);
+            }, 300);
         }
 
         // Modal de candidatos
@@ -1152,54 +1162,199 @@ require_once __DIR__ . '/controllers/controller_admin_dashboard.php';
                 });
             }
 
-            // Gráfico de Barras - Cursos
-            const ctxBar = document.getElementById('cursosChart');
-            if (ctxBar) {
-                const cursosChartData = <?php echo json_encode($cursosChartData, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES); ?>;
-                const cursosLabels = (cursosChartData || []).map(curso => curso.nome_curso);
-                const cursosValues = (cursosChartData || []).map(curso => parseInt(curso.total ?? 0, 10));
+            // Gráficos de Pizza - Cotas por Curso
+            const cotasPorCurso = <?php echo json_encode($cotasPorCurso ?? [], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES); ?>;
+            const container = document.getElementById('cursosPizzaContainer');
+            
+            console.log('Dados de cotas por curso recebidos:', cotasPorCurso);
+            console.log('Container encontrado:', container);
+            
+            // Limpar container antes de adicionar novos gráficos
+            if (container) {
+                container.innerHTML = '';
+            }
+            
+            // Limpar legenda única
+            const legendaUnica = document.getElementById('legendaUnica');
+            if (legendaUnica) {
+                legendaUnica.innerHTML = '';
+            }
+            
+            if (container && cotasPorCurso && cotasPorCurso.length > 0) {
+                console.log('Criando gráficos de pizza para', cotasPorCurso.length, 'cursos');
+                // Cores do sistema para cada tipo de cota
+                const coresCotas = {
+                    'ampla_privada': systemColors.secondary,      // Laranja
+                    'cota_privada': systemColors.warning,          // Amarelo
+                    'pcd': '#FF8C42',                              // Laranja esverdeado (intermediário entre laranja e verde)
+                    'cota_publica': systemColors.success,           // Verde
+                    'ampla_publica': systemColors.primary          // Verde escuro
+                };
+                
+                // Criar legenda única centralizada
+                if (legendaUnica) {
+                    const legendItems = [
+                        { label: 'Ampla Privada', color: coresCotas.ampla_privada },
+                        { label: 'Cota Privada', color: coresCotas.cota_privada },
+                        { label: 'PCD', color: coresCotas.pcd },
+                        { label: 'Cota Pública', color: coresCotas.cota_publica },
+                        { label: 'Ampla Pública', color: coresCotas.ampla_publica }
+                    ];
+                    
+                    legendItems.forEach(item => {
+                        const legendItem = document.createElement('div');
+                        legendItem.className = 'flex items-center gap-2';
+                        
+                        const colorBox = document.createElement('div');
+                        colorBox.className = 'w-4 h-4 rounded-full';
+                        colorBox.style.backgroundColor = item.color;
+                        colorBox.style.border = '2px solid #FFFFFF';
+                        colorBox.style.boxShadow = '0 1px 3px rgba(0,0,0,0.2)';
+                        
+                        const labelText = document.createElement('span');
+                        labelText.className = 'text-sm font-semibold text-primary';
+                        labelText.textContent = item.label;
+                        
+                        legendItem.appendChild(colorBox);
+                        legendItem.appendChild(labelText);
+                        legendaUnica.appendChild(legendItem);
+                    });
+                }
 
-                new Chart(ctxBar, {
-                    type: 'bar',
-                    data: {
-                        labels: cursosLabels,
-                        datasets: [{
-                            label: 'Candidatos Inscritos',
-                            data: cursosValues,
-                            backgroundColor: systemColors.secondary,
-                            borderColor: systemColors.dark,
-                            borderWidth: 2,
-                            borderRadius: 8,
-                            hoverBackgroundColor: systemColors.primary
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                grid: {
-                                    color: 'rgba(0, 90, 36, 0.1)'
-                                },
-                                ticks: {
-                                    font: { family: 'Inter', size: 12, weight: '600' },
-                                    color: '#1A3C34'
+                cotasPorCurso.forEach((curso, index) => {
+                    // Criar container para cada gráfico
+                    const chartWrapper = document.createElement('div');
+                    chartWrapper.className = 'bg-white rounded-xl shadow-card p-4 border-2 border-accent hover:border-secondary transition-all duration-300';
+                    
+                    const chartTitle = document.createElement('h4');
+                    chartTitle.className = 'text-base font-bold text-primary mb-3 text-center font-heading';
+                    chartTitle.textContent = curso.nome_curso || 'Curso sem nome';
+                    chartWrapper.appendChild(chartTitle);
+                    
+                    const chartDiv = document.createElement('div');
+                    chartDiv.className = 'pizza-chart-wrapper';
+                    
+                    const chartCanvas = document.createElement('canvas');
+                    chartCanvas.id = `cursoPizzaChart_${index}`;
+                    chartDiv.appendChild(chartCanvas);
+                    chartWrapper.appendChild(chartDiv);
+                    
+                    container.appendChild(chartWrapper);
+                    
+                    // Preparar dados para o gráfico
+                    const labels = [];
+                    const data = [];
+                    const backgroundColor = [];
+                    
+                    // Ampla Privada
+                    const amplaPrivada = parseInt(curso.ampla_privada ?? 0, 10);
+                    if (amplaPrivada > 0) {
+                        labels.push('Ampla Privada');
+                        data.push(amplaPrivada);
+                        backgroundColor.push(coresCotas.ampla_privada);
+                    }
+                    
+                    // Cota Privada
+                    const cotaPrivada = parseInt(curso.cota_privada ?? 0, 10);
+                    if (cotaPrivada > 0) {
+                        labels.push('Cota Privada');
+                        data.push(cotaPrivada);
+                        backgroundColor.push(coresCotas.cota_privada);
+                    }
+                    
+                    // PCD (combinando privada e pública)
+                    const pcdPrivada = parseInt(curso.pcd_privada ?? 0, 10);
+                    const pcdPublica = parseInt(curso.pcd_publica ?? 0, 10);
+                    const totalPCD = pcdPrivada + pcdPublica;
+                    if (totalPCD > 0) {
+                        labels.push('PCD');
+                        data.push(totalPCD);
+                        backgroundColor.push(coresCotas.pcd);
+                    }
+                    
+                    // Cota Pública
+                    const cotaPublica = parseInt(curso.cota_publica ?? 0, 10);
+                    if (cotaPublica > 0) {
+                        labels.push('Cota Pública');
+                        data.push(cotaPublica);
+                        backgroundColor.push(coresCotas.cota_publica);
+                    }
+                    
+                    // Ampla Pública
+                    const amplaPublica = parseInt(curso.ampla_publica ?? 0, 10);
+                    if (amplaPublica > 0) {
+                        labels.push('Ampla Pública');
+                        data.push(amplaPublica);
+                        backgroundColor.push(coresCotas.ampla_publica);
+                    }
+                    
+                    // Criar gráfico apenas se houver dados
+                    if (data.length > 0 && data.some(val => val > 0)) {
+                        // Usar setTimeout para garantir que o DOM está pronto
+                        setTimeout(() => {
+                            const ctx = document.getElementById(`cursoPizzaChart_${index}`);
+                            if (ctx) {
+                                try {
+                                    new Chart(ctx, {
+                                        type: 'pie',
+                                        data: {
+                                            labels: labels,
+                                            datasets: [{
+                                                data: data,
+                                                backgroundColor: backgroundColor,
+                                                borderColor: '#FFFFFF',
+                                                borderWidth: 2,
+                                                hoverOffset: 4
+                                            }]
+                                        },
+                                        options: {
+                                            responsive: true,
+                                            maintainAspectRatio: false,
+                                            plugins: {
+                                                legend: {
+                                                    display: false
+                                                },
+                                                tooltip: {
+                                                    callbacks: {
+                                                        label: function(context) {
+                                                            const label = context.label || '';
+                                                            const value = context.parsed || 0;
+                                                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                                            const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+                                                            return `${label}: ${value} (${percentage}%)`;
+                                                        }
+                                                    },
+                                                    font: { family: 'Inter', size: 12 }
+                                                }
+                                            }
+                                        }
+                                    });
+                                    console.log('Gráfico criado para:', curso.nome_curso);
+                                } catch (error) {
+                                    console.error('Erro ao criar gráfico para', curso.nome_curso, ':', error);
                                 }
-                            },
-                            x: {
-                                grid: { display: false },
-                                ticks: {
-                                    font: { family: 'Inter', size: 12, weight: '600' },
-                                    color: '#1A3C34'
-                                }
+                            } else {
+                                console.error('Canvas não encontrado para curso:', curso.nome_curso, 'ID:', `cursoPizzaChart_${index}`);
                             }
-                        },
-                        plugins: {
-                            legend: { display: false }
-                        }
+                        }, index * 150);
+                    } else {
+                        // Se não houver dados, mostrar mensagem
+                        const noDataMsg = document.createElement('p');
+                        noDataMsg.className = 'text-gray-500 text-center text-sm py-4';
+                        noDataMsg.textContent = 'Nenhum candidato encontrado para este curso.';
+                        chartWrapper.appendChild(noDataMsg);
                     }
                 });
+            } else {
+                // Se não houver cursos ou container não encontrado
+                if (container) {
+                    const noDataMsg = document.createElement('div');
+                    noDataMsg.className = 'col-span-full bg-white rounded-xl shadow-card p-6 border-2 border-accent text-center';
+                    noDataMsg.innerHTML = '<p class="text-gray-500 text-lg">Nenhum curso com candidatos encontrado.</p>';
+                    container.appendChild(noDataMsg);
+                } else {
+                    console.error('Container cursosPizzaContainer não encontrado');
+                }
             }
         }
     </script>

@@ -433,4 +433,28 @@ class select extends connect
     }
 }
 
+    public function getCotasPorCurso(): array
+    {
+        try {
+            $sql = "SELECT 
+                        c.id as curso_id,
+                        c.nome_curso,
+                        COUNT(CASE WHEN a.publica = 0 AND a.bairro = 0 AND a.pcd = 0 AND a.status = 1 THEN 1 END) as ampla_privada,
+                        COUNT(CASE WHEN a.publica = 0 AND a.bairro > 0 AND a.pcd = 0 AND a.status = 1 THEN 1 END) as cota_privada,
+                        COUNT(CASE WHEN a.publica = 0 AND a.pcd = 1 AND a.status = 1 THEN 1 END) as pcd_privada,
+                        COUNT(CASE WHEN a.publica = 1 AND a.bairro = 0 AND a.pcd = 0 AND a.status = 1 THEN 1 END) as ampla_publica,
+                        COUNT(CASE WHEN a.publica = 1 AND a.bairro > 0 AND a.pcd = 0 AND a.status = 1 THEN 1 END) as cota_publica,
+                        COUNT(CASE WHEN a.publica = 1 AND a.pcd = 1 AND a.status = 1 THEN 1 END) as pcd_publica
+                    FROM $this->table2 c 
+                    LEFT JOIN $this->table1 a ON a.id_curso1 = c.id 
+                    GROUP BY c.id, c.nome_curso 
+                    HAVING (ampla_privada + cota_privada + pcd_privada + ampla_publica + cota_publica + pcd_publica) > 0
+                    ORDER BY c.nome_curso";
+            $stmt = $this->connect->query($sql);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return [];
+        }
+    }
+
 }
