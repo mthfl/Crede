@@ -1,3 +1,6 @@
+<?php
+require_once __DIR__ . '/controllers/controller_admin_dashboard.php';
+?>
 <!DOCTYPE html>
 <html lang="pt-BR" style="height: auto; overflow-y: auto;">
 <head>
@@ -828,11 +831,71 @@
                         </div>
                     </div>
 
+
                     <!-- Botões de Navegação (Desktop) -->
                     <div class="hidden md:flex items-center space-x-4">
                         <button class="w-10 h-10 rounded-xl bg-accent hover:bg-primary text-primary hover:text-white transition-all duration-300 flex items-center justify-center" title="Voltar" onclick="window.history.back()">
                             <i class="fas fa-arrow-left"></i>
                         </button>
+                    </div>
+                </div>
+
+                <!-- Modal de Candidatos -->
+                <div id="candidatosModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+                    <div class="bg-white rounded-xl shadow-2xl w-full max-w-5xl max-h-[80vh] overflow-hidden flex flex-col">
+                        <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+                            <h2 class="text-xl font-bold text-primary flex items-center gap-2">
+                                <i class="fas fa-users"></i>
+                                Candidatos da escola selecionada
+                            </h2>
+                            <button type="button" onclick="closeCandidatosModal()" class="text-gray-500 hover:text-primary text-2xl leading-none">&times;</button>
+                        </div>
+                        <div class="p-6 overflow-auto">
+                            <?php if (!empty($candidatos)) { ?>
+                                <table class="min-w-full text-sm text-left">
+                                    <thead class="border-b border-accent">
+                                        <tr class="text-gray-600">
+                                            <th class="py-2 pr-4">Nome</th>
+                                            <th class="py-2 px-4">Curso</th>
+                                            <th class="py-2 px-4">Responsável</th>
+                                            <th class="py-2 px-4">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach ($candidatos as $cand) { ?>
+                                            <tr class="border-b border-gray-100 hover:bg-accent/40">
+                                                <td class="py-2 pr-4 font-semibold text-primary">
+                                                    <?= htmlspecialchars($cand['nome'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
+                                                </td>
+                                                <td class="py-2 px-4 text-gray-700">
+                                                    <?= htmlspecialchars($cand['nome_curso'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
+                                                </td>
+                                                <td class="py-2 px-4 text-gray-700">
+                                                    <?= htmlspecialchars($cand['nome_user'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
+                                                </td>
+                                                <td class="py-2 px-4 text-gray-700">
+                                                    <?php
+                                                    $status = $cand['status'] ?? null;
+                                                    $label  = 'Indefinido';
+                                                    if ($status === 1 || $status === '1') {
+                                                        $label = 'Ativo';
+                                                    } elseif ($status === 0 || $status === '0') {
+                                                        $label = 'Inativo';
+                                                    }
+                                                    echo htmlspecialchars($label, ENT_QUOTES, 'UTF-8');
+                                                    ?>
+                                                </td>
+                                            </tr>
+                                        <?php } ?>
+                                    </tbody>
+                                </table>
+                            <?php } else { ?>
+                                <p class="text-gray-600 text-center">Nenhum candidato encontrado para esta escola.</p>
+                            <?php } ?>
+                        </div>
+                        <div class="px-6 py-4 border-t border-gray-200 flex justify-end">
+                            <button type="button" onclick="closeCandidatosModal()" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition-all">Fechar</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -859,12 +922,18 @@
                         Selecione uma Escola
                     </h3>
                     <select id="escolaSelect" class="select2-escola w-full">
-                        <option value="" disabled selected>Selecione uma escola para visualizar o progresso</option>
-                        <option value="escola1">Escola Estadual de Ensino Médio - Fortaleza</option>
-                        <option value="escola2">Escola Técnica Federal - Brasília</option>
-                        <option value="escola3">Instituto de Educação - Salvador</option>
-                        <option value="escola4">Colégio Estadual - Recife</option>
-                        <option value="escola5">Escola Profissionalizante - Manaus</option>
+                        <option value="" disabled <?php echo empty($escola) ? 'selected' : ''; ?>>Selecione uma escola para visualizar o progresso</option>
+                        <?php if (!empty($schoolsConfig)) { ?>
+                            <?php foreach ($schoolsConfig as $escolaRow) { 
+                                $codigoEscola = $escolaRow['escola_banco'] ?? '';
+                                $nomeEscola   = $escolaRow['nome_escola'] ?? $codigoEscola;
+                                if (!$codigoEscola) continue;
+                            ?>
+                                <option value="<?= htmlspecialchars($codigoEscola, ENT_QUOTES, 'UTF-8'); ?>" <?php echo ($escola === $codigoEscola) ? 'selected' : ''; ?>>
+                                    <?= htmlspecialchars($nomeEscola, ENT_QUOTES, 'UTF-8'); ?>
+                                </option>
+                            <?php } ?>
+                        <?php } ?>
                     </select>
                 </div>
 
@@ -875,61 +944,29 @@
                             <div class="stat-icon">
                                 <i class="fas fa-user-graduate"></i>
                             </div>
-                            <div class="stat-number" id="totalCandidatos">0</div>
+                            <div class="stat-number"><?php echo (int)($quickStats['totalAlunos'] ?? 0); ?></div>
                             <div class="stat-label">Total de Candidatos</div>
                         </div>
                         <div class="stat-item">
                             <div class="stat-icon">
-                                <i class="fas fa-check-circle"></i>
+                                <i class="fas fa-school"></i>
                             </div>
-                            <div class="stat-number" id="candidatosAprovados">0</div>
-                            <div class="stat-label">Candidatos Aprovados</div>
+                            <div class="stat-number"><?php echo (int)($quickStats['totalPublicos'] ?? 0); ?></div>
+                            <div class="stat-label">Candidatos Escola Pública</div>
                         </div>
                         <div class="stat-item">
                             <div class="stat-icon">
-                                <i class="fas fa-hourglass-half"></i>
+                                <i class="fas fa-building"></i>
                             </div>
-                            <div class="stat-number" id="candidatosProcessando">0</div>
-                            <div class="stat-label">Em Processamento</div>
+                            <div class="stat-number"><?php echo (int)($quickStats['totalPrivados'] ?? 0); ?></div>
+                            <div class="stat-label">Candidatos Escola Privada</div>
                         </div>
                         <div class="stat-item">
                             <div class="stat-icon">
-                                <i class="fas fa-times-circle"></i>
+                                <i class="fas fa-wheelchair"></i>
                             </div>
-                            <div class="stat-number" id="candidatosRejeitados">0</div>
-                            <div class="stat-label">Candidatos Rejeitados</div>
-                        </div>
-                    </div>
-
-                    <!-- Gráficos e Cards -->
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-                        <!-- Gráfico de Pizza - Distribuição de Status -->
-                        <div class="bg-white rounded-xl shadow-card p-6 border-2 border-accent hover:border-secondary transition-all duration-300 lg:col-span-2">
-                            <div class="flex items-center justify-between mb-4 pb-3 border-b-2 border-accent">
-                                <h3 class="text-xl font-bold text-primary font-heading flex items-center">
-                                    <i class="fas fa-chart-pie text-secondary mr-3"></i>
-                                    Distribuição de Candidatos
-                                </h3>
-                            </div>
-                            <div class="chart-container">
-                                <canvas id="statusChart"></canvas>
-                            </div>
-                        </div>
-
-                        <!-- Card de Resumo -->
-                        <div class="info-card p-6 flex flex-col items-center space-y-4 lg:col-start-3">
-                            <div class="card-shine"></div>
-                            <div class="card-icon w-16 h-16 text-primary flex items-center justify-center">
-                                <i class="fas fa-info-circle text-4xl"></i>
-                            </div>
-                            <h3 class="text-xl font-bold text-primary text-center font-heading">Resumo da Escola</h3>
-                            <p class="text-gray-600 text-center text-sm" id="resumoEscola">
-                                Selecione uma escola para visualizar informações detalhadas sobre o progresso de candidatos.
-                            </p>
-                            <button class="w-full bg-gradient-to-r from-secondary to-orange-500 text-white py-2 px-4 rounded-lg hover:from-orange-500 hover:to-secondary transition-all duration-300 font-semibold flex items-center justify-center text-sm">
-                                <i class="fas fa-download mr-2"></i>
-                                Exportar Dados
-                            </button>
+                            <div class="stat-number"><?php echo (int)($quickStats['totalPCDs'] ?? 0); ?></div>
+                            <div class="stat-label">Candidatos PCD</div>
                         </div>
                     </div>
 
@@ -946,119 +983,51 @@
                         </div>
                     </div>
 
-                    <!-- Cards de Progresso por Curso -->
+                    <!-- Lista de Usuários Cadastrados na Escola -->
                     <div class="mb-8">
-                        <h3 class="text-xl font-bold text-primary font-heading mb-4">
-                            <i class="fas fa-list-ul text-secondary mr-2"></i>
-                            Progresso Detalhado por Curso
+                        <h3 class="text-xl font-bold text-primary font-heading mb-4 flex items-center">
+                            <i class="fas fa-users text-secondary mr-2"></i>
+                            Usuários cadastrados na escola
                         </h3>
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            <!-- Card 1 -->
-                            <div class="info-card p-6 space-y-3 grid-item">
-                                <div class="card-shine"></div>
-                                <h4 class="text-lg font-semibold text-primary font-heading flex items-center">
-                                    <i class="fas fa-laptop-code text-secondary mr-2"></i>
-                                    Técnico em TI
-                                </h4>
-                                <div class="space-y-2">
-                                    <div class="flex justify-between text-sm">
-                                        <span class="text-gray-600">Inscritos:</span>
-                                        <span class="font-bold text-primary" id="ti-inscritos">48</span>
-                                    </div>
-                                    <div class="progress-bar">
-                                        <div class="progress-fill" style="width: 75%;"></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Card 2 -->
-                            <div class="info-card p-6 space-y-3 grid-item">
-                                <div class="card-shine"></div>
-                                <h4 class="text-lg font-semibold text-primary font-heading flex items-center">
-                                    <i class="fas fa-wallet text-secondary mr-2"></i>
-                                    Técnico em Contabilidade
-                                </h4>
-                                <div class="space-y-2">
-                                    <div class="flex justify-between text-sm">
-                                        <span class="text-gray-600">Inscritos:</span>
-                                        <span class="font-bold text-primary" id="contabilidade-inscritos">32</span>
-                                    </div>
-                                    <div class="progress-bar">
-                                        <div class="progress-fill" style="width: 50%;"></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Card 3 -->
-                            <div class="info-card p-6 space-y-3 grid-item">
-                                <div class="card-shine"></div>
-                                <h4 class="text-lg font-semibold text-primary font-heading flex items-center">
-                                    <i class="fas fa-cogs text-secondary mr-2"></i>
-                                    Técnico em Mecânica
-                                </h4>
-                                <div class="space-y-2">
-                                    <div class="flex justify-between text-sm">
-                                        <span class="text-gray-600">Inscritos:</span>
-                                        <span class="font-bold text-primary" id="mecanica-inscritos">56</span>
-                                    </div>
-                                    <div class="progress-bar">
-                                        <div class="progress-fill" style="width: 85%;"></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Card 4 -->
-                            <div class="info-card p-6 space-y-3 grid-item">
-                                <div class="card-shine"></div>
-                                <h4 class="text-lg font-semibold text-primary font-heading flex items-center">
-                                    <i class="fas fa-paint-brush text-secondary mr-2"></i>
-                                    Técnico em Design
-                                </h4>
-                                <div class="space-y-2">
-                                    <div class="flex justify-between text-sm">
-                                        <span class="text-gray-600">Inscritos:</span>
-                                        <span class="font-bold text-primary" id="design-inscritos">28</span>
-                                    </div>
-                                    <div class="progress-bar">
-                                        <div class="progress-fill" style="width: 40%;"></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Card 5 -->
-                            <div class="info-card p-6 space-y-3 grid-item">
-                                <div class="card-shine"></div>
-                                <h4 class="text-lg font-semibold text-primary font-heading flex items-center">
-                                    <i class="fas fa-atom text-secondary mr-2"></i>
-                                    Técnico em Química
-                                </h4>
-                                <div class="space-y-2">
-                                    <div class="flex justify-between text-sm">
-                                        <span class="text-gray-600">Inscritos:</span>
-                                        <span class="font-bold text-primary" id="quimica-inscritos">42</span>
-                                    </div>
-                                    <div class="progress-bar">
-                                        <div class="progress-fill" style="width: 65%;"></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Card 6 -->
-                            <div class="info-card p-6 space-y-3 grid-item">
-                                <div class="card-shine"></div>
-                                <h4 class="text-lg font-semibold text-primary font-heading flex items-center">
-                                    <i class="fas fa-heartbeat text-secondary mr-2"></i>
-                                    Técnico em Enfermagem
-                                </h4>
-                                <div class="space-y-2">
-                                    <div class="flex justify-between text-sm">
-                                        <span class="text-gray-600">Inscritos:</span>
-                                        <span class="font-bold text-primary" id="enfermagem-inscritos">35</span>
-                                    </div>
-                                    <div class="progress-bar">
-                                        <div class="progress-fill" style="width: 55%;"></div>
-                                    </div>
-                                </div>
+                        <div class="info-card p-6 grid-item">
+                            <div class="card-shine"></div>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full text-sm text-left">
+                                    <thead class="border-b border-accent">
+                                        <tr class="text-gray-600">
+                                            <th class="py-2 pr-4">Nome</th>
+                                            <th class="py-2 px-4">Email</th>
+                                            <th class="py-2 px-4">CPF</th>
+                                            <th class="py-2 px-4">Tipo de usuário</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php if (!empty($usuariosEscola)) { ?>
+                                            <?php foreach ($usuariosEscola as $usuario) { ?>
+                                                <tr class="border-b border-gray-100 hover:bg-accent/40">
+                                                    <td class="py-2 pr-4 font-semibold text-primary">
+                                                        <?= htmlspecialchars($usuario['nome_user'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
+                                                    </td>
+                                                    <td class="py-2 px-4 text-gray-700">
+                                                        <?= htmlspecialchars($usuario['email'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
+                                                    </td>
+                                                    <td class="py-2 px-4 text-gray-700">
+                                                        <?= htmlspecialchars($usuario['cpf'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
+                                                    </td>
+                                                    <td class="py-2 px-4 text-gray-700">
+                                                        <?= htmlspecialchars($usuario['tipo_usuario'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
+                                                    </td>
+                                                </tr>
+                                            <?php } ?>
+                                        <?php } else { ?>
+                                            <tr>
+                                                <td colspan="4" class="py-4 text-center text-gray-500">
+                                                    Nenhum usuário cadastrado encontrado.
+                                                </td>
+                                            </tr>
+                                        <?php } ?>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -1087,11 +1056,20 @@
             $('#escolaSelect').on('change', function() {
                 const escolaId = $(this).val();
                 if (escolaId) {
-                    mostrarEstatisticas();
+                    // Recarrega a página com o parâmetro da escola selecionada
+                    const url = new URL(window.location.href);
+                    url.searchParams.set('escola', escolaId);
+                    window.location.href = url.toString();
                 } else {
                     ocultarEstatisticas();
                 }
             });
+
+            // Se já houver uma escola selecionada no backend, exibe as estatísticas automaticamente
+            const hasEscolaSelecionada = <?php echo $escola ? 'true' : 'false'; ?>;
+            if (hasEscolaSelecionada) {
+                mostrarEstatisticas();
+            }
         });
 
         // Função para mostrar estatísticas
@@ -1102,7 +1080,22 @@
             // Animar charts
             setTimeout(() => {
                 inicializarCharts();
-            }, 100);
+            }, 200);
+        }
+
+        // Modal de candidatos
+        function openCandidatosModal() {
+            const modal = document.getElementById('candidatosModal');
+            if (modal) {
+                modal.classList.remove('hidden');
+            }
+        }
+
+        function closeCandidatosModal() {
+            const modal = document.getElementById('candidatosModal');
+            if (modal) {
+                modal.classList.add('hidden');
+            }
         }
 
         // Função para ocultar estatísticas
@@ -1162,13 +1155,17 @@
             // Gráfico de Barras - Cursos
             const ctxBar = document.getElementById('cursosChart');
             if (ctxBar) {
+                const cursosChartData = <?php echo json_encode($cursosChartData, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES); ?>;
+                const cursosLabels = (cursosChartData || []).map(curso => curso.nome_curso);
+                const cursosValues = (cursosChartData || []).map(curso => parseInt(curso.total ?? 0, 10));
+
                 new Chart(ctxBar, {
                     type: 'bar',
                     data: {
-                        labels: ['TI', 'Contabilidade', 'Mecânica', 'Design', 'Química', 'Enfermagem'],
+                        labels: cursosLabels,
                         datasets: [{
                             label: 'Candidatos Inscritos',
-                            data: [48, 32, 56, 28, 42, 35],
+                            data: cursosValues,
                             backgroundColor: systemColors.secondary,
                             borderColor: systemColors.dark,
                             borderWidth: 2,
