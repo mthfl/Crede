@@ -17,17 +17,46 @@ class Escolas
             $this->tableEscolas = $tables['crede_users'][6];
         }
 
-        // Conecta ao banco crede_users (mesma lógica do connect.php de outros módulos)
-        $host = $config['local']['crede_users']['host'];
-        $database = $config['local']['crede_users']['banco'];
-        $user = $config['local']['crede_users']['user'];
-        $password = $config['local']['crede_users']['senha'];
-
+        // Tenta conectar ao banco crede_users (local primeiro, depois hospedagem)
+        $connSuccess = false;
+        
+        // Tenta local primeiro
         try {
-            $this->conn = new PDO('mysql:host=' . $host . ';dbname=' . $database . ';charset=utf8', $user, $password);
-            $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $this->conn->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+            $host = $config['local']['crede_users']['host'] ?? null;
+            $database = $config['local']['crede_users']['banco'] ?? null;
+            $user = $config['local']['crede_users']['user'] ?? null;
+            $password = $config['local']['crede_users']['senha'] ?? null;
+
+            if ($host && $database && $user !== null) {
+                $this->conn = new PDO('mysql:host=' . $host . ';dbname=' . $database . ';charset=utf8', $user, $password);
+                $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                $this->conn->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+                $connSuccess = true;
+            }
         } catch (PDOException $e) {
+            $connSuccess = false;
+        }
+        
+        // Se local falhou, tenta hospedagem
+        if (!$connSuccess) {
+            try {
+                $host = $config['hospedagem']['crede_users']['host'] ?? null;
+                $database = $config['hospedagem']['crede_users']['banco'] ?? null;
+                $user = $config['hospedagem']['crede_users']['user'] ?? null;
+                $password = $config['hospedagem']['crede_users']['senha'] ?? null;
+
+                if ($host && $database && $user !== null) {
+                    $this->conn = new PDO('mysql:host=' . $host . ';dbname=' . $database . ';charset=utf8', $user, $password);
+                    $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                    $this->conn->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+                    $connSuccess = true;
+                }
+            } catch (PDOException $e) {
+                $connSuccess = false;
+            }
+        }
+        
+        if (!$connSuccess) {
             $this->conn = null;
         }
     }
