@@ -721,7 +721,7 @@ $cursos = $select->select_cursos();
                                                                 <?php } ?>
                                                             </span>
                                                             <h4 class="font-semibold text-gray-900 text-sm mt-2">Candidato: <span class="text-gray-700"><?php echo htmlspecialchars($req['nome'] ?? 'Aluno'); ?></span></h4>
-                                                            <p class="text-xs text-gray-500 mt-1"><?php echo htmlspecialchars(date('d/m/Y H:i', strtotime($req['data_requisicao'] ?? 'now'))); ?></p>
+                                                            <p class="text-xs text-gray-500 mt-1"><?php echo htmlspecialchars(date('d/m/Y H:i', strtotime($req['data']))); ?></p>
                                                         </div>
                                                     </div>
                                                     <div class="bg-gray-50 p-3 rounded-lg">
@@ -826,7 +826,7 @@ $cursos = $select->select_cursos();
                                                                     <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                                                                     </svg>
-                                                                    <p class="text-xs sm:text-sm text-gray-500"><?= htmlspecialchars(date('d/m/Y H:i', strtotime($requisicao['data_requisicao'] ?? 'now'))) ?></p>
+                                                                    <p class="text-xs sm:text-sm text-gray-500"><?= htmlspecialchars(date('d/m/Y H:i:s', strtotime($requisicao['data_requisicao']))) ?></p>
                                                                 </div>
                                                             </div>
                                                             <div class="flex mt-2 sm:mt-0">
@@ -909,7 +909,7 @@ $cursos = $select->select_cursos();
                                                                     <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                                                                     </svg>
-                                                                    <p class="text-sm text-gray-500"><?= htmlspecialchars(date('d/m/Y H:i', strtotime($requisicao['data_requisicao'] ?? 'now'))) ?></p>
+                                                                    <p class="text-sm text-gray-500"><?= htmlspecialchars($requisicao['data_requisicao'] ?? '') ?></p>
                                                                 </div>
                                                             </div>
                                                             <div class="flex">
@@ -993,7 +993,7 @@ $cursos = $select->select_cursos();
                                                                     <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                                                                     </svg>
-                                                                    <p class="text-sm text-gray-500"><?= htmlspecialchars(date('d/m/Y H:i', strtotime($requisicao['data_requisicao'] ?? 'now'))) ?></p>
+                                                                    <p class="text-sm text-gray-500"><?= htmlspecialchars($requisicao['data_requisicao'] ?? '') ?></p>
                                                                 </div>
                                                             </div>
                                                             <div class="flex">

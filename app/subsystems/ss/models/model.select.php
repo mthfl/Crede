@@ -58,15 +58,15 @@ class select extends connect
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     public function select_requisicoes_pendentes(){
-        $stmt = $this->connect->query("SELECT *, r.id as id_requisicao FROM $this->table14 r INNER JOIN $this->table5 u ON r.id_usuario = u.id INNER JOIN $this->table1 c ON r.id_candidato = c.id WHERE r.status = 'Pendente'");
+        $stmt = $this->connect->query("SELECT *, r.id as id_requisicao, r.data as data_requisicao FROM $this->table14 r INNER JOIN $this->table5 u ON r.id_usuario = u.id INNER JOIN $this->table1 c ON r.id_candidato = c.id WHERE r.status = 'Pendente'");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     public function select_requisicoes_realizadas(){
-        $stmt = $this->connect->query("SELECT *, r.id as id_requisicao FROM $this->table14 r INNER JOIN $this->table5 u ON r.id_usuario = u.id INNER JOIN $this->table1 c ON r.id_candidato = c.id WHERE r.status = 'Concluido'");
+        $stmt = $this->connect->query("SELECT *, r.id as id_requisicao, r.data as data_requisicao FROM $this->table14 r INNER JOIN $this->table5 u ON r.id_usuario = u.id INNER JOIN $this->table1 c ON r.id_candidato = c.id WHERE r.status = 'Concluido'");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     public function select_requisicoes_rejeitadas(){
-        $stmt = $this->connect->query("SELECT *, r.id as id_requisicao FROM $this->table14 r INNER JOIN $this->table5 u ON r.id_usuario = u.id INNER JOIN $this->table1 c ON r.id_candidato = c.id WHERE r.status = 'Recusado'");
+        $stmt = $this->connect->query("SELECT *, r.id as id_requisicao, r.data as data_requisicao FROM $this->table14 r INNER JOIN $this->table5 u ON r.id_usuario = u.id INNER JOIN $this->table1 c ON r.id_candidato = c.id WHERE r.status = 'Recusado'");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     public function select_requisicoes_usuario(int $id_usuario): array
