@@ -516,24 +516,63 @@ $usuarios = $select->select_usuarios();
                     <div class="text-lg font-semibold text-gray-800">Lista de Candidatos</div>
                 </div>
 
-                <!-- Barra de Pesquisa -->
+                <!-- Barra de Pesquisa e Filtros -->
                 <div class="mb-6">
-                    <div class="flex items-center space-x-3">
-                        <div class="relative w-96">
-                            <input type="text" id="searchInput" placeholder="Pesquisar por nome do candidato..." class="w-full px-4 py-3 pr-10 border border-gray-300 rounded-xl focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-sm" onkeyup="filterCandidates()">
-                            <svg class="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                            </svg>
-                        </div>
-
-                        <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
-                            <a href="candidatos_excluidos.php" class="bg-primary text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl hover:bg-dark transition-all duration-300 font-medium text-sm btn-animate focus-ring flex items-center shadow hover:shadow-lg">
-                                <svg class="w-4 h-4 mr-1.5 sm:mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m4-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                    <div class="bg-accent/40 border border-primary/10 rounded-2xl p-4 sm:p-5 shadow-sm">
+                        <div class="flex flex-wrap lg:flex-nowrap items-center gap-3 lg:gap-4">
+                            <div class="relative w-full lg:w-80 xl:w-96">
+                                <input type="text" id="searchInput" placeholder="Pesquisar por nome do candidato..." class="w-full px-4 py-3 pr-10 border border-primary/30 rounded-xl focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-sm bg-white" onkeyup="filterCandidates()">
+                                <svg class="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                                 </svg>
-                                <span>Candidatos Inativos</span>
-                            </a>
-                        <?php } ?>
+                            </div>
+
+                            <div class="relative min-w-[150px]">
+                                <select id="cursoFilter" class="appearance-none w-full px-3 py-2.5 pr-8 border border-primary/40 rounded-xl text-xs sm:text-sm bg-accent text-dark focus:border-primary focus:ring-2 focus:ring-primary/20" onchange="filterCandidates()">
+                                    <option value="">Todos os cursos</option>
+                                    <?php foreach ($cursos as $curso) { ?>
+                                        <option value="<?= htmlspecialchars($curso['nome_curso']) ?>"><?= htmlspecialchars($curso['nome_curso']) ?></option>
+                                    <?php } ?>
+                                </select>
+                                <svg class="w-4 h-4 text-primary absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none" viewBox="0 0 20 20" fill="none" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M6 8l4 4 4-4" />
+                                </svg>
+                            </div>
+
+                            <div class="relative min-w-[130px]">
+                                <select id="seguimentoFilter" class="appearance-none w-full px-3 py-2.5 pr-8 border border-primary/40 rounded-xl text-xs sm:text-sm bg-accent text-dark focus:border-primary focus:ring-2 focus:ring-primary/20" onchange="filterCandidates()">
+                                    <option value="">Todos os seguimentos</option>
+                                    <option value="AMPLA">AMPLA</option>
+                                    <option value="BAIRRO">BAIRRO</option>
+                                    <option value="PCD">PCD</option>
+                                </select>
+                                <svg class="w-4 h-4 text-primary absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none" viewBox="0 0 20 20" fill="none" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M6 8l4 4 4-4" />
+                                </svg>
+                            </div>
+
+                            <div class="relative min-w-[130px]">
+                                <select id="origemFilter" class="appearance-none w-full px-3 py-2.5 pr-8 border border-primary/40 rounded-xl text-xs sm:text-sm bg-accent text-dark focus:border-primary focus:ring-2 focus:ring-primary/20" onchange="filterCandidates()">
+                                    <option value="">Todas as origens</option>
+                                    <option value="Pública">Pública</option>
+                                    <option value="Privada">Privada</option>
+                                </select>
+                                <svg class="w-4 h-4 text-primary absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none" viewBox="0 0 20 20" fill="none" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M6 8l4 4 4-4" />
+                                </svg>
+                            </div>
+
+                            <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
+                                <div class="ml-0 lg:ml-2">
+                                    <a href="candidatos_excluidos.php" class="bg-primary text-white px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl hover:bg-dark transition-all duration-300 font-medium text-xs sm:text-sm btn-animate focus-ring flex items-center shadow hover:shadow-lg whitespace-nowrap">
+                                        <svg class="w-4 h-4 mr-1.5 sm:mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m4-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                        </svg>
+                                        <span>Candidatos Inativos</span>
+                                    </a>
+                                </div>
+                            <?php } ?>
+                        </div>
                     </div>
                 </div>
 
@@ -548,27 +587,50 @@ $usuarios = $select->select_usuarios();
                 </style>
 
                 <script>
-                       function filterCandidates() {
-        const searchInput = document.getElementById('searchInput').value.toLowerCase();
-        const tableRows = document.querySelectorAll('tbody tr');
-        const candidateCards = document.querySelectorAll('.candidate-card');
+                    function filterCandidates() {
+                        const searchInput = (document.getElementById('searchInput')?.value || '').toLowerCase();
+                        const cursoFilter = document.getElementById('cursoFilter')?.value || '';
+                        const seguimentoFilter = document.getElementById('seguimentoFilter')?.value || '';
+                        const origemFilter = document.getElementById('origemFilter')?.value || '';
 
-        // Desktop (tabela) – nome está na primeira coluna (td:first-child)
-        tableRows.forEach(row => {
-            const nomeCell = row.querySelector('td:first-child');
-            const nome = nomeCell ? nomeCell.textContent.toLowerCase() : '';
-            row.style.display = nome.includes(searchInput) ? '' : 'none';
-        });
+                        const tableRows = document.querySelectorAll('tbody tr');
+                        const candidateCards = document.querySelectorAll('.candidate-card');
 
-        // Mobile (cards) – usa data-nome ou o <h3> com o nome
-        candidateCards.forEach(card => {
-            const nomeAttr = card.getAttribute('data-nome') || '';
-            const nomeH3 = card.querySelector('h3') ? card.querySelector('h3').textContent : '';
-            const nome = (nomeAttr || nomeH3).toLowerCase();
+                        // Desktop (tabela)
+                        tableRows.forEach(row => {
+                            const nomeCell = row.querySelector('td:first-child');
+                            const nome = nomeCell ? nomeCell.textContent.toLowerCase() : '';
 
-            card.style.display = nome.includes(searchInput) ? '' : 'none';
-        });
-    }
+                            const rowCurso = row.getAttribute('data-curso') || '';
+                            const rowSeguimento = row.getAttribute('data-seguimento') || '';
+                            const rowOrigem = row.getAttribute('data-origem') || '';
+
+                            const matchNome = nome.includes(searchInput);
+                            const matchCurso = !cursoFilter || rowCurso === cursoFilter;
+                            const matchSeguimento = !seguimentoFilter || rowSeguimento === seguimentoFilter;
+                            const matchOrigem = !origemFilter || rowOrigem === origemFilter;
+
+                            row.style.display = (matchNome && matchCurso && matchSeguimento && matchOrigem) ? '' : 'none';
+                        });
+
+                        // Mobile (cards)
+                        candidateCards.forEach(card => {
+                            const nomeAttr = card.getAttribute('data-nome') || '';
+                            const nomeH3 = card.querySelector('h3') ? card.querySelector('h3').textContent : '';
+                            const nome = (nomeAttr || nomeH3).toLowerCase();
+
+                            const cardCurso = card.getAttribute('data-curso') || '';
+                            const cardSeguimento = card.getAttribute('data-seguimento') || '';
+                            const cardOrigem = card.getAttribute('data-origem') || '';
+
+                            const matchNome = nome.includes(searchInput);
+                            const matchCurso = !cursoFilter || cardCurso === cursoFilter;
+                            const matchSeguimento = !seguimentoFilter || cardSeguimento === seguimentoFilter;
+                            const matchOrigem = !origemFilter || cardOrigem === origemFilter;
+
+                            card.style.display = (matchNome && matchCurso && matchSeguimento && matchOrigem) ? '' : 'none';
+                        });
+                    }
                 </script>
 
                 <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
@@ -609,7 +671,7 @@ $usuarios = $select->select_usuarios();
                                         $cota = 'AMPLA';
                                     }
                                 ?>
-                                    <tr class="hover:bg-gradient-to-r hover:from-primary/5 hover:to-accent/10 transition-all duration-200 <?= $cand['status'] == 0 ? 'bg-gray-50 opacity-75' : 'bg-white' ?> group">
+                                    <tr class="hover:bg-gradient-to-r hover:from-primary/5 hover:to-accent/10 transition-all duration-200 <?= $cand['status'] == 0 ? 'bg-gray-50 opacity-75' : 'bg-white' ?> group" data-curso="<?= htmlspecialchars((string)$cursoNome) ?>" data-seguimento="<?= htmlspecialchars((string)$cota) ?>" data-origem="<?= htmlspecialchars((string)$origem) ?>">
                                         <td class="px-6 py-4">
                                             <div>
                                                 <div class="text-sm font-semibold <?= $cand['status'] == 0 ? 'text-gray-400' : 'text-gray-900' ?>"><?= htmlspecialchars((string)$nome) ?></div>
@@ -720,7 +782,7 @@ $usuarios = $select->select_usuarios();
                                     $cota = 'AMPLA';
                                 }
                             ?>
-                                <article class="grid-item card-hover candidate-card bg-white rounded-2xl shadow-xl border-0 overflow-hidden group relative<?= (isset($cand['status']) && (int)$cand['status'] === 0 ? ' opacity-80 grayscale' : '') ?>" data-nome="<?= htmlspecialchars($nome) ?>" data-curso="<?= htmlspecialchars($cursoNome) ?>">
+                                <article class="grid-item card-hover candidate-card bg-white rounded-2xl shadow-xl border-0 overflow-hidden group relative<?= (isset($cand['status']) && (int)$cand['status'] === 0 ? ' opacity-80 grayscale' : '') ?>" data-nome="<?= htmlspecialchars($nome) ?>" data-curso="<?= htmlspecialchars($cursoNome) ?>" data-seguimento="<?= htmlspecialchars($cota) ?>" data-origem="<?= htmlspecialchars($origem) ?>">
                                     <div class="h-2 w-full bg-gradient-to-r <?= (isset($cand['status']) && (int)$cand['status'] === 0 ? 'from-red-400 to-red-600' : 'from-primary to-secondary') ?>"></div>
                                     <?php if (isset($cand['status']) && (int)$cand['status'] === 0) { ?>
                                         <span class="absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-700 border border-red-200 shadow-sm">Desativado</span>
