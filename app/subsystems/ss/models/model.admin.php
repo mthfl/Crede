@@ -348,7 +348,7 @@ class admin extends cadastrador
             $stmt_candidato->bindValue(":id_usuario", $id_usuario);
             $stmt_candidato->bindValue(":datatime", $datatime);
             $stmt_candidato->bindValue(":tipo_movimentacao", 'EDITAR USUÁRIO');
-            $stmt_candidato->bindValue(":descricao", "FOI EDITADO O USUÁRIO" . $nome);
+            $stmt_candidato->bindValue(":descricao", "FOI EDITADO O USUÁRIO " . $nome);
             if (!$stmt_candidato->execute()) {
                 return 2;
             }

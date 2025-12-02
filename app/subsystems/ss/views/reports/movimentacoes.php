@@ -79,7 +79,7 @@ class relatorios extends connect
         $pdf->SetFont('Arial', 'B', 12);
         $pdf->SetY(38);
         $pdf->SetX(10);
-        $pdf->Cell(100, 7, 'Usuário: ' . $dados_usuario['nome_user'], 0, 1, 'L');
+        $pdf->Cell(100, 7, 'USUÁRIO: ' . $dados_usuario['nome_user'], 0, 1, 'L');
 
         // Table Header
         $pdf->SetFont('Arial', 'B', 10);

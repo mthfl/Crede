@@ -108,7 +108,7 @@ class RelatorioAdminCursos
         // Cabeçalho
         $this->pdf->SetFont('Arial', 'B', 13);
         $this->pdf->SetY(3);
-        $this->pdf->SetX(10);
+        $this->pdf->SetX(9);
         $this->pdf->Cell(0, 6, $nomeEscola, 0, 1, 'L');
 
         $this->pdf->SetY(5);
@@ -117,7 +117,7 @@ class RelatorioAdminCursos
 
         // Título
         $this->pdf->SetY(9.5);
-        $this->pdf->SetX(10);
+        $this->pdf->SetX(8.5);  
         $this->pdf->SetFont('Arial', 'B', 17);
         $this->pdf->Cell(0, 8, 'RELATÓRIO GERAL', 0, 1, 'L');
 
@@ -132,7 +132,7 @@ class RelatorioAdminCursos
         $this->pdf->SetFont('Arial', '', 10);
         $this->pdf->SetTextColor(0, 0, 0);
         $this->pdf->SetX(10);
-        $this->pdf->Cell(47, 6, "TOTAL DE CANDIDATOS: {$totalAlunos}", 0, 0, 'L');
+        $this->pdf->Cell(60, 6, "TOTAL DE CANDIDATOS: {$totalAlunos}", 0, 0, 'L');
         $this->pdf->Cell(47, 6, "ESCOLA PÚBLICA: {$totalPublicos}", 0, 0, 'L');
         $this->pdf->Cell(47, 6, "ESCOLA PRIVADA: {$totalPrivados}", 0, 0, 'L');
         $this->pdf->Cell(49, 6, "PCD'S: {$totalPCDs}", 0, 1, 'L');
