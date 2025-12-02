@@ -540,10 +540,10 @@ $usuarios = $select->select_usuarios();
                                             <option value="curso:<?= htmlspecialchars($nomeCursoOriginal) ?>">Curso: <?= htmlspecialchars($nomeCursoNormalizado) ?></option>
                                         <?php } ?>
                                     </optgroup>
-                                    <optgroup label="Seguimento">
-                                        <option value="seguimento:AMPLA">Seguimento: Ampla</option>
-                                        <option value="seguimento:BAIRRO">Seguimento: Bairro</option>
-                                        <option value="seguimento:PCD">Seguimento: Pcd</option>
+                                    <optgroup label="Segmento">
+                                        <option value="segmento:AMPLA">Segmento: Ampla</option>
+                                        <option value="segmento:BAIRRO">Segmento: Bairro</option>
+                                        <option value="segmento:PCD">Segmento: Pcd</option>
                                     </optgroup>
                                     <optgroup label="Origem">
                                         <option value="origem:Pública">Origem: Pública</option>
@@ -658,7 +658,7 @@ $usuarios = $select->select_usuarios();
                         const chips = document.querySelectorAll('#activeFilters .filter-chip');
                         const filtros = {
                             cursos: [],
-                            seguimentos: [],
+                            segmentos: [],
                             origens: []
                         };
 
@@ -668,7 +668,7 @@ $usuarios = $select->select_usuarios();
                             if (!valor) return;
 
                             if (tipo === 'curso') filtros.cursos.push(valor);
-                            if (tipo === 'seguimento') filtros.seguimentos.push(valor);
+                            if (tipo === 'segmento') filtros.segmentos.push(valor);
                             if (tipo === 'origem') filtros.origens.push(valor);
                         });
 
@@ -689,11 +689,21 @@ $usuarios = $select->select_usuarios();
 
                         const valor = raw;
 
+                        // Regras por ramo:
+                        // - curso: apenas 1 ativo por vez
+                        // - segmento / origem: apenas 1 ativo por vez
+
                         // Evitar chips duplicados (mesmo tipo + valor)
-                        const existing = container.querySelector(`.filter-chip[data-tipo="${tipo}"][data-valor="${valor}"]`);
-                        if (existing) {
+                        const existingSame = container.querySelector(`.filter-chip[data-tipo="${tipo}"][data-valor="${valor}"]`);
+                        if (existingSame) {
                             select.value = '';
                             return;
+                        }
+
+                        // Para curso, segmento e origem, remove qualquer chip anterior do mesmo tipo
+                        if (tipo === 'curso' || tipo === 'segmento' || tipo === 'origem') {
+                            const previousOfType = container.querySelectorAll(`.filter-chip[data-tipo="${tipo}"]`);
+                            previousOfType.forEach(chip => chip.remove());
                         }
 
                         const chip = document.createElement('div');
@@ -724,7 +734,7 @@ $usuarios = $select->select_usuarios();
 
                     function filterCandidates() {
                         const searchInput = (document.getElementById('searchInput')?.value || '').toLowerCase();
-                        const { cursos, seguimentos, origens } = getActiveFilterValues();
+                        const { cursos, segmentos, origens } = getActiveFilterValues();
 
                         const tableRows = document.querySelectorAll('tbody tr');
                         const candidateCards = document.querySelectorAll('.candidate-card');
@@ -735,15 +745,15 @@ $usuarios = $select->select_usuarios();
                             const nome = nomeCell ? nomeCell.textContent.toLowerCase() : '';
 
                             const rowCurso = row.getAttribute('data-curso') || '';
-                            const rowSeguimento = row.getAttribute('data-seguimento') || '';
+                            const rowSegmento = row.getAttribute('data-segmento') || '';
                             const rowOrigem = row.getAttribute('data-origem') || '';
 
                             const matchNome = nome.includes(searchInput);
                             const matchCurso = cursos.length === 0 || cursos.includes(rowCurso);
-                            const matchSeguimento = seguimentos.length === 0 || seguimentos.includes(rowSeguimento);
+                            const matchSegmento = segmentos.length === 0 || segmentos.includes(rowSegmento);
                             const matchOrigem = origens.length === 0 || origens.includes(rowOrigem);
 
-                            row.style.display = (matchNome && matchCurso && matchSeguimento && matchOrigem) ? '' : 'none';
+                            row.style.display = (matchNome && matchCurso && matchSegmento && matchOrigem) ? '' : 'none';
                         });
 
                         // Mobile (cards)
@@ -753,15 +763,15 @@ $usuarios = $select->select_usuarios();
                             const nome = (nomeAttr || nomeH3).toLowerCase();
 
                             const cardCurso = card.getAttribute('data-curso') || '';
-                            const cardSeguimento = card.getAttribute('data-seguimento') || '';
+                            const cardSegmento = card.getAttribute('data-segmento') || '';
                             const cardOrigem = card.getAttribute('data-origem') || '';
 
                             const matchNome = nome.includes(searchInput);
                             const matchCurso = cursos.length === 0 || cursos.includes(cardCurso);
-                            const matchSeguimento = seguimentos.length === 0 || seguimentos.includes(cardSeguimento);
+                            const matchSegmento = segmentos.length === 0 || segmentos.includes(cardSegmento);
                             const matchOrigem = origens.length === 0 || origens.includes(cardOrigem);
 
-                            card.style.display = (matchNome && matchCurso && matchSeguimento && matchOrigem) ? '' : 'none';
+                            card.style.display = (matchNome && matchCurso && matchSegmento && matchOrigem) ? '' : 'none';
                         });
                     }
                 </script>
@@ -774,7 +784,7 @@ $usuarios = $select->select_usuarios();
                                 <tr class="bg-gradient-to-r from-primary to-dark text-white">
                                     <th class="px-6 py-4 text-left text-sm font-semibold font-display">Nome</th>
                                     <th class="px-6 py-4 text-left text-sm font-semibold font-display">Curso</th>
-                                    <th class="px-6 py-4 text-left text-sm font-semibold font-display">Seguimento</th>
+                                    <th class="px-6 py-4 text-left text-sm font-semibold font-display">Segmento</th>
                                     <th class="px-6 py-4 text-left text-sm font-semibold font-display">Origem</th>
                                     <th class="px-6 py-4 text-left text-sm font-semibold font-display">Data</th>
                                     <th class="px-6 py-4 text-left text-sm font-semibold font-display">Cadastrador</th>
@@ -804,7 +814,7 @@ $usuarios = $select->select_usuarios();
                                         $cota = 'AMPLA';
                                     }
                                 ?>
-                                    <tr class="hover:bg-gradient-to-r hover:from-primary/5 hover:to-accent/10 transition-all duration-200 <?= $cand['status'] == 0 ? 'bg-gray-50 opacity-75' : 'bg-white' ?> group" data-curso="<?= htmlspecialchars((string)$cursoNome) ?>" data-seguimento="<?= htmlspecialchars((string)$cota) ?>" data-origem="<?= htmlspecialchars((string)$origem) ?>">
+                                    <tr class="hover:bg-gradient-to-r hover:from-primary/5 hover:to-accent/10 transition-all duration-200 <?= $cand['status'] == 0 ? 'bg-gray-50 opacity-75' : 'bg-white' ?> group" data-curso="<?= htmlspecialchars((string)$cursoNome) ?>" data-segmento="<?= htmlspecialchars((string)$cota) ?>" data-origem="<?= htmlspecialchars((string)$origem) ?>">
                                         <td class="px-6 py-4">
                                             <div>
                                                 <div class="text-sm font-semibold <?= $cand['status'] == 0 ? 'text-gray-400' : 'text-gray-900' ?>"><?= htmlspecialchars((string)$nome) ?></div>
@@ -915,7 +925,7 @@ $usuarios = $select->select_usuarios();
                                     $cota = 'AMPLA';
                                 }
                             ?>
-                                <article class="grid-item card-hover candidate-card bg-white rounded-2xl shadow-xl border-0 overflow-hidden group relative<?= (isset($cand['status']) && (int)$cand['status'] === 0 ? ' opacity-80 grayscale' : '') ?>" data-nome="<?= htmlspecialchars($nome) ?>" data-curso="<?= htmlspecialchars($cursoNome) ?>" data-seguimento="<?= htmlspecialchars($cota) ?>" data-origem="<?= htmlspecialchars($origem) ?>">
+                                <article class="grid-item card-hover candidate-card bg-white rounded-2xl shadow-xl border-0 overflow-hidden group relative<?= (isset($cand['status']) && (int)$cand['status'] === 0 ? ' opacity-80 grayscale' : '') ?>" data-nome="<?= htmlspecialchars($nome) ?>" data-curso="<?= htmlspecialchars($cursoNome) ?>" data-segmento="<?= htmlspecialchars($cota) ?>" data-origem="<?= htmlspecialchars($origem) ?>">
                                     <div class="h-2 w-full bg-gradient-to-r <?= (isset($cand['status']) && (int)$cand['status'] === 0 ? 'from-red-400 to-red-600' : 'from-primary to-secondary') ?>"></div>
                                     <?php if (isset($cand['status']) && (int)$cand['status'] === 0) { ?>
                                         <span class="absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-700 border border-red-200 shadow-sm">Desativado</span>
@@ -947,7 +957,7 @@ $usuarios = $select->select_usuarios();
                                                 <svg class="w-4 h-4 mr-2 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
                                                 </svg>
-                                                <span class="font-medium">Seguimento:</span>
+                                                <span class="font-medium">Segmento:</span>
                                                 <span class="ml-2 px-2 py-1 bg-primary/10 text-primary rounded-full text-xs font-medium"><?= htmlspecialchars((string)$cota) ?></span>
                                             </div>
                                             <div class="flex items-center text-sm text-gray-600">
