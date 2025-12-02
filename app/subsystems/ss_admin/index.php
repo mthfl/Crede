@@ -914,7 +914,7 @@ require_once __DIR__ . '/controllers/controller_admin_dashboard.php';
                 <div class="text-center mb-8">
                     <h1 class="text-primary text-3xl md:text-4xl font-bold mb-4 page-title tracking-tight font-heading">
                         <i class="fas fa-chart-line mr-3 text-secondary"></i>
-                        Progresso de Candidatos
+                        Progresso da seleção
                     </h1>
                     <p class="text-gray-600 text-lg max-w-2xl mx-auto">
                         Monitore o progresso de inscrições por escola
@@ -981,7 +981,7 @@ require_once __DIR__ . '/controllers/controller_admin_dashboard.php';
                         <div class="flex items-center justify-between mb-4 pb-3 border-b-2 border-accent">
                             <h3 class="text-xl font-bold text-primary font-heading flex items-center">
                                 <i class="fas fa-chart-pie text-secondary mr-3"></i>
-                                Distribuição de Cotas por Curso
+                                Distribuição de Cursos
                             </h3>
                         </div>
                         <div id="cursosPizzaContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
