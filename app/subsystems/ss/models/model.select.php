@@ -337,9 +337,11 @@ class select extends connect
 
     public function countTotalAlunos() {
         try {
-            $stmt = $this->connect->query("SELECT COUNT(*) as total FROM $this->table1 WHERE status = 1");
-            $result = $stmt->fetch(PDO::FETCH_ASSOC);
-            return $result['total'] ?? 0;
+            $totalPublicos = $this->countTotalPublicos();
+            $totalPrivados = $this->countTotalPrivados();
+            $totalPCDs     = $this->countTotalPCDs();
+
+            return (int)$totalPublicos + (int)$totalPrivados + (int)$totalPCDs;
         } catch (PDOException $e) {
             return 0;
         }
@@ -347,7 +349,7 @@ class select extends connect
 
     public function countTotalPublicos() {
         try {
-            $stmt = $this->connect->query("SELECT COUNT(*) as total FROM $this->table1 WHERE publica = 1 AND status = 1");
+            $stmt = $this->connect->query("SELECT COUNT(*) as total FROM $this->table1 WHERE publica = 1 AND pcd = 0 AND status = 1");
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
             return $result['total'] ?? 0;
         } catch (PDOException $e) {
@@ -357,7 +359,7 @@ class select extends connect
 
     public function countTotalPrivados() {
         try {
-            $stmt = $this->connect->query("SELECT COUNT(*) as total FROM $this->table1 WHERE publica = 0 AND status = 1");
+            $stmt = $this->connect->query("SELECT COUNT(*) as total FROM $this->table1 WHERE publica = 0 AND pcd = 0 AND status = 1");
             $result = $stmt->fetch(PDO::FETCH_ASSOC);
             return $result['total'] ?? 0;
         } catch (PDOException $e) {

@@ -958,21 +958,21 @@ require_once __DIR__ . '/controllers/controller_admin_dashboard.php';
                                 <i class="fas fa-school"></i>
                             </div>
                             <div class="stat-number"><?php echo (int)($quickStats['totalPublicos'] ?? 0); ?></div>
-                            <div class="stat-label">Candidatos Escola Pública</div>
+                            <div class="stat-label">Escola Pública</div>
                         </div>
                         <div class="stat-item">
                             <div class="stat-icon">
                                 <i class="fas fa-building"></i>
                             </div>
                             <div class="stat-number"><?php echo (int)($quickStats['totalPrivados'] ?? 0); ?></div>
-                            <div class="stat-label">Candidatos Escola Privada</div>
+                            <div class="stat-label">Escola Privada</div>
                         </div>
                         <div class="stat-item">
                             <div class="stat-icon">
                                 <i class="fas fa-wheelchair"></i>
                             </div>
                             <div class="stat-number"><?php echo (int)($quickStats['totalPCDs'] ?? 0); ?></div>
-                            <div class="stat-label">Candidatos PCD</div>
+                            <div class="stat-label">PCD's</div>
                         </div>
                     </div>
 
@@ -997,7 +997,7 @@ require_once __DIR__ . '/controllers/controller_admin_dashboard.php';
                     <div class="mb-8">
                         <h3 class="text-xl font-bold text-primary font-heading mb-4 flex items-center">
                             <i class="fas fa-users text-secondary mr-2"></i>
-                            Usuários cadastrados na escola
+                           Comissão de Seleção
                         </h3>
                         <div class="info-card p-6 grid-item">
                             <div class="card-shine"></div>
@@ -1022,7 +1022,20 @@ require_once __DIR__ . '/controllers/controller_admin_dashboard.php';
                                                         <?= htmlspecialchars($usuario['email'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
                                                     </td>
                                                     <td class="py-2 px-4 text-gray-700">
-                                                        <?= htmlspecialchars($usuario['cpf'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
+                                                        <?php
+                                                        $cpfRaw = $usuario['cpf'] ?? '';
+                                                        $cpfDigits = preg_replace('/\D/', '', (string)$cpfRaw);
+                                                        if (strlen($cpfDigits) > 4) {
+                                                            $first3 = substr($cpfDigits, 0, 3);
+                                                            $fourth = substr($cpfDigits, 3, 1);
+                                                            $restLen = strlen($cpfDigits) - 4;
+                                                            $maskedRest = str_repeat('*', max(0, $restLen));
+                                                            $cpfMasked = $first3 . '-' . $fourth . $maskedRest;
+                                                        } else {
+                                                            $cpfMasked = $cpfDigits;
+                                                        }
+                                                        echo htmlspecialchars($cpfMasked, ENT_QUOTES, 'UTF-8');
+                                                        ?>
                                                     </td>
                                                     <td class="py-2 px-4 text-gray-700">
                                                         <?= htmlspecialchars($usuario['tipo_usuario'] ?? '', ENT_QUOTES, 'UTF-8'); ?>

@@ -548,21 +548,27 @@ $usuarios = $select->select_usuarios();
                 </style>
 
                 <script>
-                    function filterCandidates() {
-                        const searchInput = document.getElementById('searchInput').value.toLowerCase();
-                        const tableRows = document.querySelectorAll('tbody tr');
-                        const candidateCards = document.querySelectorAll('.candidate-card');
+                       function filterCandidates() {
+        const searchInput = document.getElementById('searchInput').value.toLowerCase();
+        const tableRows = document.querySelectorAll('tbody tr');
+        const candidateCards = document.querySelectorAll('.candidate-card');
 
-                        tableRows.forEach(row => {
-                            const nome = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
-                            row.style.display = nome.includes(searchInput) ? '' : 'none';
-                        });
+        // Desktop (tabela) – nome está na primeira coluna (td:first-child)
+        tableRows.forEach(row => {
+            const nomeCell = row.querySelector('td:first-child');
+            const nome = nomeCell ? nomeCell.textContent.toLowerCase() : '';
+            row.style.display = nome.includes(searchInput) ? '' : 'none';
+        });
 
-                        candidateCards.forEach(card => {
-                            const nome = card.querySelector('.field:nth-child(2) .field-value').textContent.toLowerCase();
-                            card.style.display = nome.includes(searchInput) ? '' : 'none';
-                        });
-                    }
+        // Mobile (cards) – usa data-nome ou o <h3> com o nome
+        candidateCards.forEach(card => {
+            const nomeAttr = card.getAttribute('data-nome') || '';
+            const nomeH3 = card.querySelector('h3') ? card.querySelector('h3').textContent : '';
+            const nome = (nomeAttr || nomeH3).toLowerCase();
+
+            card.style.display = nome.includes(searchInput) ? '' : 'none';
+        });
+    }
                 </script>
 
                 <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
