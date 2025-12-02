@@ -394,6 +394,16 @@ function simnao($v) {
                                     <option value="privada" <?= !$isPublica ? 'selected' : '' ?>>Escola Privada</option>
                                 </select>
                             </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-600 mb-1">Curso</label>
+                                <select name="curso_id" class="w-full px-4 py-2.5 border border-gray-200 rounded-xl input-modern input-focus input-disabled" style="--tw-ring-color: <?= $cursoCor ?>; --tw-border-opacity: 0.5;" disabled required>
+                                    <?php foreach ($cursos as $curso): ?>
+                                        <option value="<?= fmt($curso['id'] ?? '') ?>" <?= isset($candidato['id_curso1']) && (int)$candidato['id_curso1'] === (int)($curso['id'] ?? 0) ? 'selected' : '' ?>>
+                                            <?= fmt($curso['nome_curso'] ?? '') ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
                             <div class="flex items-center gap-3">
                                 <input type="radio" id="pcd" name="status_candidato" value="pcd" class="w-5 h-5 text-primary border-gray-300 rounded input-checkbox input-disabled" style="--tw-ring-color: <?= $cursoCor ?>;" <?= $candidato['pcd'] == 1 ? 'checked' : '' ?> disabled>
                                 <label for="pcd" class="text-sm font-medium text-gray-700">PCD</label>

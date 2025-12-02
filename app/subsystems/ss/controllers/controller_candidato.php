@@ -17,6 +17,7 @@ if (
     $id_candidato = (int)$_POST['id_candidato'];
     $nome = trim($_POST['nome'] ?? '');
     $data_nascimento = trim($_POST['data_nascimento'] ?? '');
+    $id_curso1 = isset($_POST['curso_id']) ? (int)$_POST['curso_id'] : 0;
     $tipo_escola = $_POST['tipo_escola'] ?? 'publica';
     $publica = $tipo_escola === 'publica' ? 1 : 0;
 
@@ -122,6 +123,7 @@ if (
     $result = $admin_model->editar_candidato(
         $id_candidato,
         $nome,
+        $id_curso1,
         $data_nascimento,
         $bairro,
         $publica,

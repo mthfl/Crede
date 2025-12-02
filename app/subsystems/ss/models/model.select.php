@@ -213,6 +213,7 @@ class select extends connect
         try {
             $sql = "SELECT 
                 can.id,
+                can.id_curso1,
                 can.nome,
                 can.data_nascimento,
                 can.publica,

@@ -652,6 +652,7 @@ class admin extends cadastrador
     public function editar_candidato(
         int $id_candidato,
         string $nome,
+        int $id_curso1,
         string $data_nascimento,
         int $bairro,
         int $publica,
@@ -722,8 +723,9 @@ class admin extends cadastrador
     ): int {
         try {
             // Atualiza dados do candidato
-            $stmt = $this->connect->prepare("UPDATE $this->table1 SET nome=:nome, data_nascimento=:data_nascimento, bairro=:bairro, publica=:publica, pcd=:pcd WHERE id=:id");
+            $stmt = $this->connect->prepare("UPDATE $this->table1 SET nome=:nome, id_curso1=:id_curso1, data_nascimento=:data_nascimento, bairro=:bairro, publica=:publica, pcd=:pcd WHERE id=:id");
             $stmt->bindValue(":nome", $nome);
+            $stmt->bindValue(":id_curso1", $id_curso1, PDO::PARAM_INT);
             $stmt->bindValue(":data_nascimento", $data_nascimento);
             $stmt->bindValue(":bairro", $bairro);
             $stmt->bindValue(":publica", $publica);
