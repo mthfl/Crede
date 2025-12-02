@@ -1173,7 +1173,7 @@ class admin extends cadastrador
             $stmt_candidato = $this->connect->prepare("INSERT INTO $this->table16 VALUES (NULL, :id_usuario, :datatime, :tipo_movimentacao, :descricao)");
             $stmt_candidato->bindValue(":id_usuario", $id_usuario);
             $stmt_candidato->bindValue(":datatime", $datatime);
-            $stmt_candidato->bindValue(":tipo_movimentacao", 'HABILITAR USUÁRIO');
+            $stmt_candidato->bindValue(":tipo_movimentacao", 'CADASTRAR PERFIL');
             $stmt_candidato->bindValue(":descricao", "PERFIL " . $perfil . " CRIADO");
             if (!$stmt_candidato->execute()) {
                 return 2;
@@ -1205,7 +1205,7 @@ class admin extends cadastrador
             $stmt_candidato = $this->connect->prepare("INSERT INTO $this->table16 VALUES (NULL, :id_usuario, :datatime, :tipo_movimentacao, :descricao)");
             $stmt_candidato->bindValue(":id_usuario", $id_usuario);
             $stmt_candidato->bindValue(":datatime", $datatime);
-            $stmt_candidato->bindValue(":tipo_movimentacao", 'HABILITAR USUÁRIO');
+            $stmt_candidato->bindValue(":tipo_movimentacao", 'EDITAR PERFIL');
             $stmt_candidato->bindValue(":descricao", "FOI EDITADO O PERFIL " . $perfil);
             if (!$stmt_candidato->execute()) {
                 return 2;
@@ -1237,14 +1237,15 @@ class admin extends cadastrador
             } else {
                 return 2;
             }
+
             date_default_timezone_set('America/Fortaleza');
             $datatime = date('Y/m/d H:i:s');
             $id_usuario = $_SESSION['id'];
             $stmt_candidato = $this->connect->prepare("INSERT INTO $this->table16 VALUES (NULL, :id_usuario, :datatime, :tipo_movimentacao, :descricao)");
             $stmt_candidato->bindValue(":id_usuario", $id_usuario);
             $stmt_candidato->bindValue(":datatime", $datatime);
-            $stmt_candidato->bindValue(":tipo_movimentacao", 'HABILITAR USUÁRIO');
-            $stmt_candidato->bindValue(":descricao", "FOI EDITADO O PERFIL " . $dados['nome_perfil']);
+            $stmt_candidato->bindValue(":tipo_movimentacao", 'EDITAR PERFIL');
+            $stmt_candidato->bindValue(":descricao", "FOI EXCLUIDO O PERFIL " . $dados['nome_perfil']);
             if (!$stmt_candidato->execute()) {
                 return 2;
             }

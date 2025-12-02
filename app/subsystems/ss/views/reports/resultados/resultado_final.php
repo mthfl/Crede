@@ -55,11 +55,11 @@ class relatorios extends connect
         if ((isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin')) {
             $celula_cl = 10;
             $celula_nome = 70;
-            $celula_curso = 25;
+            $celula_curso = 30;
             $celula_origem = 18;
             $celula_segmento = 18;
             $celula_media = 15;
-            $celula_status = 32;
+            $celula_status = 27;
             $altura_celula = 5;
             $orientacao = 'P';
         } else if ((isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'cadastrador')) {
@@ -302,7 +302,7 @@ class relatorios extends connect
 
                 $pdf->Cell($celula_cl, $altura_celula, sprintf('%03d', $class), 1, 0, 'C', true);
                 $pdf->Cell($celula_nome, $altura_celula, mb_convert_encoding(mb_strtoupper($row['nome']), 'ISO-8859-1', 'UTF-8'), 1, 0, 'L', true);
-                $pdf->Cell($celula_curso, $altura_celula, mb_convert_encoding(mb_strtoupper($row['nome_curso']), 'ISO-8859-1', 'UTF-8'), 1, 0, 'L', true);
+                $pdf->Cell($celula_curso, $altura_celula, mb_convert_encoding(mb_strtoupper($row['nome_curso']), 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
                 $pdf->Cell($celula_origem, $altura_celula, mb_convert_encoding($cota, 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
                 $pdf->Cell($celula_segmento, $altura_celula, mb_convert_encoding($origem, 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
                 $pdf->Cell($celula_media, $altura_celula, number_format($row['media_final'], 2), 1, 0, 'C', true);
