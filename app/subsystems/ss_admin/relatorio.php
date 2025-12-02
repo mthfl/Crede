@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-// Garantir que a escola esteja definida (vinda do dashboard admin)
+// Garantir que a escola esteja definida
 $escola = $_SESSION['escola'] ?? null;
 if (!$escola) {
     header('Location: ./index.php');
@@ -14,7 +14,7 @@ require_once __DIR__ . '/../ss/assets/libs/fpdf/fpdf.php';
 require_once __DIR__ . '/models/Escolas.php';
 
 /**
- * PDF com fundo padrão dos relatórios do SS
+ * PDF com fundo padrão
  */
 class PDFAdminCursos extends FPDF
 {
@@ -33,31 +33,48 @@ class PDFAdminCursos extends FPDF
 
     public function Cell($w, $h = 0, $txt = '', $border = 0, $ln = 0, $align = '', $fill = false, $link = '')
     {
-        $txt = mb_convert_encoding($txt, 'ISO-8859-1', 'UTF-8');
+        $txt = mb_convert_encoding(mb_strtoupper($txt, 'UTF-8'), 'ISO-8859-1', 'UTF-8');
         parent::Cell($w, $h, $txt, $border, $ln, $align, $fill, $link);
     }
 
     public function MultiCell($w, $h, $txt, $border = 0, $align = 'J', $fill = false)
     {
-        $txt = mb_convert_encoding($txt, 'ISO-8859-1', 'UTF-8');
+        $txt = mb_convert_encoding(mb_strtoupper($txt, 'UTF-8'), 'ISO-8859-1', 'UTF-8');
         parent::MultiCell($w, $h, $txt, $border, $align, $fill);
     }
 }
 
-/**
- * Relatório de cursos (admin) usando o mesmo padrão dos relatórios do SS
- * e os mesmos dados exibidos no dashboard admin.
- */
 class RelatorioAdminCursos
 {
     private select $select;
     private PDFAdminCursos $pdf;
+    private string $table5;
+    private $connect;
 
     public function __construct(string $escola)
     {
         $this->select = new select($escola);
-        // Modo retrato para o relatório
         $this->pdf = new PDFAdminCursos('P', 'mm', 'A4');
+        
+        $table = require(__DIR__ . '/../../.env/tables.php');
+        $this->table5 = $table["ss_$escola"][5]; // usuarios
+
+        $connectTemp = new connect($escola);
+        $reflection  = new ReflectionClass($connectTemp);
+        $property    = $reflection->getProperty('connect');
+        $property->setAccessible(true);
+        $this->connect = $property->getValue($connectTemp);
+    }
+    
+    private function getUsuariosAtivos(): array
+    {
+        try {
+            $sql = "SELECT nome_user, email, cpf, tipo_usuario FROM {$this->table5} WHERE status = 1 ORDER BY nome_user";
+            $stmt = $this->connect->query($sql);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return [];
+        }
     }
 
     public function gerar(): void
@@ -65,36 +82,32 @@ class RelatorioAdminCursos
         date_default_timezone_set('America/Fortaleza');
         $dataHora = date('d/m/Y H:i:s');
 
-        // Tentar obter o nome completo da escola
-        $nomeEscola = $_SESSION['nome_escola'] ?? '';
+        // Nome da escola em caixa alta
+        $nomeEscola = mb_strtoupper($_SESSION['nome_escola'] ?? '');
         if ($nomeEscola === '' && !empty($_SESSION['escola'])) {
             $escolasModel  = new Escolas();
             $schoolsConfig = $escolasModel->listarEscolas();
             foreach ($schoolsConfig as $escolaRow) {
                 if (($escolaRow['escola_banco'] ?? '') === $_SESSION['escola']) {
-                    $nomeEscola = $escolaRow['nome_escola'] ?? '';
+                    $nomeEscola = mb_strtoupper($escolaRow['nome_escola'] ?? 'ESCOLA');
                     break;
                 }
             }
         }
-        if ($nomeEscola === '') {
-            $nomeEscola = 'Escola';
-        }
+        $nomeEscola = $nomeEscola !== '' ? $nomeEscola : 'ESCOLA';
 
-        // Dados gerais (mesmo conceito do dashboard)
+        // Dados gerais
         $totalAlunos   = $this->select->countTotalAlunos();
         $totalPublicos = $this->select->countTotalPublicos();
         $totalPrivados = $this->select->countTotalPrivados();
         $totalPCDs     = $this->select->countTotalPCDs();
-
-        // Dados por curso (mesmo método usado em AdminDashboard)
         $cotasPorCurso = $this->select->getCotasPorCurso();
 
         $this->pdf->AddPage();
 
         // Cabeçalho
         $this->pdf->SetFont('Arial', 'B', 13);
-        $this->pdf->SetY(5);
+        $this->pdf->SetY(3);
         $this->pdf->SetX(10);
         $this->pdf->Cell(0, 6, $nomeEscola, 0, 1, 'L');
 
@@ -102,33 +115,29 @@ class RelatorioAdminCursos
         $this->pdf->SetX(-80);
         $this->pdf->Cell(70, 6, $dataHora, 0, 1, 'R');
 
-        // Título principal
-        $this->pdf->SetY(12);
+        // Título
+        $this->pdf->SetY(9.5);
         $this->pdf->SetX(10);
-        $this->pdf->SetFont('Arial', 'B', 18);
-        $titulo = 'RELATÓRIO';
-        $this->pdf->Cell(0, 8, $titulo, 0, 1, 'L');
+        $this->pdf->SetFont('Arial', 'B', 17);
+        $this->pdf->Cell(0, 8, 'RELATÓRIO GERAL', 0, 1, 'L');
 
-        // Bloco de estatísticas gerais (equivalente ao "quick stats" do dashboard)
+        // Resumo geral
         $this->pdf->Ln(2);
         $this->pdf->SetFont('Arial', 'B', 11);
-        $this->pdf->SetTextColor(0, 90, 36); // verde
-
+        $this->pdf->SetTextColor(0, 90, 36);
         $this->pdf->SetX(10);
         $this->pdf->Cell(0, 6, 'RESUMO GERAL DE CANDIDATOS', 0, 1, 'L');
 
         $this->pdf->Ln(1);
         $this->pdf->SetFont('Arial', '', 10);
         $this->pdf->SetTextColor(0, 0, 0);
-
-        // Distribuir as estatísticas em 4 colunas iguais (190mm / 4 = 47.5mm cada)
         $this->pdf->SetX(10);
-        $this->pdf->Cell(47, 6, "Total de Candidatos: {$totalAlunos}", 0, 0, 'L');
-        $this->pdf->Cell(47, 6, "Escola Publica: {$totalPublicos}", 0, 0, 'L');
-        $this->pdf->Cell(47, 6, "Escola Privada: {$totalPrivados}", 0, 0, 'L');
-        $this->pdf->Cell(49, 6, "PCD's: {$totalPCDs}", 0, 1, 'L');
+        $this->pdf->Cell(47, 6, "TOTAL DE CANDIDATOS: {$totalAlunos}", 0, 0, 'L');
+        $this->pdf->Cell(47, 6, "ESCOLA PÚBLICA: {$totalPublicos}", 0, 0, 'L');
+        $this->pdf->Cell(47, 6, "ESCOLA PRIVADA: {$totalPrivados}", 0, 0, 'L');
+        $this->pdf->Cell(49, 6, "PCD'S: {$totalPCDs}", 0, 1, 'L');
 
-        // Legenda das colunas de cotas (equivalente ao dashboard)
+        // Legenda
         $this->pdf->Ln(4);
         $this->pdf->SetFont('Arial', 'B', 9);
         $this->pdf->SetTextColor(255, 174, 25);
@@ -138,22 +147,20 @@ class RelatorioAdminCursos
         $this->pdf->SetFont('Arial', '', 9);
         $this->pdf->SetTextColor(0, 90, 36);
         $this->pdf->SetX(10);
-        $this->pdf->Cell(0, 5, 'AMPLA PUBLICA | COTA PUBLICA | PCD PUBLICA/PRIVADA | AMPLA PRIVADA | COTA PRIVADA', 0, 1, 'L');
+        $this->pdf->Cell(0, 5, 'AMPLA PÚBLICA | COTA PÚBLICA | PCD PÚBLICA/PRIVADA | AMPLA PRIVADA | COTA PRIVADA', 0, 1, 'L');
 
-        // Tabela de cursos com distribuição de cotas
-        // Largura útil da página A4 em retrato: 210mm - 10mm (esquerda) - 10mm (direita) = 190mm
+        // Tabela de cursos
         $this->pdf->Ln(3);
         $this->pdf->SetFont('Arial', 'B', 10);
         $this->pdf->SetTextColor(255, 255, 255);
-        $this->pdf->SetFillColor(0, 90, 36); // verde
-
+        $this->pdf->SetFillColor(0, 90, 36);
         $this->pdf->SetX(10);
         $this->pdf->Cell(60, 7, 'CURSO', 1, 0, 'C', true);
         $this->pdf->Cell(18, 7, 'TOTAL', 1, 0, 'C', true);
-        $this->pdf->Cell(22, 7, 'AMPLA PUB.', 1, 0, 'C', true);
-        $this->pdf->Cell(22, 7, 'COTA PUB.', 1, 0, 'C', true);
-        $this->pdf->Cell(22, 7, 'PCD (TOT.)', 1, 0, 'C', true);
-        $this->pdf->Cell(22, 7, 'AMPLA PRIV.', 1, 0, 'C', true);
+        $this->pdf->Cell(23, 7, 'AMPLA PUB.', 1, 0, 'C', true);
+        $this->pdf->Cell(23, 7, 'COTA PUB.', 1, 0, 'C', true);
+        $this->pdf->Cell(18, 7, 'PCD', 1, 0, 'C', true);
+        $this->pdf->Cell(24, 7, 'AMPLA PRIV.', 1, 0, 'C', true);
         $this->pdf->Cell(24, 7, 'COTA PRIV.', 1, 1, 'C', true);
 
         $this->pdf->SetFont('Arial', '', 9);
@@ -162,28 +169,90 @@ class RelatorioAdminCursos
         if (empty($cotasPorCurso)) {
             $this->pdf->Ln(4);
             $this->pdf->SetX(10);
-            $this->pdf->Cell(0, 6, 'Nenhum curso com candidatos encontrado para esta escola.', 0, 1, 'L');
+            $this->pdf->Cell(0, 6, 'NENHUM CURSO COM CANDIDATOS ENCONTRADO PARA ESTA ESCOLA.', 0, 1, 'L');
         } else {
             foreach ($cotasPorCurso as $curso) {
-                $nomeCurso      = $curso['nome_curso'] ?? 'Curso sem nome';
-                $amplaPublica   = (int)($curso['ampla_publica'] ?? 0);
-                $cotaPublica    = (int)($curso['cota_publica'] ?? 0);
-                $pcdPublica     = (int)($curso['pcd_publica'] ?? 0);
-                $amplaPrivada   = (int)($curso['ampla_privada'] ?? 0);
-                $cotaPrivada    = (int)($curso['cota_privada'] ?? 0);
-                $pcdPrivada     = (int)($curso['pcd_privada'] ?? 0);
+                $nomeCurso    = $curso['nome_curso'] ?? 'CURSO SEM NOME';
+                $amplaPublica = (int)($curso['ampla_publica'] ?? 0);
+                $cotaPublica  = (int)($curso['cota_publica'] ?? 0);
+                $pcdPublica   = (int)($curso['pcd_publica'] ?? 0);
+                $amplaPrivada = (int)($curso['ampla_privada'] ?? 0);
+                $cotaPrivada  = (int)($curso['cota_privada'] ?? 0);
+                $pcdPrivada   = (int)($curso['pcd_privada'] ?? 0);
 
                 $totalPCD   = $pcdPublica + $pcdPrivada;
                 $totalCurso = $amplaPublica + $cotaPublica + $totalPCD + $amplaPrivada + $cotaPrivada;
 
                 $this->pdf->SetX(10);
-                $this->pdf->Cell(60, 7, mb_strtoupper($nomeCurso), 1, 0, 'L');
+                $this->pdf->Cell(60, 7, $nomeCurso, 1, 0, 'L');
                 $this->pdf->Cell(18, 7, (string)$totalCurso, 1, 0, 'C');
-                $this->pdf->Cell(22, 7, (string)$amplaPublica, 1, 0, 'C');
-                $this->pdf->Cell(22, 7, (string)$cotaPublica, 1, 0, 'C');
-                $this->pdf->Cell(22, 7, (string)$totalPCD, 1, 0, 'C');
-                $this->pdf->Cell(22, 7, (string)$amplaPrivada, 1, 0, 'C');
+                $this->pdf->Cell(23, 7, (string)$amplaPublica, 1, 0, 'C');
+                $this->pdf->Cell(23, 7, (string)$cotaPublica, 1, 0, 'C');
+                $this->pdf->Cell(18, 7, (string)$totalPCD, 1, 0, 'C');
+                $this->pdf->Cell(24, 7, (string)$amplaPrivada, 1, 0, 'C');
                 $this->pdf->Cell(24, 7, (string)$cotaPrivada, 1, 1, 'C');
+            }
+        }
+
+        // COMISSÃO DE SELEÇÃO
+        $usuariosAtivos = $this->getUsuariosAtivos();
+        
+        if (!empty($usuariosAtivos)) {
+            if ($this->pdf->GetY() > 230) {
+                $this->pdf->AddPage();
+            }
+            
+            $this->pdf->Ln(10);
+            
+            $this->pdf->SetFont('Arial', 'B', 14);
+            $this->pdf->SetFillColor(0, 90, 36);
+            $this->pdf->SetTextColor(255, 255, 255);
+            $this->pdf->SetX(10);
+            $this->pdf->Cell(190, 9, 'COMISSÃO DE SELEÇÃO - USUÁRIOS ATIVOS', 1, 1, 'C', true);
+            
+            // Cabeçalho da tabela
+            $this->pdf->SetFont('Arial', 'B', 10);
+            $this->pdf->SetFillColor(0, 90, 36);
+            $this->pdf->SetTextColor(255, 255, 255);
+            $this->pdf->SetX(10);
+            $this->pdf->Cell(65, 8, 'NOME', 1, 0, 'C', true);
+            $this->pdf->Cell(60, 8, 'E-MAIL', 1, 0, 'C', true);
+            $this->pdf->Cell(30, 8, 'CPF', 1, 0, 'C', true);
+            $this->pdf->Cell(35, 8, 'TIPO DE USUÁRIO', 1, 1, 'C', true);
+            
+            $this->pdf->SetFont('Arial', '', 9);
+            $this->pdf->SetTextColor(0, 0, 0);
+            
+            foreach ($usuariosAtivos as $usuario) {
+                $nome  = $usuario['nome_user'] ?? '';
+                $email = $usuario['email'] ?? '';
+                $cpf   = $usuario['cpf'] ?? '';
+                $tipo  = $usuario['tipo_usuario'] ?? 'NÃO INFORMADO';
+
+                // CPF formatado
+                if ($cpf && strlen($cpf) === 11) {
+                    $cpf = preg_replace("/(\d{3})(\d{3})(\d{3})(\d{2})/", "$1.$2.$3-$4", $cpf);
+                }
+
+                if ($this->pdf->GetY() > 270) {
+                    $this->pdf->AddPage();
+                    $this->pdf->SetFont('Arial', 'B', 10);
+                    $this->pdf->SetFillColor(0, 90, 36);
+                    $this->pdf->SetTextColor(255, 255, 255);
+                    $this->pdf->SetX(10);
+                    $this->pdf->Cell(65, 8, 'NOME', 1, 0, 'C', true);
+                    $this->pdf->Cell(60, 8, 'E-MAIL', 1, 0, 'C', true);
+                    $this->pdf->Cell(30, 8, 'CPF', 1, 0, 'C', true);
+                    $this->pdf->Cell(35, 8, 'TIPO DE USUÁRIO', 1, 1, 'C', true);
+                    $this->pdf->SetFont('Arial', '', 9);
+                    $this->pdf->SetTextColor(0, 0, 0);
+                }
+                
+                $this->pdf->SetX(10);
+                $this->pdf->Cell(65, 8, $nome, 1, 0, 'L');
+                $this->pdf->Cell(60, 8, $email, 1, 0, 'L');
+                $this->pdf->Cell(30, 8, $cpf, 1, 0, 'C');
+                $this->pdf->Cell(35, 8, $tipo, 1, 1, 'L');
             }
         }
 
@@ -191,7 +260,6 @@ class RelatorioAdminCursos
     }
 }
 
+// Executa
 $relatorio = new RelatorioAdminCursos($escola);
 $relatorio->gerar();
-
-
