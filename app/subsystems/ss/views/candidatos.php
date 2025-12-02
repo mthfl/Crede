@@ -24,6 +24,7 @@ $usuarios = $select->select_usuarios();
     <title>Sistema Escolar - Candidatos</title>
     <link rel="icon" type="image/png" href="https://i.postimg.cc/0N0dsxrM/Bras-o-do-Cear-svg-removebg-preview.png">
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/slim-select@2.8.1/dist/slimselect.css">
     <script>
         tailwind.config = {
             theme: {
@@ -336,7 +337,7 @@ $usuarios = $select->select_usuarios();
                             <a href="../index.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring ">
                                 <div class="w-12 h-12 bg-white/10  rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5a2 2 0 012-2h4a2 2 0 012 2v2H8V5z"></path>
                                     </svg>
                                 </div>
@@ -527,46 +528,38 @@ $usuarios = $select->select_usuarios();
                                 </svg>
                             </div>
 
-                            <div class="relative min-w-[150px]">
-                                <select id="cursoFilter" class="appearance-none w-full px-3 py-2.5 pr-8 border border-primary/40 rounded-xl text-xs sm:text-sm bg-accent text-dark focus:border-primary focus:ring-2 focus:ring-primary/20" onchange="filterCandidates()">
-                                    <option value="">Todos os cursos</option>
-                                    <?php foreach ($cursos as $curso) { ?>
-                                        <option value="<?= htmlspecialchars($curso['nome_curso']) ?>"><?= htmlspecialchars($curso['nome_curso']) ?></option>
-                                    <?php } ?>
+                            <!-- Select único de filtros -->
+                            <div class="relative min-w-[200px]">
+                                <select id="filterPicker" onchange="addFilterChip()">
+                                    <option value="">Adicionar filtro...</option>
+                                    <optgroup label="Curso">
+                                        <?php foreach ($cursos as $curso) { 
+                                            $nomeCursoOriginal = $curso['nome_curso'] ?? '';
+                                            $nomeCursoNormalizado = ucfirst(mb_strtolower($nomeCursoOriginal, 'UTF-8'));
+                                        ?>
+                                            <option value="curso:<?= htmlspecialchars($nomeCursoOriginal) ?>">Curso: <?= htmlspecialchars($nomeCursoNormalizado) ?></option>
+                                        <?php } ?>
+                                    </optgroup>
+                                    <optgroup label="Seguimento">
+                                        <option value="seguimento:AMPLA">Seguimento: Ampla</option>
+                                        <option value="seguimento:BAIRRO">Seguimento: Bairro</option>
+                                        <option value="seguimento:PCD">Seguimento: Pcd</option>
+                                    </optgroup>
+                                    <optgroup label="Origem">
+                                        <option value="origem:Pública">Origem: Pública</option>
+                                        <option value="origem:Privada">Origem: Privada</option>
+                                    </optgroup>
                                 </select>
-                                <svg class="w-4 h-4 text-primary absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none" viewBox="0 0 20 20" fill="none" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M6 8l4 4 4-4" />
-                                </svg>
                             </div>
 
-                            <div class="relative min-w-[130px]">
-                                <select id="seguimentoFilter" class="appearance-none w-full px-3 py-2.5 pr-8 border border-primary/40 rounded-xl text-xs sm:text-sm bg-accent text-dark focus:border-primary focus:ring-2 focus:ring-primary/20" onchange="filterCandidates()">
-                                    <option value="">Todos os seguimentos</option>
-                                    <option value="AMPLA">AMPLA</option>
-                                    <option value="BAIRRO">BAIRRO</option>
-                                    <option value="PCD">PCD</option>
-                                </select>
-                                <svg class="w-4 h-4 text-primary absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none" viewBox="0 0 20 20" fill="none" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M6 8l4 4 4-4" />
-                                </svg>
-                            </div>
-
-                            <div class="relative min-w-[130px]">
-                                <select id="origemFilter" class="appearance-none w-full px-3 py-2.5 pr-8 border border-primary/40 rounded-xl text-xs sm:text-sm bg-accent text-dark focus:border-primary focus:ring-2 focus:ring-primary/20" onchange="filterCandidates()">
-                                    <option value="">Todas as origens</option>
-                                    <option value="Pública">Pública</option>
-                                    <option value="Privada">Privada</option>
-                                </select>
-                                <svg class="w-4 h-4 text-primary absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none" viewBox="0 0 20 20" fill="none" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M6 8l4 4 4-4" />
-                                </svg>
-                            </div>
+                            <!-- Chips de filtros ativos -->
+                            <div id="activeFilters" class="flex flex-wrap gap-2 flex-1"></div>
 
                             <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
                                 <div class="ml-0 lg:ml-2">
                                     <a href="candidatos_excluidos.php" class="bg-primary text-white px-4 sm:px-5 py-2.5 sm:py-3 rounded-xl hover:bg-dark transition-all duration-300 font-medium text-xs sm:text-sm btn-animate focus-ring flex items-center shadow hover:shadow-lg whitespace-nowrap">
                                         <svg class="w-4 h-4 mr-1.5 sm:mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m4-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                                         </svg>
                                         <span>Candidatos Inativos</span>
                                     </a>
@@ -584,14 +577,154 @@ $usuarios = $select->select_usuarios();
                         outline: 2px solid var(--primary);
                         outline-offset: 2px;
                     }
+
+                    /* Slim Select - estilização alinhada à paleta do sistema */
+                    #filterPicker {
+                        display: block;
+                        width: 100%;
+                        border-radius: 0.75rem;
+                        border: 1px solid rgba(0, 90, 36, 0.6);
+                        min-height: 2.5rem;
+                        padding: 0.45rem 0.75rem;
+                        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+                        background-color: #ffffff;
+                        font-size: 0.9rem;
+                        color: #374151;
+                    }
+
+                    .ss-main {
+                        border-radius: 0.75rem;
+                        border: 1px solid rgba(0, 90, 36, 0.6);
+                        min-height: 2.5rem;
+                        padding: 0.15rem 0.6rem;
+                        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+                        background-color: #ffffff;
+                        font-size: 0.9rem;
+                        color: #374151;
+                        outline: none;
+                    }
+
+                    .ss-main.ss-open,
+                    .ss-main.ss-focus,
+                    .ss-main:focus,
+                    .ss-main:focus-visible {
+                        border-color: var(--primary) !important;
+                        box-shadow: 0 0 0 3px rgba(0, 90, 36, 0.18) !important;
+                        outline: none !important;
+                    }
+
+                    .ss-main .ss-values .ss-single {
+                        color: #4b5563;
+                    }
+
+                    .ss-main .ss-arrow path {
+                        stroke: var(--primary);
+                    }
+
+                    .ss-content {
+                        border-radius: 0.75rem;
+                        border-color: rgba(0, 90, 36, 0.35);
+                        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+                        overflow: hidden;
+                        outline: none;
+                    }
+
+                    .ss-content .ss-list .ss-option {
+                        font-size: 0.8rem;
+                        padding: 0.5rem 0.75rem;
+                        color: var(--dark);
+                    }
+
+                    .ss-content .ss-list .ss-option.ss-highlighted,
+                    .ss-content .ss-list .ss-option.ss-selected,
+                    .ss-content .ss-list .ss-option:hover {
+                        background-color: rgba(0, 90, 36, 0.08) !important;
+                        color: var(--primary) !important;
+                    }
+
+                    .ss-content .ss-list .ss-group {
+                        font-size: 0.75rem;
+                        font-weight: 600;
+                        text-transform: uppercase;
+                        color: var(--primary);
+                        background-color: rgba(0, 90, 36, 0.06);
+                        padding: 0.4rem 0.75rem;
+                        border-top: 1px solid rgba(0, 90, 36, 0.08);
+                    }
                 </style>
 
                 <script>
+                    function getActiveFilterValues() {
+                        const chips = document.querySelectorAll('#activeFilters .filter-chip');
+                        const filtros = {
+                            cursos: [],
+                            seguimentos: [],
+                            origens: []
+                        };
+
+                        chips.forEach(chip => {
+                            const tipo = chip.getAttribute('data-tipo');
+                            const valor = chip.getAttribute('data-valor') || '';
+                            if (!valor) return;
+
+                            if (tipo === 'curso') filtros.cursos.push(valor);
+                            if (tipo === 'seguimento') filtros.seguimentos.push(valor);
+                            if (tipo === 'origem') filtros.origens.push(valor);
+                        });
+
+                        return filtros;
+                    }
+
+                    function addFilterChip() {
+                        const select = document.getElementById('filterPicker');
+                        if (!select) return;
+
+                        const value = select.value;
+                        if (!value) return;
+
+                        const [tipo, raw] = value.split(':');
+                        const texto = select.options[select.selectedIndex].text;
+                        const container = document.getElementById('activeFilters');
+                        if (!container || !tipo || !raw) return;
+
+                        const valor = raw;
+
+                        // Evitar chips duplicados (mesmo tipo + valor)
+                        const existing = container.querySelector(`.filter-chip[data-tipo="${tipo}"][data-valor="${valor}"]`);
+                        if (existing) {
+                            select.value = '';
+                            return;
+                        }
+
+                        const chip = document.createElement('div');
+                        chip.className = 'filter-chip inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/30';
+                        chip.setAttribute('data-tipo', tipo);
+                        chip.setAttribute('data-valor', valor);
+
+                        const span = document.createElement('span');
+                        span.textContent = texto;
+
+                        const btn = document.createElement('button');
+                        btn.type = 'button';
+                        btn.className = 'ml-1 text-primary/70 hover:text-primary focus:outline-none';
+                        btn.innerHTML = '&times;';
+                        btn.onclick = function() {
+                            chip.remove();
+                            filterCandidates();
+                        };
+
+                        chip.appendChild(span);
+                        chip.appendChild(btn);
+                        container.appendChild(chip);
+
+                        // Reset select e aplicar filtro
+                        select.value = '';
+                        filterCandidates();
+                    }
+
                     function filterCandidates() {
                         const searchInput = (document.getElementById('searchInput')?.value || '').toLowerCase();
-                        const cursoFilter = document.getElementById('cursoFilter')?.value || '';
-                        const seguimentoFilter = document.getElementById('seguimentoFilter')?.value || '';
-                        const origemFilter = document.getElementById('origemFilter')?.value || '';
+                        const { cursos, seguimentos, origens } = getActiveFilterValues();
 
                         const tableRows = document.querySelectorAll('tbody tr');
                         const candidateCards = document.querySelectorAll('.candidate-card');
@@ -606,9 +739,9 @@ $usuarios = $select->select_usuarios();
                             const rowOrigem = row.getAttribute('data-origem') || '';
 
                             const matchNome = nome.includes(searchInput);
-                            const matchCurso = !cursoFilter || rowCurso === cursoFilter;
-                            const matchSeguimento = !seguimentoFilter || rowSeguimento === seguimentoFilter;
-                            const matchOrigem = !origemFilter || rowOrigem === origemFilter;
+                            const matchCurso = cursos.length === 0 || cursos.includes(rowCurso);
+                            const matchSeguimento = seguimentos.length === 0 || seguimentos.includes(rowSeguimento);
+                            const matchOrigem = origens.length === 0 || origens.includes(rowOrigem);
 
                             row.style.display = (matchNome && matchCurso && matchSeguimento && matchOrigem) ? '' : 'none';
                         });
@@ -624,9 +757,9 @@ $usuarios = $select->select_usuarios();
                             const cardOrigem = card.getAttribute('data-origem') || '';
 
                             const matchNome = nome.includes(searchInput);
-                            const matchCurso = !cursoFilter || cardCurso === cursoFilter;
-                            const matchSeguimento = !seguimentoFilter || cardSeguimento === seguimentoFilter;
-                            const matchOrigem = !origemFilter || cardOrigem === origemFilter;
+                            const matchCurso = cursos.length === 0 || cursos.includes(cardCurso);
+                            const matchSeguimento = seguimentos.length === 0 || seguimentos.includes(cardSeguimento);
+                            const matchOrigem = origens.length === 0 || origens.includes(cardOrigem);
 
                             card.style.display = (matchNome && matchCurso && matchSeguimento && matchOrigem) ? '' : 'none';
                         });
@@ -819,7 +952,7 @@ $usuarios = $select->select_usuarios();
                                             </div>
                                             <div class="flex items-center text-sm text-gray-600">
                                                 <svg class="w-4 h-4 mr-2 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"></path>
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 7l9-4 9 4M4 10h16v11H4V10z"></path>
                                                 </svg>
                                                 <span class="font-medium">Origem:</span>
                                                 <span class="ml-2 px-2 py-1 bg-primary/10 text-primary rounded-full text-xs font-medium"><?= $origem ?></span>
@@ -903,7 +1036,7 @@ $usuarios = $select->select_usuarios();
                 <div class="mb-4 text-left">
                     <label for="inactivateReason" class="block text-sm font-semibold text-gray-700 mb-2">Motivo da desativação *</label>
                     <div class="relative">
-                        <select id="inactivateReason" name="motivo" required class="w-full appearance-none px-4 py-3.5 border border-gray-300 rounded-xl bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-base pr-10">
+                        <select id="inactivateReason" name="motivo" required class="w-full appearance-none px-4 py-3.5 border border-gray-300 rounded-xl text-xs sm:text-sm bg-white text-dark shadow-sm hover:border-primary hover:shadow focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all">
                             <option value="" selected disabled>SELECIONE UM MOTIVO</option>
                             <option value="DESISTÊNCIA VOLUNTÁRIA">DESISTÊNCIA VOLUNTÁRIA</option>
                             <option value="DOCUMENTO INVÁLIDO">DOCUMENTO INVÁLIDO</option>
@@ -924,7 +1057,7 @@ $usuarios = $select->select_usuarios();
                     </div>
                 </div>
                 <div class="flex flex-col sm:flex-row gap-3 justify-center">
-                    <button type="button" class="px-6 py-3 rounded-xl border-2 border-secondary font-semibold text-secondary hover:bg-secondary/10 hover:border-secondary transition-all text-base focus-ring" onclick="closeModal('modalInactivateConfirm')">Cancelar</button>
+                    <button type="button" class="px-6 py-3 rounded-xl border-2 border-secondary font-semibold text-secondary hover:bg-accent hover:border-secondary transition-all text-base focus-ring" onclick="closeModal('modalInactivateConfirm')">Cancelar</button>
                     <button type="submit" class="px-6 py-3 bg-gradient-to-r from-secondary to-orange-600 text-white font-semibold rounded-xl hover:from-secondary/90 hover:to-orange-700 transition-all text-base shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 focus-ring">Confirmar Desativação</button>
                 </div>
             </form>
@@ -945,7 +1078,7 @@ $usuarios = $select->select_usuarios();
                     Tem certeza que deseja ativar o candidato <span class="font-semibold text-dark" id="activateCandidatoName"></span>?
                 </p>
                 <div class="flex flex-col sm:flex-row gap-3 justify-center">
-                    <button type="button" class="px-6 py-3 rounded-xl border-2 border-secondary font-semibold text-secondary hover:bg-secondary/10 hover:border-secondary transition-all text-base focus-ring" onclick="closeModal('modalActivateConfirm')">Cancelar</button>
+                    <button type="button" class="px-6 py-3 rounded-xl border-2 border-secondary font-semibold text-secondary hover:bg-accent hover:border-secondary transition-all text-base focus-ring" onclick="closeModal('modalActivateConfirm')">Cancelar</button>
                     <a id="activateLink" href="#" class="px-6 py-3 bg-gradient-to-r from-secondary to-orange-600 text-white font-semibold rounded-xl hover:from-secondary/90 hover:to-orange-700 transition-all text-base shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 focus-ring text-center">Confirmar Ativação</a>
                 </div>
             </div>
@@ -973,7 +1106,7 @@ $usuarios = $select->select_usuarios();
                     <input type="hidden" name="form" value="candidato">
                     <input type="hidden" id="deleteCandidatoId" name="id_candidato" value="">
                     <div class="flex flex-col sm:flex-row gap-3 justify-center">
-                        <button type="button" class="px-6 py-3 rounded-xl border-2 border-secondary font-semibold text-secondary hover:bg-secondary/10 hover:border-secondary transition-all text-base focus-ring" onclick="closeModal('modalDeleteCandidato')">Cancelar</button>
+                        <button type="button" class="px-6 py-3 rounded-xl border-2 border-secondary font-semibold text-secondary hover:bg-accent hover:border-secondary transition-all text-base focus-ring" onclick="closeModal('modalDeleteCandidato')">Cancelar</button>
                         <button type="submit" name="acao" value="delete" class="px-6 py-3 bg-gradient-to-r from-secondary to-orange-600 text-white font-semibold rounded-xl hover:from-secondary/90 hover:to-orange-700 transition-all text-base shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 focus-ring">Excluir Candidato</button>
                     </div>
                 </form>
@@ -1052,7 +1185,7 @@ $usuarios = $select->select_usuarios();
                 <div class="flex items-center space-x-3">
                     <div class="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm border border-white/30 shadow-lg">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0h2a2 2 0 002 2v2a2 2 0 00-2 2H9a2 2 0 00-2-2v-2a2 2 0 00-2-2zm2 0h2v2a2 2 0 002 2H9a2 2 0 00-2-2v-2a2 2 0 002-2z"></path>
                         </svg>
                     </div>
                     <div>
@@ -1105,6 +1238,7 @@ $usuarios = $select->select_usuarios();
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/slim-select@2.8.1/dist/slimselect.min.js"></script>
     <script>
         const sidebar = document.getElementById('sidebar');
         const overlay = document.getElementById('overlay');
@@ -1267,6 +1401,18 @@ $usuarios = $select->select_usuarios();
                         labelCurso.textContent = 'Curso (Obrigatório)';
                         labelCurso.classList.remove('text-gray-400');
                         labelCurso.classList.add('text-red-600');
+                    }
+                });
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterPicker = document.getElementById('filterPicker');
+            if (filterPicker && typeof SlimSelect !== 'undefined') {
+                new SlimSelect({
+                    select: filterPicker,
+                    settings: {
+                        showSearch: false
                     }
                 });
             }
