@@ -234,7 +234,7 @@ class relatorios extends connect
         $pdf->SetTextColor(0, 90, 36);
         $pdf->SetFont('Arial', '', 8);
         $pdf->SetX(39);
-        $pdf->Cell(0, 5, $this->bairros_texto_pdf, 0, 1, 'L');
+        $pdf->Cell(0, 5, mb_convert_encoding($this->bairros_texto_pdf, 'ISO-8859-1', 'UTF-8'), 0, 1, 'L');
 
         // Linha separadora verde
         $pdf->SetDrawColor(0, 90, 36);
@@ -288,7 +288,7 @@ class relatorios extends connect
                 $origem = $row['publica'] ? 'PÚBLICA' : 'PRIVADA';
                 $cota   = $row['pcd'] ? 'PCD' : ($row['bairro'] ? 'COTISTA' : 'AC');
                 $isClassificado = in_array($row['id'], $ids_classificados);
-                $status = $isClassificado ? 'CLASSIFICADO' : 'CLASSIFICÁVEL';
+                $status = $isClassificado ? 'CLASSIFICADO' : 'LISTA DE ESPERA';
 
                 // destaques visuais para classificados
                 $pdf->SetFont('Arial', $isClassificado ? 'B' : '', 8);

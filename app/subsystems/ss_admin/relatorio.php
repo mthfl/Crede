@@ -137,18 +137,6 @@ class RelatorioAdminCursos
         $this->pdf->Cell(47, 6, "ESCOLA PRIVADA: {$totalPrivados}", 0, 0, 'L');
         $this->pdf->Cell(49, 6, "PCD'S: {$totalPCDs}", 0, 1, 'L');
 
-        // Legenda
-        $this->pdf->Ln(4);
-        $this->pdf->SetFont('Arial', 'B', 9);
-        $this->pdf->SetTextColor(255, 174, 25);
-        $this->pdf->SetX(10);
-        $this->pdf->Cell(0, 5, 'LEGENDA DOS SEGMENTOS:', 0, 1, 'L');
-
-        $this->pdf->SetFont('Arial', '', 9);
-        $this->pdf->SetTextColor(0, 90, 36);
-        $this->pdf->SetX(10);
-        $this->pdf->Cell(0, 5, 'AMPLA PÚBLICA | COTA PÚBLICA | PCD PÚBLICA/PRIVADA | AMPLA PRIVADA | COTA PRIVADA', 0, 1, 'L');
-
         // Tabela de cursos
         $this->pdf->Ln(3);
         $this->pdf->SetFont('Arial', 'B', 10);
