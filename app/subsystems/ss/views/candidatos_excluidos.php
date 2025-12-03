@@ -341,7 +341,7 @@ $usuarios = $select->select_usuarios();
                                     </svg>
                                 </div>
                                 <div>
-                                    <span class="font-semibold text-base">Dashboard</span>
+                                   <span class="font-semibold text-base">Início</span>
                                     <p class="text-green-200 text-xs mt-1">Página inicial</p>
                                 </div>
                             </a>
@@ -454,7 +454,7 @@ $usuarios = $select->select_usuarios();
                     <?php if (isset($_SESSION['tipo_usuario']) && $_SESSION['tipo_usuario'] === 'admin') { ?>
                         <div class="animate-slide-in-left" style="animation-delay: 0.5s;">
                             <a href="limpar_banco.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
-                                <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-red-500 group-hover:scale-110 transition-all duration-300">
+                                <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-red-500 group-hover:scale-110 transition-all duração-300">
                                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                                     </svg>
@@ -466,6 +466,22 @@ $usuarios = $select->select_usuarios();
                             </a>
                         </div>
                     <?php } ?>
+
+                    <!-- Perfil Escola -->
+                    <div class="animate-slide-in-left" style="animation-delay: 0.53s;">
+                        <a href="perfil_escola.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
+                            <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7l9-4 9 4-9 4-9-4z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 17l9 4 9-4"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <span class="font-semibold text-base">Perfil Escola</span>
+                                <p class="text-green-200 text-xs mt-1">Dados e foto da escola</p>
+                            </div>
+                        </a>
+                    </div>
 
                     <!-- FAQ -->
                     <div class="animate-slide-in-left" style="animation-delay: 0.55s;">

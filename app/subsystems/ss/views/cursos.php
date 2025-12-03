@@ -423,7 +423,7 @@ if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) 
                                     </svg>
                                 </div>
                                 <div>
-                                    <span class="font-semibold text-base">Dashboard</span>
+                                    <span class="font-semibold text-base">Início</span>
                                     <p class="text-green-200 text-xs mt-1">Página inicial</p>
                                 </div>
                             </a>
@@ -548,6 +548,22 @@ if (isset($_POST['senha']) && !empty($_POST['senha']) && isset($_POST['email']) 
                             </a>
                         </div>
                     <?php } ?>
+
+                    <!-- Perfil Escola -->
+                    <div class="animate-slide-in-left" style="animation-delay: 0.53s;">
+                        <a href="perfil_escola.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring">
+                            <div class="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7l9-4 9 4-9 4-9-4z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 17l9 4 9-4"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <span class="font-semibold text-base">Perfil Escola</span>
+                                <p class="text-green-200 text-xs mt-1">Dados e foto da escola</p>
+                            </div>
+                        </a>
+                    </div>
 
                     <!-- FAQ -->
                     <div class="animate-slide-in-left" style="animation-delay: 0.55s;">
