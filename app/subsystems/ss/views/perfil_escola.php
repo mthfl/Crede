@@ -4,6 +4,11 @@ $session = new sessions();
 $session->autenticar_session();
 $session->tempo_session();
 
+if (!isset($_SESSION['tipo_usuario']) || $_SESSION['tipo_usuario'] !== 'admin') {
+    header('Location: ../index.php');
+    exit;
+}
+
 require_once __DIR__ . '/../config/connect.php';
 $escola_banco = $_SESSION['escola'];
 
