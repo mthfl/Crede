@@ -376,7 +376,7 @@ class cadastrador extends select
                 $d_media_final -= 1;
             }
             if ($reli_media == 0) {
-                $d_media -= 1;
+                $d_media_final -= 1;
             }
             $media_final = ($l_portuguesa_media + $artes_media + $ef_media + $l_inglesa_media + $matematica_media + $ciencias_media + $geografia_media + $historia_media + $reli_media) / $d_media_final;
             //media final
