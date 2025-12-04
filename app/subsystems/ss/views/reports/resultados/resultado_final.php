@@ -268,7 +268,7 @@ class relatorios extends connect
         // Linha separadora verde
         $pdf->SetDrawColor(0, 90, 36);
         $pdf->SetLineWidth(0.8);
-        $pdf->Line(10, $pdf->GetY() + 3, 200, $pdf->GetY() + 3);
+        $pdf->Line(10, $pdf->GetY() + 3, 197.55, $pdf->GetY() + 3);
         $pdf->SetLineWidth(0.2);
         $pdf->Ln(8);
 
