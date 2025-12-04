@@ -827,12 +827,12 @@ class admin extends cadastrador
                 // recalcula médias e atualiza 9º (média)
                 $li_9ano = ($li_1bim_9ano + $li_2bim_9ano + $li_3bim_9ano) / 3;
                 $lp_9ano = ($lp_1bim_9ano + $lp_2bim_9ano + $lp_3bim_9ano) / 3;
-                $artes_9ano = ($artes_1bim_9ano + $artes_2bim_9ano + $artes_3bim_9ano) / 3;
-                $ef_9ano = ($ef_1bim_9ano + $ef_2bim_9ano + $ef_3bim_9ano) / 3;
                 $mate_9ano = ($mate_1bim_9ano + $mate_2bim_9ano + $mate_3bim_9ano) / 3;
                 $cien_9ano = ($cien_1bim_9ano + $cien_2bim_9ano + $cien_3bim_9ano) / 3;
                 $geo_9ano = ($geo_1bim_9ano + $geo_2bim_9ano + $geo_3bim_9ano) / 3;
                 $hist_9ano = ($hist_1bim_9ano + $hist_2bim_9ano + $hist_3bim_9ano) / 3;
+
+                //religiao
                 $d = 3;
                 if ($reli_1bim_9ano == 0) {
                     $d -= 1;
@@ -840,10 +840,36 @@ class admin extends cadastrador
                 if ($reli_2bim_9ano == 0) {
                     $d -= 1;
                 }
-                if ($reli_3bim_9ano == 0) {
+                if ($ef_3bim_9ano == 0) {
                     $d -= 1;
                 }
                 $reli_9ano = $d == 0 ? 0 : ($reli_1bim_9ano + $reli_2bim_9ano + $reli_3bim_9ano) / $d;
+
+                //artes
+                $d = 3;
+                if ($artes_1bim_9ano == 0) {
+                    $d -= 1;
+                }
+                if ($artes_2bim_9ano == 0) {
+                    $d -= 1;
+                }
+                if ($artes_3bim_9ano == 0) {
+                    $d -= 1;
+                }
+                $artes_9ano = $d == 0 ? 0 : ($artes_1bim_9ano + $artes_2bim_9ano + $artes_3bim_9ano) / $d;
+
+                //educacao fisica
+                $d = 3;
+                if ($ef_1bim_9ano == 0) {
+                    $d -= 1;
+                }
+                if ($ef_2bim_9ano == 0) {
+                    $d -= 1;
+                }
+                if ($ef_3bim_9ano == 0) {
+                    $d -= 1;
+                }
+                $ef_9ano = $d == 0 ? 0 : ($ef_1bim_9ano + $ef_2bim_9ano + $ef_3bim_9ano) / $d;
             }
 
             // Atualiza 9º (média)
@@ -901,7 +927,7 @@ class admin extends cadastrador
             if ($artes_9ano == 0) {
                 $d_media -= 1;
             }
-            $artes_media = ($ef_6ano + $ef_7ano + $ef_8ano + $ef_9ano) / $d_media; // espelha a lógica existente no cadastro
+            $artes_media = $d_media == 0 ? 0 : ($artes_6ano + $artes_7ano + $artes_8ano + $artes_9ano) / $d_media; // espelha a lógica existente no cadastro
 
             $d_media = 4;
             if ($ef_6ano == 0) {
@@ -916,7 +942,7 @@ class admin extends cadastrador
             if ($ef_9ano == 0) {
                 $d_media -= 1;
             }
-            $ef_media = ($ef_6ano + $ef_7ano + $ef_8ano + $ef_9ano) / $d_media;
+            $ef_media = $d_media == 0 ? 0 : ($ef_6ano + $ef_7ano + $ef_8ano + $ef_9ano) / $d_media;
 
             $d_media = 4;
             if ($reli_6ano == 0) {
@@ -931,7 +957,7 @@ class admin extends cadastrador
             if ($reli_9ano == 0) {
                 $d_media -= 1;
             }
-            $reli_media = ($reli_6ano + $reli_7ano + $reli_8ano + $reli_9ano) / $d_media;
+            $reli_media = $d_media == 0 ? 0 : ($reli_6ano + $reli_7ano + $reli_8ano + $reli_9ano) / $d_media;
 
             $d_media_final = 9;
             if ($artes_media == 0) {

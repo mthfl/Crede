@@ -218,13 +218,11 @@ class cadastrador extends select
                 }
                 $li_9ano = ($li_1bim_9ano + $li_2bim_9ano + $li_3bim_9ano) / 3;
                 $lp_9ano = ($lp_1bim_9ano + $lp_2bim_9ano + $lp_3bim_9ano) / 3;
-                $artes_9ano = ($artes_1bim_9ano + $artes_2bim_9ano + $artes_3bim_9ano) / 3;
-                $ef_9ano = ($ef_1bim_9ano + $ef_2bim_9ano + $ef_3bim_9ano) / 3;
                 $mate_9ano = ($mate_1bim_9ano + $mate_2bim_9ano + $mate_3bim_9ano) / 3;
                 $cien_9ano = ($cien_1bim_9ano + $cien_2bim_9ano + $cien_3bim_9ano) / 3;
                 $geo_9ano = ($geo_1bim_9ano + $geo_2bim_9ano + $geo_3bim_9ano) / 3;
                 $hist_9ano = ($hist_1bim_9ano + $hist_2bim_9ano + $hist_3bim_9ano) / 3;
-                $reli_9ano = ($reli_1bim_9ano + $reli_2bim_9ano + $reli_3bim_9ano) / 3;
+                
                 $d = 3;
                 if ($reli_1bim_9ano == 0) {
                     $d -= 1;
@@ -330,7 +328,7 @@ class cadastrador extends select
                 if ($artes_9ano == 0) {
                     $d_media -= 1;
                 }
-                $artes_media = ($ef_6ano + $ef_7ano + $ef_8ano + $ef_9ano) / $d_media;
+                $artes_media = ($artes_6ano + $artes_7ano + $artes_8ano + $artes_9ano) / $d_media;
             }
             if ($ef_6ano == 0 && $ef_7ano == 0 && $ef_8ano == 0 && $ef_9ano == 0) {
                 $ef_media = 0;
