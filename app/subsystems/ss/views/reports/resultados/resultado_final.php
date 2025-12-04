@@ -47,6 +47,10 @@ class relatorios extends connect
     protected string $table3;
     protected string $table4;
     protected string $table5;
+    protected string $table6;
+    protected string $table7;
+    protected string $table8;
+    protected string $table9;
     protected string $table13;
     protected string $escola;
 
@@ -62,7 +66,115 @@ class relatorios extends connect
         $this->table3 = $table["ss_$escola"][3];
         $this->table4 = $table["ss_$escola"][4];
         $this->table5 = $table["ss_$escola"][5];
+        $this->table6 = $table["ss_$escola"][6];
+        $this->table7 = $table["ss_$escola"][7];
+        $this->table8 = $table["ss_$escola"][8];
+        $this->table9 = $table["ss_$escola"][9];
         $this->table13 = $table["ss_$escola"][13];
+    }
+
+    /**
+     * Calcula a média final baseada nas notas dos 4 anos (6º, 7º, 8º, 9º)
+     * Usa a mesma lógica do model.cadastrador.php
+     */
+    private function calcularMediaFinal($notas_6ano, $notas_7ano, $notas_8ano, $notas_9ano)
+    {
+        // Extrair valores das notas
+        $lp_6ano = floatval($notas_6ano['l_portuguesa'] ?? 0);
+        $artes_6ano = floatval($notas_6ano['artes'] ?? 0);
+        $ef_6ano = floatval($notas_6ano['educacao_fisica'] ?? 0);
+        $li_6ano = floatval($notas_6ano['l_inglesa'] ?? 0);
+        $mate_6ano = floatval($notas_6ano['matematica'] ?? 0);
+        $cien_6ano = floatval($notas_6ano['ciencias'] ?? 0);
+        $geo_6ano = floatval($notas_6ano['geografia'] ?? 0);
+        $hist_6ano = floatval($notas_6ano['historia'] ?? 0);
+        $reli_6ano = floatval($notas_6ano['religiao'] ?? 0);
+
+        $lp_7ano = floatval($notas_7ano['l_portuguesa'] ?? 0);
+        $artes_7ano = floatval($notas_7ano['artes'] ?? 0);
+        $ef_7ano = floatval($notas_7ano['educacao_fisica'] ?? 0);
+        $li_7ano = floatval($notas_7ano['l_inglesa'] ?? 0);
+        $mate_7ano = floatval($notas_7ano['matematica'] ?? 0);
+        $cien_7ano = floatval($notas_7ano['ciencias'] ?? 0);
+        $geo_7ano = floatval($notas_7ano['geografia'] ?? 0);
+        $hist_7ano = floatval($notas_7ano['historia'] ?? 0);
+        $reli_7ano = floatval($notas_7ano['religiao'] ?? 0);
+
+        $lp_8ano = floatval($notas_8ano['l_portuguesa'] ?? 0);
+        $artes_8ano = floatval($notas_8ano['artes'] ?? 0);
+        $ef_8ano = floatval($notas_8ano['educacao_fisica'] ?? 0);
+        $li_8ano = floatval($notas_8ano['l_inglesa'] ?? 0);
+        $mate_8ano = floatval($notas_8ano['matematica'] ?? 0);
+        $cien_8ano = floatval($notas_8ano['ciencias'] ?? 0);
+        $geo_8ano = floatval($notas_8ano['geografia'] ?? 0);
+        $hist_8ano = floatval($notas_8ano['historia'] ?? 0);
+        $reli_8ano = floatval($notas_8ano['religiao'] ?? 0);
+
+        $lp_9ano = floatval($notas_9ano['l_portuguesa'] ?? 0);
+        $artes_9ano = floatval($notas_9ano['artes'] ?? 0);
+        $ef_9ano = floatval($notas_9ano['educacao_fisica'] ?? 0);
+        $li_9ano = floatval($notas_9ano['l_inglesa'] ?? 0);
+        $mate_9ano = floatval($notas_9ano['matematica'] ?? 0);
+        $cien_9ano = floatval($notas_9ano['ciencias'] ?? 0);
+        $geo_9ano = floatval($notas_9ano['geografia'] ?? 0);
+        $hist_9ano = floatval($notas_9ano['historia'] ?? 0);
+        $reli_9ano = floatval($notas_9ano['religiao'] ?? 0);
+
+        // Calcular médias por matéria (soma dos 4 anos / 4)
+        $l_portuguesa_media = ($lp_6ano + $lp_7ano + $lp_8ano + $lp_9ano) / 4;
+        $l_inglesa_media = ($li_6ano + $li_7ano + $li_8ano + $li_9ano) / 4;
+        $matematica_media = ($mate_6ano + $mate_7ano + $mate_8ano + $mate_9ano) / 4;
+        $ciencias_media = ($cien_6ano + $cien_7ano + $cien_8ano + $cien_9ano) / 4;
+        $geografia_media = ($geo_6ano + $geo_7ano + $geo_8ano + $geo_9ano) / 4;
+        $historia_media = ($hist_6ano + $hist_7ano + $hist_8ano + $hist_9ano) / 4;
+
+        // Calcular média de artes (considerando zeros)
+        if ($artes_6ano == 0 && $artes_7ano == 0 && $artes_8ano == 0 && $artes_9ano == 0) {
+            $artes_media = 0;
+        } else {
+            $d_media = 4;
+            if ($artes_6ano == 0) $d_media -= 1;
+            if ($artes_7ano == 0) $d_media -= 1;
+            if ($artes_8ano == 0) $d_media -= 1;
+            if ($artes_9ano == 0) $d_media -= 1;
+            $artes_media = ($artes_6ano + $artes_7ano + $artes_8ano + $artes_9ano) / $d_media;
+        }
+
+        // Calcular média de educação física (considerando zeros)
+        if ($ef_6ano == 0 && $ef_7ano == 0 && $ef_8ano == 0 && $ef_9ano == 0) {
+            $ef_media = 0;
+        } else {
+            $d_media = 4;
+            if ($ef_6ano == 0) $d_media -= 1;
+            if ($ef_7ano == 0) $d_media -= 1;
+            if ($ef_8ano == 0) $d_media -= 1;
+            if ($ef_9ano == 0) $d_media -= 1;
+            $ef_media = ($ef_6ano + $ef_7ano + $ef_8ano + $ef_9ano) / $d_media;
+        }
+
+        // Calcular média de religião (considerando zeros)
+        if ($reli_6ano == 0 && $reli_7ano == 0 && $reli_8ano == 0 && $reli_9ano == 0) {
+            $reli_media = 0;
+        } else {
+            $d_media = 4;
+            if ($reli_6ano == 0) $d_media -= 1;
+            if ($reli_7ano == 0) $d_media -= 1;
+            if ($reli_8ano == 0) $d_media -= 1;
+            if ($reli_9ano == 0) $d_media -= 1;
+            $reli_media = ($reli_6ano + $reli_7ano + $reli_8ano + $reli_9ano) / $d_media;
+        }
+
+        // Calcular média final (soma de todas as médias / quantidade de matérias)
+        $d_media_final = 9;
+        if ($artes_media == 0) $d_media_final -= 1;
+        if ($ef_media == 0) $d_media_final -= 1;
+        if ($reli_media == 0) $d_media_final -= 1;
+        
+        $media_final = ($l_portuguesa_media + $artes_media + $ef_media + $l_inglesa_media + 
+                       $matematica_media + $ciencias_media + $geografia_media + $historia_media + 
+                       $reli_media) / $d_media_final;
+
+        return $media_final;
     }
 
     public function gerarRelatorio($curso, $tipo_relatorio = 'TODOS')
@@ -114,49 +226,94 @@ class relatorios extends connect
         $todos_candidatos = [];
 
         $queries = [
-            'publica_ac' => "SELECT can.id, can.nome, cur.nome_curso, can.publica, can.bairro, can.pcd, m.media_final
+            'publica_ac' => "SELECT can.id, can.nome, can.data_nascimento, cur.nome_curso, can.publica, can.bairro, can.pcd
                              FROM $this->table1 can
-                             INNER JOIN $this->table4 m ON m.id_candidato = can.id
                              INNER JOIN $this->table2 cur ON can.id_curso1 = cur.id
-                             WHERE can.id_curso1 = :curso AND can.publica = 1 AND can.pcd = 0 AND can.bairro = 0 AND status = 1
-                             ORDER BY m.media_final DESC, can.data_nascimento ASC, m.l_portuguesa_media DESC, m.matematica_media DESC",
-            'publica_cotas' => "SELECT can.id, can.nome, cur.nome_curso, can.publica, can.bairro, can.pcd, m.media_final
+                             WHERE can.id_curso1 = :curso AND can.publica = 1 AND can.pcd = 0 AND can.bairro = 0 AND status = 1",
+            'publica_cotas' => "SELECT can.id, can.nome, can.data_nascimento, cur.nome_curso, can.publica, can.bairro, can.pcd
                                 FROM $this->table1 can
-                                INNER JOIN $this->table4 m ON m.id_candidato = can.id
                                 INNER JOIN $this->table2 cur ON can.id_curso1 = cur.id
-                                WHERE can.id_curso1 = :curso AND can.publica = 1 AND can.pcd = 0 AND can.bairro = 1 AND status = 1
-                                ORDER BY m.media_final DESC, can.data_nascimento ASC, m.l_portuguesa_media DESC, m.matematica_media DESC",
-            'pcd_publica' => "SELECT can.id, can.nome, cur.nome_curso, can.publica, can.bairro, can.pcd, m.media_final
+                                WHERE can.id_curso1 = :curso AND can.publica = 1 AND can.pcd = 0 AND can.bairro = 1 AND status = 1",
+            'pcd_publica' => "SELECT can.id, can.nome, can.data_nascimento, cur.nome_curso, can.publica, can.bairro, can.pcd
                               FROM $this->table1 can
-                              INNER JOIN $this->table4 m ON m.id_candidato = can.id
                               INNER JOIN $this->table2 cur ON can.id_curso1 = cur.id
-                              WHERE can.id_curso1 = :curso AND can.publica = 1 AND can.pcd = 1 AND status = 1
-                              ORDER BY m.media_final DESC, can.data_nascimento ASC, m.l_portuguesa_media DESC, m.matematica_media DESC",
-            'privada_ac' => "SELECT can.id, can.nome, cur.nome_curso, can.publica, can.bairro, can.pcd, m.media_final
+                              WHERE can.id_curso1 = :curso AND can.publica = 1 AND can.pcd = 1 AND status = 1",
+            'privada_ac' => "SELECT can.id, can.nome, can.data_nascimento, cur.nome_curso, can.publica, can.bairro, can.pcd
                              FROM $this->table1 can
-                             INNER JOIN $this->table4 m ON m.id_candidato = can.id
                              INNER JOIN $this->table2 cur ON can.id_curso1 = cur.id
-                             WHERE can.id_curso1 = :curso AND can.publica = 0 AND can.pcd = 0 AND can.bairro = 0 AND status = 1
-                             ORDER BY m.media_final DESC, can.data_nascimento ASC, m.l_portuguesa_media DESC, m.matematica_media DESC",
-            'privada_cotas' => "SELECT can.id, can.nome, cur.nome_curso, can.publica, can.bairro, can.pcd, m.media_final
+                             WHERE can.id_curso1 = :curso AND can.publica = 0 AND can.pcd = 0 AND can.bairro = 0 AND status = 1",
+            'privada_cotas' => "SELECT can.id, can.nome, can.data_nascimento, cur.nome_curso, can.publica, can.bairro, can.pcd
                                  FROM $this->table1 can
-                                 INNER JOIN $this->table4 m ON m.id_candidato = can.id
                                  INNER JOIN $this->table2 cur ON can.id_curso1 = cur.id
-                                 WHERE can.id_curso1 = :curso AND can.publica = 0 AND can.pcd = 0 AND can.bairro = 1 AND status = 1
-                                 ORDER BY m.media_final DESC, can.data_nascimento ASC, m.l_portuguesa_media DESC, m.matematica_media DESC",
-            'pcd_privada' => "SELECT can.id, can.nome, cur.nome_curso, can.publica, can.bairro, can.pcd, m.media_final
+                                 WHERE can.id_curso1 = :curso AND can.publica = 0 AND can.pcd = 0 AND can.bairro = 1 AND status = 1",
+            'pcd_privada' => "SELECT can.id, can.nome, can.data_nascimento, cur.nome_curso, can.publica, can.bairro, can.pcd
                               FROM $this->table1 can
-                              INNER JOIN $this->table4 m ON m.id_candidato = can.id
                               INNER JOIN $this->table2 cur ON can.id_curso1 = cur.id
-                              WHERE can.id_curso1 = :curso AND can.publica = 0 AND can.pcd = 1 AND status = 1
-                              ORDER BY m.media_final DESC, can.data_nascimento ASC, m.l_portuguesa_media DESC, m.matematica_media DESC"
+                              WHERE can.id_curso1 = :curso AND can.publica = 0 AND can.pcd = 1 AND status = 1"
         ];
 
         foreach ($queries as $key => $sql) {
             $stmt = $this->connect->prepare($sql);
             $stmt->bindValue(':curso', $curso);
             $stmt->execute();
-            $todos_candidatos[$key] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $candidatos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            // Para cada candidato, buscar notas e calcular média final
+            foreach ($candidatos as &$candidato) {
+                // Buscar notas dos 4 anos
+                $stmt_6ano = $this->connect->prepare("SELECT * FROM $this->table6 WHERE id_candidato = :id LIMIT 1");
+                $stmt_6ano->bindValue(':id', $candidato['id']);
+                $stmt_6ano->execute();
+                $notas_6ano = $stmt_6ano->fetch(PDO::FETCH_ASSOC) ?: [];
+
+                $stmt_7ano = $this->connect->prepare("SELECT * FROM $this->table7 WHERE id_candidato = :id LIMIT 1");
+                $stmt_7ano->bindValue(':id', $candidato['id']);
+                $stmt_7ano->execute();
+                $notas_7ano = $stmt_7ano->fetch(PDO::FETCH_ASSOC) ?: [];
+
+                $stmt_8ano = $this->connect->prepare("SELECT * FROM $this->table8 WHERE id_candidato = :id LIMIT 1");
+                $stmt_8ano->bindValue(':id', $candidato['id']);
+                $stmt_8ano->execute();
+                $notas_8ano = $stmt_8ano->fetch(PDO::FETCH_ASSOC) ?: [];
+
+                $stmt_9ano = $this->connect->prepare("SELECT * FROM $this->table9 WHERE id_candidato = :id LIMIT 1");
+                $stmt_9ano->bindValue(':id', $candidato['id']);
+                $stmt_9ano->execute();
+                $notas_9ano = $stmt_9ano->fetch(PDO::FETCH_ASSOC) ?: [];
+
+                // Calcular média final
+                $candidato['media_final'] = $this->calcularMediaFinal($notas_6ano, $notas_7ano, $notas_8ano, $notas_9ano);
+                
+                // Calcular médias de português e matemática para ordenação
+                $lp_6ano = floatval($notas_6ano['l_portuguesa'] ?? 0);
+                $lp_7ano = floatval($notas_7ano['l_portuguesa'] ?? 0);
+                $lp_8ano = floatval($notas_8ano['l_portuguesa'] ?? 0);
+                $lp_9ano = floatval($notas_9ano['l_portuguesa'] ?? 0);
+                $candidato['l_portuguesa_media'] = ($lp_6ano + $lp_7ano + $lp_8ano + $lp_9ano) / 4;
+
+                $mate_6ano = floatval($notas_6ano['matematica'] ?? 0);
+                $mate_7ano = floatval($notas_7ano['matematica'] ?? 0);
+                $mate_8ano = floatval($notas_8ano['matematica'] ?? 0);
+                $mate_9ano = floatval($notas_9ano['matematica'] ?? 0);
+                $candidato['matematica_media'] = ($mate_6ano + $mate_7ano + $mate_8ano + $mate_9ano) / 4;
+            }
+            unset($candidato);
+
+            // Ordenar por média final, data de nascimento, português e matemática
+            usort($candidatos, function($a, $b) {
+                if ($b['media_final'] != $a['media_final']) {
+                    return $b['media_final'] <=> $a['media_final'];
+                }
+                if ($a['data_nascimento'] != $b['data_nascimento']) {
+                    return $a['data_nascimento'] <=> $b['data_nascimento'];
+                }
+                if ($b['l_portuguesa_media'] != $a['l_portuguesa_media']) {
+                    return $b['l_portuguesa_media'] <=> $a['l_portuguesa_media'];
+                }
+                return $b['matematica_media'] <=> $a['matematica_media'];
+            });
+
+            $todos_candidatos[$key] = $candidatos;
         }
 
         // ---------- REDISTRIBUIÇÃO DE VAGAS ----------
