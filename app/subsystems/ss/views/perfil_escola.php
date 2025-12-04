@@ -66,11 +66,61 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remover_foto_escola']
 
 // Upload de nova foto
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['upload_foto_escola'])) {
-    if (isset($_FILES['foto_escola']) && $_FILES['foto_escola']['error'] === UPLOAD_ERR_OK) {
+    $permitidas = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+
+    // Verificar se veio imagem recortada em base64
+    if (isset($_POST['cropped_image_data']) && !empty($_POST['cropped_image_data'])) {
+        $croppedData = $_POST['cropped_image_data'];
+
+        if (preg_match('/^data:image\/(\w+);base64,/', $croppedData, $type)) {
+            $croppedData = substr($croppedData, strpos($croppedData, ',') + 1);
+            $ext = strtolower($type[1]);
+            if ($ext === 'jpeg') {
+                $ext = 'jpg';
+            }
+
+            if (!in_array($ext, $permitidas)) {
+                $mensagem = 'Formato de imagem inválido. Use JPG, PNG, GIF ou WEBP.';
+                $tipo_mensagem = 'error';
+            } else {
+                $imageData = base64_decode($croppedData);
+
+                if ($imageData === false) {
+                    $mensagem = 'Erro ao processar a imagem enviada.';
+                    $tipo_mensagem = 'error';
+                } else {
+                    $novoNome = 'escola_' . preg_replace('/[^a-z0-9_]/i', '_', $escola_banco) . '_' . time() . '.' . $ext;
+                    $destinoDir = __DIR__ . '/../assets/fotos_escola';
+                    if (!is_dir($destinoDir)) {
+                        @mkdir($destinoDir, 0775, true);
+                    }
+                    $destino = $destinoDir . '/' . $novoNome;
+
+                    if (file_put_contents($destino, $imageData) !== false) {
+                        $stmt = $pdo_users->prepare("UPDATE escolas SET foto_perfil = :foto WHERE escola_banco = :escola_banco LIMIT 1");
+                        $stmt->bindValue(':foto', $novoNome);
+                        $stmt->bindValue(':escola_banco', $escola_banco);
+                        $stmt->execute();
+
+                        $mensagem = 'Foto de perfil da escola atualizada com sucesso!';
+                        $tipo_mensagem = 'success';
+
+                        header('Location: ' . $_SERVER['PHP_SELF']);
+                        exit;
+                    } else {
+                        $mensagem = 'Erro ao salvar a imagem enviada.';
+                        $tipo_mensagem = 'error';
+                    }
+                }
+            }
+        } else {
+            $mensagem = 'Imagem enviada em formato inválido.';
+            $tipo_mensagem = 'error';
+        }
+    } elseif (isset($_FILES['foto_escola']) && $_FILES['foto_escola']['error'] === UPLOAD_ERR_OK) {
         $fileTmp  = $_FILES['foto_escola']['tmp_name'];
         $fileName = basename($_FILES['foto_escola']['name']);
         $ext = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
-        $permitidas = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
 
         if (!in_array($ext, $permitidas)) {
             $mensagem = 'Formato de imagem inválido. Use JPG, PNG, GIF ou WEBP.';
@@ -165,6 +215,9 @@ if (!empty($escola['foto_perfil'])) {
     <title>Perfil da Escola - Sistema Seleção</title>
     <link rel="icon" type="image/png" href="https://i.postimg.cc/0N0dsxrM/Bras-o-do-Cear-svg-removebg-preview.png">
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -813,7 +866,7 @@ if (!empty($escola['foto_perfil'])) {
             backdrop-filter: blur(8px);
             align-items: center;
             justify-content: center;
-            padding: clamp(1rem, 3vw, 2rem);
+            padding: clamp(0.75rem, 2.5vw, 1.5rem);
         }
 
         .modal.show {
@@ -823,15 +876,19 @@ if (!empty($escola['foto_perfil'])) {
         .modal-content {
             position: relative;
             background: white;
-            border-radius: clamp(1rem, 3vw, 1.5rem);
-            padding: clamp(1.5rem, 4vw, 2.5rem);
+            border-radius: clamp(0.75rem, 2.5vw, 1.25rem);
+            padding: clamp(1rem, 3vw, 1.75rem);
             max-width: min(95vw, 32rem);
             width: 100%;
-            max-height: min(90vh, 600px);
             box-shadow: 0 24px 64px rgba(0, 0, 0, 0.4);
             animation: modalSlideIn 0.3s ease-out;
-            overflow-y: auto;
             margin: auto;
+        }
+
+        /* Modal de foto da escola mais compacto, sem rolagem interna */
+        #modalFotoEscola .modal-content {
+            max-height: none;
+            overflow-y: visible;
         }
 
         @keyframes modalSlideIn {
@@ -991,6 +1048,28 @@ if (!empty($escola['foto_perfil'])) {
 
         .btn-primary:active {
             transform: translateY(0);
+        }
+
+        /* Área de recorte de imagem da escola mais compacta para caber em um modal só */
+        .cropper-container {
+            max-width: 100%;
+            max-height: min(40vh, 260px);
+            margin: 0 auto;
+        }
+
+        .crop-preview {
+            width: 96px;
+            height: 96px;
+            border-radius: 999px;
+            overflow: hidden;
+            margin: 0 auto;
+            border: 3px solid var(--primary);
+        }
+
+        .crop-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         /* Mensagens */
@@ -1440,27 +1519,55 @@ if (!empty($escola['foto_perfil'])) {
             </button>
         </div>
 
-        <form method="POST" enctype="multipart/form-data" class="space-y-4">
-            <div class="space-y-2">
+        <div class="space-y-4">
+            <div id="uploadAreaEscola" class="space-y-2">
                 <label class="info-label block">Selecionar nova foto</label>
                 <input type="file"
+                       id="foto_escola_input"
                        name="foto_escola"
                        accept="image/*"
+                       onchange="handleImageSelectEscola(event)"
                        class="block w-full text-sm text-gray-700 border-2 border-gray-200 rounded-xl cursor-pointer bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all px-4 py-3">
                 <p class="text-xs text-gray-500">Formatos aceitos: JPG, PNG, GIF, WEBP. Tamanho máximo recomendado: 5MB.</p>
             </div>
 
+            <div id="cropAreaEscola" class="hidden">
+                <div class="text-center mb-3">
+                    <h4 class="text-lg font-semibold text-gray-800">Recortar Foto</h4>
+                    <p class="text-gray-600">Arraste e redimensione para selecionar a área desejada</p>
+                </div>
+
+                <div class="cropper-container mb-4">
+                    <img id="cropImageEscola" src="/placeholder.svg" alt="Imagem para recorte" style="max-width: 100%;">
+                </div>
+
+                <div class="text-center mb-3">
+                    <h5 class="text-base font-semibold text-gray-800 mb-2">Preview</h5>
+                    <div class="crop-preview">
+                        <img id="cropPreviewEscola" src="/placeholder.svg" alt="Preview do recorte">
+                    </div>
+                </div>
+
+                <div class="cropper-controls">
+                    <button type="button" class="cropper-btn secondary" onclick="rotateImageEscola(-90)">
+                        <i class="fas fa-undo"></i> <span class="hidden sm:inline">Girar Esquerda</span>
+                    </button>
+                    <button type="button" class="cropper-btn secondary" onclick="rotateImageEscola(90)">
+                        <i class="fas fa-redo"></i> <span class="hidden sm:inline">Girar Direita</span>
+                    </button>
+                    <button type="button" class="cropper-btn secondary" onclick="resetCropEscola()">
+                        <i class="fas fa-refresh"></i> <span class="hidden sm:inline">Resetar</span>
+                    </button>
+                    <button type="button" class="cropper-btn primary" onclick="cropAndUploadEscola()">
+                        <i class="fas fa-check"></i> <span class="hidden sm:inline">Aplicar</span>
+                    </button>
+                </div>
+            </div>
+
             <div class="form-actions">
                 <button type="button" class="btn-cancel" onclick="toggleModalFotoEscola(false)">Cancelar</button>
-
-                <button type="submit" name="upload_foto_escola" class="btn-save">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-                    </svg>
-                    <span>Atualizar foto</span>
-                </button>
             </div>
-        </form>
+        </div>
     </div>
 </div>
 
@@ -1570,6 +1677,7 @@ if (!empty($escola['foto_perfil'])) {
     const modalFotoEscola = document.getElementById('modalFotoEscola');
     const openModalFotoEscola = document.getElementById('openModalFotoEscola');
     const closeModalFotoEscola = document.getElementById('closeModalFotoEscola');
+    let cropperEscola = null;
 
     function toggleModalFotoEscola(show) {
         if (!modalFotoEscola) return;
@@ -1577,11 +1685,153 @@ if (!empty($escola['foto_perfil'])) {
             modalFotoEscola.classList.add('show');
         } else {
             modalFotoEscola.classList.remove('show');
+            if (cropperEscola) {
+                cropperEscola.destroy();
+                cropperEscola = null;
+            }
+            const uploadArea = document.getElementById('uploadAreaEscola');
+            const cropArea = document.getElementById('cropAreaEscola');
+            const fileInput = document.getElementById('foto_escola_input');
+            if (uploadArea) uploadArea.classList.remove('hidden');
+            if (cropArea) cropArea.classList.add('hidden');
+            if (fileInput) fileInput.value = '';
         }
     }
 
     if (openModalFotoEscola && modalFotoEscola) {
         openModalFotoEscola.addEventListener('click', () => toggleModalFotoEscola(true));
+    }
+
+    if (closeModalFotoEscola && modalFotoEscola) {
+        closeModalFotoEscola.addEventListener('click', () => toggleModalFotoEscola(false));
+    }
+
+    function handleImageSelectEscola(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        if (file.size > 5 * 1024 * 1024) {
+            alert('O arquivo é muito grande. Tamanho máximo: 5MB');
+            event.target.value = '';
+            return;
+        }
+
+        if (!file.type.startsWith('image/')) {
+            alert('Por favor, selecione apenas arquivos de imagem.');
+            event.target.value = '';
+            return;
+        }
+
+        const uploadArea = document.getElementById('uploadAreaEscola');
+        const cropArea = document.getElementById('cropAreaEscola');
+        if (uploadArea) uploadArea.classList.add('hidden');
+        if (cropArea) cropArea.classList.remove('hidden');
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const cropImage = document.getElementById('cropImageEscola');
+            const cropPreview = document.getElementById('cropPreviewEscola');
+            if (cropImage) cropImage.src = e.target.result;
+            if (cropPreview) cropPreview.src = e.target.result;
+
+            setTimeout(() => {
+                initCropperEscola();
+            }, 100);
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function initCropperEscola() {
+        const cropImage = document.getElementById('cropImageEscola');
+        if (!cropImage) return;
+
+        if (cropperEscola) {
+            cropperEscola.destroy();
+        }
+
+        cropperEscola = new Cropper(cropImage, {
+            aspectRatio: 1,
+            viewMode: 2,
+            dragMode: 'move',
+            autoCropArea: 1,
+            cropBoxMovable: true,
+            cropBoxResizable: true,
+            toggleDragModeOnDblclick: false,
+            ready: function() {
+                updatePreviewEscola();
+            },
+            crop: function() {
+                updatePreviewEscola();
+            }
+        });
+    }
+
+    function updatePreviewEscola() {
+        if (!cropperEscola) return;
+        const cropPreview = document.getElementById('cropPreviewEscola');
+        if (!cropPreview) return;
+        try {
+            const canvas = cropperEscola.getCroppedCanvas({
+                width: 200,
+                height: 200,
+                imageSmoothingEnabled: true,
+                imageSmoothingQuality: 'medium'
+            });
+            if (canvas) {
+                cropPreview.src = canvas.toDataURL('image/jpeg', 0.8);
+            }
+        } catch (e) {}
+    }
+
+    function rotateImageEscola(degree) {
+        if (cropperEscola) {
+            cropperEscola.rotate(degree);
+        }
+    }
+
+    function resetCropEscola() {
+        if (cropperEscola) {
+            cropperEscola.reset();
+        }
+    }
+
+    function cropAndUploadEscola() {
+        if (!cropperEscola) {
+            alert('Nenhuma imagem selecionada para recorte.');
+            return;
+        }
+
+        const canvas = cropperEscola.getCroppedCanvas({
+            width: 300,
+            height: 300,
+            imageSmoothingEnabled: true,
+            imageSmoothingQuality: 'high'
+        });
+
+        if (!canvas) {
+            alert('Erro ao processar imagem. Tente novamente.');
+            return;
+        }
+
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = window.location.href;
+
+        const inputFlag = document.createElement('input');
+        inputFlag.type = 'hidden';
+        inputFlag.name = 'upload_foto_escola';
+        inputFlag.value = '1';
+        form.appendChild(inputFlag);
+
+        const inputData = document.createElement('input');
+        inputData.type = 'hidden';
+        inputData.name = 'cropped_image_data';
+        inputData.value = dataUrl;
+        form.appendChild(inputData);
+
+        document.body.appendChild(form);
+        form.submit();
     }
 
     if (closeModalFotoEscola && modalFotoEscola) {
