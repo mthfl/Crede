@@ -12,6 +12,8 @@ require_once(__DIR__ . '/../../../assets/libs/fpdf/fpdf.php');
 
 class PDF extends FPDF
 {
+    public $data_hora_footer = '';
+
     function AddPage($orientation = '', $size = '', $rotation = 0)
     {
         parent::AddPage($orientation, $size, $rotation);
@@ -24,6 +26,18 @@ class PDF extends FPDF
             'png'
         );
     }
+
+    function Footer()
+    {
+        // Adicionar data/hora apenas na primeira página
+        if ($this->PageNo() == 1 && !empty($this->data_hora_footer)) {
+            $this->SetY(-12);
+            $this->SetX(10);
+            $this->SetFont('Arial', 'B', 9);
+            $this->SetTextColor(0, 0, 0);
+            $this->Cell(0, 5, mb_convert_encoding('Gerado em: ' . $this->data_hora_footer, 'ISO-8859-1', 'UTF-8'), 0, 0, 'L');
+        }
+    }
 }
 
 class relatorios extends connect
@@ -34,13 +48,14 @@ class relatorios extends connect
     protected string $table4;
     protected string $table5;
     protected string $table13;
+    protected string $escola;
 
-    public $data_hora_pdf;
     public $bairros_texto_pdf;
 
     function __construct($escola)
     {
         parent::__construct($escola);
+        $this->escola = $escola;
         $table = require(__DIR__ . '/../../../../../.env/tables.php');
         $this->table1 = $table["ss_$escola"][1];
         $this->table2 = $table["ss_$escola"][2];
@@ -167,9 +182,23 @@ class relatorios extends connect
         $vagas_ocupadas['privada_ac'] = array_slice($todos_candidatos['privada_ac'], 0, $limite_privada_ac);
         foreach ($vagas_ocupadas['privada_ac'] as $cand) $ids_classificados[] = $cand['id'];
 
-        // ---------- DATA/HORA E BAIRROS ----------
+        // ---------- LOGO DA ESCOLA E BAIRROS ----------
+        // Buscar logo da escola
+        $logo_escola = null;
+        $stmt_logo = $this->connect_users->prepare("SELECT foto_perfil FROM escolas WHERE escola_banco = :escola_banco LIMIT 1");
+        $stmt_logo->bindValue(':escola_banco', $this->escola);
+        $stmt_logo->execute();
+        $dados_logo = $stmt_logo->fetch();
+        if ($dados_logo && !empty($dados_logo['foto_perfil'])) {
+            $logo_path = __DIR__ . '/../../../assets/fotos_escola/' . $dados_logo['foto_perfil'];
+            if (file_exists($logo_path)) {
+                $logo_escola = $logo_path;
+            }
+        }
+
+        // Data e hora para exibir no rodapé
         date_default_timezone_set('America/Fortaleza');
-        $this->data_hora_pdf = date('d/m/Y H:i:s');
+        $data_hora_pdf = date('d/m/Y H:i:s');
 
         $stmt_bairros = $this->connect->query("SELECT bairros FROM $this->table13 ORDER BY id LIMIT 5");
         $bairros = $stmt_bairros->fetchAll(PDO::FETCH_COLUMN);
@@ -177,6 +206,7 @@ class relatorios extends connect
 
         // ---------- INÍCIO DO PDF ----------
         $pdf = new PDF($orientacao, 'mm', 'A4');
+        $pdf->data_hora_footer = $data_hora_pdf;
         $pdf->AddPage();
 
         // Nome da escola
@@ -191,11 +221,10 @@ class relatorios extends connect
         $pdf->SetX(8.5);
         $pdf->Cell(0, 8, mb_convert_encoding('RESULTADO FINAL', 'ISO-8859-1', 'UTF-8'), 0, 1, 'L');
 
-        // Data e hora
-        $pdf->SetY(8);
-        $pdf->SetX(-70);
-        $pdf->SetFont('Arial', 'B', 11);
-        $pdf->Cell(0, 8, $this->data_hora_pdf, 0, 0, 'R');
+        // Logo da escola
+        if ($logo_escola) {
+            $pdf->Image($logo_escola, 170, 3, 22, 0, '', '');
+        }
 
         // Legendas
         $pdf->SetY(18);

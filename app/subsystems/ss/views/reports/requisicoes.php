@@ -11,6 +11,8 @@ $escola = $_SESSION['escola'];
 // Classe FPDF customizada para suporte a UTF-8
 class PDF extends FPDF
 {
+    public $data_hora_footer = '';
+
     function Cell($w, $h = 0, $txt = '', $border = 0, $ln = 0, $align = '', $fill = false, $link = '')
     {
         if (mb_detect_encoding($txt, 'UTF-8', true) === 'UTF-8') {
@@ -26,6 +28,22 @@ class PDF extends FPDF
         }
         parent::MultiCell($w, $h, $txt, $border, $align, $fill);
     }
+
+    function Footer()
+    {
+        // Adicionar data/hora apenas na primeira página
+        if ($this->PageNo() == 1 && !empty($this->data_hora_footer)) {
+            $this->SetY(-12);
+            $this->SetX(10);
+            $this->SetFont('Arial', 'B', 9);
+            $this->SetTextColor(0, 0, 0);
+            $texto = 'Gerado em: ' . $this->data_hora_footer;
+            if (mb_detect_encoding($texto, 'UTF-8', true) === 'UTF-8') {
+                $texto = iconv('UTF-8', 'ISO-8859-1//TRANSLIT//IGNORE', $texto);
+            }
+            $this->Cell(0, 5, $texto, 0, 0, 'L');
+        }
+    }
 }
 
 class relatorios extends connect
@@ -33,10 +51,12 @@ class relatorios extends connect
     protected string $table5;
     protected string $table14;
     protected string $table1;
+    protected string $escola;
 
     function __construct($escola)
     {
         parent::__construct($escola);
+        $this->escola = $escola;
         $table = require(__DIR__ . '/../../../../.env/tables.php');
         $this->table5 = $table["ss_$escola"][5]; // usuarios table
         $this->table14 = $table["ss_$escola"][14]; // requisicoes table
@@ -75,18 +95,38 @@ class relatorios extends connect
         $stmtSelect_recusadas = $this->connect->query($sql_recusadas);
         $dados_recusadas = $stmtSelect_recusadas->fetchAll(PDO::FETCH_ASSOC);
 
+        // Buscar logo da escola
+        $logo_escola = null;
+        $stmt_logo = $this->connect_users->prepare("SELECT foto_perfil FROM escolas WHERE escola_banco = :escola_banco LIMIT 1");
+        $stmt_logo->bindValue(':escola_banco', $this->escola);
+        $stmt_logo->execute();
+        $dados_logo = $stmt_logo->fetch();
+        if ($dados_logo && !empty($dados_logo['foto_perfil'])) {
+            $logo_path = __DIR__ . '/../../assets/fotos_escola/' . $dados_logo['foto_perfil'];
+            if (file_exists($logo_path)) {
+                $logo_escola = $logo_path;
+            }
+        }
+
+        // Data e hora para exibir no rodapé
+        date_default_timezone_set('America/Fortaleza');
+        $data_hora_pdf = date('d/m/Y H:i:s');
+
         $pdf = new PDF('P', 'mm', 'A4');
+        $pdf->data_hora_footer = $data_hora_pdf;
         $pdf->AddPage();
         $pdf->Image('../../assets/imgs/fundo5_pdf.png', 0, 0, $pdf->GetPageWidth(), $pdf->GetPageHeight(), 'png', '', 0.1);
         // Header
         
-        date_default_timezone_set('America/Fortaleza');
         $pdf->SetFont('Arial', 'B', 13);
         $pdf->SetY(3);
         $pdf->SetX(46);
         $pdf->Cell(40, 4, $_SESSION['nome_escola'], 0, 0, 'C');
-        $pdf->SetX(155);
-        $pdf->Cell(40, 4, $datatime = date('Y/m/d H:i:s'), 0, 1, 'C');
+        
+        // Logo da escola no lugar da data/hora (adicionar por último para ficar por cima)
+        if ($logo_escola && file_exists($logo_escola)) {
+            $pdf->Image($logo_escola, 170, 3, 22);
+        }
 
         $pdf->SetFont('Arial', 'B', 17);
         $pdf->SetY(10);
