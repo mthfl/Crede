@@ -722,14 +722,6 @@ class admin extends cadastrador
         float $reli_3bim_9ano
     ): int {
         try {
-            // Atualiza dados do candidato
-            $stmt_check = $this->connect->prepare("SELECT * FROM $this->table1 WHERE nome = :nome AND data_nascimento = :data_nascimento");
-            $stmt_check->bindValue(":nome", $nome);
-            $stmt_check->bindValue(":data_nascimento", $data_nascimento);
-            $stmt_check->execute();
-            if($stmt_check->rowCount() >= 1){
-                return 3;
-            }
             
             $stmt = $this->connect->prepare("UPDATE $this->table1 SET nome=:nome, id_curso1=:id_curso1, data_nascimento=:data_nascimento, bairro=:bairro, publica=:publica, pcd=:pcd WHERE id=:id");
             $stmt->bindValue(":nome", $nome);

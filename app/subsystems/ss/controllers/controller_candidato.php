@@ -196,9 +196,6 @@ if (
     if ($result === 1) {
         header('Location: ../views/candidatos.php?id=' . urlencode((string)$id_candidato) . '&atualizado=1');
         exit();
-    } if ($result === 3) {
-        header('Location: ../views/candidatos.php?id=' . urlencode((string)$id_candidato) . '&aluno_ja_cadastrado');
-        exit();
     } else {
         header('Location: ../views/candidatos.php?id=' . urlencode((string)$id_candidato) . '&erro=1');
         exit();
