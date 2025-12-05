@@ -87,6 +87,15 @@ class cadastrador extends select
         try {
             date_default_timezone_set('America/Fortaleza');
             $datatime = date('Y/m/d H:i:s');
+
+            $stmt_check = $this->connect->prepare("SELECT * FROM $this->table1 WHERE nome = :nome AND data_nascimento = :data_nascimento");
+            $stmt_check->bindValue(":nome", $nome);
+            $stmt_check->bindValue(":data_nascimento", $data_nascimento);
+            $stmt_check->execute();
+            if($stmt_check->rowCount() >= 1){
+                return 3;
+            }
+            
             $stmt_candidato = $this->connect->prepare("INSERT INTO $this->table1 VALUES (NULL, :nome, :id_curso1, :data_nascimento, :bairro, :publica, :pcd, :data, :id_cadastrador, 1)");
             $stmt_candidato->bindValue(":nome", $nome);
             $stmt_candidato->bindValue(":id_curso1", $id_curso1);

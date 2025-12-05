@@ -196,6 +196,9 @@ if (
     if ($result === 1) {
         header('Location: ../views/candidatos.php?id=' . urlencode((string)$id_candidato) . '&atualizado=1');
         exit();
+    } if ($result === 3) {
+        header('Location: ../views/candidatos.php?id=' . urlencode((string)$id_candidato) . '&aluno_ja_cadastrado');
+        exit();
     } else {
         header('Location: ../views/candidatos.php?id=' . urlencode((string)$id_candidato) . '&erro=1');
         exit();
@@ -382,7 +385,7 @@ if (
             header('Location: ../views/cadastro.php?erro');
             exit();
         case 3:
-            header('Location: ../views/cadastro.php?ja_existe');
+            header('Location: ../views/windows/success.php?ja_existe');
             exit();
         default:
             header('Location: ../views/cadastro.php?falha');

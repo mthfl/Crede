@@ -69,6 +69,7 @@ new connect($escola);
       0% {
         background-position: 0 0;
       }
+
       100% {
         background-position: 500px 500px;
       }
@@ -84,9 +85,12 @@ new connect($escola);
     }
 
     @keyframes floatAnimation {
-      0%, 100% {
+
+      0%,
+      100% {
         transform: translateY(0);
       }
+
       50% {
         transform: translateY(-15px);
       }
@@ -155,6 +159,7 @@ new connect($escola);
       0% {
         transform: scale(1);
       }
+
       100% {
         transform: scale(1.1);
       }
@@ -240,9 +245,12 @@ new connect($escola);
     }
 
     @keyframes dotBounce {
-      0%, 100% {
+
+      0%,
+      100% {
         transform: translateY(0);
       }
+
       50% {
         transform: translateY(-8px);
       }
@@ -253,10 +261,12 @@ new connect($escola);
         transform: scale(1);
         box-shadow: 0 0 0 0 rgba(0, 140, 69, 0.5);
       }
+
       70% {
         transform: scale(1.05);
         box-shadow: 0 0 0 20px rgba(0, 140, 69, 0);
       }
+
       100% {
         transform: scale(1);
         box-shadow: 0 0 0 0 rgba(0, 140, 69, 0);
@@ -268,7 +278,7 @@ new connect($escola);
       .container {
         padding: 0 15px;
       }
-      
+
       .success-card {
         padding: 2.5rem 1.5rem;
         border-radius: 20px;
@@ -277,12 +287,12 @@ new connect($escola);
       h1 {
         font-size: 1.8rem;
       }
-      
+
       .message {
         font-size: 1.1rem;
         padding: 0;
       }
-      
+
       .success-icon {
         width: 90px;
         height: 90px;
@@ -292,7 +302,7 @@ new connect($escola);
       .success-icon i {
         font-size: 40px;
       }
-      
+
       .loading-indicator {
         padding: 10px 16px;
         font-size: 1rem;
@@ -307,12 +317,12 @@ new connect($escola);
       h1 {
         font-size: 1.6rem;
       }
-      
+
       .message {
         font-size: 1rem;
         margin-bottom: 2rem;
       }
-      
+
       .success-icon {
         width: 80px;
         height: 80px;
@@ -322,12 +332,12 @@ new connect($escola);
       .success-icon i {
         font-size: 35px;
       }
-      
+
       .loading-indicator {
         padding: 8px 14px;
         font-size: 0.9rem;
       }
-      
+
       .dot {
         width: 8px;
         height: 8px;
@@ -342,14 +352,24 @@ new connect($escola);
       <div class="success-icon">
         <i class="fas fa-check"></i>
       </div>
-    
-      <h1> <?=$_SESSION['candidato'] ?> </h1>
-        <span class="congratulations">Confirmado!</span>
-      <p class="message">
-        Inscrito com sucesso
-        <br>
 
-      </p>
+      <?php if (isset($_GET['criado'])) { ?>
+        <h1> <?= $_SESSION['candidato'] ?> </h1>
+        <span class="congratulations">Confirmado!</span>
+        <p class="message">
+          Inscrito com sucesso
+          <br>
+
+        </p>
+      <?php } else if (isset($_GET['ja_existe'])) { ?>
+        <h1>Candidato já cadastrado!</h1>
+        <span class="congratulations">O Candidato já foi cadastrado!</span>
+        <p class="message">
+          Já cadastrado.
+          <br>
+
+        </p>
+      <?php } ?>
       <div class="loading-indicator">
         Redirecionando
         <div class="loading-dots">
@@ -366,7 +386,7 @@ new connect($escola);
     setTimeout(function() {
       window.location.href = "../../index.php";
     }, 4000);
-</script>
+  </script>
 </body>
 
 </html>
