@@ -331,13 +331,18 @@ class relatorios extends connect
         $vagas_ocupadas['privada_cotas'] = array_slice($todos_candidatos['privada_cotas'], 0, $privada_cotas);
         foreach ($vagas_ocupadas['privada_cotas'] as $cand) $ids_classificados[] = $cand['id'];
 
-        $limite_publica_ac = $publica_ac + ($publica_cotas - count($vagas_ocupadas['publica_cotas'])) + ($vagas_pcd - count($vagas_ocupadas['pcd']));
-        $vagas_ocupadas['publica_ac'] = array_slice($todos_candidatos['publica_ac'], 0, $limite_publica_ac);
-        foreach ($vagas_ocupadas['publica_ac'] as $cand) $ids_classificados[] = $cand['id'];
-
+        // Primeiro preencher privada_ac para calcular vagas restantes
         $limite_privada_ac = $privada_ac + ($privada_cotas - count($vagas_ocupadas['privada_cotas']));
         $vagas_ocupadas['privada_ac'] = array_slice($todos_candidatos['privada_ac'], 0, $limite_privada_ac);
         foreach ($vagas_ocupadas['privada_ac'] as $cand) $ids_classificados[] = $cand['id'];
+        
+        // Calcular vagas restantes de privada_ac que não foram preenchidas
+        $vagas_restantes_privada_ac = $limite_privada_ac - count($vagas_ocupadas['privada_ac']);
+        
+        // Adicionar vagas restantes de privada_ac para publica_ac
+        $limite_publica_ac = $publica_ac + ($publica_cotas - count($vagas_ocupadas['publica_cotas'])) + ($vagas_pcd - count($vagas_ocupadas['pcd'])) + $vagas_restantes_privada_ac;
+        $vagas_ocupadas['publica_ac'] = array_slice($todos_candidatos['publica_ac'], 0, $limite_publica_ac);
+        foreach ($vagas_ocupadas['publica_ac'] as $cand) $ids_classificados[] = $cand['id'];
 
         // ---------- LOGO DA ESCOLA E BAIRROS ----------
         // Buscar logo da escola
