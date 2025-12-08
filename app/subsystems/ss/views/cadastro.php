@@ -1283,12 +1283,17 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
 
         function applyDateMask(input) {
             let value = input.value.replace(/\D/g, '');
-            if (value.length > 8) value = value.slice(0, 8);
+
+            if (value.length > 8) {
+                value = value.slice(0, 8);
+            }
+
             if (value.length > 4) {
                 value = value.slice(0, 2) + '/' + value.slice(2, 4) + '/' + value.slice(4);
             } else if (value.length > 2) {
                 value = value.slice(0, 2) + '/' + value.slice(2);
             }
+
             input.value = value;
         }
 
@@ -1369,7 +1374,71 @@ $primary_rgba_02 = hex2rgba($curso_cor, 0.20);
             }
         }
 
+        function isValidBirthDate(dateStr) {
+            const regex = /^(\d{2})\/(\d{2})\/(\d{4})$/;
+            const match = dateStr.match(regex);
+
+            if (!match) return false;
+
+            const day = parseInt(match[1], 10);
+            const month = parseInt(match[2], 10);
+            const year = parseInt(match[3], 10);
+
+            if (isNaN(day) || isNaN(month) || isNaN(year)) return false;
+            if (day < 1 || day > 31) return false;
+            if (month < 1 || month > 12) return false;
+            if (year < 2000) return false;
+
+            const date = new Date(year, month - 1, day);
+            if (date.getFullYear() !== year || (date.getMonth() + 1) !== month || date.getDate() !== day) {
+                return false;
+            }
+
+            return true;
+        }
+
         function validateStep(step) {
+            // Validação específica do passo 1 (Informações Pessoais)
+            if (step === 1) {
+                const nameInput = document.querySelector('input[name="nome"]');
+                const birthInput = document.querySelector('input[name="data_nascimento"]');
+                let hasError = false;
+                let messages = [];
+
+                if (nameInput) {
+                    if (!nameInput.value.trim()) {
+                        nameInput.classList.add('border-red-500');
+                        messages.push('Por favor, preencha o campo de nome.');
+                        hasError = true;
+                    } else {
+                        nameInput.classList.remove('border-red-500');
+                    }
+                }
+
+                if (birthInput) {
+                    const value = birthInput.value.trim();
+                    if (!value) {
+                        birthInput.classList.add('border-red-500');
+                        messages.push('Por favor, preencha a data de nascimento.');
+                        hasError = true;
+                    } else if (!isValidBirthDate(value)) {
+                        birthInput.classList.add('border-red-500');
+                        messages.push('Data de nascimento inválida. Use uma data real a partir de 01/01/2000 no formato DD/MM/AAAA.');
+                        hasError = true;
+                    } else {
+                        birthInput.classList.remove('border-red-500');
+                    }
+                }
+
+                if (hasError) {
+                    showErrorModal(messages.join(' '));
+                    return false;
+                }
+
+                return true;
+            }
+
+            // Validação original para as etapas de notas
             const inputs = document.querySelectorAll(`#step-${step} input[required]`);
             const emptyFields = [];
             const subjectMap = {
