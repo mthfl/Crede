@@ -325,11 +325,108 @@ class relatorios extends connect
         $vagas_ocupadas['pcd'] = array_slice($total_pcd, 0, $vagas_pcd);
         foreach ($vagas_ocupadas['pcd'] as $cand) $ids_classificados[] = $cand['id'];
 
+        // Identificar PCDs que ficaram na lista de espera e adicioná-los às listas AC correspondentes
+        $ids_pcd_classificados = array_column($vagas_ocupadas['pcd'], 'id');
+        
+        // PCDs públicos da lista de espera vão para pública AC
+        $pcd_publica_lista_espera = array_filter($todos_candidatos['pcd_publica'], function($cand) use ($ids_pcd_classificados) {
+            return !in_array($cand['id'], $ids_pcd_classificados);
+        });
+        
+        // PCDs privados da lista de espera vão para privada AC
+        $pcd_privada_lista_espera = array_filter($todos_candidatos['pcd_privada'], function($cand) use ($ids_pcd_classificados) {
+            return !in_array($cand['id'], $ids_pcd_classificados);
+        });
+        
+        // Adicionar PCDs públicos da lista de espera à lista de pública AC
+        if (!empty($pcd_publica_lista_espera)) {
+            $todos_candidatos['publica_ac'] = array_merge($todos_candidatos['publica_ac'], $pcd_publica_lista_espera);
+            // Reordenar a lista de pública AC mantendo a ordem por média final
+            usort($todos_candidatos['publica_ac'], function($a, $b) {
+                if ($b['media_final'] != $a['media_final']) {
+                    return $b['media_final'] <=> $a['media_final'];
+                }
+                if ($a['data_nascimento'] != $b['data_nascimento']) {
+                    return $a['data_nascimento'] <=> $b['data_nascimento'];
+                }
+                if ($b['l_portuguesa_media'] != $a['l_portuguesa_media']) {
+                    return $b['l_portuguesa_media'] <=> $a['l_portuguesa_media'];
+                }
+                return $b['matematica_media'] <=> $a['matematica_media'];
+            });
+        }
+        
+        // Adicionar PCDs privados da lista de espera à lista de privada AC
+        if (!empty($pcd_privada_lista_espera)) {
+            $todos_candidatos['privada_ac'] = array_merge($todos_candidatos['privada_ac'], $pcd_privada_lista_espera);
+            // Reordenar a lista de privada AC mantendo a ordem por média final
+            usort($todos_candidatos['privada_ac'], function($a, $b) {
+                if ($b['media_final'] != $a['media_final']) {
+                    return $b['media_final'] <=> $a['media_final'];
+                }
+                if ($a['data_nascimento'] != $b['data_nascimento']) {
+                    return $a['data_nascimento'] <=> $b['data_nascimento'];
+                }
+                if ($b['l_portuguesa_media'] != $a['l_portuguesa_media']) {
+                    return $b['l_portuguesa_media'] <=> $a['l_portuguesa_media'];
+                }
+                return $b['matematica_media'] <=> $a['matematica_media'];
+            });
+        }
+
         $vagas_ocupadas['publica_cotas'] = array_slice($todos_candidatos['publica_cotas'], 0, $publica_cotas);
+        $ids_publica_cotas_classificados = array_column($vagas_ocupadas['publica_cotas'], 'id');
         foreach ($vagas_ocupadas['publica_cotas'] as $cand) $ids_classificados[] = $cand['id'];
 
+        // Identificar cotistas públicos da lista de espera e adicioná-los à lista de pública AC
+        $cotistas_publica_lista_espera = array_filter($todos_candidatos['publica_cotas'], function($cand) use ($ids_publica_cotas_classificados) {
+            return !in_array($cand['id'], $ids_publica_cotas_classificados);
+        });
+        
+        // Adicionar cotistas públicos da lista de espera à lista de pública AC
+        if (!empty($cotistas_publica_lista_espera)) {
+            $todos_candidatos['publica_ac'] = array_merge($todos_candidatos['publica_ac'], $cotistas_publica_lista_espera);
+            // Reordenar a lista de pública AC mantendo a ordem por média final
+            usort($todos_candidatos['publica_ac'], function($a, $b) {
+                if ($b['media_final'] != $a['media_final']) {
+                    return $b['media_final'] <=> $a['media_final'];
+                }
+                if ($a['data_nascimento'] != $b['data_nascimento']) {
+                    return $a['data_nascimento'] <=> $b['data_nascimento'];
+                }
+                if ($b['l_portuguesa_media'] != $a['l_portuguesa_media']) {
+                    return $b['l_portuguesa_media'] <=> $a['l_portuguesa_media'];
+                }
+                return $b['matematica_media'] <=> $a['matematica_media'];
+            });
+        }
+
         $vagas_ocupadas['privada_cotas'] = array_slice($todos_candidatos['privada_cotas'], 0, $privada_cotas);
+        $ids_privada_cotas_classificados = array_column($vagas_ocupadas['privada_cotas'], 'id');
         foreach ($vagas_ocupadas['privada_cotas'] as $cand) $ids_classificados[] = $cand['id'];
+        
+        // Identificar cotistas privados da lista de espera e adicioná-los à lista de privada AC
+        $cotistas_privada_lista_espera = array_filter($todos_candidatos['privada_cotas'], function($cand) use ($ids_privada_cotas_classificados) {
+            return !in_array($cand['id'], $ids_privada_cotas_classificados);
+        });
+        
+        // Adicionar cotistas privados da lista de espera à lista de privada AC
+        if (!empty($cotistas_privada_lista_espera)) {
+            $todos_candidatos['privada_ac'] = array_merge($todos_candidatos['privada_ac'], $cotistas_privada_lista_espera);
+            // Reordenar a lista de privada AC mantendo a ordem por média final
+            usort($todos_candidatos['privada_ac'], function($a, $b) {
+                if ($b['media_final'] != $a['media_final']) {
+                    return $b['media_final'] <=> $a['media_final'];
+                }
+                if ($a['data_nascimento'] != $b['data_nascimento']) {
+                    return $a['data_nascimento'] <=> $b['data_nascimento'];
+                }
+                if ($b['l_portuguesa_media'] != $a['l_portuguesa_media']) {
+                    return $b['l_portuguesa_media'] <=> $a['l_portuguesa_media'];
+                }
+                return $b['matematica_media'] <=> $a['matematica_media'];
+            });
+        }
 
         // Primeiro preencher privada_ac para calcular vagas restantes
         $limite_privada_ac = $privada_ac + ($privada_cotas - count($vagas_ocupadas['privada_cotas']));
@@ -438,12 +535,19 @@ class relatorios extends connect
         $pdf->SetDrawColor(0, 0, 0);
 
         // ---------- IMPRESSÃO DOS SEGMENTOS ----------
+        // IDs classificados por segmento para verificação de status
+        $ids_pcd_classificados_segmento = array_column($vagas_ocupadas['pcd'], 'id');
+        $ids_publica_cotas_classificados_segmento = array_column($vagas_ocupadas['publica_cotas'], 'id');
+        $ids_privada_cotas_classificados_segmento = array_column($vagas_ocupadas['privada_cotas'], 'id');
+        $ids_publica_ac_classificados_segmento = array_column($vagas_ocupadas['publica_ac'], 'id');
+        $ids_privada_ac_classificados_segmento = array_column($vagas_ocupadas['privada_ac'], 'id');
+        
         $segmentos = [
-            ['titulo' => 'PÚBLICA - AC',      'dados' => $todos_candidatos['publica_ac']],
-            ['titulo' => 'PÚBLICA - COTA',    'dados' => $todos_candidatos['publica_cotas']],
-            ['titulo' => 'PCD',               'dados' => $total_pcd],
-            ['titulo' => 'PRIVADA - AC',      'dados' => $todos_candidatos['privada_ac']],
-            ['titulo' => 'PRIVADA - COTA',    'dados' => $todos_candidatos['privada_cotas']]
+            ['titulo' => 'PÚBLICA - AC',      'dados' => $todos_candidatos['publica_ac'], 'ids_classificados' => $ids_publica_ac_classificados_segmento],
+            ['titulo' => 'PÚBLICA - COTA',    'dados' => $todos_candidatos['publica_cotas'], 'ids_classificados' => $ids_publica_cotas_classificados_segmento],
+            ['titulo' => 'PCD',               'dados' => $total_pcd, 'ids_classificados' => $ids_pcd_classificados_segmento],
+            ['titulo' => 'PRIVADA - AC',      'dados' => $todos_candidatos['privada_ac'], 'ids_classificados' => $ids_privada_ac_classificados_segmento],
+            ['titulo' => 'PRIVADA - COTA',    'dados' => $todos_candidatos['privada_cotas'], 'ids_classificados' => $ids_privada_cotas_classificados_segmento]
         ];
 
         $pdf->SetLeftMargin(10);
@@ -478,7 +582,8 @@ class relatorios extends connect
             foreach ($seg['dados'] as $row) {
                 $origem = $row['publica'] ? 'PÚBLICA' : 'PRIVADA';
                 $cota   = $row['pcd'] ? 'PCD' : ($row['bairro'] ? 'COTISTA' : 'AC');
-                $isClassificado = in_array($row['id'], $ids_classificados);
+                // Verificar se está classificado no próprio segmento
+                $isClassificado = in_array($row['id'], $seg['ids_classificados']);
                 $status = $isClassificado ? 'CLASSIFICADO' : 'LISTA DE ESPERA';
 
                 // destaques visuais para classificados
