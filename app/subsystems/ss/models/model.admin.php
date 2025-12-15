@@ -1325,7 +1325,7 @@ class admin extends cadastrador
         //try {
             // Se id_curso for "todos", salvar como NULL
             if($id_curso == 0){
-                echo $id_curso = null;
+                $id_curso = null;
             }
             
             $stmt_matricula = $this->connect->prepare("INSERT INTO $this->table18 (id_curso, data, hora) VALUES (:id_curso, :data, :hora)");
@@ -1346,7 +1346,7 @@ class admin extends cadastrador
     public function excluir_matricula(int $id_matricula): int
     {
         try {
-            $stmt = $this->connect->prepare("DELETE FROM $this->table19 WHERE id = :id");
+            $stmt = $this->connect->prepare("DELETE FROM $this->table18 WHERE id = :id");
             $stmt->bindValue(":id", $id_matricula);
             
             if (!$stmt->execute()) {

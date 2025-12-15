@@ -9,9 +9,28 @@ require_once(__DIR__ . "/../models/model.select.php");
 
 $select = new select($_SESSION['escola']);
 $cursos = $select->select_cursos();
-echo "<pre>";
-print_r($_POST);
-echo "</pre>";
+
+if (
+    isset($_POST["acao"]) && $_POST["acao"] === "excluir_matricula" &&
+    isset($_POST["id_matricula"]) && !empty($_POST["id_matricula"])
+) {
+    $id_matricula = (int) $_POST["id_matricula"];
+    $escola = $_SESSION['escola'];
+    $admin_model = new admin($escola);
+    $result = $admin_model->excluir_matricula($id_matricula);
+
+    switch ($result) {
+        case 1:
+            header('Location: ../views/matriculas.php?excluido');
+            exit();
+        case 2:
+            header('Location: ../views/matriculas.php?erro');
+            exit();
+        default:
+            header('Location: ../views/matriculas.php?falha');
+            exit();
+    }
+}
 //cadastrar bairro
 if (
    
@@ -27,7 +46,7 @@ if (
         $curso_id = $dia["curso_id"];
         $data = $dia["data"];
         $hora = $dia["hora"];
-        echo $result = $admin_model->cadastrar_matricula($curso_id, $data, $hora);
+        $result = $admin_model->cadastrar_matricula($curso_id, $data, $hora);
     }
 
     switch ($result) {

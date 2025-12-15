@@ -380,6 +380,41 @@ $matriculas = $select->select_matriculas();
             color: #1A3C34;
         }
 
+        input[type="date"],
+        input[type="time"] {
+            accent-color: var(--primary);
+        }
+
+        input[type="date"]:focus,
+        input[type="time"]:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(0, 90, 36, 0.12);
+        }
+
+        input[type="date"]::-webkit-datetime-edit-day-field:focus,
+        input[type="date"]::-webkit-datetime-edit-month-field:focus,
+        input[type="date"]::-webkit-datetime-edit-year-field:focus,
+        input[type="date"]::-webkit-datetime-edit-text:focus,
+        input[type="date"]::-webkit-datetime-edit:focus,
+        input[type="date"]::-webkit-datetime-edit-fields-wrapper:focus,
+        input[type="time"]::-webkit-datetime-edit-hour-field:focus,
+        input[type="time"]::-webkit-datetime-edit-minute-field:focus,
+        input[type="time"]::-webkit-datetime-edit-second-field:focus,
+        input[type="time"]::-webkit-datetime-edit-ampm-field:focus,
+        input[type="time"]::-webkit-datetime-edit-text:focus,
+        input[type="time"]::-webkit-datetime-edit:focus,
+        input[type="time"]::-webkit-datetime-edit-fields-wrapper:focus {
+            background-color: transparent !important;
+            color: inherit !important;
+            outline: none !important;
+        }
+
+        input[type="date"]::selection,
+        input[type="time"]::selection {
+            background: transparent;
+        }
+
         .horario-item {
             animation: slideInUp 0.3s ease-out;
         }
@@ -427,290 +462,357 @@ $matriculas = $select->select_matriculas();
                     </div>
                 </div>
             </header>
-            <main class="p-4 sm:p-6 lg:p-8">
-                <div class="mb-8">
-                    <div class="text-center">
-                        <h1 class="text-primary text-3xl md:text-4xl font-bold tracking-tight font-heading">
-                            <i class="fas fa-calendar-alt mr-3 text-secondary"></i>
-                            Gerenciar Matrículas
-                        </h1>
-                        <p class="text-gray-600 text-base md:text-lg mt-2 max-w-2xl mx-auto">
-                            Configure os dias e horários de matrícula por curso
-                        </p>
-                        <div class="mt-6 inline-flex text-sm  px-6 py-3 ">
-                           
+           <main class="p-4 sm:p-6 lg:p-8">
+    <div class="mb-8 text-center">
+        <h1 class="text-primary text-3xl md:text-4xl font-bold tracking-tight font-heading">
+            <i class="fas fa-calendar-alt mr-3 text-secondary"></i>
+            Gerenciar Matrículas
+        </h1>
+        <p class="text-gray-600 text-base md:text-lg mt-2 max-w-2xl mx-auto">
+            Configure os dias e horários de matrícula por curso
+        </p>
+    </div>
+
+    <?php if (isset($_GET['sucesso'])) { ?>
+        <div class="max-w-5xl mx-auto mb-6 rounded-2xl border border-green-200 bg-green-50 px-6 sm:px-8 py-4 text-green-800 shadow-sm">
+            <div class="flex items-start gap-3">
+                <div class="mt-0.5 w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center">
+                    <i class="fas fa-check text-green-700"></i>
+                </div>
+                <div class="flex-1">
+                    <p class="font-semibold">Matrícula(s) adicionada(s) com sucesso!</p>
+                    <p class="text-sm text-green-700 mt-1">As configurações foram salvas e já estão válidas.</p>
+                </div>
+            </div>
+        </div>
+    <?php } ?>
+
+    <?php if (isset($_GET['erro'])) { ?>
+        <div class="max-w-5xl mx-auto mb-6 rounded-2xl border border-red-200 bg-red-50 px-6 sm:px-8 py-4 text-red-800 shadow-sm">
+            <div class="flex items-start gap-3">
+                <div class="mt-0.5 w-10 h-10 rounded-xl bg-red-100 flex items-center justify-center">
+                    <i class="fas fa-triangle-exclamation text-red-700"></i>
+                </div>
+                <div class="flex-1">
+                    <p class="font-semibold">Erro ao processar matrícula(s).</p>
+                    <p class="text-sm text-red-700 mt-1">Revise os campos e tente novamente.</p>
+                </div>
+            </div>
+        </div>
+    <?php } ?>
+
+    <?php if (isset($_GET['excluido'])) { ?>
+        <div class="max-w-5xl mx-auto mb-6 rounded-2xl border border-green-200 bg-green-50 px-6 sm:px-8 py-4 text-green-800 shadow-sm">
+            <div class="flex items-start gap-3">
+                <div class="mt-0.5 w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center">
+                    <i class="fas fa-check text-green-700"></i>
+                </div>
+                <div class="flex-1">
+                    <p class="font-semibold">Matrícula excluída com sucesso!</p>
+                    <p class="text-sm text-green-700 mt-1">A lista foi atualizada.</p>
+                </div>
+            </div>
+        </div>
+    <?php } ?>
+
+
+    <div class="max-w-5xl mx-auto space-y-8">
+        <!-- Formulário de Nova Matrícula -->
+        <div class="bg-white rounded-2xl shadow-xl border border-gray-200/70 overflow-hidden">
+            <div class="px-6 sm:px-8 py-6 border-b border-gray-100">
+                <h2 class="text-lg sm:text-xl font-bold text-primary">
+                    <i class="fas fa-plus-circle mr-2 text-secondary"></i>
+                    Adicionar Nova Configuração
+                </h2>
+                <p class="text-sm text-gray-600 mt-2">Defina curso, data e hora para abertura de matrículas.</p>
+            </div>
+
+            <form action="../controllers/controller_matricula.php" method="POST" id="formMatricula" class="p-6 sm:p-8">
+                <div id="dias-matricula-container" class="space-y-6">
+                    <!-- Primeiro item (fixo) -->
+                    <div class="dia-matricula-item bg-gray-50 p-6 rounded-2xl border border-gray-200">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-5">Dia de Matrícula 1</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                    <i class="fas fa-book mr-2 text-primary"></i> Curso
+                                </label>
+                                <select name="dias_matricula[0][curso_id]" class="select2-curso w-full" required>
+                                    <option value="">Selecione um curso</option>
+                                    <option value="0">TODOS OS CURSOS</option>
+                                    <?php
+                                    $cursos = $select->select_cursos();
+                                    foreach ($cursos as $curso) { ?>
+                                        <option value="<?= htmlspecialchars($curso["id"]) ?>">
+                                            <?= htmlspecialchars($curso["nome_curso"]) ?>
+                                        </option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                    <i class="fas fa-calendar mr-2 text-primary"></i> Data
+                                </label>
+                                <input type="date" name="dias_matricula[0][data]" required min="<?= date('Y-m-d') ?>"
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-[#005A24] focus:ring-4 focus:ring-[rgba(0,90,36,0.12)] focus:outline-none transition-all bg-white">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                    <i class="fas fa-clock mr-2 text-primary"></i> Hora
+                                </label>
+                                <input type="time" name="dias_matricula[0][hora]" required
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-[#005A24] focus:ring-4 focus:ring-[rgba(0,90,36,0.12)] focus:outline-none transition-all bg-white">
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <?php if (isset($_GET['sucesso'])) { ?>
-                    <div class="mb-6 rounded-2xl border border-green-200 bg-green-50 px-5 py-4 text-green-800 shadow-sm">
-                        <div class="flex items-start gap-3">
-                            <div class="mt-0.5 w-10 h-10 rounded-xl bg-green-100 flex items-center justify-center">
-                                <i class="fas fa-check text-green-700"></i>
-                            </div>
-                            <div class="flex-1">
-                                <p class="font-semibold">Matrícula(s) adicionada(s) com sucesso!</p>
-                                <p class="text-sm text-green-700 mt-1">As configurações foram salvas e já estão válidas.</p>
-                            </div>
-                        </div>
+                <div class="mt-8 flex flex-col sm:flex-row gap-4">
+                    <div class="flex-1 flex gap-4 order-1 sm:order-2">
+                        <button type="button" onclick="adicionarDiaMatricula()"
+                                class="flex-1 px-6 py-3 rounded-xl border-2 border-dashed border-secondary text-secondary bg-white hover:bg-secondary/5 transition-all font-semibold">
+                            <i class="fas fa-plus mr-2"></i>
+                            Adicionar outro dia
+                        </button>
+                        <button type="reset"
+                                class="px-6 py-3 rounded-xl border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 transition-all font-semibold">
+                            <i class="fas fa-redo mr-2"></i>
+                            Limpar
+                        </button>
                     </div>
-                <?php } ?>
-                <?php if (isset($_GET['erro'])) { ?>
-                    <div class="mb-6 rounded-2xl border border-red-200 bg-red-50 px-5 py-4 text-red-800 shadow-sm">
-                        <div class="flex items-start gap-3">
-                            <div class="mt-0.5 w-10 h-10 rounded-xl bg-red-100 flex items-center justify-center">
-                                <i class="fas fa-triangle-exclamation text-red-700"></i>
-                            </div>
-                            <div class="flex-1">
-                                <p class="font-semibold">Erro ao processar matrícula(s).</p>
-                                <p class="text-sm text-red-700 mt-1">Revise os campos e tente novamente.</p>
-                            </div>
-                        </div>
-                    </div>
-                <?php } ?>
+                    <button type="submit" name="adicionar_matricula"
+                            class="order-2 sm:order-1 w-full sm:w-1/2 bg-gradient-to-r from-primary to-dark text-white py-3 px-8 rounded-xl hover:from-dark hover:to-primary transition-all font-semibold shadow-lg">
+                        <i class="fas fa-save mr-2"></i>
+                        Salvar Configurações
+                    </button>
+                </div>
+            </form>
+        </div>
 
-                <div class="max-w-4xl mx-auto space-y-6">
-                    <!-- Lista de Matrículas Existentes -->
-                    <?php if (!empty($matriculas)) { ?>
-                        <div class="bg-white rounded-2xl shadow-xl border border-gray-200/70 overflow-hidden">
-                            <div class="px-6 sm:px-8 py-6 border-b border-gray-100 flex items-center justify-between">
-                                <h2 class="text-lg sm:text-xl font-bold text-primary">
-                                    <i class="fas fa-list mr-2 text-secondary"></i>
-                                    Matrículas Cadastradas
-                                </h2>
-                                <span class="text-sm text-gray-500">
-                                    <?= count($matriculas) ?> registro(s)
-                                </span>
-                            </div>
-                            <div class="divide-y divide-gray-100">
-                                <?php foreach ($matriculas as $matricula) { ?>
-                                    <div class="px-6 sm:px-8 py-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                                        <div class="min-w-0">
-                                            <p class="font-semibold text-gray-900 truncate">
-                                                <?php if ($matricula['nome_curso']) { ?>
-                                                    <?= htmlspecialchars($matricula['nome_curso']) ?>
-                                                <?php } else { ?>
-                                                    <span class="inline-flex items-center rounded-full bg-secondary/10 text-secondary px-3 py-1 text-xs font-semibold">TODOS OS CURSOS</span>
-                                                <?php } ?>
-                                            </p>
-                                            <div class="mt-2 flex flex-wrap items-center gap-3 text-sm text-gray-600">
-                                                <span class="inline-flex items-center gap-2 rounded-lg bg-gray-50 border border-gray-200 px-3 py-1">
-                                                    <i class="fas fa-calendar text-primary"></i>
-                                                    <?= date('d/m/Y', strtotime($matricula['data'])) ?>
-                                                </span>
-                                                <span class="inline-flex items-center gap-2 rounded-lg bg-gray-50 border border-gray-200 px-3 py-1">
-                                                    <i class="fas fa-clock text-primary"></i>
-                                                    <?= date('H:i', strtotime($matricula['hora'])) ?>
-                                                </span>
-                                            </p>
-                                        </div>
-                                        <a href="?excluir_matricula=<?= $matricula['id'] ?>"
-                                            onclick="return confirm('Tem certeza que deseja excluir esta matrícula?')"
-                                            class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-red-200 bg-red-50 text-red-700 hover:bg-red-100 transition-all text-sm font-semibold">
-                                            <i class="fas fa-trash"></i>
-                                            <span>Excluir</span>
-                                        </a>
-                                    </div>
-                                <?php } ?>
-                            </div>
-                        </div>
-                    <?php } ?>
-
-                    <!-- Formulário de Nova Matrícula -->
-                    <div class="bg-white rounded-2xl shadow-xl border border-gray-200/70 overflow-hidden">
-                        <div class="px-6 sm:px-8 py-6 border-b border-gray-100">
-                            <h2 class="text-lg sm:text-xl font-bold text-primary">
-                                <i class="fas fa-plus-circle mr-2 text-secondary"></i>
-                                Nova Configuração
-                            </h2>
-                            <p class="text-sm text-gray-600 mt-1">Adicione um ou mais dias de matrícula e salve ao final.</p>
-                        </div>
-                        <form action="../controllers/controller_matricula.php" method="POST" id="formMatricula" class="space-y-6 px-6 sm:px-8 py-6">
-                            <div id="dias-matricula-container" class="space-y-6">
-                                <!-- Primeiro dia de matrícula -->
-                                <div class="dia-matricula-item bg-gray-50 p-6 rounded-2xl border border-gray-200">
-                                    <div class="flex items-center justify-between mb-5">
-                                        <h3 class="text-base sm:text-lg font-semibold text-gray-900">Dia de Matrícula 1</h3>
-                                        <button type="button" onclick="removerDiaMatricula(this)" class="px-3 py-2 rounded-xl border border-red-200 bg-red-50 text-red-700 hover:bg-red-100 transition-all text-sm font-semibold">
-                                            <i class="fas fa-trash mr-1"></i>
-                                            Remover
-                                        </button>
-                                    </div>
-                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                        <div class="md:col-span-1">
-                                            <label class="block text-sm font-semibold text-gray-700 mb-2">
-                                                <i class="fas fa-book mr-2 text-primary"></i>
-                                                Curso
-                                            </label>
-                                            <select name="dias_matricula[0][curso_id]" class="select2-curso w-full" required>
-                                                <option value="">SELECIONAR CURSO</option>
-                                                <option value="0">TODOS OS CURSOS</option>
-                                                <?php
-                                                $cursos = $select->select_cursos();
-                                                foreach ($cursos as $curso) { ?>
-                                                    <option value="<?= htmlspecialchars($curso["id"]) ?>">
-                                                        <?= htmlspecialchars($curso["nome_curso"]) ?>
-                                                    </option>
-                                                <?php } ?>
-                                            </select>
-                                        </div>
-
-                                        <div class="md:col-span-1">
-                                            <label class="block text-sm font-semibold text-gray-700 mb-2">
-                                                <i class="fas fa-calendar mr-2 text-primary"></i>
-                                                Data
-                                            </label>
-                                            <input type="date" name="dias_matricula[0][data]" required
-                                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all bg-white">
-                                        </div>
-
-                                        <div class="md:col-span-1">
-                                            <label class="block text-sm font-semibold text-gray-700 mb-2">
-                                                <i class="fas fa-clock mr-2 text-primary"></i>
-                                                Hora
-                                            </label>
-                                            <input type="time" name="dias_matricula[0][hora]" required
-                                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all bg-white">
-                                        </div>
-                                    </div>
+        <!-- Lista de Matrículas Existentes -->
+        <?php if (!empty($matriculas)) { ?>
+            <div class="bg-white rounded-2xl shadow-xl border border-gray-200/70 overflow-hidden">
+                <div class="px-6 sm:px-8 py-6 border-b border-gray-100 flex items-center justify-between">
+                    <h2 class="text-lg sm:text-xl font-bold text-primary">
+                        <i class="fas fa-list mr-2 text-secondary"></i>
+                        Matrículas Cadastradas
+                    </h2>
+                    <span class="text-sm text-gray-500"><?= count($matriculas) ?> registro(s)</span>
+                </div>
+                <div class="divide-y divide-gray-100">
+                    <?php foreach ($matriculas as $matricula) { ?>
+                        <div class="px-6 sm:px-8 py-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                            <div class="min-w-0 flex-1">
+                                <p class="font-semibold text-gray-900 truncate">
+                                    <?php if ($matricula['nome_curso']) { ?>
+                                        <?= htmlspecialchars($matricula['nome_curso']) ?>
+                                    <?php } else { ?>
+                                        <span class="inline-flex items-center rounded-full bg-secondary/10 text-secondary px-3 py-1 text-xs font-semibold">
+                                            TODOS OS CURSOS
+                                        </span>
+                                    <?php } ?>
+                                </p>
+                                <div class="mt-3 flex flex-wrap gap-3 text-sm text-gray-600">
+                                    <span class="inline-flex items-center gap-2 rounded-lg bg-gray-50 border border-gray-200 px-3 py-1.5">
+                                        <i class="fas fa-calendar text-primary"></i>
+                                        <?= date('d/m/Y', strtotime($matricula['data'])) ?>
+                                    </span>
+                                    <span class="inline-flex items-center gap-2 rounded-lg bg-gray-50 border border-gray-200 px-3 py-1.5">
+                                        <i class="fas fa-clock text-primary"></i>
+                                        <?= date('H:i', strtotime($matricula['hora'])) ?>
+                                    </span>
                                 </div>
                             </div>
-
-                            <button type="button" onclick="adicionarDiaMatricula()" class="w-full px-4 py-3 rounded-xl border-2 border-secondary text-secondary bg-white hover:bg-secondary/10 transition-all font-semibold">
-                                <i class="fas fa-plus mr-2"></i>
-                                Adicionar dia de matrícula
+                            <button type="button"
+                               onclick="openDeleteMatriculaModal(<?= (int)$matricula['id'] ?>)"
+                               class="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl border border-red-200 bg-red-50 text-red-700 hover:bg-red-100 transition-all text-sm font-semibold">
+                                <i class="fas fa-trash"></i> Excluir
                             </button>
-
-                            <div class="flex gap-4 pt-4">
-                                <button type="submit" name="adicionar_matricula" class="flex-1 bg-gradient-to-r from-primary to-dark text-white py-3 px-6 rounded-xl hover:from-dark hover:to-primary transition-all font-semibold">
-                                    <i class="fas fa-save mr-2"></i>
-                                    Salvar Matrícula
-                                </button>
-                                <button type="reset" class="px-6 py-3 rounded-xl border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 transition-all font-semibold">
-                                    <i class="fas fa-redo mr-2"></i>
-                                    Limpar
-                                </button>
-                            </div>
-                        </form>
+                        </div>
+                    <?php } ?>
+                </div>
+            </div>
+        <?php } else { ?>
+            <div class="bg-white rounded-2xl shadow-xl border border-gray-200/70 overflow-hidden">
+                <div class="px-6 sm:px-8 py-6 border-b border-gray-100">
+                    <h2 class="text-lg sm:text-xl font-bold text-primary">
+                        <i class="fas fa-list mr-2 text-secondary"></i>
+                        Matrículas Cadastradas
+                    </h2>
+                </div>
+                <div class="p-8 text-center">
+                    <div class="max-w-md mx-auto">
+                        <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
+                            <i class="fas fa-calendar-times text-3xl text-gray-400"></i>
+                        </div>
+                        <p class="text-lg font-semibold text-gray-800">Nenhuma matrícula cadastrada</p>
+                        <p class="text-gray-600 mt-2">Adicione as primeiras configurações de data e hora abaixo.</p>
                     </div>
                 </div>
-            </main>
+            </div>
+        <?php } ?>
+    </div>
+</main>
         </div>
     </div>
 
     <script>
-        let diaMatriculaCount = 1;
+    let diaMatriculaCount = 1;
 
-        $(document).ready(function() {
-            // Inicializar Select2 para todos os selects existentes
-            $('.select2-curso').select2({
-                placeholder: 'SELECIONAR CURSO',
-                allowClear: true
-            });
+    $(document).ready(function() {
+        $('.select2-curso').select2({
+            placeholder: 'Selecione um curso',
+            allowClear: true
         });
+    });
 
-        function adicionarDiaMatricula() {
-            const container = document.getElementById('dias-matricula-container');
-            const novoDia = document.createElement('div');
-            novoDia.className = 'dia-matricula-item bg-gray-50 p-6 rounded-2xl border border-gray-200 horario-item';
-            novoDia.innerHTML = `
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-lg font-semibold text-gray-800">Dia de Matrícula ${diaMatriculaCount + 1}</h3>
-                    <button type="button" onclick="removerDiaMatricula(this)" class="px-3 py-2 rounded-xl border border-red-200 bg-red-50 text-red-700 hover:bg-red-100 transition-all text-sm font-semibold">
-                        <i class="fas fa-trash mr-1"></i>
-                        Remover
-                    </button>
+    function adicionarDiaMatricula() {
+        const container = document.getElementById('dias-matricula-container');
+        const novoDia = document.createElement('div');
+        novoDia.className = 'dia-matricula-item bg-gray-50 p-6 rounded-2xl border border-gray-200 horario-item';
+
+        novoDia.innerHTML = `
+            <div class="flex items-center justify-between mb-5">
+                <h3 class="text-lg font-semibold text-gray-900">Dia de Matrícula ${diaMatriculaCount + 1}</h3>
+                <button type="button" onclick="removerDiaMatricula(this)" 
+                        class="px-4 py-2 rounded-xl border border-red-200 bg-red-50 text-red-700 hover:bg-red-100 transition-all text-sm font-semibold">
+                    <i class="fas fa-trash mr-1"></i> Remover
+                </button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">
+                        <i class="fas fa-book mr-2 text-primary"></i> Curso
+                    </label>
+                    <select name="dias_matricula[${diaMatriculaCount}][curso_id]" class="select2-curso w-full" required>
+                        <option value="">Selecione um curso</option>
+                        <option value="0">TODOS OS CURSOS</option>
+                        <?php foreach ($cursos as $curso) { ?>
+                            <option value="<?= htmlspecialchars($curso["id"]) ?>"><?= htmlspecialchars($curso["nome_curso"]) ?></option>
+                        <?php } ?>
+                    </select>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div class="md:col-span-1">
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">
-                            <i class="fas fa-book mr-2 text-primary"></i>
-                            Curso
-                        </label>
-                        <select name="dias_matricula[${diaMatriculaCount}][curso_id]" class="select2-curso w-full" required>
-                            <option value="">SELECIONAR CURSO</option>
-                            <option value="0">TODOS OS CURSOS</option>
-                            <?php
-                            $cursos = $select->select_cursos();
-                            foreach ($cursos as $curso) { ?>
-                                <option value="<?= htmlspecialchars($curso["id"]) ?>">
-                                    <?= htmlspecialchars($curso["nome_curso"]) ?>
-                                </option>
-                            <?php } ?>
-                        </select>
-                    </div>
-
-                    <div class="md:col-span-1">
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">
-                            <i class="fas fa-calendar mr-2 text-primary"></i>
-                            Data
-                        </label>
-                        <input type="date" name="dias_matricula[${diaMatriculaCount}][data]" required
-                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all bg-white">
-                    </div>
-
-                    <div class="md:col-span-1">
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">
-                            <i class="fas fa-clock mr-2 text-primary"></i>
-                            Hora
-                        </label>
-                        <input type="time" name="dias_matricula[${diaMatriculaCount}][hora]" required
-                            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all bg-white">
-                    </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">
+                        <i class="fas fa-calendar mr-2 text-primary"></i> Data
+                    </label>
+                    <input type="date" name="dias_matricula[${diaMatriculaCount}][data]" required min="<?= date('Y-m-d') ?>"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-[#005A24] focus:ring-4 focus:ring-[rgba(0,90,36,0.12)] focus:outline-none transition-all bg-white">
                 </div>
-            `;
-            container.appendChild(novoDia);
-            diaMatriculaCount++;
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">
+                        <i class="fas fa-clock mr-2 text-primary"></i> Hora
+                    </label>
+                    <input type="time" name="dias_matricula[${diaMatriculaCount}][hora]" required
+                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:border-[#005A24] focus:ring-4 focus:ring-[rgba(0,90,36,0.12)] focus:outline-none transition-all bg-white">
+                </div>
+            </div>
+        `;
 
-            // Inicializar Select2 no novo select
-            $(novoDia).find('.select2-curso').select2({
-                placeholder: 'SELECIONAR CURSO',
-                allowClear: true
+        container.appendChild(novoDia);
+        diaMatriculaCount++;
+
+        // Inicializa Select2 no novo campo
+        $(novoDia).find('.select2-curso').select2({
+            placeholder: 'Selecione um curso',
+            allowClear: true
+        });
+    }
+
+    function removerDiaMatricula(button) {
+        const container = document.getElementById('dias-matricula-container');
+        if (container.children.length > 1) {
+            const item = button.closest('.dia-matricula-item');
+            $(item).find('.select2-curso').select2('destroy');
+            item.remove();
+
+            // Renumera os títulos
+            container.querySelectorAll('.dia-matricula-item').forEach((el, i) => {
+                el.querySelector('h3').textContent = `Dia de Matrícula ${i + 1}`;
             });
+        } else {
+            alert('É obrigatório manter pelo menos um dia de matrícula.');
+        }
+    }
+
+    // Sidebar toggle (mantido como estava)
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+    const openSidebar = document.getElementById('openSidebar');
+    const closeSidebar = document.getElementById('closeSidebar');
+
+    if (openSidebar) openSidebar.addEventListener('click', () => { sidebar.classList.add('open'); overlay.classList.add('show'); });
+    if (closeSidebar) closeSidebar.addEventListener('click', () => { sidebar.classList.remove('open'); overlay.classList.remove('show'); });
+    if (overlay) overlay.addEventListener('click', () => { sidebar.classList.remove('open'); overlay.classList.remove('show'); });
+
+    function openDeleteMatriculaModal(idMatricula) {
+        const modal = document.getElementById('deleteMatriculaModal');
+        const input = document.getElementById('deleteMatriculaId');
+        input.value = idMatricula;
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+    }
+
+    function closeDeleteMatriculaModal() {
+        const modal = document.getElementById('deleteMatriculaModal');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+    }
+
+    function confirmDeleteMatricula() {
+        const form = document.getElementById('deleteMatriculaForm');
+        form.submit();
+    }
+
+    (function () {
+        const hasQuery = window.location.search && window.location.search.length > 0;
+        if (!hasQuery) return;
+
+        const alreadyRefreshed = sessionStorage.getItem('matriculas_refreshed') === '1';
+        if (alreadyRefreshed) {
+            sessionStorage.removeItem('matriculas_refreshed');
+            return;
         }
 
-        function removerDiaMatricula(button) {
-            const container = document.getElementById('dias-matricula-container');
-            if (container.children.length > 1) {
-                const item = button.closest('.dia-matricula-item');
-                // Destruir Select2 antes de remover
-                $(item).find('.select2-curso').select2('destroy');
-                item.remove();
-                // Renumerar os dias
-                container.querySelectorAll('.dia-matricula-item').forEach((item, index) => {
-                    item.querySelector('h3').textContent = `Dia de Matrícula ${index + 1}`;
-                });
-            } else {
-                alert('É necessário ter pelo menos um dia de matrícula!');
-            }
-        }
+        sessionStorage.setItem('matriculas_refreshed', '1');
+        const cleanUrl = window.location.pathname;
+        window.location.replace(cleanUrl);
+    })();
+</script>
 
-        // Sidebar toggle
-        const sidebar = document.getElementById('sidebar');
-        const overlay = document.getElementById('overlay');
-        const openSidebar = document.getElementById('openSidebar');
-        const closeSidebar = document.getElementById('closeSidebar');
+<div id="deleteMatriculaModal" class="hidden fixed inset-0 z-50 items-center justify-center">
+    <div class="absolute inset-0 bg-black/40" onclick="closeDeleteMatriculaModal()"></div>
+    <div class="relative w-[92%] max-w-md rounded-2xl bg-white shadow-2xl border border-gray-200 overflow-hidden">
+        <div class="px-6 sm:px-8 py-5 border-b border-gray-100 flex items-center justify-between">
+            <h3 class="text-lg font-bold text-gray-900">Confirmar exclusão</h3>
+            <button type="button" onclick="closeDeleteMatriculaModal()" class="w-10 h-10 rounded-xl border border-gray-200 bg-white text-gray-600 hover:bg-gray-50 transition-all">
+                <i class="fas fa-xmark"></i>
+            </button>
+        </div>
 
-        if (openSidebar) {
-            openSidebar.addEventListener('click', () => {
-                sidebar.classList.add('open');
-                overlay.classList.add('show');
-            });
-        }
-        if (closeSidebar) {
-            closeSidebar.addEventListener('click', () => {
-                sidebar.classList.remove('open');
-                overlay.classList.remove('show');
-            });
-        }
-        if (overlay) {
-            overlay.addEventListener('click', () => {
-                sidebar.classList.remove('open');
-                overlay.classList.remove('show');
-            });
-        }
-    </script>
+        <div class="px-6 sm:px-8 py-6">
+            <p class="text-gray-800 text-base text-center font-semibold">Tem certeza que deseja excluir esta matrícula?</p>
+            <form id="deleteMatriculaForm" action="../controllers/controller_matricula.php" method="POST">
+                <input type="hidden" name="acao" value="excluir_matricula">
+                <input type="hidden" id="deleteMatriculaId" name="id_matricula" value="">
+            </form>
+        </div>
+
+        <div class="px-6 sm:px-8 py-4 border-t border-gray-100 bg-white">
+            <div class="flex items-center justify-between gap-3">
+                <button type="button" onclick="closeDeleteMatriculaModal()"
+                        class="px-5 py-2.5 rounded-xl border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 transition-all font-semibold">
+                    Cancelar
+                </button>
+                <button type="button" onclick="confirmDeleteMatricula()"
+                        class="px-5 py-2.5 rounded-xl border border-red-200 bg-red-50 text-red-700 hover:bg-red-100 transition-all font-semibold">
+                    <i class="fas fa-trash mr-2"></i>
+                    Excluir
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 
 </html>
