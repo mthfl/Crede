@@ -218,7 +218,7 @@ function sidebar_is_active(string $currentPage, string $target): bool {
                     <a href="<?= $indexHref ?>" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group <?= $isActive ? $activeBg : $inactiveBg ?>">
                         <div class="w-12 h-12 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300 <?= $isActive ? $activeIconBg : $inactiveIconBg ?>">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9.75L12 3l9 6.75V21a.75.75 0 01-.75.75H14.25a.75.75 0 01-.75-.75v-6a.75.75 0 00-.75-.75h-1.5a.75.75 0 00-.75.75v6a.75.75 0 01-.75.75H3.75A.75.75 0 013 21V9.75z"></path>
                             </svg>
                         </div>
                         <div>
@@ -282,7 +282,7 @@ function sidebar_is_active(string $currentPage, string $target): bool {
                     <a href="<?= $viewsBase ?>candidatos.php" class="nav-item flex items-center px-4 py-4 text-white hover:text-white transition-all group focus-ring <?= $isActive ? $activeBg : $inactiveBg ?>">
                         <div class="w-12 h-12 rounded-xl flex items-center justify-center mr-4 group-hover:bg-secondary group-hover:scale-110 transition-all duration-300 <?= $isActive ? $activeIconBg : $inactiveIconBg ?>">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-1a4 4 0 00-4-4h-1m-4 5H3v-1a4 4 0 014-4h6a4 4 0 014 4v1zm-1-9a4 4 0 10-8 0 4 4 0 008 0zm6 1a3 3 0 10-6 0 3 3 0 006 0z"></path>
                             </svg>
                         </div>
                         <div>

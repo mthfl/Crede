@@ -442,8 +442,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['atualizar_status_recu
                                                                     Pendente
                                                                 </span>
                                                                 <h4 class="font-semibold text-gray-900"><?= htmlspecialchars($recurso['nome'] ?? 'Candidato Desconhecido') ?></h4>
-                                                                <p class="text-sm text-gray-500 mt-1">ID: <?= htmlspecialchars($recurso['id_recurso'] ?? '') ?></p>
-                                                                <p class="text-xs text-gray-400 mt-1">Usuário: <?= htmlspecialchars($recurso['nome_usuario'] ?? '') ?></p>
+                                                               
+                                                              
                                                             </div>
                                                         </div>
                                                         <div class="bg-gray-50 p-4 rounded-lg mb-4">
@@ -496,13 +496,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['atualizar_status_recu
                                                                     Deferido
                                                                 </span>
                                                                 <h4 class="font-semibold text-gray-900"><?= htmlspecialchars($recurso['nome'] ?? 'Candidato Desconhecido') ?></h4>
-                                                                <p class="text-sm text-gray-500 mt-1">ID: <?= htmlspecialchars($recurso['id_recurso'] ?? '') ?></p>
-                                                                <p class="text-xs text-gray-400 mt-1">Usuário: <?= htmlspecialchars($recurso['nome_usuario'] ?? '') ?></p>
+                                                               
                                                             </div>
                                                         </div>
                                                         <div class="bg-gray-50 p-4 rounded-lg mb-4">
                                                             <h5 class="font-medium text-gray-700 mb-2">Descrição:</h5>
                                                             <p class="text-sm text-gray-600 whitespace-pre-line"><?= htmlspecialchars($recurso['texto'] ?? '') ?></p>
+                                                        </div>
+                                                        <div class="flex gap-2">
+                                                            <form action="recursos.php" method="post" class="flex-1">
+                                                                <input type="hidden" name="id_recurso" value="<?= $recurso['id_recurso'] ?>">
+                                                                <input type="hidden" name="novo_status" value="PEDENTE">
+                                                                <button type="submit" name="atualizar_status_recurso" class="w-full bg-white border border-yellow-500 text-yellow-500 px-3 py-2 rounded-lg hover:bg-yellow-50 transition-all font-medium text-sm">
+                                                                    Voltar Pendente
+                                                                </button>
+                                                            </form>
+                                                            <form action="recursos.php" method="post" class="flex-1">
+                                                                <input type="hidden" name="id_recurso" value="<?= $recurso['id_recurso'] ?>">
+                                                                <input type="hidden" name="novo_status" value="INDEFERIDO">
+                                                                <button type="submit" name="atualizar_status_recurso" class="w-full bg-white border border-red-500 text-red-500 px-3 py-2 rounded-lg hover:bg-red-50 transition-all font-medium text-sm">
+                                                                    Indeferir
+                                                                </button>
+                                                            </form>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -534,13 +549,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['atualizar_status_recu
                                                                     Indeferido
                                                                 </span>
                                                                 <h4 class="font-semibold text-gray-900"><?= htmlspecialchars($recurso['nome'] ?? 'Candidato Desconhecido') ?></h4>
-                                                                <p class="text-sm text-gray-500 mt-1">ID: <?= htmlspecialchars($recurso['id_recurso'] ?? '') ?></p>
-                                                                <p class="text-xs text-gray-400 mt-1">Usuário: <?= htmlspecialchars($recurso['nome_usuario'] ?? '') ?></p>
+                                                                
                                                             </div>
                                                         </div>
                                                         <div class="bg-gray-50 p-4 rounded-lg mb-4">
                                                             <h5 class="font-medium text-gray-700 mb-2">Descrição:</h5>
                                                             <p class="text-sm text-gray-600 whitespace-pre-line"><?= htmlspecialchars($recurso['texto'] ?? '') ?></p>
+                                                        </div>
+                                                        <div class="flex gap-2">
+                                                            <form action="recursos.php" method="post" class="flex-1">
+                                                                <input type="hidden" name="id_recurso" value="<?= $recurso['id_recurso'] ?>">
+                                                                <input type="hidden" name="novo_status" value="PEDENTE">
+                                                                <button type="submit" name="atualizar_status_recurso" class="w-full bg-white border border-yellow-500 text-yellow-500 px-3 py-2 rounded-lg hover:bg-yellow-50 transition-all font-medium text-sm">
+                                                                    Voltar Pendente
+                                                                </button>
+                                                            </form>
+                                                            <form action="recursos.php" method="post" class="flex-1">
+                                                                <input type="hidden" name="id_recurso" value="<?= $recurso['id_recurso'] ?>">
+                                                                <input type="hidden" name="novo_status" value="DEFERIDO">
+                                                                <button type="submit" name="atualizar_status_recurso" class="w-full bg-primary text-white px-3 py-2 rounded-lg hover:bg-primary/90 transition-all font-medium text-sm">
+                                                                    Deferir
+                                                                </button>
+                                                            </form>
                                                         </div>
                                                     </div>
                                                 </div>
