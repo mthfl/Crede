@@ -53,6 +53,12 @@ $primary_rgba_02 = hex2rgba($cursoCor, 0.20);
 function fmt($v) {
     return htmlspecialchars((string)$v);
 }
+function fmtNota($v) {
+    if ($v === null || $v === '' || $v === 0 || $v === '0' || (is_numeric($v) && (float)$v == 0)) {
+        return '';
+    }
+    return htmlspecialchars((string)$v);
+}
 function simnao($v) {
     return ((int)$v) === 1 ? 'Sim' : 'Não';
 }
@@ -461,13 +467,13 @@ function simnao($v) {
                                                 echo '<tr class="hover:bg-gray-50">';
                                                 echo '<td class="border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700">' . fmt($label) . '</td>';
                                                 echo '<td class="border border-gray-300 px-2 py-2 text-center">';
-                                                echo '<input type="text" name="' . $n6 . '" value="' . fmt($candidato[$a6] ?? '') . '" class="w-full px-2 py-1.5 border border-gray-300 rounded-lg input-modern input-focus input-disabled text-center text-sm" style="--tw-ring-color: ' . $cursoCor . '; --tw-border-opacity: 0.5;" oninput="applyGradeMask(this)"' . ($required ? ' required' : '') . ' disabled>';
+                                                echo '<input type="text" name="' . $n6 . '" value="' . fmtNota($candidato[$a6] ?? null) . '" class="w-full px-2 py-1.5 border border-gray-300 rounded-lg input-modern input-focus input-disabled text-center text-sm" style="--tw-ring-color: ' . $cursoCor . '; --tw-border-opacity: 0.5;" oninput="applyGradeMask(this)"' . ($required ? ' required' : '') . ' disabled>';
                                                 echo '</td>';
                                                 echo '<td class="border border-gray-300 px-2 py-2 text-center">';
-                                                echo '<input type="text" name="' . $n7 . '" value="' . fmt($candidato[$a7] ?? '') . '" class="w-full px-2 py-1.5 border border-gray-300 rounded-lg input-modern input-focus input-disabled text-center text-sm" style="--tw-ring-color: ' . $cursoCor . '; --tw-border-opacity: 0.5;" oninput="applyGradeMask(this)"' . ($required ? ' required' : '') . ' disabled>';
+                                                echo '<input type="text" name="' . $n7 . '" value="' . fmtNota($candidato[$a7] ?? null) . '" class="w-full px-2 py-1.5 border border-gray-300 rounded-lg input-modern input-focus input-disabled text-center text-sm" style="--tw-ring-color: ' . $cursoCor . '; --tw-border-opacity: 0.5;" oninput="applyGradeMask(this)"' . ($required ? ' required' : '') . ' disabled>';
                                                 echo '</td>';
                                                 echo '<td class="border border-gray-300 px-2 py-2 text-center">';
-                                                echo '<input type="text" name="' . $n8 . '" value="' . fmt($candidato[$a8] ?? '') . '" class="w-full px-2 py-1.5 border border-gray-300 rounded-lg input-modern input-focus input-disabled text-center text-sm" style="--tw-ring-color: ' . $cursoCor . '; --tw-border-opacity: 0.5;" oninput="applyGradeMask(this)"' . ($required ? ' required' : '') . ' disabled>';
+                                                echo '<input type="text" name="' . $n8 . '" value="' . fmtNota($candidato[$a8] ?? null) . '" class="w-full px-2 py-1.5 border border-gray-300 rounded-lg input-modern input-focus input-disabled text-center text-sm" style="--tw-ring-color: ' . $cursoCor . '; --tw-border-opacity: 0.5;" oninput="applyGradeMask(this)"' . ($required ? ' required' : '') . ' disabled>';
                                                 echo '</td>';
                                                 echo '</tr>';
                                             }
@@ -508,22 +514,22 @@ function simnao($v) {
                                                 echo '<tr class="hover:bg-gray-50">';
                                                 echo '<td class="border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700">' . fmt($label) . '</td>';
                                                 echo '<td class="border border-gray-300 px-2 py-2 text-center">';
-                                                echo '<input type="text" name="' . $n1 . '" value="' . fmt($candidato[$b1] ?? '') . '" class="w-full px-2 py-1.5 border border-gray-300 rounded-lg input-modern input-focus input-disabled text-center text-sm" style="--tw-ring-color: ' . $cursoCor . '; --tw-border-opacity: 0.5;" oninput="applyGradeMask(this)" disabled>';
+                                                echo '<input type="text" name="' . $n1 . '" value="' . fmtNota($candidato[$b1] ?? null) . '" class="w-full px-2 py-1.5 border border-gray-300 rounded-lg input-modern input-focus input-disabled text-center text-sm" style="--tw-ring-color: ' . $cursoCor . '; --tw-border-opacity: 0.5;" oninput="applyGradeMask(this)" disabled>';
                                                 echo '</td>';
                                                 echo '<td class="border border-gray-300 px-2 py-2 text-center">';
-                                                echo '<input type="text" name="' . $n2 . '" value="' . fmt($candidato[$b2] ?? '') . '" class="w-full px-2 py-1.5 border border-gray-300 rounded-lg input-modern input-focus input-disabled text-center text-sm" style="--tw-ring-color: ' . $cursoCor . '; --tw-border-opacity: 0.5;" oninput="applyGradeMask(this)" disabled>';
+                                                echo '<input type="text" name="' . $n2 . '" value="' . fmtNota($candidato[$b2] ?? null) . '" class="w-full px-2 py-1.5 border border-gray-300 rounded-lg input-modern input-focus input-disabled text-center text-sm" style="--tw-ring-color: ' . $cursoCor . '; --tw-border-opacity: 0.5;" oninput="applyGradeMask(this)" disabled>';
                                                 echo '</td>';
                                                 echo '<td class="border border-gray-300 px-2 py-2 text-center">';
-                                                echo '<input type="text" name="' . $n3 . '" value="' . fmt($candidato[$b3] ?? '') . '" class="w-full px-2 py-1.5 border border-gray-300 rounded-lg input-modern input-focus input-disabled text-center text-sm" style="--tw-ring-color: ' . $cursoCor . '; --tw-border-opacity: 0.5;" oninput="applyGradeMask(this)" disabled>';
+                                                echo '<input type="text" name="' . $n3 . '" value="' . fmtNota($candidato[$b3] ?? null) . '" class="w-full px-2 py-1.5 border border-gray-300 rounded-lg input-modern input-focus input-disabled text-center text-sm" style="--tw-ring-color: ' . $cursoCor . '; --tw-border-opacity: 0.5;" oninput="applyGradeMask(this)" disabled>';
                                                 echo '</td>';
                                                 echo '<td class="border border-gray-300 px-2 py-2 text-center">';
-                                                $bim1 = isset($candidato[$b1]) && !empty($candidato[$b1]);
-                                                $bim2 = isset($candidato[$b2]) && !empty($candidato[$b2]);
-                                                $bim3 = isset($candidato[$b3]) && !empty($candidato[$b3]);
-                                                if ($bim1 && $bim2 && $bim3) {
+                                                $bim1 = isset($candidato[$b1]) && !empty($candidato[$b1]) && $candidato[$b1] != 0 && $candidato[$b1] != '0';
+                                                $bim2 = isset($candidato[$b2]) && !empty($candidato[$b2]) && $candidato[$b2] != 0 && $candidato[$b2] != '0';
+                                                $bim3 = isset($candidato[$b3]) && !empty($candidato[$b3]) && $candidato[$b3] != 0 && $candidato[$b3] != '0';
+                                                if ($bim1 || $bim2 || $bim3) {
                                                     echo '<span class="text-sm text-gray-500">Completo</span>';
                                                 } else {
-                                                    echo '<input type="text" name="' . $nMed . '" value="' . fmt($candidato[$med] ?? '') . '" class="w-full px-2 py-1.5 border border-gray-300 rounded-lg input-modern input-focus input-disabled text-center text-sm bg-yellow-50" style="--tw-ring-color: ' . $cursoCor . '; --tw-border-opacity: 0.5;" oninput="applyGradeMask(this)" disabled>';
+                                                    echo '<input type="text" name="' . $nMed . '" value="' . fmtNota($candidato[$med] ?? null) . '" class="w-full px-2 py-1.5 border border-gray-300 rounded-lg input-modern input-focus input-disabled text-center text-sm bg-yellow-50" style="--tw-ring-color: ' . $cursoCor . '; --tw-border-opacity: 0.5;" oninput="applyGradeMask(this)" disabled>';
                                                 }
                                                 echo '</td>';
                                                 echo '</tr>';

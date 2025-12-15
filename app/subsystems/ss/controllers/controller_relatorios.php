@@ -15,7 +15,7 @@ if (
 
     switch ($tipo_relatorio) {
         case 'Resultado Final':
-            header("location:../views/reports/resultados/resultado_final.php?curso=" . $id_curso);
+            header("location:../views/reports/resultados/resultado.php?curso=" . $id_curso);
             exit();
         case 'comissao_selecao':
             header("location:../views/reports/comissao_selecao.php?usuarios");
@@ -25,6 +25,9 @@ if (
             exit();
         case 'requisicoes':
             header("location:../views/reports/requisicoes.php?usuarios");
+            exit();
+        case 'recursos':
+            header("location:../views/reports/recursos.php?usuarios");
             exit();
         case 'can_desabilitados':
             header("location:../views/reports/candidatos_desabilitados.php?usuarios");

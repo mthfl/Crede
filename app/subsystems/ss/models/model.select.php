@@ -19,6 +19,8 @@ class select extends connect
     protected string $table15;
     protected string $table16;
     protected string $table17;
+    protected string $table18;
+    protected string $table19;
 
     function __construct($escola)
     {
@@ -41,6 +43,8 @@ class select extends connect
         $this->table15 = $table["ss_$escola"][15];
         $this->table16 = $table["ss_$escola"][16];
         $this->table17 = $table["ss_$escola"][17];
+        $this->table18 = $table["ss_$escola"][18]; // recursos
+        $this->table19 = $table["ss_$escola"][19]; // matriculas
     }
 
     public function select_vagas(){
@@ -68,6 +72,45 @@ class select extends connect
     public function select_requisicoes_rejeitadas(){
         $stmt = $this->connect->query("SELECT *, r.id as id_requisicao, r.data as data_requisicao FROM $this->table14 r INNER JOIN $this->table5 u ON r.id_usuario = u.id INNER JOIN $this->table1 c ON r.id_candidato = c.id WHERE r.status = 'Recusado'");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function select_recursos_pendentes(){
+        $stmt = $this->connect->query("SELECT *, r.id as id_recurso FROM $this->table18 r INNER JOIN $this->table5 u ON r.id_usuario = u.id INNER JOIN $this->table1 c ON r.id_candidato = c.id WHERE r.status = 'PEDENTE' ORDER BY r.id DESC");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function select_recursos_deferidos(){
+        $stmt = $this->connect->query("SELECT *, r.id as id_recurso FROM $this->table18 r INNER JOIN $this->table5 u ON r.id_usuario = u.id INNER JOIN $this->table1 c ON r.id_candidato = c.id WHERE r.status = 'DEFERIDO' ORDER BY r.id DESC");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function select_recursos_nao_deferidos(){
+        $stmt = $this->connect->query("SELECT *, r.id as id_recurso FROM $this->table18 r INNER JOIN $this->table5 u ON r.id_usuario = u.id INNER JOIN $this->table1 c ON r.id_candidato = c.id WHERE r.status = 'NÃO DEFERIDO' ORDER BY r.id DESC");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    public function select_matriculas(): array
+    {
+        try {
+            $sql = "SELECT m.*, c.nome_curso 
+                    FROM $this->table19 m 
+                    LEFT JOIN $this->table2 c ON m.id_curso = c.id 
+                    ORDER BY m.data DESC, m.hora DESC";
+            $stmt = $this->connect->query($sql);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return [];
+        }
+    }
+    public function select_candidatos_ativos_recursos(): array
+    {
+        try {
+            $sql = "SELECT c.id, c.nome, c2.nome_curso 
+                    FROM $this->table1 c 
+                    INNER JOIN $this->table2 c2 ON c.id_curso1 = c2.id 
+                    WHERE c.status = 1 
+                    ORDER BY c.nome ASC";
+            $stmt = $this->connect->query($sql);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $e) {
+            return [];
+        }
     }
     public function select_requisicoes_usuario(int $id_usuario): array
     {
