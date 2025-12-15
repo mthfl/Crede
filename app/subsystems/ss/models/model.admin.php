@@ -1283,31 +1283,13 @@ class admin extends cadastrador
     {
         try {
             // Tabela recursos não tem campo data, apenas: id, id_candidato, id_usuario, texto, status
-            $stmt_recurso = $this->connect->prepare("INSERT INTO $this->table18 (id_candidato, id_usuario, texto, status) VALUES (:id_candidato, :id_usuario, :texto, :status)");
+            $stmt_recurso = $this->connect->prepare("INSERT INTO $this->table19 (id_candidato, id_usuario, texto, status) VALUES (:id_candidato, :id_usuario, :texto, :status)");
             $stmt_recurso->bindValue(":id_usuario", $id_usuario);
             $stmt_recurso->bindValue(":id_candidato", $id_candidato);
             $stmt_recurso->bindValue(":texto", $texto_recurso);
             $stmt_recurso->bindValue(":status", "PEDENTE");
 
             if (!$stmt_recurso->execute()) {
-                return 2;
-            }
-
-            date_default_timezone_set('America/Fortaleza');
-            $datatime = date('Y/m/d H:i:s');
-            $id_usuario_log = $_SESSION['id'];
-            
-            $stmt_candidato = $this->connect->prepare("SELECT nome FROM $this->table1 WHERE id = :id_candidato");
-            $stmt_candidato->bindValue(":id_candidato", $id_candidato);
-            $stmt_candidato->execute();
-            $dado = $stmt_candidato->fetch(PDO::FETCH_ASSOC);
-
-            $stmt_candidato = $this->connect->prepare("INSERT INTO $this->table16 VALUES (NULL, :id_usuario, :datatime, :tipo_movimentacao, :descricao)");
-            $stmt_candidato->bindValue(":id_usuario", $id_usuario_log);
-            $stmt_candidato->bindValue(":datatime", $datatime);
-            $stmt_candidato->bindValue(":tipo_movimentacao", 'RECURSO');
-            $stmt_candidato->bindValue(":descricao", "FOI REGISTRADO UM RECURSO DO CANDIDATO(A) " . ($dado['nome'] ?? ''));
-            if (!$stmt_candidato->execute()) {
                 return 2;
             }
 
@@ -1322,32 +1304,13 @@ class admin extends cadastrador
         try {
             // Converter status para o formato do enum: PEDENTE, DEFERIDO, NÃO DEFERIDO
             $status_enum = mb_strtoupper($novo_status, 'UTF-8');
-            if ($status_enum === 'DEFERIDO' || $status_enum === 'DEFERIDO') {
-                $status_enum = 'DEFERIDO';
-            } elseif ($status_enum === 'NÃO DEFERIDO' || $status_enum === 'NAO DEFERIDO' || $status_enum === 'NÃO DEFERIDO') {
-                $status_enum = 'NÃO DEFERIDO';
-            } else {
-                $status_enum = 'PEDENTE';
-            }
             
             // Tabela recursos não tem campo data
-            $stmt = $this->connect->prepare("UPDATE $this->table18 SET status = :status WHERE id = :id");
+            $stmt = $this->connect->prepare("UPDATE $this->table19 SET status = :status WHERE id = :id");
             $stmt->bindValue(":id", $id_recurso);
             $stmt->bindValue(":status", $status_enum);
             
             if (!$stmt->execute()) {
-                return 2;
-            }
-
-            date_default_timezone_set('America/Fortaleza');
-            $datatime = date('Y/m/d H:i:s');
-            $id_usuario = $_SESSION['id'];
-
-            $stmt_candidato = $this->connect->prepare("INSERT INTO $this->table16 VALUES (NULL, :id_usuario, :datatime, :tipo_movimentacao, NULL)");
-            $stmt_candidato->bindValue(":id_usuario", $id_usuario);
-            $stmt_candidato->bindValue(":datatime", $datatime);
-            $stmt_candidato->bindValue(":tipo_movimentacao", 'RECURSO ' . $status_enum);
-            if (!$stmt_candidato->execute()) {
                 return 2;
             }
 
@@ -1359,12 +1322,14 @@ class admin extends cadastrador
 
     public function cadastrar_matricula($id_curso, $data, $hora): int
     {
-        try {
+        //try {
             // Se id_curso for "todos", salvar como NULL
-            $curso_id = ($id_curso === 'todos' || $id_curso === '') ? null : (int)$id_curso;
+            if($id_curso == 0){
+                echo $id_curso = null;
+            }
             
-            $stmt_matricula = $this->connect->prepare("INSERT INTO $this->table19 (id_curso, data, hora) VALUES (:id_curso, :data, :hora)");
-            $stmt_matricula->bindValue(":id_curso", $curso_id, $curso_id === null ? PDO::PARAM_NULL : PDO::PARAM_INT);
+            $stmt_matricula = $this->connect->prepare("INSERT INTO $this->table18 (id_curso, data, hora) VALUES (:id_curso, :data, :hora)");
+            $stmt_matricula->bindValue(":id_curso", $id_curso);
             $stmt_matricula->bindValue(":data", $data);
             $stmt_matricula->bindValue(":hora", $hora);
 
@@ -1372,35 +1337,10 @@ class admin extends cadastrador
                 return 2;
             }
 
-            date_default_timezone_set('America/Fortaleza');
-            $datatime = date('Y/m/d H:i:s');
-            $id_usuario = $_SESSION['id'];
-
-            $descricao = "FOI CADASTRADO DIA DE MATRÍCULA";
-            if ($curso_id !== null) {
-                $stmt_curso = $this->connect->prepare("SELECT nome_curso FROM $this->table2 WHERE id = :id_curso");
-                $stmt_curso->bindValue(":id_curso", $curso_id);
-                $stmt_curso->execute();
-                $curso = $stmt_curso->fetch(PDO::FETCH_ASSOC);
-                $descricao .= " PARA O CURSO " . ($curso['nome_curso'] ?? '');
-            } else {
-                $descricao .= " PARA TODOS OS CURSOS";
-            }
-            $descricao .= " NA DATA " . $data . " ÀS " . $hora;
-
-            $stmt_candidato = $this->connect->prepare("INSERT INTO $this->table16 VALUES (NULL, :id_usuario, :datatime, :tipo_movimentacao, :descricao)");
-            $stmt_candidato->bindValue(":id_usuario", $id_usuario);
-            $stmt_candidato->bindValue(":datatime", $datatime);
-            $stmt_candidato->bindValue(":tipo_movimentacao", 'CADASTRAR MATRÍCULA');
-            $stmt_candidato->bindValue(":descricao", $descricao);
-            if (!$stmt_candidato->execute()) {
-                return 2;
-            }
-
             return 1;
-        } catch (PDOException $e) {
-            return 0;
-        }
+        //} catch (PDOException $e) {
+           // return 0;
+        //}
     }
 
     public function excluir_matricula(int $id_matricula): int

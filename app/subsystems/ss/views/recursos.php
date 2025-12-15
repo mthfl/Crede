@@ -41,20 +41,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['atualizar_status_recu
     if ($id_recurso && $novo_status) {
         // Converter status para o formato correto
         $status_formatado = mb_strtoupper($novo_status, 'UTF-8');
-        if ($status_formatado === 'DEFERIDO') {
-            $status_formatado = 'DEFERIDO';
-        } elseif ($status_formatado === 'NÃO DEFERIDO' || $status_formatado === 'NAO DEFERIDO') {
-            $status_formatado = 'NÃO DEFERIDO';
-        } else {
-            $status_formatado = 'PEDENTE';
-        }
         
         $result = $admin->atualizar_status_recurso((int)$id_recurso, $status_formatado);
         if ($result === 1) {
             $tab = 'tab-pendentes';
             if ($status_formatado === 'DEFERIDO') {
                 $tab = 'tab-deferidos';
-            } elseif ($status_formatado === 'NÃO DEFERIDO') {
+            } elseif ($status_formatado === 'INDEFERIDO') {
                 $tab = 'tab-nao-deferidos';
             }
             header('Location: recursos.php?tab=' . $tab . '&sucesso=1');
@@ -416,7 +409,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['atualizar_status_recu
                                         <?php } ?>
                                     </button>
                                     <button data-tab="tab-nao-deferidos" class="tab-button py-3 px-6 border-b-2 border-transparent text-gray-500 hover:text-gray-700 flex items-center">
-                                        Não Deferidos
+                                        Indeferidos
                                         <?php if ($total_nao_deferidos > 0) { ?>
                                             <span class="ml-2 inline-flex items-center justify-center w-5 h-5 text-xs font-semibold text-white bg-red-500 rounded-full"><?= $total_nao_deferidos ?></span>
                                         <?php } ?>
@@ -460,7 +453,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['atualizar_status_recu
                                                         <div class="flex gap-2">
                                                             <form action="recursos.php" method="post" class="flex-1">
                                                                 <input type="hidden" name="id_recurso" value="<?= $recurso['id_recurso'] ?>">
-                                                                <input type="hidden" name="novo_status" value="NÃO DEFERIDO">
+                                                                <input type="hidden" name="novo_status" value="INDEFERIDO">
                                                                 <button type="submit" name="atualizar_status_recurso" class="w-full bg-white border border-red-500 text-red-500 px-3 py-2 rounded-lg hover:bg-red-50 transition-all font-medium text-sm">
                                                                     Não Deferir
                                                                 </button>
@@ -518,7 +511,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['atualizar_status_recu
                                     </div>
                                 </div>
 
-                                <!-- Aba Não Deferidos -->
+                                <!-- Aba Indeferidos -->
                                 <div id="tab-nao-deferidos" class="tab-content hidden">
                                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                         <?php
@@ -538,7 +531,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['atualizar_status_recu
                                                         <div class="flex justify-between items-start mb-4">
                                                             <div>
                                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 mb-2">
-                                                                    Não Deferido
+                                                                    Indeferido
                                                                 </span>
                                                                 <h4 class="font-semibold text-gray-900"><?= htmlspecialchars($recurso['nome'] ?? 'Candidato Desconhecido') ?></h4>
                                                                 <p class="text-sm text-gray-500 mt-1">ID: <?= htmlspecialchars($recurso['id_recurso'] ?? '') ?></p>

@@ -15,6 +15,12 @@ if (
 
     switch ($tipo_relatorio) {
         case 'Resultado Final':
+            header("location:../views/reports/resultados/resultado_final.php?curso=" . $id_curso);
+            exit();
+        case 'Resultado Preliminar':
+            header("location:../views/reports/resultados/resultado_preliminar.php?curso=" . $id_curso);
+            exit();
+        case 'Resultado':
             header("location:../views/reports/resultados/resultado.php?curso=" . $id_curso);
             exit();
         case 'comissao_selecao':

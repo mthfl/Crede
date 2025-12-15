@@ -16,51 +16,6 @@ $select = new select($escola);
 require_once __DIR__ . "/../models/model.admin.php";
 $admin = new admin($escola);
 
-// Processar formulário de matrícula
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['adicionar_matricula'])) {
-    $dias_matricula = $_POST['dias_matricula'] ?? [];
-
-    if (!empty($dias_matricula)) {
-        $sucesso_total = true;
-        foreach ($dias_matricula as $dia) {
-            $curso_id = $dia['curso_id'] ?? null;
-            $data = $dia['data'] ?? '';
-            $hora = $dia['hora'] ?? '';
-
-            if (!empty($data) && !empty($hora)) {
-                $result = $admin->cadastrar_matricula($curso_id, $data, $hora);
-                if ($result !== 1) {
-                    $sucesso_total = false;
-                }
-            }
-        }
-
-        if ($sucesso_total) {
-            header('Location: matriculas.php?sucesso=1');
-            exit();
-        } else {
-            header('Location: matriculas.php?erro=1');
-            exit();
-        }
-    }
-}
-
-// Processar exclusão de matrícula
-if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['excluir_matricula'])) {
-    $id_matricula = $_GET['excluir_matricula'] ?? null;
-    if ($id_matricula) {
-        $result = $admin->excluir_matricula((int)$id_matricula);
-        if ($result === 1) {
-            header('Location: matriculas.php?sucesso=1');
-            exit();
-        } else {
-            header('Location: matriculas.php?erro=1');
-            exit();
-        }
-    }
-}
-
-// Buscar matrículas existentes
 $matriculas = $select->select_matriculas();
 ?>
 <!DOCTYPE html>

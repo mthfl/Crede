@@ -14,17 +14,21 @@ print_r($_POST);
 echo "</pre>";
 //cadastrar bairro
 if (
-    empty($_POST["curso_id"]) &&
-    isset($_POST["data"]) && !empty($_POST["data"]) &&
-    isset($_POST["hora"]) && !empty($_POST["hora"])
+   
+    isset($_POST["dias_matricula"]) && !empty($_POST["dias_matricula"])
+  
 ) {
-    $curso_id = $_POST["curso_id"];
-    $data = $_POST["data"];
-    $hora = $_POST["hora"];
+    
     $escola = $_SESSION['escola'];
-
     $admin_model = new admin($escola);
-    $result = $admin_model->cadastrar_matricula($curso_id, $data, $hora);
+
+    $dias_matricula = $_POST["dias_matricula"];
+    foreach ($dias_matricula as $dia) {
+        $curso_id = $dia["curso_id"];
+        $data = $dia["data"];
+        $hora = $dia["hora"];
+        echo $result = $admin_model->cadastrar_matricula($curso_id, $data, $hora);
+    }
 
     switch ($result) {
         case 1:

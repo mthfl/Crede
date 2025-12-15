@@ -934,7 +934,9 @@ $select = new select($escola);
                     </label>
                     <select name="tipo_relatorio" id="unified_tipo_relatorio" required class="select2-unified-tipo">
                         <option value="" disabled selected>SELECIONAR TIPO DE RELATÓRIO</option>
-                        <option value="Resultado Final">RESULTADO</option>
+                        <option value="Resultado Preliminar">RESULTADO PRELIMINAR</option>
+                        <option value="Resultado Final">RESULTADO FINAL</option>
+                        <option value="Resultado">RESULTADO</option>
                         <option value="comissao_selecao">COMISSÃO DE SELEÇÃO</option>
                         <option value="can_desabilitados">CANDIDATOS DESABILITADOS</option>
                         <option value="movimentacoes">MOVIMENTAÇÕES</option>
@@ -1233,7 +1235,7 @@ $select = new select($escola);
         }
 
         function handleReportTypeChange(value) {
-            toggleCourseField(value === 'Resultado Final');
+            toggleCourseField(value === 'Resultado');
             toggleUserField(value === 'movimentacoes');
         }
 
@@ -1285,8 +1287,8 @@ $select = new select($escola);
                     return;
                 }
 
-                if (tipo === 'Resultado Final' && !curso) {
-                    showNotification('Selecione o curso para Resultado Final.', 'error');
+                if (tipo === 'Resultado' && !curso) {
+                    showNotification('Selecione o curso para Resultado.', 'error');
                     return;
                 }
 

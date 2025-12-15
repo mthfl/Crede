@@ -43,8 +43,8 @@ class select extends connect
         $this->table15 = $table["ss_$escola"][15];
         $this->table16 = $table["ss_$escola"][16];
         $this->table17 = $table["ss_$escola"][17];
-        $this->table18 = $table["ss_$escola"][18]; // recursos
-        $this->table19 = $table["ss_$escola"][19]; // matriculas
+        $this->table18 = $table["ss_$escola"][18]; 
+        $this->table19 = $table["ss_$escola"][19]; 
     }
 
     public function select_vagas(){
@@ -74,15 +74,15 @@ class select extends connect
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     public function select_recursos_pendentes(){
-        $stmt = $this->connect->query("SELECT *, r.id as id_recurso FROM $this->table18 r INNER JOIN $this->table5 u ON r.id_usuario = u.id INNER JOIN $this->table1 c ON r.id_candidato = c.id WHERE r.status = 'PEDENTE' ORDER BY r.id DESC");
+        $stmt = $this->connect->query("SELECT *, r.id as id_recurso FROM $this->table19 r INNER JOIN $this->table5 u ON r.id_usuario = u.id INNER JOIN $this->table1 c ON r.id_candidato = c.id WHERE r.status = 'PEDENTE' ORDER BY r.id DESC");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     public function select_recursos_deferidos(){
-        $stmt = $this->connect->query("SELECT *, r.id as id_recurso FROM $this->table18 r INNER JOIN $this->table5 u ON r.id_usuario = u.id INNER JOIN $this->table1 c ON r.id_candidato = c.id WHERE r.status = 'DEFERIDO' ORDER BY r.id DESC");
+        $stmt = $this->connect->query("SELECT *, r.id as id_recurso FROM $this->table19 r INNER JOIN $this->table5 u ON r.id_usuario = u.id INNER JOIN $this->table1 c ON r.id_candidato = c.id WHERE r.status = 'DEFERIDO' ORDER BY r.id DESC");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     public function select_recursos_nao_deferidos(){
-        $stmt = $this->connect->query("SELECT *, r.id as id_recurso FROM $this->table18 r INNER JOIN $this->table5 u ON r.id_usuario = u.id INNER JOIN $this->table1 c ON r.id_candidato = c.id WHERE r.status = 'NÃO DEFERIDO' ORDER BY r.id DESC");
+        $stmt = $this->connect->query("SELECT *, r.id as id_recurso FROM $this->table19 r INNER JOIN $this->table5 u ON r.id_usuario = u.id INNER JOIN $this->table1 c ON r.id_candidato = c.id WHERE r.status = 'INDEFERIDO' ORDER BY r.id DESC");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     public function select_matriculas(): array
