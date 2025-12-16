@@ -284,12 +284,20 @@ class relatorios extends connect
         $pdf->SetX(9);
         $pdf->Cell(0, 10, mb_convert_encoding(strtoupper($_SESSION['nome_escola']), 'ISO-8859-1', 'UTF-8'), 0, 1, 'L');
 
+
         // INEP e local
         $pdf->SetFont('Arial', '', 10);
         $pdf->SetY(10);
         $pdf->SetX(9);
-        $pdf->Cell(0, 6, mb_convert_encoding('Conforme Portaria Nº2278/2025 - GAB', 'ISO-8859-1', 'UTF-8'), 0, 1, 'L');
+        $pdf->Cell(0, 6, mb_convert_encoding('CONFORME A PORTARIA Nº2278/2025 - GAB; PARECER Nº 010690/2025/SEDUC/ASJUR;', 'ISO-8859-1', 'UTF-8'), 0, 1, 'L');
 
+
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->SetFillColor(255, 174, 25);
+        $pdf->SetTextColor(255, 174, 25);
+        $pdf->Cell(148, 1.3, mb_convert_encoding('', 'ISO-8859-1', 'UTF-8'), 0, 1, 'C', true);
+
+        $pdf->SetTextColor(0,0,0);
         // Coordenadoria Regional
         $pdf->SetFont('Arial', 'B', 14.5);
         $pdf->SetY($pdf->GetY() + 30);
@@ -300,7 +308,7 @@ class relatorios extends connect
         $pdf->SetFont('Arial', 'B', 30);
         $pdf->SetY($pdf->GetY() + 10);
         $pdf->SetX(10);
-        $pdf->Cell(0, 15, mb_convert_encoding('SELEÇÃO DE ALUNOS - 2025', 'ISO-8859-1', 'UTF-8'), 0, 1, 'C');
+        $pdf->Cell(0, 15, mb_convert_encoding('SELEÇÃO DE ALUNOS - 2026', 'ISO-8859-1', 'UTF-8'), 0, 1, 'C');
 
         // Subtítulo
         $pdf->SetFont('Arial', 'B', 32);
@@ -314,7 +322,7 @@ class relatorios extends connect
         $pdf->SetFont('Arial', 'B', 14);
         $pdf->SetY($pdf->GetY() + 10);
         $pdf->SetX(17);
-        $pdf->Cell(0, 10, mb_convert_encoding('CRONOGRAMA DE INSCRIÇÃO/MATRÍCULA PARA 1ª SÉRIE 2025', 'ISO-8859-1', 'UTF-8'), 0, 1, 'C');
+        $pdf->Cell(0, 10, mb_convert_encoding('CRONOGRAMA DE INSCRIÇÃO/MATRÍCULA PARA 1ª SÉRIE 2026', 'ISO-8859-1', 'UTF-8'), 0, 1, 'C');
 
         // Cabeçalho da tabela do cronograma
         $pdf->SetFont('Arial', 'B', 12);
@@ -329,20 +337,27 @@ class relatorios extends connect
         $pdf->SetTextColor(0,0,0); // Texto preto
         $pdf->SetX(20);
         $pdf->Cell(100, 7, mb_convert_encoding('LANÇAMENTO DO EDITAL', 'ISO-8859-1', 'UTF-8'), 1, 0, 'L');
-        $pdf->Cell(70, 7, mb_convert_encoding('30/11/2025', 'ISO-8859-1', 'UTF-8'), 1, 1, 'C');
+        $pdf->Cell(70, 7, mb_convert_encoding('28/11/2025', 'ISO-8859-1', 'UTF-8'), 1, 1, 'C');
         $pdf->SetX(20);
         $pdf->Cell(100, 7, mb_convert_encoding('PERÍODO DE INSCRIÇÃO ALUNO', 'ISO-8859-1', 'UTF-8'), 1, 0, 'L');
-        $pdf->Cell(70, 7, mb_convert_encoding('03/12/2025 a 10/12/2025', 'ISO-8859-1', 'UTF-8'), 1, 1, 'C');
+        $pdf->Cell(70, 7, mb_convert_encoding('01/12/2025 A 10/12/2025', 'ISO-8859-1', 'UTF-8'), 1, 1, 'C');
         $pdf->SetX(20);
-        $pdf->Cell(100, 7, mb_convert_encoding('RESULTADO PRELIMINAR', 'ISO-8859-1', 'UTF-8'), 1, 0, 'L');
+        $pdf->Cell(100, 7, mb_convert_encoding('ANÁLISE DA DOCUMENTAÇÃO DOS ALUNOS', 'ISO-8859-1', 'UTF-8'), 1, 0, 'L');
+        $pdf->Cell(70, 7, mb_convert_encoding('11 A 16/12/2025', 'ISO-8859-1', 'UTF-8'), 1, 1, 'C');
+        $pdf->SetX(20);
+        $pdf->Cell(100, 7, mb_convert_encoding('RESULTADO PRELIMINAR (Na EEEP e site da CREDE)', 'ISO-8859-1', 'UTF-8'), 1, 0, 'L');
         $pdf->Cell(70, 7, mb_convert_encoding('17/12/2025 (16h)', 'ISO-8859-1', 'UTF-8'), 1, 1, 'C');
         $pdf->SetX(20);
         $pdf->Cell(100, 7, mb_convert_encoding('PRAZO RECURSAL (Presencial na EEEP)', 'ISO-8859-1', 'UTF-8'), 1, 0, 'L');
-        $pdf->Cell(70, 7, mb_convert_encoding('19, 20, 26, 27/12/2025 e 02/01/2026', 'ISO-8859-1', 'UTF-8'), 1, 1, 'C');
+        $pdf->Cell(70, 7, mb_convert_encoding('18 A 22/12/2025', 'ISO-8859-1', 'UTF-8'), 1, 1, 'C');
         $pdf->SetX(20);
-        $pdf->Cell(100, 7, mb_convert_encoding('RESULTADO FINAL (EEEP e site da CREDE 01)', 'ISO-8859-1', 'UTF-8'), 1, 0, 'L');
-        $pdf->Cell(70, 7, mb_convert_encoding('03/01/2026', 'ISO-8859-1', 'UTF-8'), 1, 1, 'C');
-
+        $pdf->Cell(100, 7, mb_convert_encoding('RESULTADO FINAL (EEEP e site da CREDE)', 'ISO-8859-1', 'UTF-8'), 1, 0, 'L');
+        $pdf->Cell(70, 7, mb_convert_encoding('23/12/2025', 'ISO-8859-1', 'UTF-8'), 1, 1, 'C');
+        $pdf->SetX(20);
+        $pdf->Cell(100, 7, mb_convert_encoding('MATRÍCULA E SEMINÁRIO (Na EEEP)', 'ISO-8859-1', 'UTF-8'), 1, 0, 'L');
+        $pdf->Cell(70, 7, mb_convert_encoding('05 A 09/01/2026', 'ISO-8859-1', 'UTF-8'), 1, 1, 'C');
+        $pdf->SetX(20);
+    
         // Horários de atendimento
         $pdf->SetFont('Arial', '', 10);
         $pdf->SetY($pdf->GetY() + 8);
