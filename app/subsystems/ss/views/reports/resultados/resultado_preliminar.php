@@ -823,10 +823,27 @@ class relatorios extends connect
 
                 // Linhas de dados - Zebrado cinza claro / branco
                 $pdf->SetTextColor(0, 0, 0);
-                $pdf->SetFont('Arial', '', 8);
                 $class = 1;
 
                 foreach ($seg['dados'] as $row) {
+                    // Determinar se o candidato está classificado
+                    $isClassificado = in_array($row['id'], $seg['ids_classificados']);
+
+                    // Definir negrito apenas para classificados
+                    if ($isClassificado) {
+                        $pdf->SetFont('Arial', 'B', 9);  // Negrito e um pouco maior para destacar
+                    } else {
+                        $pdf->SetFont('Arial', '', 8);   // Normal para lista de espera
+                    }
+                    $pdf->SetTextColor(0, 0, 0);
+
+                    // Zebrado: linha par = cinza claro, ímpar = branco
+                    if ($class % 2 == 0) {
+                        $pdf->SetFillColor(240, 240, 240); // cinza claro
+                    } else {
+                        $pdf->SetFillColor(255, 255, 255); // branco
+                    }
+
                     // Determinar SEGM. baseado no SEGMENTO ORIGINAL (não no segmento atual)
                     $segmento = '';
                     $origem = '';
@@ -850,15 +867,7 @@ class relatorios extends connect
                     }
 
                     // Verificar se está classificado no próprio segmento
-                    $isClassificado = in_array($row['id'], $seg['ids_classificados']);
                     $situacao = $isClassificado ? 'CLASSIFICADO' : 'LISTA DE ESPERA';
-
-                    // Zebrado: linha par = cinza claro, ímpar = branco
-                    if ($class % 2 == 0) {
-                        $pdf->SetFillColor(240, 240, 240); // cinza claro
-                    } else {
-                        $pdf->SetFillColor(255, 255, 255); // branco
-                    }
 
                     $pdf->Cell($celula_cl, $altura_celula, sprintf('%03d', $class), 1, 0, 'C', true);
                     $pdf->Cell($celula_nome, $altura_celula, mb_convert_encoding(mb_strtoupper($row['nome']), 'ISO-8859-1', 'UTF-8'), 1, 0, 'L', true);
