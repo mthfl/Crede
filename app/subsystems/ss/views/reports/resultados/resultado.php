@@ -478,7 +478,7 @@ class relatorios extends connect
         $pdf->SetFont('Arial', 'B', 20);
         $pdf->SetY(8);
         $pdf->SetX(8.5);
-        $pdf->Cell(0, 8, mb_convert_encoding('RESULTADO FINAL', 'ISO-8859-1', 'UTF-8'), 0, 1, 'L');
+        $pdf->Cell(0, 8, mb_convert_encoding('RELATÓRIO', 'ISO-8859-1', 'UTF-8'), 0, 1, 'L');
 
         // Logo da escola
         if ($logo_escola) {

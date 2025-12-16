@@ -318,12 +318,15 @@ class relatorios extends connect
 
         // Cabeçalho da tabela do cronograma
         $pdf->SetFont('Arial', 'B', 12);
+        $pdf->SetFillColor(0, 90, 36); // Verde
+        $pdf->SetTextColor(255, 255, 255); // Texto branco
         $pdf->SetX(20);
-        $pdf->Cell(100, 8, mb_convert_encoding('ATIVIDADES', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C');
-        $pdf->Cell(70, 8, mb_convert_encoding('PERÍODO', 'ISO-8859-1', 'UTF-8'), 1, 1, 'C');
+        $pdf->Cell(100, 8, mb_convert_encoding('ATIVIDADES', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
+        $pdf->Cell(70, 8, mb_convert_encoding('PERÍODO', 'ISO-8859-1', 'UTF-8'), 1, 1, 'C', true);
 
         // Dados do cronograma
         $pdf->SetFont('Arial', '', 10);
+        $pdf->SetTextColor(0,0,0); // Texto preto
         $pdf->SetX(20);
         $pdf->Cell(100, 7, mb_convert_encoding('LANÇAMENTO DO EDITAL', 'ISO-8859-1', 'UTF-8'), 1, 0, 'L');
         $pdf->Cell(70, 7, mb_convert_encoding('30/11/2025', 'ISO-8859-1', 'UTF-8'), 1, 1, 'C');
@@ -341,9 +344,9 @@ class relatorios extends connect
         $pdf->Cell(70, 7, mb_convert_encoding('03/01/2026', 'ISO-8859-1', 'UTF-8'), 1, 1, 'C');
 
         // Horários de atendimento
-        $pdf->SetFont('Arial', '', 9);
+        $pdf->SetFont('Arial', '', 10);
         $pdf->SetY($pdf->GetY() + 8);
-        $pdf->SetX(16);
+        $pdf->SetX(15);
         $pdf->Cell(0, 6, mb_convert_encoding('HORÁRIOS DE ATENDIMENTO NA EEEP: segunda a sexta de 8h às 12h, à tarde de 13h às 16h', 'ISO-8859-1', 'UTF-8'), 0, 1, 'C');
 
         // Rodapé da capa
@@ -474,20 +477,20 @@ class relatorios extends connect
             $pdf->SetTextColor(0, 0, 0);
 
             // Primeira linha de totais (Total de Inscritos)
-            $pdf->Cell(94, 6, mb_convert_encoding('Total de Inscritos:', 'ISO-8859-1', 'UTF-8'), 0, 0, 'L');
-            $pdf->Cell(94, 6, $contagens['total'], 0, 1, 'L');
+            $pdf->Cell(94, 6, mb_convert_encoding('Total de Inscritos:', 'ISO-8859-1', 'UTF-8'), 1, 0, 'L');
+            $pdf->Cell(94, 6, $contagens['total'], 1, 1, 'L');
 
             // Segunda linha (Total Pública)
-            $pdf->Cell(94, 6, mb_convert_encoding('Total Pública:', 'ISO-8859-1', 'UTF-8'), 0, 0, 'L');
-            $pdf->Cell(94, 6, $contagens['publica_total'], 0, 1, 'L');
+            $pdf->Cell(94, 6, mb_convert_encoding('Total Pública:', 'ISO-8859-1', 'UTF-8'), 1, 0, 'L');
+            $pdf->Cell(94, 6, $contagens['publica_total'], 1, 1, 'L');
 
             // Terceira linha (Total Privada)
-            $pdf->Cell(94, 6, mb_convert_encoding('Total Privada:', 'ISO-8859-1', 'UTF-8'), 0, 0, 'L');
-            $pdf->Cell(94, 6, $contagens['privada_total'], 0, 1, 'L');
+            $pdf->Cell(94, 6, mb_convert_encoding('Total Privada:', 'ISO-8859-1', 'UTF-8'), 1, 0, 'L');
+            $pdf->Cell(94, 6, $contagens['privada_total'], 1, 1, 'L');
 
             // Quarta linha (Total Cota PCD)
-            $pdf->Cell(94, 6, mb_convert_encoding('Total Cota PCD:', 'ISO-8859-1', 'UTF-8'), 0, 0, 'L');
-            $pdf->Cell(94, 6, $contagens['pcd_total'], 0, 1, 'L');
+            $pdf->Cell(94, 6, mb_convert_encoding('Total Cota PCD:', 'ISO-8859-1', 'UTF-8'), 1, 0, 'L');
+            $pdf->Cell(94, 6, $contagens['pcd_total'], 1, 1, 'L');
 
             $pdf->Ln(5);
 
@@ -859,16 +862,17 @@ class relatorios extends connect
                         $this->recriarCabecalhoPagina($pdf, $logo_escola);
                     }
                 }
-                $pdf->Ln(5);
+                $pdf->Ln(7);
             }
 
             // Adicionar separador entre cursos (exceto no último curso)
             if ($curso !== end($cursos)) {
                 $pdf->SetFont('Arial', 'B', 10);
+                $pdf->SetFillColor(255, 174, 25);
                 $pdf->SetTextColor(255, 174, 25);
-                $pdf->Cell(0, 8, mb_convert_encoding('─' . str_repeat('─', 80) . '─', 'ISO-8859-1', 'UTF-8'), 0, 1, 'C');
+                $pdf->Cell(188, 1, mb_convert_encoding('', 'ISO-8859-1', 'UTF-8'), 0, 1, 'C', true);
                 $pdf->SetTextColor(0, 0, 0);
-                $pdf->Ln(5);
+                $pdf->Ln(7);
 
                 // Verificar se precisa adicionar nova página antes do próximo curso
                 if ($pdf->GetY() > 250) {
