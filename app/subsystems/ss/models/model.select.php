@@ -470,7 +470,7 @@ class select extends connect
         $sql = "SELECT c.nome_curso, COUNT(a.id) as total 
                 FROM $this->table2 c 
                 LEFT JOIN $this->table1 a ON a.id_curso1 = c.id 
-                GROUP BY c.id, c.nome_curso 
+                WHERE status = 1 GROUP BY c.id, c.nome_curso 
                 ORDER BY total DESC";
         $stmt = $this->connect->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);

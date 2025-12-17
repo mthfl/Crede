@@ -195,7 +195,19 @@ class relatorios extends connect
      */
     private function buscarDatasMatricula()
     {
-        $stmt = $this->connect->prepare("SELECT c.nome_curso, m.data, m.hora FROM $this->table18 m INNER JOIN $this->table2 c ON m.id_curso = c.id ORDER BY m.data");
+        $stmt = $this->connect->prepare("SELECT 
+    CASE 
+        WHEN m.id_curso IS NULL THEN 'TODOS OS CURSOS'
+        ELSE c.nome_curso 
+    END AS nome_curso,
+    m.id_curso,
+    m.data,
+    m.hora
+FROM matriculas m
+LEFT JOIN cursos c ON m.id_curso = c.id
+ORDER BY 
+    m.data ASC,
+    nome_curso ASC;");
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -302,11 +314,18 @@ class relatorios extends connect
         $pdf->SetFont('Arial', '', 10);
         $pdf->SetY(10);
         $pdf->SetX(9);
-        $pdf->Cell(0, 6, mb_convert_encoding('Conforme Portaria Nº2278/2025 - GAB', 'ISO-8859-1', 'UTF-8'), 0, 1, 'L');
+        $pdf->Cell(0, 6, mb_convert_encoding('CONFORME A PORTARIA Nº2278/2025 - GAB; PARECER Nº 010690/2025/SEDUC/ASJUR;', 'ISO-8859-1', 'UTF-8'), 0, 1, 'L');
 
+
+        $pdf->SetFont('Arial', 'B', 10);
+        $pdf->SetFillColor(255, 174, 25);
+        $pdf->SetTextColor(255, 174, 25);
+        $pdf->Cell(148, 1.3, mb_convert_encoding('', 'ISO-8859-1', 'UTF-8'), 0, 1, 'C', true);
+
+        $pdf->SetTextColor(0, 0, 0);
         // Coordenadoria Regional
         $pdf->SetFont('Arial', 'B', 14.5);
-        $pdf->SetY($pdf->GetY() + 30);
+        $pdf->SetY($pdf->GetY() + 15);
         $pdf->SetX(10);
         $pdf->Cell(0, 8, mb_convert_encoding('1ª COORDENADORIA REGIONAL DE DESENVOLVIMENTO DA EDUCAÇÃO', 'ISO-8859-1', 'UTF-8'), 0, 1, 'C');
 
@@ -314,7 +333,7 @@ class relatorios extends connect
         $pdf->SetFont('Arial', 'B', 30);
         $pdf->SetY($pdf->GetY() + 10);
         $pdf->SetX(10);
-        $pdf->Cell(0, 15, mb_convert_encoding('SELEÇÃO DE ALUNOS - 2025', 'ISO-8859-1', 'UTF-8'), 0, 1, 'C');
+        $pdf->Cell(0, 15, mb_convert_encoding('SELEÇÃO DE ALUNOS - 2026', 'ISO-8859-1', 'UTF-8'), 0, 1, 'C');
 
         // Subtítulo
         $pdf->SetFont('Arial', 'B', 32);
@@ -326,29 +345,32 @@ class relatorios extends connect
 
         // ---------- DATAS DE MATRÍCULA ----------
         $pdf->SetFont('Arial', 'B', 13);
-        $pdf->SetY($pdf->GetY() + 10);
+        $pdf->SetY($pdf->GetY() + 5);
         $pdf->SetX(14);
         $pdf->Cell(0, 10, mb_convert_encoding('CRONOGRAMA DE MATRÍCULA PARA CANDIDATOS CLASSIFICADOS 2026', 'ISO-8859-1', 'UTF-8'), 0, 1, 'C');
 
         // Buscar datas de matrícula do banco
         $datas_matricula = $this->buscarDatasMatricula();
 
-        // Cabeçalho da tabela do cronograma
         $pdf->SetFont('Arial', 'B', 12);
+        $pdf->SetFillColor(0, 90, 36); // Verde
+        $pdf->SetTextColor(255, 255, 255); // Texto branco
         $pdf->SetX(22);
-        $pdf->Cell(100, 8, mb_convert_encoding('CURSOS', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C');
-        $pdf->Cell(70, 8, mb_convert_encoding('DATA / HORA', 'ISO-8859-1', 'UTF-8'), 1, 1, 'C');
+        $pdf->Cell(100, 8, mb_convert_encoding('CURSOS', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
+        $pdf->Cell(70, 8, mb_convert_encoding('DATA / HORA', 'ISO-8859-1', 'UTF-8'), 1, 1, 'C', true);
 
         // Dados do cronograma vindos do banco
         $pdf->SetFont('Arial', '', 10);
+        $pdf->SetTextColor(0, 0, 0);
         foreach ($datas_matricula as $curso) {
             $pdf->SetX(22);
-            $pdf->Cell(100, 7, mb_convert_encoding($curso['nome_curso'], 'ISO-8859-1', 'UTF-8'), 1, 0, 'L');
-            
-            $pdf->Cell(70, 7, mb_convert_encoding($curso['data'] . ' às ' . $curso['hora'], 'ISO-8859-1', 'UTF-8'), 1, 1, 'C');
+
+                $pdf->Cell(100, 7, mb_convert_encoding($curso['nome_curso'], 'ISO-8859-1', 'UTF-8'), 1, 0, 'L');
+
+            $pdf->Cell(70, 7, mb_convert_encoding(date('d/m/Y', strtotime($curso['data'])) . ' às ' . date('H:i', strtotime($curso['hora'])), 'ISO-8859-1', 'UTF-8'), 1, 1, 'C');
         }
 
-        $pdf->Ln(10);
+        $pdf->Ln(5);
 
         // ---------- DOCUMENTOS NECESSÁRIOS ----------
         $pdf->SetFont('Arial', 'B', 14);
@@ -372,7 +394,7 @@ class relatorios extends connect
 
         $pdf->SetFont('Arial', '', 10);
         $pdf->SetLeftMargin(20);
-        
+
         foreach ($documentos as $letra => $descricao) {
             $pdf->SetX(20);
             $pdf->SetFont('Arial', 'B', 10);
@@ -385,13 +407,6 @@ class relatorios extends connect
         $pdf->SetLeftMargin(10);
         $pdf->Ln(10);
 
-        // Observação importante
-        $pdf->SetFont('Arial', 'B', 10);
-        $pdf->SetTextColor(200, 0, 0); // Vermelho
-        $pdf->SetX(20);
-        $pdf->MultiCell(0, 6, mb_convert_encoding('IMPORTANTE: Os candidatos classificados deverão comparecer na data e horário estabelecidos acima, portando TODOS os documentos listados. A ausência de qualquer documento poderá resultar na perda da vaga.', 'ISO-8859-1', 'UTF-8'), 0, 'L');
-        $pdf->SetTextColor(0, 0, 0); // Volta ao preto
-
         // Rodapé da capa
         $pdf->SetFont('Arial', 'I', 8);
         $pdf->SetY(-20);
@@ -402,22 +417,22 @@ class relatorios extends connect
     /**
      * Cria seção de deferimentos no final do relatório
      */
-   /**
- * Cria seção de deferimentos no final do relatório
- */
-private function criarSecaoDeferimentos($pdf)
-{
-    $pdf->AddPage();
-    
-    // Título da seção de deferimentos
-    $pdf->SetFont('Arial', 'B', 16);
-    $pdf->SetY(20);
-    $pdf->SetX(10);
-    $pdf->Cell(0, 10, mb_convert_encoding('RESULTADO DOS DEFERIMENTOS', 'ISO-8859-1', 'UTF-8'), 0, 1, 'C');
-    $pdf->Ln(5);
-    
-    // Buscar recursos do banco
-    $stmt_recursos = $this->connect->prepare("
+    /**
+     * Cria seção de deferimentos no final do relatório
+     */
+    private function criarSecaoDeferimentos($pdf)
+    {
+        $pdf->AddPage();
+
+        // Título da seção de deferimentos
+        $pdf->SetFont('Arial', 'B', 16);
+        $pdf->SetY(20);
+        $pdf->SetX(10);
+        $pdf->Cell(0, 10, mb_convert_encoding('RESULTADO DOS DEFERIMENTOS', 'ISO-8859-1', 'UTF-8'), 0, 1, 'C');
+        $pdf->Ln(5);
+
+        // Buscar recursos do banco
+        $stmt_recursos = $this->connect->prepare("
         SELECT r.*, c.nome, c.publica, c.pcd, c.bairro, cur.nome_curso 
         FROM $this->table19 r 
         INNER JOIN $this->table1 c ON r.id_candidato = c.id 
@@ -425,260 +440,166 @@ private function criarSecaoDeferimentos($pdf)
         WHERE r.status != 'PENDENTE'
         ORDER BY c.id_curso1, r.status DESC, c.nome
     ");
-    $stmt_recursos->execute();
-    $recursos = $stmt_recursos->fetchAll(PDO::FETCH_ASSOC);
-    
-    if (empty($recursos)) {
-        // Se não houver recursos analisados
-        $pdf->SetFont('Arial', 'I', 12);
-        $pdf->SetY(40);
-        $pdf->SetX(10);
-        $pdf->Cell(0, 10, mb_convert_encoding('Nenhum recurso analisado encontrado.', 'ISO-8859-1', 'UTF-8'), 0, 1, 'C');
-        return;
-    }
-    
-    // Agrupar recursos por curso
-    $recursos_por_curso = [];
-    foreach ($recursos as $recurso) {
-        $curso_id = $recurso['id_curso1'] ?? 0;
-        if (!isset($recursos_por_curso[$curso_id])) {
-            $recursos_por_curso[$curso_id] = [
-                'nome_curso' => $recurso['nome_curso'],
-                'deferidos' => 0,
-                'indeferidos' => 0,
-                'recursos' => []
-            ];
-        }
-        
-        // Determinar segmento do candidato
-        $segmento = $this->determinarSegmento($recurso['publica'], $recurso['pcd'], $recurso['bairro']);
-        
-        // Adicionar recurso à lista do curso
-        $recursos_por_curso[$curso_id]['recursos'][] = [
-            'nome' => $recurso['nome'],
-            'segmento' => $segmento,
-            'motivo' => $recurso['texto'],
-            'status' => $recurso['status'],
-            'resposta' => $recurso['resposta'] ?? ''
-        ];
-        
-        // Contar por status
-        if (strtoupper($recurso['status']) == 'DEFERIDO') {
-            $recursos_por_curso[$curso_id]['deferidos']++;
-        } elseif (strtoupper($recurso['status']) == 'INDEFERIDO') {
-            $recursos_por_curso[$curso_id]['indeferidos']++;
-        }
-    }
-    
-    // Exibir resumo por curso
-    $pdf->SetFont('Arial', 'B', 14);
-    $pdf->SetY(35);
-    $pdf->SetX(10);
-    $pdf->Cell(0, 10, mb_convert_encoding('RESUMO POR CURSO', 'ISO-8859-1', 'UTF-8'), 0, 1, 'C');
-    $pdf->Ln(5);
-    
-    // Cabeçalho da tabela de resumo
-    $pdf->SetFont('Arial', 'B', 10);
-    $pdf->SetX(15);
-    $pdf->Cell(100, 8, mb_convert_encoding('CURSO', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C');
-    $pdf->Cell(30, 8, mb_convert_encoding('DEFERIDOS', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C');
-    $pdf->Cell(30, 8, mb_convert_encoding('INDEFERIDOS', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C');
-    $pdf->Cell(25, 8, mb_convert_encoding('TOTAL', 'ISO-8859-1', 'UTF-8'), 1, 1, 'C');
-    
-    $pdf->SetFont('Arial', '', 9);
-    
-    $total_deferidos = 0;
-    $total_indeferidos = 0;
-    $total_recursos = 0;
-    
-    foreach ($recursos_por_curso as $curso_id => $dados_curso) {
-        $total_curso = $dados_curso['deferidos'] + $dados_curso['indeferidos'];
-        
-        $pdf->SetX(15);
-        $pdf->Cell(100, 7, mb_convert_encoding($dados_curso['nome_curso'], 'ISO-8859-1', 'UTF-8'), 1, 0, 'L');
-        $pdf->Cell(30, 7, $dados_curso['deferidos'], 1, 0, 'C');
-        $pdf->Cell(30, 7, $dados_curso['indeferidos'], 1, 0, 'C');
-        $pdf->Cell(25, 7, $total_curso, 1, 1, 'C');
-        
-        $total_deferidos += $dados_curso['deferidos'];
-        $total_indeferidos += $dados_curso['indeferidos'];
-        $total_recursos += $total_curso;
-    }
-    
-    // Totais
-    $pdf->SetFont('Arial', 'B', 10);
-    $pdf->SetX(15);
-    $pdf->Cell(100, 8, mb_convert_encoding('TOTAL GERAL', 'ISO-8859-1', 'UTF-8'), 1, 0, 'R');
-    $pdf->Cell(30, 8, $total_deferidos, 1, 0, 'C');
-    $pdf->Cell(30, 8, $total_indeferidos, 1, 0, 'C');
-    $pdf->Cell(25, 8, $total_recursos, 1, 1, 'C');
-    
-    $pdf->Ln(15);
-    
-    // Detalhes dos recursos
-    $pdf->SetFont('Arial', 'B', 14);
-    $pdf->SetX(10);
-    $pdf->Cell(0, 10, mb_convert_encoding('DETALHES DOS RECURSOS ANALISADOS', 'ISO-8859-1', 'UTF-8'), 0, 1, 'C');
-    $pdf->Ln(5);
-    
-    // Exibir detalhes por curso
-    foreach ($recursos_por_curso as $curso_id => $dados_curso) {
-        if (empty($dados_curso['recursos'])) continue;
-        
-        // Título do curso
-        $pdf->SetFont('Arial', 'B', 12);
-        $pdf->SetFillColor(220, 220, 220);
-        $pdf->SetX(10);
-        $pdf->Cell(187, 8, mb_convert_encoding($dados_curso['nome_curso'], 'ISO-8859-1', 'UTF-8'), 1, 1, 'C', true);
-        $pdf->Ln(3);
-        
-        // Cabeçalho da tabela
-        $pdf->SetFont('Arial', 'B', 9);
-        $pdf->SetX(10);
-        $pdf->Cell(50, 8, mb_convert_encoding('CANDIDATO', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C');
-        $pdf->Cell(25, 8, mb_convert_encoding('SEGMENTO', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C');
-        $pdf->Cell(40, 8, mb_convert_encoding('MOTIVO DO RECURSO', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C');
-        $pdf->Cell(30, 8, mb_convert_encoding('STATUS', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C');
-        $pdf->Cell(42, 8, mb_convert_encoding('RESPOSTA', 'ISO-8859-1', 'UTF-8'), 1, 1, 'C');
-        
-        $pdf->SetFont('Arial', '', 8);
-        $linha = 0;
-        
-        foreach ($dados_curso['recursos'] as $recurso) {
-            // Alternar cores das linhas
-            if ($linha % 2 == 0) {
-                $pdf->SetFillColor(245, 245, 245);
-            } else {
-                $pdf->SetFillColor(255, 255, 255);
-            }
-            
-            $status = strtoupper($recurso['status']);
-            
-            // Definir cor do status
-            if ($status == 'DEFERIDO') {
-                $pdf->SetTextColor(0, 100, 0); // Verde
-            } elseif ($status == 'INDEFERIDO') {
-                $pdf->SetTextColor(200, 0, 0); // Vermelho
-            } else {
-                $pdf->SetTextColor(0, 0, 0); // Preto
-            }
-            
-            // Nome do candidato (truncado se necessário)
-            $nome = mb_strimwidth($recurso['nome'], 0, 30, '...');
-            
+        $stmt_recursos->execute();
+        $recursos = $stmt_recursos->fetchAll(PDO::FETCH_ASSOC);
+
+        if (empty($recursos)) {
+            // Se não houver recursos analisados
+            $pdf->SetFont('Arial', 'I', 12);
+            $pdf->SetY(40);
             $pdf->SetX(10);
-            $pdf->Cell(50, 7, mb_convert_encoding($nome, 'ISO-8859-1', 'UTF-8'), 1, 0, 'L', true);
-            $pdf->Cell(25, 7, mb_convert_encoding($recurso['segmento'], 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
-            
-            // Motivo do recurso (truncado)
-            $motivo = mb_strimwidth($recurso['motivo'], 0, 40, '...');
-            $pdf->Cell(40, 7, mb_convert_encoding($motivo, 'ISO-8859-1', 'UTF-8'), 1, 0, 'L', true);
-            
-            // Status
-            $pdf->Cell(30, 7, mb_convert_encoding($status, 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
-            
-            // Resposta (truncada)
-            $resposta = mb_strimwidth($recurso['resposta'], 0, 45, '...');
-            $pdf->Cell(42, 7, mb_convert_encoding($resposta, 'ISO-8859-1', 'UTF-8'), 1, 1, 'L', true);
-            
-            $pdf->SetTextColor(0, 0, 0); // Voltar ao preto
-            $linha++;
-            
-            // Verificar se precisa de nova página
-            if ($pdf->GetY() > 270) {
-                $pdf->AddPage();
-                $this->recriarCabecalhoRecursos($pdf);
-                $pdf->Ln(5);
+            $pdf->Cell(0, 10, mb_convert_encoding('Nenhum recurso analisado encontrado.', 'ISO-8859-1', 'UTF-8'), 0, 1, 'C');
+            return;
+        }
+
+        // Agrupar recursos por curso
+        $recursos_por_curso = [];
+        foreach ($recursos as $recurso) {
+            $curso_id = $recurso['id_curso1'] ?? 0;
+            if (!isset($recursos_por_curso[$curso_id])) {
+                $recursos_por_curso[$curso_id] = [
+                    'nome_curso' => $recurso['nome_curso'],
+                    'deferidos' => 0,
+                    'indeferidos' => 0,
+                    'recursos' => []
+                ];
+            }
+
+            // Determinar segmento do candidato
+            $segmento = $this->determinarSegmento($recurso['publica'], $recurso['pcd'], $recurso['bairro']);
+
+            // Adicionar recurso à lista do curso
+            $recursos_por_curso[$curso_id]['recursos'][] = [
+                'nome' => $recurso['nome'],
+                'segmento' => $segmento,
+                'motivo' => $recurso['texto'],
+                'status' => $recurso['status'],
+                'resposta' => $recurso['resposta'] ?? ''
+            ];
+
+            // Contar por status
+            if (strtoupper($recurso['status']) == 'DEFERIDO') {
+                $recursos_por_curso[$curso_id]['deferidos']++;
+            } elseif (strtoupper($recurso['status']) == 'INDEFERIDO') {
+                $recursos_por_curso[$curso_id]['indeferidos']++;
             }
         }
-        
+
+        // Detalhes dos recursos
+        $pdf->SetFont('Arial', 'B', 14);
+        $pdf->SetX(10);
+        $pdf->Cell(0, 10, mb_convert_encoding('DETALHES DOS RECURSOS ANALISADOS', 'ISO-8859-1', 'UTF-8'), 0, 1, 'C');
+        $pdf->Ln(5);
+
+        // Exibir detalhes por curso
+        foreach ($recursos_por_curso as $curso_id => $dados_curso) {
+            if (empty($dados_curso['recursos'])) continue;
+
+            // Cabeçalho da tabela
+            $pdf->SetFont('Arial', 'B', 9);
+            $pdf->SetTextColor(255,255,255);
+            $pdf->SetFillColor(0, 90, 36);
+            $pdf->SetX(10);
+            $pdf->Cell(60, 8, mb_convert_encoding('CANDIDATO', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
+            $pdf->Cell(25, 8, mb_convert_encoding('SEGMENTO', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
+            $pdf->Cell(72, 8, mb_convert_encoding('MOTIVO DO RECURSO', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
+            $pdf->Cell(30, 8, mb_convert_encoding('STATUS', 'ISO-8859-1', 'UTF-8'), 1, 1, 'C', true);
+
+            $pdf->SetFont('Arial', '', 8);
+            $linha = 0;
+
+            foreach ($dados_curso['recursos'] as $recurso) {
+                // Alternar cores das linhas
+                if ($linha % 2 == 0) {
+                    $pdf->SetFillColor(245, 245, 245);
+                } else {
+                    $pdf->SetFillColor(255, 255, 255);
+                }
+
+                $status = strtoupper($recurso['status']);
+
+                // Definir cor do status
+                if ($status == 'DEFERIDO') {
+                    $pdf->SetTextColor(0, 100, 0); // Verde
+                } elseif ($status == 'INDEFERIDO') {
+                    $pdf->SetTextColor(200, 0, 0); // Vermelho
+                } else {
+                    $pdf->SetTextColor(0, 0, 0); // Preto
+                }
+
+                // Nome do candidato (truncado se necessário)
+                $nome = mb_strimwidth($recurso['nome'], 0, 30, '...');
+
+                $pdf->SetX(10);
+                $pdf->Cell(60, 7, mb_convert_encoding($nome, 'ISO-8859-1', 'UTF-8'), 1, 0, 'L', true);
+                $pdf->Cell(25, 7, mb_convert_encoding($recurso['segmento'], 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
+
+                // Motivo do recurso (truncado)
+                $motivo = mb_strimwidth($recurso['motivo'], 0, 40, '...');
+                $pdf->Cell(72, 7, mb_convert_encoding($motivo, 'ISO-8859-1', 'UTF-8'), 1, 0, 'L', true);
+
+                // Status
+                $pdf->Cell(30, 7, mb_convert_encoding($status, 'ISO-8859-1', 'UTF-8'), 1, 1, 'C', true);
+
+                $pdf->SetTextColor(0, 0, 0); // Voltar ao preto
+                $linha++;
+
+                // Verificar se precisa de nova página
+                if ($pdf->GetY() > 270) {
+                    $pdf->AddPage();
+                    $this->recriarCabecalhoRecursos($pdf);
+                    $pdf->Ln(5);
+                }
+            }
+
+            $pdf->Ln(10);
+        }
+    }
+
+    /**
+     * Determina o segmento do candidato
+     */
+    private function determinarSegmento($publica, $pcd, $bairro)
+    {
+        if ($pcd == 1) {
+            return 'PCD';
+        } elseif ($bairro == 1) {
+            return 'COTAS';
+        } else {
+            return 'AC';
+        }
+    }
+
+    /**
+     * Recria cabeçalho básico nas páginas da seção de recursos
+     */
+    private function recriarCabecalhoRecursos($pdf)
+    {
+        $pdf->SetFont('Arial', 'B', 13);
+        $pdf->SetY(2);
+        $pdf->SetX(9);
+        $pdf->Cell(0, 6, mb_convert_encoding($_SESSION['nome_escola'], 'ISO-8859-1', 'UTF-8'), 0, 1, 'L');
+
+        $pdf->SetFont('Arial', 'B', 14);
+        $pdf->SetY(8);
+        $pdf->SetX(9);
+        $pdf->Cell(0, 8, mb_convert_encoding('RESULTADO DOS DEFERIMENTOS', 'ISO-8859-1', 'UTF-8'), 0, 1, 'L');
+
+        $pdf->SetFont('Arial', 'I', 9);
+        $pdf->SetY(14);
+        $pdf->SetX(9);
+        $pdf->Cell(0, 6, mb_convert_encoding('Relatório de Análise de Recursos - Resultado Final', 'ISO-8859-1', 'UTF-8'), 0, 1, 'L');
+
+        $pdf->SetDrawColor(0, 90, 36);
+        $pdf->SetLineWidth(0.8);
+        $pdf->Line(10, 20, 197.55, 20);
+        $pdf->SetLineWidth(0.2);
         $pdf->Ln(10);
-    }
-    
-    // Observações finais
-    $pdf->SetY($pdf->GetY() + 10);
-    $pdf->SetFont('Arial', 'B', 11);
-    $pdf->SetTextColor(0, 90, 36);
-    $pdf->SetX(15);
-    $pdf->Cell(0, 8, mb_convert_encoding('OBSERVAÇÕES:', 'ISO-8859-1', 'UTF-8'), 0, 1, 'L');
-    
-    $pdf->SetFont('Arial', '', 10);
-    $pdf->SetTextColor(0, 0, 0);
-    $pdf->SetX(15);
-    $pdf->MultiCell(170, 6, mb_convert_encoding('1. Os resultados apresentados são FINAIS após análise de todos os recursos protocolados.', 'ISO-8859-1', 'UTF-8'), 0, 'L');
-    $pdf->SetX(15);
-    $pdf->MultiCell(170, 6, mb_convert_encoding('2. Os candidatos com recursos DEFERIDOS serão incluídos na lista de classificados de acordo com a disponibilidade de vagas.', 'ISO-8859-1', 'UTF-8'), 0, 'L');
-    $pdf->SetX(15);
-    $pdf->MultiCell(170, 6, mb_convert_encoding('3. Os recursos INDEFERIDOS mantêm a situação anterior ao recurso.', 'ISO-8859-1', 'UTF-8'), 0, 'L');
-    $pdf->SetX(15);
-    $pdf->MultiCell(170, 6, mb_convert_encoding('4. Esta é a última etapa do processo seletivo.', 'ISO-8859-1', 'UTF-8'), 0, 'L');
-    
-    $pdf->Ln(15);
-    
-    // Assinaturas
-    $pdf->SetFont('Arial', 'B', 11);
-    $pdf->SetX(20);
-    $pdf->Cell(75, 10, mb_convert_encoding('_________________________________', 'ISO-8859-1', 'UTF-8'), 0, 0, 'C');
-    $pdf->SetX(100);
-    $pdf->Cell(75, 10, mb_convert_encoding('_________________________________', 'ISO-8859-1', 'UTF-8'), 0, 1, 'C');
-    
-    $pdf->SetFont('Arial', '', 10);
-    $pdf->SetX(20);
-    $pdf->Cell(75, 6, mb_convert_encoding('Presidente da Comissão', 'ISO-8859-1', 'UTF-8'), 0, 0, 'C');
-    $pdf->SetX(100);
-    $pdf->Cell(75, 6, mb_convert_encoding('Diretor da Escola', 'ISO-8859-1', 'UTF-8'), 0, 1, 'C');
-    
-    $pdf->SetFont('Arial', 'I', 9);
-    $pdf->SetX(20);
-    $pdf->Cell(75, 6, date('d/m/Y'), 0, 0, 'C');
-    $pdf->SetX(100);
-    $pdf->Cell(75, 6, date('d/m/Y'), 0, 1, 'C');
-}
 
-/**
- * Determina o segmento do candidato
- */
-private function determinarSegmento($publica, $pcd, $bairro)
-{
-    if ($pcd == 1) {
-        return 'PCD';
-    } elseif ($bairro == 1) {
-        return 'COTAS';
-    } else {
-        return 'AC';
+        $pdf->SetDrawColor(0, 0, 0);
+        $pdf->SetLeftMargin(10);
+        $pdf->SetTextColor(0, 0, 0);
     }
-}
-
-/**
- * Recria cabeçalho básico nas páginas da seção de recursos
- */
-private function recriarCabecalhoRecursos($pdf)
-{
-    $pdf->SetFont('Arial', 'B', 13);
-    $pdf->SetY(2);
-    $pdf->SetX(9);
-    $pdf->Cell(0, 6, mb_convert_encoding($_SESSION['nome_escola'], 'ISO-8859-1', 'UTF-8'), 0, 1, 'L');
-    
-    $pdf->SetFont('Arial', 'B', 14);
-    $pdf->SetY(8);
-    $pdf->SetX(9);
-    $pdf->Cell(0, 8, mb_convert_encoding('RESULTADO DOS DEFERIMENTOS', 'ISO-8859-1', 'UTF-8'), 0, 1, 'L');
-    
-    $pdf->SetFont('Arial', 'I', 9);
-    $pdf->SetY(14);
-    $pdf->SetX(9);
-    $pdf->Cell(0, 6, mb_convert_encoding('Relatório de Análise de Recursos - Resultado Final', 'ISO-8859-1', 'UTF-8'), 0, 1, 'L');
-    
-    $pdf->SetDrawColor(0, 90, 36);
-    $pdf->SetLineWidth(0.8);
-    $pdf->Line(10, 20, 197.55, 20);
-    $pdf->SetLineWidth(0.2);
-    $pdf->Ln(10);
-    
-    $pdf->SetDrawColor(0, 0, 0);
-    $pdf->SetLeftMargin(10);
-    $pdf->SetTextColor(0, 0, 0);
-}
 
     public function gerarRelatorioFinal()
     {
@@ -800,21 +721,24 @@ private function recriarCabecalhoRecursos($pdf)
             $pdf->SetFont('Arial', '', 10);
             $pdf->SetTextColor(0, 0, 0);
 
-            // Primeira linha de totais (Total de Inscritos)
-            $pdf->Cell(94, 6, mb_convert_encoding('Total de Inscritos:', 'ISO-8859-1', 'UTF-8'), 0, 0, 'L');
-            $pdf->Cell(94, 6, $contagens['total'], 0, 1, 'L');
+            $pdf->SetFillColor(255, 255, 255);
+            $pdf->Cell(94, 6, mb_convert_encoding('Total de Inscritos:', 'ISO-8859-1', 'UTF-8'), 0, 0, 'L', true);
+            $pdf->Cell(94, 6, $contagens['total'], 0, 1, 'R', true);
 
-            // Segunda linha (Total Pública)
-            $pdf->Cell(94, 6, mb_convert_encoding('Total Pública:', 'ISO-8859-1', 'UTF-8'), 0, 0, 'L');
-            $pdf->Cell(94, 6, $contagens['publica_total'], 0, 1, 'L');
+            // Segunda linha – cinza claro
+            $pdf->SetFillColor(230, 230, 230);
+            $pdf->Cell(94, 6, mb_convert_encoding('Total Pública:', 'ISO-8859-1', 'UTF-8'), 0, 0, 'L', true);
+            $pdf->Cell(94, 6, $contagens['publica_total'], 0, 1, 'R', true);
 
-            // Terceira linha (Total Privada)
-            $pdf->Cell(94, 6, mb_convert_encoding('Total Privada:', 'ISO-8859-1', 'UTF-8'), 0, 0, 'L');
-            $pdf->Cell(94, 6, $contagens['privada_total'], 0, 1, 'L');
+            // Terceira linha – branco
+            $pdf->SetFillColor(255, 255, 255);
+            $pdf->Cell(94, 6, mb_convert_encoding('Total Privada:', 'ISO-8859-1', 'UTF-8'), 0, 0, 'L', true);
+            $pdf->Cell(94, 6, $contagens['privada_total'], 0, 1, 'R', true);
 
-            // Quarta linha (Total Cota PCD)
-            $pdf->Cell(94, 6, mb_convert_encoding('Total Cota PCD:', 'ISO-8859-1', 'UTF-8'), 0, 0, 'L');
-            $pdf->Cell(94, 6, $contagens['pcd_total'], 0, 1, 'L');
+            // Quarta linha – cinza claro
+            $pdf->SetFillColor(230, 230, 230);
+            $pdf->Cell(94, 6, mb_convert_encoding('Total Cota PCD:', 'ISO-8859-1', 'UTF-8'), 0, 0, 'L', true);
+            $pdf->Cell(94, 6, $contagens['pcd_total'], 0, 1, 'R', true);
 
             $pdf->Ln(5);
 
@@ -956,7 +880,7 @@ private function recriarCabecalhoRecursos($pdf)
                 $candidato['segmento_original'] = 'pcd_privada';
                 $total_pcd[] = $candidato;
             }
-            
+
             usort($total_pcd, fn($a, $b) => $b['media_final'] <=> $a['media_final']);
             $vagas_ocupadas['pcd'] = array_slice($total_pcd, 0, $vagas_pcd);
             foreach ($vagas_ocupadas['pcd'] as $cand) $ids_classificados[] = $cand['id'];
@@ -1139,10 +1063,10 @@ private function recriarCabecalhoRecursos($pdf)
                     // Determinar SEGM. baseado no SEGMENTO ORIGINAL (não no segmento atual)
                     $segmento = '';
                     $origem = '';
-                    
+
                     // Verificar o segmento original do candidato
                     $segmento_original = $row['segmento_original'] ?? '';
-                    
+
                     if ($segmento_original == 'pcd_publica' || $segmento_original == 'pcd_privada') {
                         $segmento = 'PCD';
                     } elseif ($segmento_original == 'publica_ac' || $segmento_original == 'privada_ac') {
@@ -1150,7 +1074,7 @@ private function recriarCabecalhoRecursos($pdf)
                     } elseif ($segmento_original == 'publica_cotas' || $segmento_original == 'privada_cotas') {
                         $segmento = 'COTISTA';
                     }
-                    
+
                     // Determinar ORIGEM baseado no segmento original
                     if ($segmento_original == 'pcd_publica' || $segmento_original == 'publica_ac' || $segmento_original == 'publica_cotas') {
                         $origem = 'PUBLICA';
@@ -1174,7 +1098,7 @@ private function recriarCabecalhoRecursos($pdf)
                     $pdf->Cell($celula_curso, $altura_celula, mb_convert_encoding(mb_strtoupper($curso_nome), 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
                     $pdf->Cell($celula_segmento, $altura_celula, mb_convert_encoding($segmento, 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
                     $pdf->Cell($celula_origem, $altura_celula, mb_convert_encoding($origem, 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
-                    $pdf->Cell($celula_media, $altura_celula, number_format($row['media_final'], 2), 1, 0, 'C', true);
+                    $pdf->Cell($celula_media, $altura_celula, number_format($row['media_final'], 5), 1, 0, 'C', true);
                     $pdf->Cell($celula_status, $altura_celula, mb_convert_encoding($situacao, 'ISO-8859-1', 'UTF-8'), 1, 1, 'C', true);
 
                     $class++;
@@ -1192,8 +1116,9 @@ private function recriarCabecalhoRecursos($pdf)
             // Adicionar separador entre cursos (exceto no último curso)
             if ($curso !== end($cursos)) {
                 $pdf->SetFont('Arial', 'B', 10);
+                $pdf->SetFillColor(255, 174, 25);
                 $pdf->SetTextColor(255, 174, 25);
-                $pdf->Cell(0, 8, mb_convert_encoding('─' . str_repeat('─', 80) . '─', 'ISO-8859-1', 'UTF-8'), 0, 1, 'C');
+                $pdf->Cell(188, 1, mb_convert_encoding('', 'ISO-8859-1', 'UTF-8'), 0, 1, 'C', true);
                 $pdf->SetTextColor(0, 0, 0);
                 $pdf->Ln(5);
 

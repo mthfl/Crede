@@ -297,7 +297,7 @@ class relatorios extends connect
         $pdf->SetTextColor(255, 174, 25);
         $pdf->Cell(148, 1.3, mb_convert_encoding('', 'ISO-8859-1', 'UTF-8'), 0, 1, 'C', true);
 
-        $pdf->SetTextColor(0,0,0);
+        $pdf->SetTextColor(0, 0, 0);
         // Coordenadoria Regional
         $pdf->SetFont('Arial', 'B', 14.5);
         $pdf->SetY($pdf->GetY() + 30);
@@ -334,7 +334,7 @@ class relatorios extends connect
 
         // Dados do cronograma
         $pdf->SetFont('Arial', '', 10);
-        $pdf->SetTextColor(0,0,0); // Texto preto
+        $pdf->SetTextColor(0, 0, 0); // Texto preto
         $pdf->SetX(20);
         $pdf->Cell(100, 7, mb_convert_encoding('LANÇAMENTO DO EDITAL', 'ISO-8859-1', 'UTF-8'), 1, 0, 'L');
         $pdf->Cell(70, 7, mb_convert_encoding('28/11/2025', 'ISO-8859-1', 'UTF-8'), 1, 1, 'C');
@@ -357,7 +357,7 @@ class relatorios extends connect
         $pdf->Cell(100, 7, mb_convert_encoding('MATRÍCULA E SEMINÁRIO (Na EEEP)', 'ISO-8859-1', 'UTF-8'), 1, 0, 'L');
         $pdf->Cell(70, 7, mb_convert_encoding('05 A 09/01/2026', 'ISO-8859-1', 'UTF-8'), 1, 1, 'C');
         $pdf->SetX(20);
-    
+
         // Horários de atendimento
         $pdf->SetFont('Arial', '', 10);
         $pdf->SetY($pdf->GetY() + 8);
@@ -491,24 +491,27 @@ class relatorios extends connect
             $pdf->SetFont('Arial', '', 10);
             $pdf->SetTextColor(0, 0, 0);
 
-            // Primeira linha de totais (Total de Inscritos)
-            $pdf->Cell(94, 6, mb_convert_encoding('Total de Inscritos:', 'ISO-8859-1', 'UTF-8'), 1, 0, 'L');
-            $pdf->Cell(94, 6, $contagens['total'], 1, 1, 'L');
+            $pdf->SetFillColor(255, 255, 255);
+            $pdf->Cell(94, 6, mb_convert_encoding('Total de Inscritos:', 'ISO-8859-1', 'UTF-8'), 0, 0, 'L', true);
+            $pdf->Cell(94, 6, $contagens['total'], 0, 1, 'R', true);
 
-            // Segunda linha (Total Pública)
-            $pdf->Cell(94, 6, mb_convert_encoding('Total Pública:', 'ISO-8859-1', 'UTF-8'), 1, 0, 'L');
-            $pdf->Cell(94, 6, $contagens['publica_total'], 1, 1, 'L');
+            // Segunda linha – cinza claro
+            $pdf->SetFillColor(230, 230, 230);
+            $pdf->Cell(94, 6, mb_convert_encoding('Total Pública:', 'ISO-8859-1', 'UTF-8'), 0, 0, 'L', true);
+            $pdf->Cell(94, 6, $contagens['publica_total'], 0, 1, 'R', true);
 
-            // Terceira linha (Total Privada)
-            $pdf->Cell(94, 6, mb_convert_encoding('Total Privada:', 'ISO-8859-1', 'UTF-8'), 1, 0, 'L');
-            $pdf->Cell(94, 6, $contagens['privada_total'], 1, 1, 'L');
+            // Terceira linha – branco
+            $pdf->SetFillColor(255, 255, 255);
+            $pdf->Cell(94, 6, mb_convert_encoding('Total Privada:', 'ISO-8859-1', 'UTF-8'), 0, 0, 'L', true);
+            $pdf->Cell(94, 6, $contagens['privada_total'], 0, 1, 'R', true);
 
-            // Quarta linha (Total Cota PCD)
-            $pdf->Cell(94, 6, mb_convert_encoding('Total Cota PCD:', 'ISO-8859-1', 'UTF-8'), 1, 0, 'L');
-            $pdf->Cell(94, 6, $contagens['pcd_total'], 1, 1, 'L');
+            // Quarta linha – cinza claro
+            $pdf->SetFillColor(230, 230, 230);
+            $pdf->Cell(94, 6, mb_convert_encoding('Total Cota PCD:', 'ISO-8859-1', 'UTF-8'), 0, 0, 'L', true);
+            $pdf->Cell(94, 6, $contagens['pcd_total'], 0, 1, 'R', true);
+
 
             $pdf->Ln(5);
-
             // ---------- BUSCAR E ORDENAR CANDIDATOS DO CURSO ----------
             $todos_candidatos = [];
 
@@ -647,7 +650,7 @@ class relatorios extends connect
                 $candidato['segmento_original'] = 'pcd_privada';
                 $total_pcd[] = $candidato;
             }
-            
+
             usort($total_pcd, fn($a, $b) => $b['media_final'] <=> $a['media_final']);
             $vagas_ocupadas['pcd'] = array_slice($total_pcd, 0, $vagas_pcd);
             foreach ($vagas_ocupadas['pcd'] as $cand) $ids_classificados[] = $cand['id'];
@@ -847,10 +850,10 @@ class relatorios extends connect
                     // Determinar SEGM. baseado no SEGMENTO ORIGINAL (não no segmento atual)
                     $segmento = '';
                     $origem = '';
-                    
+
                     // Verificar o segmento original do candidato
                     $segmento_original = $row['segmento_original'] ?? '';
-                    
+
                     if ($segmento_original == 'pcd_publica' || $segmento_original == 'pcd_privada') {
                         $segmento = 'PCD';
                     } elseif ($segmento_original == 'publica_ac' || $segmento_original == 'privada_ac') {
@@ -858,7 +861,7 @@ class relatorios extends connect
                     } elseif ($segmento_original == 'publica_cotas' || $segmento_original == 'privada_cotas') {
                         $segmento = 'COTISTA';
                     }
-                    
+
                     // Determinar ORIGEM baseado no segmento original
                     if ($segmento_original == 'pcd_publica' || $segmento_original == 'publica_ac' || $segmento_original == 'publica_cotas') {
                         $origem = 'PUBLICA';
@@ -874,7 +877,7 @@ class relatorios extends connect
                     $pdf->Cell($celula_curso, $altura_celula, mb_convert_encoding(mb_strtoupper($curso_nome), 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
                     $pdf->Cell($celula_segmento, $altura_celula, mb_convert_encoding($segmento, 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
                     $pdf->Cell($celula_origem, $altura_celula, mb_convert_encoding($origem, 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
-                    $pdf->Cell($celula_media, $altura_celula, number_format($row['media_final'], 2), 1, 0, 'C', true);
+                    $pdf->Cell($celula_media, $altura_celula, number_format($row['media_final'], 5), 1, 0, 'C', true);
                     $pdf->Cell($celula_status, $altura_celula, mb_convert_encoding($situacao, 'ISO-8859-1', 'UTF-8'), 1, 1, 'C', true);
 
                     $class++;
