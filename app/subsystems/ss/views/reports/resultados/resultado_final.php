@@ -554,15 +554,11 @@ ORDER BY
 
         foreach ($recursos_por_curso as $dados_curso) {
             if (empty($dados_curso['recursos'])) continue;
-
-            // Título do curso no cabeçalho da tabela de recursos
-            $pdf->SetFont('Arial', 'B', 11);
-            $pdf->SetFillColor(0, 90, 36);
-            $pdf->SetTextColor(255, 255, 255);
-            $pdf->Cell(188, 8, mb_convert_encoding('CURSO: ' . mb_strtoupper($dados_curso['nome_curso']), 'ISO-8859-1', 'UTF-8'), 1, 1, 'C', true);
-
+            
+            
             // Cabeçalho da tabela
             $pdf->SetFont('Arial', 'B', 9);
+            $pdf->SetFillColor(0, 90, 36);
             $pdf->SetTextColor(255, 255, 255);
             $pdf->Cell(60, 8, mb_convert_encoding('CANDIDATO', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
             $pdf->Cell(53, 8, mb_convert_encoding('MOTIVO DO RECURSO', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
