@@ -472,13 +472,13 @@ ORDER BY
         $pdf->Ln(5);
 
         $stmt_recursos = $this->connect->prepare("
-            SELECT r.*, c.nome, c.publica, c.pcd, c.bairro, cur.nome_curso 
-            FROM $this->table19 r 
-            INNER JOIN $this->table1 c ON r.id_candidato = c.id 
-            INNER JOIN $this->table2 cur ON c.id_curso1 = cur.id 
-            WHERE r.status != 'PENDENTE'
-            ORDER BY c.id_curso1, r.status DESC, c.nome
-        ");
+        SELECT r.*, c.nome, c.publica, c.pcd, c.bairro, cur.nome_curso 
+        FROM $this->table19 r 
+        INNER JOIN $this->table1 c ON r.id_candidato = c.id 
+        INNER JOIN $this->table2 cur ON c.id_curso1 = cur.id 
+        WHERE r.status != 'PENDENTE'
+        ORDER BY c.id_curso1, r.status DESC, c.nome
+    ");
         $stmt_recursos->execute();
         $recursos = $stmt_recursos->fetchAll(PDO::FETCH_ASSOC);
 
@@ -490,7 +490,7 @@ ORDER BY
             return;
         }
 
-        // Regras de migração
+        // === REGRAS DE MIGRAÇÃO ===
         $pdf->SetFont('Arial', 'B', 14);
         $pdf->Cell(0, 10, mb_convert_encoding('Regra de Migração de Vagas Ociosas (Não Preenchimento)', 'ISO-8859-1', 'UTF-8'), 0, 1, 'C');
         $pdf->Ln(5);
@@ -500,10 +500,12 @@ ORDER BY
         $pdf->SetFont('Arial', '', 11);
         $pdf->MultiCell(0, 6, mb_convert_encoding(
             "1. A vaga PCD é padrão universal, sem vínculo com pública ou privada.\n" .
-            "2. Se restarem vagas PCD sem preenchimento, elas não migram para privada.\n" .
-            "3. Essas vagas devem migrar exclusivamente para Ampla Concorrência da Escola Pública.\n\n" .
-            "Ou seja:\nVaga PCD sobrando -> vai para AC Pública.",
-            'ISO-8859-1', 'UTF-8'));
+                "2. Se restarem vagas PCD sem preenchimento, elas não migram para privada.\n" .
+                "3. Essas vagas devem migrar exclusivamente para Ampla Concorrência da Escola Pública.\n\n" .
+                "Ou seja:\nVaga PCD sobrando -> vai para AC Pública.",
+            'ISO-8859-1',
+            'UTF-8'
+        ));
 
         $pdf->Ln(8);
 
@@ -512,7 +514,9 @@ ORDER BY
         $pdf->SetFont('Arial', '', 11);
         $pdf->MultiCell(0, 6, mb_convert_encoding(
             "Seguem sempre sua origem:\n- CT Pública sobrando -> vai para AC Pública\n- CT Privada sobrando -> vai para AC Privada",
-            'ISO-8859-1', 'UTF-8'));
+            'ISO-8859-1',
+            'UTF-8'
+        ));
 
         $pdf->Ln(8);
 
@@ -523,7 +527,7 @@ ORDER BY
 
         $pdf->Ln(15);
 
-        // Detalhes dos recursos
+        // === DETALHES DOS RECURSOS ===
         $pdf->SetFont('Arial', 'B', 14);
         $pdf->SetX(10);
         $pdf->Cell(0, 10, mb_convert_encoding('DETALHES DOS RECURSOS ANALISADOS', 'ISO-8859-1', 'UTF-8'), 0, 1, 'C');
@@ -540,10 +544,10 @@ ORDER BY
             }
             $segmento = $this->determinarSegmento($recurso['publica'], $recurso['pcd'], $recurso['bairro']);
             $recursos_por_curso[$curso_id]['recursos'][] = [
-                'nome' => $recurso['nome'],
+                'nome'     => $recurso['nome'],
                 'segmento' => $segmento,
-                'motivo' => $recurso['texto'],
-                'status' => $recurso['status'],
+                'motivo'   => $recurso['texto'],
+                'status'   => $recurso['status'],
                 'resposta' => $recurso['resposta'] ?? ''
             ];
         }
@@ -551,10 +555,15 @@ ORDER BY
         foreach ($recursos_por_curso as $dados_curso) {
             if (empty($dados_curso['recursos'])) continue;
 
-            $pdf->SetFont('Arial', 'B', 9);
+            // Título do curso no cabeçalho da tabela de recursos
+            $pdf->SetFont('Arial', 'B', 11);
             $pdf->SetFillColor(0, 90, 36);
             $pdf->SetTextColor(255, 255, 255);
-            $pdf->SetX(10);
+            $pdf->Cell(188, 8, mb_convert_encoding('CURSO: ' . mb_strtoupper($dados_curso['nome_curso']), 'ISO-8859-1', 'UTF-8'), 1, 1, 'C', true);
+
+            // Cabeçalho da tabela
+            $pdf->SetFont('Arial', 'B', 9);
+            $pdf->SetTextColor(255, 255, 255);
             $pdf->Cell(60, 8, mb_convert_encoding('CANDIDATO', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
             $pdf->Cell(53, 8, mb_convert_encoding('MOTIVO DO RECURSO', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
             $pdf->Cell(53, 8, mb_convert_encoding('RESPOSTA DO RECURSO', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
@@ -565,12 +574,6 @@ ORDER BY
             $linha = 0;
 
             foreach ($dados_curso['recursos'] as $recurso) {
-                if ($linha % 2 == 0) {
-                    $pdf->SetFillColor(245, 245, 245);
-                } else {
-                    $pdf->SetFillColor(255, 255, 255);
-                }
-
                 $status = strtoupper($recurso['status']);
                 if ($status == 'DEFERIDO') {
                     $pdf->SetTextColor(0, 100, 0);
@@ -580,16 +583,25 @@ ORDER BY
                     $pdf->SetTextColor(0, 0, 0);
                 }
 
-                $nome = mb_convert_encoding($recurso['nome'], 'ISO-8859-1', 'UTF-8');
-                $motivo = mb_convert_encoding($recurso['motivo'], 'ISO-8859-1', 'UTF-8');
+                // === CONVERSÃO DE TODOS OS TEXTOS PARA ISO-8859-1 ===
+                $nome     = mb_convert_encoding($recurso['nome'], 'ISO-8859-1', 'UTF-8');
+                $motivo   = mb_convert_encoding($recurso['motivo'], 'ISO-8859-1', 'UTF-8');
                 $resposta = mb_convert_encoding($recurso['resposta'] ?? '', 'ISO-8859-1', 'UTF-8');
+                $status   = mb_convert_encoding($status, 'ISO-8859-1', 'UTF-8');
+
+                $nome_truncado = mb_strimwidth($nome, 0, 55, '...', 'ISO-8859-1');
+
+                if ($linha % 2 == 0) {
+                    $pdf->SetFillColor(245, 245, 245);
+                } else {
+                    $pdf->SetFillColor(255, 255, 255);
+                }
 
                 $y_inicial = $pdf->GetY();
 
                 // Candidato
-                $nome_truncado = mb_strimwidth($nome, 0, 55, '...');
                 $pdf->SetX(10);
-                $pdf->Cell(60, 10, $nome_truncado, 0, 0, 'L', true); // altura temporária
+                $pdf->Cell(60, 10, $nome_truncado, 0, 0, 'L', true);
 
                 // Motivo
                 $pdf->SetXY(70, $y_inicial);
@@ -602,16 +614,16 @@ ORDER BY
                 $pdf->MultiCell(53, 4, $resposta, 0, 'L', true);
                 $y_resposta = $pdf->GetY();
 
-                // Altura final da linha
+                // Altura da linha
                 $altura_linha = max($y_motivo, $y_resposta) - $y_inicial;
-                $altura_linha = max($altura_linha, 10); // mínimo
+                $altura_linha = max($altura_linha, 10);
 
                 // Status
                 $pdf->SetY($y_inicial);
                 $pdf->SetX(176);
-                $pdf->Cell(22, $altura_linha, mb_convert_encoding($status, 'ISO-8859-1', 'UTF-8'), 0, 1, 'C', true);
+                $pdf->Cell(22, $altura_linha, $status, 0, 1, 'C', true);
 
-                // Bordas finais
+                // Bordas
                 $pdf->Rect(10, $y_inicial, 60, $altura_linha);
                 $pdf->Rect(70, $y_inicial, 53, $altura_linha);
                 $pdf->Rect(123, $y_inicial, 53, $altura_linha);
