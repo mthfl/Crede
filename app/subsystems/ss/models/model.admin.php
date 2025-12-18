@@ -1299,22 +1299,32 @@ class admin extends cadastrador
         }
     }
 
-    public function atualizar_status_recurso(int $id_recurso, string $novo_status): int
+    public function responder_recurso(int $id_recurso, $resposta, $status): int
     {
         try {
-            // Converter status para o formato do enum: PEDENTE, DEFERIDO, NÃO DEFERIDO
-            $status_enum = mb_strtoupper($novo_status, 'UTF-8');
-            
-            // Tabela recursos não tem campo data
-            $stmt = $this->connect->prepare("UPDATE $this->table19 SET status = :status WHERE id = :id");
+            $stmt = $this->connect->prepare("UPDATE $this->table19 SET resposta = :resposta, status = :status WHERE id = :id");
             $stmt->bindValue(":id", $id_recurso);
-            $stmt->bindValue(":status", $status_enum);
-            
+            $stmt->bindValue(":resposta", $resposta);
+            $stmt->bindValue(":status", $status);
             if (!$stmt->execute()) {
                 return 2;
             }
-
             return 1;
+        }
+        catch (PDOException $e) {
+            return 0;
+        }
+    }
+
+    public function recurso_motivo_pendente(int $id_recurso): int
+    {
+        try {
+            $stmt = $this->connect->prepare("UPDATE $this->table19 SET status = 'PENDENTE' , resposta = null WHERE id = :id");
+            $stmt->bindValue(":id", $id_recurso);
+            if (!$stmt->execute()) {
+            return 2;
+        }
+        return 1;
         } catch (PDOException $e) {
             return 0;
         }

@@ -15,7 +15,25 @@ $admin = new admin($escola);
 
 $cursos = $select->select_cursos();
 
-// Processar formulário de recurso
+// Processar formulário de resposta de recurso (agora com modal)
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['responder_recurso'])) {
+    $id_recurso = $_POST['id_recurso'];
+    $resposta = $_POST['resposta'];
+    $tipo_resposta = $_POST['tipo_resposta'];
+    
+    if ($id_recurso && !empty($resposta)) {
+        $result = $admin->responder_recurso((int)$id_recurso, $resposta, $tipo_resposta);
+        if ($result === 1) {
+            header('Location: recursos.php?sucesso=1');
+            exit();
+        } else {
+            header('Location: recursos.php?erro=1');
+            exit();
+        }
+    }
+}
+
+// Processar formulário de cadastro de recurso (antigo)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cadastrar_recurso'])) {
     $id_candidato = $_POST['id_candidato'] ?? null;
     $texto_recurso = $_POST['texto_recurso'] ?? '';
@@ -33,31 +51,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cadastrar_recurso']))
     }
 }
 
-// Processar atualização de status
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['atualizar_status_recurso'])) {
-    $id_recurso = $_POST['id_recurso'] ?? null;
-    $novo_status = $_POST['novo_status'] ?? '';
-    
-    if ($id_recurso && $novo_status) {
-        // Converter status para o formato correto
-        $status_formatado = mb_strtoupper($novo_status, 'UTF-8');
-        
-        $result = $admin->atualizar_status_recurso((int)$id_recurso, $status_formatado);
-        if ($result === 1) {
-            $tab = 'tab-pendentes';
-            if ($status_formatado === 'DEFERIDO') {
-                $tab = 'tab-deferidos';
-            } elseif ($status_formatado === 'INDEFERIDO') {
-                $tab = 'tab-nao-deferidos';
-            }
-            header('Location: recursos.php?tab=' . $tab . '&sucesso=1');
-            exit();
-        } else {
-            header('Location: recursos.php?erro=1');
-            exit();
-        }
-    }
-}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -276,9 +269,84 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['atualizar_status_recu
             border-color: var(--primary);
             box-shadow: 0 0 0 4px rgba(0, 90, 36, 0.1);
         }
+        
+        /* Estilos para o modal */
+        .modal {
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+        .modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+        .modal.show .modal-content {
+            transform: scale(1);
+        }
     </style>
 </head>
 <body class="bg-gray-50 min-h-screen font-body">
+    <!-- Modal para resposta de recurso -->
+    <div id="modalResposta" class="modal fixed inset-0 z-50 overflow-y-auto">
+        <div class="modal-overlay absolute inset-0 bg-black/50"></div>
+        <div class="modal-container min-h-screen px-4 text-center flex items-center justify-center">
+            <div class="modal-content bg-white rounded-2xl shadow-2xl max-w-md w-full mx-auto p-6 relative">
+                <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-primary to-secondary rounded-t-2xl"></div>
+                
+                <div class="text-center mb-6 pt-4">
+                    <div class="w-16 h-16 mx-auto rounded-full bg-gradient-to-br from-primary to-dark flex items-center justify-center mb-4">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900" id="modalTitulo">Responder Recurso</h3>
+                    <p class="text-gray-600 mt-2" id="modalSubtitulo">Digite a resposta para o recurso</p>
+                </div>
+
+                <form id="formResposta" action="recursos.php" method="post">
+                    <input type="hidden" name="id_recurso" id="modalIdRecurso">
+                    <input type="hidden" name="tipo_resposta" id="modalTipoResposta">
+                    
+                    <div class="mb-6">
+                        <label for="resposta" class="block text-sm font-medium text-gray-700 mb-2">
+                            Resposta *
+                        </label>
+                        <textarea 
+                            name="resposta" 
+                            id="resposta" 
+                            rows="6"
+                            class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-sm resize-none"
+                            placeholder="Digite a justificativa da resposta..."
+                            required
+                        ></textarea>
+                    </div>
+
+                    <div class="flex gap-3">
+                        <button 
+                            type="button" 
+                            onclick="fecharModal()"
+                            class="flex-1 bg-gray-100 text-gray-700 px-4 py-3 rounded-xl hover:bg-gray-200 transition-all font-medium"
+                        >
+                            Cancelar
+                        </button>
+                        <button 
+                            type="submit" 
+                            name="responder_recurso"
+                            class="flex-1 bg-gradient-to-r from-primary to-dark text-white px-4 py-3 rounded-xl hover:from-dark hover:to-primary transition-all font-medium"
+                        >
+                            Enviar Resposta
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <div id="overlay" class="overlay fixed inset-0 bg-black/30 z-40 lg:hidden"></div>
     <div class="flex h-screen bg-gray-50 overflow-hidden">
        <?php include __DIR__ . '/partials/sidebar.php'; ?>
@@ -437,13 +505,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['atualizar_status_recu
                                                 <div class="bg-white rounded-xl shadow-md overflow-hidden border-l-4 border-yellow-400 hover:shadow-lg transition-all duration-300">
                                                     <div class="p-5">
                                                         <div class="flex justify-between items-start mb-4">
-                                            <div>
-                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 mb-2">
+                                                            <div>
+                                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 mb-2">
                                                                     Pendente
                                                                 </span>
                                                                 <h4 class="font-semibold text-gray-900"><?= htmlspecialchars($recurso['nome'] ?? 'Candidato Desconhecido') ?></h4>
-                                                               
-                                                              
                                                             </div>
                                                         </div>
                                                         <div class="bg-gray-50 p-4 rounded-lg mb-4">
@@ -451,20 +517,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['atualizar_status_recu
                                                             <p class="text-sm text-gray-600 whitespace-pre-line"><?= htmlspecialchars($recurso['texto'] ?? '') ?></p>
                                                         </div>
                                                         <div class="flex gap-2">
-                                                            <form action="recursos.php" method="post" class="flex-1">
-                                                                <input type="hidden" name="id_recurso" value="<?= $recurso['id_recurso'] ?>">
-                                                                <input type="hidden" name="novo_status" value="INDEFERIDO">
-                                                                <button type="submit" name="atualizar_status_recurso" class="w-full bg-white border border-red-500 text-red-500 px-3 py-2 rounded-lg hover:bg-red-50 transition-all font-medium text-sm">
-                                                                    Não Deferir
-                                                                </button>
-                                                            </form>
-                                                            <form action="recursos.php" method="post" class="flex-1">
-                                                                <input type="hidden" name="id_recurso" value="<?= $recurso['id_recurso'] ?>">
-                                                                <input type="hidden" name="novo_status" value="DEFERIDO">
-                                                                <button type="submit" name="atualizar_status_recurso" class="w-full bg-primary text-white px-3 py-2 rounded-lg hover:bg-primary/90 transition-all font-medium text-sm">
-                                                                    Deferir
-                                                                </button>
-                                                            </form>
+                                                            <button 
+                                                                type="button" 
+                                                                onclick="abrirModalResponder(<?= $recurso['id_recurso'] ?>, 'INDEFERIDO', '<?= htmlspecialchars(addslashes($recurso['nome'] ?? 'Candidato')) ?>')"
+                                                                class="flex-1 bg-white border border-red-500 text-red-500 px-3 py-2 rounded-lg hover:bg-red-50 transition-all font-medium text-sm"
+                                                            >
+                                                                Não Deferir
+                                                            </button>
+                                                            <button 
+                                                                type="button" 
+                                                                onclick="abrirModalResponder(<?= $recurso['id_recurso'] ?>, 'DEFERIDO', '<?= htmlspecialchars(addslashes($recurso['nome'] ?? 'Candidato')) ?>')"
+                                                                class="flex-1 bg-primary text-white px-3 py-2 rounded-lg hover:bg-primary/90 transition-all font-medium text-sm"
+                                                            >
+                                                                Deferir
+                                                            </button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -496,28 +562,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['atualizar_status_recu
                                                                     Deferido
                                                                 </span>
                                                                 <h4 class="font-semibold text-gray-900"><?= htmlspecialchars($recurso['nome'] ?? 'Candidato Desconhecido') ?></h4>
-                                                               
                                                             </div>
                                                         </div>
                                                         <div class="bg-gray-50 p-4 rounded-lg mb-4">
                                                             <h5 class="font-medium text-gray-700 mb-2">Descrição:</h5>
                                                             <p class="text-sm text-gray-600 whitespace-pre-line"><?= htmlspecialchars($recurso['texto'] ?? '') ?></p>
                                                         </div>
+                                                        <?php if ($recurso['resposta'] ?? '') { ?>
+                                                            <div class="bg-green-50 p-4 rounded-lg mb-4 border border-green-200">
+                                                                <h5 class="font-medium text-green-700 mb-2">Resposta:</h5>
+                                                                <p class="text-sm text-green-600 whitespace-pre-line"><?= htmlspecialchars($recurso['resposta'] ?? '') ?></p>
+                                                            </div>
+                                                        <?php } ?>
                                                         <div class="flex gap-2">
-                                                            <form action="recursos.php" method="post" class="flex-1">
-                                                                <input type="hidden" name="id_recurso" value="<?= $recurso['id_recurso'] ?>">
-                                                                <input type="hidden" name="novo_status" value="PEDENTE">
-                                                                <button type="submit" name="atualizar_status_recurso" class="w-full bg-white border border-yellow-500 text-yellow-500 px-3 py-2 rounded-lg hover:bg-yellow-50 transition-all font-medium text-sm">
-                                                                    Voltar Pendente
-                                                                </button>
-                                                            </form>
-                                                            <form action="recursos.php" method="post" class="flex-1">
-                                                                <input type="hidden" name="id_recurso" value="<?= $recurso['id_recurso'] ?>">
-                                                                <input type="hidden" name="novo_status" value="INDEFERIDO">
-                                                                <button type="submit" name="atualizar_status_recurso" class="w-full bg-white border border-red-500 text-red-500 px-3 py-2 rounded-lg hover:bg-red-50 transition-all font-medium text-sm">
-                                                                    Indeferir
-                                                                </button>
-                                                            </form>
+                                                            <button 
+                                                                type="button" 
+                                                                onclick="abrirModalResponder(<?= $recurso['id_recurso'] ?>, 'PENDENTE', '<?= htmlspecialchars(addslashes($recurso['nome'] ?? 'Candidato')) ?>')"
+                                                                class="flex-1 bg-white border border-yellow-500 text-yellow-500 px-3 py-2 rounded-lg hover:bg-yellow-50 transition-all font-medium text-sm"
+                                                            >
+                                                                Voltar Pendente
+                                                            </button>
+                                                            <button 
+                                                                type="button" 
+                                                                onclick="abrirModalResponder(<?= $recurso['id_recurso'] ?>, 'INDEFERIDO', '<?= htmlspecialchars(addslashes($recurso['nome'] ?? 'Candidato')) ?>')"
+                                                                class="flex-1 bg-white border border-red-500 text-red-500 px-3 py-2 rounded-lg hover:bg-red-50 transition-all font-medium text-sm"
+                                                            >
+                                                                Indeferir
+                                                            </button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -549,28 +620,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['atualizar_status_recu
                                                                     Indeferido
                                                                 </span>
                                                                 <h4 class="font-semibold text-gray-900"><?= htmlspecialchars($recurso['nome'] ?? 'Candidato Desconhecido') ?></h4>
-                                                                
                                                             </div>
                                                         </div>
                                                         <div class="bg-gray-50 p-4 rounded-lg mb-4">
                                                             <h5 class="font-medium text-gray-700 mb-2">Descrição:</h5>
                                                             <p class="text-sm text-gray-600 whitespace-pre-line"><?= htmlspecialchars($recurso['texto'] ?? '') ?></p>
                                                         </div>
+                                                        <?php if ($recurso['resposta'] ?? '') { ?>
+                                                            <div class="bg-red-50 p-4 rounded-lg mb-4 border border-red-200">
+                                                                <h5 class="font-medium text-red-700 mb-2">Resposta:</h5>
+                                                                <p class="text-sm text-red-600 whitespace-pre-line"><?= htmlspecialchars($recurso['resposta'] ?? '') ?></p>
+                                                            </div>
+                                                        <?php } ?>
                                                         <div class="flex gap-2">
-                                                            <form action="recursos.php" method="post" class="flex-1">
-                                                                <input type="hidden" name="id_recurso" value="<?= $recurso['id_recurso'] ?>">
-                                                                <input type="hidden" name="novo_status" value="PEDENTE">
-                                                                <button type="submit" name="atualizar_status_recurso" class="w-full bg-white border border-yellow-500 text-yellow-500 px-3 py-2 rounded-lg hover:bg-yellow-50 transition-all font-medium text-sm">
-                                                                    Voltar Pendente
-                                                                </button>
-                                                            </form>
-                                                            <form action="recursos.php" method="post" class="flex-1">
-                                                                <input type="hidden" name="id_recurso" value="<?= $recurso['id_recurso'] ?>">
-                                                                <input type="hidden" name="novo_status" value="DEFERIDO">
-                                                                <button type="submit" name="atualizar_status_recurso" class="w-full bg-primary text-white px-3 py-2 rounded-lg hover:bg-primary/90 transition-all font-medium text-sm">
-                                                                    Deferir
-                                                                </button>
-                                                            </form>
+                                                            <button 
+                                                                type="button" 
+                                                                onclick="abrirModalResponder(<?= $recurso['id_recurso'] ?>, 'PENDENTE', '<?= htmlspecialchars(addslashes($recurso['nome'] ?? 'Candidato')) ?>')"
+                                                                class="flex-1 bg-white border border-yellow-500 text-yellow-500 px-3 py-2 rounded-lg hover:bg-yellow-50 transition-all font-medium text-sm"
+                                                            >
+                                                                Voltar Pendente
+                                                            </button>
+                                                            <button 
+                                                                type="button" 
+                                                                onclick="abrirModalResponder(<?= $recurso['id_recurso'] ?>, 'DEFERIDO', '<?= htmlspecialchars(addslashes($recurso['nome'] ?? 'Candidato')) ?>')"
+                                                                class="flex-1 bg-white border border-primary text-primary px-3 py-2 rounded-lg hover:bg-primary/5 transition-all font-medium text-sm"
+                                                            >
+                                                                Deferir
+                                                            </button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -587,6 +663,66 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['atualizar_status_recu
     </div>
 
     <script>
+        // Funções para o modal (CORRIGIDO - agora abre corretamente)
+        function abrirModalResponder(idRecurso, tipoResposta, nomeCandidato) {
+            document.getElementById('modalIdRecurso').value = idRecurso;
+            document.getElementById('modalTipoResposta').value = tipoResposta;
+            document.getElementById('resposta').value = '';
+
+            let titulo, subtitulo;
+            switch(tipoResposta) {
+                case 'DEFERIDO':
+                    titulo = 'Deferir Recurso';
+                    subtitulo = 'Digite a justificativa para deferir o recurso de ' + nomeCandidato;
+                    break;
+                case 'INDEFERIDO':
+                    titulo = 'Indeferir Recurso';
+                    subtitulo = 'Digite a justificativa para indeferir o recurso de ' + nomeCandidato;
+                    break;
+                case 'PENDENTE':
+                    titulo = 'Voltar para Pendente';
+                    subtitulo = 'Digite a justificativa para voltar o recurso de ' + nomeCandidato + ' para pendente';
+                    break;
+                default:
+                    titulo = 'Responder Recurso';
+                    subtitulo = 'Digite a resposta para o recurso de ' + nomeCandidato;
+            }
+
+            document.getElementById('modalTitulo').textContent = titulo;
+            document.getElementById('modalSubtitulo').textContent = subtitulo;
+
+            const modal = document.getElementById('modalResposta');
+            modal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+
+            // Impede que cliques dentro do conteúdo fechem o modal
+            const modalContent = modal.querySelector('.modal-content');
+            modalContent.addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
+        }
+
+        function fecharModal() {
+            const modal = document.getElementById('modalResposta');
+            modal.classList.remove('show');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Fechar ao clicar fora (apenas no overlay)
+        document.getElementById('modalResposta').addEventListener('click', function(e) {
+            if (e.target === this || e.target.classList.contains('modal-overlay')) {
+                fecharModal();
+            }
+        });
+
+        // Fechar com ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && document.getElementById('modalResposta').classList.contains('show')) {
+                fecharModal();
+            }
+        });
+
+        // Sidebar functions
         const sidebar = document.getElementById('sidebar');
         const overlay = document.getElementById('overlay');
         const openSidebar = document.getElementById('openSidebar');
@@ -672,4 +808,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['atualizar_status_recu
     </script>
 </body>
 </html>
-

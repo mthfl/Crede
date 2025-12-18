@@ -555,9 +555,10 @@ $pdf->Ln(5);
             $pdf->SetTextColor(255,255,255);
             $pdf->SetFillColor(0, 90, 36);
             $pdf->SetX(10);
-            $pdf->Cell(65, 8, mb_convert_encoding('CANDIDATO', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
-            $pdf->Cell(102, 8, mb_convert_encoding('MOTIVO DO RECURSO', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
-            $pdf->Cell(20, 8, mb_convert_encoding('STATUS', 'ISO-8859-1', 'UTF-8'), 1, 1, 'C', true);
+            $pdf->Cell(60, 8, mb_convert_encoding('CANDIDATO', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
+            $pdf->Cell(53, 8, mb_convert_encoding('MOTIVO DO RECURSO', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
+            $pdf->Cell(53, 8, mb_convert_encoding('RESPOSTA DO RECURSO', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
+            $pdf->Cell(19, 8, mb_convert_encoding('STATUS', 'ISO-8859-1', 'UTF-8'), 1, 1, 'C', true);
 
             $pdf->SetFont('Arial', '', 8);
             $linha = 0;
@@ -589,7 +590,10 @@ $pdf->Ln(5);
                 
                 // Motivo do recurso (truncado)
                 $motivo = mb_strimwidth($recurso['motivo'], 0, 40, '...');
-                $pdf->Cell(102, 7, mb_convert_encoding($motivo, 'ISO-8859-1', 'UTF-8'), 1, 0, 'L', true);
+                $pdf->Cell(51, 7, mb_convert_encoding($motivo, 'ISO-8859-1', 'UTF-8'), 1, 0, 'L', true);
+
+                $resposta = mb_strimwidth($recurso['resposta'], 0, 40, '...');
+                $pdf->Cell(51, 7, mb_convert_encoding($resposta, 'ISO-8859-1', 'UTF-8'), 1, 0, 'L', true);
 
                 // Status
                 $pdf->Cell(20, 7, mb_convert_encoding($status, 'ISO-8859-1', 'UTF-8'), 1, 1, 'C', true);
