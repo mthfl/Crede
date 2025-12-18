@@ -15,12 +15,27 @@ $admin = new admin($escola);
 
 $cursos = $select->select_cursos();
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['voltar_pendente'])) {
+    $id_recurso = $_POST['id_recurso'];
+
+    if ($id_recurso) {
+        $result = $admin->recurso_motivo_pendente((int)$id_recurso);
+        if ($result === 1) {
+            header('Location: recursos.php?tab=tab-pendentes');
+            exit();
+        } else {
+            header('Location: recursos.php?erro=1');
+            exit();
+        }
+    }
+}
+
 // Processar formulário de resposta de recurso (agora com modal)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['responder_recurso'])) {
     $id_recurso = $_POST['id_recurso'];
     $resposta = $_POST['resposta'];
     $tipo_resposta = $_POST['tipo_resposta'];
-    
+
     if ($id_recurso && !empty($resposta)) {
         $result = $admin->responder_recurso((int)$id_recurso, $resposta, $tipo_resposta);
         if ($result === 1) {
@@ -38,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cadastrar_recurso']))
     $id_candidato = $_POST['id_candidato'] ?? null;
     $texto_recurso = $_POST['texto_recurso'] ?? '';
     $id_usuario = $_SESSION['id'] ?? null;
-    
+
     if ($id_candidato && !empty($texto_recurso) && $id_usuario) {
         $result = $admin->cadastrar_recurso((int)$id_candidato, (int)$id_usuario, $texto_recurso);
         if ($result === 1) {
@@ -54,6 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cadastrar_recurso']))
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -68,7 +84,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cadastrar_recurso']))
         *:focus {
             outline: none !important;
         }
-        .tab-button:focus, .border-b:focus {
+
+        .tab-button:focus,
+        .border-b:focus {
             outline: none !important;
             box-shadow: none !important;
         }
@@ -94,6 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cadastrar_recurso']))
     </script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
         :root {
             --primary: #005A24;
             --secondary: #FFA500;
@@ -101,33 +120,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cadastrar_recurso']))
             --dark: #1A3C34;
             --light: #F8FAF9;
         }
+
         * {
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
         }
+
         .sidebar {
             transform: translateX(-100%);
             transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             backdrop-filter: blur(10px);
             background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 100%);
         }
+
         .sidebar.open {
             transform: translateX(0);
         }
+
         .overlay {
             opacity: 0;
             visibility: hidden;
             transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             backdrop-filter: blur(2px);
         }
+
         .overlay.show {
             opacity: 1;
             visibility: visible;
         }
+
         .nav-item {
             position: relative;
             transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             border-radius: 12px;
         }
+
         .nav-item::before {
             content: '';
             position: absolute;
@@ -140,13 +166,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cadastrar_recurso']))
             transform: scaleY(0);
             transition: transform 0.3s ease;
         }
+
         .nav-item:hover::before {
             transform: scaleY(1);
         }
+
         .nav-item:hover {
             transform: translateX(8px);
             background: rgba(255, 255, 255, 0.1);
         }
+
         .sidebar {
             z-index: 50;
             position: fixed;
@@ -156,39 +185,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cadastrar_recurso']))
             width: 100vw;
             max-width: 20rem;
         }
+
         .overlay {
             z-index: 45;
         }
+
         @media (min-width: 1024px) {
             .sidebar {
                 width: 20rem;
                 position: static;
                 flex-shrink: 0;
             }
+
             .main-content {
                 flex: 1;
                 min-width: 0;
                 margin-left: 0;
                 overflow-x: hidden;
             }
+
             body {
                 overflow-x: hidden;
             }
         }
+
         .custom-scrollbar::-webkit-scrollbar {
             width: 6px;
         }
+
         .custom-scrollbar::-webkit-scrollbar-track {
             background: rgba(0, 0, 0, 0.1);
             border-radius: 3px;
         }
+
         .custom-scrollbar::-webkit-scrollbar-thumb {
             background: var(--primary);
             border-radius: 3px;
         }
+
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
             background: var(--dark);
         }
+
         .select2-container .select2-selection--single {
             height: 3rem;
             border: 2px solid rgba(0, 90, 36, 0.25);
@@ -269,7 +307,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cadastrar_recurso']))
             border-color: var(--primary);
             box-shadow: 0 0 0 4px rgba(0, 90, 36, 0.1);
         }
-        
+
         /* Estilos para o modal */
         .modal {
             opacity: 0;
@@ -277,19 +315,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cadastrar_recurso']))
             transition: all 0.3s ease;
             z-index: 100;
         }
+
         .modal.show {
             opacity: 1;
             visibility: visible;
         }
+
         .modal-content {
             transform: scale(0.9);
             transition: transform 0.3s ease;
         }
+
         .modal.show .modal-content {
             transform: scale(1);
         }
     </style>
 </head>
+
 <body class="bg-gray-50 min-h-screen font-body">
     <!-- Modal para resposta de recurso -->
     <div id="modalResposta" class="modal fixed inset-0 z-50 overflow-y-auto">
@@ -297,7 +339,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cadastrar_recurso']))
         <div class="modal-container min-h-screen px-4 text-center flex items-center justify-center">
             <div class="modal-content bg-white rounded-2xl shadow-2xl max-w-md w-full mx-auto p-6 relative">
                 <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-primary to-secondary rounded-t-2xl"></div>
-                
+
                 <div class="text-center mb-6 pt-4">
                     <div class="w-16 h-16 mx-auto rounded-full bg-gradient-to-br from-primary to-dark flex items-center justify-center mb-4">
                         <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -311,34 +353,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cadastrar_recurso']))
                 <form id="formResposta" action="recursos.php" method="post">
                     <input type="hidden" name="id_recurso" id="modalIdRecurso">
                     <input type="hidden" name="tipo_resposta" id="modalTipoResposta">
-                    
+
                     <div class="mb-6">
                         <label for="resposta" class="block text-sm font-medium text-gray-700 mb-2">
                             Resposta *
                         </label>
-                        <textarea 
-                            name="resposta" 
-                            id="resposta" 
+                        <textarea
+                            name="resposta"
+                            id="resposta"
                             rows="6"
                             class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-sm resize-none"
                             placeholder="Digite a justificativa da resposta..."
-                            required
-                        ></textarea>
+                            required></textarea>
                     </div>
 
                     <div class="flex gap-3">
-                        <button 
-                            type="button" 
+                        <button
+                            type="button"
                             onclick="fecharModal()"
-                            class="flex-1 bg-gray-100 text-gray-700 px-4 py-3 rounded-xl hover:bg-gray-200 transition-all font-medium"
-                        >
+                            class="flex-1 bg-gray-100 text-gray-700 px-4 py-3 rounded-xl hover:bg-gray-200 transition-all font-medium">
                             Cancelar
                         </button>
-                        <button 
-                            type="submit" 
+                        <button
+                            type="submit"
                             name="responder_recurso"
-                            class="flex-1 bg-gradient-to-r from-primary to-dark text-white px-4 py-3 rounded-xl hover:from-dark hover:to-primary transition-all font-medium"
-                        >
+                            class="flex-1 bg-gradient-to-r from-primary to-dark text-white px-4 py-3 rounded-xl hover:from-dark hover:to-primary transition-all font-medium">
                             Enviar Resposta
                         </button>
                     </div>
@@ -349,7 +388,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cadastrar_recurso']))
 
     <div id="overlay" class="overlay fixed inset-0 bg-black/30 z-40 lg:hidden"></div>
     <div class="flex h-screen bg-gray-50 overflow-hidden">
-       <?php include __DIR__ . '/partials/sidebar.php'; ?>
+        <?php include __DIR__ . '/partials/sidebar.php'; ?>
 
         <div class="main-content flex-1 h-screen overflow-y-auto custom-scrollbar">
             <header class="bg-white shadow-sm border-b border-gray-200 z-30 sticky top-0">
@@ -517,24 +556,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cadastrar_recurso']))
                                                             <p class="text-sm text-gray-600 whitespace-pre-line"><?= htmlspecialchars($recurso['texto'] ?? '') ?></p>
                                                         </div>
                                                         <div class="flex gap-2">
-                                                            <button 
-                                                                type="button" 
+                                                            <button
+                                                                type="button"
                                                                 onclick="abrirModalResponder(<?= $recurso['id_recurso'] ?>, 'INDEFERIDO', '<?= htmlspecialchars(addslashes($recurso['nome'] ?? 'Candidato')) ?>')"
-                                                                class="flex-1 bg-white border border-red-500 text-red-500 px-3 py-2 rounded-lg hover:bg-red-50 transition-all font-medium text-sm"
-                                                            >
+                                                                class="flex-1 bg-white border border-red-500 text-red-500 px-3 py-2 rounded-lg hover:bg-red-50 transition-all font-medium text-sm">
                                                                 Não Deferir
                                                             </button>
-                                                            <button 
-                                                                type="button" 
+                                                            <button
+                                                                type="button"
                                                                 onclick="abrirModalResponder(<?= $recurso['id_recurso'] ?>, 'DEFERIDO', '<?= htmlspecialchars(addslashes($recurso['nome'] ?? 'Candidato')) ?>')"
-                                                                class="flex-1 bg-primary text-white px-3 py-2 rounded-lg hover:bg-primary/90 transition-all font-medium text-sm"
-                                                            >
+                                                                class="flex-1 bg-primary text-white px-3 py-2 rounded-lg hover:bg-primary/90 transition-all font-medium text-sm">
                                                                 Deferir
                                                             </button>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            <?php }
+                                        <?php }
                                         } ?>
                                     </div>
                                 </div>
@@ -575,24 +612,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cadastrar_recurso']))
                                                             </div>
                                                         <?php } ?>
                                                         <div class="flex gap-2">
-                                                            <button 
-                                                                type="button" 
-                                                                onclick="abrirModalResponder(<?= $recurso['id_recurso'] ?>, 'PENDENTE', '<?= htmlspecialchars(addslashes($recurso['nome'] ?? 'Candidato')) ?>')"
-                                                                class="flex-1 bg-white border border-yellow-500 text-yellow-500 px-3 py-2 rounded-lg hover:bg-yellow-50 transition-all font-medium text-sm"
-                                                            >
-                                                                Voltar Pendente
-                                                            </button>
-                                                            <button 
-                                                                type="button" 
+                                                            <form action="recursos.php" method="post">
+                                                                <input type="hidden" name="id_recurso" value="<?= $recurso['id_recurso'] ?>">
+                                                                <button type="submit" name="voltar_pendente" class="flex-1 bg-white border border-yellow-500 text-yellow-500 px-3 py-2 rounded-lg hover:bg-yellow-50 transition-all font-medium text-sm">
+                                                                    Voltar Pendente
+                                                                </button>
+                                                            </form>
+                                                            <button
+                                                                type="button"
                                                                 onclick="abrirModalResponder(<?= $recurso['id_recurso'] ?>, 'INDEFERIDO', '<?= htmlspecialchars(addslashes($recurso['nome'] ?? 'Candidato')) ?>')"
-                                                                class="flex-1 bg-white border border-red-500 text-red-500 px-3 py-2 rounded-lg hover:bg-red-50 transition-all font-medium text-sm"
-                                                            >
+                                                                class="flex-1 bg-white border border-red-500 text-red-500 px-3 py-2 rounded-lg hover:bg-red-50 transition-all font-medium text-sm">
                                                                 Indeferir
                                                             </button>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            <?php }
+                                        <?php }
                                         } ?>
                                     </div>
                                 </div>
@@ -633,24 +668,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cadastrar_recurso']))
                                                             </div>
                                                         <?php } ?>
                                                         <div class="flex gap-2">
-                                                            <button 
-                                                                type="button" 
-                                                                onclick="abrirModalResponder(<?= $recurso['id_recurso'] ?>, 'PENDENTE', '<?= htmlspecialchars(addslashes($recurso['nome'] ?? 'Candidato')) ?>')"
-                                                                class="flex-1 bg-white border border-yellow-500 text-yellow-500 px-3 py-2 rounded-lg hover:bg-yellow-50 transition-all font-medium text-sm"
-                                                            >
-                                                                Voltar Pendente
-                                                            </button>
-                                                            <button 
-                                                                type="button" 
+                                                            <form action="recursos.php" method="post">
+                                                                <input type="hidden" name="id_recurso" value="<?= $recurso['id_recurso'] ?>">
+                                                                <button type="submit" name="voltar_pendente" class="flex-1 bg-white border border-yellow-500 text-yellow-500 px-3 py-2 rounded-lg hover:bg-yellow-50 transition-all font-medium text-sm">
+                                                                    Voltar Pendente
+                                                                </button>
+                                                            </form>
+                                                            <button
+                                                                type="button"
                                                                 onclick="abrirModalResponder(<?= $recurso['id_recurso'] ?>, 'DEFERIDO', '<?= htmlspecialchars(addslashes($recurso['nome'] ?? 'Candidato')) ?>')"
-                                                                class="flex-1 bg-white border border-primary text-primary px-3 py-2 rounded-lg hover:bg-primary/5 transition-all font-medium text-sm"
-                                                            >
+                                                                class="flex-1 bg-white border border-primary text-primary px-3 py-2 rounded-lg hover:bg-primary/5 transition-all font-medium text-sm">
                                                                 Deferir
                                                             </button>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            <?php }
+                                        <?php }
                                         } ?>
                                     </div>
                                 </div>
@@ -670,7 +703,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cadastrar_recurso']))
             document.getElementById('resposta').value = '';
 
             let titulo, subtitulo;
-            switch(tipoResposta) {
+            switch (tipoResposta) {
                 case 'DEFERIDO':
                     titulo = 'Deferir Recurso';
                     subtitulo = 'Digite a justificativa para deferir o recurso de ' + nomeCandidato;
@@ -751,10 +784,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cadastrar_recurso']))
         document.addEventListener('DOMContentLoaded', function() {
             const tabButtons = document.querySelectorAll('.tab-button');
             const tabContents = document.querySelectorAll('.tab-content');
-            
+
             const urlParams = new URLSearchParams(window.location.search);
             const tabFromUrl = urlParams.get('tab');
-            
+
             if (tabFromUrl) {
                 const targetButton = document.querySelector(`[data-tab="${tabFromUrl}"]`);
                 if (targetButton) {
@@ -767,15 +800,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cadastrar_recurso']))
             tabButtons.forEach(button => {
                 button.addEventListener('click', () => {
                     const tabId = button.getAttribute('data-tab');
-                    
+
                     tabButtons.forEach(btn => {
                         btn.classList.remove('border-secondary', 'text-secondary', 'border-green-500', 'text-green-700', 'border-red-500', 'text-red-700', 'font-semibold');
                         btn.classList.add('border-transparent', 'text-gray-500', 'hover:text-gray-700');
                     });
-                    
+
                     button.classList.add('font-semibold');
                     button.classList.remove('border-transparent', 'text-gray-500', 'hover:text-gray-700');
-                    
+
                     if (tabId === 'tab-pendentes') {
                         button.classList.add('border-secondary', 'text-secondary');
                     } else if (tabId === 'tab-deferidos') {
@@ -783,11 +816,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cadastrar_recurso']))
                     } else if (tabId === 'tab-nao-deferidos') {
                         button.classList.add('border-red-500', 'text-red-700');
                     }
-                    
+
                     tabContents.forEach(content => {
                         content.classList.add('hidden');
                     });
-                    
+
                     const activeContent = document.getElementById(tabId);
                     if (activeContent) {
                         activeContent.classList.remove('hidden');
@@ -807,4 +840,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['cadastrar_recurso']))
         });
     </script>
 </body>
+
 </html>

@@ -722,7 +722,7 @@ class admin extends cadastrador
         float $reli_3bim_9ano
     ): int {
         try {
-            
+
             $stmt = $this->connect->prepare("UPDATE $this->table1 SET nome=:nome, id_curso1=:id_curso1, data_nascimento=:data_nascimento, bairro=:bairro, publica=:publica, pcd=:pcd WHERE id=:id");
             $stmt->bindValue(":nome", $nome);
             $stmt->bindValue(":id_curso1", $id_curso1, PDO::PARAM_INT);
@@ -1191,7 +1191,7 @@ class admin extends cadastrador
             if (!$stmt->execute()) {
                 return 2;
             }
-            
+
             date_default_timezone_set('America/Fortaleza');
             $datatime = date('Y/m/d H:i:s');
             $id_usuario = $_SESSION['id'];
@@ -1310,46 +1310,45 @@ class admin extends cadastrador
                 return 2;
             }
             return 1;
-        }
-        catch (PDOException $e) {
+        } catch (PDOException $e) {
             return 0;
         }
     }
 
     public function recurso_motivo_pendente(int $id_recurso): int
     {
-        try {
+        //try {
             $stmt = $this->connect->prepare("UPDATE $this->table19 SET status = 'PENDENTE' , resposta = null WHERE id = :id");
             $stmt->bindValue(":id", $id_recurso);
             if (!$stmt->execute()) {
-            return 2;
-        }
-        return 1;
-        } catch (PDOException $e) {
-            return 0;
-        }
+                return 2;
+            }
+            return 1;
+        //} catch (PDOException $e) {
+        //    return 0;
+        //}
     }
 
     public function cadastrar_matricula($id_curso, $data, $hora): int
     {
         //try {
-            // Se id_curso for "todos", salvar como NULL
-            if($id_curso == 0){
-                $id_curso = null;
-            }
-            
-            $stmt_matricula = $this->connect->prepare("INSERT INTO $this->table18 (id_curso, data, hora) VALUES (:id_curso, :data, :hora)");
-            $stmt_matricula->bindValue(":id_curso", $id_curso);
-            $stmt_matricula->bindValue(":data", $data);
-            $stmt_matricula->bindValue(":hora", $hora);
+        // Se id_curso for "todos", salvar como NULL
+        if ($id_curso == 0) {
+            $id_curso = null;
+        }
 
-            if (!$stmt_matricula->execute()) {
-                return 2;
-            }
+        $stmt_matricula = $this->connect->prepare("INSERT INTO $this->table18 (id_curso, data, hora) VALUES (:id_curso, :data, :hora)");
+        $stmt_matricula->bindValue(":id_curso", $id_curso);
+        $stmt_matricula->bindValue(":data", $data);
+        $stmt_matricula->bindValue(":hora", $hora);
 
-            return 1;
+        if (!$stmt_matricula->execute()) {
+            return 2;
+        }
+
+        return 1;
         //} catch (PDOException $e) {
-           // return 0;
+        // return 0;
         //}
     }
 
@@ -1358,7 +1357,7 @@ class admin extends cadastrador
         try {
             $stmt = $this->connect->prepare("DELETE FROM $this->table18 WHERE id = :id");
             $stmt->bindValue(":id", $id_matricula);
-            
+
             if (!$stmt->execute()) {
                 return 2;
             }

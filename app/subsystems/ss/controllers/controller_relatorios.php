@@ -32,9 +32,6 @@ if (
         case 'requisicoes':
             header("location:../views/reports/requisicoes.php?usuarios");
             exit();
-        case 'recursos':
-            header("location:../views/reports/recursos.php?usuarios");
-            exit();
         case 'can_desabilitados':
             header("location:../views/reports/candidatos_desabilitados.php?usuarios");
             exit();

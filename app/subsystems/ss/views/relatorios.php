@@ -934,15 +934,13 @@ $select = new select($escola);
                     </label>
                     <select name="tipo_relatorio" id="unified_tipo_relatorio" required class="select2-unified-tipo">
                         <option value="" disabled selected>SELECIONAR TIPO DE RELATÓRIO</option>
-                        <option value="Resultado Preliminar">RESULTADO PRELIMINAR</option>
                         <option value="Resultado Final">RESULTADO FINAL</option>
+                        <option value="Resultado Preliminar">RESULTADO PRELIMINAR</option>
                         <option value="Resultado">RESULTADO</option>
                         <option value="comissao_selecao">COMISSÃO DE SELEÇÃO</option>
                         <option value="can_desabilitados">CANDIDATOS DESABILITADOS</option>
                         <option value="movimentacoes">MOVIMENTAÇÕES</option>
                         <option value="requisicoes">REQUISIÇÕES</option>
-                        <option value="recursos">RECURSOS</option>
-                        
                     </select>
                 </div>
 

@@ -341,7 +341,7 @@ ORDER BY
         $pdf->SetFillColor(0, 90, 36);
         $pdf->SetY($pdf->GetY() + 5);
         $pdf->SetX(20);
-        $pdf->Cell(170,20,mb_convert_encoding('RESULTADO FINAL', 'ISO-8859-1', 'UTF-8'),0,1,'C',true);
+        $pdf->Cell(170, 20, mb_convert_encoding('RESULTADO FINAL', 'ISO-8859-1', 'UTF-8'), 0, 1, 'C', true);
         $pdf->SetTextColor(0, 0, 0);
 
         // ---------- DATAS DE MATRÍCULA ----------
@@ -366,7 +366,7 @@ ORDER BY
         foreach ($datas_matricula as $curso) {
             $pdf->SetX(22);
 
-                $pdf->Cell(100, 7, mb_convert_encoding($curso['nome_curso'], 'ISO-8859-1', 'UTF-8'), 1, 0, 'L');
+            $pdf->Cell(100, 7, mb_convert_encoding($curso['nome_curso'], 'ISO-8859-1', 'UTF-8'), 1, 0, 'L');
 
             $pdf->Cell(70, 7, mb_convert_encoding(date('d/m/Y', strtotime($curso['data'])) . ' às ' . date('H:i', strtotime($curso['hora'])), 'ISO-8859-1', 'UTF-8'), 1, 1, 'C');
         }
@@ -421,31 +421,68 @@ ORDER BY
     /**
      * Cria seção de deferimentos no final do relatório
      */
+    /**
+     * Cria seção de deferimentos no final do relatório
+     */
+    private function calcularAlturaEstimadaMultiCell($pdf, $texto, $largura, $alturaLinha = 4)
+    {
+        if (empty($texto)) {
+            return $alturaLinha;
+        }
+
+        $texto = mb_convert_encoding($texto, 'Windows-1252', 'UTF-8');
+        $larguraDisponivel = $largura - 2;
+
+        $linhas = 0;
+        $paragrafos = explode("\n", $texto);
+
+        foreach ($paragrafos as $paragrafo) {
+            $palavras = preg_split('/\s+/', $paragrafo);
+            $linhaAtual = '';
+
+            foreach ($palavras as $palavra) {
+                $teste = $linhaAtual === '' ? $palavra : $linhaAtual . ' ' . $palavra;
+                if ($pdf->GetStringWidth($teste) > $larguraDisponivel) {
+                    if ($linhaAtual !== '') {
+                        $linhas++;
+                        $linhaAtual = $palavra;
+                    } else {
+                        $linhas++;
+                        $linhaAtual = '';
+                    }
+                } else {
+                    $linhaAtual = $teste;
+                }
+            }
+            if ($linhaAtual !== '') $linhas++;
+            $linhas++; // linha em branco entre parágrafos
+        }
+
+        return $linhas * $alturaLinha;
+    }
+
     private function criarSecaoDeferimentos($pdf)
     {
         $pdf->AddPage();
 
-        // Título da seção de deferimentos
         $pdf->SetFont('Arial', 'B', 16);
         $pdf->SetY(20);
         $pdf->SetX(10);
         $pdf->Cell(0, 10, mb_convert_encoding('RESULTADO DOS DEFERIMENTOS', 'ISO-8859-1', 'UTF-8'), 0, 1, 'C');
         $pdf->Ln(5);
 
-        // Buscar recursos do banco
         $stmt_recursos = $this->connect->prepare("
-        SELECT r.*, c.nome, c.publica, c.pcd, c.bairro, cur.nome_curso 
-        FROM $this->table19 r 
-        INNER JOIN $this->table1 c ON r.id_candidato = c.id 
-        INNER JOIN $this->table2 cur ON c.id_curso1 = cur.id 
-        WHERE r.status != 'PENDENTE'
-        ORDER BY c.id_curso1, r.status DESC, c.nome
-    ");
+            SELECT r.*, c.nome, c.publica, c.pcd, c.bairro, cur.nome_curso 
+            FROM $this->table19 r 
+            INNER JOIN $this->table1 c ON r.id_candidato = c.id 
+            INNER JOIN $this->table2 cur ON c.id_curso1 = cur.id 
+            WHERE r.status != 'PENDENTE'
+            ORDER BY c.id_curso1, r.status DESC, c.nome
+        ");
         $stmt_recursos->execute();
         $recursos = $stmt_recursos->fetchAll(PDO::FETCH_ASSOC);
 
         if (empty($recursos)) {
-            // Se não houver recursos analisados
             $pdf->SetFont('Arial', 'I', 12);
             $pdf->SetY(40);
             $pdf->SetX(10);
@@ -453,23 +490,55 @@ ORDER BY
             return;
         }
 
-        // Agrupar recursos por curso
+        // Regras de migração
+        $pdf->SetFont('Arial', 'B', 14);
+        $pdf->Cell(0, 10, mb_convert_encoding('Regra de Migração de Vagas Ociosas (Não Preenchimento)', 'ISO-8859-1', 'UTF-8'), 0, 1, 'C');
+        $pdf->Ln(5);
+
+        $pdf->SetFont('Arial', 'B', 12);
+        $pdf->Cell(0, 8, mb_convert_encoding('Vagas PCD não preenchidas', 'ISO-8859-1', 'UTF-8'), 0, 1, 'L');
+        $pdf->SetFont('Arial', '', 11);
+        $pdf->MultiCell(0, 6, mb_convert_encoding(
+            "1. A vaga PCD é padrão universal, sem vínculo com pública ou privada.\n" .
+            "2. Se restarem vagas PCD sem preenchimento, elas não migram para privada.\n" .
+            "3. Essas vagas devem migrar exclusivamente para Ampla Concorrência da Escola Pública.\n\n" .
+            "Ou seja:\nVaga PCD sobrando -> vai para AC Pública.",
+            'ISO-8859-1', 'UTF-8'));
+
+        $pdf->Ln(8);
+
+        $pdf->SetFont('Arial', 'B', 12);
+        $pdf->Cell(0, 8, mb_convert_encoding('Vagas de Cota de Território não preenchidas', 'ISO-8859-1', 'UTF-8'), 0, 1, 'L');
+        $pdf->SetFont('Arial', '', 11);
+        $pdf->MultiCell(0, 6, mb_convert_encoding(
+            "Seguem sempre sua origem:\n- CT Pública sobrando -> vai para AC Pública\n- CT Privada sobrando -> vai para AC Privada",
+            'ISO-8859-1', 'UTF-8'));
+
+        $pdf->Ln(8);
+
+        $pdf->SetFont('Arial', 'B', 12);
+        $pdf->Cell(0, 8, mb_convert_encoding('Vagas AC Privada não preenchidas', 'ISO-8859-1', 'UTF-8'), 0, 1, 'L');
+        $pdf->SetFont('Arial', '', 11);
+        $pdf->MultiCell(0, 6, mb_convert_encoding("- AC Privada sobrando -> vai para AC Pública", 'ISO-8859-1', 'UTF-8'));
+
+        $pdf->Ln(15);
+
+        // Detalhes dos recursos
+        $pdf->SetFont('Arial', 'B', 14);
+        $pdf->SetX(10);
+        $pdf->Cell(0, 10, mb_convert_encoding('DETALHES DOS RECURSOS ANALISADOS', 'ISO-8859-1', 'UTF-8'), 0, 1, 'C');
+        $pdf->Ln(5);
+
         $recursos_por_curso = [];
         foreach ($recursos as $recurso) {
             $curso_id = $recurso['id_curso1'] ?? 0;
             if (!isset($recursos_por_curso[$curso_id])) {
                 $recursos_por_curso[$curso_id] = [
                     'nome_curso' => $recurso['nome_curso'],
-                    'deferidos' => 0,
-                    'indeferidos' => 0,
                     'recursos' => []
                 ];
             }
-
-            // Determinar segmento do candidato
             $segmento = $this->determinarSegmento($recurso['publica'], $recurso['pcd'], $recurso['bairro']);
-
-            // Adicionar recurso à lista do curso
             $recursos_por_curso[$curso_id]['recursos'][] = [
                 'nome' => $recurso['nome'],
                 'segmento' => $segmento,
@@ -477,94 +546,25 @@ ORDER BY
                 'status' => $recurso['status'],
                 'resposta' => $recurso['resposta'] ?? ''
             ];
-
-            // Contar por status
-            if (strtoupper($recurso['status']) == 'DEFERIDO') {
-                $recursos_por_curso[$curso_id]['deferidos']++;
-            } elseif (strtoupper($recurso['status']) == 'INDEFERIDO') {
-                $recursos_por_curso[$curso_id]['indeferidos']++;
-            }
         }
 
-        $pdf->SetFont('Arial', 'B', 14);
-        $pdf->Cell(0, 10, mb_convert_encoding('Regra de Migração de Vagas Ociosas (Não Preenchimento)', 'ISO-8859-1', 'UTF-8'), 0, 1, 'C');
-        
-
-$pdf->Ln(5);
-
-// ==============================================
-// Vagas PCD não preenchidas
-// ==============================================
-$pdf->SetFont('Arial', 'B', 12);
-$pdf->Cell(0, 8, mb_convert_encoding('Vagas PCD não preenchidas', 'ISO-8859-1', 'UTF-8'), 0, 1, 'L');
-
-$pdf->SetFont('Arial', '', 11);
-$pdf->MultiCell(0, 6, mb_convert_encoding(
-    "1. A vaga PCD é padrão universal, sem vínculo com pública ou privada.\n" .
-    "2. Se restarem vagas PCD sem preenchimento, elas não migram para privada.\n" .
-    "3. Essas vagas devem migrar exclusivamente para Ampla Concorrência da Escola Pública.\n\n" .
-    "Ou seja:\n" .
-    "Vaga PCD sobrando -> vai para AC Pública.\n\n" .
-    "Independente de quantos candidatos de privada existam, a vaga pertence ao segmento público após migração.",
-    'ISO-8859-1', 'UTF-8'
-));
-
-$pdf->Ln(8);
-
-// ==============================================
-// Vagas de Cota de Território não preenchidas
-// ==============================================
-$pdf->SetFont('Arial', 'B', 12);
-$pdf->Cell(0, 8, mb_convert_encoding('Vagas de Cota de Território não preenchidas', 'ISO-8859-1', 'UTF-8'), 0, 1, 'L');
-
-$pdf->SetFont('Arial', '', 11);
-$pdf->MultiCell(0, 6, mb_convert_encoding(
-    "Seguem sempre sua origem:\n" .
-    "- CT Pública sobrando -> vai para AC Pública\n" .
-    "- CT Privada sobrando -> vai para AC Privada",
-    'ISO-8859-1', 'UTF-8'
-));
-
-$pdf->Ln(8);
-
-// ==============================================
-// Vagas AC Privada não preenchidas
-// ==============================================
-$pdf->SetFont('Arial', 'B', 12);
-$pdf->Cell(0, 8, mb_convert_encoding('Vagas AC Privada não preenchidas', 'ISO-8859-1', 'UTF-8'), 0, 1, 'L');
-
-$pdf->SetFont('Arial', '', 11);
-$pdf->MultiCell(0, 6, mb_convert_encoding(
-    "- AC Privada sobrando -> vai para AC Pública",
-    'ISO-8859-1', 'UTF-8'
-));
-
-$pdf->Ln(5);
-        // Detalhes dos recursos
-        $pdf->SetFont('Arial', 'B', 14);
-        $pdf->SetX(10);
-        $pdf->Cell(0, 10, mb_convert_encoding('DETALHES DOS RECURSOS ANALISADOS', 'ISO-8859-1', 'UTF-8'), 0, 1, 'C');
-        $pdf->Ln(5);
-
-        // Exibir detalhes por curso
-        foreach ($recursos_por_curso as $curso_id => $dados_curso) {
+        foreach ($recursos_por_curso as $dados_curso) {
             if (empty($dados_curso['recursos'])) continue;
 
-            // Cabeçalho da tabela
             $pdf->SetFont('Arial', 'B', 9);
-            $pdf->SetTextColor(255,255,255);
             $pdf->SetFillColor(0, 90, 36);
+            $pdf->SetTextColor(255, 255, 255);
             $pdf->SetX(10);
             $pdf->Cell(60, 8, mb_convert_encoding('CANDIDATO', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
             $pdf->Cell(53, 8, mb_convert_encoding('MOTIVO DO RECURSO', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
             $pdf->Cell(53, 8, mb_convert_encoding('RESPOSTA DO RECURSO', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
-            $pdf->Cell(19, 8, mb_convert_encoding('STATUS', 'ISO-8859-1', 'UTF-8'), 1, 1, 'C', true);
+            $pdf->Cell(22, 8, mb_convert_encoding('STATUS', 'ISO-8859-1', 'UTF-8'), 1, 1, 'C', true);
 
             $pdf->SetFont('Arial', '', 8);
+            $pdf->SetTextColor(0, 0, 0);
             $linha = 0;
 
             foreach ($dados_curso['recursos'] as $recurso) {
-                // Alternar cores das linhas
                 if ($linha % 2 == 0) {
                     $pdf->SetFillColor(245, 245, 245);
                 } else {
@@ -572,50 +572,64 @@ $pdf->Ln(5);
                 }
 
                 $status = strtoupper($recurso['status']);
-
-                // Definir cor do status
                 if ($status == 'DEFERIDO') {
-                    $pdf->SetTextColor(0, 100, 0); // Verde
+                    $pdf->SetTextColor(0, 100, 0);
                 } elseif ($status == 'INDEFERIDO') {
-                    $pdf->SetTextColor(200, 0, 0); // Vermelho
+                    $pdf->SetTextColor(200, 0, 0);
                 } else {
-                    $pdf->SetTextColor(0, 0, 0); // Preto
+                    $pdf->SetTextColor(0, 0, 0);
                 }
 
-                // Nome do candidato (truncado se necessário)
-                $nome = mb_strimwidth($recurso['nome'], 0, 30, '...');
+                $nome = mb_convert_encoding($recurso['nome'], 'ISO-8859-1', 'UTF-8');
+                $motivo = mb_convert_encoding($recurso['motivo'], 'ISO-8859-1', 'UTF-8');
+                $resposta = mb_convert_encoding($recurso['resposta'] ?? '', 'ISO-8859-1', 'UTF-8');
 
+                $y_inicial = $pdf->GetY();
+
+                // Candidato
+                $nome_truncado = mb_strimwidth($nome, 0, 55, '...');
                 $pdf->SetX(10);
-                $pdf->Cell(65, 7, mb_convert_encoding($nome, 'ISO-8859-1', 'UTF-8'), 1, 0, 'L', true);
-                
-                // Motivo do recurso (truncado)
-                $motivo = mb_strimwidth($recurso['motivo'], 0, 40, '...');
-                $pdf->Cell(51, 7, mb_convert_encoding($motivo, 'ISO-8859-1', 'UTF-8'), 1, 0, 'L', true);
+                $pdf->Cell(60, 10, $nome_truncado, 0, 0, 'L', true); // altura temporária
 
-                $resposta = mb_strimwidth($recurso['resposta'], 0, 40, '...');
-                $pdf->Cell(51, 7, mb_convert_encoding($resposta, 'ISO-8859-1', 'UTF-8'), 1, 0, 'L', true);
+                // Motivo
+                $pdf->SetXY(70, $y_inicial);
+                $pdf->MultiCell(53, 4, $motivo, 0, 'L', true);
+                $y_motivo = $pdf->GetY();
+
+                // Resposta
+                $pdf->SetY($y_inicial);
+                $pdf->SetX(123);
+                $pdf->MultiCell(53, 4, $resposta, 0, 'L', true);
+                $y_resposta = $pdf->GetY();
+
+                // Altura final da linha
+                $altura_linha = max($y_motivo, $y_resposta) - $y_inicial;
+                $altura_linha = max($altura_linha, 10); // mínimo
 
                 // Status
-                $pdf->Cell(20, 7, mb_convert_encoding($status, 'ISO-8859-1', 'UTF-8'), 1, 1, 'C', true);
+                $pdf->SetY($y_inicial);
+                $pdf->SetX(176);
+                $pdf->Cell(22, $altura_linha, mb_convert_encoding($status, 'ISO-8859-1', 'UTF-8'), 0, 1, 'C', true);
 
-                $pdf->SetTextColor(0, 0, 0); // Voltar ao preto
+                // Bordas finais
+                $pdf->Rect(10, $y_inicial, 60, $altura_linha);
+                $pdf->Rect(70, $y_inicial, 53, $altura_linha);
+                $pdf->Rect(123, $y_inicial, 53, $altura_linha);
+                $pdf->Rect(176, $y_inicial, 22, $altura_linha);
+
+                $pdf->SetY($y_inicial + $altura_linha);
+                $pdf->SetTextColor(0, 0, 0);
                 $linha++;
 
-                // Verificar se precisa de nova página
                 if ($pdf->GetY() > 270) {
                     $pdf->AddPage();
                     $this->recriarCabecalhoRecursos($pdf);
                     $pdf->Ln(5);
                 }
             }
-
             $pdf->Ln(10);
         }
     }
-
-    /**
-     * Determina o segmento do candidato
-     */
     private function determinarSegmento($publica, $pcd, $bairro)
     {
         if ($pcd == 1) {

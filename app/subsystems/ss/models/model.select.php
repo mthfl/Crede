@@ -74,7 +74,7 @@ class select extends connect
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     public function select_recursos_pendentes(){
-        $stmt = $this->connect->query("SELECT *, r.id as id_recurso FROM $this->table19 r INNER JOIN $this->table5 u ON r.id_usuario = u.id INNER JOIN $this->table1 c ON r.id_candidato = c.id WHERE r.status = 'PEDENTE' ORDER BY r.id DESC");
+        $stmt = $this->connect->query("SELECT *, r.id as id_recurso FROM $this->table19 r INNER JOIN $this->table5 u ON r.id_usuario = u.id INNER JOIN $this->table1 c ON r.id_candidato = c.id WHERE r.status = 'PENDENTE' ORDER BY r.id DESC");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     public function select_recursos_deferidos(){
