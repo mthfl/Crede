@@ -311,12 +311,13 @@ class relatorios extends connect
         $pdf->Cell(0, 15, mb_convert_encoding('SELEÇÃO DE ALUNOS - 2026', 'ISO-8859-1', 'UTF-8'), 0, 1, 'C');
 
         // Subtítulo
-        $pdf->SetFont('Arial', 'B', 32);
-        $pdf->SetTextColor(0, 90, 36); // Verde
+        $pdf->SetFont('Arial', 'B', 26);
+        $pdf->SetTextColor(255, 255, 255);
+        $pdf->SetFillColor(0, 90, 36);
         $pdf->SetY($pdf->GetY() + 5);
-        $pdf->SetX(10);
-        $pdf->Cell(0, 20, mb_convert_encoding('RESULTADO PRELIMINAR', 'ISO-8859-1', 'UTF-8'), 0, 1, 'C');
-        $pdf->SetTextColor(0, 0, 0); // Volta ao preto
+        $pdf->SetX(20);
+        $pdf->Cell(170, 20, mb_convert_encoding('RESULTADO PRELIMINAR', 'ISO-8859-1', 'UTF-8'), 0, 1, 'C', true);
+        $pdf->SetTextColor(0, 0, 0);
 
         // Tabela de cronograma
         $pdf->SetFont('Arial', 'B', 14);

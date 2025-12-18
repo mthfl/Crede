@@ -336,12 +336,13 @@ ORDER BY
         $pdf->Cell(0, 15, mb_convert_encoding('SELEÇÃO DE ALUNOS - 2026', 'ISO-8859-1', 'UTF-8'), 0, 1, 'C');
 
         // Subtítulo
-        $pdf->SetFont('Arial', 'B', 32);
-        $pdf->SetTextColor(0, 90, 36); // Verde
+        $pdf->SetFont('Arial', 'B', 26);
+        $pdf->SetTextColor(255, 255, 255);
+        $pdf->SetFillColor(0, 90, 36);
         $pdf->SetY($pdf->GetY() + 5);
-        $pdf->SetX(10);
-        $pdf->Cell(0, 20, mb_convert_encoding('RESULTADO FINAL', 'ISO-8859-1', 'UTF-8'), 0, 1, 'C');
-        $pdf->SetTextColor(0, 0, 0); // Volta ao preto
+        $pdf->SetX(20);
+        $pdf->Cell(170,20,mb_convert_encoding('RESULTADO FINAL', 'ISO-8859-1', 'UTF-8'),0,1,'C',true);
+        $pdf->SetTextColor(0, 0, 0);
 
         // ---------- DATAS DE MATRÍCULA ----------
         $pdf->SetFont('Arial', 'B', 13);
@@ -485,6 +486,60 @@ ORDER BY
             }
         }
 
+        $pdf->SetFont('Arial', 'B', 14);
+        $pdf->Cell(0, 10, mb_convert_encoding('Regra de Migração de Vagas Ociosas (Não Preenchimento)', 'ISO-8859-1', 'UTF-8'), 0, 1, 'C');
+        
+
+$pdf->Ln(5);
+
+// ==============================================
+// Vagas PCD não preenchidas
+// ==============================================
+$pdf->SetFont('Arial', 'B', 12);
+$pdf->Cell(0, 8, mb_convert_encoding('Vagas PCD não preenchidas', 'ISO-8859-1', 'UTF-8'), 0, 1, 'L');
+
+$pdf->SetFont('Arial', '', 11);
+$pdf->MultiCell(0, 6, mb_convert_encoding(
+    "1. A vaga PCD é padrão universal, sem vínculo com pública ou privada.\n" .
+    "2. Se restarem vagas PCD sem preenchimento, elas não migram para privada.\n" .
+    "3. Essas vagas devem migrar exclusivamente para Ampla Concorrência da Escola Pública.\n\n" .
+    "Ou seja:\n" .
+    "Vaga PCD sobrando -> vai para AC Pública.\n\n" .
+    "Independente de quantos candidatos de privada existam, a vaga pertence ao segmento público após migração.",
+    'ISO-8859-1', 'UTF-8'
+));
+
+$pdf->Ln(8);
+
+// ==============================================
+// Vagas de Cota de Território não preenchidas
+// ==============================================
+$pdf->SetFont('Arial', 'B', 12);
+$pdf->Cell(0, 8, mb_convert_encoding('Vagas de Cota de Território não preenchidas', 'ISO-8859-1', 'UTF-8'), 0, 1, 'L');
+
+$pdf->SetFont('Arial', '', 11);
+$pdf->MultiCell(0, 6, mb_convert_encoding(
+    "Seguem sempre sua origem:\n" .
+    "- CT Pública sobrando -> vai para AC Pública\n" .
+    "- CT Privada sobrando -> vai para AC Privada",
+    'ISO-8859-1', 'UTF-8'
+));
+
+$pdf->Ln(8);
+
+// ==============================================
+// Vagas AC Privada não preenchidas
+// ==============================================
+$pdf->SetFont('Arial', 'B', 12);
+$pdf->Cell(0, 8, mb_convert_encoding('Vagas AC Privada não preenchidas', 'ISO-8859-1', 'UTF-8'), 0, 1, 'L');
+
+$pdf->SetFont('Arial', '', 11);
+$pdf->MultiCell(0, 6, mb_convert_encoding(
+    "- AC Privada sobrando -> vai para AC Pública",
+    'ISO-8859-1', 'UTF-8'
+));
+
+$pdf->Ln(5);
         // Detalhes dos recursos
         $pdf->SetFont('Arial', 'B', 14);
         $pdf->SetX(10);
@@ -500,10 +555,9 @@ ORDER BY
             $pdf->SetTextColor(255,255,255);
             $pdf->SetFillColor(0, 90, 36);
             $pdf->SetX(10);
-            $pdf->Cell(60, 8, mb_convert_encoding('CANDIDATO', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
-            $pdf->Cell(25, 8, mb_convert_encoding('SEGMENTO', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
-            $pdf->Cell(72, 8, mb_convert_encoding('MOTIVO DO RECURSO', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
-            $pdf->Cell(30, 8, mb_convert_encoding('STATUS', 'ISO-8859-1', 'UTF-8'), 1, 1, 'C', true);
+            $pdf->Cell(65, 8, mb_convert_encoding('CANDIDATO', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
+            $pdf->Cell(102, 8, mb_convert_encoding('MOTIVO DO RECURSO', 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
+            $pdf->Cell(20, 8, mb_convert_encoding('STATUS', 'ISO-8859-1', 'UTF-8'), 1, 1, 'C', true);
 
             $pdf->SetFont('Arial', '', 8);
             $linha = 0;
@@ -531,15 +585,14 @@ ORDER BY
                 $nome = mb_strimwidth($recurso['nome'], 0, 30, '...');
 
                 $pdf->SetX(10);
-                $pdf->Cell(60, 7, mb_convert_encoding($nome, 'ISO-8859-1', 'UTF-8'), 1, 0, 'L', true);
-                $pdf->Cell(25, 7, mb_convert_encoding($recurso['segmento'], 'ISO-8859-1', 'UTF-8'), 1, 0, 'C', true);
-
+                $pdf->Cell(65, 7, mb_convert_encoding($nome, 'ISO-8859-1', 'UTF-8'), 1, 0, 'L', true);
+                
                 // Motivo do recurso (truncado)
                 $motivo = mb_strimwidth($recurso['motivo'], 0, 40, '...');
-                $pdf->Cell(72, 7, mb_convert_encoding($motivo, 'ISO-8859-1', 'UTF-8'), 1, 0, 'L', true);
+                $pdf->Cell(102, 7, mb_convert_encoding($motivo, 'ISO-8859-1', 'UTF-8'), 1, 0, 'L', true);
 
                 // Status
-                $pdf->Cell(30, 7, mb_convert_encoding($status, 'ISO-8859-1', 'UTF-8'), 1, 1, 'C', true);
+                $pdf->Cell(20, 7, mb_convert_encoding($status, 'ISO-8859-1', 'UTF-8'), 1, 1, 'C', true);
 
                 $pdf->SetTextColor(0, 0, 0); // Voltar ao preto
                 $linha++;
@@ -660,7 +713,7 @@ ORDER BY
         $pdf->SetY(8);
         $pdf->SetX(9);
         $pdf->Cell(0, 8, mb_convert_encoding('RESULTADO FINAL', 'ISO-8859-1', 'UTF-8'), 0, 1, 'L');
-
+        $pdf->SetTextColor(0, 0, 0);
         // Legendas
         $pdf->SetY(18);
         $pdf->SetX(8.5);
