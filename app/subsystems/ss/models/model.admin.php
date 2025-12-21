@@ -1281,7 +1281,7 @@ class admin extends cadastrador
 
     public function cadastrar_recurso(int $id_candidato, int $id_usuario, string $texto_recurso): int
     {
-        //try {
+        try {
             // Tabela recursos não tem campo data, apenas: id, id_candidato, id_usuario, texto, status
             $stmt_recurso = $this->connect->prepare("INSERT INTO $this->table19 (id_candidato, id_usuario, texto, status) VALUES (:id_candidato, :id_usuario, :texto, :status)");
             $stmt_recurso->bindValue(":id_usuario", $id_usuario);
@@ -1294,9 +1294,9 @@ class admin extends cadastrador
             }
 
             return 1;
-        /*} catch (PDOException $e) {
+        } catch (PDOException $e) {
             return 0;
-        }*/
+        }
     }
 
     public function responder_recurso(int $id_recurso, $resposta, $status): int
