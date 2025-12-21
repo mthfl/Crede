@@ -57,18 +57,80 @@ $cursos = $select->select_cursos(); // Para o select do formulário
         /* (Mantive todos os estilos anteriores - omitidos aqui por brevidade, mas estão iguais ao seu código original) */
         /* Inclua aqui todos os <style> que você já tinha (sidebar, select2, animações, etc.) */
         /* Para não repetir tudo, assumo que você vai colar o bloco <style> completo do seu código original */
+
         .grid-responsive {
             grid-template-columns: 1fr;
         }
+
         @media (min-width: 768px) {
             .grid-responsive {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
+
         @media (min-width: 1024px) {
             .grid-responsive {
                 grid-template-columns: repeat(4, 1fr);
             }
+        }
+
+        /* Estilização do Select2 para o select de Curso */
+        .select2-curso + .select2-container .select2-selection--single {
+            height: 3rem;
+            min-height: 3rem;
+            border-radius: 0.75rem;
+            border: 1px solid #d1d5db; /* border-gray-300 */
+            padding: 0.5rem 0.75rem;
+            display: flex;
+            align-items: center;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+            background-color: #ffffff;
+        }
+
+        .select2-curso + .select2-container .select2-selection--single .select2-selection__rendered {
+            padding-left: 0;
+            color: #111827; /* text-gray-900 */
+            font-size: 0.95rem;
+        }
+
+        .select2-curso + .select2-container .select2-selection--single .select2-selection__placeholder {
+            color: #6b7280; /* text-gray-500 */
+        }
+
+        .select2-curso + .select2-container .select2-selection--single .select2-selection__arrow {
+            height: 100%;
+            right: 0.75rem;
+        }
+
+        .select2-curso + .select2-container--default.select2-container--focus .select2-selection--single,
+        .select2-curso + .select2-container .select2-selection--single:focus {
+            border-color: #005A24; /* primary */
+            box-shadow: 0 0 0 4px rgba(0, 90, 36, 0.12);
+            outline: none;
+        }
+
+        .select2-dropdown {
+            border-radius: 0.75rem;
+            border-color: #d1d5db;
+            overflow: hidden;
+        }
+
+        .select2-results__option {
+            font-size: 0.9rem;
+            padding: 0.5rem 0.75rem;
+            color: #111827; /* text-gray-900 */
+        }
+
+        /* Item selecionado na lista */
+        .select2-container--default .select2-results__option--selected {
+            background-color: #E6F4EA !important; /* accent bem claro em vez do azul padrão */
+            color: #005A24 !important; /* primary */
+        }
+
+        /* Hover / highlight do item (seta/teclado ou mouse) */
+        .select2-container--default .select2-results__option--highlighted.select2-results__option--selectable {
+            background-color: #005A24 !important; /* primary */
+            color: #ffffff !important;
         }
     </style>
 </head>
@@ -202,20 +264,14 @@ $cursos = $select->select_cursos(); // Para o select do formulário
                                 </div>
                             </div>
 
-                            <div class="mt-8 flex flex-col sm:flex-row gap-4">
-                                <div class="flex-1 flex gap-4 order-1 sm:order-2">
-                                    <button type="button" onclick="adicionarDiaMatricula()"
-                                            class="flex-1 px-6 py-3 rounded-xl border-2 border-dashed border-secondary text-secondary bg-white hover:bg-secondary/5 font-semibold">
-                                        <i class="fas fa-plus mr-2"></i> Adicionar outro dia
-                                    </button>
-                                    <button type="reset"
-                                            class="px-6 py-3 rounded-xl border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 font-semibold">
-                                        <i class="fas fa-redo mr-2"></i> Limpar
-                                    </button>
-                                </div>
+                            <div class="mt-8 flex flex-col sm:flex-row justify-start gap-4">
                                 <button type="submit" name="adicionar_matricula"
-                                        class="order-2 sm:order-1 w-full sm:w-1/2 bg-gradient-to-r from-primary to-dark text-white py-3 px-8 rounded-xl hover:from-dark hover:to-primary font-semibold shadow-lg">
+                                        class="w-full sm:w-auto bg-gradient-to-r from-primary to-dark text-white py-3 px-8 rounded-xl hover:from-dark hover:to-primary font-semibold shadow-lg order-2 sm:order-1">
                                     <i class="fas fa-save mr-2"></i> Salvar Configurações
+                                </button>
+                                <button type="reset"
+                                        class="w-full sm:w-auto px-6 py-3 rounded-xl border border-secondary bg-secondary text-white hover:bg-orange-500 hover:border-orange-500 font-semibold order-1 sm:order-2">
+                                    <i class="fas fa-redo mr-2"></i> Limpar
                                 </button>
                             </div>
                         </form>
