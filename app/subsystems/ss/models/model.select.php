@@ -91,7 +91,7 @@ class select extends connect
             $sql = "SELECT m.*, c.nome_curso 
                     FROM $this->table18 m 
                     LEFT JOIN $this->table2 c ON m.id_curso = c.id 
-                    ORDER BY m.data DESC, m.hora DESC";
+                    ORDER BY m.data DESC";
             $stmt = $this->connect->query($sql);
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $e) {

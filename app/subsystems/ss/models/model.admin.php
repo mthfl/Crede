@@ -1281,22 +1281,22 @@ class admin extends cadastrador
 
     public function cadastrar_recurso(int $id_candidato, int $id_usuario, string $texto_recurso): int
     {
-        try {
+        //try {
             // Tabela recursos não tem campo data, apenas: id, id_candidato, id_usuario, texto, status
             $stmt_recurso = $this->connect->prepare("INSERT INTO $this->table19 (id_candidato, id_usuario, texto, status) VALUES (:id_candidato, :id_usuario, :texto, :status)");
             $stmt_recurso->bindValue(":id_usuario", $id_usuario);
             $stmt_recurso->bindValue(":id_candidato", $id_candidato);
             $stmt_recurso->bindValue(":texto", $texto_recurso);
-            $stmt_recurso->bindValue(":status", "PEDENTE");
+            $stmt_recurso->bindValue(":status", "PENDENTE");
 
             if (!$stmt_recurso->execute()) {
                 return 2;
             }
 
             return 1;
-        } catch (PDOException $e) {
+        /*} catch (PDOException $e) {
             return 0;
-        }
+        }*/
     }
 
     public function responder_recurso(int $id_recurso, $resposta, $status): int
@@ -1329,7 +1329,7 @@ class admin extends cadastrador
         //}
     }
 
-    public function cadastrar_matricula($id_curso, $data, $hora): int
+    public function cadastrar_matricula($id_curso, $data, $hora_inicio, $hora_fim): int
     {
         //try {
         // Se id_curso for "todos", salvar como NULL
@@ -1337,10 +1337,11 @@ class admin extends cadastrador
             $id_curso = null;
         }
 
-        $stmt_matricula = $this->connect->prepare("INSERT INTO $this->table18 (id_curso, data, hora) VALUES (:id_curso, :data, :hora)");
+        $stmt_matricula = $this->connect->prepare("INSERT INTO $this->table18 (id_curso, data, hora_inicio, hora_fim) VALUES (:id_curso, :data, :hora_inicio, :hora_fim)");
         $stmt_matricula->bindValue(":id_curso", $id_curso);
         $stmt_matricula->bindValue(":data", $data);
-        $stmt_matricula->bindValue(":hora", $hora);
+        $stmt_matricula->bindValue(":hora_inicio", $hora_inicio);
+        $stmt_matricula->bindValue(":hora_fim", $hora_fim);
 
         if (!$stmt_matricula->execute()) {
             return 2;

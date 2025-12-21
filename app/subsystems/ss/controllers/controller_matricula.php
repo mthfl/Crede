@@ -9,7 +9,7 @@ require_once(__DIR__ . "/../models/model.select.php");
 
 $select = new select($_SESSION['escola']);
 $cursos = $select->select_cursos();
-
+print_r($_POST);
 if (
     isset($_POST["acao"]) && $_POST["acao"] === "excluir_matricula" &&
     isset($_POST["id_matricula"]) && !empty($_POST["id_matricula"])
@@ -44,9 +44,10 @@ if (
     $dias_matricula = $_POST["dias_matricula"];
     foreach ($dias_matricula as $dia) {
         $curso_id = $dia["curso_id"];
-        $data = $dia["data"];
-        $hora = $dia["hora"];
-        $result = $admin_model->cadastrar_matricula($curso_id, $data, $hora);
+        echo $data = $dia["data"];
+        echo $hora_inicio = $dia["hora_inicio"];
+        echo $hora_fim = $dia["hora_fim"];
+        $result = $admin_model->cadastrar_matricula($curso_id, $data, $hora_inicio, $hora_fim);
     }
 
     switch ($result) {
