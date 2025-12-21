@@ -335,10 +335,22 @@ $cursos = $select->select_cursos(); // Para o select do formulário
         let diaMatriculaCount = 1;
 
         $(document).ready(function() {
+            // Inicializa Select2 nos selects de curso
             $('.select2-curso').select2({
                 placeholder: 'Selecione um curso',
                 allowClear: true
             });
+
+            // Garante que o botão "Limpar" reseta também o Select2
+            const formMatricula = document.querySelector('form[action="../controllers/controller_matricula.php"]');
+            if (formMatricula) {
+                formMatricula.addEventListener('reset', function() {
+                    // dá um pequeno delay para garantir que o reset padrão rode antes
+                    setTimeout(function() {
+                        $('.select2-curso').val(null).trigger('change');
+                    }, 0);
+                });
+            }
         });
 
         function adicionarDiaMatricula() {

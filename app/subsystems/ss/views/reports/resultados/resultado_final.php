@@ -1240,7 +1240,6 @@ foreach ($recursos_por_curso as $dados_curso) {
 
                 // Linhas de dados - Zebrado cinza claro / branco
                 $pdf->SetTextColor(0, 0, 0);
-                $pdf->SetFont('Arial', '', 8);
                 $class = 1;
 
                 foreach ($seg['dados'] as $row) {
@@ -1269,6 +1268,13 @@ foreach ($recursos_por_curso as $dados_curso) {
                     // Verificar se está classificado no próprio segmento
                     $isClassificado = in_array($row['id'], $seg['ids_classificados']);
                     $situacao = $isClassificado ? 'CLASSIFICADO' : 'LISTA DE ESPERA';
+
+                    // Definir negrito apenas para classificados (mesma lógica do resultado preliminar)
+                    if ($isClassificado) {
+                        $pdf->SetFont('Arial', 'B', 9);
+                    } else {
+                        $pdf->SetFont('Arial', '', 8);
+                    }
 
                     // Zebrado: linha par = cinza claro, ímpar = branco
                     if ($class % 2 == 0) {

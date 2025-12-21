@@ -3,19 +3,29 @@ require_once(__DIR__ . '/../models/sessions.php');
 $session = new sessions();
 $session->autenticar_session();
 $session->tempo_session();
-print_r($_POST);
-print_r($_GET);
+
+require_once(__DIR__ . '/../config/connect.php');
+$escola = $_SESSION['escola'];
+new connect($escola);
+require_once(__DIR__ . '/../models/model.select.php');
+$select = new select($escola);
 
 if (
     (isset($_GET['tipo_relatorio']) && !empty($_GET['tipo_relatorio']) || isset($_POST['tipo_relatorio']) && !empty($_POST['tipo_relatorio']))
 ) {
-    echo $tipo_relatorio = $_GET['tipo_relatorio'] ?? $_POST['tipo_relatorio'];
-    echo $id_usuario = $_GET['id_usuario'] ?? $_POST['id_usuario'];
-    echo $id_curso = $_GET['curso'] ?? $_POST['curso'];
-
+    $tipo_relatorio = $_GET['tipo_relatorio'] ?? $_POST['tipo_relatorio'];
+    $id_usuario = $_GET['id_usuario'] ?? $_POST['id_usuario'];
+    $id_curso = $_GET['curso'] ?? $_POST['curso'];
+    
     switch ($tipo_relatorio) {
         case 'Resultado Final':
-            header("location:../views/reports/resultados/resultado_final.php?curso=" . $id_curso);
+            $recursos_pendentes = $select->select_recursos_pendentes();
+            if (!empty($recursos_pendentes)) {
+                header('Location: ../views/relatorios.php?erro_recursos_pendentes=1');
+                exit();
+            }
+
+            header('Location: ../views/reports/resultados/resultado_final.php?curso=' . $id_curso);
             exit();
         case 'Resultado Preliminar':
             header("location:../views/reports/resultados/resultado_preliminar.php?curso=" . $id_curso);

@@ -916,6 +916,37 @@ $select = new select($escola);
         </div>
     </div>
 
+    <!-- Modal Erro Recursos Pendentes -->
+    <div id="errorRecursosModal" class="modal">
+        <div class="modal-content bg-white rounded-2xl shadow-2xl max-w-md w-full mx-auto p-8 relative border border-gray-200">
+            <div class="flex flex-col items-center text-center gap-4">
+                <div class="w-16 h-16 rounded-full bg-red-50 flex items-center justify-center">
+                    <i class="fas fa-exclamation-triangle text-red-500 text-2xl"></i>
+                </div>
+                <div>
+                    <h2 class="font-heading text-xl font-semibold text-gray-900 mb-2">
+                        Não foi possível gerar o Resultado Final
+                    </h2>
+                    <p class="text-sm text-gray-700 mb-2">
+                        Existem <strong>recursos pendentes de análise</strong>. Por segurança, o relatório de
+                        <strong>Resultado Final</strong> só pode ser gerado quando todos os recursos tiverem sido
+                        devidamente analisados.
+                    </p>
+                    <p class="text-sm text-gray-600">
+                        Acesse a tela de <strong>Recursos</strong>, finalize a análise dos recursos pendentes e depois
+                        tente gerar o Resultado Final novamente.
+                    </p>
+                </div>
+                <div class="mt-4 w-full flex justify-center">
+                    <a href="recursos.php" class="inline-flex items-center justify-center px-6 py-2.5 rounded-lg text-sm font-semibold text-white bg-red-600 hover:bg-red-700 shadow-md">
+                        <i class="fas fa-arrow-right mr-2"></i>
+                        Ir para Recursos
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal Unificado -->
     <div id="unifiedReportModal" class="modal">
         <div class="modal-content">
@@ -992,6 +1023,18 @@ $select = new select($escola);
         </div>
     </div>
 <script>
+    // Abrir automaticamente o modal de erro de recursos pendentes, se houver
+    document.addEventListener('DOMContentLoaded', function () {
+        var hasRecursosError = <?php echo isset($_GET['erro_recursos_pendentes']) ? 'true' : 'false'; ?>;
+        if (hasRecursosError) {
+            var modal = document.getElementById('errorRecursosModal');
+            if (modal) {
+                modal.classList.add('show');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+    });
+
     // Definir cores do sistema
     const systemColors = {
         primary: '#005A24',
